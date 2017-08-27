@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client.converter;
+package com.github.jactorrises.persistence.client.converter;
 
-import nu.hjemme.client.datatype.Country;
+import com.github.jactorrises.client.datatype.Country;
 
 public class CountryConverter implements TypeConverter<Country, String> {
 

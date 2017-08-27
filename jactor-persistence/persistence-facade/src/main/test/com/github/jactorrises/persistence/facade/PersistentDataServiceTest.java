@@ -1,9 +1,9 @@
-package nu.hjemme.persistence.facade;
+package com.github.jactorrises.persistence.facade;
 
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.domain.User;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.orm.domain.DefaultUserEntity;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.orm.domain.DefaultUserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

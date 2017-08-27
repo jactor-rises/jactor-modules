@@ -1,6 +1,6 @@
-package nu.hjemme.client.domain;
+package com.github.jactorrises.client.domain;
 
-import nu.hjemme.client.datatype.Name;
+import com.github.jactorrises.client.datatype.Name;
 
 import java.time.LocalDateTime;
 

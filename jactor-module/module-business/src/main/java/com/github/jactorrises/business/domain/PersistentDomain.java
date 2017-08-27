@@ -1,7 +1,7 @@
 package com.github.jactorrises.business.domain;
 
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.domain.Persistent;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.domain.Persistent;
 import org.apache.commons.lang3.Validate;
 
 import java.time.LocalDateTime;

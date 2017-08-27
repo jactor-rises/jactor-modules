@@ -2,9 +2,9 @@ package com.github.jactorrises.facade.config.db;
 
 import com.github.jactorrises.facade.config.JactorBeanContext;
 import com.github.jactorrises.facade.config.JactorDbContext;
-import nu.hjemme.persistence.client.GuestBookEntity;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.orm.domain.DefaultGuestBookEntity;
+import com.github.jactorrises.persistence.client.GuestBookEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.orm.domain.DefaultGuestBookEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -16,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.Serializable;
 
-import static nu.hjemme.business.domain.AddressDomain.anAddress;
-import static nu.hjemme.business.domain.GuestBookDomain.aGuestBook;
-import static nu.hjemme.business.domain.PersonDomain.aPerson;
-import static nu.hjemme.business.domain.UserDomain.aUser;
+import static com.github.jactorrises.business.domain.AddressDomain.anAddress;
+import static com.github.jactorrises.business.domain.GuestBookDomain.aGuestBook;
+import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
+import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,9 +46,9 @@ public class GuestBookDbIntegrationTest {
     private UserEntity aPersistedUser() {
         UserEntity userEntity = aUser().withUserNameAs("titten")
                 .withPasswordAs("demo")
-                .withEmailAddressAs("helt@hjemme")
+                .withEmailAddressAs("jactor@rises")
                 .with(aPerson().withDescriptionAs("description")
-                        .with(anAddress().withAddressLine1As("Hjemme")
+                        .with(anAddress().withAddressLine1As("the streets")
                                 .withCityAs("Dirdal")
                                 .withCountryAs("NO")
                                 .withZipCodeAs(1234)

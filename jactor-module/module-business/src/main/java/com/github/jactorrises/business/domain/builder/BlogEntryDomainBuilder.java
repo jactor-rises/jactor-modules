@@ -1,8 +1,8 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.BlogEntryDomain;
-import nu.hjemme.persistence.client.BlogEntity;
-import nu.hjemme.persistence.client.BlogEntryEntity;
+import com.github.jactorrises.persistence.client.BlogEntity;
+import com.github.jactorrises.persistence.client.BlogEntryEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -35,7 +35,7 @@ public class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
         return this;
     }
 
-    @Override protected BlogEntryDomain initWithRequiredFields() {
+    @Override protected BlogEntryDomain addhRequiredFields() {
         return new BlogEntryDomain(blogEntryEntity);
     }
 

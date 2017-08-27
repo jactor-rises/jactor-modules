@@ -1,11 +1,11 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.domain.Entry;
-import nu.hjemme.persistence.client.PersistentEntry;
-import nu.hjemme.persistence.client.converter.LocalDateTimeConverter;
-import nu.hjemme.persistence.client.converter.NameConverter;
-import nu.hjemme.persistence.orm.time.Now;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.domain.Entry;
+import com.github.jactorrises.persistence.client.PersistentEntry;
+import com.github.jactorrises.persistence.client.converter.LocalDateTimeConverter;
+import com.github.jactorrises.persistence.client.converter.NameConverter;
+import com.github.jactorrises.persistence.orm.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

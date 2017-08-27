@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.orm.meta;
+package com.github.jactorrises.persistence.orm.meta;
 
 public final class AddressMetadata {
     private AddressMetadata() {}

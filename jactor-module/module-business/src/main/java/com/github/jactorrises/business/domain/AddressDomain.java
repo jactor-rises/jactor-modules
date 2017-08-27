@@ -1,9 +1,9 @@
 package com.github.jactorrises.business.domain;
 
 import com.github.jactorrises.business.domain.builder.AddressDomainBuilder;
-import nu.hjemme.client.datatype.Country;
-import nu.hjemme.client.domain.Address;
-import nu.hjemme.persistence.client.AddressEntity;
+import com.github.jactorrises.client.datatype.Country;
+import com.github.jactorrises.client.domain.Address;
+import com.github.jactorrises.persistence.client.AddressEntity;
 
 public class AddressDomain extends PersistentDomain<AddressEntity, Long> implements Address {
 

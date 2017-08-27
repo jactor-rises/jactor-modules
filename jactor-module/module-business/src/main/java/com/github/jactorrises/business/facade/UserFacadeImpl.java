@@ -1,10 +1,10 @@
 package com.github.jactorrises.business.facade;
 
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.client.domain.User;
-import nu.hjemme.client.facade.UserFacade;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.client.dao.UserDao;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.client.facade.UserFacade;
+import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.client.dao.UserDao;
 
 import java.util.Optional;
 

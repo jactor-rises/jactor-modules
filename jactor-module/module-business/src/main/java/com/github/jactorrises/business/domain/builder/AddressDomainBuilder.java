@@ -1,7 +1,7 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.AddressDomain;
-import nu.hjemme.persistence.client.AddressEntity;
+import com.github.jactorrises.persistence.client.AddressEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -53,7 +53,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
         return this;
     }
 
-    @Override protected AddressDomain initWithRequiredFields() {
+    @Override protected AddressDomain addhRequiredFields() {
         return new AddressDomain(addressEntity);
     }
 

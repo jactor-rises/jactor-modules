@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client;
+package com.github.jactorrises.persistence.client;
 
-import nu.hjemme.client.domain.GuestBookEntry;
+import com.github.jactorrises.client.domain.GuestBookEntry;
 
 public interface GuestBookEntryEntity extends GuestBookEntry, PersistentEntry {
     @Override GuestBookEntity getGuestBook();

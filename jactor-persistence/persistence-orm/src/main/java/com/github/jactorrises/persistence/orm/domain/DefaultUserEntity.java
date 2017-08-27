@@ -1,11 +1,11 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
-import nu.hjemme.client.datatype.EmailAddress;
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.client.domain.User;
-import nu.hjemme.persistence.client.PersonEntity;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.orm.meta.UserMetadata;
+import com.github.jactorrises.persistence.orm.meta.UserMetadata;
+import com.github.jactorrises.client.datatype.EmailAddress;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.persistence.client.PersonEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

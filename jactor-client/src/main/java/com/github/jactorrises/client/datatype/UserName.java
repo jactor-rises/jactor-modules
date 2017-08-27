@@ -1,4 +1,4 @@
-package nu.hjemme.client.datatype;
+package com.github.jactorrises.client.datatype;
 
 import java.util.Objects;
 

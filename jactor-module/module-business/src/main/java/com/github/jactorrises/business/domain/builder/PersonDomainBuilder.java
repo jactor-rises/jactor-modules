@@ -2,8 +2,8 @@ package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.PersonDomain;
 import com.github.jactorrises.business.domain.AddressDomain;
-import nu.hjemme.persistence.client.PersonEntity;
-import nu.hjemme.persistence.facade.PersistentDataService;
+import com.github.jactorrises.persistence.client.PersonEntity;
+import com.github.jactorrises.persistence.facade.PersistentDataService;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
         ));
     }
 
-    @Override protected PersonDomain initWithRequiredFields() {
+    @Override protected PersonDomain addhRequiredFields() {
         return new PersonDomain(personEntity);
     }
 

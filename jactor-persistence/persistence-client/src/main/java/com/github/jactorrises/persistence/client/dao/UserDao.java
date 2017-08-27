@@ -1,7 +1,7 @@
-package nu.hjemme.persistence.client.dao;
+package com.github.jactorrises.persistence.client.dao;
 
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.persistence.client.UserEntity;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.client.UserEntity;
 
 import java.util.Optional;
 

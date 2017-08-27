@@ -1,9 +1,9 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
-import nu.hjemme.client.datatype.Country;
-import nu.hjemme.client.domain.Address;
-import nu.hjemme.persistence.client.AddressEntity;
-import nu.hjemme.persistence.orm.meta.AddressMetadata;
+import com.github.jactorrises.client.datatype.Country;
+import com.github.jactorrises.client.domain.Address;
+import com.github.jactorrises.persistence.client.AddressEntity;
+import com.github.jactorrises.persistence.orm.meta.AddressMetadata;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

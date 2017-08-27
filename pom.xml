@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>nu.hjemme</groupId>
-    <artifactId>hjemme-application</artifactId>
+    <groupId>com.github.jactor-rises</groupId>
+    <artifactId>jactor-rises</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <url>http://www.hjemme.nu</url>
+    <url>https://github.com/jactor-rises</url>
 
     <prerequisites>
         <maven>3.5</maven>
@@ -30,14 +30,14 @@
     </properties>
 
     <modules>
-        <module>hjemme-module</module>
-        <module>hjemme-client</module>
-        <module>hjemme-persistence</module>
-        <module>hjemme-web</module>
+        <module>jactor-module</module>
+        <module>jactor-client</module>
+        <module>jactor-persistence</module>
+        <module>jactor-web</module>
     </modules>
 
-    <name>hjemme</name>
-    <description>The build for the sub modules in hjemme</description>
+    <name>jactor-rises</name>
+    <description>The build for the sub modules in this application</description>
 
     <dependencies>
         <dependency>
@@ -137,7 +137,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${maven-war-plugin.version}</version>
                     <configuration>
-                        <warName>hjemme</warName>
+                        <warName>jactor</warName>
                     </configuration>
                 </plugin>
                 <plugin>

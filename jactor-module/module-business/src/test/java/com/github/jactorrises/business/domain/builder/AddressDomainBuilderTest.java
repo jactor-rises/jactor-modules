@@ -1,7 +1,7 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.AddressDomain;
-import nu.hjemme.client.datatype.Country;
+import com.github.jactorrises.client.datatype.Country;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

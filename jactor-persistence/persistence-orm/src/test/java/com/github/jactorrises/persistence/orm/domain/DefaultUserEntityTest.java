@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client;
+package com.github.jactorrises.persistence.client;
 
-import nu.hjemme.client.domain.Address;
+import com.github.jactorrises.client.domain.Address;
 
 public interface AddressEntity extends Address {
     void setCity(String city);

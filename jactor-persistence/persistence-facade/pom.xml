@@ -2,20 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>nu.hjemme.persistence</groupId>
-        <artifactId>hjemme-persistence</artifactId>
+        <groupId>com.github.jactor-rises</groupId>
+        <artifactId>jactor-persistence</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.jactor-rises.persistence</groupId>
     <artifactId>persistence-facade</artifactId>
 
-    <name>hjemme-persistence-facade</name>
+    <name>jactor-rises-persistence-facade</name>
     <description>The facade of the persistence layer</description>
 
     <dependencies>
         <dependency>
-            <groupId>nu.hjemme.persistence</groupId>
+            <groupId>com.github.jactor-rises.persistence</groupId>
             <artifactId>persistence-orm</artifactId>
         </dependency>
     </dependencies>

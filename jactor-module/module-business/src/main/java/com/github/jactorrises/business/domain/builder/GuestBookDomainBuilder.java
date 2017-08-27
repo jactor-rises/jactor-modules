@@ -1,8 +1,8 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.GuestBookDomain;
-import nu.hjemme.persistence.client.GuestBookEntity;
-import nu.hjemme.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.client.GuestBookEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -32,7 +32,7 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
         return this;
     }
 
-    @Override protected GuestBookDomain initWithRequiredFields() {
+    @Override protected GuestBookDomain addhRequiredFields() {
         return new GuestBookDomain(guestBookEntity);
     }
 

@@ -1,7 +1,7 @@
 package com.github.jactorrises.facade;
 
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.client.facade.UserFacade;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.facade.config.JactorBeanContext;
 import com.github.jactorrises.facade.config.JactorDbContext;
 import org.junit.Ignore;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Ignore("OutOfMemoryError ???")
 public class UserFacadeIntegrationTest {
 
-    @Resource(name = "hjemme.userFacade")
+    @Resource(name = "jactor.userFacade")
     private UserFacade testUserFacade;
 
     @Test public void willFetchStandardUser() {

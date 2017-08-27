@@ -1,7 +1,7 @@
 package com.github.jactorrises.business.domain.builder;
 
-import nu.hjemme.persistence.client.GuestBookEntity;
-import nu.hjemme.persistence.facade.PersistentDataService;
+import com.github.jactorrises.persistence.client.GuestBookEntity;
+import com.github.jactorrises.persistence.facade.PersistentDataService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

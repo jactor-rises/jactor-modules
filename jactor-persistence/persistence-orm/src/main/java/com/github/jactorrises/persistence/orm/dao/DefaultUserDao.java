@@ -1,9 +1,9 @@
-package nu.hjemme.persistence.orm.dao;
+package com.github.jactorrises.persistence.orm.dao;
 
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.client.dao.UserDao;
-import nu.hjemme.persistence.orm.domain.DefaultUserEntity;
+import com.github.jactorrises.persistence.orm.domain.DefaultUserEntity;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.client.dao.UserDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -15,7 +15,7 @@ public class DefaultUserDao implements UserDao {
 
     private final SessionFactory sessionFactory;
 
-    public DefaultUserDao(SessionFactory sessionFactory) {
+    DefaultUserDao(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

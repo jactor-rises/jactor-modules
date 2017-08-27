@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client;
+package com.github.jactorrises.persistence.client;
 
-import nu.hjemme.client.domain.Person;
+import com.github.jactorrises.client.domain.Person;
 
 import java.util.Locale;
 

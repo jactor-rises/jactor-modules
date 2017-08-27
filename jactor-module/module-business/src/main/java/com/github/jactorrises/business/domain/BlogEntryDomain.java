@@ -1,10 +1,10 @@
 package com.github.jactorrises.business.domain;
 
 import com.github.jactorrises.business.domain.builder.BlogEntryDomainBuilder;
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.domain.Blog;
-import nu.hjemme.client.domain.BlogEntry;
-import nu.hjemme.persistence.client.BlogEntryEntity;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.domain.Blog;
+import com.github.jactorrises.client.domain.BlogEntry;
+import com.github.jactorrises.persistence.client.BlogEntryEntity;
 
 import java.time.LocalDateTime;
 

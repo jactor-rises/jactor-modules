@@ -17,7 +17,7 @@ public class JactorDbContext {
     @Bean(name = "dataSource") public DataSource dataSourceFromHsqldb() {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.HSQL)
-                .setName("hjemme-db" + System.currentTimeMillis())
+                .setName("mydb" + System.currentTimeMillis())
                 .addScript("classpath:create.db.sql")
                 .addScript("classpath:create.constraints.sql")
                 .addScript("classpath:create.default.users.sql")
@@ -26,7 +26,7 @@ public class JactorDbContext {
 
     @Bean(name = "sessionFactory") public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setPackagesToScan("nu.hjemme.persistence.orm.domain");
+        sessionFactory.setPackagesToScan("com.github.jactorrises.persistence.orm.domain");
         sessionFactory.setDataSource(dataSource);
         sessionFactory.setHibernateProperties(new Properties() {
             {

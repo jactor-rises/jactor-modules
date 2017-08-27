@@ -1,12 +1,12 @@
 package com.github.jactorrises.facade.config.db;
 
-import nu.hjemme.client.datatype.Name;
+import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.facade.config.JactorBeanContext;
 import com.github.jactorrises.facade.config.JactorDbContext;
-import nu.hjemme.persistence.client.BlogEntity;
-import nu.hjemme.persistence.client.BlogEntryEntity;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.orm.domain.DefaultBlogEntryEntity;
+import com.github.jactorrises.persistence.client.BlogEntity;
+import com.github.jactorrises.persistence.client.BlogEntryEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.orm.domain.DefaultBlogEntryEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -18,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.Serializable;
 
-import static nu.hjemme.business.domain.AddressDomain.anAddress;
-import static nu.hjemme.business.domain.BlogDomain.aBlog;
-import static nu.hjemme.business.domain.BlogEntryDomain.aBlogEntry;
-import static nu.hjemme.business.domain.PersonDomain.aPerson;
-import static nu.hjemme.business.domain.UserDomain.aUser;
+import static com.github.jactorrises.business.domain.AddressDomain.anAddress;
+import static com.github.jactorrises.business.domain.BlogDomain.aBlog;
+import static com.github.jactorrises.business.domain.BlogEntryDomain.aBlogEntry;
+import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
+import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -57,9 +57,9 @@ public class BlogEntryDbIntegrationTest {
     private UserEntity aPersistedUser() {
         UserEntity userEntity = aUser().withUserNameAs("titten")
                 .withPasswordAs("demo")
-                .withEmailAddressAs("helt@hjemme")
+                .withEmailAddressAs("jactor@rises")
                 .with(aPerson().withDescriptionAs("description")
-                        .with(anAddress().withAddressLine1As("Hjemme")
+                        .with(anAddress().withAddressLine1As("the streets")
                                 .withCityAs("Dirdal")
                                 .withCountryAs("NO")
                                 .withZipCodeAs(1234)

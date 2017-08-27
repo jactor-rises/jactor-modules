@@ -1,9 +1,9 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
-import nu.hjemme.client.domain.GuestBook;
-import nu.hjemme.client.domain.User;
-import nu.hjemme.persistence.client.GuestBookEntity;
-import nu.hjemme.persistence.client.UserEntity;
+import com.github.jactorrises.client.domain.GuestBook;
+import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.persistence.client.GuestBookEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,9 +17,9 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 import static java.util.Objects.hash;
-import static nu.hjemme.persistence.orm.meta.GuestBookMetadata.GUEST_BOOK_TABLE;
-import static nu.hjemme.persistence.orm.meta.GuestBookMetadata.TITLE;
-import static nu.hjemme.persistence.orm.meta.GuestBookMetadata.USER;
+import static com.github.jactorrises.persistence.orm.meta.GuestBookMetadata.GUEST_BOOK_TABLE;
+import static com.github.jactorrises.persistence.orm.meta.GuestBookMetadata.TITLE;
+import static com.github.jactorrises.persistence.orm.meta.GuestBookMetadata.USER;
 
 @Entity
 @Table(name = GUEST_BOOK_TABLE)

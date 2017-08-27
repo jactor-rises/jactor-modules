@@ -2,9 +2,9 @@ package com.github.jactorrises.business.facade;
 
 import com.github.jactorrises.business.domain.PersonDomain;
 import com.github.jactorrises.business.domain.UserDomain;
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.client.domain.User;
-import nu.hjemme.persistence.client.dao.UserDao;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.persistence.client.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

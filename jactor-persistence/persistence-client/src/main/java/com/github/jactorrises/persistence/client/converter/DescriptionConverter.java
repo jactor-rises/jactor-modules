@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client.converter;
+package com.github.jactorrises.persistence.client.converter;
 
-import nu.hjemme.client.datatype.Description;
+import com.github.jactorrises.client.datatype.Description;
 
 public class DescriptionConverter implements TypeConverter<Description, String> {
 

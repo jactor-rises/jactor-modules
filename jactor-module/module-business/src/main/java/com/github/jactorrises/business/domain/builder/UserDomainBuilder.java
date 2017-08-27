@@ -2,7 +2,7 @@ package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.PersonDomain;
 import com.github.jactorrises.business.domain.UserDomain;
-import nu.hjemme.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
 
 import java.util.Optional;
 
@@ -48,7 +48,7 @@ public class UserDomainBuilder extends DomainBuilder<UserDomain> {
     }
 
     @Override
-    protected UserDomain initWithRequiredFields() {
+    protected UserDomain addhRequiredFields() {
         return new UserDomain(userEntity);
     }
 

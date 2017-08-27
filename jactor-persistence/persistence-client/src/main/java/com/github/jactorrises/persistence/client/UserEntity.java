@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client;
+package com.github.jactorrises.persistence.client;
 
-import nu.hjemme.client.domain.User;
+import com.github.jactorrises.client.domain.User;
 
 public interface UserEntity extends User {
     void setUserName(String userName);

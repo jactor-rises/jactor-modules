@@ -3,16 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>nu.hjemme</groupId>
-        <artifactId>hjemme-application</artifactId>
+        <groupId>com.github.jactor-rises</groupId>
+        <artifactId>jactor-rises</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>nu.hjemme.persistence</groupId>
-    <artifactId>hjemme-persistence</artifactId>
+    <artifactId>jactor-persistence</artifactId>
     <packaging>pom</packaging>
-    <url>http://www.hjemme.nu</url>
 
     <modules>
         <module>persistence-client</module>
@@ -20,8 +18,8 @@
         <module>persistence-facade</module>
     </modules>
 
-    <name>hjemme-persistence</name>
-    <description>The build for the persistence layer in hjemme.nu</description>
+    <name>jactor-rises-persistence</name>
+    <description>The build for the persistence layer</description>
 
     <properties>
         <aspectj.version>1.8.8</aspectj.version>
@@ -38,30 +36,30 @@
 
     <dependencies>
         <dependency>
-            <groupId>nu.hjemme</groupId>
-            <artifactId>hjemme-client</artifactId>
+            <groupId>com.github.jactor-rises</groupId>
+            <artifactId>jactor-client</artifactId>
         </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>nu.hjemme</groupId>
-                <artifactId>hjemme-client</artifactId>
+                <groupId>com.github.jactor-rises</groupId>
+                <artifactId>jactor-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>nu.hjemme.persistence</groupId>
+                <groupId>com.github.jactor-rises.persistence</groupId>
                 <artifactId>persistence-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>nu.hjemme.persistence</groupId>
+                <groupId>com.github.jactor-rises.persistence</groupId>
                 <artifactId>persistence-facade</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>nu.hjemme.persistence</groupId>
+                <groupId>com.github.jactor-rises.persistence</groupId>
                 <artifactId>persistence-orm</artifactId>
                 <version>${project.version}</version>
             </dependency>

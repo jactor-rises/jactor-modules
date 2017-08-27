@@ -1,10 +1,8 @@
 package com.github.jactorrises.facade.config;
 
-import nu.hjemme.business.facade.UserFacadeImpl;
-import nu.hjemme.client.facade.UserFacade;
-import nu.hjemme.persistence.client.dao.UserDao;
-import nu.hjemme.persistence.facade.PersistentDataService;
-import nu.hjemme.persistence.orm.dao.DefaultUserDao;
+import com.github.jactorrises.business.facade.UserFacadeImpl;
+import com.github.jactorrises.client.facade.UserFacade;
+import com.github.jactorrises.persistence.client.dao.UserDao;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +18,12 @@ public class JactorBeanContext {
         Locale.setDefault(Locale.ENGLISH);
     }
 
-    @Bean(name = "hjemme.userFacade") public UserFacade userFacade(SessionFactory sessionFactory) {
-        return new UserFacadeImpl(PersistentDataService.getInstance().provideInstanceFor(UserDao.class, sessionFactory));
+    @Bean(name = "jactor.userFacade") public UserFacade userFacade(SessionFactory sessionFactory) {
+        //return new UserFacadeImpl(PersistentDataService.getInstance().provideInstanceFor(UserDao.class, sessionFactory));
+        return new UserFacadeImpl(null); // todo: replace with spring boot
     }
 
-    @Bean(name = "hjemme.userDao") public UserDao userDao(SessionFactory sessionFactory) {
-        return new DefaultUserDao(sessionFactory);
+    @Bean(name = "jactor.userDao") public UserDao userDao(SessionFactory sessionFactory) {
+        return null; // todo: remove, shold be a service from the persistence layer...
     }
 }

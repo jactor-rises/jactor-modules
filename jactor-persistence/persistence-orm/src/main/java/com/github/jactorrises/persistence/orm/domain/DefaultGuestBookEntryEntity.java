@@ -1,10 +1,10 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.domain.GuestBookEntry;
-import nu.hjemme.persistence.client.GuestBookEntity;
-import nu.hjemme.persistence.client.GuestBookEntryEntity;
-import nu.hjemme.persistence.orm.meta.GuestBookEntryMetadata;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.domain.GuestBookEntry;
+import com.github.jactorrises.persistence.client.GuestBookEntity;
+import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.orm.meta.GuestBookEntryMetadata;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

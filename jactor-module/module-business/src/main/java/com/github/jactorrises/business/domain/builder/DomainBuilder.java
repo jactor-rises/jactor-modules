@@ -1,6 +1,6 @@
 package com.github.jactorrises.business.domain.builder;
 
-import nu.hjemme.persistence.facade.PersistentDataService;
+import com.github.jactorrises.persistence.facade.PersistentDataService;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ public abstract class DomainBuilder<T> {
         this.validateFields = validateFields;
     }
 
-    protected abstract T initWithRequiredFields();
+    protected abstract T addhRequiredFields();
 
     public T build() {
-        T bean = initWithRequiredFields();
+        T bean = addhRequiredFields();
         fieldValidator.validate(bean, validateFields);
 
         return bean;

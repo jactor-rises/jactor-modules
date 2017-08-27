@@ -3,12 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.github.jactor-rises.module</groupId>
+        <groupId>com.github.jactor-rises</groupId>
         <artifactId>jactor-module</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.jactor-rises.module</groupId>
     <artifactId>module-facade</artifactId>
     <name>jactor-rises-module-facade</name>
     <packaging>jar</packaging>
@@ -24,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.jactor-rises.module</groupId>
-            <artifactId>jactor-business</artifactId>
+            <artifactId>module-business</artifactId>
         </dependency>
 
         <!-- Third party -->
@@ -62,6 +63,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jactor-rises.persistence</groupId>
+            <artifactId>persistence-orm</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

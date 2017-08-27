@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client.converter;
+package com.github.jactorrises.persistence.client.converter;
 
-import nu.hjemme.client.datatype.Name;
+import com.github.jactorrises.client.datatype.Name;
 
 public class NameConverter implements TypeConverter<Name, String> {
     @Override public Name convertTo(String from) {

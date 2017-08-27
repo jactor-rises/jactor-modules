@@ -1,6 +1,6 @@
-package nu.hjemme.client.domain;
+package com.github.jactorrises.client.domain;
 
-import nu.hjemme.client.datatype.Country;
+import com.github.jactorrises.client.datatype.Country;
 
 public interface Address extends Persistent<Long> {
 

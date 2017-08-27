@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>nu.hjemme</groupId>
-        <artifactId>hjemme-application</artifactId>
+        <groupId>com.github.jactor-rises</groupId>
+        <artifactId>jactor-rises</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>hjemme-client</artifactId>
+    <artifactId>jactor-client</artifactId>
+    <name>jactor-rises-client</name>
     <version>1.0-SNAPSHOT</version>
 
-    <name>hjemme-client</name>
-    <description>The public classes for www.hjemme.nu</description>
+    <description>The public classes</description>
 </project>

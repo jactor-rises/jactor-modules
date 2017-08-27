@@ -1,4 +1,4 @@
-package nu.hjemme.client.domain;
+package com.github.jactorrises.client.domain;
 
 import java.time.LocalDate;
 

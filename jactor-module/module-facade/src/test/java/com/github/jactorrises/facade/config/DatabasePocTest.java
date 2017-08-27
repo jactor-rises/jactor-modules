@@ -1,5 +1,8 @@
 package com.github.jactorrises.facade.config;
 
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.orm.domain.DefaultUserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Before;

@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client;
+package com.github.jactorrises.persistence.client;
 
-import nu.hjemme.client.domain.GuestBook;
+import com.github.jactorrises.client.domain.GuestBook;
 
 public interface GuestBookEntity extends GuestBook {
     void setTitle(String title);

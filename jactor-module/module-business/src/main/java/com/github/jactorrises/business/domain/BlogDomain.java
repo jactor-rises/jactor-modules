@@ -1,9 +1,9 @@
 package com.github.jactorrises.business.domain;
 
 import com.github.jactorrises.business.domain.builder.BlogDomainBuilder;
-import nu.hjemme.client.domain.Blog;
-import nu.hjemme.client.domain.User;
-import nu.hjemme.persistence.client.BlogEntity;
+import com.github.jactorrises.client.domain.Blog;
+import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.persistence.client.BlogEntity;
 
 import java.time.LocalDate;
 

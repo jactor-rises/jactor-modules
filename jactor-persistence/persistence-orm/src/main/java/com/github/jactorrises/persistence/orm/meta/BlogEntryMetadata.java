@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.orm.meta;
+package com.github.jactorrises.persistence.orm.meta;
 
 /**
  * The meta data of a blog entry.

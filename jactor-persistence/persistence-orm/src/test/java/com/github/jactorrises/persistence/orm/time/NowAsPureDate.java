@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.orm.time;
+package com.github.jactorrises.persistence.orm.time;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

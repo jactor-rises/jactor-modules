@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client;
+package com.github.jactorrises.persistence.client;
 
-import nu.hjemme.client.domain.BlogEntry;
+import com.github.jactorrises.client.domain.BlogEntry;
 
 public interface BlogEntryEntity extends BlogEntry, PersistentEntry {
 

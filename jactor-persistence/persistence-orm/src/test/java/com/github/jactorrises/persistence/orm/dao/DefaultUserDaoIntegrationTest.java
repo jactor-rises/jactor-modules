@@ -1,7 +1,7 @@
-package nu.hjemme.persistence.orm.dao;
+package com.github.jactorrises.persistence.orm.dao;
 
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.persistence.orm.domain.DefaultUserEntity;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.orm.domain.DefaultUserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Before;
@@ -23,9 +23,9 @@ import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Ignore("fix after finished making hjemme-persistence an external component of hjemme.nu")
+@Ignore("fix after finished making a persistence layer with spring-boot")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = DefaultUserDaoIntegrationTest.HjemmeDbContext.class)
+@ContextConfiguration(classes = DefaultUserDaoIntegrationTest.JactorDbContext.class)
 @Transactional
 public class DefaultUserDaoIntegrationTest {
 
@@ -54,12 +54,12 @@ public class DefaultUserDaoIntegrationTest {
     }
 
     @ContextConfiguration
-    public static class HjemmeDbContext {
+    public static class JactorDbContext {
 
         @Bean(name = "dataSource") public DataSource dataSource() {
             return new EmbeddedDatabaseBuilder()
                     .setType(EmbeddedDatabaseType.HSQL)
-                    .setName("hjemme-persistence-" + System.currentTimeMillis())
+                    .setName("mydb-" + System.currentTimeMillis())
                     .addScript("classpath:create.db.sql")
                     .addScript("classpath:create.constraints.sql")
                     .addScript("classpath:create.default.users.sql")
@@ -69,7 +69,7 @@ public class DefaultUserDaoIntegrationTest {
         @Bean(name = "sessionFactoryBean") public LocalSessionFactoryBean locaslSessionFactoryBean() {
             LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
             sessionFactory.setDataSource(dataSource());
-            sessionFactory.setPackagesToScan("nu.hjemme.persistence.domain");
+            sessionFactory.setPackagesToScan("com.github.jactor-rises.persistence.domain");
             sessionFactory.setHibernateProperties(new Properties() {
                 {
                     setProperty("hibernate.hbm2ddl.auto", "validate");

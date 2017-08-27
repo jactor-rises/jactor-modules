@@ -1,7 +1,7 @@
-package nu.hjemme.persistence.client.converter;
+package com.github.jactorrises.persistence.client.converter;
 
-public interface TypeConverter<To, From> {
-    To convertTo(From from);
+public interface TypeConverter<T, F> {
+    T convertTo(F from);
 
-    From convertFrom(To to);
+    F convertFrom(T to);
 }

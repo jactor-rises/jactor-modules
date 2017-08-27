@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client.converter;
+package com.github.jactorrises.persistence.client.converter;
 
-import nu.hjemme.client.datatype.UserName;
+import com.github.jactorrises.client.datatype.UserName;
 
 public class UserNameConverter implements TypeConverter<UserName, String> {
     @Override public UserName convertTo(String from) {

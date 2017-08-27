@@ -1,11 +1,11 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
-import nu.hjemme.client.datatype.Description;
-import nu.hjemme.client.datatype.EmailAddress;
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.persistence.client.AddressEntity;
-import nu.hjemme.persistence.client.UserEntity;
+import com.github.jactorrises.client.datatype.Description;
+import com.github.jactorrises.client.datatype.EmailAddress;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.client.AddressEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

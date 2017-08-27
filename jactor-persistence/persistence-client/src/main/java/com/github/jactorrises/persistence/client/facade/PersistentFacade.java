@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.client.facade;
+package com.github.jactorrises.persistence.client.facade;
 
 public interface PersistentFacade {
 }

@@ -1,6 +1,6 @@
-package nu.hjemme.persistence.client.converter;
+package com.github.jactorrises.persistence.client.converter;
 
-import nu.hjemme.client.datatype.EmailAddress;
+import com.github.jactorrises.client.datatype.EmailAddress;
 
 public class EmailAddressConverter implements TypeConverter<EmailAddress, String> {
     @Override public EmailAddress convertTo(String from) {

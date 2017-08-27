@@ -1,9 +1,8 @@
 package com.github.jactorrises.business.domain.dao;
 
 import com.github.jactorrises.business.domain.UserDomain;
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.client.dao.UserDao;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.client.dao.UserDao;
 
 import java.util.Optional;
 
@@ -19,13 +18,7 @@ public class UserDomainDao {
             return Optional.empty();
         }
 
-        Optional<UserEntity> entity = userDao.findUsing(userName);
-
-        if (!entity.isPresent()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(new UserDomain(entity.get()));
+        return userDao.findUsing(userName).map(UserDomain::new);
     }
 
     void save(UserDomain userDomain) {

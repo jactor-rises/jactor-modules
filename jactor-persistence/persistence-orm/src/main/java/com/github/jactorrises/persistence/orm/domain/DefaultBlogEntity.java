@@ -1,8 +1,8 @@
-package nu.hjemme.persistence.orm.domain;
+package com.github.jactorrises.persistence.orm.domain;
 
-import nu.hjemme.persistence.client.BlogEntity;
-import nu.hjemme.persistence.client.UserEntity;
-import nu.hjemme.persistence.orm.meta.BlogMetadata;
+import com.github.jactorrises.persistence.client.BlogEntity;
+import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.orm.meta.BlogMetadata;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

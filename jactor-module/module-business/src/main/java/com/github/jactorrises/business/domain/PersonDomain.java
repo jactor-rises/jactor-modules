@@ -1,11 +1,11 @@
 package com.github.jactorrises.business.domain;
 
 import com.github.jactorrises.business.domain.builder.PersonDomainBuilder;
-import nu.hjemme.client.datatype.Description;
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.domain.Address;
-import nu.hjemme.client.domain.Person;
-import nu.hjemme.persistence.client.PersonEntity;
+import com.github.jactorrises.client.datatype.Description;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.domain.Address;
+import com.github.jactorrises.client.domain.Person;
+import com.github.jactorrises.persistence.client.PersonEntity;
 
 import java.util.Locale;
 
