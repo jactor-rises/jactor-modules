@@ -1,7 +1,7 @@
-package nu.hjemme.persistence.boot.repository;
+package com.github.jactorrises.persistence.boot.repository;
 
-import nu.hjemme.persistence.boot.Persistence;
-import nu.hjemme.persistence.boot.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.boot.Persistence;
+import com.github.jactorrises.persistence.boot.entity.address.AddressEntity;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-import static nu.hjemme.persistence.boot.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.persistence.boot.entity.address.AddressEntity.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.fail;
 public class AddressRepositoryTest {
 
     @Autowired
-    private AddressRepository addressRepository;
+    private com.github.jactorrises.persistence.boot.repository.AddressRepository addressRepository;
 
     @Autowired
     private SessionFactory sessionFactory;

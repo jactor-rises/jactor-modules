@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.boot;
+package com.github.jactorrises.persistence.boot;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;

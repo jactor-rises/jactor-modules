@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jactor-rises.module</groupId>
     <artifactId>module-facade</artifactId>
-    <name>jactor-rises-module-facade</name>
+    <name>jactor-rises::module-facade</name>
     <packaging>jar</packaging>
 
     <description>

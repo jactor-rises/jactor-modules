@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.boot;
+package com.github.jactorrises.persistence.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

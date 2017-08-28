@@ -11,6 +11,6 @@
     <groupId>com.github.jactor-rises.persistence</groupId>
     <artifactId>persistence-client</artifactId>
 
-    <name>jactor-rises-persistence-client</name>
+    <name>jactor-rises::persistence-client</name>
     <description>The client of the persistence layer</description>
 </project>

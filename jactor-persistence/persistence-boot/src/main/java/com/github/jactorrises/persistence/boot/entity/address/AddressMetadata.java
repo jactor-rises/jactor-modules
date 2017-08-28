@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.boot.entity.address;
+package com.github.jactorrises.persistence.boot.entity.address;
 
 final class AddressMetadata {
     private AddressMetadata() {

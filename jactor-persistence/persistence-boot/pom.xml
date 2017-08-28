@@ -10,29 +10,29 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>persistence-boot</artifactId>
-    <groupId>nu.hjemme.persistence</groupId>
+    <groupId>com.github.jactor-rises.persistence</groupId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <assertj.version>3.8.0</assertj.version>
-        <hjemme.version>1.0-SNAPSHOT</hjemme.version>
+        <jactor.version>1.0-SNAPSHOT</jactor.version>
         <java.version>1.8</java.version>
     </properties>
 
-    <name>hjemme-persistence-boot</name>
-    <description>The relational database access of hjemme.</description>
+    <name>jactor-rises::persistence-boot</name>
+    <description>The relational database access enabled by spring boot for jactor-rises.</description>
 
     <dependencies>
         <dependency>
-            <groupId>nu.hjemme</groupId>
-            <artifactId>hjemme-client</artifactId>
-            <version>${hjemme.version}</version>
+            <groupId>com.github.jactor-rises</groupId>
+            <artifactId>jactor-client</artifactId>
+            <version>${jactor.version}</version>
         </dependency>
         <dependency>
-            <groupId>nu.hjemme.persistence</groupId>
+            <groupId>com.github.jactor-rises.persistence</groupId>
             <artifactId>persistence-client</artifactId>
-            <version>${hjemme.version}</version>
+            <version>${jactor.version}</version>
         </dependency>
 
         <!-- Third party -->

@@ -19,7 +19,7 @@
         <module>persistence-facade</module>
     </modules>
 
-    <name>jactor-rises-persistence</name>
+    <name>jactor-rises::persistence</name>
     <description>The build for the persistence layer</description>
 
     <properties>

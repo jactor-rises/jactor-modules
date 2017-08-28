@@ -13,7 +13,7 @@
     <artifactId>module-business</artifactId>
     <packaging>jar</packaging>
 
-    <name>jactor-rises-module-business</name>
+    <name>jactor-rises::module-business</name>
 
     <dependencies>
         <dependency>

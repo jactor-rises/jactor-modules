@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>jactor-module</artifactId>
-    <name>jactor-rises-module</name>
+    <name>jactor-rises::module</name>
     <packaging>pom</packaging>
     <description>The pom for the multi-build of jactor-module</description>
 

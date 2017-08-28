@@ -1,4 +1,4 @@
-package nu.hjemme.persistence.boot.entity;
+package com.github.jactorrises.persistence.boot.entity;
 
 final class PersistentMetadata {
 

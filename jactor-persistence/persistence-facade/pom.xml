@@ -11,7 +11,7 @@
     <groupId>com.github.jactor-rises.persistence</groupId>
     <artifactId>persistence-facade</artifactId>
 
-    <name>jactor-rises-persistence-facade</name>
+    <name>jactor-rises::persistence-facade</name>
     <description>The facade of the persistence layer</description>
 
     <dependencies>

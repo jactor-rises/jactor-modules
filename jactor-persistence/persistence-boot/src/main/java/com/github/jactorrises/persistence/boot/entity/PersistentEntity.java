@@ -1,18 +1,18 @@
-package nu.hjemme.persistence.boot.entity;
+package com.github.jactorrises.persistence.boot.entity;
 
-import nu.hjemme.client.datatype.Country;
-import nu.hjemme.client.datatype.Description;
-import nu.hjemme.client.datatype.EmailAddress;
-import nu.hjemme.client.datatype.Name;
-import nu.hjemme.client.datatype.UserName;
-import nu.hjemme.persistence.client.converter.CountryConverter;
-import nu.hjemme.persistence.client.converter.DescriptionConverter;
-import nu.hjemme.persistence.client.converter.EmailAddressConverter;
-import nu.hjemme.persistence.client.converter.LocalDateConverter;
-import nu.hjemme.persistence.client.converter.LocalDateTimeConverter;
-import nu.hjemme.persistence.client.converter.NameConverter;
-import nu.hjemme.persistence.client.converter.TypeConverter;
-import nu.hjemme.persistence.client.converter.UserNameConverter;
+import com.github.jactorrises.client.datatype.Country;
+import com.github.jactorrises.client.datatype.Description;
+import com.github.jactorrises.client.datatype.EmailAddress;
+import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.client.converter.CountryConverter;
+import com.github.jactorrises.persistence.client.converter.DescriptionConverter;
+import com.github.jactorrises.persistence.client.converter.EmailAddressConverter;
+import com.github.jactorrises.persistence.client.converter.LocalDateConverter;
+import com.github.jactorrises.persistence.client.converter.LocalDateTimeConverter;
+import com.github.jactorrises.persistence.client.converter.NameConverter;
+import com.github.jactorrises.persistence.client.converter.TypeConverter;
+import com.github.jactorrises.persistence.client.converter.UserNameConverter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @MappedSuperclass
-public abstract class PersistentEntity implements nu.hjemme.client.domain.Persistent<Long> {
+public abstract class PersistentEntity implements com.github.jactorrises.client.domain.Persistent<Long> {
 
     private static final Map<Class<?>, TypeConverter> dataTypeConverters = initKnownConverters();
 
