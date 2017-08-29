@@ -25,6 +25,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
 import static com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl.anAddress;
 import static com.github.jactorrises.persistence.boot.entity.blog.BlogEntityImpl.aBlog;
 import static com.github.jactorrises.persistence.boot.entity.blog.BlogEntryEntityImpl.aBlogEntry;
@@ -361,5 +363,22 @@ public class HibernateRepositoryIT {
 
     private Session session() {
         return sessionFactory.getCurrentSession();
+    }
+
+    @Test
+    public void shouldFindDefaultUser() {
+        hibernateRepository.saveOrUpdate(
+                aUser()
+                        .withUserName("jactor")
+                        .withPassword("enter")
+                        .build()
+        );
+
+        Optional<UserEntity> jactor = hibernateRepository.findUsing(new UserName("jactor"));
+
+        assertSoftly(softly -> {
+            softly.assertThat(jactor).as("jactor").isPresent();
+            softly.assertThat(jactor.get().getPassword()).isEqualTo("enter");
+        });
     }
 }
