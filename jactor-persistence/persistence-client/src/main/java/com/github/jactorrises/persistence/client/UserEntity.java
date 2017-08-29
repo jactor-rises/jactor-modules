@@ -10,6 +10,4 @@ public interface UserEntity extends User {
     void setPassword(String password);
 
     void setEmailAddress(String emailAddress);
-
-    void setUserNameAsEmailAddress();
 }

@@ -1,11 +1,12 @@
-package com.github.jactorrises.persistence.orm.domain;
+package com.github.jactorrises.persistence.boot.entity.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.persistence.boot.entity.PersistentEntity;
+import com.github.jactorrises.persistence.boot.entity.person.PersonEntityImpl;
 import com.github.jactorrises.persistence.client.PersonEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.orm.meta.UserMetadata;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,36 +23,32 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = UserMetadata.USER_TABLE)
-public class DefaultUserEntity extends DefaultPersistentEntity implements UserEntity {
+public class UserEntityImpl extends PersistentEntity implements UserEntity {
 
     @Column(name = UserMetadata.PASSWORD, nullable = false) private String password; // the user password
     @Column(name = UserMetadata.USER_NAME, nullable = false) private String userName; // the user name
-    @JoinColumn(name = UserMetadata.PERSON_ID) @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private DefaultPersonEntity personEntity; // the user as a person
+    @JoinColumn(name = UserMetadata.PERSON_ID) @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntityImpl personEntity; // the user as a person
     @Column(name = UserMetadata.EMAIL) private String emailAddress; // the email address to the user
-    @Column(name = UserMetadata.EMAIL_AS_NAME, nullable = false) private boolean userNameIsEmailAddress; // if the user uses the email address as the user name
 
-    public DefaultUserEntity() { }
+    public UserEntityImpl() { }
 
     /** @param user is used to create an entity */
-    public DefaultUserEntity(User user) {
+    public UserEntityImpl(User user) {
         password = user.getPassword();
         userName = convertFrom(user.getUserName(), UserName.class);
-        personEntity = constructCopy(user.getPerson(), DefaultPersonEntity.class);
+        personEntity = castOrInitializeCopyWith(user.getPerson(), PersonEntityImpl.class);
         emailAddress = convertFrom(user.getEmailAddress(), EmailAddress.class);
-        userNameIsEmailAddress = user.isUserNameEmailAddress();
     }
 
     @Override public boolean equals(Object o) {
         return o == this || o != null && getClass() == o.getClass() &&
-                Objects.equals(getId(), ((DefaultUserEntity) o).getId()) &&
-                Objects.equals(userName, ((DefaultUserEntity) o).userName) &&
-                Objects.equals(personEntity, ((DefaultUserEntity) o).personEntity) &&
-                Objects.equals(emailAddress, ((DefaultUserEntity) o).emailAddress) &&
-                Objects.equals(userNameIsEmailAddress, ((DefaultUserEntity) o).userNameIsEmailAddress);
+                Objects.equals(userName, ((UserEntityImpl) o).userName) &&
+                Objects.equals(personEntity, ((UserEntityImpl) o).personEntity) &&
+                Objects.equals(emailAddress, ((UserEntityImpl) o).emailAddress);
     }
 
     @Override public int hashCode() {
-        return hash(userName, personEntity, emailAddress, userNameIsEmailAddress);
+        return hash(userName, personEntity, emailAddress);
     }
 
     @Override public String toString() {
@@ -60,7 +57,6 @@ public class DefaultUserEntity extends DefaultPersistentEntity implements UserEn
                 .append(userName)
                 .append(personEntity)
                 .append(emailAddress)
-                .append(userNameIsEmailAddress)
                 .toString();
     }
 
@@ -81,7 +77,7 @@ public class DefaultUserEntity extends DefaultPersistentEntity implements UserEn
     }
 
     @Override public boolean isUserNameEmailAddress() {
-        return userNameIsEmailAddress;
+        return userName.endsWith(emailAddress);
     }
 
     @Override public void setPassword(String password) {
@@ -92,15 +88,15 @@ public class DefaultUserEntity extends DefaultPersistentEntity implements UserEn
         this.emailAddress = emailAddress;
     }
 
-    public void setUserNameAsEmailAddress() {
-        userNameIsEmailAddress = true;
-    }
-
     @Override public void setUserName(String userName) {
         this.userName = userName;
     }
 
     @Override public void setPersonEntity(PersonEntity personEntity) {
-        this.personEntity = castOrInitializeCopyWith(personEntity, DefaultPersonEntity.class);
+        this.personEntity = personEntity != null ? castOrInitializeCopyWith(personEntity, PersonEntityImpl.class) : null;
+    }
+
+    public static UserEntityBuilder aUser() {
+        return new UserEntityBuilder();
     }
 }

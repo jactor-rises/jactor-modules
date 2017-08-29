@@ -1,5 +1,5 @@
-INSERT INTO T_USER (USER_NAME, PASSWORD, EMAIL, EMAIL_AS_NAME) VALUES ('jactor', 'demo', 'tor.egil.jacobsen@gmail.com', 0);
-INSERT INTO T_USER (USER_NAME, PASSWORD, EMAIL, EMAIL_AS_NAME) VALUES ('tip', 'demo', 'suthatip.jacobsen@gmail.com', 0);
+INSERT INTO T_USER (USER_NAME, PASSWORD, EMAIL, EMAIL_AS_NAME) VALUES ('jactor', 'demo', 'tor.egil.jacobsen@gmail.com');
+INSERT INTO T_USER (USER_NAME, PASSWORD, EMAIL, EMAIL_AS_NAME) VALUES ('tip', 'demo', 'suthatip.jacobsen@gmail.com');
 
 INSERT INTO T_PERSON(DESCRIPTION) VALUES ('jactor.desc');
 INSERT INTO T_PERSON(DESCRIPTION) VALUES ('tip.desc');

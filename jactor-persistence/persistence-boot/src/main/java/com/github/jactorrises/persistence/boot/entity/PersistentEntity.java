@@ -14,6 +14,7 @@ import com.github.jactorrises.persistence.client.converter.LocalDateTimeConverte
 import com.github.jactorrises.persistence.client.converter.NameConverter;
 import com.github.jactorrises.persistence.client.converter.TypeConverter;
 import com.github.jactorrises.persistence.client.converter.UserNameConverter;
+import com.github.jactorrises.persistence.client.time.Now;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -43,9 +44,9 @@ public abstract class PersistentEntity implements Persistent<Long> {
 
     protected PersistentEntity() {
         createdBy = "todo";
-        creationTime = new Date();
+        creationTime = Now.asDate();
         updatedBy = "todo";
-        updatedTime = new Date();
+        updatedTime = Now.asDate();
     }
 
     @SuppressWarnings("unchecked") protected <T, F> T convertTo(F from, Class<T> classType) {
