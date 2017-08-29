@@ -5,6 +5,7 @@ import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.persistence.client.converter.CountryConverter;
 import com.github.jactorrises.persistence.client.converter.DescriptionConverter;
 import com.github.jactorrises.persistence.client.converter.EmailAddressConverter;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @MappedSuperclass
-public abstract class PersistentEntity implements com.github.jactorrises.client.domain.Persistent<Long> {
+public abstract class PersistentEntityImpl implements Persistent<Long> {
 
     private static final Map<Class<?>, TypeConverter> dataTypeConverters = initKnownConverters();
 
@@ -40,7 +41,7 @@ public abstract class PersistentEntity implements com.github.jactorrises.client.
     @Column(name = PersistentMetadata.UPDATED_TIME) @Type(type = "timestamp") private Date updatedTime;
     @Column(name = PersistentMetadata.UPDATED_BY) private String updatedBy;
 
-    public PersistentEntity() {
+    protected PersistentEntityImpl() {
         createdBy = "todo";
         creationTime = new Date();
         updatedBy = "todo";

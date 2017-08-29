@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.boot.repository;
 
 import com.github.jactorrises.persistence.boot.Persistence;
-import com.github.jactorrises.persistence.boot.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -12,26 +12,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-import static com.github.jactorrises.persistence.boot.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Persistence.class)
 @Transactional
-public class AddressRepositoryIT {
+public class HibernateRepositoryIT {
 
     @Autowired
-    private AddressRepository addressRepository;
+    private HibernateRepository hibernateRepository;
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @Test
-    public void shouldPFindPersistedEntity() {
-        int noOfEntities = session().createCriteria(AddressEntity.class).list().size();
+    public void shouldFindAddress() {
+        int noOfEntities = session().createCriteria(AddressEntityImpl.class).list().size();
 
-        Long id = addressRepository.saveOrUpdate(
+        Long id = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("living on the edge")
                         .withZipCode(1234)
@@ -41,13 +41,13 @@ public class AddressRepositoryIT {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(AddressEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(AddressEntityImpl.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
     @Test
-    public void shouldReadPersistedEntityWithHibernate() {
-        Long id = addressRepository.saveOrUpdate(
+    public void shouldReadAddressEntityWithHibernate() {
+        Long id = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("living on the edge")
                         .withZipCode(1234)
@@ -58,7 +58,7 @@ public class AddressRepositoryIT {
         session().flush();
         session().clear();
 
-        AddressEntity addressEntity = session().load(AddressEntity.class, id);
+        AddressEntityImpl addressEntity = hibernateRepository.load(AddressEntityImpl.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(addressEntity.getAddressLine1()).as("addressLine1").isEqualTo("living on the edge");

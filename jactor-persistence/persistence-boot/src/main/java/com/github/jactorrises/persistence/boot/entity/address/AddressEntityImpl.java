@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.boot.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
-import com.github.jactorrises.persistence.boot.entity.PersistentEntity;
+import com.github.jactorrises.persistence.boot.entity.PersistentEntityImpl;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,7 +15,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = AddressMetadata.ADDRESS)
-public class AddressEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.AddressEntity {
+public class AddressEntityImpl extends PersistentEntityImpl implements com.github.jactorrises.persistence.client.AddressEntity {
 
     @Column(name = AddressMetadata.COUNTRY) private String country;
     @Column(name = AddressMetadata.ZIP_CODE) private Integer zipCode;
@@ -24,13 +24,13 @@ public class AddressEntity extends PersistentEntity implements com.github.jactor
     @Column(name = AddressMetadata.ADDRESS_LINE_3) private String addressLine3;
     @Column(name = AddressMetadata.CITY) private String city;
 
-    public AddressEntity() {
+    public AddressEntityImpl() {
     }
 
     /**
      * @param address to copy
      */
-    public AddressEntity(Address address) {
+    public AddressEntityImpl(Address address) {
         if (address != null) {
             addressLine1 = address.getAddressLine1();
             addressLine2 = address.getAddressLine2();
@@ -43,13 +43,13 @@ public class AddressEntity extends PersistentEntity implements com.github.jactor
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(getId(), ((AddressEntity) o).getId()) &&
-                Objects.equals(addressLine1, ((AddressEntity) o).addressLine1) &&
-                Objects.equals(addressLine2, ((AddressEntity) o).addressLine2) &&
-                Objects.equals(addressLine3, ((AddressEntity) o).addressLine3) &&
-                Objects.equals(city, ((AddressEntity) o).city) &&
-                Objects.equals(country, ((AddressEntity) o).country) &&
-                Objects.equals(zipCode, ((AddressEntity) o).zipCode);
+                Objects.equals(getId(), ((AddressEntityImpl) o).getId()) &&
+                Objects.equals(addressLine1, ((AddressEntityImpl) o).addressLine1) &&
+                Objects.equals(addressLine2, ((AddressEntityImpl) o).addressLine2) &&
+                Objects.equals(addressLine3, ((AddressEntityImpl) o).addressLine3) &&
+                Objects.equals(city, ((AddressEntityImpl) o).city) &&
+                Objects.equals(country, ((AddressEntityImpl) o).country) &&
+                Objects.equals(zipCode, ((AddressEntityImpl) o).zipCode);
     }
 
     @Override public int hashCode() {
