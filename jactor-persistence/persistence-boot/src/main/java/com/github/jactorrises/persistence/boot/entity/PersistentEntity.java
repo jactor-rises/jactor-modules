@@ -85,7 +85,7 @@ public abstract class PersistentEntity implements Persistent<Long> {
         return constructCopy(iFace, entityClass);
     }
 
-    <E extends I, I> E constructCopy(I iFace, Class<E> entityClass) {
+    private <E extends I, I> E constructCopy(I iFace, Class<E> entityClass) {
         if (iFace != null) {
             for (Constructor<?> constructor : entityClass.getConstructors()) {
                 if (constructor.getParameterCount() == 1 && isCorrectParameterType(constructor.getParameterTypes()[0], entityClass)) {
