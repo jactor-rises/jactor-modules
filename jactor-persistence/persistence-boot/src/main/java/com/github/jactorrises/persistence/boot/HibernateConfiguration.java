@@ -1,5 +1,6 @@
 package com.github.jactorrises.persistence.boot;
 
+import com.github.jactorrises.persistence.boot.entity.PersistentEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,9 +31,6 @@ public class HibernateConfiguration {
     @Value("${hibernate.hbm2ddl.auto}")
     private String hbm2DdlAuto;
 
-    @Value("${entitymanager.packagesToScan}")
-    private String packagesToScan;
-
     @Bean
     @ConfigurationProperties("app.datasource")
     public DataSource dataSource() {
@@ -43,7 +41,7 @@ public class HibernateConfiguration {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(packagesToScan);
+        sessionFactory.setPackagesToScan(PersistentEntity.class.getPackage().getName());
         Properties hibernateProperties = new Properties();
         hibernateProperties.put("hibernate.dialect", dialect);
         hibernateProperties.put("hibernate.show_sql", showSql);

@@ -1,7 +1,9 @@
 package com.github.jactorrises.persistence.boot.repository;
 
+import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.persistence.boot.Persistence;
 import com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.user.UserEntityImpl;
 import com.github.jactorrises.persistence.client.AddressEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
 import org.hibernate.Session;
@@ -48,7 +50,7 @@ public class HibernateRepositoryIT {
     }
 
     @Test
-    public void shouldReadAddressEntityWithHibernate() {
+    public void shouldReadAddressProperties() {
         Long id = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("living on the edge")
@@ -83,6 +85,26 @@ public class HibernateRepositoryIT {
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
             softly.assertThat(session().createCriteria(UserEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+        });
+    }
+
+    @Test
+    public void shouldReadUserProperties() {
+        Long id = hibernateRepository.saveOrUpdate(
+                aUser()
+                        .withUserName("jactor")
+                        .withPassword("enter")
+                        .build()
+        ).getId();
+
+        session().flush();
+        session().clear();
+
+        UserEntity userEntity = hibernateRepository.load(UserEntityImpl.class, id);
+
+        assertSoftly(softly -> {
+            softly.assertThat(userEntity.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
+            softly.assertThat(userEntity.getPassword()).as("password").isEqualTo("enter");
         });
     }
 

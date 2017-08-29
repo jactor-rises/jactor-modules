@@ -30,9 +30,10 @@ class DefaultGuestBookEntityTest {
 
 
         assertAll(
-                () -> assertThat(base.hashCode()).as("(%s).hashCode() is equal to (%s).hashCode()", base, equal).isEqualTo(equal.hashCode()),
-                () -> assertThat(base.hashCode()).as("(%s).hashCode() is not equal to (%s).hashCode()", base, notEqual).isNotEqualTo(notEqual.hashCode()),
-                () -> assertThat(base.hashCode()).as("(%s).hashCode() is a number with different value", base).isNotEqualTo(0)
+                () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is not equal to notEqual.hashCode()", base, notEqual).isNotEqualTo(notEqual.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is a number with different value", base).isNotEqualTo(0),
+                () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }
 
@@ -49,10 +50,10 @@ class DefaultGuestBookEntityTest {
         notEqual.setUser(new DefaultUserEntity());
 
         assertAll(
-                () -> assertThat(base).as("%s is equal to %s", base, equal).isEqualTo(equal),
-                () -> assertThat(base).as("%s is not equal to %s", base, notEqual).isNotEqualTo(notEqual),
-                () -> assertThat(base).as("%s is not equal to %s").isNotEqualTo(null),
-                () -> assertThat(base).as("%s is equal to %s").isEqualTo(base),
+                () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
+                () -> assertThat(base).as("base is equal to base").isEqualTo(base),
+                () -> assertThat(base).as("base is equal to equal", base, equal).isEqualTo(equal),
+                () -> assertThat(base).as("base is not equal to notEqual", base, notEqual).isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }

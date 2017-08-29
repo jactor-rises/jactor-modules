@@ -38,9 +38,10 @@ class DefaultUserEntityTest {
         notEqual.setUserName("some other user");
 
         assertAll(
-                () -> assertThat(base.hashCode()).as("(%s).hashCode() is equal to (%s).hashCode()", base, equal).isEqualTo(equal.hashCode()),
-                () -> assertThat(base.hashCode()).as("(%s).hashCode() is not equal to (%s).hashCode()", base, notEqual).isNotEqualTo(notEqual.hashCode()),
-                () -> assertThat(base.hashCode()).as("(%s).hashCode() is a number with different value", base).isNotEqualTo(0)
+                () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is not equal to notEqual.hashCode()", base, notEqual).isNotEqualTo(notEqual.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is a number with different value", base).isNotEqualTo(0),
+                () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }
 
@@ -61,10 +62,10 @@ class DefaultUserEntityTest {
         notEqual.setUserName("some other user");
 
         assertAll(
-                () -> assertThat(base).as("base is equal to eqaul").isEqualTo(equal),
-                () -> assertThat(base).as("base is not equal to notEqual").isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
                 () -> assertThat(base).as("base is equal to base").isEqualTo(base),
+                () -> assertThat(base).as("base is equal to equal", base, equal).isEqualTo(equal),
+                () -> assertThat(base).as("base is not equal to notEqual", base, notEqual).isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }
