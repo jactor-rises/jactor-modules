@@ -4,6 +4,8 @@ public class UserEntityBuilder {
     private String userName;
     private String password;
 
+    UserEntityBuilder() { }
+
     public UserEntityBuilder withUserName(String userName) {
         this.userName = userName;
         return this;

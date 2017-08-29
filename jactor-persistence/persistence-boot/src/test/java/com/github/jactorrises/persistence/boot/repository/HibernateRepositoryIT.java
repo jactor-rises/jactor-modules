@@ -3,8 +3,10 @@ package com.github.jactorrises.persistence.boot.repository;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.persistence.boot.Persistence;
 import com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.guestbook.GuestBookEntityImpl;
 import com.github.jactorrises.persistence.boot.entity.user.UserEntityImpl;
 import com.github.jactorrises.persistence.client.AddressEntity;
+import com.github.jactorrises.persistence.client.GuestBookEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 
 import static com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl.anAddress;
+import static com.github.jactorrises.persistence.boot.entity.guestbook.GuestBookEntityImpl.aGuestBook;
 import static com.github.jactorrises.persistence.boot.entity.user.UserEntityImpl.aUser;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -105,6 +108,57 @@ public class HibernateRepositoryIT {
         assertSoftly(softly -> {
             softly.assertThat(userEntity.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
             softly.assertThat(userEntity.getPassword()).as("password").isEqualTo("enter");
+        });
+    }
+
+    @Test
+    public void shouldFindGuestBook() {
+        int noOfEntities = session().createCriteria(GuestBookEntity.class).list().size();
+
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
+                aUser()
+                        .withUserName("jactor")
+                        .withPassword("enter")
+                        .build()
+        );
+
+        Long id = hibernateRepository.saveOrUpdate(
+                aGuestBook()
+                        .withTitle("no rest for the wicked")
+                        .with(userEntity)
+                        .build()
+        ).getId();
+
+        assertSoftly(softly -> {
+            softly.assertThat(id).as("id").isNotNull();
+            softly.assertThat(session().createCriteria(GuestBookEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+        });
+    }
+
+    @Test
+    public void shouldReadGuestBookProperties() {
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
+                aUser()
+                        .withUserName("jactor")
+                        .withPassword("enter")
+                        .build()
+        );
+
+        Long id = hibernateRepository.saveOrUpdate(
+                aGuestBook()
+                        .withTitle("no rest for the wicked")
+                        .with(userEntity)
+                        .build()
+        ).getId();
+
+        session().flush();
+        session().clear();
+
+        GuestBookEntity guestBookEntity = hibernateRepository.load(GuestBookEntityImpl.class, id);
+
+        assertSoftly(softly -> {
+            softly.assertThat(guestBookEntity.getTitle()).as("title").isEqualTo("no rest for the wicked");
+            softly.assertThat(guestBookEntity.getUser()).as("user").isEqualTo(userEntity);
         });
     }
 
