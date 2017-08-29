@@ -2,7 +2,8 @@ package com.github.jactorrises.persistence.boot.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
-import com.github.jactorrises.persistence.boot.entity.PersistentEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.PersistentEntity;
+import com.github.jactorrises.persistence.client.AddressEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,7 +16,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = AddressMetadata.ADDRESS)
-public class AddressEntityImpl extends PersistentEntityImpl implements com.github.jactorrises.persistence.client.AddressEntity {
+public class AddressEntityImpl extends PersistentEntity implements AddressEntity {
 
     @Column(name = AddressMetadata.COUNTRY) private String country;
     @Column(name = AddressMetadata.ZIP_CODE) private Integer zipCode;

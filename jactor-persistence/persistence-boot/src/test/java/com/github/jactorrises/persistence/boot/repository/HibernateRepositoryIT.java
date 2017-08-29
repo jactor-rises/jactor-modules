@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.boot.repository;
 
 import com.github.jactorrises.persistence.boot.Persistence;
-import com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.address.AddressEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-import static com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl.anAddress;
+import static com.github.jactorrises.persistence.boot.entity.address.AddressEntity.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -29,7 +29,7 @@ public class HibernateRepositoryIT {
 
     @Test
     public void shouldFindAddress() {
-        int noOfEntities = session().createCriteria(AddressEntityImpl.class).list().size();
+        int noOfEntities = session().createCriteria(AddressEntity.class).list().size();
 
         Long id = hibernateRepository.saveOrUpdate(
                 anAddress()
@@ -41,7 +41,7 @@ public class HibernateRepositoryIT {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(AddressEntityImpl.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(AddressEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
@@ -58,7 +58,7 @@ public class HibernateRepositoryIT {
         session().flush();
         session().clear();
 
-        AddressEntityImpl addressEntity = hibernateRepository.load(AddressEntityImpl.class, id);
+        AddressEntity addressEntity = hibernateRepository.load(AddressEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(addressEntity.getAddressLine1()).as("addressLine1").isEqualTo("living on the edge");

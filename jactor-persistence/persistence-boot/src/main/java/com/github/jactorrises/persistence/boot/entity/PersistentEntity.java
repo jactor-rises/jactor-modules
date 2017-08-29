@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @MappedSuperclass
-public abstract class PersistentEntityImpl implements Persistent<Long> {
+public abstract class PersistentEntity implements Persistent<Long> {
 
     private static final Map<Class<?>, TypeConverter> dataTypeConverters = initKnownConverters();
 
@@ -41,7 +41,7 @@ public abstract class PersistentEntityImpl implements Persistent<Long> {
     @Column(name = PersistentMetadata.UPDATED_TIME) @Type(type = "timestamp") private Date updatedTime;
     @Column(name = PersistentMetadata.UPDATED_BY) private String updatedBy;
 
-    protected PersistentEntityImpl() {
+    protected PersistentEntity() {
         createdBy = "todo";
         creationTime = new Date();
         updatedBy = "todo";
