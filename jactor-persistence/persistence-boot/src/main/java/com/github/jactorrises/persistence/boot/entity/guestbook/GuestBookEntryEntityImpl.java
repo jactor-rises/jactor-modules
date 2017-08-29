@@ -31,11 +31,9 @@ public class GuestBookEntryEntityImpl extends PersistentEntity implements GuestB
             @AttributeOverride(name = "createdTime", column = @Column(name = GuestBookEntryMetadata.CREATED_TIME)),
             @AttributeOverride(name = "creatorName", column = @Column(name = GuestBookEntryMetadata.GUEST_NAME)),
             @AttributeOverride(name = "entry", column = @Column(name = GuestBookEntryMetadata.ENTRY))
-    }) private PersistentEntryImpl persistentEntry;
+    }) private PersistentEntryImpl persistentEntry = new PersistentEntryImpl();
 
-    public GuestBookEntryEntityImpl() {
-        persistentEntry = new PersistentEntryImpl();
-    }
+    public GuestBookEntryEntityImpl() {    }
 
     public GuestBookEntryEntityImpl(GuestBookEntry guestBookEntry) {
         guestBookEntity = castOrInitializeCopyWith(guestBookEntry.getGuestBook(), GuestBookEntityImpl.class);
