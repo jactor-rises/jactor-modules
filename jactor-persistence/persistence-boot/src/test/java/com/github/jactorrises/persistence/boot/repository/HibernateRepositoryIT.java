@@ -1,7 +1,8 @@
 package com.github.jactorrises.persistence.boot.repository;
 
 import com.github.jactorrises.persistence.boot.Persistence;
-import com.github.jactorrises.persistence.boot.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl;
+import com.github.jactorrises.persistence.client.AddressEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -12,8 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-import static com.github.jactorrises.persistence.boot.entity.address.AddressEntity.anAddress;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl.anAddress;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)
@@ -58,7 +58,7 @@ public class HibernateRepositoryIT {
         session().flush();
         session().clear();
 
-        AddressEntity addressEntity = hibernateRepository.load(AddressEntity.class, id);
+        AddressEntity addressEntity = hibernateRepository.load(AddressEntityImpl.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(addressEntity.getAddressLine1()).as("addressLine1").isEqualTo("living on the edge");

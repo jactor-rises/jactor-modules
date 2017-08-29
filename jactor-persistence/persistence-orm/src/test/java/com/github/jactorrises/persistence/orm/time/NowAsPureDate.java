@@ -1,5 +1,7 @@
 package com.github.jactorrises.persistence.orm.time;
 
+import com.github.jactorrises.persistence.client.time.Now;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -9,8 +11,7 @@ public final class NowAsPureDate extends Now {
     private NowAsPureDate() {
     }
 
-    @Override
-    protected LocalDateTime nowAsDateTime() {
+    @Override protected LocalDateTime nowAsDateTime() {
         return LocalDateTime.now()
                 .withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
@@ -20,10 +21,10 @@ public final class NowAsPureDate extends Now {
     }
 
     public static void set() {
-        setInstance(new NowAsPureDate());
+        reset(new NowAsPureDate());
     }
 
     public static void remove() {
-        setInstance(new Now());
+        reset(new Now());
     }
 }

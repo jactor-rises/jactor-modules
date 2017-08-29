@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.orm.time;
+package com.github.jactorrises.persistence.client.time;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -8,11 +8,11 @@ public class Now {
 
     private static volatile Now instance;
 
-    LocalDateTime nowAsDateTime() {
+    protected LocalDateTime nowAsDateTime() {
         return LocalDateTime.now();
     }
 
-    Date nowAsDate() {
+    protected Date nowAsDate() {
         return new Date();
     }
 
@@ -24,13 +24,13 @@ public class Now {
         return instance.nowAsDate();
     }
 
-    static void setInstance(Now instance) {
+    protected static void reset(Now instance) {
         synchronized (SYNC) {
             Now.instance = instance;
         }
     }
 
     static {
-        setInstance(new Now());
+        reset(new Now());
     }
 }

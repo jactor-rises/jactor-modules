@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.orm.domain;
+package com.github.jactorrises.persistence.boot.entity.entry;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Entry;
@@ -17,7 +17,7 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Embeddable
-public class DefaultPersistentEntry implements PersistentEntry {
+public class PersistentEntryImpl implements PersistentEntry {
     private static final LocalDateTimeConverter TIME_CONVERTER = new LocalDateTimeConverter();
     private static final NameConverter NAME_CONVERTER = new NameConverter();
 
@@ -25,28 +25,28 @@ public class DefaultPersistentEntry implements PersistentEntry {
     private String creatorName;
     private String entry;
 
-    DefaultPersistentEntry() {
+    PersistentEntryImpl() {
         createdTime = Now.asDate();
     }
 
-    DefaultPersistentEntry(Date createdTime) {
+    PersistentEntryImpl(Date createdTime) {
         this.createdTime = createdTime;
     }
 
     /**
      * @param entry will be used to copy an instance...
      */
-    DefaultPersistentEntry(Entry entry) {
+    PersistentEntryImpl(Entry entry) {
         createdTime = TIME_CONVERTER.convertFrom(entry.getCreatedTime());
         this.entry = entry.getEntry();
         creatorName = NAME_CONVERTER.convertFrom(entry.getCreatorName());
     }
 
     @Override public boolean equals(Object obj) {
-        return this == obj || obj != null && getClass() == obj.getClass() && isEqualTo((DefaultPersistentEntry) obj);
+        return this == obj || obj != null && getClass() == obj.getClass() && isEqualTo((PersistentEntryImpl) obj);
     }
 
-    private boolean isEqualTo(DefaultPersistentEntry obj) {
+    private boolean isEqualTo(PersistentEntryImpl obj) {
         return Objects.equals(createdTime, obj.createdTime) &&
                 Objects.equals(entry, obj.entry) &&
                 Objects.equals(creatorName, obj.creatorName);
