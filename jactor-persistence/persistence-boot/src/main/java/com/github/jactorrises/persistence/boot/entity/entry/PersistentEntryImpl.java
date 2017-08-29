@@ -25,11 +25,11 @@ public class PersistentEntryImpl implements PersistentEntry {
     private String creatorName;
     private String entry;
 
-    PersistentEntryImpl() {
+    public PersistentEntryImpl() {
         createdTime = Now.asDate();
     }
 
-    PersistentEntryImpl(Date createdTime) {
+    public PersistentEntryImpl(Date createdTime) {
         this.createdTime = createdTime;
     }
 

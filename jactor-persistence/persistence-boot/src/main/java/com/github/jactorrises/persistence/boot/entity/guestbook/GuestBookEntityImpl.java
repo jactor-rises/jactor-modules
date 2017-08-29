@@ -43,7 +43,6 @@ public class GuestBookEntityImpl extends PersistentEntity implements GuestBookEn
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(getId(), ((GuestBookEntityImpl) o).getId()) &&
                 Objects.equals(title, ((GuestBookEntityImpl) o).title) &&
                 Objects.equals(user, ((GuestBookEntityImpl) o).user);
     }
