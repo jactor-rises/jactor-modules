@@ -19,5 +19,9 @@
             <groupId>com.github.jactor-rises.persistence</groupId>
             <artifactId>persistence-orm</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.jactor-rises.persistence</groupId>
+            <artifactId>persistence-boot</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -65,6 +65,11 @@
                 <artifactId>persistence-orm</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises.persistence</groupId>
+                <artifactId>persistence-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- third party -->
             <dependency>
