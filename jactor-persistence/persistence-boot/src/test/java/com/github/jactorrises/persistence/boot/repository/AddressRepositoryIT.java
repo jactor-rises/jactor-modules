@@ -29,7 +29,7 @@ public class AddressRepositoryIT {
 
     @Test
     public void shouldPFindPersistedEntity() {
-        assertThat(session().createCriteria(AddressEntity.class).list()).as("before").isEmpty();
+        int noOfEntities = session().createCriteria(AddressEntity.class).list().size();
 
         Long id = addressRepository.saveOrUpdate(
                 anAddress()
@@ -41,14 +41,12 @@ public class AddressRepositoryIT {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(AddressEntity.class).list()).as("after").isNotEmpty();
+            softly.assertThat(session().createCriteria(AddressEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
     @Test
     public void shouldReadPersistedEntityWithHibernate() {
-        assertThat(session().createCriteria(AddressEntity.class).list()).as("before").isEmpty();
-
         Long id = addressRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("living on the edge")
@@ -56,6 +54,9 @@ public class AddressRepositoryIT {
                         .withCity("metropolis")
                         .build()
         ).getId();
+
+        session().flush();
+        session().clear();
 
         AddressEntity addressEntity = session().load(AddressEntity.class, id);
 

@@ -34,7 +34,7 @@ public class Persistence {
             count++;
 
             if (count == 5 || name.contains(".")) {
-                names.append('\n');
+                names.append("\n-> ");
                 count = 0;
             }
 
