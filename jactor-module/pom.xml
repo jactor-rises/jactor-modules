@@ -16,7 +16,6 @@
 
     <modules>
         <module>module-business</module>
-        <module>module-facade</module>
     </modules>
 
     <properties>
