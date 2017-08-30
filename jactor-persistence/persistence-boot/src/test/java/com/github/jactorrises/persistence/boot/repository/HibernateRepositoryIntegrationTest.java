@@ -38,7 +38,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Persistence.class)
 @Transactional
-public class HibernateRepositoryIT {
+public class HibernateRepositoryIntegrationTest {
 
     @Autowired
     private HibernateRepository hibernateRepository;

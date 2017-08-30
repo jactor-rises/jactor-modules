@@ -27,7 +27,6 @@
         <org.apache.commons-lang3.version>3.4</org.apache.commons-lang3.version>
         <org.aspectj.version>1.8.8</org.aspectj.version>
         <org.hsqldb.version>2.3.3</org.hsqldb.version>
-        <org.slf4j.version>1.7.17</org.slf4j.version>
         <org.springframework.version>4.2.4.RELEASE</org.springframework.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -96,21 +95,6 @@
                 <groupId>org.hsqldb</groupId>
                 <artifactId>hsqldb</artifactId>
                 <version>${org.hsqldb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${org.slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${org.slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${org.slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>

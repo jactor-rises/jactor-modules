@@ -10,14 +10,17 @@ import com.github.jactorrises.persistence.client.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+@RunWith(JUnitPlatform.class)
 @DisplayName("A PersistentEntity")
-class PersistentEntityTest {
+public class PersistentEntityTest {
     private TestPersistentEntity testPersistentEntity;
 
     @BeforeEach void initForTesting() {
