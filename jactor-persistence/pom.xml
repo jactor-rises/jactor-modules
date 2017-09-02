@@ -15,8 +15,6 @@
     <modules>
         <module>persistence-boot</module>
         <module>persistence-client</module>
-        <module>persistence-orm</module>
-        <module>persistence-facade</module>
     </modules>
 
     <name>jactor-rises::persistence</name>
@@ -24,17 +22,9 @@
 
     <properties>
         <aspectj.version>1.8.8</aspectj.version>
-        <commons-dbcp.version>2.1.1</commons-dbcp.version>
-        <hibernate.version>4.2.0.Final</hibernate.version>
-        <hsqldb.version>2.4.0</hsqldb.version>
-        <javax.persistence.version>1.0.2</javax.persistence.version>
         <junit.jupiter.version>5.0.0-M4</junit.jupiter.version>
         <junit.platform.verion>1.0.0-M4</junit.platform.verion>
         <junit.vintage.version>4.12.0-M4</junit.vintage.version>
-        <log4j.version>1.2.17</log4j.version>
-        <slf4j.version>1.7.17</slf4j.version>
-        <springframework.version>4.2.4.RELEASE</springframework.version>
-        <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -60,16 +50,6 @@
             </dependency>
             <dependency>
                 <groupId>com.github.jactor-rises.persistence</groupId>
-                <artifactId>persistence-facade</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.jactor-rises.persistence</groupId>
-                <artifactId>persistence-orm</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.jactor-rises.persistence</groupId>
                 <artifactId>persistence-boot</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -79,58 +59,6 @@
                 <groupId>org.apache.commonsg</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${apache.commons.lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>${hibernate.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hsqldb</groupId>
-                <artifactId>hsqldb</artifactId>
-                <version>${hsqldb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-jpa</artifactId>
-                <version>${spring-boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${springframework.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${springframework.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-orm</artifactId>
-                <version>${springframework.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-tx</artifactId>
-                <version>${springframework.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-kernel</artifactId>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-io</artifactId>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-graphviz</artifactId>
-                <scope>test</scope>
             </dependency>
 
             <!-- Test scope -->
@@ -144,18 +72,6 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${springframework.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring-boot.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
