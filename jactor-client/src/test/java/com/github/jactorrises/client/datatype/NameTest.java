@@ -9,6 +9,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -49,12 +51,12 @@ class NameTest {
 
     @DisplayName("should not initialize when the name is null")
     @Test void whenInitializingTheNameCannotBeNull() {
-        assertThat(assertThrows(IllegalArgumentException.class, () -> new Name(null)).getMessage()).isEqualTo(Name.A_NAME_MUST_BE_GIVEN);
+        assertThatNullPointerException().isThrownBy(() -> new Name(null)).withMessage(Name.A_NAME_MUST_BE_GIVEN);
     }
 
     @DisplayName("should not initialize when the name is empty")
     @Test void whenInitializingTheNameCannotBeEmpty() {
-        assertThat(assertThrows(IllegalArgumentException.class, () -> new Name("")).getMessage()).isEqualTo(Name.A_NAME_MUST_BE_GIVEN);
+        assertThatIllegalArgumentException().isThrownBy(() -> new Name("")).withMessage(Name.A_NAME_MUST_BE_GIVEN);
     }
 
     @DisplayName("should be sorted according to its value")
