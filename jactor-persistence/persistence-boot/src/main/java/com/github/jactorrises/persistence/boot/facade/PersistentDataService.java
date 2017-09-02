@@ -1,5 +1,13 @@
-package com.github.jactorrises.persistence.facade;
+package com.github.jactorrises.persistence.boot.facade;
 
+import com.github.jactorrises.persistence.boot.entity.address.AddressEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.blog.BlogEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.blog.BlogEntryEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.entry.PersistentEntryImpl;
+import com.github.jactorrises.persistence.boot.entity.guestbook.GuestBookEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.guestbook.GuestBookEntryEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.person.PersonEntityImpl;
+import com.github.jactorrises.persistence.boot.entity.user.UserEntityImpl;
 import com.github.jactorrises.persistence.client.AddressEntity;
 import com.github.jactorrises.persistence.client.BlogEntity;
 import com.github.jactorrises.persistence.client.BlogEntryEntity;
@@ -8,16 +16,6 @@ import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.client.PersistentEntry;
 import com.github.jactorrises.persistence.client.PersonEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.client.dao.UserDao;
-import com.github.jactorrises.persistence.orm.dao.DefaultUserDao;
-import com.github.jactorrises.persistence.orm.domain.DefaultAddressEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultBlogEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultBlogEntryEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultGuestBookEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultGuestBookEntryEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultPersistentEntry;
-import com.github.jactorrises.persistence.orm.domain.DefaultPersonEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultUserEntity;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -95,15 +93,14 @@ public final class PersistentDataService {
 
     private static Map<Class<?>, Class<?>> initMapOfSupportedClasses() {
         HashMap<Class<?>, Class<?>> supportedClasses = new HashMap<>();
-        supportedClasses.put(AddressEntity.class, DefaultAddressEntity.class);
-        supportedClasses.put(BlogEntity.class, DefaultBlogEntity.class);
-        supportedClasses.put(BlogEntryEntity.class, DefaultBlogEntryEntity.class);
-        supportedClasses.put(GuestBookEntity.class, DefaultGuestBookEntity.class);
-        supportedClasses.put(GuestBookEntryEntity.class, DefaultGuestBookEntryEntity.class);
-        supportedClasses.put(PersistentEntry.class, DefaultPersistentEntry.class);
-        supportedClasses.put(PersonEntity.class, DefaultPersonEntity.class);
-        supportedClasses.put(UserEntity.class, DefaultUserEntity.class);
-        supportedClasses.put(UserDao.class, DefaultUserDao.class);
+        supportedClasses.put(AddressEntity.class, AddressEntityImpl.class);
+        supportedClasses.put(BlogEntity.class, BlogEntityImpl.class);
+        supportedClasses.put(BlogEntryEntity.class, BlogEntryEntityImpl.class);
+        supportedClasses.put(GuestBookEntity.class, GuestBookEntityImpl.class);
+        supportedClasses.put(GuestBookEntryEntity.class, GuestBookEntryEntityImpl.class);
+        supportedClasses.put(PersistentEntry.class, PersistentEntryImpl.class);
+        supportedClasses.put(PersonEntity.class, PersonEntityImpl.class);
+        supportedClasses.put(UserEntity.class, UserEntityImpl.class);
 
         return supportedClasses;
     }

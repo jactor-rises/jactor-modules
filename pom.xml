@@ -17,9 +17,9 @@
         <apache.commons.lang3.version>3.6</apache.commons.lang3.version>
         <assertj.version>3.8.0</assertj.version>
         <junit.version>4.12</junit.version>
-        <junit.jupiter.version>5.0.0-M4</junit.jupiter.version>
-        <junit.platform.verion>1.0.0-M4</junit.platform.verion>
-        <junit.vintage.version>4.12.0-M4</junit.vintage.version>
+        <junit.jupiter.version>5.0.0-RC3</junit.jupiter.version>
+        <junit.platform.verion>1.0.0-RC3</junit.platform.verion>
+        <junit.vintage.version>4.12.0-RC3</junit.vintage.version>
         <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
         <maven-site-plugin.version>3.4</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
@@ -66,6 +66,22 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Only required to run tests in an IntelliJ IDEA that bundles an older version -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -98,6 +114,25 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- Only required to run tests in an IntelliJ IDEA that bundles an older version -->
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-launcher</artifactId>
+                <version>${junit.platform.verion}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>${junit.vintage.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

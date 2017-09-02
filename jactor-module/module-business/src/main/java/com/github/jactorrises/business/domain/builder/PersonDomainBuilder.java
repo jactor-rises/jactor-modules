@@ -3,7 +3,7 @@ package com.github.jactorrises.business.domain.builder;
 import com.github.jactorrises.business.domain.PersonDomain;
 import com.github.jactorrises.business.domain.AddressDomain;
 import com.github.jactorrises.persistence.client.PersonEntity;
-import com.github.jactorrises.persistence.facade.PersistentDataService;
+import com.github.jactorrises.persistence.boot.facade.PersistentDataService;
 
 import java.util.Optional;
 

@@ -6,7 +6,7 @@ import com.github.jactorrises.business.domain.UserDomain;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.persistence.client.UserEntity;
 import com.github.jactorrises.persistence.client.dao.UserDao;
-import com.github.jactorrises.persistence.facade.PersistentDataService;
+import com.github.jactorrises.persistence.boot.facade.PersistentDataService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
