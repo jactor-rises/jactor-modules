@@ -1,21 +1,19 @@
-package com.github.jactorrises.facade.config.db;
+package com.github.jactorrises.business.domain;
 
+import com.github.jactorrises.JactorModule;
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.persistence.HibernateConfiguration;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryEntityImpl;
-import com.github.jactorrises.persistence.client.BlogEntity;
-import com.github.jactorrises.persistence.client.BlogEntryEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 
 import static com.github.jactorrises.business.domain.AddressDomain.anAddress;
@@ -23,14 +21,14 @@ import static com.github.jactorrises.business.domain.BlogDomain.aBlog;
 import static com.github.jactorrises.business.domain.BlogEntryDomain.aBlogEntry;
 import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.business.domain.UserDomain.aUser;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {JactorModule.class, HibernateConfiguration.class})
+@ContextConfiguration(classes = JactorModule.class)
 @Transactional
-public class BlogEntryDbIntegrationTest {
+public class BlogEntryIntegrationTest {
 
-    @Resource(name = "sessionFactory") @SuppressWarnings("unused") // initialized by spring
+    @Autowired
     private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
@@ -39,7 +37,7 @@ public class BlogEntryDbIntegrationTest {
         session().flush();
         session().clear();
 
-        BlogEntryEntity blogEntry = session().get(BlogEntryEntityImpl.class, id);
+        BlogEntryEntity blogEntry = session().get(BlogEntryEntity.class, id);
 
         assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
         assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").isNotNull();

@@ -1,21 +1,19 @@
-package com.github.jactorrises.facade.config.db;
+package com.github.jactorrises.business.domain;
 
+import com.github.jactorrises.JactorModule;
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.persistence.HibernateConfiguration;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntityImpl;
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 
 import static com.github.jactorrises.business.domain.AddressDomain.anAddress;
@@ -26,11 +24,11 @@ import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {JactorModule.class, HibernateConfiguration.class})
+@ContextConfiguration(classes = JactorModule.class)
 @Transactional
-public class GuestBookEntryDbIntegrationTest {
+public class GuestBookEntryIntegrationTest {
 
-    @Resource(name = "sessionFactory") @SuppressWarnings("unused") // initialized by spring
+    @Autowired
     private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
@@ -39,7 +37,7 @@ public class GuestBookEntryDbIntegrationTest {
         session().flush();
         session().clear();
 
-        GuestBookEntryEntity guestBookEntry = session().get(GuestBookEntryEntityImpl.class, id);
+        GuestBookEntryEntity guestBookEntry = session().get(GuestBookEntryEntity.class, id);
 
         assertThat(guestBookEntry.getGuestBook().getTitle()).as("guest book.title").isEqualTo("my guest book");
         assertThat(guestBookEntry.getCreatedTime()).as("entry.createdTime").isNotNull();

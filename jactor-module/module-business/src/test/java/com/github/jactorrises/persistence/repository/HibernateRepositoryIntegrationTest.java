@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.repository;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.persistence.Persistence;
+import com.github.jactorrises.JactorModule;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
@@ -30,7 +30,7 @@ import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = Persistence.class)
+@ContextConfiguration(classes = JactorModule.class)
 @Transactional
 public class HibernateRepositoryIntegrationTest {
 

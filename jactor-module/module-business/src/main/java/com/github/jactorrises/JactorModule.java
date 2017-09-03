@@ -1,16 +1,27 @@
-package com.github.jactorrises.persistence;
+package com.github.jactorrises;
 
+import com.github.jactorrises.business.facade.UserFacadeImpl;
+import com.github.jactorrises.client.facade.UserFacade;
+import com.github.jactorrises.persistence.client.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 import static java.util.Arrays.sort;
 
 @SpringBootApplication
-public class Persistence {
+public class JactorModule {
+
+
+    @Autowired
+    @Bean(name = "jactor.userFacade") public UserFacade userFacade(UserDao userDao) {
+        return new UserFacadeImpl(userDao);
+    }
 
     public static void main(String... args) {
-        display(SpringApplication.run(Persistence.class, args));
+        display(SpringApplication.run(JactorModule.class, args));
     }
 
     private static void display(ApplicationContext ctx) {
