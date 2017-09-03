@@ -37,13 +37,13 @@ public class HibernateRepository implements UserDao {
         saveOrUpdate(userEntity);
     }
 
-    public <T extends Persistent<?>> T saveOrUpdate(T addressEntity) {
-        session().saveOrUpdate(addressEntity);
-        return addressEntity;
+    public <T extends Persistent<?>> T saveOrUpdate(T entity) {
+        session().saveOrUpdate(entity);
+        return entity;
     }
 
-    public <T extends Persistent<I>, I extends Serializable> T load(Class<T> entity, I id) {
-        return session().load(entity, id);
+    public <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
+        return session().load(entityClass, id);
     }
 
     private Session session() {

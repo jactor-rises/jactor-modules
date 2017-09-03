@@ -37,7 +37,7 @@ public class HibernateConfiguration {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean
+    @Bean(name = "jactor-session")
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());

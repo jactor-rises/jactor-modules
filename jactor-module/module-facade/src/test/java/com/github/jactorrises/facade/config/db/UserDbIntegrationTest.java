@@ -4,16 +4,15 @@ import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.domain.Address;
-import com.github.jactorrises.facade.config.JactorDbContext;
+import com.github.jactorrises.persistence.boot.HibernateConfiguration;
 import com.github.jactorrises.persistence.client.UserEntity;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -23,10 +22,9 @@ import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.hibernate.criterion.Restrictions.eq;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JactorDbContext.class)
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = HibernateConfiguration.class)
 @Transactional
-@Ignore("OutOfMemoryError???")
 public class UserDbIntegrationTest {
 
     @Resource(name = "sessionFactory")

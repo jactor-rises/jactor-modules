@@ -51,12 +51,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.jactor-rises.persistence</groupId>
-                <artifactId>persistence-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.jactor-rises.persistence</groupId>
-                <artifactId>persistence-facade</artifactId>
+                <artifactId>persistence-boot</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

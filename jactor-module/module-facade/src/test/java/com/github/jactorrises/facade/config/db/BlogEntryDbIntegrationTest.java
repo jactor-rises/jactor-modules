@@ -2,17 +2,17 @@ package com.github.jactorrises.facade.config.db;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.facade.config.JactorDbContext;
+import com.github.jactorrises.persistence.boot.HibernateConfiguration;
+import com.github.jactorrises.persistence.boot.entity.blog.BlogEntryEntityImpl;
 import com.github.jactorrises.persistence.client.BlogEntity;
 import com.github.jactorrises.persistence.client.BlogEntryEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultBlogEntryEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -25,8 +25,8 @@ import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JactorModule.class, JactorDbContext.class})
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {JactorModule.class, HibernateConfiguration.class})
 @Transactional
 public class BlogEntryDbIntegrationTest {
 
@@ -39,7 +39,7 @@ public class BlogEntryDbIntegrationTest {
         session().flush();
         session().clear();
 
-        BlogEntryEntity blogEntry = (BlogEntryEntity) session().get(DefaultBlogEntryEntity.class, id);
+        BlogEntryEntity blogEntry = session().get(BlogEntryEntityImpl.class, id);
 
         assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
         assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").isNotNull();

@@ -1,17 +1,16 @@
 package com.github.jactorrises.facade.config.db;
 
 import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.facade.config.JactorDbContext;
 import com.github.jactorrises.persistence.boot.Persistence;
+import com.github.jactorrises.persistence.boot.entity.blog.BlogEntityImpl;
 import com.github.jactorrises.persistence.client.BlogEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultBlogEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -24,7 +23,7 @@ import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JactorModule.class, Persistence.class})
 @Transactional
 public class BlogDbIntegrationTest {
@@ -39,7 +38,7 @@ public class BlogDbIntegrationTest {
         session().flush();
         session().clear();
 
-        BlogEntity blog = (BlogEntity) session().get(DefaultBlogEntity.class, id);
+        BlogEntity blog = session().get(BlogEntityImpl.class, id);
 
         assertThat(blog.getCreated()).isEqualTo(LocalDate.now());
         assertThat(blog.getTitle()).isEqualTo("some blog");

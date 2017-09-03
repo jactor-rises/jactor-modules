@@ -1,16 +1,16 @@
 package com.github.jactorrises.facade.config.db;
 
 import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.facade.config.JactorDbContext;
+import com.github.jactorrises.persistence.boot.Persistence;
+import com.github.jactorrises.persistence.boot.entity.guestbook.GuestBookEntityImpl;
 import com.github.jactorrises.persistence.client.GuestBookEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultGuestBookEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -22,12 +22,12 @@ import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JactorModule.class, JactorDbContext.class})
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {JactorModule.class, Persistence.class})
 @Transactional
 public class GuestBookDbIntegrationTest {
 
-    @Resource(name = "sessionFactory") @SuppressWarnings("unused") // initialized by spring
+    @Resource(name = "jactor-session")
     private SessionFactory sessionFactory;
 
     @Test public void willSaveGuestBookEntityToThePersistentLayer() {
@@ -37,7 +37,7 @@ public class GuestBookDbIntegrationTest {
         session().flush();
         session().clear();
 
-        GuestBookEntity guestBook = (GuestBookEntity) session().get(DefaultGuestBookEntity.class, id);
+        GuestBookEntity guestBook = session().get(GuestBookEntityImpl.class, id);
 
         assertThat(guestBook.getTitle()).isEqualTo("my guest book");
         assertThat(guestBook.getUser().getId()).isEqualTo(aPersistedUser.getId());

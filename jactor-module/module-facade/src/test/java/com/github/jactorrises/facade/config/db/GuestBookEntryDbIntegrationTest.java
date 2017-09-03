@@ -2,16 +2,17 @@ package com.github.jactorrises.facade.config.db;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.facade.config.JactorDbContext;
+import com.github.jactorrises.persistence.boot.HibernateConfiguration;
+import com.github.jactorrises.persistence.boot.entity.guestbook.GuestBookEntryEntityImpl;
 import com.github.jactorrises.persistence.client.GuestBookEntity;
+import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.orm.domain.DefaultGuestBookEntryEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -24,8 +25,8 @@ import static com.github.jactorrises.business.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.business.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JactorModule.class, JactorDbContext.class})
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {JactorModule.class, HibernateConfiguration.class})
 @Transactional
 public class GuestBookEntryDbIntegrationTest {
 
@@ -38,7 +39,7 @@ public class GuestBookEntryDbIntegrationTest {
         session().flush();
         session().clear();
 
-        DefaultGuestBookEntryEntity guestBookEntry = (DefaultGuestBookEntryEntity) session().get(DefaultGuestBookEntryEntity.class, id);
+        GuestBookEntryEntity guestBookEntry = session().get(GuestBookEntryEntityImpl.class, id);
 
         assertThat(guestBookEntry.getGuestBook().getTitle()).as("guest book.title").isEqualTo("my guest book");
         assertThat(guestBookEntry.getCreatedTime()).as("entry.createdTime").isNotNull();

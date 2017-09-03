@@ -22,11 +22,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.jactor-rises.persistence</groupId>
-            <artifactId>persistence-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jactor-rises.persistence</groupId>
-            <artifactId>persistence-facade</artifactId>
+            <artifactId>persistence-boot</artifactId>
         </dependency>
 
         <!-- Third party -->
