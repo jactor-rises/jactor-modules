@@ -3,6 +3,7 @@ package com.github.jactorrises;
 import com.github.jactorrises.business.facade.UserFacadeImpl;
 import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.persistence.client.dao.UserDao;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,9 +15,10 @@ import static java.util.Arrays.sort;
 @SpringBootApplication
 public class JactorModule {
 
+    private static final Logger LOGGER = Logger.getLogger(JactorModule.class);
 
     @Autowired
-    @Bean(name = "jactor.userFacade") public UserFacade userFacade(UserDao userDao) {
+    @Bean public UserFacade userFacade(UserDao userDao) {
         return new UserFacadeImpl(userDao);
     }
 
@@ -25,12 +27,12 @@ public class JactorModule {
     }
 
     private static void display(ApplicationContext ctx) {
-        System.out.println("Available beans:");
+        LOGGER.debug("Available beans:");
 
         String[] beanDefinitions = ctx.getBeanDefinitionNames();
         sort(beanDefinitions);
 
-        System.out.println(namesOf(beanDefinitions));
+        LOGGER.debug(namesOf(beanDefinitions));
     }
 
     private static StringBuilder namesOf(String[] beanNames) {

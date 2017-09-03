@@ -6,33 +6,33 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.jactorrises.business.domain.BlogEntryDomain.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-@DisplayName("A BlogEntryBuilder")
+@DisplayName("The BlogEntryBuilder")
 class BlogEntryDomainBuilderTest {
 
     @DisplayName("should not build a blog entry without the entry")
     @Test void willNotBuildBlogEntryWithoutTheEntry() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> aBlogEntry().withEntryAs(null, "aCreator").with(new BlogEntity()).build());
-        assertThat(illegalArgumentException.getMessage()).isEqualTo(BlogEntryDomainBuilder.THE_ENTRY_CANNOT_BE_EMPTY);
+        assertThatIllegalArgumentException().isThrownBy(() -> aBlogEntry().withEntryAs(null, "aCreator").with(new BlogEntity()).build())
+                .withMessage(BlogEntryDomainBuilder.THE_ENTRY_CANNOT_BE_EMPTY);
     }
 
     @DisplayName("should not build a blog entry with an empty entry")
     @Test void willNotBuildBlogEntryWithAnEmptyEntry() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> aBlogEntry().withEntryAs("", "aCreator").with(new BlogEntity()).build());
-        assertThat(illegalArgumentException.getMessage()).isEqualTo(BlogEntryDomainBuilder.THE_ENTRY_CANNOT_BE_EMPTY);
+        assertThatIllegalArgumentException().isThrownBy(() -> aBlogEntry().withEntryAs("", "aCreator").with(new BlogEntity()).build())
+                .withMessage(BlogEntryDomainBuilder.THE_ENTRY_CANNOT_BE_EMPTY);
     }
 
     @DisplayName("should not build a blog entry with a blog")
     @Test void willNotBuildBlogEntryWithoutTheBlog() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> aBlogEntry().withEntryAs("some entry", "aCreatorName").build());
-        assertThat(illegalArgumentException.getMessage()).isEqualTo(BlogEntryDomainBuilder.THE_ENTRY_MUST_BELONG_TO_A_BLOG);
+        assertThatIllegalArgumentException().isThrownBy(() -> aBlogEntry().withEntryAs("some entry", "aCreatorName").build())
+                .withMessage(BlogEntryDomainBuilder.THE_ENTRY_MUST_BELONG_TO_A_BLOG);
     }
 
     @DisplayName("should not build a blog entry with the creator")
     @Test void willNotBuildBlogEntryWithoutTheCreator() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> aBlogEntry().withEntryAs("some entry", null).with(new BlogEntity()).build());
-        assertThat(illegalArgumentException.getMessage()).isEqualTo(BlogEntryDomainBuilder.THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE);
+        assertThatIllegalArgumentException().isThrownBy(() -> aBlogEntry().withEntryAs("some entry", null).with(new BlogEntity()).build())
+                .withMessage(BlogEntryDomainBuilder.THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE);
     }
 
     @DisplayName("should build a blog entry when all required fields are set")

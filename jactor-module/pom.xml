@@ -12,9 +12,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jactor-rises</groupId>
     <artifactId>jactor-module</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>jactor-rises::module</name>
+    <name>jactor-rises::jactor-module</name>
 
     <properties>
         <assertj.version>3.8.0</assertj.version>

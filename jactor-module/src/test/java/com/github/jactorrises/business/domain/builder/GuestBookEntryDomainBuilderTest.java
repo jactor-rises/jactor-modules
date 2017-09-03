@@ -8,7 +8,7 @@ import static com.github.jactorrises.business.domain.GuestBookEntryDomain.aGuest
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-@DisplayName("A GuestBookEntryDomainBuilder")
+@DisplayName("The GuestBookEntryDomainBuilder")
 class GuestBookEntryDomainBuilderTest {
 
     @DisplayName("should not initialize a guest book entry without an entry")

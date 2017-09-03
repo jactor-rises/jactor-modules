@@ -1,8 +1,8 @@
 package com.github.jactorrises.persistence.repository;
 
+import com.github.jactorrises.JactorModule;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.JactorModule;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
@@ -18,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-
 import java.util.Optional;
 
 import static com.github.jactorrises.persistence.entity.address.AddressEntity.anAddress;
@@ -359,7 +358,7 @@ public class HibernateRepositoryIntegrationTest {
         return sessionFactory.getCurrentSession();
     }
 
-    @Test
+    @SuppressWarnings("ConstantConditions") @Test
     public void shouldFindDefaultUser() {
         hibernateRepository.saveOrUpdate(
                 aUser()
@@ -371,7 +370,7 @@ public class HibernateRepositoryIntegrationTest {
         Optional<UserEntity> jactor = hibernateRepository.findUsing(new UserName("jactor"));
 
         assertSoftly(softly -> {
-            softly.assertThat(jactor).as("jactor").isPresent();
+            softly.assertThat(jactor).as("jactor is present").isPresent();
             softly.assertThat(jactor.get().getPassword()).isEqualTo("enter");
         });
     }
