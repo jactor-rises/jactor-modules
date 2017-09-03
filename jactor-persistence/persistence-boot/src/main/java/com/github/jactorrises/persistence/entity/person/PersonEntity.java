@@ -2,13 +2,9 @@ package com.github.jactorrises.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.address.AddressEntityImpl;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
-import com.github.jactorrises.persistence.client.AddressEntity;
-import com.github.jactorrises.persistence.client.PersonEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -28,36 +24,36 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = PersonMetadata.PERSON_TABLE)
-public class PersonEntityImpl extends PersistentEntity implements PersonEntity {
+public class PersonEntity extends PersistentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = PersonMetadata.ADDRESS_ID) private AddressEntityImpl addressEntity;
+    @JoinColumn(name = PersonMetadata.ADDRESS_ID) private AddressEntity addressEntity;
     @Column(name = PersonMetadata.DESCRIPTION) private String description;
-    @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntityImpl userEntity;
+    @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
     @Transient private String firstName;
     @Transient private String lastName;
     @Transient private Locale locale;
 
-    public PersonEntityImpl() {
+    public PersonEntity() {
     }
 
-    public PersonEntityImpl(Person person) {
-        addressEntity = person.getAddress() != null ? new AddressEntityImpl(person.getAddress()) : null;
+    public PersonEntity(PersonEntity person) {
+        addressEntity = person.getAddress() != null ? new AddressEntity(person.getAddress()) : null;
         description = convertFrom(person.getDescription(), Description.class);
         firstName = convertFrom(person.getFirstName(), Name.class);
         lastName = convertFrom(person.getLastName(), Name.class);
-        userEntity = person.getUser() != null ? new UserEntityImpl(person.getUser()) : null;
+        userEntity = person.getUser()
         locale = person.getLocale();
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressEntity, ((PersonEntityImpl) o).addressEntity) &&
-                Objects.equals(description, ((PersonEntityImpl) o).description) &&
-                Objects.equals(firstName, ((PersonEntityImpl) o).firstName) &&
-                Objects.equals(lastName, ((PersonEntityImpl) o).lastName) &&
-                Objects.equals(userEntity, ((PersonEntityImpl) o).userEntity) &&
-                Objects.equals(locale, ((PersonEntityImpl) o).locale);
+                Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
+                Objects.equals(description, ((PersonEntity) o).description) &&
+                Objects.equals(firstName, ((PersonEntity) o).firstName) &&
+                Objects.equals(lastName, ((PersonEntity) o).lastName) &&
+                Objects.equals(userEntity, ((PersonEntity) o).userEntity) &&
+                Objects.equals(locale, ((PersonEntity) o).locale);
     }
 
     @Override public int hashCode() {
@@ -69,51 +65,51 @@ public class PersonEntityImpl extends PersistentEntity implements PersonEntity {
                 .appendSuper(super.toString()).append(firstName).append(lastName).append(userEntity).append(addressEntity).toString();
     }
 
-    @Override public AddressEntity getAddress() {
+    public AddressEntity getAddress() {
         return addressEntity;
     }
 
-    @Override public Name getFirstName() {
+    public Name getFirstName() {
         return convertTo(firstName, Name.class);
     }
 
-    @Override public Name getLastName() {
+    public Name getLastName() {
         return convertTo(lastName, Name.class);
     }
 
-    @Override public Locale getLocale() {
+    public Locale getLocale() {
         return locale;
     }
 
-    @Override public Description getDescription() {
+    public Description getDescription() {
         return convertTo(description, Description.class);
     }
 
-    @Override public UserEntity getUser() {
+    public UserEntity getUser() {
         return userEntity;
     }
 
-    @Override public void setAddressEntity(AddressEntity addressEntity) {
-        this.addressEntity = castOrInitializeCopyWith(addressEntity, AddressEntityImpl.class);
+    public void setAddressEntity(AddressEntity addressEntity) {
+        this.addressEntity = addressEntity;
     }
 
-    @Override public void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    @Override public void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    @Override public void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    @Override public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = castOrInitializeCopyWith(userEntity, UserEntityImpl.class);
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity, UserEntity.class);
     }
 
-    @Override public void setLocale(Locale locale) {
+    public void setLocale(Locale locale) {
         this.locale = locale;
     }
 }

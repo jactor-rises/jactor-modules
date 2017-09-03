@@ -1,8 +1,6 @@
-package com.github.jactorrises.persistence.entity.blog;
+package com.github.jactorrises.persistence.entity.guestbook;
 
-import com.github.jactorrises.persistence.entity.NowAsPureDate;
-import com.github.jactorrises.persistence.client.BlogEntryEntity;
-import org.junit.jupiter.api.AfterEach;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,28 +8,26 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A BlogEntryEntityImpl")
-class BlogEntryEntityImplTest {
-    private BlogEntryEntityImpl blogEntryEntityToTest;
+@DisplayName("A GuestBookEntity")
+class GuestBookEntityTest {
 
-    @BeforeEach void initBlogEntryEntity() {
-        NowAsPureDate.set();
-        blogEntryEntityToTest = new BlogEntryEntityImpl();
+    private GuestBookEntity guestBookEntityToTest;
+
+    @BeforeEach void initClassToTest() {
+        guestBookEntityToTest = new GuestBookEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogEntryEntityImpl base = blogEntryEntityToTest;
-        base.setBlog(new BlogEntityImpl());
-        base.setEntry("some entry");
-        base.setCreatorName("some creator");
+        GuestBookEntity base = guestBookEntityToTest;
+        base.setTitle("title");
+        base.setUser(new UserEntity());
 
-        BlogEntryEntity equal = new BlogEntryEntityImpl(blogEntryEntityToTest);
+        GuestBookEntity equal = new GuestBookEntity(base);
 
-        BlogEntryEntity notEqual = new BlogEntryEntityImpl();
-        notEqual.setEntry("some other entry");
-        notEqual.setCreatorName("some other creator");
-        notEqual.setBlog(new BlogEntityImpl());
+        GuestBookEntity notEqual = new GuestBookEntity();
+        notEqual.setTitle("another title");
+        notEqual.setUser(new UserEntity());
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -43,17 +39,15 @@ class BlogEntryEntityImplTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogEntryEntityImpl base = blogEntryEntityToTest;
-        base.setBlog(new BlogEntityImpl());
-        base.setEntry("some entry");
-        base.setCreatorName("some creator");
+        GuestBookEntity base = guestBookEntityToTest;
+        base.setTitle("title");
+        base.setUser(new UserEntity());
 
-        BlogEntryEntity equal = new BlogEntryEntityImpl(blogEntryEntityToTest);
+        GuestBookEntity equal = new GuestBookEntity(base);
 
-        BlogEntryEntity notEqual = new BlogEntryEntityImpl();
-        notEqual.setEntry("some other entry");
-        notEqual.setCreatorName("some other creator");
-        notEqual.setBlog(new BlogEntityImpl());
+        GuestBookEntity notEqual = new GuestBookEntity();
+        notEqual.setTitle("another title");
+        notEqual.setUser(new UserEntity());
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
@@ -62,9 +56,5 @@ class BlogEntryEntityImplTest {
                 () -> assertThat(base).as("base is not equal to notEqual", base, notEqual).isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
-    }
-
-    @AfterEach void removeNowAsPureDate() {
-        NowAsPureDate.remove();
     }
 }

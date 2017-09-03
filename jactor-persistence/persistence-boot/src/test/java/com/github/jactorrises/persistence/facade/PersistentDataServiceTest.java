@@ -2,8 +2,7 @@ package com.github.jactorrises.persistence.facade;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +21,11 @@ class PersistentDataServiceTest {
 
     @DisplayName("should find an implementation of the class (interface)")
     @Test void willFindImplementationOfInterface() {
-        assertThat(PersistentDataService.getInstance().provideInstanceFor(UserEntity.class)).isInstanceOf(UserEntityImpl.class);
+        assertThat(PersistentDataService.getInstance().provideInstanceFor(UserEntity.class)).isInstanceOf(UserEntity.class);
     }
 
     @DisplayName("should find an implementation of the class (interface) unsing constructor arguments")
     @Test void willFindImplementationOfInterfaceUsingConstructorArguments() {
-        assertThat(PersistentDataService.getInstance().provideInstanceFor(UserEntity.class, mock(User.class))).isInstanceOf(UserEntityImpl.class);
+        assertThat(PersistentDataService.getInstance().provideInstanceFor(UserEntity.class, mock(User.class))).isInstanceOf(UserEntity.class);
     }
 }

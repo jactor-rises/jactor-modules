@@ -24,8 +24,8 @@ public class AddressEntityBuilder {
         return this;
     }
 
-    public AddressEntityImpl build() {
-        AddressEntityImpl addressEntity = new AddressEntityImpl();
+    public AddressEntity build() {
+        AddressEntity addressEntity = new AddressEntity();
         addressEntity.setAddressLine1(addressLine1);
         addressEntity.setZipCode(zipCode);
         addressEntity.setCity(city);

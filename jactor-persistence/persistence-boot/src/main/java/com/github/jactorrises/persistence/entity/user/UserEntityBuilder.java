@@ -16,8 +16,8 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntityImpl build() {
-        UserEntityImpl userEntity = new UserEntityImpl();
+    public UserEntity build() {
+        UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);
         userEntity.setPassword(password);
 

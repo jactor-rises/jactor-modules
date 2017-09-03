@@ -3,9 +3,7 @@ package com.github.jactorrises.persistence.entity.guestbook;
 import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -25,26 +23,26 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = GUEST_BOOK_TABLE)
-public class GuestBookEntityImpl extends PersistentEntity implements GuestBookEntity {
+public class GuestBookEntity extends PersistentEntity {
 
     @Column(name = TITLE) private String title;
-    @JoinColumn(name = USER) @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntityImpl user;
+    @JoinColumn(name = USER) @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
 
-    public GuestBookEntityImpl() {
+    public GuestBookEntity() {
     }
 
     /**
      * @param guestBook will be used to copy an instance...
      */
-    public GuestBookEntityImpl(GuestBook guestBook) {
+    public GuestBookEntity(GuestBookEntity guestBook) {
         title = guestBook.getTitle();
-        user = castOrInitializeCopyWith(guestBook.getUser(), UserEntityImpl.class);
+        user = guestBook.getUser();
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(title, ((GuestBookEntityImpl) o).title) &&
-                Objects.equals(user, ((GuestBookEntityImpl) o).user);
+                Objects.equals(title, ((GuestBookEntity) o).title) &&
+                Objects.equals(user, ((GuestBookEntity) o).user);
     }
 
     @Override public int hashCode() {
@@ -59,20 +57,20 @@ public class GuestBookEntityImpl extends PersistentEntity implements GuestBookEn
                 .toString();
     }
 
-    @Override public String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    @Override public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    @Override public void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    @Override public void setUser(UserEntity user) {
-        this.user = castOrInitializeCopyWith(user, UserEntityImpl.class);
+    public void setUser(UserEntity user) {
+        this.user = user, UserEntity.class);
     }
 
     public static GuestBookEntityBuilder aGuestBook() {

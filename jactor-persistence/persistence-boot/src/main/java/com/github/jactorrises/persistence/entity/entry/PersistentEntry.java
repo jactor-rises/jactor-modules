@@ -1,8 +1,6 @@
 package com.github.jactorrises.persistence.entity.entry;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Entry;
-import com.github.jactorrises.persistence.client.PersistentEntry;
 import com.github.jactorrises.persistence.client.converter.LocalDateTimeConverter;
 import com.github.jactorrises.persistence.client.converter.NameConverter;
 import com.github.jactorrises.persistence.client.time.Now;
@@ -17,7 +15,7 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Embeddable
-public class PersistentEntryImpl implements PersistentEntry {
+public class PersistentEntry {
     private static final LocalDateTimeConverter TIME_CONVERTER = new LocalDateTimeConverter();
     private static final NameConverter NAME_CONVERTER = new NameConverter();
 
@@ -25,35 +23,34 @@ public class PersistentEntryImpl implements PersistentEntry {
     private String creatorName;
     private String entry;
 
-    public PersistentEntryImpl() {
+    public PersistentEntry() {
         createdTime = Now.asDate();
     }
 
-    public PersistentEntryImpl(Date createdTime) {
+    public PersistentEntry(Date createdTime) {
         this.createdTime = createdTime;
     }
 
     /**
      * @param entry will be used to copy an instance...
      */
-    PersistentEntryImpl(Entry entry) {
+    PersistentEntry(PersistentEntry entry) {
         createdTime = TIME_CONVERTER.convertFrom(entry.getCreatedTime());
         this.entry = entry.getEntry();
         creatorName = NAME_CONVERTER.convertFrom(entry.getCreatorName());
     }
 
     @Override public boolean equals(Object obj) {
-        return this == obj || obj != null && getClass() == obj.getClass() && isEqualTo((PersistentEntryImpl) obj);
+        return this == obj || obj != null && getClass() == obj.getClass() && isEqualTo((PersistentEntry) obj);
     }
 
-    private boolean isEqualTo(PersistentEntryImpl obj) {
+    private boolean isEqualTo(PersistentEntry obj) {
         return Objects.equals(createdTime, obj.createdTime) &&
                 Objects.equals(entry, obj.entry) &&
                 Objects.equals(creatorName, obj.creatorName);
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(getCreatedTime()).append(creatorName).append(entryAsString()).toString();
     }
 
@@ -69,23 +66,23 @@ public class PersistentEntryImpl implements PersistentEntry {
         return hash(createdTime, creatorName, entry);
     }
 
-    @Override public String getEntry() {
+    public String getEntry() {
         return entry;
     }
 
-    @Override public Name getCreatorName() {
+    public Name getCreatorName() {
         return NAME_CONVERTER.convertTo(creatorName);
     }
 
-    @Override public void setEntry(String entry) {
+    public void setEntry(String entry) {
         this.entry = entry;
     }
 
-    @Override public void setCreatorName(String creatorName) {
+    public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
     }
 
-    @Override public LocalDateTime getCreatedTime() {
+    public LocalDateTime getCreatedTime() {
         return TIME_CONVERTER.convertTo(createdTime);
     }
 }

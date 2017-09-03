@@ -1,9 +1,7 @@
 package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
-import com.github.jactorrises.persistence.client.BlogEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,26 +19,26 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = BlogMetadata.BLOG_TABLE)
-public class BlogEntityImpl extends PersistentEntity implements BlogEntity {
+public class BlogEntity extends PersistentEntity {
 
     @Column(name = BlogMetadata.CREATED) private String created;
     @Column(name = BlogMetadata.TITLE) private String title;
-    @JoinColumn(name = BlogMetadata.USER) @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntityImpl userEntity;
+    @JoinColumn(name = BlogMetadata.USER) @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
 
-    public BlogEntityImpl() {
+    public BlogEntity() {
         created = convertFrom(LocalDate.now(), LocalDate.class);
     }
 
-    public BlogEntityImpl(BlogEntity blogEntity) {
+    public BlogEntity(BlogEntity blogEntity) {
         created = convertFrom(blogEntity.getCreated(), LocalDate.class);
         title = blogEntity.getTitle();
-        userEntity = castOrInitializeCopyWith(blogEntity.getUser(), UserEntityImpl.class);
+        userEntity = blogEntity.getUser();
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(title, ((BlogEntityImpl) o).title) &&
-                Objects.equals(userEntity, ((BlogEntityImpl) o).userEntity);
+                Objects.equals(title, ((BlogEntity) o).title) &&
+                Objects.equals(userEntity, ((BlogEntity) o).userEntity);
     }
 
     @Override public int hashCode() {
@@ -56,24 +54,24 @@ public class BlogEntityImpl extends PersistentEntity implements BlogEntity {
                 .toString();
     }
 
-    @Override public String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    @Override public UserEntity getUser() {
+    public UserEntity getUser() {
         return userEntity;
     }
 
-    @Override public LocalDate getCreated() {
+    public LocalDate getCreated() {
         return convertTo(created, LocalDate.class);
     }
 
-    @Override public void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    @Override public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = castOrInitializeCopyWith(userEntity, UserEntityImpl.class);
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public static BlogEntityBuilder aBlog() {

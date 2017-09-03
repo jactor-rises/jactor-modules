@@ -5,7 +5,6 @@ import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.persistence.client.converter.CountryConverter;
 import com.github.jactorrises.persistence.client.converter.DescriptionConverter;
 import com.github.jactorrises.persistence.client.converter.EmailAddressConverter;
@@ -22,8 +21,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -31,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @MappedSuperclass
-public abstract class PersistentEntity implements Persistent<Long> {
+public abstract class PersistentEntity {
 
     private static final Map<Class<?>, TypeConverter> dataTypeConverters = initKnownConverters();
 
@@ -69,52 +66,8 @@ public abstract class PersistentEntity implements Persistent<Long> {
         return !(classType != null && !dataTypeConverters.containsKey(classType));
     }
 
-    protected <E extends I, I> E castOrInitializeCopyWith(I iFace, Class<E> entityClass) {
-        if (iFace == null) {
-            return null;
-        }
-
-        if (entityClass.isAssignableFrom(iFace.getClass())) {
-            return cast(iFace);
-        }
-
-        if (!entityClass.isAssignableFrom(iFace.getClass())) {
-            throw new IllegalArgumentException(createErrorMessageUsing(iFace, entityClass));
-        }
-
-        return constructCopy(iFace, entityClass);
-    }
-
-    private <E extends I, I> E constructCopy(I iFace, Class<E> entityClass) {
-        if (iFace != null) {
-            for (Constructor<?> constructor : entityClass.getConstructors()) {
-                if (constructor.getParameterCount() == 1 && isCorrectParameterType(constructor.getParameterTypes()[0], entityClass)) {
-                    return constructCopy(iFace, entityClass, constructor);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private boolean isCorrectParameterType(Class<?> aClass, Class<?> entityClass) {
-        return aClass.isAssignableFrom(entityClass);
-    }
-
-    private <E extends I, I> E constructCopy(I iFace, Class<E> implementation, Constructor<?> constructor) {
-        try {
-            return cast(constructor.newInstance(iFace));
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException(createErrorMessageUsing(iFace, implementation), e);
-        }
-    }
-
     @SuppressWarnings("unchecked") private <T> T cast(Object object) {
         return (T) object;
-    }
-
-    private String createErrorMessageUsing(Object object, Class<?> implementation) {
-        return "Unable to cast or initialize " + object.getClass() + " to " + implementation;
     }
 
     @Override public String toString() {

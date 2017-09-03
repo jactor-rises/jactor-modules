@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.entity.blog;
 
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 
 public class BlogEntityBuilder {
     private String title;
@@ -19,8 +19,8 @@ public class BlogEntityBuilder {
         return this;
     }
 
-    public BlogEntityImpl build() {
-        BlogEntityImpl blogEntity = new BlogEntityImpl();
+    public BlogEntity build() {
+        BlogEntity blogEntity = new BlogEntity();
         blogEntity.setTitle(title);
         blogEntity.setUserEntity(userEntity);
 

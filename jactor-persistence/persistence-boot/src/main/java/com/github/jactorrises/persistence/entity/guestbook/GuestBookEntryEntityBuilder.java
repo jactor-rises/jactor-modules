@@ -1,8 +1,5 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
-
 public class GuestBookEntryEntityBuilder {
     private GuestBookEntity guestBookEntity;
     private String creatorName;
@@ -26,7 +23,7 @@ public class GuestBookEntryEntityBuilder {
     }
 
     public GuestBookEntryEntity build() {
-        GuestBookEntryEntityImpl guestBookEntryEntity = new GuestBookEntryEntityImpl();
+        GuestBookEntryEntity guestBookEntryEntity = new GuestBookEntryEntity();
         guestBookEntryEntity.setCreatorName(creatorName);
         guestBookEntryEntity.setEntry(entry);
         guestBookEntryEntity.setGuestBook(guestBookEntity);

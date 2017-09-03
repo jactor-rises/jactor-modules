@@ -2,8 +2,7 @@ package com.github.jactorrises.persistence.repository;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import com.github.jactorrises.persistence.client.dao.UserDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,7 +25,7 @@ public class HibernateRepository implements UserDao {
     }
 
     @Override public Optional<UserEntity> findUsing(UserName userName) {
-        UserEntity userEntity = (UserEntity) session().createCriteria(UserEntityImpl.class)
+        UserEntity userEntity = (UserEntity) session().createCriteria(UserEntity.class)
                 .add(eq("userName", userName.getName()))
                 .uniqueResult();
 

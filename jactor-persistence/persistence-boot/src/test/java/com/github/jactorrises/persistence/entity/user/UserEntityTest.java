@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.entity.user;
 
-import com.github.jactorrises.persistence.entity.person.PersonEntityImpl;
+import com.github.jactorrises.persistence.entity.person.PersonEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,32 +8,32 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A UserEntityImpl")
-class UserEntityImplTest {
+@DisplayName("A UserEntity")
+class UserEntityTest {
 
-    private UserEntityImpl userEntityImplToTest;
+    private UserEntity userEntityToTest;
 
     @BeforeEach
     void initClassToTest() {
-        userEntityImplToTest = new UserEntityImpl();
+        userEntityToTest = new UserEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test
     void willHaveCorrectImplementedHashCode() {
-        UserEntityImpl base = userEntityImplToTest;
+        UserEntity base = userEntityToTest;
         base.setUserName("some user");
-        base.setPersonEntity(new PersonEntityImpl());
+        base.setPersonEntity(new PersonEntity());
         base.setEmailAddress("some@where");
 
-        UserEntityImpl equal = new UserEntityImpl();
+        UserEntity equal = new UserEntity();
         equal.setUserName("some user");
-        equal.setPersonEntity(new PersonEntityImpl());
+        equal.setPersonEntity(new PersonEntity());
         equal.setEmailAddress("some@where");
 
-        UserEntityImpl notEqual = new UserEntityImpl();
+        UserEntity notEqual = new UserEntity();
         notEqual.setEmailAddress("any@where");
-        notEqual.setPersonEntity(new PersonEntityImpl());
+        notEqual.setPersonEntity(new PersonEntity());
         notEqual.setUserName("some other user");
 
         assertAll(
@@ -47,15 +47,15 @@ class UserEntityImplTest {
     @DisplayName("should have an implementation of the equals method")
     @Test
     void willHaveCorrectImplementedEquals() {
-        UserEntityImpl base = userEntityImplToTest;
-        base.setPersonEntity(new PersonEntityImpl());
+        UserEntity base = userEntityToTest;
+        base.setPersonEntity(new PersonEntity());
         base.setUserName("some user");
         base.setEmailAddress("some@where");
 
-        UserEntityImpl equal = new UserEntityImpl(base);
+        UserEntity equal = new UserEntity(base);
 
-        UserEntityImpl notEqual = new UserEntityImpl();
-        notEqual.setPersonEntity(new PersonEntityImpl());
+        UserEntity notEqual = new UserEntity();
+        notEqual.setPersonEntity(new PersonEntity());
         notEqual.setEmailAddress("some@where");
         notEqual.setUserName("some other user");
 

@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.entity.entry;
+package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.persistence.entity.NowAsPureDate;
 import org.junit.jupiter.api.AfterEach;
@@ -9,29 +9,28 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A PersistentEntryImpl")
-class PersistentEntryImplTest {
+@DisplayName("A BlogEntryEntity")
+class BlogEntryEntityTest {
+    private BlogEntryEntity blogEntryEntityToTest;
 
-    private PersistentEntryImpl persistentEntryImplToTest;
-
-    @BeforeEach
-    void initClassToTest() {
+    @BeforeEach void initBlogEntryEntity() {
         NowAsPureDate.set();
-        persistentEntryImplToTest = new PersistentEntryImpl();
+        blogEntryEntityToTest = new BlogEntryEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
-    @Test
-    void willHaveCorrectlyImplementedHashCode() {
-        PersistentEntryImpl base = persistentEntryImplToTest;
-        base.setCreatorName("a creator");
+    @Test void willHaveCorrectImplementedHashCode() {
+        BlogEntryEntity base = blogEntryEntityToTest;
+        base.setBlog(new BlogEntity());
         base.setEntry("some entry");
+        base.setCreatorName("some creator");
 
-        PersistentEntryImpl equal = new PersistentEntryImpl(base);
+        BlogEntryEntity equal = new BlogEntryEntity(blogEntryEntityToTest);
 
-        PersistentEntryImpl notEqual = new PersistentEntryImpl();
-        notEqual.setCreatorName("another creator");
-        notEqual.setEntry("another entry");
+        BlogEntryEntity notEqual = new BlogEntryEntity();
+        notEqual.setEntry("some other entry");
+        notEqual.setCreatorName("some other creator");
+        notEqual.setBlog(new BlogEntity());
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -42,17 +41,18 @@ class PersistentEntryImplTest {
     }
 
     @DisplayName("should have an implementation of the equals method")
-    @Test
-    void willHaveCorrectlyImplementedEquals() {
-        PersistentEntryImpl base = persistentEntryImplToTest;
-        base.setCreatorName("a creator");
+    @Test void willHaveCorrectImplementedEquals() {
+        BlogEntryEntity base = blogEntryEntityToTest;
+        base.setBlog(new BlogEntity());
         base.setEntry("some entry");
+        base.setCreatorName("some creator");
 
-        PersistentEntryImpl equal = new PersistentEntryImpl(base);
+        BlogEntryEntity equal = new BlogEntryEntity(blogEntryEntityToTest);
 
-        PersistentEntryImpl notEqual = new PersistentEntryImpl();
-        notEqual.setCreatorName("another creator");
-        notEqual.setEntry("another entry");
+        BlogEntryEntity notEqual = new BlogEntryEntity();
+        notEqual.setEntry("some other entry");
+        notEqual.setCreatorName("some other creator");
+        notEqual.setBlog(new BlogEntity());
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
@@ -63,20 +63,7 @@ class PersistentEntryImplTest {
         );
     }
 
-    @Test
-    void shouldDisplayEntryInToString() {
-        persistentEntryImplToTest.setEntry("hello you");
-        assertThat(persistentEntryImplToTest.toString()).contains(",hello you");
-    }
-
-    @Test
-    void shouldNotDisplayEntryInToStringWithMoreCharachtersThan50() {
-        persistentEntryImplToTest.setEntry("123456789.123456789.123456789.123456789.ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        assertThat(persistentEntryImplToTest.toString()).contains(",123456789.123456789.123456789.123456789.ABCDEFG...");
-    }
-
-    @AfterEach
-    void removeNowAsPureDate() {
+    @AfterEach void removeNowAsPureDate() {
         NowAsPureDate.remove();
     }
 }

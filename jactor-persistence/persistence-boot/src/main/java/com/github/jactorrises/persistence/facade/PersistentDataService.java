@@ -1,21 +1,13 @@
 package com.github.jactorrises.persistence.facade;
 
-import com.github.jactorrises.persistence.entity.address.AddressEntityImpl;
-import com.github.jactorrises.persistence.entity.blog.BlogEntityImpl;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryEntityImpl;
-import com.github.jactorrises.persistence.entity.entry.PersistentEntryImpl;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntityImpl;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntityImpl;
-import com.github.jactorrises.persistence.entity.person.PersonEntityImpl;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
-import com.github.jactorrises.persistence.client.AddressEntity;
-import com.github.jactorrises.persistence.client.BlogEntity;
-import com.github.jactorrises.persistence.client.BlogEntryEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
-import com.github.jactorrises.persistence.client.PersistentEntry;
-import com.github.jactorrises.persistence.client.PersonEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.entry.PersistentEntry;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -93,14 +85,14 @@ public final class PersistentDataService {
 
     private static Map<Class<?>, Class<?>> initMapOfSupportedClasses() {
         HashMap<Class<?>, Class<?>> supportedClasses = new HashMap<>();
-        supportedClasses.put(AddressEntity.class, AddressEntityImpl.class);
-        supportedClasses.put(BlogEntity.class, BlogEntityImpl.class);
-        supportedClasses.put(BlogEntryEntity.class, BlogEntryEntityImpl.class);
-        supportedClasses.put(GuestBookEntity.class, GuestBookEntityImpl.class);
-        supportedClasses.put(GuestBookEntryEntity.class, GuestBookEntryEntityImpl.class);
-        supportedClasses.put(PersistentEntry.class, PersistentEntryImpl.class);
-        supportedClasses.put(PersonEntity.class, PersonEntityImpl.class);
-        supportedClasses.put(UserEntity.class, UserEntityImpl.class);
+        supportedClasses.put(AddressEntity.class, AddressEntity.class);
+        supportedClasses.put(BlogEntity.class, BlogEntity.class);
+        supportedClasses.put(BlogEntryEntity.class, BlogEntryEntity.class);
+        supportedClasses.put(GuestBookEntity.class, GuestBookEntity.class);
+        supportedClasses.put(GuestBookEntryEntity.class, GuestBookEntryEntity.class);
+        supportedClasses.put(PersistentEntry.class, PersistentEntry.class);
+        supportedClasses.put(PersonEntity.class, PersonEntity.class);
+        supportedClasses.put(UserEntity.class, UserEntity.class);
 
         return supportedClasses;
     }

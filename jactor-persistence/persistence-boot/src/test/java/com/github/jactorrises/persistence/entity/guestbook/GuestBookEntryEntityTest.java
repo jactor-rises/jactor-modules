@@ -1,40 +1,40 @@
-package com.github.jactorrises.persistence.entity.blog;
+package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.persistence.entity.NowAsPureDate;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A BlogEntityImpl")
-class BlogEntityImplTest {
-    private BlogEntityImpl blogEntityToTest;
+@DisplayName("A GuestBookEntryEntity")
+class GuestBookEntryEntityTest {
 
-    @BeforeEach void initDefaulBlogEntityToTestWithCreationTime() {
+    private GuestBookEntryEntity guestBookEntryEntityToTest;
+
+    @BeforeEach void initEntryForTestingWithNowAsPureDate() {
         NowAsPureDate.set();
-        blogEntityToTest = new BlogEntityImpl();
+        guestBookEntryEntityToTest = new GuestBookEntryEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogEntityImpl base = blogEntityToTest;
+        GuestBookEntryEntity base = guestBookEntryEntityToTest;
+        base.setGuestBook(new GuestBookEntity());
+        base.setEntry("some entry");
+        base.setCreatorName("some creator");
 
-        base.setTitle("title");
-        base.setUserEntity(new UserEntityImpl());
+        GuestBookEntryEntity equal = new GuestBookEntryEntity(base);
 
-        BlogEntityImpl equal = new BlogEntityImpl(base);
-        equal.setTitle("title");
-        equal.setUserEntity(new UserEntityImpl());
-
-        BlogEntityImpl notEqual = new BlogEntityImpl();
-        notEqual.setTitle("another title");
-        notEqual.setUserEntity(new UserEntityImpl());
+        GuestBookEntryEntity notEqual = new GuestBookEntryEntity();
+        notEqual.setGuestBook(new GuestBookEntity());
+        notEqual.setEntry("some other entry");
+        notEqual.setCreatorName("some other creator");
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -46,16 +46,17 @@ class BlogEntityImplTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogEntityImpl base = blogEntityToTest;
+        GuestBookEntryEntity base = guestBookEntryEntityToTest;
+        base.setGuestBook(new GuestBookEntity());
+        base.setEntry("some entry");
+        base.setCreatorName("some creator");
 
-        base.setTitle("title");
-        base.setUserEntity(new UserEntityImpl());
+        GuestBookEntryEntity equal = new GuestBookEntryEntity(base);
 
-        BlogEntityImpl equal = new BlogEntityImpl(base);
-
-        BlogEntityImpl notEqual = new BlogEntityImpl();
-        notEqual.setTitle("another title");
-        notEqual.setUserEntity(new UserEntityImpl());
+        GuestBookEntryEntity notEqual = new GuestBookEntryEntity();
+        notEqual.setGuestBook(new GuestBookEntity());
+        notEqual.setEntry("some other entry");
+        notEqual.setCreatorName("some other creator");
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
@@ -66,18 +67,19 @@ class BlogEntityImplTest {
         );
     }
 
-    @DisplayName("should set created when initialized")
-    @Test void willSetCreatedWhenInitialized() {
-        assertThat(blogEntityToTest.getCreated()).isEqualTo(LocalDate.now());
+    @DisplayName("should set created time when initialized")
+    @Test void willHaveCreationTimeOnEntryWhenCreated() {
+        assertThat(guestBookEntryEntityToTest.getCreatedTime()).isEqualTo(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
     }
 
     @DisplayName("should have an implementation of the toString method")
     @Test void shouldHaveAnImplementationOfTheToStringMethod() {
-        blogEntityToTest.setTitle("my blog");
+        guestBookEntryEntityToTest.setCreatorName("jactor");
+        guestBookEntryEntityToTest.setEntry("hi");
 
-        assertThat(blogEntityToTest.toString())
-                .contains("BlogEntityImpl")
-                .contains("my blog")
+        assertThat(guestBookEntryEntityToTest.toString())
+                .contains("jactor")
+                .contains("hi")
                 .contains(LocalDate.now().toString());
     }
 

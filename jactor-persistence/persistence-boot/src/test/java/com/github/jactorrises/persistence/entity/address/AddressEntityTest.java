@@ -1,6 +1,5 @@
-package com.github.jactorrises.persistence.entity.guestbook;
+package com.github.jactorrises.persistence.entity.address;
 
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,26 +7,34 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A GuestBookEntityImpl")
-class GuestBookEntityImplTest {
+@DisplayName("An AddressEntity")
+class AddressEntityTest {
 
-    private GuestBookEntityImpl GuestBookEntityImplToTest;
+    private AddressEntity addressEntityToTest;
 
-    @BeforeEach void initClassToTest() {
-        GuestBookEntityImplToTest = new GuestBookEntityImpl();
+    @BeforeEach void initAddressEntityImpl() {
+        addressEntityToTest = new AddressEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        GuestBookEntityImpl base = GuestBookEntityImplToTest;
-        base.setTitle("title");
-        base.setUser(new UserEntityImpl());
+        AddressEntity base = addressEntityToTest;
+        base.setAddressLine1("somewhere");
+        base.setZipCode(1234);
+        base.setCountry("NO");
+        base.setCity("some city");
+        base.setAddressLine2("somewhere else");
+        base.setAddressLine3("way out there");
 
-        GuestBookEntityImpl equal = new GuestBookEntityImpl(base);
+        AddressEntity equal = new AddressEntity(base);
 
-        GuestBookEntityImpl notEqual = new GuestBookEntityImpl();
-        notEqual.setTitle("another title");
-        notEqual.setUser(new UserEntityImpl());
+        AddressEntity notEqual = new AddressEntity();
+        notEqual.setAddressLine1("somewhere else");
+        notEqual.setZipCode(5678);
+        notEqual.setCountry("SE");
+        notEqual.setCity("some other city");
+        notEqual.setAddressLine2("some place");
+        notEqual.setAddressLine3("in the distance");
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -39,15 +46,23 @@ class GuestBookEntityImplTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        GuestBookEntityImpl base = GuestBookEntityImplToTest;
-        base.setTitle("title");
-        base.setUser(new UserEntityImpl());
+        AddressEntity base = addressEntityToTest;
+        base.setAddressLine1("somewhere");
+        base.setZipCode(1234);
+        base.setCountry("NO");
+        base.setCity("some city");
+        base.setAddressLine2("somewhere else");
+        base.setAddressLine3("way out there");
 
-        GuestBookEntityImpl equal = new GuestBookEntityImpl(base);
+        AddressEntity equal = new AddressEntity(addressEntityToTest);
 
-        GuestBookEntityImpl notEqual = new GuestBookEntityImpl();
-        notEqual.setTitle("another title");
-        notEqual.setUser(new UserEntityImpl());
+        AddressEntity notEqual = new AddressEntity();
+        notEqual.setAddressLine1("somewhere");
+        notEqual.setZipCode(1234);
+        notEqual.setCountry("NO");
+        notEqual.setCity("some city");
+        notEqual.setAddressLine2("somewhere else");
+        notEqual.setAddressLine3("inside");
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),

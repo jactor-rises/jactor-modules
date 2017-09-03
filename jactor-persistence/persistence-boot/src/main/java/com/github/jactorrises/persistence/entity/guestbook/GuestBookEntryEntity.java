@@ -1,11 +1,8 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.entry.PersistentEntryImpl;
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.entity.entry.PersistentEntry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -24,29 +21,30 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = GuestBookEntryMetadata.GUEST_BOOK_ENTRY_TABLE)
-public class GuestBookEntryEntityImpl extends PersistentEntity implements GuestBookEntryEntity {
-    @ManyToOne() @JoinColumn(name = GuestBookEntryMetadata.GUEST_BOOK_ID) private GuestBookEntityImpl guestBookEntity;
+public class GuestBookEntryEntity extends PersistentEntity {
+    @ManyToOne() @JoinColumn(name = GuestBookEntryMetadata.GUEST_BOOK_ID) private GuestBookEntity guestBookEntity;
 
     @Embedded @AttributeOverrides({
             @AttributeOverride(name = "createdTime", column = @Column(name = GuestBookEntryMetadata.CREATED_TIME)),
             @AttributeOverride(name = "creatorName", column = @Column(name = GuestBookEntryMetadata.GUEST_NAME)),
             @AttributeOverride(name = "entry", column = @Column(name = GuestBookEntryMetadata.ENTRY))
-    }) private PersistentEntryImpl persistentEntry = new PersistentEntryImpl();
+    }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    public GuestBookEntryEntityImpl() {    }
+    public GuestBookEntryEntity() {
+    }
 
-    public GuestBookEntryEntityImpl(GuestBookEntry guestBookEntry) {
-        guestBookEntity = castOrInitializeCopyWith(guestBookEntry.getGuestBook(), GuestBookEntityImpl.class);
-        persistentEntry = new PersistentEntryImpl(convertFrom(guestBookEntry.getCreatedTime(), LocalDateTime.class));
+    public GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
+        guestBookEntity = guestBookEntry.getGuestBook(), GuestBookEntity.class);
+        persistentEntry = new PersistentEntry(convertFrom(guestBookEntry.getCreatedTime(), LocalDateTime.class));
         persistentEntry.setCreatorName(convertFrom(guestBookEntry.getCreatorName(), Name.class));
         persistentEntry.setEntry(guestBookEntry.getEntry());
     }
 
     @Override public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryEntityImpl) o);
+        return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryEntity) o);
     }
 
-    private boolean isEqualTo(GuestBookEntryEntityImpl o) {
+    private boolean isEqualTo(GuestBookEntryEntity o) {
         return Objects.equals(persistentEntry, o.persistentEntry) &&
                 Objects.equals(guestBookEntity, o.guestBookEntity);
     }
@@ -59,31 +57,31 @@ public class GuestBookEntryEntityImpl extends PersistentEntity implements GuestB
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(guestBookEntity).append(persistentEntry).toString();
     }
 
-    @Override public GuestBookEntity getGuestBook() {
+    public GuestBookEntity getGuestBook() {
         return guestBookEntity;
     }
 
-    @Override public LocalDateTime getCreatedTime() {
+    public LocalDateTime getCreatedTime() {
         return persistentEntry.getCreatedTime();
     }
 
-    @Override public String getEntry() {
+    public String getEntry() {
         return persistentEntry.getEntry();
     }
 
-    @Override public Name getCreatorName() {
+    public Name getCreatorName() {
         return persistentEntry.getCreatorName();
     }
 
-    @Override public void setGuestBook(GuestBookEntity guestBookEntity) {
-        this.guestBookEntity = castOrInitializeCopyWith(guestBookEntity, GuestBookEntityImpl.class);
+    public void setGuestBook(GuestBookEntity guestBookEntity) {
+        this.guestBookEntity = guestBookEntity, GuestBookEntity.class);
     }
 
-    @Override public void setEntry(String entry) {
+    public void setEntry(String entry) {
         persistentEntry.setEntry(entry);
     }
 
-    @Override public void setCreatorName(String creatorName) {
+    public void setCreatorName(String creatorName) {
         persistentEntry.setCreatorName(creatorName);
     }
 

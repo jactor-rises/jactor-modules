@@ -3,18 +3,12 @@ package com.github.jactorrises.persistence.repository;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.persistence.Persistence;
-import com.github.jactorrises.persistence.entity.address.AddressEntityImpl;
-import com.github.jactorrises.persistence.entity.blog.BlogEntityImpl;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryEntityImpl;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntityImpl;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntityImpl;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
-import com.github.jactorrises.persistence.client.AddressEntity;
-import com.github.jactorrises.persistence.client.BlogEntity;
-import com.github.jactorrises.persistence.client.BlogEntryEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -27,12 +21,12 @@ import javax.transaction.Transactional;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.persistence.entity.address.AddressEntityImpl.anAddress;
-import static com.github.jactorrises.persistence.entity.blog.BlogEntityImpl.aBlog;
-import static com.github.jactorrises.persistence.entity.blog.BlogEntryEntityImpl.aBlogEntry;
-import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntityImpl.aGuestBook;
-import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntityImpl.aGuestBookEntry;
-import static com.github.jactorrises.persistence.entity.user.UserEntityImpl.aUser;
+import static com.github.jactorrises.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)
@@ -77,7 +71,7 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        AddressEntity addressEntity = hibernateRepository.load(AddressEntityImpl.class, id);
+        AddressEntity addressEntity = hibernateRepository.load(AddressEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(addressEntity.getAddressLine1()).as("addressLine1").isEqualTo("living on the edge");
@@ -115,7 +109,7 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        UserEntity userEntity = hibernateRepository.load(UserEntityImpl.class, id);
+        UserEntity userEntity = hibernateRepository.load(UserEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(userEntity.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
@@ -166,7 +160,7 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        GuestBookEntity guestBookEntity = hibernateRepository.load(GuestBookEntityImpl.class, id);
+        GuestBookEntity guestBookEntity = hibernateRepository.load(GuestBookEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(guestBookEntity.getTitle()).as("title").isEqualTo("no rest for the wicked");
@@ -233,7 +227,7 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        GuestBookEntryEntity guestBookEntryEntity = hibernateRepository.load(GuestBookEntryEntityImpl.class, id);
+        GuestBookEntryEntity guestBookEntryEntity = hibernateRepository.load(GuestBookEntryEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(guestBookEntryEntity.getGuestBook()).as("guest book").isEqualTo(guestBookEntity);
@@ -285,7 +279,7 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        BlogEntity blogEntity = hibernateRepository.load(BlogEntityImpl.class, id);
+        BlogEntity blogEntity = hibernateRepository.load(BlogEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(blogEntity.getTitle()).as("title").isEqualTo("no rest for the wicked");
@@ -321,7 +315,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(BlogEntryEntityImpl.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(BlogEntryEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
@@ -352,7 +346,7 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        BlogEntryEntity blogEntryEntity = hibernateRepository.load(BlogEntryEntityImpl.class, id);
+        BlogEntryEntity blogEntryEntity = hibernateRepository.load(BlogEntryEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(blogEntryEntity.getBlog()).as("blog").isEqualTo(blogEntity);

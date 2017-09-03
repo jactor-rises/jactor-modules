@@ -2,9 +2,7 @@ package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.entry.PersistentEntryImpl;
-import com.github.jactorrises.persistence.client.BlogEntity;
-import com.github.jactorrises.persistence.client.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.entry.PersistentEntry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -23,31 +21,31 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = BlogEntryMetadata.BLOG_ENTRY_TABLE)
-public class BlogEntryEntityImpl extends PersistentEntity implements BlogEntryEntity {
+public class BlogEntryEntity extends PersistentEntity {
 
-    @ManyToOne() @JoinColumn(name = BlogEntryMetadata.BLOG) private BlogEntityImpl blogEntity;
+    @ManyToOne() @JoinColumn(name = BlogEntryMetadata.BLOG) private BlogEntity blogEntity;
 
     @Embedded @AttributeOverrides({
             @AttributeOverride(name = "createdTime", column = @Column(name = BlogEntryMetadata.CREATED_TIME)),
             @AttributeOverride(name = "creatorName", column = @Column(name = BlogEntryMetadata.CREATOR_NAME)),
             @AttributeOverride(name = "entry", column = @Column(name = BlogEntryMetadata.ENTRY))
-    }) private PersistentEntryImpl persistentEntry = new PersistentEntryImpl();
+    }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    public BlogEntryEntityImpl() { }
+    public BlogEntryEntity() { }
 
-    public BlogEntryEntityImpl(BlogEntryEntity blogEntryEntity) {
-        blogEntity = castOrInitializeCopyWith(blogEntryEntity.getBlog(), BlogEntityImpl.class);
-        blogEntity = castOrInitializeCopyWith(blogEntryEntity.getBlog(), BlogEntityImpl.class);
-        persistentEntry = new PersistentEntryImpl(convertFrom(blogEntryEntity.getCreatedTime(), LocalDateTime.class));
+    public BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
+        blogEntity = blogEntryEntity.getBlog(), BlogEntity.class);
+        blogEntity = blogEntryEntity.getBlog(), BlogEntity.class);
+        persistentEntry = new PersistentEntry(convertFrom(blogEntryEntity.getCreatedTime(), LocalDateTime.class));
         persistentEntry.setCreatorName(convertFrom(blogEntryEntity.getCreatorName(), Name.class));
         persistentEntry.setEntry(blogEntryEntity.getEntry());
     }
 
     @Override public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryEntityImpl) o);
+        return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryEntity) o);
     }
 
-    private boolean isEqualTo(BlogEntryEntityImpl o) {
+    private boolean isEqualTo(BlogEntryEntity o) {
         return Objects.equals(getId(), o.getId()) &&
                 Objects.equals(persistentEntry, o.persistentEntry) &&
                 Objects.equals(blogEntity, o.blogEntity);
@@ -61,31 +59,31 @@ public class BlogEntryEntityImpl extends PersistentEntity implements BlogEntryEn
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(blogEntity).append(persistentEntry).toString();
     }
 
-    @Override public BlogEntity getBlog() {
+    public BlogEntity getBlog() {
         return blogEntity;
     }
 
-    @Override public void setBlog(BlogEntity blog) {
-        this.blogEntity = castOrInitializeCopyWith(blog, BlogEntityImpl.class);
+    public void setBlog(BlogEntity blog) {
+        this.blogEntity = blog;
     }
 
-    @Override public LocalDateTime getCreatedTime() {
+    public LocalDateTime getCreatedTime() {
         return persistentEntry.getCreatedTime();
     }
 
-    @Override public Name getCreatorName() {
+    public Name getCreatorName() {
         return persistentEntry.getCreatorName();
     }
 
-    @Override public void setCreatorName(String creator) {
+    public void setCreatorName(String creator) {
         persistentEntry.setCreatorName(creator);
     }
 
-    @Override public String getEntry() {
+    public String getEntry() {
         return persistentEntry.getEntry();
     }
 
-    @Override public void setEntry(String entry) {
+    public void setEntry(String entry) {
         persistentEntry.setEntry(entry);
     }
 

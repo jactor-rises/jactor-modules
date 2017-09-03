@@ -1,8 +1,5 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
-
 public class GuestBookEntityBuilder {
 
     private String title;
@@ -21,7 +18,7 @@ public class GuestBookEntityBuilder {
     }
 
     public GuestBookEntity build() {
-        GuestBookEntityImpl guestBookEntity = new GuestBookEntityImpl();
+        GuestBookEntity guestBookEntity = new GuestBookEntity();
         guestBookEntity.setTitle(title);
         guestBookEntity.setUser(userEntity);
 

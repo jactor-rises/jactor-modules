@@ -1,8 +1,8 @@
 package com.github.jactorrises.persistence.entity.person;
 
 
-import com.github.jactorrises.persistence.entity.address.AddressEntityImpl;
-import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
+import com.github.jactorrises.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,33 +12,33 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A PersonEntityImpl")
-class PersonEntityImplTest {
+@DisplayName("A PersonEntity")
+class PersonEntityTest {
 
-    private PersonEntityImpl personEntityImplToTest;
+    private PersonEntity personEntityToTest;
 
     @BeforeEach void initPersonEntityImpl() {
-        personEntityImplToTest = new PersonEntityImpl();
+        personEntityToTest = new PersonEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        PersonEntityImpl base = personEntityImplToTest;
-        base.setAddressEntity(new AddressEntityImpl());
+        PersonEntity base = personEntityToTest;
+        base.setAddressEntity(new AddressEntity());
         base.setDescription("some description");
         base.setFirstName("ola");
         base.setLastName("norman");
-        base.setUserEntity(new UserEntityImpl());
+        base.setUserEntity(new UserEntity());
         base.setLocale(new Locale("no"));
 
-        PersonEntityImpl equal = new PersonEntityImpl(personEntityImplToTest);
+        PersonEntity equal = new PersonEntity(personEntityToTest);
 
-        PersonEntityImpl notEqual = new PersonEntityImpl();
-        notEqual.setAddressEntity(new AddressEntityImpl());
+        PersonEntity notEqual = new PersonEntity();
+        notEqual.setAddressEntity(new AddressEntity());
         notEqual.setDescription("some description");
         notEqual.setFirstName("ola");
         notEqual.setLastName("norman");
-        notEqual.setUserEntity(new UserEntityImpl());
+        notEqual.setUserEntity(new UserEntity());
         notEqual.setLocale(new Locale("se"));
 
         assertAll(
@@ -51,22 +51,22 @@ class PersonEntityImplTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        PersonEntityImpl base = personEntityImplToTest;
-        base.setAddressEntity(new AddressEntityImpl());
+        PersonEntity base = personEntityToTest;
+        base.setAddressEntity(new AddressEntity());
         base.setDescription("some description");
         base.setFirstName("ola");
         base.setLastName("norman");
-        base.setUserEntity(new UserEntityImpl());
+        base.setUserEntity(new UserEntity());
         base.setLocale(new Locale("no"));
 
-        PersonEntityImpl equal = new PersonEntityImpl(personEntityImplToTest);
+        PersonEntity equal = new PersonEntity(personEntityToTest);
 
-        PersonEntityImpl notEqual = new PersonEntityImpl();
-        notEqual.setAddressEntity(new AddressEntityImpl());
+        PersonEntity notEqual = new PersonEntity();
+        notEqual.setAddressEntity(new AddressEntity());
         notEqual.setDescription("some description");
         notEqual.setFirstName("ola");
         notEqual.setLastName("norman");
-        notEqual.setUserEntity(new UserEntityImpl());
+        notEqual.setUserEntity(new UserEntity());
         notEqual.setLocale(new Locale("se"));
 
         assertAll(
