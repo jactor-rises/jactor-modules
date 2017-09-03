@@ -1,8 +1,8 @@
 package com.github.jactorrises.facade.config.db;
 
 import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.persistence.boot.Persistence;
-import com.github.jactorrises.persistence.boot.entity.blog.BlogEntityImpl;
+import com.github.jactorrises.persistence.Persistence;
+import com.github.jactorrises.persistence.entity.blog.BlogEntityImpl;
 import com.github.jactorrises.persistence.client.BlogEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
 import org.hibernate.Session;

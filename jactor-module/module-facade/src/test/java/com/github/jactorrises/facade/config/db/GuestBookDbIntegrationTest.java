@@ -1,8 +1,8 @@
 package com.github.jactorrises.facade.config.db;
 
 import com.github.jactorrises.facade.JactorModule;
-import com.github.jactorrises.persistence.boot.Persistence;
-import com.github.jactorrises.persistence.boot.entity.guestbook.GuestBookEntityImpl;
+import com.github.jactorrises.persistence.Persistence;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntityImpl;
 import com.github.jactorrises.persistence.client.GuestBookEntity;
 import com.github.jactorrises.persistence.client.UserEntity;
 import org.hibernate.Session;

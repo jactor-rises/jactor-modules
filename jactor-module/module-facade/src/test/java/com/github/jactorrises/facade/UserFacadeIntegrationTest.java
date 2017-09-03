@@ -2,7 +2,7 @@ package com.github.jactorrises.facade;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.facade.UserFacade;
-import com.github.jactorrises.persistence.boot.HibernateConfiguration;
+import com.github.jactorrises.persistence.HibernateConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

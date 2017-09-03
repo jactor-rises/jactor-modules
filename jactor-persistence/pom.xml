@@ -14,7 +14,6 @@
 
     <modules>
         <module>persistence-boot</module>
-        <module>persistence-client</module>
     </modules>
 
     <name>jactor-rises::persistence</name>

@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.domain.Address;
-import com.github.jactorrises.persistence.boot.HibernateConfiguration;
+import com.github.jactorrises.persistence.HibernateConfiguration;
 import com.github.jactorrises.persistence.client.UserEntity;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.Session;

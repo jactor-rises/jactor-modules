@@ -2,7 +2,7 @@ package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.BlogDomain;
 import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.boot.facade.PersistentDataService;
+import com.github.jactorrises.persistence.facade.PersistentDataService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,6 @@
 package com.github.jactorrises.business.domain;
 
-import com.github.jactorrises.persistence.boot.entity.PersistentEntity;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

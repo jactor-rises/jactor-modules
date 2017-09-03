@@ -1,8 +1,8 @@
 package com.github.jactorrises.facade.config;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.persistence.boot.HibernateConfiguration;
-import com.github.jactorrises.persistence.boot.entity.user.UserEntityImpl;
+import com.github.jactorrises.persistence.HibernateConfiguration;
+import com.github.jactorrises.persistence.entity.user.UserEntityImpl;
 import com.github.jactorrises.persistence.client.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
