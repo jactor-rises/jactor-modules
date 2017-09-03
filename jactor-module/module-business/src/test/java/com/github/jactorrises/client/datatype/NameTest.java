@@ -1,5 +1,6 @@
 package com.github.jactorrises.client.datatype;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -64,6 +65,6 @@ class NameTest {
         List<Name> names = new ArrayList<>(asList(new Name("Donald"), new Name("Ashley"), new Name("Bill")));
         Collections.sort(names);
 
-        assertThat(names).as("#s should be sorted").isEqualTo(asList(new Name("Ashley"), new Name("Bill"), new Name("Donald")));
+        Assertions.assertThat(names).as("#s should be sorted").isEqualTo(asList(new Name("Ashley"), new Name("Bill"), new Name("Donald")));
     }
 }

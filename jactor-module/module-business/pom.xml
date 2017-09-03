@@ -17,16 +17,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.jactor-rises</groupId>
-            <artifactId>jactor-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jactor-rises.persistence</groupId>
-            <artifactId>persistence-boot</artifactId>
-        </dependency>
-
-        <!-- Third party -->
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
