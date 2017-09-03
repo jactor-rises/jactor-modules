@@ -3,7 +3,7 @@ package com.github.jactorrises.business.domain;
 import com.github.jactorrises.business.domain.builder.GuestBookDomainBuilder;
 import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.persistence.client.GuestBookEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
 
 public class GuestBookDomain extends PersistentDomain<GuestBookEntity, Long> implements GuestBook {
 

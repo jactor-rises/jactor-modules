@@ -1,6 +1,7 @@
 package com.github.jactorrises.persistence.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
+import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -14,7 +15,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = AddressMetadata.ADDRESS)
-public class AddressEntity extends PersistentEntity {
+public class AddressEntity extends PersistentEntity implements Address {
 
     @Column(name = AddressMetadata.COUNTRY) private String country;
     @Column(name = AddressMetadata.ZIP_CODE) private Integer zipCode;
@@ -91,27 +92,27 @@ public class AddressEntity extends PersistentEntity {
         return city;
     }
 
-    @Override public void setCountry(String country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
-    @Override public void setZipCode(Integer zipCode) {
+    public void setZipCode(Integer zipCode) {
         this.zipCode = zipCode;
     }
 
-    @Override public void setAddressLine1(String addressLine1) {
+    public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
     }
 
-    @Override public void setAddressLine2(String addressLine2) {
+    public void setAddressLine2(String addressLine2) {
         this.addressLine2 = addressLine2;
     }
 
-    @Override public void setAddressLine3(String addressLine3) {
+    public void setAddressLine3(String addressLine3) {
         this.addressLine3 = addressLine3;
     }
 
-    @Override public void setCity(String city) {
+    public void setCity(String city) {
         this.city = city;
     }
 

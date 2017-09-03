@@ -5,7 +5,7 @@ import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 
 public class UserDomain extends PersistentDomain<UserEntity, Long> implements User {
 

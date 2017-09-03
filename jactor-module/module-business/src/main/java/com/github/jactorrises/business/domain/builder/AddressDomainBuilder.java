@@ -1,7 +1,7 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.AddressDomain;
-import com.github.jactorrises.persistence.client.AddressEntity;
+import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
     static final String COUNTRY_CANNOT_BE_NULL = "A country must be provided";
     static final String ZIP_CODE_CANNOT_BE_NULL = "A Zip code must be provided";
 
-    private final AddressEntity addressEntity = newInstanceOf(AddressEntity.class);
+    private final AddressEntity addressEntity = new AddressEntity();
 
     private AddressDomainBuilder() {
         super(asList(

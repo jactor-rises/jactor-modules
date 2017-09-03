@@ -1,8 +1,8 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.BlogDomain;
-import com.github.jactorrises.persistence.client.BlogEntity;
-import com.github.jactorrises.persistence.client.UserEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ public class BlogDomainBuilder extends DomainBuilder<BlogDomain> {
     static final String THE_BLOG_MUST_BELONG_TO_A_USER = "The blog must belong to a user";
     static final String THE_BLOG_MUST_HAVE_A_TITLE = "The blog must have a title";
 
-    private final BlogEntity blogEntity = newInstanceOf(BlogEntity.class);
+    private final BlogEntity blogEntity = new BlogEntity();
 
     public BlogDomainBuilder() {
         super(asList(

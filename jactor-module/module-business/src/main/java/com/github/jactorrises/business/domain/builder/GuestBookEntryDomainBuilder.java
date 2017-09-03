@@ -1,8 +1,8 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.GuestBookEntryDomain;
-import com.github.jactorrises.persistence.client.GuestBookEntity;
-import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -14,7 +14,7 @@ public class GuestBookEntryDomainBuilder extends DomainBuilder<GuestBookEntryDom
     static final String THE_ENTRY_CANNOT_BE_EMPTY = "The entry cannot be empty";
     private static final String THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE = "The entry must be created by someone";
 
-    private final GuestBookEntryEntity guestBookEntryEntity = newInstanceOf(GuestBookEntryEntity.class);
+    private final GuestBookEntryEntity guestBookEntryEntity = new GuestBookEntryEntity();
 
     private GuestBookEntryDomainBuilder() {
         super(asList(

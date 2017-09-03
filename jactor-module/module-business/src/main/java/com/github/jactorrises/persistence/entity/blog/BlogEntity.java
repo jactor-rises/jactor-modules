@@ -1,5 +1,6 @@
 package com.github.jactorrises.persistence.entity.blog;
 
+import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,7 +20,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = BlogMetadata.BLOG_TABLE)
-public class BlogEntity extends PersistentEntity {
+public class BlogEntity extends PersistentEntity implements Blog {
 
     @Column(name = BlogMetadata.CREATED) private String created;
     @Column(name = BlogMetadata.TITLE) private String title;
@@ -54,15 +55,15 @@ public class BlogEntity extends PersistentEntity {
                 .toString();
     }
 
-    public String getTitle() {
+    @Override public String getTitle() {
         return title;
     }
 
-    public UserEntity getUser() {
+    @Override public UserEntity getUser() {
         return userEntity;
     }
 
-    public LocalDate getCreated() {
+    @Override public LocalDate getCreated() {
         return convertTo(created, LocalDate.class);
     }
 

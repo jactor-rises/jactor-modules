@@ -32,12 +32,12 @@ public class PersistentEntry {
     }
 
     /**
-     * @param entry will be used to copy an instance...
+     * @param persistentEntry is the entry to create a copy of
      */
-    PersistentEntry(PersistentEntry entry) {
-        createdTime = TIME_CONVERTER.convertFrom(entry.getCreatedTime());
-        this.entry = entry.getEntry();
-        creatorName = NAME_CONVERTER.convertFrom(entry.getCreatorName());
+    public PersistentEntry(PersistentEntry persistentEntry) {
+        creatorName = persistentEntry.creatorName;
+        createdTime = persistentEntry.createdTime;
+        entry = persistentEntry.entry;
     }
 
     @Override public boolean equals(Object obj) {

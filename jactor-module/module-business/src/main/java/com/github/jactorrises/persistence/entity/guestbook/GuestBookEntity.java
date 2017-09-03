@@ -1,7 +1,6 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
-import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -23,7 +22,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = GUEST_BOOK_TABLE)
-public class GuestBookEntity extends PersistentEntity {
+public class GuestBookEntity extends PersistentEntity implements GuestBook {
 
     @Column(name = TITLE) private String title;
     @JoinColumn(name = USER) @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
@@ -35,8 +34,8 @@ public class GuestBookEntity extends PersistentEntity {
      * @param guestBook will be used to copy an instance...
      */
     public GuestBookEntity(GuestBookEntity guestBook) {
-        title = guestBook.getTitle();
-        user = guestBook.getUser();
+        title = guestBook.title;
+        user = guestBook.user != null ? new UserEntity(guestBook.getUser()) : null;
     }
 
     @Override public boolean equals(Object o) {
@@ -70,7 +69,7 @@ public class GuestBookEntity extends PersistentEntity {
     }
 
     public void setUser(UserEntity user) {
-        this.user = user, UserEntity.class);
+        this.user = user;
     }
 
     public static GuestBookEntityBuilder aGuestBook() {

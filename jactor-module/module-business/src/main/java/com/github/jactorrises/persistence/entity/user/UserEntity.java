@@ -21,7 +21,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = UserMetadata.USER_TABLE)
-public class UserEntity extends PersistentEntity {
+public class UserEntity extends PersistentEntity implements User {
 
     @Column(name = UserMetadata.PASSWORD, nullable = false) private String password; // the user password
     @Column(name = UserMetadata.USER_NAME, nullable = false) private String userName; // the user name
@@ -34,11 +34,11 @@ public class UserEntity extends PersistentEntity {
     /**
      * @param user is used to create an entity
      */
-    public UserEntity(User user) {
+    public UserEntity(UserEntity user) {
+        emailAddress = user.emailAddress;
         password = user.getPassword();
-        userName = convertFrom(user.getUserName(), UserName.class);
-        personEntity = (PersonEntity) user.getPerson();
-        emailAddress = convertFrom(user.getEmailAddress(), EmailAddress.class);
+        personEntity = user.personEntity != null ? new PersonEntity(user.personEntity) : null;
+        userName = user.userName;
     }
 
     @Override public boolean equals(Object o) {
@@ -94,7 +94,7 @@ public class UserEntity extends PersistentEntity {
     }
 
     public void setPersonEntity(PersonEntity personEntity) {
-        this.personEntity = personEntity != null ? personEntity, PersonEntity.class) :null;
+        this.personEntity = personEntity;
     }
 
     public static UserEntityBuilder aUser() {

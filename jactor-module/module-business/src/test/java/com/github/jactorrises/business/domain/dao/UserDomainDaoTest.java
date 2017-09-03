@@ -1,12 +1,11 @@
 package com.github.jactorrises.business.domain.dao;
 
 import com.github.jactorrises.business.domain.PersonDomain;
-import com.github.jactorrises.business.domain.builder.UserDomainBuilder;
 import com.github.jactorrises.business.domain.UserDomain;
+import com.github.jactorrises.business.domain.builder.UserDomainBuilder;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.persistence.client.UserEntity;
 import com.github.jactorrises.persistence.client.dao.UserDao;
-import com.github.jactorrises.persistence.facade.PersistentDataService;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,9 +67,7 @@ class UserDomainDaoTest {
 
     @DisplayName("should try to find the user domain when user name is not null")
     @Test void willFindUserDomainBasedOnUserName() {
-        when(userDaoMock.findUsing(new UserName("someone"))).thenReturn(
-                Optional.of(PersistentDataService.getInstance().provideInstanceFor(UserEntity.class))
-        );
+        when(userDaoMock.findUsing(new UserName("someone"))).thenReturn(Optional.of(new UserEntity()));
 
         userDomainDaoToTest.findUsing(new UserName("someone"));
         verify(userDaoMock, times(1)).findUsing(new UserName("someone"));
@@ -86,8 +83,7 @@ class UserDomainDaoTest {
 
     @DisplayName("should return a user domain when an entity is found")
     @Test void willReturnDomainWhenEntityIsFound() {
-        UserEntity userEntity = PersistentDataService.getInstance().provideInstanceFor(UserEntity.class);
-        when(userDaoMock.findUsing(new UserName("someone"))).thenReturn(Optional.of(userEntity));
+        when(userDaoMock.findUsing(new UserName("someone"))).thenReturn(Optional.of(new UserEntity()));
 
         Optional<UserDomain> userDomain = userDomainDaoToTest.findUsing(new UserName("someone"));
         assertThat(userDomain.isPresent()).as("optional user domain").isEqualTo(true);

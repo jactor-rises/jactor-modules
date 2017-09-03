@@ -3,7 +3,7 @@ package com.github.jactorrises.business.domain;
 import com.github.jactorrises.business.domain.builder.BlogDomainBuilder;
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.persistence.client.BlogEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 
 import java.time.LocalDate;
 

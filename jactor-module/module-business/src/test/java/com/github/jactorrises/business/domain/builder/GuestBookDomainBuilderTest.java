@@ -1,8 +1,7 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.GuestBookDomain;
-import com.github.jactorrises.persistence.client.UserEntity;
-import com.github.jactorrises.persistence.facade.PersistentDataService;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +13,13 @@ class GuestBookDomainBuilderTest {
 
     @DisplayName("should not build an instance without the title of the guest book")
     @Test void willNotBuildGuestBookWithoutTheTitleOfTheGuestBook() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> GuestBookDomain.aGuestBook().with(aUser()).build());
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> GuestBookDomain.aGuestBook().with(new UserEntity()).build());
         assertThat(illegalArgumentException.getMessage()).isEqualTo(GuestBookDomainBuilder.THE_TITLE_CANNOT_BE_BLANK);
     }
 
     @DisplayName("should not build an instance with an empty title for the guest book")
     @Test void willNotBuildGuestBookWithAnEmptyTitleOfTheGuestBook() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> GuestBookDomain.aGuestBook().withTitleAs("").with(aUser()).build());
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> GuestBookDomain.aGuestBook().withTitleAs("").with(new UserEntity()).build());
         assertThat(illegalArgumentException.getMessage()).isEqualTo(GuestBookDomainBuilder.THE_TITLE_CANNOT_BE_BLANK);
     }
 
@@ -32,10 +31,6 @@ class GuestBookDomainBuilderTest {
 
     @DisplayName("should build an instance when all required fields are set")
     @Test void willBuildGuestBookWhenAllRequiredFieldsAreSet() throws Exception {
-        assertThat(GuestBookDomain.aGuestBook().withTitleAs("some title").with(aUser()).build()).isNotNull();
-    }
-
-    private UserEntity aUser() {
-        return PersistentDataService.getInstance().provideInstanceFor(UserEntity.class);
+        assertThat(GuestBookDomain.aGuestBook().withTitleAs("some title").with(new UserEntity()).build()).isNotNull();
     }
 }

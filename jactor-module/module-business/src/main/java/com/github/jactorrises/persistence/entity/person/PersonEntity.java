@@ -2,6 +2,7 @@ package com.github.jactorrises.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
@@ -24,7 +25,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = PersonMetadata.PERSON_TABLE)
-public class PersonEntity extends PersistentEntity {
+public class PersonEntity extends PersistentEntity implements Person {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = PersonMetadata.ADDRESS_ID) private AddressEntity addressEntity;
@@ -39,11 +40,11 @@ public class PersonEntity extends PersistentEntity {
 
     public PersonEntity(PersonEntity person) {
         addressEntity = person.getAddress() != null ? new AddressEntity(person.getAddress()) : null;
-        description = convertFrom(person.getDescription(), Description.class);
-        firstName = convertFrom(person.getFirstName(), Name.class);
-        lastName = convertFrom(person.getLastName(), Name.class);
-        userEntity = person.getUser()
+        description = person.description;
+        firstName = person.firstName;
+        lastName = person.lastName;
         locale = person.getLocale();
+        userEntity = person.userEntity != null ? new UserEntity(person.userEntity) : null;
     }
 
     @Override public boolean equals(Object o) {
@@ -65,27 +66,27 @@ public class PersonEntity extends PersistentEntity {
                 .appendSuper(super.toString()).append(firstName).append(lastName).append(userEntity).append(addressEntity).toString();
     }
 
-    public AddressEntity getAddress() {
+    @Override public AddressEntity getAddress() {
         return addressEntity;
     }
 
-    public Name getFirstName() {
+    @Override public Name getFirstName() {
         return convertTo(firstName, Name.class);
     }
 
-    public Name getLastName() {
+    @Override public Name getLastName() {
         return convertTo(lastName, Name.class);
     }
 
-    public Locale getLocale() {
+    @Override public Locale getLocale() {
         return locale;
     }
 
-    public Description getDescription() {
+    @Override public Description getDescription() {
         return convertTo(description, Description.class);
     }
 
-    public UserEntity getUser() {
+    @Override public UserEntity getUser() {
         return userEntity;
     }
 
@@ -106,7 +107,7 @@ public class PersonEntity extends PersistentEntity {
     }
 
     public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity, UserEntity.class);
+        this.userEntity = userEntity;
     }
 
     public void setLocale(Locale locale) {

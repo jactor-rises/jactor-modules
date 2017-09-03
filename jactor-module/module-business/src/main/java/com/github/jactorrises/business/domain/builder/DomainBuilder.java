@@ -1,7 +1,5 @@
 package com.github.jactorrises.business.domain.builder;
 
-import com.github.jactorrises.persistence.facade.PersistentDataService;
-
 import java.util.List;
 
 /**
@@ -14,7 +12,7 @@ public abstract class DomainBuilder<T> {
     private static FieldValidator fieldValidator;
     private final List<FieldValidator.ValidateField<T>> validateFields;
 
-    protected DomainBuilder(List<FieldValidator.ValidateField<T>> validateFields) {
+    DomainBuilder(List<FieldValidator.ValidateField<T>> validateFields) {
         this.validateFields = validateFields;
     }
 
@@ -27,12 +25,8 @@ public abstract class DomainBuilder<T> {
         return bean;
     }
 
-    protected static void useFieldValidator(FieldValidator fieldValidator) {
+    static void useFieldValidator(FieldValidator fieldValidator) {
         DomainBuilder.fieldValidator = fieldValidator;
-    }
-
-    static <T> T newInstanceOf(Class<T> persistentClass) {
-        return PersistentDataService.getInstance().provideInstanceFor(persistentClass);
     }
 
     static {

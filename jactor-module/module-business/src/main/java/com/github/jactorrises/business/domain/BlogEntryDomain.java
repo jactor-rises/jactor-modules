@@ -4,7 +4,7 @@ import com.github.jactorrises.business.domain.builder.BlogEntryDomainBuilder;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.client.domain.BlogEntry;
-import com.github.jactorrises.persistence.client.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 
 import java.time.LocalDateTime;
 

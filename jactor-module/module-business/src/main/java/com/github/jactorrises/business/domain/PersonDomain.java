@@ -5,7 +5,7 @@ import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.client.domain.Person;
-import com.github.jactorrises.persistence.client.PersonEntity;
+import com.github.jactorrises.persistence.entity.person.PersonEntity;
 
 import java.util.Locale;
 

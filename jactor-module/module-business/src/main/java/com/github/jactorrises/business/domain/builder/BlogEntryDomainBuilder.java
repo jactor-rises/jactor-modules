@@ -1,8 +1,8 @@
 package com.github.jactorrises.business.domain.builder;
 
 import com.github.jactorrises.business.domain.BlogEntryDomain;
-import com.github.jactorrises.persistence.client.BlogEntity;
-import com.github.jactorrises.persistence.client.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -14,7 +14,7 @@ public class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
     static final String THE_ENTRY_CANNOT_BE_EMPTY = "The entry field cannot be empty";
     static final String THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE = "The entry must be created by someone";
 
-    private final BlogEntryEntity blogEntryEntity = newInstanceOf(BlogEntryEntity.class);
+    private final BlogEntryEntity blogEntryEntity = new BlogEntryEntity();
 
     private BlogEntryDomainBuilder() {
         super(asList(

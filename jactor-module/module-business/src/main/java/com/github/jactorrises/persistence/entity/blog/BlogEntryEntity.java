@@ -31,14 +31,12 @@ public class BlogEntryEntity extends PersistentEntity {
             @AttributeOverride(name = "entry", column = @Column(name = BlogEntryMetadata.ENTRY))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    public BlogEntryEntity() { }
+    public BlogEntryEntity() {
+    }
 
     public BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
-        blogEntity = blogEntryEntity.getBlog(), BlogEntity.class);
-        blogEntity = blogEntryEntity.getBlog(), BlogEntity.class);
-        persistentEntry = new PersistentEntry(convertFrom(blogEntryEntity.getCreatedTime(), LocalDateTime.class));
-        persistentEntry.setCreatorName(convertFrom(blogEntryEntity.getCreatorName(), Name.class));
-        persistentEntry.setEntry(blogEntryEntity.getEntry());
+        blogEntity = new BlogEntity(blogEntryEntity.blogEntity);
+        persistentEntry = new PersistentEntry(blogEntryEntity.persistentEntry);
     }
 
     @Override public boolean equals(Object o) {

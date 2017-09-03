@@ -5,6 +5,7 @@ import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.persistence.client.converter.CountryConverter;
 import com.github.jactorrises.persistence.client.converter.DescriptionConverter;
 import com.github.jactorrises.persistence.client.converter.EmailAddressConverter;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @MappedSuperclass
-public abstract class PersistentEntity {
+public abstract class PersistentEntity implements Persistent<Long> {
 
     private static final Map<Class<?>, TypeConverter> dataTypeConverters = initKnownConverters();
 

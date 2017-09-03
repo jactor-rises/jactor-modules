@@ -4,7 +4,7 @@ import com.github.jactorrises.business.domain.builder.GuestBookEntryDomainBuilde
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.client.domain.GuestBookEntry;
-import com.github.jactorrises.persistence.client.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
 
 import java.time.LocalDateTime;
 
