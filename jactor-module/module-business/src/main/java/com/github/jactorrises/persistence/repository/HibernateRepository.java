@@ -26,7 +26,7 @@ public class HibernateRepository implements UserDao {
 
     @Override public Optional<UserEntity> findUsing(UserName userName) {
         UserEntity userEntity = (UserEntity) session().createCriteria(UserEntity.class)
-                .add(eq("userName", userName.getName()))
+                .add(Restrictions.eq("userName", userName.getName()))
                 .uniqueResult();
 
         return Optional.ofNullable(userEntity);
