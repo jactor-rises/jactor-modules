@@ -18,7 +18,7 @@
     </properties>
 
     <modules>
-        <module>jactor-module</module>
+        <module>jactor-model</module>
         <module>jactor-web</module>
     </modules>
 

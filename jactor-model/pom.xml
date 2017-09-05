@@ -11,11 +11,17 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jactor-rises</groupId>
-    <artifactId>jactor-module</artifactId>
+    <artifactId>jactor-model</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <name>jactor-rises::jactor-module</name>
+    <name>jactor-rises::jactor-model</name>
+
+    <modules>
+        <module>jactor-client</module>
+        <module>jactor-business</module>
+        <module>jactor-rest</module>
+    </modules>
 
     <properties>
         <assertj.version>3.8.0</assertj.version>
@@ -30,18 +36,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
         </dependency>
 
         <!-- Test scope -->
@@ -81,6 +75,23 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.github.jactor-rises.model</groupId>
+                <artifactId>jactor-business</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises.model</groupId>
+                <artifactId>jactor-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises.model</groupId>
+                <artifactId>jactor-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- third party -->
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
