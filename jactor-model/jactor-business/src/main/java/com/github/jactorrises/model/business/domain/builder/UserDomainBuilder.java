@@ -48,7 +48,7 @@ public class UserDomainBuilder extends DomainBuilder<UserDomain> {
     }
 
     @Override
-    protected UserDomain addhRequiredFields() {
+    protected UserDomain addRequiredFields() {
         return new UserDomain(userEntity);
     }
 

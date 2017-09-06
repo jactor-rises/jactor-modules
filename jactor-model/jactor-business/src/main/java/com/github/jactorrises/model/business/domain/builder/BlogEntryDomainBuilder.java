@@ -35,7 +35,7 @@ public class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
         return this;
     }
 
-    @Override protected BlogEntryDomain addhRequiredFields() {
+    @Override protected BlogEntryDomain addRequiredFields() {
         return new BlogEntryDomain(blogEntryEntity);
     }
 

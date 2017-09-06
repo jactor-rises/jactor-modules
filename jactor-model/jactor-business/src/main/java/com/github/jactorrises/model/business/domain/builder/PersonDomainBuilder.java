@@ -19,7 +19,7 @@ public class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
         ));
     }
 
-    @Override protected PersonDomain addhRequiredFields() {
+    @Override protected PersonDomain addRequiredFields() {
         return new PersonDomain(personEntity);
     }
 

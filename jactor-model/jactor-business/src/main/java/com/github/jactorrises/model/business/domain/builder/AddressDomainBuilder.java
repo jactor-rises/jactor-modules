@@ -53,7 +53,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
         return this;
     }
 
-    @Override protected AddressDomain addhRequiredFields() {
+    @Override protected AddressDomain addRequiredFields() {
         return new AddressDomain(addressEntity);
     }
 

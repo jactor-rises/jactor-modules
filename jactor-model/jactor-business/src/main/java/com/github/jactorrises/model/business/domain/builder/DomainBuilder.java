@@ -16,10 +16,10 @@ public abstract class DomainBuilder<T> {
         this.validateFields = validateFields;
     }
 
-    protected abstract T addhRequiredFields();
+    protected abstract T addRequiredFields();
 
     public T build() {
-        T bean = addhRequiredFields();
+        T bean = addRequiredFields();
         fieldValidator.validate(bean, validateFields);
 
         return bean;

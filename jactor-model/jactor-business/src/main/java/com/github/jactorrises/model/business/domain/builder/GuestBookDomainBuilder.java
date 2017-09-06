@@ -32,7 +32,7 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
         return this;
     }
 
-    @Override protected GuestBookDomain addhRequiredFields() {
+    @Override protected GuestBookDomain addRequiredFields() {
         return new GuestBookDomain(guestBookEntity);
     }
 

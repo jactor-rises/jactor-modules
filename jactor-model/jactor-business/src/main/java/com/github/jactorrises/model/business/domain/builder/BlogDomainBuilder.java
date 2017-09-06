@@ -32,7 +32,7 @@ public class BlogDomainBuilder extends DomainBuilder<BlogDomain> {
         return this;
     }
 
-    @Override protected BlogDomain addhRequiredFields() {
+    @Override protected BlogDomain addRequiredFields() {
         return new BlogDomain(blogEntity);
     }
 }

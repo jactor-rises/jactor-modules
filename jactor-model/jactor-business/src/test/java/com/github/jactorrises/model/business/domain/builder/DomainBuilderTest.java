@@ -46,7 +46,7 @@ class DomainBuilderTest {
             super(validFields);
         }
 
-        @Override protected Bean addhRequiredFields() {
+        @Override protected Bean addRequiredFields() {
             return new Bean();
         }
     }
