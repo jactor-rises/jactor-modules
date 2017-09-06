@@ -12,10 +12,18 @@
 
     <groupId>com.github.jactor-rises.model</groupId>
     <artifactId>jactor-client</artifactId>
+    <packaging>jar</packaging>
 
-    <name>jactor-rises::jactor-client</name>
+    <name>jactor-rises-model::jactor-client</name>
     <version>1.0-SNAPSHOT</version>
 
     <description>The public classes</description>
-    
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

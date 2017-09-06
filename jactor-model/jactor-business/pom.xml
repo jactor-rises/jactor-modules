@@ -12,8 +12,9 @@
 
     <groupId>com.github.jactor-rises.model</groupId>
     <artifactId>jactor-business</artifactId>
+    <packaging>jar</packaging>
 
-    <name>jactor-rises::jactor-business</name>
+    <name>jactor-rises-model::jactor-business</name>
 
     <dependencies>
         <dependency>

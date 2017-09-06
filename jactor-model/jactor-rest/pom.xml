@@ -12,7 +12,8 @@
 
     <groupId>com.github.jactor-rises.model</groupId>
     <artifactId>jactor-rest</artifactId>
-    <name>jactor-rises::jactor-rest</name>
+    <name>jactor-rises-model::jactor-rest</name>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
