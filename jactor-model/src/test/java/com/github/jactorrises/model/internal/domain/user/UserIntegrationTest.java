@@ -2,8 +2,10 @@ package com.github.jactorrises.model.internal.domain.user;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.datatype.Description;
+import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.model.internal.JactorModule;
+import com.github.jactorrises.model.internal.persistence.client.dao.UserDao;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.Session;
@@ -15,6 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
 import static com.github.jactorrises.model.internal.domain.person.PersonDomain.aPerson;
 import static com.github.jactorrises.model.internal.domain.user.UserDomain.aUser;
@@ -25,12 +29,13 @@ import static org.hibernate.criterion.Restrictions.eq;
 @Transactional
 public class UserIntegrationTest {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @Autowired private SessionFactory sessionFactory;
+
+    @Autowired private UserDao userDao;
 
     @Test
     public void willSaveUserAndPersonToTheDatabase() {
-        session().save(
+        userDao.save(
                 aUser().withUserName("titten")
                         .withPassword("demo")
                         .withEmailAddress("jactorhrises")
@@ -46,9 +51,11 @@ public class UserIntegrationTest {
         session().flush();
         session().clear();
 
-        UserEntity userFromDb = (UserEntity) session().createCriteria(UserEntity.class).add(eq("userName", "titten")).uniqueResult();
+        Optional<UserEntity> possibleUserFromDb = userDao.findUsing(new UserName("titten"));
 
         SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(possibleUserFromDb).isPresent();
+            UserEntity userFromDb = possibleUserFromDb.get();
 //            softly.assertThat(userFromDb.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")); todo fix: should work after story   ..#131 is resolved
             softly.assertThat(userFromDb.getPassword()).as("user.password").isEqualTo("demo");
             softly.assertThat(userFromDb.getPerson().getDescription()).as("user.description").isEqualTo(new Description("description"));
@@ -57,7 +64,7 @@ public class UserIntegrationTest {
 
     @Test
     public void willSaveUserWithAddressTheDatabase() {
-        session().save(
+        userDao.save(
                 aUser().withUserName("titten")
                         .withPassword("demo")
                         .with(aPerson().withDescription("description")
@@ -72,10 +79,12 @@ public class UserIntegrationTest {
         session().flush();
         session().clear();
 
-        UserEntity userFromDb = (UserEntity) session().createCriteria(UserEntity.class).add(eq("userName", "titten")).uniqueResult();
-        Address address = userFromDb.getPerson().getAddress();
+        Optional<UserEntity> possibleUserFromDb = userDao.findUsing(new UserName("titten"));
 
         SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(possibleUserFromDb).isPresent();
+            UserEntity userFromDb = possibleUserFromDb.get();
+            Address address = userFromDb.getPerson().getAddress();
             softly.assertThat(address.getAddressLine1()).as("address line 1").isEqualTo("the streets");
             softly.assertThat(address.getAddressLine2()).as("address line 2").isNull();
             softly.assertThat(address.getAddressLine3()).as("address line 3").isNull();
