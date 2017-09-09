@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.business.persistence.entity.entry;
+package com.github.jactorrises.model.internal.persistence.entity.entry;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.business.persistence.client.converter.LocalDateTimeConverter;
-import com.github.jactorrises.model.business.persistence.client.converter.NameConverter;
-import com.github.jactorrises.model.business.persistence.client.time.Now;
+import com.github.jactorrises.model.internal.persistence.client.converter.LocalDateTimeConverter;
+import com.github.jactorrises.model.internal.persistence.client.converter.NameConverter;
+import com.github.jactorrises.model.internal.persistence.client.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

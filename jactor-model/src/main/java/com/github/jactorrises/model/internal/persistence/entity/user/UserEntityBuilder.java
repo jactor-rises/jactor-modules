@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.persistence.entity.user;
+package com.github.jactorrises.model.internal.persistence.entity.user;
 
 public class UserEntityBuilder {
     private String userName;

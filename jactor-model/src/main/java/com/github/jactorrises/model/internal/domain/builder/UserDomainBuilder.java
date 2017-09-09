@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.business.domain.builder;
+package com.github.jactorrises.model.internal.domain.builder;
 
-import com.github.jactorrises.model.business.domain.PersonDomain;
-import com.github.jactorrises.model.business.domain.UserDomain;
-import com.github.jactorrises.model.business.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.internal.domain.PersonDomain;
+import com.github.jactorrises.model.internal.domain.UserDomain;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 
 import java.util.Optional;
 

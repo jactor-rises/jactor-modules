@@ -1,11 +1,11 @@
-package com.github.jactorrises.model.business.domain;
+package com.github.jactorrises.model.internal.domain;
 
-import com.github.jactorrises.model.business.domain.builder.PersonDomainBuilder;
+import com.github.jactorrises.model.internal.domain.builder.PersonDomainBuilder;
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.client.domain.Person;
-import com.github.jactorrises.model.business.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.model.internal.persistence.entity.person.PersonEntity;
 
 import java.util.Locale;
 

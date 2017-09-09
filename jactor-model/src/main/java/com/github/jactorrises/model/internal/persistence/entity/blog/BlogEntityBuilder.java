@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.business.persistence.entity.blog;
+package com.github.jactorrises.model.internal.persistence.entity.blog;
 
-import com.github.jactorrises.model.business.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 
 public class BlogEntityBuilder {
     private String title;

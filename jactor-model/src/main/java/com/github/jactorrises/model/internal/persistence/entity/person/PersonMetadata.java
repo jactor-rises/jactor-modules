@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.persistence.entity.person;
+package com.github.jactorrises.model.internal.persistence.entity.person;
 
 final class PersonMetadata {
     private PersonMetadata() {}

@@ -1,10 +1,10 @@
-package com.github.jactorrises.model.business.persistence.entity.user;
+package com.github.jactorrises.model.internal.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.model.business.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.business.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.model.internal.persistence.entity.PersistentEntity;
+import com.github.jactorrises.model.internal.persistence.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

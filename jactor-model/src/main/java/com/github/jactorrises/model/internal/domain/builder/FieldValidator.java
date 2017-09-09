@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.domain.builder;
+package com.github.jactorrises.model.internal.domain.builder;
 
 import java.util.List;
 import java.util.Optional;

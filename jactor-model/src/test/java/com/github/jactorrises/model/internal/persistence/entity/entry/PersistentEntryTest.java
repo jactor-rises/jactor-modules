@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.business.persistence.entity.entry;
+package com.github.jactorrises.model.internal.persistence.entity.entry;
 
-import com.github.jactorrises.model.business.persistence.entity.NowAsPureDate;
+import com.github.jactorrises.model.internal.persistence.entity.NowAsPureDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

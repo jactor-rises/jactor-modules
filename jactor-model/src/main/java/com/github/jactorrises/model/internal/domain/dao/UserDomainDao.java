@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.business.domain.dao;
+package com.github.jactorrises.model.internal.domain.dao;
 
-import com.github.jactorrises.model.business.domain.UserDomain;
+import com.github.jactorrises.model.internal.domain.UserDomain;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.business.persistence.client.dao.UserDao;
+import com.github.jactorrises.model.internal.persistence.client.dao.UserDao;
 
 import java.util.Optional;
 

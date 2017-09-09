@@ -1,11 +1,11 @@
-package com.github.jactorrises.model.business.domain;
+package com.github.jactorrises.model.internal.domain;
 
-import com.github.jactorrises.model.business.domain.builder.UserDomainBuilder;
+import com.github.jactorrises.model.internal.domain.builder.UserDomainBuilder;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.model.business.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 
 public class UserDomain extends PersistentDomain<UserEntity, Long> implements User {
 

@@ -1,10 +1,10 @@
-package com.github.jactorrises.model.business.domain;
+package com.github.jactorrises.model.internal.domain;
 
-import com.github.jactorrises.model.business.JactorModule;
+import com.github.jactorrises.model.internal.JactorModule;
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.domain.Address;
-import com.github.jactorrises.model.business.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,9 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.github.jactorrises.model.business.domain.AddressDomain.anAddress;
-import static com.github.jactorrises.model.business.domain.PersonDomain.aPerson;
-import static com.github.jactorrises.model.business.domain.UserDomain.aUser;
+import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.PersonDomain.aPerson;
+import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
 import static org.hibernate.criterion.Restrictions.eq;
 
 @RunWith(SpringRunner.class)

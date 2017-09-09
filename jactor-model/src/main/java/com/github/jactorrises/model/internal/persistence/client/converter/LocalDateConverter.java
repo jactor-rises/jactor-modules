@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.persistence.client.converter;
+package com.github.jactorrises.model.internal.persistence.client.converter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

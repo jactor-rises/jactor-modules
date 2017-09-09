@@ -1,11 +1,11 @@
-package com.github.jactorrises.model.business.domain.builder;
+package com.github.jactorrises.model.internal.domain.builder;
 
-import com.github.jactorrises.model.business.domain.AddressDomain;
+import com.github.jactorrises.model.internal.domain.AddressDomain;
 import com.github.jactorrises.client.datatype.Country;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.business.domain.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.jupiter.api.Assertions.assertAll;

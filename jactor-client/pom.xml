@@ -6,24 +6,14 @@
 
     <parent>
         <groupId>com.github.jactor-rises</groupId>
-        <artifactId>jactor-model</artifactId>
+        <artifactId>jactor-rises</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.github.jactor-rises.model</groupId>
     <artifactId>jactor-client</artifactId>
     <packaging>jar</packaging>
 
-    <name>jactor-rises-model::jactor-client</name>
-    <version>1.0-SNAPSHOT</version>
+    <name>jactor-rises::jactor-client</name>
 
     <description>The public classes</description>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-    </dependencies>
-
 </project>

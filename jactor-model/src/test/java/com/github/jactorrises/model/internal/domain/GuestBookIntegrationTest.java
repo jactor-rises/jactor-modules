@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.business.domain;
+package com.github.jactorrises.model.internal.domain;
 
-import com.github.jactorrises.model.business.JactorModule;
-import com.github.jactorrises.model.business.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.business.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.internal.JactorModule;
+import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.Serializable;
 
-import static com.github.jactorrises.model.business.domain.AddressDomain.anAddress;
-import static com.github.jactorrises.model.business.domain.GuestBookDomain.aGuestBook;
-import static com.github.jactorrises.model.business.domain.PersonDomain.aPerson;
-import static com.github.jactorrises.model.business.domain.UserDomain.aUser;
+import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.GuestBookDomain.aGuestBook;
+import static com.github.jactorrises.model.internal.domain.PersonDomain.aPerson;
+import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)

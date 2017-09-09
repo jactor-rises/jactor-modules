@@ -1,10 +1,10 @@
-package com.github.jactorrises.model.business.facade;
+package com.github.jactorrises.model.internal.facade;
 
-import com.github.jactorrises.model.business.domain.PersonDomain;
-import com.github.jactorrises.model.business.domain.UserDomain;
+import com.github.jactorrises.model.internal.domain.PersonDomain;
+import com.github.jactorrises.model.internal.domain.UserDomain;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.model.business.persistence.client.dao.UserDao;
+import com.github.jactorrises.model.internal.persistence.client.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.model.business.domain.AddressDomain.anAddress;
-import static com.github.jactorrises.model.business.domain.UserDomain.aUser;
+import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 

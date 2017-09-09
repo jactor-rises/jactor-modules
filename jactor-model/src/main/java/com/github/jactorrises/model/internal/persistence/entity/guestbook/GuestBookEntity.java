@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.business.persistence.entity.guestbook;
+package com.github.jactorrises.model.internal.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
-import com.github.jactorrises.model.business.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.business.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.internal.persistence.entity.PersistentEntity;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,9 +15,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
-import static com.github.jactorrises.model.business.persistence.entity.guestbook.GuestBookMetadata.GUEST_BOOK_TABLE;
-import static com.github.jactorrises.model.business.persistence.entity.guestbook.GuestBookMetadata.TITLE;
-import static com.github.jactorrises.model.business.persistence.entity.guestbook.GuestBookMetadata.USER;
+import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookMetadata.GUEST_BOOK_TABLE;
+import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookMetadata.TITLE;
+import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookMetadata.USER;
 import static java.util.Objects.hash;
 
 @Entity

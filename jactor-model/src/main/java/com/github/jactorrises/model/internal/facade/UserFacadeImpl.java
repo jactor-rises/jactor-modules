@@ -1,11 +1,11 @@
-package com.github.jactorrises.model.business.facade;
+package com.github.jactorrises.model.internal.facade;
 
-import com.github.jactorrises.model.business.domain.UserDomain;
+import com.github.jactorrises.model.internal.domain.UserDomain;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.facade.UserFacade;
-import com.github.jactorrises.model.business.persistence.client.dao.UserDao;
-import com.github.jactorrises.model.business.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.internal.persistence.client.dao.UserDao;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 
 import java.util.Optional;
 

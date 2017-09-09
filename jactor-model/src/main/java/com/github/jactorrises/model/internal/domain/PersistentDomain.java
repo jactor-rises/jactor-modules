@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.domain;
+package com.github.jactorrises.model.internal.domain;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Persistent;

@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.persistence.entity.address;
+package com.github.jactorrises.model.internal.persistence.entity.address;
 
 public class AddressEntityBuilder {
 

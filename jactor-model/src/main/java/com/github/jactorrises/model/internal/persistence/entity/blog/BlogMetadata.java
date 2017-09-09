@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.persistence.entity.blog;
+package com.github.jactorrises.model.internal.persistence.entity.blog;
 
 /**
  * The meta data of an persistent blog

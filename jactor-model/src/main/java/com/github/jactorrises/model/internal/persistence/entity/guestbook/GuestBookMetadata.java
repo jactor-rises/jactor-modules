@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.business.persistence.entity.guestbook;
+package com.github.jactorrises.model.internal.persistence.entity.guestbook;
 
 final class GuestBookMetadata {
     private GuestBookMetadata() {}
