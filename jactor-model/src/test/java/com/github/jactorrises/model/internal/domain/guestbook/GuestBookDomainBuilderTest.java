@@ -1,6 +1,7 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.guestbook;
 
-import com.github.jactorrises.model.internal.domain.GuestBookDomain;
+import com.github.jactorrises.model.internal.domain.guestbook.GuestBookDomain;
+import com.github.jactorrises.model.internal.domain.guestbook.GuestBookDomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

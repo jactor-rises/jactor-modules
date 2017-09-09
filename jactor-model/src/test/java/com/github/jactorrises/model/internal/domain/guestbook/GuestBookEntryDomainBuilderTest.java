@@ -1,10 +1,11 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.guestbook;
 
+import com.github.jactorrises.model.internal.domain.guestbook.GuestBookEntryDomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.internal.domain.GuestBookEntryDomain.aGuestBookEntry;
+import static com.github.jactorrises.model.internal.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 

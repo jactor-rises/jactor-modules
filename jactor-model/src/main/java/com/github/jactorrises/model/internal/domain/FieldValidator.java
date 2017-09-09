@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +17,10 @@ public class FieldValidator {
     }
 
     private <E> void validateField(E domain, ValidateField<E> validateField) {
-        Optional<String> requiredFieldMsg = validateField.validateFields(domain);
+        Optional<String> validationMsg = validateField.validateFields(domain);
 
-        if (requiredFieldMsg.isPresent()) {
-            throw new IllegalArgumentException(requiredFieldMsg.get());
+        if (validationMsg.isPresent()) {
+            throw new IllegalArgumentException(validationMsg.get());
         }
     }
 

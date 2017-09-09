@@ -1,7 +1,7 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.person;
 
+import com.github.jactorrises.model.internal.domain.DomainBuilder;
 import com.github.jactorrises.model.internal.domain.address.AddressDomain;
-import com.github.jactorrises.model.internal.domain.PersonDomain;
 import com.github.jactorrises.model.internal.domain.address.AddressDomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.person.PersonEntity;
 
@@ -20,7 +20,7 @@ public class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
         ));
     }
 
-    @Override protected PersonDomain addRequiredFields() {
+    @Override protected PersonDomain buildBeforeValidation() {
         return new PersonDomain(personEntity);
     }
 

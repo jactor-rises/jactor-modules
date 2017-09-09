@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.person;
 
 import com.github.jactorrises.model.internal.domain.person.PersonDomain;
 import com.github.jactorrises.model.internal.domain.person.PersonDomainBuilder;

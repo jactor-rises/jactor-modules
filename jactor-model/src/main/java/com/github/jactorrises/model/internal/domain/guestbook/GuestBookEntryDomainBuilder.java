@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.guestbook;
 
-import com.github.jactorrises.model.internal.domain.GuestBookEntryDomain;
+import com.github.jactorrises.model.internal.domain.DomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntryEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +35,7 @@ public class GuestBookEntryDomainBuilder extends DomainBuilder<GuestBookEntryDom
         return this;
     }
 
-    @Override protected GuestBookEntryDomain addRequiredFields() {
+    @Override protected GuestBookEntryDomain buildBeforeValidation() {
         return new GuestBookEntryDomain(guestBookEntryEntity);
     }
 

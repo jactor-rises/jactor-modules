@@ -1,7 +1,8 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.user;
 
-import com.github.jactorrises.model.internal.domain.PersonDomain;
-import com.github.jactorrises.model.internal.domain.UserDomain;
+import com.github.jactorrises.model.internal.domain.DomainBuilder;
+import com.github.jactorrises.model.internal.domain.person.PersonDomain;
+import com.github.jactorrises.model.internal.domain.person.PersonDomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 
 import java.util.Optional;
@@ -48,7 +49,7 @@ public class UserDomainBuilder extends DomainBuilder<UserDomain> {
     }
 
     @Override
-    protected UserDomain addRequiredFields() {
+    protected UserDomain buildBeforeValidation() {
         return new UserDomain(userEntity);
     }
 

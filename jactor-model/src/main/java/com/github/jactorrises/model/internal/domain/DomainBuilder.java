@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ public abstract class DomainBuilder<T> {
         this.validateFields = validateFields;
     }
 
-    protected abstract T addRequiredFields();
+    protected abstract T buildBeforeValidation();
 
     public T build() {
-        T bean = addRequiredFields();
+        T bean = buildBeforeValidation();
         fieldValidator.validate(bean, validateFields);
 
         return bean;

@@ -1,5 +1,7 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain;
 
+import com.github.jactorrises.model.internal.domain.DomainBuilder;
+import com.github.jactorrises.model.internal.domain.FieldValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +48,7 @@ class DomainBuilderTest {
             super(validFields);
         }
 
-        @Override protected Bean addRequiredFields() {
+        @Override protected Bean buildBeforeValidation() {
             return new Bean();
         }
     }

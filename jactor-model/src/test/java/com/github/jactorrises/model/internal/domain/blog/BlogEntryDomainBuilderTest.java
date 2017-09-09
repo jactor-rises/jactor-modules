@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.blog;
 
-import com.github.jactorrises.model.internal.domain.address.BlogEntryDomainBuilder;
+import com.github.jactorrises.model.internal.domain.blog.BlogEntryDomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

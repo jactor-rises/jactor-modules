@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.address;
 
-import com.github.jactorrises.model.internal.domain.address.AddressDomain;
+import com.github.jactorrises.model.internal.domain.DomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.address.AddressEntity;
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,7 +53,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
         return this;
     }
 
-    @Override protected AddressDomain addRequiredFields() {
+    @Override protected AddressDomain buildBeforeValidation() {
         return new AddressDomain(addressEntity);
     }
 

@@ -1,7 +1,6 @@
-package com.github.jactorrises.model.internal.domain.address;
+package com.github.jactorrises.model.internal.domain.blog;
 
-import com.github.jactorrises.model.internal.domain.blog.BlogEntryDomain;
-import com.github.jactorrises.model.internal.domain.builder.DomainBuilder;
+import com.github.jactorrises.model.internal.domain.DomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntryEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +35,7 @@ public class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
         return this;
     }
 
-    @Override protected BlogEntryDomain addRequiredFields() {
+    @Override protected BlogEntryDomain buildBeforeValidation() {
         return new BlogEntryDomain(blogEntryEntity);
     }
 

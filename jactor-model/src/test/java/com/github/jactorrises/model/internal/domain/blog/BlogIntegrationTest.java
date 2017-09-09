@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.domain;
+package com.github.jactorrises.model.internal.domain.blog;
 
 import com.github.jactorrises.model.internal.JactorModule;
 import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
@@ -17,8 +17,8 @@ import java.time.LocalDate;
 
 import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
 import static com.github.jactorrises.model.internal.domain.blog.BlogDomain.aBlog;
-import static com.github.jactorrises.model.internal.domain.PersonDomain.aPerson;
-import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
+import static com.github.jactorrises.model.internal.domain.person.PersonDomain.aPerson;
+import static com.github.jactorrises.model.internal.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
