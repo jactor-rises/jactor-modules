@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.business;
 
-import com.github.jactorrises.model.business.facade.UserFacadeImpl;
 import com.github.jactorrises.client.facade.UserFacade;
+import com.github.jactorrises.model.business.facade.UserFacadeImpl;
 import com.github.jactorrises.model.business.persistence.client.dao.UserDao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
