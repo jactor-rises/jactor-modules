@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 
-public class UserDomainBuilder extends DomainBuilder<UserDomain> {
+public final class UserDomainBuilder extends DomainBuilder<UserDomain> {
     static final String THE_FIELD_CANNOT_BE_EMPTY = "The password cannot be empty";
     static final String THE_USER_MUST_BE_A_PERSON = "The user must be a person";
     static final String THE_USER_NAME_CANNOT_BE_NULL = "The user name cannot be null";
@@ -24,7 +24,7 @@ public class UserDomainBuilder extends DomainBuilder<UserDomain> {
         ));
     }
 
-    public UserDomainBuilder withUserNameAs(String userName) {
+    public UserDomainBuilder withUserName(String userName) {
         userEntity.setUserName(userName);
         return this;
     }
@@ -38,12 +38,12 @@ public class UserDomainBuilder extends DomainBuilder<UserDomain> {
         return with(personDomainBuilder.build());
     }
 
-    public UserDomainBuilder withPasswordAs(String password) {
+    public UserDomainBuilder withPassword(String password) {
         userEntity.setPassword(password);
         return this;
     }
 
-    public UserDomainBuilder withEmailAddressAs(String emailAddress) {
+    public UserDomainBuilder withEmailAddress(String emailAddress) {
         userEntity.setEmailAddress(emailAddress);
         return this;
     }

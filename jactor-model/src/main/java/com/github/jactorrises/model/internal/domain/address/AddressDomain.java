@@ -7,7 +7,7 @@ import com.github.jactorrises.model.internal.persistence.entity.address.AddressE
 
 public class AddressDomain extends PersistentDomain<AddressEntity, Long> implements Address {
 
-    public AddressDomain(AddressEntity addressEntity) {
+    AddressDomain(AddressEntity addressEntity) {
         super(addressEntity);
     }
 

@@ -1,7 +1,5 @@
 package com.github.jactorrises.model.internal.domain.person;
 
-import com.github.jactorrises.model.internal.domain.person.PersonDomain;
-import com.github.jactorrises.model.internal.domain.person.PersonDomainBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,10 +20,10 @@ class PersonDomainBuilderTest {
     @Test void willBuildPersonDomainWhenAllRequiredFieldsAreSet() throws Exception {
         PersonDomain person = aPerson()
                 .with(anAddress()
-                        .withAddressLine1As("somewhere")
-                        .withZipCodeAs(1234)
-                        .withCountryAs("NO")
-                ).withDescriptionAs("description field only for coverage")
+                        .withAddressLine1("somewhere")
+                        .withZipCode(1234)
+                        .withCountry("NO")
+                ).withDescription("description field only for coverage")
                 .build();
 
         assertThat(person).isNotNull();

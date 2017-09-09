@@ -23,17 +23,17 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
         ));
     }
 
-    public AddressDomainBuilder withCityAs(String city) {
+    public AddressDomainBuilder withCity(String city) {
         addressEntity.setCity(city);
         return this;
     }
 
-    public AddressDomainBuilder withCountryAs(String country) {
+    public AddressDomainBuilder withCountry(String country) {
         addressEntity.setCountry(country);
         return this;
     }
 
-    public AddressDomainBuilder withAddressLine1As(String addressLine1) {
+    public AddressDomainBuilder withAddressLine1(String addressLine1) {
         addressEntity.setAddressLine1(addressLine1);
         return this;
     }
@@ -48,7 +48,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
         return this;
     }
 
-    public AddressDomainBuilder withZipCodeAs(Integer zipCode) {
+    public AddressDomainBuilder withZipCode(Integer zipCode) {
         addressEntity.setZipCode(zipCode);
         return this;
     }

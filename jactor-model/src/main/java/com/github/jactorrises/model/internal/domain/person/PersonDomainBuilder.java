@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 
-public class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
+public final class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
     static final String AN_ADDRESS_MUST_BE_PRESENT = "An address must be present";
 
     private PersonEntity personEntity = new PersonEntity();
@@ -33,7 +33,7 @@ public class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
         return with(address.build());
     }
 
-    public PersonDomainBuilder withDescriptionAs(String description) {
+    public PersonDomainBuilder withDescription(String description) {
         personEntity.setDescription(description);
         return this;
     }

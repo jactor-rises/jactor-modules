@@ -9,14 +9,14 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 
-public class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
+public final class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
     static final String THE_ENTRY_MUST_BELONG_TO_A_BLOG = "The blog entry must belong to a blog";
     static final String THE_ENTRY_CANNOT_BE_EMPTY = "The entry field cannot be empty";
     static final String THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE = "The entry must be created by someone";
 
     private final BlogEntryEntity blogEntryEntity = new BlogEntryEntity();
 
-    private BlogEntryDomainBuilder() {
+    BlogEntryDomainBuilder() {
         super(asList(
                 domain -> StringUtils.isNotBlank(domain.getEntry()) ? Optional.empty() : Optional.of(THE_ENTRY_CANNOT_BE_EMPTY),
                 domain -> domain.getCreatorName() != null ? Optional.empty() : Optional.of(THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE),
@@ -24,7 +24,7 @@ public class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
         ));
     }
 
-    public BlogEntryDomainBuilder withEntryAs(String entry, String creator) {
+    public BlogEntryDomainBuilder withEntry(String entry, String creator) {
         blogEntryEntity.setEntry(entry);
         blogEntryEntity.setCreatorName(creator);
         return this;
@@ -37,9 +37,5 @@ public class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain> {
 
     @Override protected BlogEntryDomain buildBeforeValidation() {
         return new BlogEntryDomain(blogEntryEntity);
-    }
-
-    public static BlogEntryDomainBuilder init() {
-        return new BlogEntryDomainBuilder();
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 
-public class BlogDomainBuilder extends DomainBuilder<BlogDomain> {
+public final class BlogDomainBuilder extends DomainBuilder<BlogDomain> {
     static final String THE_BLOG_MUST_BELONG_TO_A_USER = "The blog must belong to a user";
     static final String THE_BLOG_MUST_HAVE_A_TITLE = "The blog must have a title";
 
