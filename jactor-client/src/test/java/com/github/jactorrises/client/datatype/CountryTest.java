@@ -58,8 +58,8 @@ class CountryTest {
 
     @DisplayName("should not initialize when country code is null")
     @Test void skalFeileNarCountryCodeErNull() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> new Country(null));
-        assertThat(illegalArgumentException.getMessage()).isEqualTo(Country.THE_COUNTRY_CODE_CANNOT_BE_EMPTY);
+        NullPointerException nullPointerException = assertThrows(NullPointerException.class, () -> new Country(null));
+        assertThat(nullPointerException.getMessage()).isEqualTo(Country.THE_COUNTRY_CODE_CANNOT_BE_EMPTY);
     }
 
     @DisplayName("should not initialize when couyntry code is empty")

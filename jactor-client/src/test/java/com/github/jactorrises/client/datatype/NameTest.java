@@ -1,5 +1,6 @@
 package com.github.jactorrises.client.datatype;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -49,12 +52,12 @@ class NameTest {
 
     @DisplayName("should not initialize when the name is null")
     @Test void whenInitializingTheNameCannotBeNull() {
-        assertThat(assertThrows(IllegalArgumentException.class, () -> new Name(null)).getMessage()).isEqualTo(Name.A_NAME_MUST_BE_GIVEN);
+        assertThatNullPointerException().isThrownBy(() -> new Name(null)).withMessage(Name.A_NAME_MUST_BE_GIVEN);
     }
 
     @DisplayName("should not initialize when the name is empty")
     @Test void whenInitializingTheNameCannotBeEmpty() {
-        assertThat(assertThrows(IllegalArgumentException.class, () -> new Name("")).getMessage()).isEqualTo(Name.A_NAME_MUST_BE_GIVEN);
+        assertThatIllegalArgumentException().isThrownBy(() -> new Name("")).withMessage(Name.A_NAME_MUST_BE_GIVEN);
     }
 
     @DisplayName("should be sorted according to its value")
@@ -62,6 +65,6 @@ class NameTest {
         List<Name> names = new ArrayList<>(asList(new Name("Donald"), new Name("Ashley"), new Name("Bill")));
         Collections.sort(names);
 
-        assertThat(names).as("#s should be sorted").isEqualTo(asList(new Name("Ashley"), new Name("Bill"), new Name("Donald")));
+        Assertions.assertThat(names).as("#s should be sorted").isEqualTo(asList(new Name("Ashley"), new Name("Bill"), new Name("Donald")));
     }
 }
