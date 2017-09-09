@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class FieldValidator {
-    <E> void validate(E domain, List<ValidateField<E>> validateFields) {
+    public <E> void validate(E domain, List<ValidateField<E>> validateFields) {
         if (validateFields != null) {
             failWhenFieldIsInvalid(domain, validateFields);
         }
@@ -17,8 +17,7 @@ public class FieldValidator {
     }
 
     private <E> void validateField(E domain, ValidateField<E> validateField) {
-        Optional<String> requiredFieldMsg;
-        requiredFieldMsg = validateField.checkRequiredFieldOn(domain);
+        Optional<String> requiredFieldMsg = validateField.validateFields(domain);
 
         if (requiredFieldMsg.isPresent()) {
             throw new IllegalArgumentException(requiredFieldMsg.get());
@@ -27,6 +26,6 @@ public class FieldValidator {
 
     @FunctionalInterface
     public interface ValidateField<T> {
-        Optional<String> checkRequiredFieldOn(T domain);
+        Optional<String> validateFields(T domain);
     }
 }

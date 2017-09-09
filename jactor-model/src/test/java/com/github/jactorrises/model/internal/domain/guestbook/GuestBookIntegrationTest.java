@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.internal.domain;
 
 import com.github.jactorrises.model.internal.JactorModule;
-import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,10 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.time.LocalDate;
 
-import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
-import static com.github.jactorrises.model.internal.domain.BlogDomain.aBlog;
+import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.GuestBookDomain.aGuestBook;
 import static com.github.jactorrises.model.internal.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,26 +23,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModule.class)
 @Transactional
-public class BlogIntegrationTest {
+public class GuestBookIntegrationTest {
 
-    @Resource
+    @Resource(name = "jactor-session")
     private SessionFactory sessionFactory;
 
-    @Test public void willSaveBlogEntityToThePersistentLayer() {
-        final UserEntity persistedUser = persistUser();
-        Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getEntity());
+    @Test public void willSaveGuestBookEntityToThePersistentLayer() {
+        final UserEntity aPersistedUser = aPersistedUser();
+        Serializable id = session().save(aGuestBook().withTitleAs("my guest book").with(aPersistedUser).build().getEntity());
 
         session().flush();
         session().clear();
 
-        BlogEntity blog = session().get(BlogEntity.class, id);
+        GuestBookEntity guestBook = session().get(GuestBookEntity.class, id);
 
-        assertThat(blog.getCreated()).isEqualTo(LocalDate.now());
-        assertThat(blog.getTitle()).isEqualTo("some blog");
-        assertThat(blog.getUser().getId()).isEqualTo(persistedUser.getId());
+        assertThat(guestBook.getTitle()).isEqualTo("my guest book");
+        assertThat(guestBook.getUser().getId()).isEqualTo(aPersistedUser.getId());
     }
 
-    private UserEntity persistUser() {
+    private UserEntity aPersistedUser() {
         UserEntity userEntity = aUser().withUserNameAs("titten")
                 .withPasswordAs("demo")
                 .withEmailAddressAs("jactor@rises")

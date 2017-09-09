@@ -12,7 +12,7 @@ public abstract class DomainBuilder<T> {
     private static FieldValidator fieldValidator;
     private final List<FieldValidator.ValidateField<T>> validateFields;
 
-    DomainBuilder(List<FieldValidator.ValidateField<T>> validateFields) {
+    protected DomainBuilder(List<FieldValidator.ValidateField<T>> validateFields) {
         this.validateFields = validateFields;
     }
 
@@ -25,7 +25,7 @@ public abstract class DomainBuilder<T> {
         return bean;
     }
 
-    static void useFieldValidator(FieldValidator fieldValidator) {
+    protected static void useFieldValidator(FieldValidator fieldValidator) {
         DomainBuilder.fieldValidator = fieldValidator;
     }
 

@@ -15,9 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
-import static com.github.jactorrises.model.internal.domain.PersonDomain.aPerson;
-import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
+import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.person.PersonDomain.aPerson;
+import static com.github.jactorrises.model.internal.domain.user.UserDomain.aUser;
 import static org.hibernate.criterion.Restrictions.eq;
 
 @RunWith(SpringRunner.class)

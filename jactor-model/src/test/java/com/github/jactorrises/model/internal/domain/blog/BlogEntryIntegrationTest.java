@@ -2,8 +2,8 @@ package com.github.jactorrises.model.internal.domain;
 
 import com.github.jactorrises.model.internal.JactorModule;
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,39 +16,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
-import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
-import static com.github.jactorrises.model.internal.domain.GuestBookDomain.aGuestBook;
-import static com.github.jactorrises.model.internal.domain.GuestBookEntryDomain.aGuestBookEntry;
+import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.blog.BlogDomain.aBlog;
+import static com.github.jactorrises.model.internal.domain.blog.BlogEntryDomain.aBlogEntry;
 import static com.github.jactorrises.model.internal.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModule.class)
 @Transactional
-public class GuestBookEntryIntegrationTest {
+public class BlogEntryIntegrationTest {
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
-        Serializable id = session().save(aGuestBookEntry().with(aPersistedGuestBookTitled("my guest book")).withEntryAs("svada", "lada").build().getEntity());
+        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntryAs("svada", "lada").build().getEntity());
 
         session().flush();
         session().clear();
 
-        GuestBookEntryEntity guestBookEntry = session().get(GuestBookEntryEntity.class, id);
+        BlogEntryEntity blogEntry = session().get(BlogEntryEntity.class, id);
 
-        assertThat(guestBookEntry.getGuestBook().getTitle()).as("guest book.title").isEqualTo("my guest book");
-        assertThat(guestBookEntry.getCreatedTime()).as("entry.createdTime").isNotNull();
-        assertThat(guestBookEntry.getCreatorName()).as("entry.creatorName").isEqualTo(new Name("lada"));
-        assertThat(guestBookEntry.getEntry()).as("entry.entry").isEqualTo("svada");
+        assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
+        assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").isNotNull();
+        assertThat(blogEntry.getCreatorName()).as("entry.creator").isEqualTo(new Name("lada"));
+        assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("svada");
     }
 
-    private GuestBookEntity aPersistedGuestBookTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
-        GuestBookEntity guestBookEntry = aGuestBook().with(aPersistedUser()).withTitleAs(blogTitled).build().getEntity();
-        session().save(guestBookEntry);
-        return guestBookEntry;
+    private BlogEntity aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
+        BlogEntity blogEntity = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getEntity();
+        session().save(blogEntity);
+
+        return blogEntity;
     }
 
     private UserEntity aPersistedUser() {

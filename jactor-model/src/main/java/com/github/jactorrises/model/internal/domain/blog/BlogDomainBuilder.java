@@ -1,6 +1,7 @@
-package com.github.jactorrises.model.internal.domain.builder;
+package com.github.jactorrises.model.internal.domain.address;
 
-import com.github.jactorrises.model.internal.domain.BlogDomain;
+import com.github.jactorrises.model.internal.domain.blog.BlogDomain;
+import com.github.jactorrises.model.internal.domain.builder.DomainBuilder;
 import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.StringUtils;

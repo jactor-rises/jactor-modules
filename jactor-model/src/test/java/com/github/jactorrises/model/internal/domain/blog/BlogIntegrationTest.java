@@ -1,58 +1,49 @@
 package com.github.jactorrises.model.internal.domain;
 
 import com.github.jactorrises.model.internal.JactorModule;
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
+import java.time.LocalDate;
 
-import static com.github.jactorrises.model.internal.domain.AddressDomain.anAddress;
-import static com.github.jactorrises.model.internal.domain.BlogDomain.aBlog;
-import static com.github.jactorrises.model.internal.domain.BlogEntryDomain.aBlogEntry;
+import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
+import static com.github.jactorrises.model.internal.domain.blog.BlogDomain.aBlog;
 import static com.github.jactorrises.model.internal.domain.PersonDomain.aPerson;
 import static com.github.jactorrises.model.internal.domain.UserDomain.aUser;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModule.class)
 @Transactional
-public class BlogEntryIntegrationTest {
+public class BlogIntegrationTest {
 
-    @Autowired
+    @Resource
     private SessionFactory sessionFactory;
 
-    @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
-        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntryAs("svada", "lada").build().getEntity());
+    @Test public void willSaveBlogEntityToThePersistentLayer() {
+        final UserEntity persistedUser = persistUser();
+        Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getEntity());
 
         session().flush();
         session().clear();
 
-        BlogEntryEntity blogEntry = session().get(BlogEntryEntity.class, id);
+        BlogEntity blog = session().get(BlogEntity.class, id);
 
-        assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
-        assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").isNotNull();
-        assertThat(blogEntry.getCreatorName()).as("entry.creator").isEqualTo(new Name("lada"));
-        assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("svada");
+        assertThat(blog.getCreated()).isEqualTo(LocalDate.now());
+        assertThat(blog.getTitle()).isEqualTo("some blog");
+        assertThat(blog.getUser().getId()).isEqualTo(persistedUser.getId());
     }
 
-    private BlogEntity aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
-        BlogEntity blogEntity = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getEntity();
-        session().save(blogEntity);
-
-        return blogEntity;
-    }
-
-    private UserEntity aPersistedUser() {
+    private UserEntity persistUser() {
         UserEntity userEntity = aUser().withUserNameAs("titten")
                 .withPasswordAs("demo")
                 .withEmailAddressAs("jactor@rises")
