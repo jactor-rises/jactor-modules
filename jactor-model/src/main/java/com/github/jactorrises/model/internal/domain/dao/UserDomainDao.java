@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.internal.domain.dao;
 
-import com.github.jactorrises.model.internal.domain.UserDomain;
+import com.github.jactorrises.model.internal.domain.user.UserDomain;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.internal.persistence.client.dao.UserDao;
 

@@ -11,7 +11,7 @@ public abstract class PersistentDomain<T extends Persistent<I>, I> implements Pe
 
     private final T entity;
 
-    PersistentDomain(T entity) {
+    protected PersistentDomain(T entity) {
         Validate.notNull(entity, THE_ENTITY_ON_THE_DOMAIN_CANNOT_BE_NULL);
         this.entity = entity;
     }
