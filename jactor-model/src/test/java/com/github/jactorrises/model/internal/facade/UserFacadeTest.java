@@ -46,12 +46,12 @@ class UserFacadeTest {
         return aUser()
                 .with(PersonDomain.aPerson()
                         .with(anAddress()
-                                .withAddressLine1As("on the road")
-                                .withZipCodeAs(69)
-                                .withCountryAs("NO")
+                                .withAddressLine1("on the road")
+                                .withZipCode(69)
+                                .withCountry("NO")
                         )
-                ).withUserNameAs("turbo")
-                .withPasswordAs("something")
+                ).withUserName("turbo")
+                .withPassword("something")
                 .build();
     }
 

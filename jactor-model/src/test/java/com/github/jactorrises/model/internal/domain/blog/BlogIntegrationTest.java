@@ -44,14 +44,14 @@ public class BlogIntegrationTest {
     }
 
     private UserEntity persistUser() {
-        UserEntity userEntity = aUser().withUserNameAs("titten")
-                .withPasswordAs("demo")
-                .withEmailAddressAs("jactor@rises")
-                .with(aPerson().withDescriptionAs("description")
-                        .with(anAddress().withAddressLine1As("the streets")
-                                .withCityAs("Dirdal")
-                                .withCountryAs("NO")
-                                .withZipCodeAs(1234)
+        UserEntity userEntity = aUser().withUserName("titten")
+                .withPassword("demo")
+                .withEmailAddress("jactor@rises")
+                .with(aPerson().withDescription("description")
+                        .with(anAddress().withAddressLine1("the streets")
+                                .withCity("Dirdal")
+                                .withCountry("NO")
+                                .withZipCode(1234)
                         )
                 )
                 .build().getEntity();

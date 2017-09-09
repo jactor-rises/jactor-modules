@@ -6,13 +6,7 @@ import java.util.Optional;
 public class FieldValidator {
     public <E> void validate(E domain, List<ValidateField<E>> validateFields) {
         if (validateFields != null) {
-            failWhenFieldIsInvalid(domain, validateFields);
-        }
-    }
-
-    private <E> void failWhenFieldIsInvalid(E domain, List<ValidateField<E>> validateFields) {
-        for (ValidateField<E> validateField : validateFields) {
-            validateField(domain, validateField);
+            validateFields.forEach(validateField -> validateField(domain, validateField));
         }
     }
 

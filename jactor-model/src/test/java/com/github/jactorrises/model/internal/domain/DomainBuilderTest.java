@@ -1,7 +1,5 @@
 package com.github.jactorrises.model.internal.domain;
 
-import com.github.jactorrises.model.internal.domain.DomainBuilder;
-import com.github.jactorrises.model.internal.domain.FieldValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +15,10 @@ class DomainBuilderTest {
 
     @DisplayName("should build a domain when the build method is invoked")
     @Test void shouldBuildDomainWhenBuildMethodIsInvoked() {
-        assertThat(new TestDomainBuilder(Collections.emptyList()).build()).isNotNull();
+        assertThat(new TestDomainBuilder(Collections.emptyList()).build()).isInstanceOf(Bean.class);
     }
 
-    @DisplayName("should throw exception when illegal build is done")
+    @DisplayName("should throw an exception when illegal build is done")
     @Test void shouldValidateDomainWhenBuildMethodIsInvokedg() {
         IllegalArgumentException illegalArgumentException = assertThrows(
                 IllegalArgumentException.class, () -> new TestDomainBuilder(

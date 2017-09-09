@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class BlogEntryDomain extends PersistentDomain<BlogEntryEntity, Long> implements BlogEntry {
 
-    public BlogEntryDomain(BlogEntryEntity blogEntryEntity) {
+    BlogEntryDomain(BlogEntryEntity blogEntryEntity) {
         super(blogEntryEntity);
     }
 
@@ -33,6 +33,6 @@ public class BlogEntryDomain extends PersistentDomain<BlogEntryEntity, Long> imp
     }
 
     public static BlogEntryDomainBuilder aBlogEntry() {
-        return BlogEntryDomainBuilder.init();
+        return new BlogEntryDomainBuilder();
     }
 }

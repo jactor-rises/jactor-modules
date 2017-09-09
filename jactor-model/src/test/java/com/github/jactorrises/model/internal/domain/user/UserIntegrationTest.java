@@ -1,9 +1,9 @@
 package com.github.jactorrises.model.internal.domain.user;
 
-import com.github.jactorrises.model.internal.JactorModule;
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.domain.Address;
+import com.github.jactorrises.model.internal.JactorModule;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.Session;
@@ -31,14 +31,14 @@ public class UserIntegrationTest {
     @Test
     public void willSaveUserAndPersonToTheDatabase() {
         session().save(
-                aUser().withUserNameAs("titten")
-                        .withPasswordAs("demo")
-                        .withEmailAddressAs("jactorhrises")
-                        .with(aPerson().withDescriptionAs("description")
-                                .with(anAddress().withAddressLine1As("the streets")
-                                        .withCityAs("Dirdal")
-                                        .withCountryAs("NO")
-                                        .withZipCodeAs(1234)
+                aUser().withUserName("titten")
+                        .withPassword("demo")
+                        .withEmailAddress("jactorhrises")
+                        .with(aPerson().withDescription("description")
+                                .with(anAddress().withAddressLine1("the streets")
+                                        .withCity("Dirdal")
+                                        .withCountry("NO")
+                                        .withZipCode(1234)
                                 )
                         ).build().getEntity()
         );
@@ -58,13 +58,13 @@ public class UserIntegrationTest {
     @Test
     public void willSaveUserWithAddressTheDatabase() {
         session().save(
-                aUser().withUserNameAs("titten")
-                        .withPasswordAs("demo")
-                        .with(aPerson().withDescriptionAs("description")
-                                .with(anAddress().withAddressLine1As("the streets")
-                                        .withCityAs("Dirdal")
-                                        .withCountryAs("NO")
-                                        .withZipCodeAs(1234)
+                aUser().withUserName("titten")
+                        .withPassword("demo")
+                        .with(aPerson().withDescription("description")
+                                .with(anAddress().withAddressLine1("the streets")
+                                        .withCity("Dirdal")
+                                        .withCountry("NO")
+                                        .withZipCode(1234)
                                 )
                         ).build().getEntity()
         );

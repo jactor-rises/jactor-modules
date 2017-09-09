@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class BlogDomain extends PersistentDomain<BlogEntity, Long> implements Blog {
 
-    public BlogDomain(BlogEntity blogEntity) {
+    BlogDomain(BlogEntity blogEntity) {
         super(blogEntity);
     }
 
