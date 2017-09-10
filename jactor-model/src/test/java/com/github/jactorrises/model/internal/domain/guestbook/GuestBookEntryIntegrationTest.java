@@ -46,7 +46,7 @@ public class GuestBookEntryIntegrationTest {
     }
 
     private GuestBookEntity aPersistedGuestBookTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
-        GuestBookEntity guestBookEntry = aGuestBook().with(aPersistedUser()).withTitleAs(blogTitled).build().getEntity();
+        GuestBookEntity guestBookEntry = aGuestBook().with(aPersistedUser()).withTitle(blogTitled).build().getEntity();
         session().save(guestBookEntry);
         return guestBookEntry;
     }

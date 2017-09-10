@@ -26,7 +26,7 @@ public class GuestBookDomain extends PersistentDomain<GuestBookEntity, Long> imp
         return getEntity().getUser();
     }
 
-    static GuestBookDomainBuilder aGuestBook() {
+    public static GuestBookDomainBuilder aGuestBook() {
         return new GuestBookDomainBuilder();
     }
 }

@@ -1,6 +1,7 @@
 package com.github.jactorrises.model.internal.domain.guestbook;
 
 import com.github.jactorrises.model.internal.domain.DomainBuilder;
+import com.github.jactorrises.model.internal.domain.user.UserDomain;
 import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -22,13 +23,18 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
         ));
     }
 
-    GuestBookDomainBuilder withTitleAs(String title) {
+    public GuestBookDomainBuilder withTitle(String title) {
         guestBookEntity.setTitle(title);
         return this;
     }
 
     public GuestBookDomainBuilder with(UserEntity userEntity) {
         guestBookEntity.setUser(userEntity);
+        return this;
+    }
+
+    public GuestBookDomainBuilder with(UserDomain userDomain) {
+        with(userDomain);
         return this;
     }
 

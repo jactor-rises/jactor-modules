@@ -2,8 +2,9 @@ package com.github.jactorrises.model.internal.persistence.repository;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import com.github.jactorrises.model.internal.persistence.client.dao.UserDao;
+import com.github.jactorrises.model.internal.persistence.entity.PersistentEntity;
+import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -44,7 +45,12 @@ public class HibernateRepository implements UserDao {
         return session().load(entityClass, id);
     }
 
+    public <T extends PersistentEntity> T load(RepositoryCriterion<T> someCritera) {
+        return load(someCritera.getPersistentClass(), someCritera.getId());
+    }
+
     private Session session() {
         return sessionFactory.getCurrentSession();
     }
+
 }
