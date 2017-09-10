@@ -24,7 +24,7 @@ public final class GuestBookEntryDomainBuilder extends DomainBuilder<GuestBookEn
         ));
     }
 
-    GuestBookEntryDomainBuilder withEntryAs(String entry, String guestName) {
+    public GuestBookEntryDomainBuilder withEntry(String entry, String guestName) {
         guestBookEntryEntity.setEntry(entry);
         guestBookEntryEntity.setCreatorName(guestName);
         return this;
@@ -35,7 +35,15 @@ public final class GuestBookEntryDomainBuilder extends DomainBuilder<GuestBookEn
         return this;
     }
 
+    public GuestBookEntryDomainBuilder with(GuestBookDomain guestBookDomain) {
+        return  with(guestBookDomain.getEntity());
+    }
+
     @Override protected GuestBookEntryDomain buildBeforeValidation() {
+        return new GuestBookEntryDomain(guestBookEntryEntity);
+    }
+
+    public static GuestBookEntryDomain build(GuestBookEntryEntity guestBookEntryEntity) {
         return new GuestBookEntryDomain(guestBookEntryEntity);
     }
 }

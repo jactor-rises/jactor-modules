@@ -1,13 +1,16 @@
 package com.github.jactorrises.model.internal.service;
 
 import com.github.jactorrises.client.datatype.Description;
+import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.internal.JactorModule;
 import com.github.jactorrises.model.internal.domain.address.AddressDomainBuilder;
 import com.github.jactorrises.model.internal.domain.guestbook.GuestBookDomain;
+import com.github.jactorrises.model.internal.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.internal.domain.person.PersonDomain;
 import com.github.jactorrises.model.internal.domain.user.UserDomain;
 import com.github.jactorrises.model.internal.service.PersistentDomainService.GuestBookCriterion;
+import com.github.jactorrises.model.internal.service.PersistentDomainService.GuestBookEntryCriterion;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -21,8 +24,8 @@ import java.util.Optional;
 
 import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
 import static com.github.jactorrises.model.internal.domain.guestbook.GuestBookDomain.aGuestBook;
+import static com.github.jactorrises.model.internal.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
 import static com.github.jactorrises.model.internal.domain.person.PersonDomain.aPerson;
-import static com.github.jactorrises.model.internal.domain.user.UserDomain.aUser;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModule.class)
@@ -37,7 +40,7 @@ public class PersistentDomainServiceIntegrationTest {
 
     @Test public void shouldSaveUserDomain() {
         persistentDomainService.saveOrUpdate(
-                aUser().withUserName("titten")
+                UserDomain.aUser().withUserName("titten")
                         .withPassword("demo")
                         .withEmailAddress("jactor@rises")
                         .with(aPerson().withDescription("description")
@@ -49,7 +52,7 @@ public class PersistentDomainServiceIntegrationTest {
                         ).build()
         );
 
-        emptySession();
+        ensureDbCreation();
 
         Optional<UserDomain> possibleUser = persistentDomainService.findUser(new UserName("titten"));
 
@@ -63,7 +66,7 @@ public class PersistentDomainServiceIntegrationTest {
 
     }
 
-    @Test public void willSaveGuestbookWithItsDependencies() {
+    @Test public void willSaveGuestbookWithRelations() {
         AddressDomainBuilder address = anAddress()
                 .withAddressLine1("the streets")
                 .withCity("Dirdal")
@@ -73,7 +76,7 @@ public class PersistentDomainServiceIntegrationTest {
                 .withDescription("description")
                 .with(address)
                 .build();
-        UserDomain user = aUser()
+        UserDomain user = UserDomain.aUser()
                 .withUserName("titten")
                 .withPassword("demo")
                 .withEmailAddress("jactor@rises")
@@ -82,7 +85,7 @@ public class PersistentDomainServiceIntegrationTest {
 
         Long id = persistentDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getEntity().getId();
 
-        emptySession();
+        ensureDbCreation();
 
         GuestBookDomain guestBook = persistentDomainService.findUnique(new GuestBookCriterion().with(id));
 
@@ -92,7 +95,37 @@ public class PersistentDomainServiceIntegrationTest {
         });
     }
 
-    private void emptySession() {
+
+    @Test public void willSaveGuestBookEntryWithRelations() {
+        UserDomain userDomain = UserDomain.aUser().withUserName("titten")
+                .withPassword("demo")
+                .withEmailAddress("jactor@rises")
+                .with(aPerson().withDescription("description")
+                        .with(anAddress().withAddressLine1("the streets")
+                                .withCity("Dirdal")
+                                .withCountry("NO")
+                                .withZipCode(1234)
+                        )
+                ).build();
+
+        GuestBookDomain guestBookDomain = aGuestBook().with(userDomain).withTitle("my guest book").build();
+        GuestBookEntryDomain guestBookEntryDomain = aGuestBookEntry().with(guestBookDomain).withEntry("svada", "lada").build();
+
+        Long id = persistentDomainService.saveOrUpdateGuestBookEntry(guestBookEntryDomain).getId();
+
+        ensureDbCreation();
+
+        GuestBookEntryDomain guestBookEntry = persistentDomainService.findUnique(new GuestBookEntryCriterion().with(id));
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(guestBookEntry.getGuestBook().getTitle()).as("guest book.title").isEqualTo("my guest book");
+            softly.assertThat(guestBookEntry.getCreatedTime()).as("entry.createdTime").isNotNull();
+            softly.assertThat(guestBookEntry.getCreatorName()).as("entry.creatorName").isEqualTo(new Name("lada"));
+            softly.assertThat(guestBookEntry.getEntry()).as("entry.entry").isEqualTo("svada");
+        });
+    }
+
+    private void ensureDbCreation() {
         sessionFactory.getCurrentSession().flush();
         sessionFactory.getCurrentSession().clear();
     }
