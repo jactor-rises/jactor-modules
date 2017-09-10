@@ -35,8 +35,7 @@ public class PersistentDomainServiceIntegrationTest {
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Test
-    public void shouldSaveUserDomain() {
+    @Test public void shouldSaveUserDomain() {
         persistentDomainService.saveOrUpdate(
                 aUser().withUserName("titten")
                         .withPassword("demo")
@@ -64,7 +63,7 @@ public class PersistentDomainServiceIntegrationTest {
 
     }
 
-    public void willSaveGuestbookWithItsDependencies() {
+    @Test public void willSaveGuestbookWithItsDependencies() {
         AddressDomainBuilder address = anAddress()
                 .withAddressLine1("the streets")
                 .withCity("Dirdal")

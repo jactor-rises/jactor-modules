@@ -34,7 +34,7 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
     }
 
     public GuestBookDomainBuilder with(UserDomain userDomain) {
-        with(userDomain);
+        with(userDomain.getEntity());
         return this;
     }
 

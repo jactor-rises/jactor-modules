@@ -29,6 +29,7 @@ public class PersistentDomainService {
     GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
         saveOrUpdate(guestBookDomain.getUser().getPerson().getAddress());
         saveOrUpdate(guestBookDomain.getUser().getPerson());
+        saveOrUpdate(guestBookDomain.getUser());
         saveOrUpdate(guestBookDomain);
 
         return guestBookDomain;
