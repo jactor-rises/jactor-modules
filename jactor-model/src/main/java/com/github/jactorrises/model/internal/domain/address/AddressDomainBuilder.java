@@ -15,7 +15,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
 
     private final AddressEntity addressEntity = new AddressEntity();
 
-    private AddressDomainBuilder() {
+    AddressDomainBuilder() {
         super(asList(
                 domain -> StringUtils.isNotBlank(domain.getAddressLine1()) ? Optional.empty() : Optional.of(ADDRESS_LINE_1_CANNOT_BE_EMPTY),
                 domain -> domain.getZipCode() != null ? Optional.empty() : Optional.of(ZIP_CODE_CANNOT_BE_NULL),
@@ -38,12 +38,12 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
         return this;
     }
 
-    public AddressDomainBuilder appendAddressLine2(String addressLine2) {
+    AddressDomainBuilder appendAddressLine2(String addressLine2) {
         addressEntity.setAddressLine2(addressLine2);
         return this;
     }
 
-    public AddressDomainBuilder appendAddressLine3(String addressLine3) {
+    AddressDomainBuilder appendAddressLine3(String addressLine3) {
         addressEntity.setAddressLine3(addressLine3);
         return this;
     }
@@ -57,7 +57,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
         return new AddressDomain(addressEntity);
     }
 
-    public static AddressDomainBuilder init() {
-        return new AddressDomainBuilder();
+    public static AddressDomain build(AddressEntity addressEntity) {
+        return new AddressDomain(addressEntity);
     }
 }

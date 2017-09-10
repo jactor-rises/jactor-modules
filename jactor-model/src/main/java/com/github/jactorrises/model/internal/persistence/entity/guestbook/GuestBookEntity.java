@@ -56,11 +56,11 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
                 .toString();
     }
 
-    public String getTitle() {
+    @Override public String getTitle() {
         return title;
     }
 
-    public UserEntity getUser() {
+    @Override public UserEntity getUser() {
         return user;
     }
 

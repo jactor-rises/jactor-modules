@@ -24,7 +24,7 @@ public final class BlogEntryDomainBuilder extends DomainBuilder<BlogEntryDomain>
         ));
     }
 
-    public BlogEntryDomainBuilder withEntry(String entry, String creator) {
+    BlogEntryDomainBuilder withEntry(String entry, String creator) {
         blogEntryEntity.setEntry(entry);
         blogEntryEntity.setCreatorName(creator);
         return this;

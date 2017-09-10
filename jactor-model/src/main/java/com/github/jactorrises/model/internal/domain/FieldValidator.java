@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class FieldValidator {
-    public <E> void validate(E domain, List<ValidateField<E>> validateFields) {
+    <E> void validate(E domain, List<ValidateField<E>> validateFields) {
         if (validateFields != null) {
             validateFields.forEach(validateField -> validateField(domain, validateField));
         }

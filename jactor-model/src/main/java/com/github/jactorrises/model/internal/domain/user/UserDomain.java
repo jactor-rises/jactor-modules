@@ -1,10 +1,12 @@
 package com.github.jactorrises.model.internal.domain.user;
 
-import com.github.jactorrises.model.internal.domain.PersistentDomain;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.client.domain.User;
+import com.github.jactorrises.model.internal.domain.PersistentDomain;
+import com.github.jactorrises.model.internal.domain.person.PersonDomain;
+import com.github.jactorrises.model.internal.domain.person.PersonDomainBuilder;
+import com.github.jactorrises.model.internal.persistence.entity.person.PersonEntity;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 
 public class UserDomain extends PersistentDomain<UserEntity, Long> implements User {
@@ -21,7 +23,11 @@ public class UserDomain extends PersistentDomain<UserEntity, Long> implements Us
         return getEntity().getUserName();
     }
 
-    @Override public Person getPerson() {
+    @Override public PersonDomain getPerson() {
+        return personEntity() != null ? PersonDomainBuilder.build(personEntity()) : null;
+    }
+
+    private PersonEntity personEntity() {
         return getEntity().getPerson();
     }
 
@@ -34,6 +40,6 @@ public class UserDomain extends PersistentDomain<UserEntity, Long> implements Us
     }
 
     public static UserDomainBuilder aUser() {
-        return UserDomainBuilder.init();
+        return new UserDomainBuilder();
     }
 }

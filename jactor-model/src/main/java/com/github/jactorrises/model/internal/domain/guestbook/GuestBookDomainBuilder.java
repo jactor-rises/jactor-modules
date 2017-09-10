@@ -15,14 +15,14 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
 
     private final GuestBookEntity guestBookEntity = new GuestBookEntity();
 
-    private GuestBookDomainBuilder() {
+    GuestBookDomainBuilder() {
         super(asList(
                 domain -> StringUtils.isNotBlank(domain.getTitle()) ? Optional.empty() : Optional.of(THE_TITLE_CANNOT_BE_BLANK),
                 domain -> domain.getUser() != null ? Optional.empty() : Optional.of(THE_GUEST_BOOK_MUST_BELONG_TO_A_USER)
         ));
     }
 
-    public GuestBookDomainBuilder withTitleAs(String title) {
+    GuestBookDomainBuilder withTitleAs(String title) {
         guestBookEntity.setTitle(title);
         return this;
     }
@@ -36,7 +36,7 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
         return new GuestBookDomain(guestBookEntity);
     }
 
-    public static GuestBookDomainBuilder init() {
-        return new GuestBookDomainBuilder();
+    public static GuestBookDomain build(GuestBookEntity guestBook) {
+        return new GuestBookDomain(guestBook);
     }
 }
