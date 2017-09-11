@@ -1,6 +1,7 @@
 package com.github.jactorrises.model.internal.domain.guestbook;
 
 import com.github.jactorrises.model.internal.domain.DomainBuilder;
+import com.github.jactorrises.model.internal.domain.user.UserDomain;
 import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -15,14 +16,14 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
 
     private final GuestBookEntity guestBookEntity = new GuestBookEntity();
 
-    private GuestBookDomainBuilder() {
+    GuestBookDomainBuilder() {
         super(asList(
                 domain -> StringUtils.isNotBlank(domain.getTitle()) ? Optional.empty() : Optional.of(THE_TITLE_CANNOT_BE_BLANK),
                 domain -> domain.getUser() != null ? Optional.empty() : Optional.of(THE_GUEST_BOOK_MUST_BELONG_TO_A_USER)
         ));
     }
 
-    public GuestBookDomainBuilder withTitleAs(String title) {
+    public GuestBookDomainBuilder withTitle(String title) {
         guestBookEntity.setTitle(title);
         return this;
     }
@@ -32,11 +33,16 @@ public final class GuestBookDomainBuilder extends DomainBuilder<GuestBookDomain>
         return this;
     }
 
+    public GuestBookDomainBuilder with(UserDomain userDomain) {
+        with(userDomain.getEntity());
+        return this;
+    }
+
     @Override protected GuestBookDomain buildBeforeValidation() {
         return new GuestBookDomain(guestBookEntity);
     }
 
-    public static GuestBookDomainBuilder init() {
-        return new GuestBookDomainBuilder();
+    public static GuestBookDomain build(GuestBookEntity guestBook) {
+        return new GuestBookDomain(guestBook);
     }
 }

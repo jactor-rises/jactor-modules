@@ -25,7 +25,7 @@ public abstract class DomainBuilder<T> {
         return bean;
     }
 
-    protected static void useFieldValidator(FieldValidator fieldValidator) {
+    private static void useFieldValidator(FieldValidator fieldValidator) {
         DomainBuilder.fieldValidator = fieldValidator;
     }
 

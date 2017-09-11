@@ -16,7 +16,7 @@ public final class UserDomainBuilder extends DomainBuilder<UserDomain> {
 
     private final UserEntity userEntity = new UserEntity();
 
-    private UserDomainBuilder() {
+    UserDomainBuilder() {
         super(asList(
                 domain -> domain.getUserName() != null ? Optional.empty() : Optional.of(THE_USER_NAME_CANNOT_BE_NULL),
                 domain -> domain.getPerson() != null ? Optional.empty() : Optional.of(THE_USER_MUST_BE_A_PERSON),
@@ -53,7 +53,7 @@ public final class UserDomainBuilder extends DomainBuilder<UserDomain> {
         return new UserDomain(userEntity);
     }
 
-    public static UserDomainBuilder init() {
-        return new UserDomainBuilder();
+    public static UserDomain build(UserEntity userEntity) {
+        return new UserDomain(userEntity);
     }
 }

@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 /**
  * Any persistent domain must have an identifier and data about creation from the persistent layer
  */
-public interface Persistent<Id> {
-    Id getId();
+public interface Persistent<I> {
+    I getId();
 
     Name getCreatedBy();
 

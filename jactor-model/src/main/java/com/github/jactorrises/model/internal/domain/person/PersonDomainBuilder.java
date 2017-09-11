@@ -14,7 +14,7 @@ public final class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
 
     private PersonEntity personEntity = new PersonEntity();
 
-    private PersonDomainBuilder() {
+    PersonDomainBuilder() {
         super(singletonList(
                 domain -> domain.getAddress() != null ? Optional.empty() : Optional.of(AN_ADDRESS_MUST_BE_PRESENT)
         ));
@@ -38,7 +38,7 @@ public final class PersonDomainBuilder extends DomainBuilder<PersonDomain> {
         return this;
     }
 
-    public static PersonDomainBuilder init() {
-        return new PersonDomainBuilder();
+    public static PersonDomain build(PersonEntity person) {
+        return new PersonDomain(person);
     }
 }
