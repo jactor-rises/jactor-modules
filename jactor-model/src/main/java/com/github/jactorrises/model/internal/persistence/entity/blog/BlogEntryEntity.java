@@ -20,21 +20,21 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = BlogEntryMetadata.BLOG_ENTRY_TABLE)
+@Table(name = "T_BLOG_ENTRY")
 public class BlogEntryEntity extends PersistentEntity {
 
-    @ManyToOne() @JoinColumn(name = BlogEntryMetadata.BLOG) private BlogEntity blogEntity;
+    @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogEntity blogEntity;
 
     @Embedded @AttributeOverrides({
-            @AttributeOverride(name = "createdTime", column = @Column(name = BlogEntryMetadata.CREATED_TIME)),
-            @AttributeOverride(name = "creatorName", column = @Column(name = BlogEntryMetadata.CREATOR_NAME)),
-            @AttributeOverride(name = "entry", column = @Column(name = BlogEntryMetadata.ENTRY))
+            @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
+            @AttributeOverride(name = "creatorName", column = @Column(name = "CREATOR_NAME")),
+            @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
     public BlogEntryEntity() {
     }
 
-    public BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
+    BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
         blogEntity = new BlogEntity(blogEntryEntity.blogEntity);
         persistentEntry = new PersistentEntry(blogEntryEntity.persistentEntry);
     }

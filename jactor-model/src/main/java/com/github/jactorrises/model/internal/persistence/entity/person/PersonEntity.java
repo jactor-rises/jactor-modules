@@ -24,12 +24,12 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = PersonMetadata.PERSON_TABLE)
+@Table(name = "T_PERSON")
 public class PersonEntity extends PersistentEntity implements Person {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = PersonMetadata.ADDRESS_ID) private AddressEntity addressEntity;
-    @Column(name = PersonMetadata.DESCRIPTION) private String description;
+    @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
+    @Column(name = "DESCRIPTION") private String description;
     @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
     @Transient private String firstName;
     @Transient private String lastName;
@@ -98,11 +98,11 @@ public class PersonEntity extends PersistentEntity implements Person {
         this.description = description;
     }
 
-    public void setFirstName(String firstName) {
+    void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public void setLastName(String lastName) {
+    void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -110,7 +110,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         this.userEntity = userEntity;
     }
 
-    public void setLocale(Locale locale) {
+    void setLocale(Locale locale) {
         this.locale = locale;
     }
 }

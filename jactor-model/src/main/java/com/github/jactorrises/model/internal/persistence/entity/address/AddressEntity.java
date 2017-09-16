@@ -14,15 +14,15 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = AddressMetadata.ADDRESS)
+@Table(name = "T_ADDRESS")
 public class AddressEntity extends PersistentEntity implements Address {
 
-    @Column(name = AddressMetadata.COUNTRY) private String country;
-    @Column(name = AddressMetadata.ZIP_CODE) private Integer zipCode;
-    @Column(name = AddressMetadata.ADDRESS_LINE_1) private String addressLine1;
-    @Column(name = AddressMetadata.ADDRESS_LINE_2) private String addressLine2;
-    @Column(name = AddressMetadata.ADDRESS_LINE_3) private String addressLine3;
-    @Column(name = AddressMetadata.CITY) private String city;
+    @Column(name = "COUNTRY") private String country;
+    @Column(name = "ZIP_CODE") private Integer zipCode;
+    @Column(name = "ADDRESS_LINE_1") private String addressLine1;
+    @Column(name = "ADDRESS_LINE_2") private String addressLine2;
+    @Column(name = "ADDRESS_LINE_3") private String addressLine3;
+    @Column(name = "CITY") private String city;
 
     public AddressEntity() {
     }

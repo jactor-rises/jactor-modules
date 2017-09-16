@@ -19,12 +19,12 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = BlogMetadata.BLOG_TABLE)
+@Table(name = "T_BLOG")
 public class BlogEntity extends PersistentEntity implements Blog {
 
-    @Column(name = BlogMetadata.CREATED) private String created;
-    @Column(name = BlogMetadata.TITLE) private String title;
-    @JoinColumn(name = BlogMetadata.USER) @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
+    @Column(name = "CREATED") private String created;
+    @Column(name = "TITLE") private String title;
+    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
 
     public BlogEntity() {
         created = convertFrom(LocalDate.now(), LocalDate.class);

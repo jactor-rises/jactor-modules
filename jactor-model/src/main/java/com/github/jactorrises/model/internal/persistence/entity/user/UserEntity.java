@@ -20,13 +20,13 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = UserMetadata.USER_TABLE)
+@Table(name = "T_USER")
 public class UserEntity extends PersistentEntity implements User {
 
-    @Column(name = UserMetadata.PASSWORD, nullable = false) private String password; // the user password
-    @Column(name = UserMetadata.USER_NAME, nullable = false) private String userName; // the user name
-    @JoinColumn(name = UserMetadata.PERSON_ID) @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity; // the user as a person
-    @Column(name = UserMetadata.EMAIL) private String emailAddress; // the email address to the user
+    @Column(name = "PASSWORD", nullable = false) private String password; // the user password
+    @Column(name = "USER_NAME", nullable = false) private String userName; // the user name
+    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity; // the user as a person
+    @Column(name = "EMAIL") private String emailAddress; // the email address to the user
 
     public UserEntity() {
     }
