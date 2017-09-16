@@ -21,20 +21,20 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = GuestBookEntryMetadata.GUEST_BOOK_ENTRY_TABLE)
+@Table(name = "T_GUEST_BOOK_ENTRY")
 public class GuestBookEntryEntity extends PersistentEntity implements GuestBookEntry {
-    @ManyToOne() @JoinColumn(name = GuestBookEntryMetadata.GUEST_BOOK_ID) private GuestBookEntity guestBookEntity;
+    @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookEntity guestBookEntity;
 
     @Embedded @AttributeOverrides({
-            @AttributeOverride(name = "createdTime", column = @Column(name = GuestBookEntryMetadata.CREATED_TIME)),
-            @AttributeOverride(name = "creatorName", column = @Column(name = GuestBookEntryMetadata.GUEST_NAME)),
-            @AttributeOverride(name = "entry", column = @Column(name = GuestBookEntryMetadata.ENTRY))
+            @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
+            @AttributeOverride(name = "creatorName", column = @Column(name = "GUEST_NAME")),
+            @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
     public GuestBookEntryEntity() {
     }
 
-    public GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
+    GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
         guestBookEntity = new GuestBookEntity(guestBookEntry.guestBookEntity);
         persistentEntry = new PersistentEntry(guestBookEntry.persistentEntry);
     }

@@ -15,17 +15,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 
-import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookMetadata.GUEST_BOOK_TABLE;
-import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookMetadata.TITLE;
-import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookMetadata.USER;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = GUEST_BOOK_TABLE)
+@Table(name = "T_GUEST_BOOK ")
 public class GuestBookEntity extends PersistentEntity implements GuestBook {
 
-    @Column(name = TITLE) private String title;
-    @JoinColumn(name = USER) @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
+    @Column(name = "TITLE") private String title;
+    @JoinColumn(name = "USER") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
 
     public GuestBookEntity() {
     }
