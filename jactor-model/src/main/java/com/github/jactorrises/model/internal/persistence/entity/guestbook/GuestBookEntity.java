@@ -22,7 +22,7 @@ import static java.util.Objects.hash;
 public class GuestBookEntity extends PersistentEntity implements GuestBook {
 
     @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
+    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
 
     public GuestBookEntity() {
     }

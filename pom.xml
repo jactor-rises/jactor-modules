@@ -17,15 +17,16 @@
         <apache.commons.lang3.version>3.6</apache.commons.lang3.version>
         <assertj.version>3.8.0</assertj.version>
         <jactor.version>1.0-SNAPSHOT</jactor.version>
+        <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
-        <junit.jupiter.version>5.0.0-M4</junit.jupiter.version>
-        <junit.platform.verion>1.0.0-M4</junit.platform.verion>
-        <junit.vintage.version>4.12.0-M4</junit.vintage.version>
-        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
+        <junit.jupiter.version>5.0.0</junit.jupiter.version>
+        <junit.platform.verion>1.0.0</junit.platform.verion>
+        <junit.vintage.version>${junit.version}.0</junit.vintage.version>
+        <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
         <maven-site-plugin.version>3.4</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
-        <mockito.version>2.8.47</mockito.version>
+        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
+        <mockito.version>2.10.0</mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -115,8 +116,10 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <meminitial>1024m</meminitial>
+                        <maxmem>2024m</maxmem>
                     </configuration>
                 </plugin>
 
@@ -142,6 +145,11 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <includes>
+                            <include>**/Test.java</include>
+                        </includes>
+                    </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.junit.platform</groupId>
