@@ -1,10 +1,8 @@
 package com.github.jactorrises.model.persistence.entity;
 
-import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.model.persistence.client.converter.EmailAddressConverter;
 import com.github.jactorrises.model.persistence.client.converter.LocalDateConverter;
 import com.github.jactorrises.model.persistence.client.converter.LocalDateTimeConverter;
 import com.github.jactorrises.model.persistence.client.converter.NameConverter;
@@ -101,7 +99,6 @@ public abstract class PersistentEntity implements Persistent<Long> {
     private static Map<Class<?>, TypeConverter> initKnownConverters() {
         Map<Class<?>, TypeConverter> knownConverters = new HashMap<>();
         knownConverters.put(Name.class, new NameConverter());
-        knownConverters.put(EmailAddress.class, new EmailAddressConverter());
         knownConverters.put(UserName.class, new UserNameConverter());
         knownConverters.put(LocalDateTime.class, new LocalDateTimeConverter());
         knownConverters.put(LocalDate.class, new LocalDateConverter());

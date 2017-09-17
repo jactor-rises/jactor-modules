@@ -8,8 +8,10 @@ import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -23,10 +25,10 @@ import static java.util.Objects.hash;
 @Table(name = "T_USER")
 public class UserEntity extends PersistentEntity implements User {
 
-    @Column(name = "PASSWORD", nullable = false) private String password; // the user password
-    @Column(name = "USER_NAME", nullable = false) private String userName; // the user name
-    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity; // the user as a person
-    @Column(name = "EMAIL") private String emailAddress; // the email address to the user
+    @Column(name = "PASSWORD", nullable = false) private String password;
+    @Column(name = "USER_NAME", nullable = false) private String userName;
+    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
+    @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
     public UserEntity() {
     }
@@ -75,19 +77,19 @@ public class UserEntity extends PersistentEntity implements User {
     }
 
     public EmailAddress getEmailAddress() {
-        return convertTo(emailAddress, EmailAddress.class);
+        return emailAddress != null ? emailAddress.fetchEmailAddress() : null;
     }
 
     public boolean isUserNameEmailAddress() {
-        return userName.endsWith(emailAddress);
+        return userName.equals(emailAddress.asString());
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmailAddress(EmailAddress emailAddress) {
+        this.emailAddress = new EmailAddressEmbeddable(emailAddress);
     }
 
     public void setUserName(String userName) {

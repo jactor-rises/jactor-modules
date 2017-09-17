@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.persistence.entity;
 
-import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,11 +43,6 @@ class PersistentEntityTest {
     @DisplayName("should convert to a name")
     @Test void willConvertFromName() {
         assertThat(testPersistentEntity.convertTo("jacobsen", Name.class)).isEqualTo(new Name("jacobsen"));
-    }
-
-    @DisplayName("should convert an email address")
-    @Test void willConvertEmailAddress() {
-        assertThat(testPersistentEntity.convertTo("some@where.com", EmailAddress.class)).isEqualTo(new EmailAddress("some", "where.com"));
     }
 
     @DisplayName("should convert to a user name")

@@ -1,5 +1,6 @@
 package com.github.jactorrises.model.persistence.entity.user;
 
+import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,15 +25,15 @@ class UserEntityTest {
         UserEntity base = userEntityToTest;
         base.setUserName("some user");
         base.setPersonEntity(new PersonEntity());
-        base.setEmailAddress("some@where");
+        base.setEmailAddress(new EmailAddress("some@where"));
 
         UserEntity equal = new UserEntity();
         equal.setUserName("some user");
         equal.setPersonEntity(new PersonEntity());
-        equal.setEmailAddress("some@where");
+        equal.setEmailAddress(new EmailAddress("some@where"));
 
         UserEntity notEqual = new UserEntity();
-        notEqual.setEmailAddress("any@where");
+        notEqual.setEmailAddress(new EmailAddress("any@where"));
         notEqual.setPersonEntity(new PersonEntity());
         notEqual.setUserName("some other user");
 
@@ -50,13 +51,13 @@ class UserEntityTest {
         UserEntity base = userEntityToTest;
         base.setPersonEntity(new PersonEntity());
         base.setUserName("some user");
-        base.setEmailAddress("some@where");
+        base.setEmailAddress(new EmailAddress("some@where"));
 
         UserEntity equal = new UserEntity(base);
 
         UserEntity notEqual = new UserEntity();
         notEqual.setPersonEntity(new PersonEntity());
-        notEqual.setEmailAddress("some@where");
+        equal.setEmailAddress(new EmailAddress("some@where"));
         notEqual.setUserName("some other user");
 
         assertAll(
@@ -66,5 +67,12 @@ class UserEntityTest {
                 () -> assertThat(base).as("base is not equal to notEqual", base, notEqual).isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
+    }
+
+    @DisplayName("should not fail when reading email address with null value")
+    @Test
+    void shouldGetEmailAddress() {
+        userEntityToTest.setEmailAddress(null);
+        assertThat(userEntityToTest.getEmailAddress()).isNull();
     }
 }
