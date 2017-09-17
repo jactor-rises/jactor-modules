@@ -6,7 +6,9 @@ import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Objects;
@@ -17,7 +19,7 @@ import static java.util.Objects.hash;
 @Table(name = "T_ADDRESS")
 public class AddressEntity extends PersistentEntity implements Address {
 
-    @Column(name = "COUNTRY") private String country;
+    @Embedded @AttributeOverride(name = "country", column = @Column(name = "COUNTRY")) private CountryEmbaddable country;
     @Column(name = "ZIP_CODE") private Integer zipCode;
     @Column(name = "ADDRESS_LINE_1") private String addressLine1;
     @Column(name = "ADDRESS_LINE_2") private String addressLine2;
@@ -38,7 +40,7 @@ public class AddressEntity extends PersistentEntity implements Address {
             addressLine2 = address.getAddressLine2();
             addressLine3 = address.getAddressLine3();
             city = address.getCity();
-            country = convertFrom(address.getCountry(), Country.class);
+            country = address.country;
             zipCode = address.getZipCode();
         }
     }
@@ -71,7 +73,7 @@ public class AddressEntity extends PersistentEntity implements Address {
     }
 
     @Override public Country getCountry() {
-        return convertTo(country, Country.class);
+        return country != null ? country.fetchCountry() : null;
     }
 
     @Override public Integer getZipCode() {
@@ -94,8 +96,8 @@ public class AddressEntity extends PersistentEntity implements Address {
         return city;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCountry(Country country) {
+        this.country = new CountryEmbaddable(country);
     }
 
     public void setZipCode(Integer zipCode) {

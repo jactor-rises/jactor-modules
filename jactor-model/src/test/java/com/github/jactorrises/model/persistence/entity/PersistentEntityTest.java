@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.persistence.entity;
 
-import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
@@ -55,11 +54,6 @@ class PersistentEntityTest {
     @DisplayName("should convert to a user name")
     @Test void willConvertUserName() {
         assertThat(testPersistentEntity.convertTo("jactor", UserName.class)).isEqualTo(new UserName("jactor"));
-    }
-
-    @DisplayName("should convert a description")
-    @Test void willConvertDescription() {
-        assertThat(testPersistentEntity.convertTo("description", Description.class)).isEqualTo(new Description("description"));
     }
 
     private class TestPersistentEntity extends PersistentEntity {

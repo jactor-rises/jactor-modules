@@ -1,5 +1,6 @@
 package com.github.jactorrises.model.persistence.entity.address;
 
+import com.github.jactorrises.client.datatype.Country;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class AddressEntityTest {
         AddressEntity base = addressEntityToTest;
         base.setAddressLine1("somewhere");
         base.setZipCode(1234);
-        base.setCountry("NO");
+        base.setCountry(new Country("NO"));
         base.setCity("some city");
         base.setAddressLine2("somewhere else");
         base.setAddressLine3("way out there");
@@ -31,7 +32,7 @@ class AddressEntityTest {
         AddressEntity notEqual = new AddressEntity();
         notEqual.setAddressLine1("somewhere else");
         notEqual.setZipCode(5678);
-        notEqual.setCountry("SE");
+        notEqual.setCountry(new Country("SE"));
         notEqual.setCity("some other city");
         notEqual.setAddressLine2("some place");
         notEqual.setAddressLine3("in the distance");
@@ -49,7 +50,7 @@ class AddressEntityTest {
         AddressEntity base = addressEntityToTest;
         base.setAddressLine1("somewhere");
         base.setZipCode(1234);
-        base.setCountry("NO");
+        base.setCountry(new Country("NO"));
         base.setCity("some city");
         base.setAddressLine2("somewhere else");
         base.setAddressLine3("way out there");
@@ -59,7 +60,7 @@ class AddressEntityTest {
         AddressEntity notEqual = new AddressEntity();
         notEqual.setAddressLine1("somewhere");
         notEqual.setZipCode(1234);
-        notEqual.setCountry("NO");
+        notEqual.setCountry(new Country("SE"));
         notEqual.setCity("some city");
         notEqual.setAddressLine2("somewhere else");
         notEqual.setAddressLine3("inside");

@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.persistence.entity.person;
 
-import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
@@ -83,8 +82,8 @@ public class PersonEntity extends PersistentEntity implements Person {
         return locale;
     }
 
-    @Override public Description getDescription() {
-        return convertTo(description, Description.class);
+    @Override public String getDescription() {
+        return description;
     }
 
     @Override public UserEntity getUser() {

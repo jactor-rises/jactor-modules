@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.service;
 
-import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.JactorModule;
@@ -61,9 +60,8 @@ public class PersistentDomainServiceIntegrationTest {
             UserDomain userDomain = possibleUser.get();
 //            softly.assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")); todo fix: should work after story #131 is resolved
             softly.assertThat(userDomain.getPassword()).as("user.password").isEqualTo("demo");
-            softly.assertThat(userDomain.getPerson().getDescription()).as("user.description").isEqualTo(new Description("description"));
+            softly.assertThat(userDomain.getPerson().getDescription()).as("user.description").isEqualTo("description");
         });
-
     }
 
     @Test public void willSaveGuestbookWithRelations() {

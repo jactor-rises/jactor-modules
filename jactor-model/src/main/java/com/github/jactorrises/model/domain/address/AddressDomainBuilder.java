@@ -1,5 +1,6 @@
 package com.github.jactorrises.model.domain.address;
 
+import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +30,7 @@ public final class AddressDomainBuilder extends DomainBuilder<AddressDomain> {
     }
 
     public AddressDomainBuilder withCountry(String country) {
-        addressEntity.setCountry(country);
+        addressEntity.setCountry(new Country(country));
         return this;
     }
 

@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.domain.person;
 
-import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.domain.PersistentDomain;
@@ -18,7 +17,7 @@ public class PersonDomain extends PersistentDomain<PersonEntity, Long> implement
         super(personEntity);
     }
 
-    @Override public Description getDescription() {
+    @Override public String getDescription() {
         return getEntity().getDescription();
     }
 
