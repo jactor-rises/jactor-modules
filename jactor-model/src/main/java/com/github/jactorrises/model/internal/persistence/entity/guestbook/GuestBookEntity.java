@@ -31,6 +31,7 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
      * @param guestBook will be used to copy an instance...
      */
     public GuestBookEntity(GuestBookEntity guestBook) {
+        super(guestBook);
         title = guestBook.title;
         user = guestBook.user != null ? new UserEntity(guestBook.getUser()) : null;
     }

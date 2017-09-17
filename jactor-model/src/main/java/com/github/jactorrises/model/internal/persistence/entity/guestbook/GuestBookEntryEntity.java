@@ -35,6 +35,7 @@ public class GuestBookEntryEntity extends PersistentEntity implements GuestBookE
     }
 
     GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
+        super(guestBookEntry);
         guestBookEntity = new GuestBookEntity(guestBookEntry.guestBookEntity);
         persistentEntry = new PersistentEntry(guestBookEntry.persistentEntry);
     }

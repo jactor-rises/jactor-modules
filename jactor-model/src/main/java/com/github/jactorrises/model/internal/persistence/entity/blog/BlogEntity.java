@@ -31,6 +31,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
     }
 
     public BlogEntity(BlogEntity blogEntity) {
+        super(blogEntity);
         created = convertFrom(blogEntity.getCreated(), LocalDate.class);
         title = blogEntity.getTitle();
         userEntity = blogEntity.getUser();

@@ -35,6 +35,7 @@ public class BlogEntryEntity extends PersistentEntity {
     }
 
     BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
+        super(blogEntryEntity);
         blogEntity = new BlogEntity(blogEntryEntity.blogEntity);
         persistentEntry = new PersistentEntry(blogEntryEntity.persistentEntry);
     }

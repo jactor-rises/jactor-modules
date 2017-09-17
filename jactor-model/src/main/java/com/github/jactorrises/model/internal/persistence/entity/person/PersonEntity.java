@@ -39,6 +39,7 @@ public class PersonEntity extends PersistentEntity implements Person {
     }
 
     public PersonEntity(PersonEntity person) {
+        super(person);
         addressEntity = person.getAddress() != null ? new AddressEntity(person.getAddress()) : null;
         description = person.description;
         firstName = person.firstName;

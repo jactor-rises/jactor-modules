@@ -35,6 +35,7 @@ public class UserEntity extends PersistentEntity implements User {
      * @param user is used to create an entity
      */
     public UserEntity(UserEntity user) {
+        super(user);
         emailAddress = user.emailAddress;
         password = user.getPassword();
         personEntity = user.personEntity != null ? new PersonEntity(user.personEntity) : null;

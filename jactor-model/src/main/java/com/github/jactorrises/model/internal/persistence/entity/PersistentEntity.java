@@ -47,6 +47,13 @@ public abstract class PersistentEntity implements Persistent<Long> {
         updatedTime = Now.asDate();
     }
 
+    public PersistentEntity(PersistentEntity persistentEntity) {
+        createdBy = persistentEntity.createdBy;
+        creationTime = persistentEntity.creationTime;
+        updatedBy = persistentEntity.updatedBy;
+        updatedTime = persistentEntity.updatedTime;
+    }
+
     @SuppressWarnings("unchecked") protected <T, F> T convertTo(F from, Class<T> classType) {
         if (canConvert(classType)) {
             return cast(dataTypeConverters.get(classType).convertTo(from));

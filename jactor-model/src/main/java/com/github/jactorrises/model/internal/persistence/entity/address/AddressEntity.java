@@ -31,6 +31,8 @@ public class AddressEntity extends PersistentEntity implements Address {
      * @param address to copy
      */
     public AddressEntity(AddressEntity address) {
+        super(address);
+
         if (address != null) {
             addressLine1 = address.getAddressLine1();
             addressLine2 = address.getAddressLine2();
