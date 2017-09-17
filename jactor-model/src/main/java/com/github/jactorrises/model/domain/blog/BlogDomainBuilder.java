@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.internal.domain.blog;
+package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.internal.domain.DomainBuilder;
-import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;

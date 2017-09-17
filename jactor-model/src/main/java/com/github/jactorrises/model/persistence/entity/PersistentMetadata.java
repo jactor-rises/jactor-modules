@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.entity;
+package com.github.jactorrises.model.persistence.entity;
 
 final class PersistentMetadata {
 

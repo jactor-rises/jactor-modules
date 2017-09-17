@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.persistence.entity;
+package com.github.jactorrises.model.persistence.entity;
 
-import com.github.jactorrises.model.internal.persistence.client.time.Now;
+import com.github.jactorrises.model.persistence.client.time.Now;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.internal.persistence.entity.guestbook;
+package com.github.jactorrises.model.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
-import com.github.jactorrises.model.internal.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.internal.persistence.entity.entry.PersistentEntry;
+import com.github.jactorrises.model.persistence.entity.PersistentEntity;
+import com.github.jactorrises.model.persistence.entity.entry.PersistentEntry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

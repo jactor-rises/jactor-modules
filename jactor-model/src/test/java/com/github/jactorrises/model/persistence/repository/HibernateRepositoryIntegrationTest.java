@@ -1,14 +1,14 @@
-package com.github.jactorrises.model.internal.persistence.repository;
+package com.github.jactorrises.model.persistence.repository;
 
-import com.github.jactorrises.model.internal.JactorModule;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.internal.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.JactorModule;
+import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -20,12 +20,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-import static com.github.jactorrises.model.internal.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
-import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
-import static com.github.jactorrises.model.internal.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.model.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)

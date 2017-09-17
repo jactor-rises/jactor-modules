@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.domain;
+package com.github.jactorrises.model.domain;
 
 import java.util.List;
 

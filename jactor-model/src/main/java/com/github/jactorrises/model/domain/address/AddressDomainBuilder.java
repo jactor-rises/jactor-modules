@@ -1,7 +1,7 @@
-package com.github.jactorrises.model.internal.domain.address;
+package com.github.jactorrises.model.domain.address;
 
-import com.github.jactorrises.model.internal.domain.DomainBuilder;
-import com.github.jactorrises.model.internal.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;

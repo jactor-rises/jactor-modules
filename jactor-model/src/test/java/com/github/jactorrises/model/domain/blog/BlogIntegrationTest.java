@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.internal.domain.blog;
+package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.internal.JactorModule;
-import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.JactorModule;
+import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -15,10 +15,10 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
-import static com.github.jactorrises.model.internal.domain.blog.BlogDomain.aBlog;
-import static com.github.jactorrises.model.internal.domain.person.PersonDomain.aPerson;
-import static com.github.jactorrises.model.internal.domain.user.UserDomain.aUser;
+import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
+import static com.github.jactorrises.model.domain.blog.BlogDomain.aBlog;
+import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
+import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)

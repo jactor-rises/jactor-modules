@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.entity.blog;
+package com.github.jactorrises.model.persistence.entity.blog;
 
 public class BlogEntryEntityBuilder {
     private BlogEntity blogEntity;

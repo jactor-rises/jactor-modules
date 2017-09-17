@@ -1,10 +1,10 @@
-package com.github.jactorrises.model.internal.domain.guestbook;
+package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
-import com.github.jactorrises.model.internal.domain.PersistentDomain;
-import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.model.domain.PersistentDomain;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
 
 import java.time.LocalDateTime;
 

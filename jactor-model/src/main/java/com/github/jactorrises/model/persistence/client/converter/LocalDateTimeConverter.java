@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.client.converter;
+package com.github.jactorrises.model.persistence.client.converter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.domain;
+package com.github.jactorrises.model.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.internal.persistence.entity.person;
+package com.github.jactorrises.model.persistence.entity.person;
 
 
-import com.github.jactorrises.model.internal.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

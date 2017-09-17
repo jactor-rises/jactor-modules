@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.internal.domain.guestbook;
+package com.github.jactorrises.model.domain.guestbook;
 
-import com.github.jactorrises.model.internal.domain.DomainBuilder;
-import com.github.jactorrises.model.internal.domain.user.UserDomain;
-import com.github.jactorrises.model.internal.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.domain.user.UserDomain;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;

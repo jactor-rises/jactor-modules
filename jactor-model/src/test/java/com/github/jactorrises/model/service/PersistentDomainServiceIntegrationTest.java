@@ -1,16 +1,16 @@
-package com.github.jactorrises.model.internal.service;
+package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.internal.JactorModule;
-import com.github.jactorrises.model.internal.domain.address.AddressDomainBuilder;
-import com.github.jactorrises.model.internal.domain.guestbook.GuestBookDomain;
-import com.github.jactorrises.model.internal.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactorrises.model.internal.domain.person.PersonDomain;
-import com.github.jactorrises.model.internal.domain.user.UserDomain;
-import com.github.jactorrises.model.internal.service.PersistentDomainService.GuestBookCriterion;
-import com.github.jactorrises.model.internal.service.PersistentDomainService.GuestBookEntryCriterion;
+import com.github.jactorrises.model.JactorModule;
+import com.github.jactorrises.model.domain.address.AddressDomainBuilder;
+import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
+import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
+import com.github.jactorrises.model.domain.person.PersonDomain;
+import com.github.jactorrises.model.domain.user.UserDomain;
+import com.github.jactorrises.model.service.PersistentDomainService.GuestBookCriterion;
+import com.github.jactorrises.model.service.PersistentDomainService.GuestBookEntryCriterion;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -22,10 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.model.internal.domain.address.AddressDomain.anAddress;
-import static com.github.jactorrises.model.internal.domain.guestbook.GuestBookDomain.aGuestBook;
-import static com.github.jactorrises.model.internal.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
-import static com.github.jactorrises.model.internal.domain.person.PersonDomain.aPerson;
+import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
+import static com.github.jactorrises.model.domain.guestbook.GuestBookDomain.aGuestBook;
+import static com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
+import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModule.class)

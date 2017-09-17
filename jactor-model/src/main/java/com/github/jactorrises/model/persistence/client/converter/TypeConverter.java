@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.client.converter;
+package com.github.jactorrises.model.persistence.client.converter;
 
 public interface TypeConverter<T, F> {
     T convertTo(F from);

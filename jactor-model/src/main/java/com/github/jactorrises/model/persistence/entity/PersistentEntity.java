@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.entity;
+package com.github.jactorrises.model.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.datatype.Description;
@@ -6,15 +6,15 @@ import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.model.internal.persistence.client.converter.CountryConverter;
-import com.github.jactorrises.model.internal.persistence.client.converter.DescriptionConverter;
-import com.github.jactorrises.model.internal.persistence.client.converter.EmailAddressConverter;
-import com.github.jactorrises.model.internal.persistence.client.converter.LocalDateConverter;
-import com.github.jactorrises.model.internal.persistence.client.converter.LocalDateTimeConverter;
-import com.github.jactorrises.model.internal.persistence.client.converter.NameConverter;
-import com.github.jactorrises.model.internal.persistence.client.converter.TypeConverter;
-import com.github.jactorrises.model.internal.persistence.client.converter.UserNameConverter;
-import com.github.jactorrises.model.internal.persistence.client.time.Now;
+import com.github.jactorrises.model.persistence.client.converter.CountryConverter;
+import com.github.jactorrises.model.persistence.client.converter.DescriptionConverter;
+import com.github.jactorrises.model.persistence.client.converter.EmailAddressConverter;
+import com.github.jactorrises.model.persistence.client.converter.LocalDateConverter;
+import com.github.jactorrises.model.persistence.client.converter.LocalDateTimeConverter;
+import com.github.jactorrises.model.persistence.client.converter.NameConverter;
+import com.github.jactorrises.model.persistence.client.converter.TypeConverter;
+import com.github.jactorrises.model.persistence.client.converter.UserNameConverter;
+import com.github.jactorrises.model.persistence.client.time.Now;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;

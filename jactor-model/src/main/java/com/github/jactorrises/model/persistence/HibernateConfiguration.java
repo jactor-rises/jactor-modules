@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.persistence;
+package com.github.jactorrises.model.persistence;
 
-import com.github.jactorrises.model.internal.persistence.entity.PersistentEntity;
+import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;

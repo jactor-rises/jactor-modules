@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.internal.domain.person;
+package com.github.jactorrises.model.domain.person;
 
-import com.github.jactorrises.model.internal.domain.DomainBuilder;
-import com.github.jactorrises.model.internal.domain.address.AddressDomain;
-import com.github.jactorrises.model.internal.domain.address.AddressDomainBuilder;
-import com.github.jactorrises.model.internal.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.domain.address.AddressDomain;
+import com.github.jactorrises.model.domain.address.AddressDomainBuilder;
+import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 
 import java.util.Optional;
 

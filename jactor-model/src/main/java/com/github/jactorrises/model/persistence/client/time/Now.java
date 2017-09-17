@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.client.time;
+package com.github.jactorrises.model.persistence.client.time;
 
 import java.time.LocalDateTime;
 import java.util.Date;

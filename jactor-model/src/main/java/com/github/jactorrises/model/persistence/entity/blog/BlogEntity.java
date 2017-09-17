@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.internal.persistence.entity.blog;
+package com.github.jactorrises.model.persistence.entity.blog;
 
 import com.github.jactorrises.client.domain.Blog;
-import com.github.jactorrises.model.internal.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.PersistentEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

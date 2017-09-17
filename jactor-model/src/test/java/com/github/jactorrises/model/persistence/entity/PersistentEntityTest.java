@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.entity;
+package com.github.jactorrises.model.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Description;
 import com.github.jactorrises.client.datatype.EmailAddress;
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("A PersistentEntity")
-public class PersistentEntityTest {
+class PersistentEntityTest {
     private TestPersistentEntity testPersistentEntity;
 
     @BeforeEach void initForTesting() {

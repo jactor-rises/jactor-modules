@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.domain.blog;
+package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

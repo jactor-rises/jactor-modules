@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.internal.persistence.entity.address;
+package com.github.jactorrises.model.persistence.entity.address;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

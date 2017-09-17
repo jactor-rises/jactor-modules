@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.persistence.entity.guestbook;
+package com.github.jactorrises.model.persistence.entity.guestbook;
 
-import com.github.jactorrises.model.internal.persistence.entity.NowAsPureDate;
+import com.github.jactorrises.model.persistence.entity.NowAsPureDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

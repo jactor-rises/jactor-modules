@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.internal.persistence.entity.guestbook;
+package com.github.jactorrises.model.persistence.entity.guestbook;
 
-import com.github.jactorrises.model.internal.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 
 public class GuestBookEntityBuilder {
 

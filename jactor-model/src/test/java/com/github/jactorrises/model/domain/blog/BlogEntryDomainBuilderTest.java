@@ -1,10 +1,10 @@
-package com.github.jactorrises.model.internal.domain.blog;
+package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.internal.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.internal.domain.blog.BlogEntryDomain.aBlogEntry;
+import static com.github.jactorrises.model.domain.blog.BlogEntryDomain.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
