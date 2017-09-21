@@ -27,12 +27,12 @@ public abstract class PersistentEntity implements Persistent<Long> {
 
     private static final Map<Class<?>, TypeConverter> dataTypeConverters = initKnownConverters();
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = PersistentMetadata.ID) Long id;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "ID") Long id;
 
-    @Column(name = PersistentMetadata.CREATION_TIME) @Type(type = "timestamp") private Date creationTime;
-    @Column(name = PersistentMetadata.CREATED_BY) private String createdBy;
-    @Column(name = PersistentMetadata.UPDATED_TIME) @Type(type = "timestamp") private Date updatedTime;
-    @Column(name = PersistentMetadata.UPDATED_BY) private String updatedBy;
+    @Column(name = "CREATION_TIME") @Type(type = "timestamp") private Date creationTime;
+    @Column(name = "CREATED_BY") private String createdBy;
+    @Column(name = "UPDATED_TIME") @Type(type = "timestamp") private Date updatedTime;
+    @Column(name = "UPDATED_BY") private String updatedBy;
 
     protected PersistentEntity() {
         createdBy = "todo";
