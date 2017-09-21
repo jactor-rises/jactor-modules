@@ -1,9 +1,9 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
@@ -12,13 +12,13 @@ class BlogBuilderTest {
 
     @DisplayName("should not build a blog without a title")
     @Test void skalIkkeByggeUtenTittel() {
-        assertThatIllegalArgumentException().isThrownBy(() -> BlogDomain.aBlog().with(new UserEntity()).build())
+        assertThatIllegalArgumentException().isThrownBy(() -> BlogDomain.aBlog().with(aUser()).build())
                 .withMessage(BlogBuilder.THE_BLOG_MUST_HAVE_A_TITLE);
     }
 
     @DisplayName("should not build a blog with an empty title")
     @Test void skalIkkeByggeMedTomTittel() {
-        assertThatIllegalArgumentException().isThrownBy(() -> BlogDomain.aBlog().with(new UserEntity()).withTitleAs("").build())
+        assertThatIllegalArgumentException().isThrownBy(() -> BlogDomain.aBlog().with(aUser()).withTitleAs("").build())
                 .withMessage(BlogBuilder.THE_BLOG_MUST_HAVE_A_TITLE);
     }
 
@@ -30,6 +30,6 @@ class BlogBuilderTest {
 
     @DisplayName("should build a blog with a user and a title")
     @Test void skalByggeMedTittelOgBruker() {
-        assertThat(BlogDomain.aBlog().withTitleAs("title").with(new UserEntity()).build()).isNotNull();
+        assertThat(BlogDomain.aBlog().withTitleAs("title").with(aUser()).build()).isNotNull();
     }
 }

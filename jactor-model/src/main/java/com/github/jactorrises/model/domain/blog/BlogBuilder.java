@@ -3,6 +3,7 @@ package com.github.jactorrises.model.domain.blog;
 import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -30,6 +31,10 @@ public final class BlogBuilder extends Builder<BlogDomain> {
     public BlogBuilder with(UserEntity userEntity) {
         blogEntity.setUserEntity(userEntity);
         return this;
+    }
+
+    public BlogBuilder with(UserEntityBuilder userEntityBuilder) {
+        return with(userEntityBuilder.build());
     }
 
     @Override protected BlogDomain buildBean() {

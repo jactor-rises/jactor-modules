@@ -4,6 +4,7 @@ import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -31,6 +32,10 @@ public final class GuestBookBuilder extends Builder<GuestBookDomain> {
     public GuestBookBuilder with(UserEntity userEntity) {
         guestBookEntity.setUser(userEntity);
         return this;
+    }
+
+    public GuestBookBuilder with(UserEntityBuilder userEntityBuilder) {
+        return with(userEntityBuilder.build());
     }
 
     public GuestBookBuilder with(UserDomain userDomain) {

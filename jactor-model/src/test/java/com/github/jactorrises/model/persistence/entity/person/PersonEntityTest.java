@@ -3,13 +3,13 @@ package com.github.jactorrises.model.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
+import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -29,7 +29,7 @@ class PersonEntityTest {
         base.setDescription("some description");
         base.setFirstName(new Name("ola"));
         base.setLastName(new Name("norman"));
-        base.setUserEntity(new UserEntity());
+        base.setUserEntity(aUser().build());
         base.setLocale(new Locale("no"));
 
         PersonEntity equal = new PersonEntity(personEntityToTest);
@@ -39,7 +39,7 @@ class PersonEntityTest {
         notEqual.setDescription("some description");
         notEqual.setFirstName(new Name("ola"));
         notEqual.setLastName(new Name("norman"));
-        notEqual.setUserEntity(new UserEntity());
+        notEqual.setUserEntity(aUser().build());
         notEqual.setLocale(new Locale("se"));
 
         assertAll(
@@ -57,7 +57,7 @@ class PersonEntityTest {
         base.setDescription("some description");
         base.setFirstName(new Name("ola"));
         base.setLastName(new Name("norman"));
-        base.setUserEntity(new UserEntity());
+        base.setUserEntity(aUser().build());
         base.setLocale(new Locale("no"));
 
         PersonEntity equal = new PersonEntity(personEntityToTest);
@@ -67,7 +67,7 @@ class PersonEntityTest {
         notEqual.setDescription("some description");
         notEqual.setFirstName(new Name("ola"));
         notEqual.setLastName(new Name("norman"));
-        notEqual.setUserEntity(new UserEntity());
+        notEqual.setUserEntity(aUser().build());
         notEqual.setLocale(new Locale("se"));
 
         assertAll(
