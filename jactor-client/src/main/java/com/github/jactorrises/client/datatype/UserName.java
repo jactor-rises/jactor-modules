@@ -18,13 +18,13 @@ public class UserName extends Name {
             return false;
         }
 
-        String thisName = getName() != null ? getName().toUpperCase() : null;
-        String thatName = ((UserName) obj).getName().toUpperCase();
+        String thisName = asString() != null ? asString().toUpperCase() : null;
+        String thatName = ((UserName) obj).asString().toUpperCase();
 
         return Objects.equals(thisName, thatName);
     }
 
     @Override public int hashCode() {
-        return hash(getName() != null ? getName().toUpperCase() : null);
+        return hash(asString() != null ? asString().toUpperCase() : null);
     }
 }
