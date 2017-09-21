@@ -1,6 +1,7 @@
 package com.github.jactorrises.model.persistence.entity.person;
 
 
+import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +27,8 @@ class PersonEntityTest {
         PersonEntity base = personEntityToTest;
         base.setAddressEntity(new AddressEntity());
         base.setDescription("some description");
-        base.setFirstName("ola");
-        base.setLastName("norman");
+        base.setFirstName(new Name("ola"));
+        base.setLastName(new Name("norman"));
         base.setUserEntity(new UserEntity());
         base.setLocale(new Locale("no"));
 
@@ -36,15 +37,15 @@ class PersonEntityTest {
         PersonEntity notEqual = new PersonEntity();
         notEqual.setAddressEntity(new AddressEntity());
         notEqual.setDescription("some description");
-        notEqual.setFirstName("ola");
-        notEqual.setLastName("norman");
+        notEqual.setFirstName(new Name("ola"));
+        notEqual.setLastName(new Name("norman"));
         notEqual.setUserEntity(new UserEntity());
         notEqual.setLocale(new Locale("se"));
 
         assertAll(
-                () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
-                () -> assertThat(base.hashCode()).as("base.hashCode() is not equal to notEqual.hashCode()", base, notEqual).isNotEqualTo(notEqual.hashCode()),
-                () -> assertThat(base.hashCode()).as("base.hashCode() is a number with different value", base).isNotEqualTo(0),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()").isEqualTo(equal.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is not equal to notEqual.hashCode()").isNotEqualTo(notEqual.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is a number with different value").isNotEqualTo(0),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }
@@ -54,8 +55,8 @@ class PersonEntityTest {
         PersonEntity base = personEntityToTest;
         base.setAddressEntity(new AddressEntity());
         base.setDescription("some description");
-        base.setFirstName("ola");
-        base.setLastName("norman");
+        base.setFirstName(new Name("ola"));
+        base.setLastName(new Name("norman"));
         base.setUserEntity(new UserEntity());
         base.setLocale(new Locale("no"));
 
@@ -64,16 +65,16 @@ class PersonEntityTest {
         PersonEntity notEqual = new PersonEntity();
         notEqual.setAddressEntity(new AddressEntity());
         notEqual.setDescription("some description");
-        notEqual.setFirstName("ola");
-        notEqual.setLastName("norman");
+        notEqual.setFirstName(new Name("ola"));
+        notEqual.setLastName(new Name("norman"));
         notEqual.setUserEntity(new UserEntity());
         notEqual.setLocale(new Locale("se"));
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
                 () -> assertThat(base).as("base is equal to base").isEqualTo(base),
-                () -> assertThat(base).as("base is equal to equal", base, equal).isEqualTo(equal),
-                () -> assertThat(base).as("base is not equal to notEqual", base, notEqual).isNotEqualTo(notEqual),
+                () -> assertThat(base).as("base is equal to equal").isEqualTo(equal),
+                () -> assertThat(base).as("base is not equal to notEqual").isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }

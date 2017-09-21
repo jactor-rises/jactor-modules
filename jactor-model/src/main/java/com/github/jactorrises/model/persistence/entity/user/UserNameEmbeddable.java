@@ -16,7 +16,7 @@ public class UserNameEmbeddable {
     }
 
     public UserNameEmbeddable(UserName userName) {
-        this.userName = userName.getName();
+        this.userName = userName.asString();
     }
 
     UserName fetchUserName() {

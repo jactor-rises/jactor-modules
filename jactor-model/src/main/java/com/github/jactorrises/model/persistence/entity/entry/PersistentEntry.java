@@ -1,8 +1,8 @@
 package com.github.jactorrises.model.persistence.entity.entry;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.persistence.client.converter.LocalDateTimeConverter;
 import com.github.jactorrises.model.persistence.client.time.Now;
+import com.github.jactorrises.model.persistence.entity.DateTimeEmbeddable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -15,7 +15,6 @@ import static java.util.Objects.hash;
 
 @Embeddable
 public class PersistentEntry {
-    private static final LocalDateTimeConverter TIME_CONVERTER = new LocalDateTimeConverter();
 
     private Date createdTime;
     private String creatorName;
@@ -77,6 +76,6 @@ public class PersistentEntry {
     }
 
     public LocalDateTime getCreatedTime() {
-        return TIME_CONVERTER.convertTo(createdTime);
+        return new DateTimeEmbeddable(createdTime).fetchLocalDateTime();
     }
 }

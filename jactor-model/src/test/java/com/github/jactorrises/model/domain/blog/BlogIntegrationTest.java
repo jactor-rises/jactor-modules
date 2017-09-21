@@ -53,8 +53,8 @@ public class BlogIntegrationTest {
                                 .withCountry("NO")
                                 .withZipCode(1234)
                         )
-                )
-                .build().getEntity();
+                ).build()
+                .getEntity();
 
         session().save(userEntity);
 

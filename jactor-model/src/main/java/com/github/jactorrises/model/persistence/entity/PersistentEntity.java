@@ -2,40 +2,33 @@ package com.github.jactorrises.model.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.model.persistence.client.converter.LocalDateConverter;
-import com.github.jactorrises.model.persistence.client.converter.LocalDateTimeConverter;
-import com.github.jactorrises.model.persistence.client.converter.TypeConverter;
 import com.github.jactorrises.model.persistence.client.time.Now;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @MappedSuperclass
 public abstract class PersistentEntity implements Persistent<Long> {
 
-    private static final Map<Class<?>, TypeConverter> dataTypeConverters = initKnownConverters();
-
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "ID") Long id;
 
-    @Column(name = "CREATION_TIME") @Type(type = "timestamp") private Date creationTime;
-    @Column(name = "CREATED_BY") private String createdBy;
-    @Column(name = "UPDATED_TIME") @Type(type = "timestamp") private Date updatedTime;
-    @Column(name = "UPDATED_BY") private String updatedBy;
+    @Embedded @AttributeOverride(name = "timestamp", column = @Column(name = "CREATION_TIME")) @Type(type = "timestamp") private DateTimeEmbeddable creationTime;
+    @Embedded @AttributeOverride(name = "name", column = @Column(name = "CREATED_BY")) private NameEmbeddable createdBy;
+    @Embedded @AttributeOverride(name = "timestamp", column = @Column(name = "UPDATED_TIME")) @Type(type = "timestamp") private DateTimeEmbeddable updatedTime;
+    @Embedded @AttributeOverride(name = "name", column = @Column(name = "UPDATED_BY")) private NameEmbeddable updatedBy;
 
     protected PersistentEntity() {
-        createdBy = "todo";
-        creationTime = Now.asDate();
-        updatedBy = "todo";
-        updatedTime = Now.asDate();
+        createdBy = new NameEmbeddable(new Name("todo #156"));
+        creationTime = new DateTimeEmbeddable(Now.asDate());
+        updatedBy = new NameEmbeddable(new Name("todo #156"));
+        updatedTime = new DateTimeEmbeddable(Now.asDate());
     }
 
     public PersistentEntity(PersistentEntity persistentEntity) {
@@ -45,40 +38,16 @@ public abstract class PersistentEntity implements Persistent<Long> {
         updatedTime = persistentEntity.updatedTime;
     }
 
-    @SuppressWarnings("unchecked") protected <T, F> T convertTo(F from, Class<T> classType) {
-        if (canConvert(classType)) {
-            return cast(dataTypeConverters.get(classType).convertTo(from));
-        }
-
-        throw new IllegalArgumentException(classType + " is not a type known for any converter!");
-    }
-
-    @SuppressWarnings("unchecked") protected <T, F> F convertFrom(T to, Class<T> classType) {
-        if (canConvert(classType)) {
-            return cast(dataTypeConverters.get(classType).convertFrom(to));
-        }
-
-        throw new IllegalArgumentException(classType + " is not a type known for any converter!");
-    }
-
-    private boolean canConvert(Class<?> classType) {
-        return !(classType != null && !dataTypeConverters.containsKey(classType));
-    }
-
-    @SuppressWarnings("unchecked") private <T> T cast(Object object) {
-        return (T) object;
-    }
-
     @Override public String toString() {
-        return getClass().getSimpleName() + (id != null ? "#" + id : "");
+        return "id=" + id;
     }
 
     @Override public Name getCreatedBy() {
-        return convertTo(createdBy, Name.class);
+        return createdBy.fetchName();
     }
 
     @Override public LocalDateTime getCreationTime() {
-        return convertTo(creationTime, LocalDateTime.class);
+        return creationTime.fetchLocalDateTime();
     }
 
     @Override public Long getId() {
@@ -86,18 +55,10 @@ public abstract class PersistentEntity implements Persistent<Long> {
     }
 
     @Override public Name getUpdatedBy() {
-        return convertTo(updatedBy, Name.class);
+        return updatedBy.fetchName();
     }
 
     @Override public LocalDateTime getUpdatedTime() {
-        return convertTo(updatedTime, LocalDateTime.class);
-    }
-
-    private static Map<Class<?>, TypeConverter> initKnownConverters() {
-        Map<Class<?>, TypeConverter> knownConverters = new HashMap<>();
-        knownConverters.put(LocalDateTime.class, new LocalDateTimeConverter());
-        knownConverters.put(LocalDate.class, new LocalDateConverter());
-
-        return knownConverters;
+        return updatedTime.fetchLocalDateTime();
     }
 }

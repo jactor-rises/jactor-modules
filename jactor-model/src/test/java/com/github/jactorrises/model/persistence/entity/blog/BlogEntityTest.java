@@ -1,5 +1,6 @@
 package com.github.jactorrises.model.persistence.entity.blog;
 
+import com.github.jactorrises.model.persistence.entity.DateTextEmbeddable;
 import com.github.jactorrises.model.persistence.entity.NowAsPureDate;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.AfterEach;
@@ -78,7 +79,7 @@ class BlogEntityTest {
         assertThat(blogEntityToTest.toString())
                 .contains("BlogEntity")
                 .contains("my blog")
-                .contains(LocalDate.now().toString());
+                .contains(new DateTextEmbeddable(LocalDate.now()).toString());
     }
 
     @AfterEach void removeNowAsPureDate() {

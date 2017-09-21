@@ -1,13 +1,16 @@
 package com.github.jactorrises.model.persistence.entity.blog;
 
 import com.github.jactorrises.client.domain.Blog;
+import com.github.jactorrises.model.persistence.entity.DateTextEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -22,17 +25,17 @@ import static java.util.Objects.hash;
 @Table(name = "T_BLOG")
 public class BlogEntity extends PersistentEntity implements Blog {
 
-    @Column(name = "CREATED") private String created;
+    @Embedded @AttributeOverride(name = "dateAsText", column =  @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
 
     public BlogEntity() {
-        created = convertFrom(LocalDate.now(), LocalDate.class);
+        created = new DateTextEmbeddable(LocalDate.now());
     }
 
     public BlogEntity(BlogEntity blogEntity) {
         super(blogEntity);
-        created = convertFrom(blogEntity.getCreated(), LocalDate.class);
+        created = blogEntity.created;
         title = blogEntity.getTitle();
         userEntity = blogEntity.getUser();
     }
@@ -50,7 +53,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
     @Override public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .appendSuper(super.toString())
-                .append(getCreated())
+                .append(created.toString())
                 .append(getTitle())
                 .append(getUser())
                 .toString();
@@ -65,7 +68,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
     }
 
     @Override public LocalDate getCreated() {
-        return convertTo(created, LocalDate.class);
+        return created.fetchLocalDate();
     }
 
     public void setTitle(String title) {

@@ -2,6 +2,7 @@ package com.github.jactorrises.model.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
+import com.github.jactorrises.model.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
@@ -30,8 +31,8 @@ public class PersonEntity extends PersistentEntity implements Person {
     @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
     @Column(name = "DESCRIPTION") private String description;
     @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
-    @Transient private String firstName;
-    @Transient private String lastName;
+    @Transient private NameEmbeddable firstName;
+    @Transient private NameEmbeddable lastName;
     @Transient private Locale locale;
 
     public PersonEntity() {
@@ -71,11 +72,11 @@ public class PersonEntity extends PersistentEntity implements Person {
     }
 
     @Override public Name getFirstName() {
-        return convertTo(firstName, Name.class);
+        return firstName.fetchName();
     }
 
     @Override public Name getLastName() {
-        return convertTo(lastName, Name.class);
+        return lastName.fetchName();
     }
 
     @Override public Locale getLocale() {
@@ -98,12 +99,12 @@ public class PersonEntity extends PersistentEntity implements Person {
         this.description = description;
     }
 
-    void setFirstName(String firstName) {
-        this.firstName = firstName;
+    void setFirstName(Name firstName) {
+        this.firstName = new NameEmbeddable(firstName);
     }
 
-    void setLastName(String lastName) {
-        this.lastName = lastName;
+    void setLastName(Name lastName) {
+        this.lastName = new NameEmbeddable(lastName);
     }
 
     public void setUserEntity(UserEntity userEntity) {
