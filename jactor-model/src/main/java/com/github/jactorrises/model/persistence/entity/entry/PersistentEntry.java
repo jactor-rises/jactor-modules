@@ -29,8 +29,15 @@ public class PersistentEntry {
      */
     PersistentEntry(PersistentEntry persistentEntry) {
         creatorName = persistentEntry.creatorName;
-        createdTime = persistentEntry.createdTime;
+        createdTime = persistentEntry.copyCreatedTime();
         entry = persistentEntry.entry;
+    }
+
+    private Date copyCreatedTime() {
+        Date creation = new Date();
+        creation.setTime(this.createdTime.getTime());
+
+        return creation;
     }
 
     public PersistentEntry copy() {
