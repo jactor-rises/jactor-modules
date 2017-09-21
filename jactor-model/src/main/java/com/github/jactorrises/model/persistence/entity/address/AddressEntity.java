@@ -32,17 +32,15 @@ public class AddressEntity extends PersistentEntity implements Address {
     /**
      * @param address to copy
      */
-    public AddressEntity(AddressEntity address) {
+    AddressEntity(AddressEntity address) {
         super(address);
 
-        if (address != null) {
-            addressLine1 = address.getAddressLine1();
-            addressLine2 = address.getAddressLine2();
-            addressLine3 = address.getAddressLine3();
-            city = address.getCity();
-            country = address.country;
-            zipCode = address.getZipCode();
-        }
+        addressLine1 = address.getAddressLine1();
+        addressLine2 = address.getAddressLine2();
+        addressLine3 = address.getAddressLine3();
+        city = address.getCity();
+        country = address.country;
+        zipCode = address.getZipCode();
     }
 
     @Override public boolean equals(Object o) {
@@ -54,6 +52,10 @@ public class AddressEntity extends PersistentEntity implements Address {
                 Objects.equals(city, ((AddressEntity) o).city) &&
                 Objects.equals(country, ((AddressEntity) o).country) &&
                 Objects.equals(zipCode, ((AddressEntity) o).zipCode);
+    }
+
+    public AddressEntity copy() {
+        return new AddressEntity(this);
     }
 
     @Override public int hashCode() {

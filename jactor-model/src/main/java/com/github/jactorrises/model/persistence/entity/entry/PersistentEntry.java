@@ -27,10 +27,14 @@ public class PersistentEntry {
     /**
      * @param persistentEntry is the entry to create a copy of
      */
-    public PersistentEntry(PersistentEntry persistentEntry) {
+    PersistentEntry(PersistentEntry persistentEntry) {
         creatorName = persistentEntry.creatorName;
         createdTime = persistentEntry.createdTime;
         entry = persistentEntry.entry;
+    }
+
+    public PersistentEntry copy() {
+        return new PersistentEntry(this);
     }
 
     @Override public boolean equals(Object obj) {

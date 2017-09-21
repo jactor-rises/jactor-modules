@@ -36,8 +36,16 @@ public class GuestBookEntryEntity extends PersistentEntity implements GuestBookE
 
     GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
         super(guestBookEntry);
-        guestBookEntity = new GuestBookEntity(guestBookEntry.guestBookEntity);
-        persistentEntry = new PersistentEntry(guestBookEntry.persistentEntry);
+        guestBookEntity = guestBookEntry.copyGuestBook();
+        persistentEntry = guestBookEntry.copyEntry();
+    }
+
+    private GuestBookEntity copyGuestBook() {
+        return guestBookEntity.copy();
+    }
+
+    private PersistentEntry copyEntry() {
+        return persistentEntry.copy();
     }
 
     @Override public boolean equals(Object o) {

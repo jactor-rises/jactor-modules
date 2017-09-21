@@ -40,8 +40,16 @@ public class UserEntity extends PersistentEntity implements User {
         super(user);
         emailAddress = user.emailAddress;
         password = user.getPassword();
-        personEntity = user.personEntity != null ? new PersonEntity(user.personEntity) : null;
+        personEntity = user.copyPerson();
         userName = user.userName;
+    }
+
+    private PersonEntity copyPerson() {
+        return personEntity != null ? personEntity.copy() : null;
+    }
+
+    public UserEntity copy() {
+        return new UserEntity(this);
     }
 
     @Override public boolean equals(Object o) {

@@ -25,7 +25,7 @@ import static java.util.Objects.hash;
 @Table(name = "T_BLOG")
 public class BlogEntity extends PersistentEntity implements Blog {
 
-    @Embedded @AttributeOverride(name = "dateAsText", column =  @Column(name = "CREATED")) private DateTextEmbeddable created;
+    @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
 
@@ -37,7 +37,15 @@ public class BlogEntity extends PersistentEntity implements Blog {
         super(blogEntity);
         created = blogEntity.created;
         title = blogEntity.getTitle();
-        userEntity = blogEntity.getUser();
+        userEntity = blogEntity.copyUser();
+    }
+
+    BlogEntity copy() {
+        return new BlogEntity(this);
+    }
+
+    private UserEntity copyUser() {
+        return userEntity != null ? userEntity.copy() : null;
     }
 
     @Override public boolean equals(Object o) {

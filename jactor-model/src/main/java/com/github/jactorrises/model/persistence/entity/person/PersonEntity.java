@@ -38,14 +38,26 @@ public class PersonEntity extends PersistentEntity implements Person {
     public PersonEntity() {
     }
 
-    public PersonEntity(PersonEntity person) {
+    PersonEntity(PersonEntity person) {
         super(person);
-        addressEntity = person.getAddress() != null ? new AddressEntity(person.getAddress()) : null;
+        addressEntity = person.copyAddress();
         description = person.description;
         firstName = person.firstName;
         lastName = person.lastName;
         locale = person.getLocale();
-        userEntity = person.userEntity != null ? new UserEntity(person.userEntity) : null;
+        userEntity = person.copyUser();
+    }
+
+    private AddressEntity copyAddress() {
+        return addressEntity != null ? addressEntity.copy() : null;
+    }
+
+    private UserEntity copyUser() {
+        return userEntity != null ? userEntity.copy() : null;
+    }
+
+    public PersonEntity copy() {
+        return new PersonEntity(this);
     }
 
     @Override public boolean equals(Object o) {
