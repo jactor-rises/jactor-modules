@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
+import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static java.util.Arrays.asList;
 
 public final class BlogEntryBuilder extends Builder<BlogEntryDomain> {
@@ -14,7 +15,7 @@ public final class BlogEntryBuilder extends Builder<BlogEntryDomain> {
     static final String THE_ENTRY_CANNOT_BE_EMPTY = "The entry field cannot be empty";
     static final String THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE = "The entry must be created by someone";
 
-    private final BlogEntryEntity blogEntryEntity = new BlogEntryEntity();
+    private final BlogEntryEntity blogEntryEntity = aBlogEntry().build();
 
     BlogEntryBuilder() {
         super(asList(

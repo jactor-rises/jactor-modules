@@ -6,59 +6,61 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A BlogEntryEntity")
 class BlogEntryEntityTest {
-    private BlogEntryEntity blogEntryEntityToTest;
-
-    @BeforeEach void initBlogEntryEntity() {
+    @BeforeEach void useNowAsPureDate() {
         NowAsPureDate.set();
-        blogEntryEntityToTest = new BlogEntryEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogEntryEntity base = blogEntryEntityToTest;
-        base.setBlog(new BlogEntity());
-        base.setEntry("some entry");
-        base.setCreatorName("some creator");
+        BlogEntryEntity base = aBlogEntry()
+                .with(new BlogEntity())
+                .withCreatorName("some creator")
+                .withEntry("some entry")
+                .build();
 
-        BlogEntryEntity equal = new BlogEntryEntity(blogEntryEntityToTest);
+        BlogEntryEntity equal = new BlogEntryEntity(base);
 
-        BlogEntryEntity notEqual = new BlogEntryEntity();
-        notEqual.setEntry("some other entry");
-        notEqual.setCreatorName("some other creator");
-        notEqual.setBlog(new BlogEntity());
+        BlogEntryEntity notEqual = aBlogEntry()
+                .with(new BlogEntity())
+                .withCreatorName("some other creator")
+                .withEntry("some other entry")
+                .build();
 
         assertAll(
-                () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
-                () -> assertThat(base.hashCode()).as("base.hashCode() is not equal to notEqual.hashCode()", base, notEqual).isNotEqualTo(notEqual.hashCode()),
-                () -> assertThat(base.hashCode()).as("base.hashCode() is a number with different value", base).isNotEqualTo(0),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()").isEqualTo(equal.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is not equal to notEqual.hashCode()").isNotEqualTo(notEqual.hashCode()),
+                () -> assertThat(base.hashCode()).as("base.hashCode() is a number with different value").isNotEqualTo(0),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogEntryEntity base = blogEntryEntityToTest;
-        base.setBlog(new BlogEntity());
-        base.setEntry("some entry");
-        base.setCreatorName("some creator");
+        BlogEntryEntity base = aBlogEntry()
+                .with(new BlogEntity())
+                .withCreatorName("some creator")
+                .withEntry("some entry")
+                .build();
 
-        BlogEntryEntity equal = new BlogEntryEntity(blogEntryEntityToTest);
+        BlogEntryEntity equal = new BlogEntryEntity(base);
 
-        BlogEntryEntity notEqual = new BlogEntryEntity();
-        notEqual.setEntry("some other entry");
-        notEqual.setCreatorName("some other creator");
-        notEqual.setBlog(new BlogEntity());
+        BlogEntryEntity notEqual = aBlogEntry()
+                .with(new BlogEntity())
+                .withCreatorName("some other creator")
+                .withEntry("some other entry")
+                .build();
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
                 () -> assertThat(base).as("base is equal to base").isEqualTo(base),
-                () -> assertThat(base).as("base is equal to equal", base, equal).isEqualTo(equal),
-                () -> assertThat(base).as("base is not equal to notEqual", base, notEqual).isNotEqualTo(notEqual),
+                () -> assertThat(base).as("base is equal to equal").isEqualTo(equal),
+                () -> assertThat(base).as("base is not equal to notEqual").isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
     }
