@@ -1,7 +1,5 @@
 package com.github.jactorrises.model.persistence.entity;
 
-import com.github.jactorrises.model.persistence.client.time.Now;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
