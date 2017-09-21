@@ -2,7 +2,7 @@ package com.github.jactorrises.model.domain.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.DomainBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.person.PersonDomainBuilder;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;

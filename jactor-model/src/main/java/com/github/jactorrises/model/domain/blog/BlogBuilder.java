@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.DomainBuilder;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.StringUtils;

@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.person;
 
-import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.DomainBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.model.domain.address.AddressDomainBuilder;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntity;

@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.guestbook;
 
-import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.DomainBuilder;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
 import org.apache.commons.lang3.StringUtils;
