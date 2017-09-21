@@ -1,12 +1,14 @@
 package com.github.jactorrises.model.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.model.Builder;
 
-public class UserEntityBuilder {
+public class UserEntityBuilder extends Builder<UserEntity> {
     private UserName userName;
     private String password;
 
-    UserEntityBuilder() { }
+    UserEntityBuilder() {
+    }
 
     public UserEntityBuilder withUserName(String userName) {
         this.userName = new UserName(userName);
@@ -18,7 +20,7 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntity build() {
+    @Override protected UserEntity buildBean() {
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);
         userEntity.setPassword(password);

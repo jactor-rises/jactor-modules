@@ -20,7 +20,7 @@ public final class PersonBuilder extends Builder<PersonDomain> {
         ));
     }
 
-    @Override protected PersonDomain buildBeforeValidation() {
+    @Override protected PersonDomain buildBean() {
         return new PersonDomain(personEntity);
     }
 

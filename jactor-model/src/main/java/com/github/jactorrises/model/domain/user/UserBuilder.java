@@ -51,7 +51,7 @@ public final class UserBuilder extends Builder<UserDomain> {
     }
 
     @Override
-    protected UserDomain buildBeforeValidation() {
+    protected UserDomain buildBean() {
         return new UserDomain(userEntity);
     }
 

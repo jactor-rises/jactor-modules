@@ -54,7 +54,7 @@ public final class AddressBuilder extends Builder<AddressDomain> {
         return this;
     }
 
-    @Override protected AddressDomain buildBeforeValidation() {
+    @Override protected AddressDomain buildBean() {
         return new AddressDomain(addressEntity);
     }
 

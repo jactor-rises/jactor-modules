@@ -38,7 +38,7 @@ public final class GuestBookBuilder extends Builder<GuestBookDomain> {
         return this;
     }
 
-    @Override protected GuestBookDomain buildBeforeValidation() {
+    @Override protected GuestBookDomain buildBean() {
         return new GuestBookDomain(guestBookEntity);
     }
 

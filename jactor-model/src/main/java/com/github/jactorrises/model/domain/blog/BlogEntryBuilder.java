@@ -35,7 +35,7 @@ public final class BlogEntryBuilder extends Builder<BlogEntryDomain> {
         return this;
     }
 
-    @Override protected BlogEntryDomain buildBeforeValidation() {
+    @Override protected BlogEntryDomain buildBean() {
         return new BlogEntryDomain(blogEntryEntity);
     }
 }

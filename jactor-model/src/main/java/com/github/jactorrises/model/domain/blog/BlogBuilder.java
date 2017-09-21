@@ -32,7 +32,7 @@ public final class BlogBuilder extends Builder<BlogDomain> {
         return this;
     }
 
-    @Override protected BlogDomain buildBeforeValidation() {
+    @Override protected BlogDomain buildBean() {
         return new BlogDomain(blogEntity);
     }
 

@@ -41,7 +41,7 @@ class BuilderTest {
             super(validFields);
         }
 
-        @Override protected Bean buildBeforeValidation() {
+        @Override protected Bean buildBean() {
             return new Bean();
         }
     }

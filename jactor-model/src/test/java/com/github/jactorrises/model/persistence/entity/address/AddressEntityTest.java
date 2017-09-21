@@ -1,41 +1,36 @@
 package com.github.jactorrises.model.persistence.entity.address;
 
-import com.github.jactorrises.client.datatype.Country;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("An AddressEntity")
 class AddressEntityTest {
 
-    private AddressEntity addressEntityToTest;
-
-    @BeforeEach void initAddressEntityImpl() {
-        addressEntityToTest = new AddressEntity();
-    }
-
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        AddressEntity base = addressEntityToTest;
-        base.setAddressLine1("somewhere");
-        base.setZipCode(1234);
-        base.setCountry(new Country("NO"));
-        base.setCity("some city");
-        base.setAddressLine2("somewhere else");
-        base.setAddressLine3("way out there");
+        AddressEntity base = anAddress()
+                .withAddressLine1("somewhere")
+                .withAddressLine2("somewhere else")
+                .withAddressLine3("way out there")
+                .withZipCode(1234)
+                .withCountryCode("NO")
+                .withCity("some city")
+                .build();
 
         AddressEntity equal = new AddressEntity(base);
 
-        AddressEntity notEqual = new AddressEntity();
-        notEqual.setAddressLine1("somewhere else");
-        notEqual.setZipCode(5678);
-        notEqual.setCountry(new Country("SE"));
-        notEqual.setCity("some other city");
-        notEqual.setAddressLine2("some place");
-        notEqual.setAddressLine3("in the distance");
+        AddressEntity notEqual = anAddress()
+                .withAddressLine1("somewhere")
+                .withAddressLine2("somewhere in the")
+                .withAddressLine3("distance")
+                .withZipCode(5678)
+                .withCountryCode("SE")
+                .withCity("some other city")
+                .build();
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -47,23 +42,25 @@ class AddressEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        AddressEntity base = addressEntityToTest;
-        base.setAddressLine1("somewhere");
-        base.setZipCode(1234);
-        base.setCountry(new Country("NO"));
-        base.setCity("some city");
-        base.setAddressLine2("somewhere else");
-        base.setAddressLine3("way out there");
+        AddressEntity base = anAddress()
+                .withAddressLine1("somewhere")
+                .withAddressLine2("somewhere else")
+                .withAddressLine3("way out there")
+                .withZipCode(1234)
+                .withCountryCode("NO")
+                .withCity("some city")
+                .build();
 
-        AddressEntity equal = new AddressEntity(addressEntityToTest);
+        AddressEntity equal = new AddressEntity(base);
 
-        AddressEntity notEqual = new AddressEntity();
-        notEqual.setAddressLine1("somewhere");
-        notEqual.setZipCode(1234);
-        notEqual.setCountry(new Country("SE"));
-        notEqual.setCity("some city");
-        notEqual.setAddressLine2("somewhere else");
-        notEqual.setAddressLine3("inside");
+        AddressEntity notEqual = anAddress()
+                .withAddressLine1("somewhere")
+                .withAddressLine2("somewhere place")
+                .withAddressLine3("in the distance")
+                .withZipCode(5678)
+                .withCountryCode("SE")
+                .withCity("some other city")
+                .build();
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),

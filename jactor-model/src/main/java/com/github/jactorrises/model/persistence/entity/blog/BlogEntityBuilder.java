@@ -1,8 +1,9 @@
 package com.github.jactorrises.model.persistence.entity.blog;
 
+import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 
-public class BlogEntityBuilder {
+public class BlogEntityBuilder extends Builder<BlogEntity> {
     private String title;
     private UserEntity userEntity;
 
@@ -19,7 +20,7 @@ public class BlogEntityBuilder {
         return this;
     }
 
-    public BlogEntity build() {
+    @Override protected BlogEntity buildBean() {
         BlogEntity blogEntity = new BlogEntity();
         blogEntity.setTitle(title);
         blogEntity.setUserEntity(userEntity);
