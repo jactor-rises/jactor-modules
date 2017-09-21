@@ -9,30 +9,30 @@ import static org.apache.commons.lang3.Validate.notEmpty;
 public class Name implements Comparable<Name> {
     static final String A_NAME_MUST_BE_GIVEN = "A name must be given";
 
-    private final String nameToWrap;
+    private final String text;
 
     public Name(String name) {
         notEmpty(name, A_NAME_MUST_BE_GIVEN);
-        this.nameToWrap = name;
+        text = name;
     }
 
     @Override public int compareTo(Name name) {
-        return getName().compareTo(name.getName());
+        return asString().compareTo(name.asString());
     }
 
     @Override public boolean equals(Object obj) {
-        return this == obj || (obj != null && obj.getClass() == getClass() && getName().equals(((Name) obj).getName()));
+        return this == obj || (obj != null && obj.getClass() == getClass() && asString().equals(((Name) obj).asString()));
     }
 
     @Override public int hashCode() {
-        return nameToWrap.hashCode();
+        return text.hashCode();
     }
 
     @Override public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(nameToWrap).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(text).toString();
     }
 
-    public String getName() {
-        return nameToWrap;
+    public String asString() {
+        return text;
     }
 }
