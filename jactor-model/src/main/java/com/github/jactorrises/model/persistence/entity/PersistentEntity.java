@@ -5,7 +5,6 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.model.persistence.client.converter.LocalDateConverter;
 import com.github.jactorrises.model.persistence.client.converter.LocalDateTimeConverter;
-import com.github.jactorrises.model.persistence.client.converter.NameConverter;
 import com.github.jactorrises.model.persistence.client.converter.TypeConverter;
 import com.github.jactorrises.model.persistence.client.converter.UserNameConverter;
 import com.github.jactorrises.model.persistence.client.time.Now;
@@ -98,7 +97,6 @@ public abstract class PersistentEntity implements Persistent<Long> {
 
     private static Map<Class<?>, TypeConverter> initKnownConverters() {
         Map<Class<?>, TypeConverter> knownConverters = new HashMap<>();
-        knownConverters.put(Name.class, new NameConverter());
         knownConverters.put(UserName.class, new UserNameConverter());
         knownConverters.put(LocalDateTime.class, new LocalDateTimeConverter());
         knownConverters.put(LocalDate.class, new LocalDateConverter());

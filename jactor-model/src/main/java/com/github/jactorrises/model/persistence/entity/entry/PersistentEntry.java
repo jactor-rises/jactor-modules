@@ -2,7 +2,6 @@ package com.github.jactorrises.model.persistence.entity.entry;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.persistence.client.converter.LocalDateTimeConverter;
-import com.github.jactorrises.model.persistence.client.converter.NameConverter;
 import com.github.jactorrises.model.persistence.client.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,7 +16,6 @@ import static java.util.Objects.hash;
 @Embeddable
 public class PersistentEntry {
     private static final LocalDateTimeConverter TIME_CONVERTER = new LocalDateTimeConverter();
-    private static final NameConverter NAME_CONVERTER = new NameConverter();
 
     private Date createdTime;
     private String creatorName;
@@ -25,10 +23,6 @@ public class PersistentEntry {
 
     public PersistentEntry() {
         createdTime = Now.asDate();
-    }
-
-    public PersistentEntry(Date createdTime) {
-        this.createdTime = createdTime;
     }
 
     /**
@@ -71,7 +65,7 @@ public class PersistentEntry {
     }
 
     public Name getCreatorName() {
-        return NAME_CONVERTER.convertTo(creatorName);
+        return creatorName != null ? new Name(creatorName) : null;
     }
 
     public void setEntry(String entry) {
