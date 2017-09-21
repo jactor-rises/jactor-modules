@@ -8,25 +8,20 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-@DisplayName("A DomianBuilder")
-class DomainBuilderTest {
+@DisplayName("A Builder")
+class BuilderTest {
 
-    @DisplayName("should build a domain when the build method is invoked")
+    @DisplayName("should build bean when the build method is invoked")
     @Test void shouldBuildDomainWhenBuildMethodIsInvoked() {
-        assertThat(new TestDomainBuilder(Collections.emptyList()).build()).isInstanceOf(Bean.class);
+        assertThat(new TestBuilder(Collections.emptyList()).build()).isInstanceOf(Bean.class);
     }
 
     @DisplayName("should throw an exception when illegal build is done")
     @Test void shouldValidateDomainWhenBuildMethodIsInvokedg() {
-        IllegalArgumentException illegalArgumentException = assertThrows(
-                IllegalArgumentException.class, () -> new TestDomainBuilder(
-                        initAnListWith("example of invalid field")
-                ).build()
-        );
-
-        assertThat(illegalArgumentException.getMessage()).isEqualTo("example of invalid field");
+        assertThatIllegalArgumentException().isThrownBy(() -> new TestBuilder(initAnListWith("example of invalid field")).build())
+                .withMessage("example of invalid field");
     }
 
     @SuppressWarnings("unchecked") private List<FieldValidator.ValidateField<Bean>> initAnListWith(
@@ -40,9 +35,9 @@ class DomainBuilderTest {
     private class Bean {
     }
 
-    private class TestDomainBuilder extends DomainBuilder<Bean> {
+    private class TestBuilder extends Builder<Bean> {
 
-        TestDomainBuilder(List<FieldValidator.ValidateField<Bean>> validFields) {
+        TestBuilder(List<FieldValidator.ValidateField<Bean>> validFields) {
             super(validFields);
         }
 

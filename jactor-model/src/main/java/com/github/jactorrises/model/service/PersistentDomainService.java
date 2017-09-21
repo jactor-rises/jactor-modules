@@ -2,10 +2,10 @@ package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.domain.PersistentDomain;
+import com.github.jactorrises.model.domain.guestbook.GuestBookBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
-import com.github.jactorrises.model.domain.guestbook.GuestBookDomainBuilder;
+import com.github.jactorrises.model.domain.guestbook.GuestBookEntryBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomainBuilder;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
@@ -51,13 +51,13 @@ public class PersistentDomainService {
     }
 
     GuestBookDomain findUnique(GuestBookCriterion guestBookCriterion) {
-        return GuestBookDomainBuilder.build(hibernateRepository.load(
+        return GuestBookBuilder.build(hibernateRepository.load(
                 new RepositoryCriterion<>(GuestBookEntity.class).with(guestBookCriterion.id)
         ));
     }
 
     GuestBookEntryDomain findUnique(GuestBookEntryCriterion guestBookEntryCriterion) {
-        return GuestBookEntryDomainBuilder.build(hibernateRepository.load(
+        return GuestBookEntryBuilder.build(hibernateRepository.load(
                 new RepositoryCriterion<>(GuestBookEntryEntity.class).with(guestBookEntryCriterion.id)
         ));
     }

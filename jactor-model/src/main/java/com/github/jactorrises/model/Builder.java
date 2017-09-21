@@ -8,11 +8,11 @@ import java.util.List;
  *
  * @param <T> type of domain to build
  */
-public abstract class DomainBuilder<T> {
+public abstract class Builder<T> {
     private static FieldValidator fieldValidator;
     private final List<FieldValidator.ValidateField<T>> validateFields;
 
-    protected DomainBuilder(List<FieldValidator.ValidateField<T>> validateFields) {
+    protected Builder(List<FieldValidator.ValidateField<T>> validateFields) {
         this.validateFields = validateFields;
     }
 
@@ -26,7 +26,7 @@ public abstract class DomainBuilder<T> {
     }
 
     private static void useFieldValidator(FieldValidator fieldValidator) {
-        DomainBuilder.fieldValidator = fieldValidator;
+        Builder.fieldValidator = fieldValidator;
     }
 
     static {

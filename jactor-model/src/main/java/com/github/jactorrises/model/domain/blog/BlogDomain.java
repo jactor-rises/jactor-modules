@@ -2,8 +2,8 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.model.domain.PersistentDomain;
+import com.github.jactorrises.model.domain.user.UserBuilder;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.domain.user.UserDomainBuilder;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 
@@ -21,7 +21,7 @@ public class BlogDomain extends PersistentDomain<BlogEntity, Long> implements Bl
 
     @Override
     public UserDomain getUser() {
-        return userEntity() != null ? UserDomainBuilder.build(userEntity()) : null;
+        return userEntity() != null ? UserBuilder.build(userEntity()) : null;
     }
 
     private UserEntity userEntity() {
@@ -32,7 +32,7 @@ public class BlogDomain extends PersistentDomain<BlogEntity, Long> implements Bl
         return getEntity().getCreated();
     }
 
-    static BlogDomainBuilder aBlog() {
-        return new BlogDomainBuilder();
+    static BlogBuilder aBlog() {
+        return new BlogBuilder();
     }
 }

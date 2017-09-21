@@ -10,30 +10,30 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("The AdressDomainBuilder")
-class AddressDomainBuilderTest {
+class AddressBuilderTest {
 
     @DisplayName("should not build an instance without an address line 1")
     @Test void willNotBuildDomainWithoutAddressLine1() {
         assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withZipCode(1234).withCountry("NO").build())
-                .withMessage(AddressDomainBuilder.ADDRESS_LINE_1_CANNOT_BE_EMPTY);
+                .withMessage(AddressBuilder.ADDRESS_LINE_1_CANNOT_BE_EMPTY);
     }
 
     @DisplayName("should not build an instance with an empty address line 1")
     @Test void willNotBuildDomainWithAnEmptyAddressLine1() {
         assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withAddressLine1("").withZipCode(1234).withCountry("NO").build())
-                .withMessage(AddressDomainBuilder.ADDRESS_LINE_1_CANNOT_BE_EMPTY);
+                .withMessage(AddressBuilder.ADDRESS_LINE_1_CANNOT_BE_EMPTY);
     }
 
     @DisplayName("should not build an instance without a zip code")
     @Test void willNotBuildDomainWithoutZipCode() {
         assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withCountry("NO").build())
-                .withMessage(AddressDomainBuilder.ZIP_CODE_CANNOT_BE_NULL);
+                .withMessage(AddressBuilder.ZIP_CODE_CANNOT_BE_NULL);
     }
 
     @DisplayName("should not build an instance without a country")
     @Test void willNotBuildDomainWithoutCountry() {
         assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withZipCode(1234).build())
-                .withMessage(AddressDomainBuilder.COUNTRY_CANNOT_BE_NULL);
+                .withMessage(AddressBuilder.COUNTRY_CANNOT_BE_NULL);
     }
 
     @DisplayName("should build an instance when all required properties are set")
