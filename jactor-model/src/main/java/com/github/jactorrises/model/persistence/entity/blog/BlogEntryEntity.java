@@ -36,8 +36,16 @@ public class BlogEntryEntity extends PersistentEntity {
 
     BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
         super(blogEntryEntity);
-        blogEntity = new BlogEntity(blogEntryEntity.blogEntity);
-        persistentEntry = new PersistentEntry(blogEntryEntity.persistentEntry);
+        blogEntity = blogEntryEntity.copyBlog();
+        persistentEntry = blogEntryEntity.copyEntry();
+    }
+
+    private BlogEntity copyBlog() {
+        return blogEntity.copy();
+    }
+
+    private PersistentEntry copyEntry() {
+        return persistentEntry.copy();
     }
 
     @Override public boolean equals(Object o) {

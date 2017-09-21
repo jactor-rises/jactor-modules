@@ -33,7 +33,15 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
     public GuestBookEntity(GuestBookEntity guestBook) {
         super(guestBook);
         title = guestBook.title;
-        user = guestBook.user != null ? new UserEntity(guestBook.getUser()) : null;
+        user = guestBook.copyUser();
+    }
+
+    private UserEntity copyUser() {
+        return user != null ? user.copy() : null;
+    }
+
+    GuestBookEntity copy() {
+        return new GuestBookEntity(this);
     }
 
     @Override public boolean equals(Object o) {
