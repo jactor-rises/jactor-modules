@@ -5,6 +5,7 @@ import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.model.persistence.client.dao.UserDao;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserNameEmbeddable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -26,7 +27,7 @@ public class HibernateRepository implements UserDao {
 
     @Override public Optional<UserEntity> findUsing(UserName userName) {
         UserEntity userEntity = (UserEntity) session().createCriteria(UserEntity.class)
-                .add(Restrictions.eq("userName", userName.getName()))
+                .add(Restrictions.eq("userName", new UserNameEmbeddable(userName)))
                 .uniqueResult();
 
         return Optional.ofNullable(userEntity);
@@ -41,7 +42,7 @@ public class HibernateRepository implements UserDao {
         return entity;
     }
 
-    public <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
+    <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
         return session().load(entityClass, id);
     }
 

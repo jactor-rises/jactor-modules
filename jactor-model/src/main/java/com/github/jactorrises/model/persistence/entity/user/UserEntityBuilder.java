@@ -1,13 +1,15 @@
 package com.github.jactorrises.model.persistence.entity.user;
 
+import com.github.jactorrises.client.datatype.UserName;
+
 public class UserEntityBuilder {
-    private String userName;
+    private UserName userName;
     private String password;
 
     UserEntityBuilder() { }
 
     public UserEntityBuilder withUserName(String userName) {
-        this.userName = userName;
+        this.userName = new UserName(userName);
         return this;
     }
 

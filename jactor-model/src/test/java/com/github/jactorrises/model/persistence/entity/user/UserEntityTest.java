@@ -1,6 +1,7 @@
 package com.github.jactorrises.model.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
+import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,19 +24,16 @@ class UserEntityTest {
     @Test
     void willHaveCorrectImplementedHashCode() {
         UserEntity base = userEntityToTest;
-        base.setUserName("some user");
+        base.setUserName(new UserName("some user"));
         base.setPersonEntity(new PersonEntity());
         base.setEmailAddress(new EmailAddress("some@where"));
 
-        UserEntity equal = new UserEntity();
-        equal.setUserName("some user");
-        equal.setPersonEntity(new PersonEntity());
-        equal.setEmailAddress(new EmailAddress("some@where"));
+        UserEntity equal = new UserEntity(base);
 
         UserEntity notEqual = new UserEntity();
         notEqual.setEmailAddress(new EmailAddress("any@where"));
         notEqual.setPersonEntity(new PersonEntity());
-        notEqual.setUserName("some other user");
+        notEqual.setUserName(new UserName("some other user"));
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -50,7 +48,7 @@ class UserEntityTest {
     void willHaveCorrectImplementedEquals() {
         UserEntity base = userEntityToTest;
         base.setPersonEntity(new PersonEntity());
-        base.setUserName("some user");
+        base.setUserName(new UserName("some user"));
         base.setEmailAddress(new EmailAddress("some@where"));
 
         UserEntity equal = new UserEntity(base);
@@ -58,7 +56,7 @@ class UserEntityTest {
         UserEntity notEqual = new UserEntity();
         notEqual.setPersonEntity(new PersonEntity());
         equal.setEmailAddress(new EmailAddress("some@where"));
-        notEqual.setUserName("some other user");
+        notEqual.setUserName(new UserName("some other user"));
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),

@@ -1,11 +1,11 @@
 package com.github.jactorrises.model.domain.user;
 
-import com.github.jactorrises.model.domain.address.AddressDomain;
-import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.person.PersonDomainBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
+import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -43,11 +43,10 @@ class UserDomainBuilderTest {
     }
 
     private PersonDomainBuilder aValidPerson() {
-        return PersonDomain.aPerson()
-                .with(AddressDomain.anAddress()
-                        .withAddressLine1("out there")
-                        .withZipCode(666)
-                        .withCountry("NO")
-                );
+        return aPerson().with(anAddress()
+                .withAddressLine1("out there")
+                .withZipCode(666)
+                .withCountry("NO")
+        );
     }
 }

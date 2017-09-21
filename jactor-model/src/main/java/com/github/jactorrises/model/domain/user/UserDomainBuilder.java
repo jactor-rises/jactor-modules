@@ -1,6 +1,7 @@
 package com.github.jactorrises.model.domain.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
+import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.person.PersonDomainBuilder;
@@ -26,7 +27,7 @@ public final class UserDomainBuilder extends DomainBuilder<UserDomain> {
     }
 
     public UserDomainBuilder withUserName(String userName) {
-        userEntity.setUserName(userName);
+        userEntity.setUserName(new UserName(userName));
         return this;
     }
 

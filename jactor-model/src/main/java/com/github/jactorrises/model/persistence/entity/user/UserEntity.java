@@ -26,7 +26,7 @@ import static java.util.Objects.hash;
 public class UserEntity extends PersistentEntity implements User {
 
     @Column(name = "PASSWORD", nullable = false) private String password;
-    @Column(name = "USER_NAME", nullable = false) private String userName;
+    @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
@@ -69,7 +69,7 @@ public class UserEntity extends PersistentEntity implements User {
     }
 
     public UserName getUserName() {
-        return convertTo(userName, UserName.class);
+        return userName != null ?userName.fetchUserName() : null;
     }
 
     public PersonEntity getPerson() {
@@ -81,7 +81,7 @@ public class UserEntity extends PersistentEntity implements User {
     }
 
     public boolean isUserNameEmailAddress() {
-        return userName.equals(emailAddress.asString());
+        return userName.isName(emailAddress);
     }
 
     public void setPassword(String password) {
@@ -92,8 +92,8 @@ public class UserEntity extends PersistentEntity implements User {
         this.emailAddress = new EmailAddressEmbeddable(emailAddress);
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(UserName userName) {
+        this.userName = new UserNameEmbeddable(userName);
     }
 
     public void setPersonEntity(PersonEntity personEntity) {

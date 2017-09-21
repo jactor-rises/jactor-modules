@@ -7,8 +7,9 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 class EmailAddressEmbeddable {
-    private final String emailAddress;
+    private String emailAddress;
 
+    @SuppressWarnings("unused") // used by hibernate
     EmailAddressEmbeddable() {
         this.emailAddress = null;
     }

@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.persistence.entity;
 
-import com.github.jactorrises.client.datatype.UserName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,11 +36,6 @@ class PersistentEntityTest {
         assertThat(illegalArgumentException.getMessage())
                 .contains(PersistentEntity.class.getSimpleName())
                 .contains("is not a type known for any converter");
-    }
-
-    @DisplayName("should convert to a user name")
-    @Test void willConvertUserName() {
-        assertThat(testPersistentEntity.convertTo("jactor", UserName.class)).isEqualTo(new UserName("jactor"));
     }
 
     private class TestPersistentEntity extends PersistentEntity {

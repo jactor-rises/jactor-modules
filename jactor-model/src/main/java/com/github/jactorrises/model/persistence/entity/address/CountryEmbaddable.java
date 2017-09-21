@@ -29,4 +29,8 @@ class CountryEmbaddable {
     @Override public boolean equals(Object obj) {
         return obj == this || obj != null && obj.getClass().equals(getClass()) && Objects.equals(country, ((CountryEmbaddable) obj).country);
     }
+
+    @Override public String toString() {
+        return country;
+    }
 }
