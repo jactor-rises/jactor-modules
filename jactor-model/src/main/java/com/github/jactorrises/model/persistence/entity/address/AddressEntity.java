@@ -35,14 +35,12 @@ public class AddressEntity extends PersistentEntity implements Address {
     public AddressEntity(AddressEntity address) {
         super(address);
 
-        if (address != null) {
-            addressLine1 = address.getAddressLine1();
-            addressLine2 = address.getAddressLine2();
-            addressLine3 = address.getAddressLine3();
-            city = address.getCity();
-            country = address.country;
-            zipCode = address.getZipCode();
-        }
+        addressLine1 = address.getAddressLine1();
+        addressLine2 = address.getAddressLine2();
+        addressLine3 = address.getAddressLine3();
+        city = address.getCity();
+        country = address.country;
+        zipCode = address.getZipCode();
     }
 
     @Override public boolean equals(Object o) {
