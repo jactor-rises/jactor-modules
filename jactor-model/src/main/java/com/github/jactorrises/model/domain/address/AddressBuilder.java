@@ -1,8 +1,8 @@
 package com.github.jactorrises.model.domain.address;
 
-import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -15,7 +15,7 @@ public final class AddressBuilder extends Builder<AddressDomain> {
     static final String COUNTRY_CANNOT_BE_NULL = "A country must be provided";
     static final String ZIP_CODE_CANNOT_BE_NULL = "A Zip code must be provided";
 
-    private final AddressEntity addressEntity = anAddress().build();
+    private final AddressEntityBuilder addressEntityBuilder = anAddress();
 
     AddressBuilder() {
         super(asList(
@@ -26,37 +26,37 @@ public final class AddressBuilder extends Builder<AddressDomain> {
     }
 
     public AddressBuilder withCity(String city) {
-        addressEntity.setCity(city);
+        addressEntityBuilder.withCity(city);
         return this;
     }
 
     public AddressBuilder withCountry(String country) {
-        addressEntity.setCountry(new Country(country));
+        addressEntityBuilder.withCountryCode(country);
         return this;
     }
 
     public AddressBuilder withAddressLine1(String addressLine1) {
-        addressEntity.setAddressLine1(addressLine1);
+        addressEntityBuilder.withAddressLine1(addressLine1);
         return this;
     }
 
     AddressBuilder appendAddressLine2(String addressLine2) {
-        addressEntity.setAddressLine2(addressLine2);
+        addressEntityBuilder.withAddressLine2(addressLine2);
         return this;
     }
 
     AddressBuilder appendAddressLine3(String addressLine3) {
-        addressEntity.setAddressLine3(addressLine3);
+        addressEntityBuilder.withAddressLine3(addressLine3);
         return this;
     }
 
     public AddressBuilder withZipCode(Integer zipCode) {
-        addressEntity.setZipCode(zipCode);
+        addressEntityBuilder.withZipCode(zipCode);
         return this;
     }
 
     @Override protected AddressDomain buildBean() {
-        return new AddressDomain(addressEntity);
+        return new AddressDomain(addressEntityBuilder.build());
     }
 
     public static AddressDomain build(AddressEntity addressEntity) {
