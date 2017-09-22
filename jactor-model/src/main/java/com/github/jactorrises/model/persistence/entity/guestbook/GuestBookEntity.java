@@ -24,13 +24,13 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
 
-    public GuestBookEntity() {
+    GuestBookEntity() {
     }
 
     /**
-     * @param guestBook will be used to copy an instance...
+     * @param guestBook to copy...
      */
-    public GuestBookEntity(GuestBookEntity guestBook) {
+    GuestBookEntity(GuestBookEntity guestBook) {
         super(guestBook);
         title = guestBook.title;
         user = guestBook.copyUser();

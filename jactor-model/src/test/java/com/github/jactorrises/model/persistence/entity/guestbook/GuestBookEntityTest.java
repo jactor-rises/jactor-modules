@@ -1,33 +1,29 @@
 package com.github.jactorrises.model.persistence.entity.guestbook;
 
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A GuestBookEntity")
 class GuestBookEntityTest {
 
-    private GuestBookEntity guestBookEntityToTest;
-
-    @BeforeEach void initClassToTest() {
-        guestBookEntityToTest = new GuestBookEntity();
-    }
-
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        GuestBookEntity base = guestBookEntityToTest;
-        base.setTitle("title");
-        base.setUser(new UserEntity());
+        GuestBookEntity base = aGuestBook()
+                .with(aUser().build())
+                .withTitle("title")
+                .build();
 
         GuestBookEntity equal = new GuestBookEntity(base);
 
-        GuestBookEntity notEqual = new GuestBookEntity();
-        notEqual.setTitle("another title");
-        notEqual.setUser(new UserEntity());
+        GuestBookEntity notEqual = aGuestBook()
+                .with(aUser().build())
+                .withTitle("another title")
+                .build();
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -39,15 +35,17 @@ class GuestBookEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        GuestBookEntity base = guestBookEntityToTest;
-        base.setTitle("title");
-        base.setUser(new UserEntity());
+        GuestBookEntity base = aGuestBook()
+                .with(aUser().build())
+                .withTitle("title")
+                .build();
 
         GuestBookEntity equal = new GuestBookEntity(base);
 
-        GuestBookEntity notEqual = new GuestBookEntity();
-        notEqual.setTitle("another title");
-        notEqual.setUser(new UserEntity());
+        GuestBookEntity notEqual = aGuestBook()
+                .with(aUser().build())
+                .withTitle("another title")
+                .build();
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),

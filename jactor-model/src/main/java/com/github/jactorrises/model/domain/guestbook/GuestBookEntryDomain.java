@@ -15,7 +15,7 @@ public class GuestBookEntryDomain extends PersistentDomain<GuestBookEntryEntity,
     }
 
     @Override public GuestBookDomain getGuestBook() {
-        return guestBookEntity() != null ? GuestBookDomainBuilder.build(guestBookEntity()) : null;
+        return guestBookEntity() != null ? GuestBookBuilder.build(guestBookEntity()) : null;
     }
 
     private GuestBookEntity guestBookEntity() {
@@ -34,7 +34,7 @@ public class GuestBookEntryDomain extends PersistentDomain<GuestBookEntryEntity,
         return getEntity().getCreatorName();
     }
 
-    public static GuestBookEntryDomainBuilder aGuestBookEntry() {
-        return new GuestBookEntryDomainBuilder();
+    public static GuestBookEntryBuilder aGuestBookEntry() {
+        return new GuestBookEntryBuilder();
     }
 }

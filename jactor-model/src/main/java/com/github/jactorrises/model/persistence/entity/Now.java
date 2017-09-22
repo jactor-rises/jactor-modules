@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.client.time;
+package com.github.jactorrises.model.persistence.entity;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -24,7 +24,7 @@ public class Now {
         return instance.nowAsDate();
     }
 
-    protected static void reset(Now instance) {
+    static void reset(Now instance) {
         synchronized (SYNC) {
             Now.instance = instance;
         }

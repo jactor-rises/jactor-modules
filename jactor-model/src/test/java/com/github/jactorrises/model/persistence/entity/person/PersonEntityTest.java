@@ -1,46 +1,39 @@
 package com.github.jactorrises.model.persistence.entity.person;
 
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-
+import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A PersonEntity")
 class PersonEntityTest {
 
-    private PersonEntity personEntityToTest;
-
-    @BeforeEach void initPersonEntityImpl() {
-        personEntityToTest = new PersonEntity();
-    }
-
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        PersonEntity base = personEntityToTest;
-        base.setAddressEntity(new AddressEntity());
-        base.setDescription("some description");
-        base.setFirstName(new Name("ola"));
-        base.setLastName(new Name("norman"));
-        base.setUserEntity(new UserEntity());
-        base.setLocale(new Locale("no"));
+        PersonEntity base = aPerson()
+                .with(anAddress())
+                .with(aUser())
+                .withDescription("some description")
+                .withFirstName("ola")
+                .withLastName("norman")
+                .withLocale("no")
+                .build();
 
-        PersonEntity equal = new PersonEntity(personEntityToTest);
+        PersonEntity equal = new PersonEntity(base);
 
-        PersonEntity notEqual = new PersonEntity();
-        notEqual.setAddressEntity(new AddressEntity());
-        notEqual.setDescription("some description");
-        notEqual.setFirstName(new Name("ola"));
-        notEqual.setLastName(new Name("norman"));
-        notEqual.setUserEntity(new UserEntity());
-        notEqual.setLocale(new Locale("se"));
+        PersonEntity notEqual = aPerson()
+                .with(anAddress())
+                .with(aUser())
+                .withDescription("some description")
+                .withFirstName("ola")
+                .withLastName("norman")
+                .withLocale("se")
+                .build();
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()").isEqualTo(equal.hashCode()),
@@ -52,23 +45,25 @@ class PersonEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        PersonEntity base = personEntityToTest;
-        base.setAddressEntity(new AddressEntity());
-        base.setDescription("some description");
-        base.setFirstName(new Name("ola"));
-        base.setLastName(new Name("norman"));
-        base.setUserEntity(new UserEntity());
-        base.setLocale(new Locale("no"));
+        PersonEntity base = aPerson()
+                .with(anAddress())
+                .with(aUser())
+                .withDescription("some description")
+                .withFirstName("ola")
+                .withLastName("norman")
+                .withLocale("no")
+                .build();
 
-        PersonEntity equal = new PersonEntity(personEntityToTest);
+        PersonEntity equal = new PersonEntity(base);
 
-        PersonEntity notEqual = new PersonEntity();
-        notEqual.setAddressEntity(new AddressEntity());
-        notEqual.setDescription("some description");
-        notEqual.setFirstName(new Name("ola"));
-        notEqual.setLastName(new Name("norman"));
-        notEqual.setUserEntity(new UserEntity());
-        notEqual.setLocale(new Locale("se"));
+        PersonEntity notEqual = aPerson()
+                .with(anAddress())
+                .with(aUser())
+                .withDescription("some description")
+                .withFirstName("ola")
+                .withLastName("norman")
+                .withLocale("se")
+                .build();
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),

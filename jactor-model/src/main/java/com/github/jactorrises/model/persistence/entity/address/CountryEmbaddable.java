@@ -15,7 +15,7 @@ class CountryEmbaddable {
     }
 
     CountryEmbaddable(Country country) {
-        this.country = country.getCountryCode();
+        this.country = country != null ? country.getCountryCode() : null;
     }
 
     Country fetchCountry() {

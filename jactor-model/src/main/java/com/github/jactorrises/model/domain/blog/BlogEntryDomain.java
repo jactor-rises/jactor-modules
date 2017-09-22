@@ -15,7 +15,7 @@ public class BlogEntryDomain extends PersistentDomain<BlogEntryEntity, Long> imp
     }
 
     @Override public BlogDomain getBlog() {
-        return blogEntity() != null ? BlogDomainBuilder.build(blogEntity()) : null;
+        return blogEntity() != null ? BlogBuilder.build(blogEntity()) : null;
     }
 
     private BlogEntity blogEntity() {
@@ -34,7 +34,7 @@ public class BlogEntryDomain extends PersistentDomain<BlogEntryEntity, Long> imp
         return getEntity().getCreatorName();
     }
 
-    static BlogEntryDomainBuilder aBlogEntry() {
-        return new BlogEntryDomainBuilder();
+    static BlogEntryBuilder aBlogEntry() {
+        return new BlogEntryBuilder();
     }
 }

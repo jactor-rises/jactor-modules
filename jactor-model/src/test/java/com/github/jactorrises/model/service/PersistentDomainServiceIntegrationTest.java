@@ -3,7 +3,7 @@ package com.github.jactorrises.model.service;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.JactorModule;
-import com.github.jactorrises.model.domain.address.AddressDomainBuilder;
+import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.person.PersonDomain;
@@ -65,7 +65,7 @@ public class PersistentDomainServiceIntegrationTest {
     }
 
     @Test public void willSaveGuestbookWithRelations() {
-        AddressDomainBuilder address = anAddress()
+        AddressBuilder address = anAddress()
                 .withAddressLine1("the streets")
                 .withCity("Dirdal")
                 .withCountry("NO")

@@ -29,11 +29,11 @@ public class BlogEntity extends PersistentEntity implements Blog {
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
 
-    public BlogEntity() {
+    BlogEntity() {
         created = new DateTextEmbeddable(LocalDate.now());
     }
 
-    public BlogEntity(BlogEntity blogEntity) {
+    BlogEntity(BlogEntity blogEntity) {
         super(blogEntity);
         created = blogEntity.created;
         title = blogEntity.getTitle();

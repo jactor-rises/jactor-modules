@@ -8,12 +8,12 @@ import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@DisplayName("The PersonDomainBuilder")
-class PersonDomainBuilderTest {
+@DisplayName("The PersonBuilder")
+class PersonBuilderTest {
 
     @DisplayName("should not build an instance without an address")
     @Test void willNotBuildPersonDomainWithoutAnAddress() {
-        assertThatIllegalArgumentException().isThrownBy(aPerson()::build).withMessage(PersonDomainBuilder.AN_ADDRESS_MUST_BE_PRESENT);
+        assertThatIllegalArgumentException().isThrownBy(aPerson()::build).withMessage(PersonBuilder.AN_ADDRESS_MUST_BE_PRESENT);
     }
 
     @DisplayName("should build an instance when all required fields are set")

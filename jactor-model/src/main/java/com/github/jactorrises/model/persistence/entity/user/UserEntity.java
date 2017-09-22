@@ -30,13 +30,13 @@ public class UserEntity extends PersistentEntity implements User {
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
-    public UserEntity() {
+    UserEntity() {
     }
 
     /**
      * @param user is used to create an entity
      */
-    public UserEntity(UserEntity user) {
+    UserEntity(UserEntity user) {
         super(user);
         emailAddress = user.emailAddress;
         password = user.getPassword();
@@ -77,7 +77,7 @@ public class UserEntity extends PersistentEntity implements User {
     }
 
     public UserName getUserName() {
-        return userName != null ?userName.fetchUserName() : null;
+        return userName != null ? userName.fetchUserName() : null;
     }
 
     public PersonEntity getPerson() {
@@ -97,7 +97,7 @@ public class UserEntity extends PersistentEntity implements User {
     }
 
     public void setEmailAddress(EmailAddress emailAddress) {
-        this.emailAddress = new EmailAddressEmbeddable(emailAddress);
+        this.emailAddress = emailAddress != null ? new EmailAddressEmbeddable(emailAddress) : null;
     }
 
     public void setUserName(UserName userName) {

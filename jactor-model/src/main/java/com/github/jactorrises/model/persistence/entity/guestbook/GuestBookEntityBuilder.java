@@ -1,8 +1,9 @@
 package com.github.jactorrises.model.persistence.entity.guestbook;
 
+import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 
-public class GuestBookEntityBuilder {
+public class GuestBookEntityBuilder extends Builder<GuestBookEntity> {
 
     private String title;
     private UserEntity userEntity;
@@ -19,7 +20,7 @@ public class GuestBookEntityBuilder {
         return this;
     }
 
-    public GuestBookEntity build() {
+    @Override protected GuestBookEntity buildBean() {
         GuestBookEntity guestBookEntity = new GuestBookEntity();
         guestBookEntity.setTitle(title);
         guestBookEntity.setUser(userEntity);

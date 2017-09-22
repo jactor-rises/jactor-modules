@@ -3,8 +3,8 @@ package com.github.jactorrises.model.domain.person;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.domain.PersistentDomain;
+import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
-import com.github.jactorrises.model.domain.address.AddressDomainBuilder;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
@@ -38,14 +38,14 @@ public class PersonDomain extends PersistentDomain<PersonEntity, Long> implement
     }
 
     @Override public AddressDomain getAddress() {
-        return addressEntity() != null ? AddressDomainBuilder.build(addressEntity()) : null;
+        return addressEntity() != null ? AddressBuilder.build(addressEntity()) : null;
     }
 
     private AddressEntity addressEntity() {
         return getEntity().getAddress();
     }
 
-    public static PersonDomainBuilder aPerson() {
-        return new PersonDomainBuilder();
+    public static PersonBuilder aPerson() {
+        return new PersonBuilder();
     }
 }

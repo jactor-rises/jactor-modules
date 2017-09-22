@@ -35,7 +35,7 @@ public class PersonEntity extends PersistentEntity implements Person {
     @Transient private NameEmbeddable lastName;
     @Transient private Locale locale;
 
-    public PersonEntity() {
+    PersonEntity() {
     }
 
     PersonEntity(PersonEntity person) {
@@ -125,5 +125,9 @@ public class PersonEntity extends PersistentEntity implements Person {
 
     void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    public static PersonEntityBuilder aPerson() {
+        return new PersonEntityBuilder();
     }
 }

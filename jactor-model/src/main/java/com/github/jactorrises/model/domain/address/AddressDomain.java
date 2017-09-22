@@ -35,7 +35,7 @@ public class AddressDomain extends PersistentDomain<AddressEntity, Long> impleme
         return getEntity().getZipCode();
     }
 
-    public static AddressDomainBuilder anAddress() {
-        return new AddressDomainBuilder();
+    public static AddressBuilder anAddress() {
+        return new AddressBuilder();
     }
 }

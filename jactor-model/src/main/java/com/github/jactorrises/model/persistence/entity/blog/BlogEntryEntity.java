@@ -31,7 +31,7 @@ public class BlogEntryEntity extends PersistentEntity {
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    public BlogEntryEntity() {
+    BlogEntryEntity() {
     }
 
     BlogEntryEntity(BlogEntryEntity blogEntryEntity) {

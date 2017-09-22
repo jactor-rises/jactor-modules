@@ -354,11 +354,7 @@ public class HibernateRepositoryIntegrationTest {
         });
     }
 
-    private Session session() {
-        return sessionFactory.getCurrentSession();
-    }
-
-    @SuppressWarnings("ConstantConditions") @Test
+    @Test
     public void shouldFindDefaultUser() {
         hibernateRepository.saveOrUpdate(
                 aUser()
@@ -370,8 +366,12 @@ public class HibernateRepositoryIntegrationTest {
         Optional<UserEntity> jactor = hibernateRepository.findUsing(new UserName("jactor"));
 
         assertSoftly(softly -> {
-            softly.assertThat(jactor).as("jactor is present").isPresent();
+            softly.assertThat(jactor.isPresent()).as("jactor is present").isTrue();
             softly.assertThat(jactor.get().getPassword()).isEqualTo("enter");
         });
+    }
+
+    private Session session() {
+        return sessionFactory.getCurrentSession();
     }
 }
