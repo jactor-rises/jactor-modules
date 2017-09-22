@@ -39,17 +39,17 @@ public class PersonEntityBuilder extends Builder<PersonEntity> {
         return this;
     }
 
-    public PersonEntityBuilder withFirstName(String firstName) {
+    PersonEntityBuilder withFirstName(String firstName) {
         this.firstName = new Name(firstName);
         return this;
     }
 
-    public PersonEntityBuilder withLastName(String lastName) {
+    PersonEntityBuilder withLastName(String lastName) {
         this.lastName = new Name(lastName);
         return this;
     }
 
-    public PersonEntityBuilder withLocale(String locale) {
+    PersonEntityBuilder withLocale(String locale) {
         this.locale = new Locale(locale);
         return this;
     }
@@ -59,7 +59,7 @@ public class PersonEntityBuilder extends Builder<PersonEntity> {
         personEntity.setAddressEntity(addressEntity);
         personEntity.setDescription(description);
         personEntity.setFirstName(firstName);
-        personEntity.setLastName(lastName);
+        personEntity.setSurname(lastName);
         personEntity.setLocale(locale);
         personEntity.setUserEntity(userEntity);
 

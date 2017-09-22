@@ -32,7 +32,7 @@ public class PersonEntity extends PersistentEntity implements Person {
     @Column(name = "DESCRIPTION") private String description;
     @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
     @Transient private NameEmbeddable firstName;
-    @Transient private NameEmbeddable lastName;
+    @Transient private NameEmbeddable surname;
     @Transient private Locale locale;
 
     PersonEntity() {
@@ -43,7 +43,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         addressEntity = person.copyAddress();
         description = person.description;
         firstName = person.firstName;
-        lastName = person.lastName;
+        surname = person.surname;
         locale = person.getLocale();
         userEntity = person.copyUser();
     }
@@ -65,18 +65,18 @@ public class PersonEntity extends PersistentEntity implements Person {
                 Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
                 Objects.equals(description, ((PersonEntity) o).description) &&
                 Objects.equals(firstName, ((PersonEntity) o).firstName) &&
-                Objects.equals(lastName, ((PersonEntity) o).lastName) &&
+                Objects.equals(surname, ((PersonEntity) o).surname) &&
                 Objects.equals(userEntity, ((PersonEntity) o).userEntity) &&
                 Objects.equals(locale, ((PersonEntity) o).locale);
     }
 
     @Override public int hashCode() {
-        return hash(addressEntity, description, firstName, lastName, userEntity, locale);
+        return hash(addressEntity, description, firstName, surname, userEntity, locale);
     }
 
     @Override public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .appendSuper(super.toString()).append(firstName).append(lastName).append(userEntity).append(addressEntity).toString();
+                .appendSuper(super.toString()).append(firstName).append(surname).append(userEntity).append(addressEntity).toString();
     }
 
     @Override public AddressEntity getAddress() {
@@ -87,8 +87,8 @@ public class PersonEntity extends PersistentEntity implements Person {
         return firstName.fetchName();
     }
 
-    @Override public Name getLastName() {
-        return lastName.fetchName();
+    @Override public Name getSurname() {
+        return surname.fetchName();
     }
 
     @Override public Locale getLocale() {
@@ -103,7 +103,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         return userEntity;
     }
 
-    public void setAddressEntity(AddressEntity addressEntity) {
+    void setAddressEntity(AddressEntity addressEntity) {
         this.addressEntity = addressEntity;
     }
 
@@ -115,8 +115,8 @@ public class PersonEntity extends PersistentEntity implements Person {
         this.firstName = new NameEmbeddable(firstName);
     }
 
-    void setLastName(Name lastName) {
-        this.lastName = new NameEmbeddable(lastName);
+    void setSurname(Name surname) {
+        this.surname = new NameEmbeddable(surname);
     }
 
     public void setUserEntity(UserEntity userEntity) {
