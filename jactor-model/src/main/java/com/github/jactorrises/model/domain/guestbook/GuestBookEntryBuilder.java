@@ -2,11 +2,14 @@ package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static java.util.Arrays.asList;
 
 public final class GuestBookEntryBuilder extends Builder<GuestBookEntryDomain> {
@@ -14,7 +17,7 @@ public final class GuestBookEntryBuilder extends Builder<GuestBookEntryDomain> {
     static final String THE_ENTRY_CANNOT_BE_EMPTY = "The entry cannot be empty";
     private static final String THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE = "The entry must be created by someone";
 
-    private final GuestBookEntryEntity guestBookEntryEntity = new GuestBookEntryEntity();
+    private final GuestBookEntryEntityBuilder guestBookEntryEntityBuilder = aGuestBookEntry();
 
     GuestBookEntryBuilder() {
         super(asList(
@@ -25,22 +28,28 @@ public final class GuestBookEntryBuilder extends Builder<GuestBookEntryDomain> {
     }
 
     public GuestBookEntryBuilder withEntry(String entry, String guestName) {
-        guestBookEntryEntity.setEntry(entry);
-        guestBookEntryEntity.setCreatorName(guestName);
+        guestBookEntryEntityBuilder
+                .withEntry(entry)
+                .withCreatorName(guestName);
+
         return this;
     }
 
     public GuestBookEntryBuilder with(GuestBookEntity guestBookEntity) {
-        guestBookEntryEntity.setGuestBook(guestBookEntity);
+        guestBookEntryEntityBuilder.with(guestBookEntity);
         return this;
     }
 
     public GuestBookEntryBuilder with(GuestBookDomain guestBookDomain) {
-        return  with(guestBookDomain.getEntity());
+        return with(guestBookDomain.getEntity());
+    }
+
+    public GuestBookEntryBuilder with(GuestBookEntityBuilder guestBookEntityBuilder) {
+        return with(guestBookEntityBuilder.build());
     }
 
     @Override protected GuestBookEntryDomain buildBean() {
-        return new GuestBookEntryDomain(guestBookEntryEntity);
+        return new GuestBookEntryDomain(guestBookEntryEntityBuilder.build());
     }
 
     public static GuestBookEntryDomain build(GuestBookEntryEntity guestBookEntryEntity) {

@@ -3,19 +3,21 @@ package com.github.jactorrises.model.domain.guestbook;
 import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static java.util.Arrays.asList;
 
 public final class GuestBookBuilder extends Builder<GuestBookDomain> {
     static final String THE_GUEST_BOOK_MUST_BELONG_TO_A_USER = "The guest book must belong to a user";
     static final String THE_TITLE_CANNOT_BE_BLANK = "The title cannot be blank";
 
-    private final GuestBookEntity guestBookEntity = new GuestBookEntity();
+    private final GuestBookEntityBuilder guestBookEntity = aGuestBook();
 
     GuestBookBuilder() {
         super(asList(
@@ -25,12 +27,12 @@ public final class GuestBookBuilder extends Builder<GuestBookDomain> {
     }
 
     public GuestBookBuilder withTitle(String title) {
-        guestBookEntity.setTitle(title);
+        guestBookEntity.withTitle(title);
         return this;
     }
 
     public GuestBookBuilder with(UserEntity userEntity) {
-        guestBookEntity.setUser(userEntity);
+        guestBookEntity.with(userEntity);
         return this;
     }
 
@@ -44,7 +46,7 @@ public final class GuestBookBuilder extends Builder<GuestBookDomain> {
     }
 
     @Override protected GuestBookDomain buildBean() {
-        return new GuestBookDomain(guestBookEntity);
+        return new GuestBookDomain(guestBookEntity.build());
     }
 
     public static GuestBookDomain build(GuestBookEntity guestBook) {
