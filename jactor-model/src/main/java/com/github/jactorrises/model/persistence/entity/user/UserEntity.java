@@ -77,7 +77,7 @@ public class UserEntity extends PersistentEntity implements User {
     }
 
     public UserName getUserName() {
-        return userName != null ?userName.fetchUserName() : null;
+        return userName != null ? userName.fetchUserName() : null;
     }
 
     public PersonEntity getPerson() {

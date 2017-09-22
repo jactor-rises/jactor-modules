@@ -28,7 +28,7 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
     }
 
     /**
-     * @param guestBook will be used to copy an instance...
+     * @param guestBook to copy...
      */
     public GuestBookEntity(GuestBookEntity guestBook) {
         super(guestBook);
