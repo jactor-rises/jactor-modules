@@ -15,9 +15,13 @@ public class UserEntityBuilder extends Builder<UserEntity> {
     UserEntityBuilder() {
     }
 
-    public UserEntityBuilder with(PersonEntityBuilder personEntityBuilder) {
-        person = personEntityBuilder.build();
+    public UserEntityBuilder with(PersonEntity person) {
+        this.person = person;
         return this;
+    }
+
+    public UserEntityBuilder with(PersonEntityBuilder personEntityBuilder) {
+        return with(personEntityBuilder.build());
     }
 
     public UserEntityBuilder withEmailAddress(String emailAddress) {
