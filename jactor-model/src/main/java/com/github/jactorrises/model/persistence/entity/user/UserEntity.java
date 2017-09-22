@@ -97,7 +97,7 @@ public class UserEntity extends PersistentEntity implements User {
     }
 
     public void setEmailAddress(EmailAddress emailAddress) {
-        this.emailAddress = new EmailAddressEmbeddable(emailAddress);
+        this.emailAddress = emailAddress != null ? new EmailAddressEmbeddable(emailAddress) : null;
     }
 
     public void setUserName(UserName userName) {
