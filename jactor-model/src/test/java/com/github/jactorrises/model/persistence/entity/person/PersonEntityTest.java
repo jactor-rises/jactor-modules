@@ -20,7 +20,7 @@ class PersonEntityTest {
                 .with(aUser())
                 .withDescription("some description")
                 .withFirstName("ola")
-                .withLastName("norman")
+                .withSurname("norman")
                 .withLocale("no")
                 .build();
 
@@ -31,7 +31,7 @@ class PersonEntityTest {
                 .with(aUser())
                 .withDescription("some description")
                 .withFirstName("ola")
-                .withLastName("norman")
+                .withSurname("norman")
                 .withLocale("se")
                 .build();
 
@@ -50,7 +50,7 @@ class PersonEntityTest {
                 .with(aUser())
                 .withDescription("some description")
                 .withFirstName("ola")
-                .withLastName("norman")
+                .withSurname("norman")
                 .withLocale("no")
                 .build();
 
@@ -61,7 +61,7 @@ class PersonEntityTest {
                 .with(aUser())
                 .withDescription("some description")
                 .withFirstName("ola")
-                .withLastName("norman")
+                .withSurname("norman")
                 .withLocale("se")
                 .build();
 
