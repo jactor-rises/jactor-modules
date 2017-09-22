@@ -9,32 +9,32 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A GuestBookEntryEntity")
 class GuestBookEntryEntityTest {
 
-    private GuestBookEntryEntity guestBookEntryEntityToTest;
-
-    @BeforeEach void initEntryForTestingWithNowAsPureDate() {
+    @BeforeEach void useNowAsPureDate() {
         NowAsPureDate.set();
-        guestBookEntryEntityToTest = new GuestBookEntryEntity();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        GuestBookEntryEntity base = guestBookEntryEntityToTest;
-        base.setGuestBook(new GuestBookEntity());
-        base.setEntry("some entry");
-        base.setCreatorName("some creator");
+        GuestBookEntryEntity base = aGuestBookEntry()
+                .with(new GuestBookEntity())
+                .withCreatorName("some creator")
+                .withEntry("some entry")
+                .build();
 
         GuestBookEntryEntity equal = new GuestBookEntryEntity(base);
 
-        GuestBookEntryEntity notEqual = new GuestBookEntryEntity();
-        notEqual.setGuestBook(new GuestBookEntity());
-        notEqual.setEntry("some other entry");
-        notEqual.setCreatorName("some other creator");
+        GuestBookEntryEntity notEqual = aGuestBookEntry()
+                .with(new GuestBookEntity())
+                .withCreatorName("some other creator")
+                .withEntry("some other entry")
+                .build();
 
         assertAll(
                 () -> assertThat(base.hashCode()).as("base.hashCode() is equal to equal.hashCode()", base, equal).isEqualTo(equal.hashCode()),
@@ -46,17 +46,19 @@ class GuestBookEntryEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        GuestBookEntryEntity base = guestBookEntryEntityToTest;
-        base.setGuestBook(new GuestBookEntity());
-        base.setEntry("some entry");
-        base.setCreatorName("some creator");
+        GuestBookEntryEntity base = aGuestBookEntry()
+                .with(new GuestBookEntity())
+                .withCreatorName("some creator")
+                .withEntry("some entry")
+                .build();
 
         GuestBookEntryEntity equal = new GuestBookEntryEntity(base);
 
-        GuestBookEntryEntity notEqual = new GuestBookEntryEntity();
-        notEqual.setGuestBook(new GuestBookEntity());
-        notEqual.setEntry("some other entry");
-        notEqual.setCreatorName("some other creator");
+        GuestBookEntryEntity notEqual = aGuestBookEntry()
+                .with(new GuestBookEntity())
+                .withCreatorName("some other creator")
+                .withEntry("some other entry")
+                .build();
 
         assertAll(
                 () -> assertThat(base).as("base is not equal to null").isNotEqualTo(null),
@@ -69,13 +71,15 @@ class GuestBookEntryEntityTest {
 
     @DisplayName("should set created time when initialized")
     @Test void willHaveCreationTimeOnEntryWhenCreated() {
-        assertThat(guestBookEntryEntityToTest.getCreatedTime()).isEqualTo(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
+        assertThat(new GuestBookEntryEntity().getCreatedTime()).isEqualTo(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
     }
 
     @DisplayName("should have an implementation of the toString method")
     @Test void shouldHaveAnImplementationOfTheToStringMethod() {
-        guestBookEntryEntityToTest.setCreatorName("jactor");
-        guestBookEntryEntityToTest.setEntry("hi");
+        GuestBookEntryEntity guestBookEntryEntityToTest = aGuestBookEntry()
+                .withCreatorName("jactor")
+                .withEntry("hi")
+                .build();
 
         assertThat(guestBookEntryEntityToTest.toString())
                 .contains("jactor")
