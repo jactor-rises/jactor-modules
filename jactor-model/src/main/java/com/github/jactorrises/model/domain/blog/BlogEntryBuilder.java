@@ -2,7 +2,8 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder;
+import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -15,7 +16,7 @@ public final class BlogEntryBuilder extends Builder<BlogEntryDomain> {
     static final String THE_ENTRY_CANNOT_BE_EMPTY = "The entry field cannot be empty";
     static final String THE_ENTRY_MUST_BE_CREATED_BY_SOMEONE = "The entry must be created by someone";
 
-    private final BlogEntryEntity blogEntryEntity = aBlogEntry().build();
+    private final BlogEntryEntityBuilder blogEntryEntityBuilder = aBlogEntry();
 
     BlogEntryBuilder() {
         super(asList(
@@ -26,17 +27,23 @@ public final class BlogEntryBuilder extends Builder<BlogEntryDomain> {
     }
 
     BlogEntryBuilder withEntry(String entry, String creator) {
-        blogEntryEntity.setEntry(entry);
-        blogEntryEntity.setCreatorName(creator);
+        blogEntryEntityBuilder
+                .withEntry(entry)
+                .withCreatorName(creator);
+
         return this;
     }
 
     public BlogEntryBuilder with(BlogEntity blogEntity) {
-        blogEntryEntity.setBlog(blogEntity);
+        blogEntryEntityBuilder.with(blogEntity);
         return this;
     }
 
+    public BlogEntryBuilder with(BlogEntityBuilder blogEntityBuilder) {
+        return with(blogEntityBuilder.build());
+    }
+
     @Override protected BlogEntryDomain buildBean() {
-        return new BlogEntryDomain(blogEntryEntity);
+        return new BlogEntryDomain(blogEntryEntityBuilder.build());
     }
 }
