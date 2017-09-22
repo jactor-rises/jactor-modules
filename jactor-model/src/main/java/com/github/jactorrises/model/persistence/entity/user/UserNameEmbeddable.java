@@ -20,7 +20,7 @@ public class UserNameEmbeddable {
     }
 
     UserName fetchUserName() {
-        return new UserName(userName);
+        return userName != null ? new UserName(userName) : null;
     }
 
     boolean isName(EmailAddressEmbeddable emailAddress) {

@@ -9,15 +9,14 @@ import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 @DisplayName("The UserBuilder")
 class UserBuilderTest {
 
     @DisplayName("should not build an instance without a user name")
     @Test void willNotBuildUserDomainWithoutUserName() {
-        assertThatNullPointerException().isThrownBy(() -> aUser().with(aValidPerson()).withPassword("password").build())
-                .withMessage("A name must be given");
+        assertThatIllegalArgumentException().isThrownBy(() -> aUser().with(aValidPerson()).withPassword("password").build())
+                .withMessage(UserBuilder.THE_USER_NAME_CANNOT_BE_NULL);
     }
 
     @DisplayName("should not build an instance without a person")
