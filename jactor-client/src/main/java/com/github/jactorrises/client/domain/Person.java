@@ -14,7 +14,7 @@ public interface Person extends Persistent<Long> {
 
     Name getFirstName();
 
-    Name getLastName();
+    Name getSurname();
 
     Locale getLocale();
 

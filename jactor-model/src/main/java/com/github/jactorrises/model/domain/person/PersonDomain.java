@@ -29,8 +29,8 @@ public class PersonDomain extends PersistentDomain<PersonEntity, Long> implement
         return getEntity().getFirstName();
     }
 
-    @Override public Name getLastName() {
-        return getEntity().getLastName();
+    @Override public Name getSurname() {
+        return getEntity().getSurname();
     }
 
     @Override public Locale getLocale() {
