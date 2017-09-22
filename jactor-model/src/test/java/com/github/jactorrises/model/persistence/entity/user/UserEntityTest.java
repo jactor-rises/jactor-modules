@@ -2,11 +2,11 @@ package com.github.jactorrises.model.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -25,14 +25,14 @@ class UserEntityTest {
     void willHaveCorrectImplementedHashCode() {
         UserEntity base = userEntityToTest;
         base.setUserName(new UserName("some user"));
-        base.setPersonEntity(new PersonEntity());
+        base.setPersonEntity(aPerson().build());
         base.setEmailAddress(new EmailAddress("some@where"));
 
         UserEntity equal = new UserEntity(base);
 
         UserEntity notEqual = new UserEntity();
         notEqual.setEmailAddress(new EmailAddress("any@where"));
-        notEqual.setPersonEntity(new PersonEntity());
+        notEqual.setPersonEntity(aPerson().build());
         notEqual.setUserName(new UserName("some other user"));
 
         assertAll(
@@ -47,14 +47,14 @@ class UserEntityTest {
     @Test
     void willHaveCorrectImplementedEquals() {
         UserEntity base = userEntityToTest;
-        base.setPersonEntity(new PersonEntity());
+        base.setPersonEntity(aPerson().build());
         base.setUserName(new UserName("some user"));
         base.setEmailAddress(new EmailAddress("some@where"));
 
         UserEntity equal = new UserEntity(base);
 
         UserEntity notEqual = new UserEntity();
-        notEqual.setPersonEntity(new PersonEntity());
+        notEqual.setPersonEntity(aPerson().build());
         equal.setEmailAddress(new EmailAddress("some@where"));
         notEqual.setUserName(new UserName("some other user"));
 

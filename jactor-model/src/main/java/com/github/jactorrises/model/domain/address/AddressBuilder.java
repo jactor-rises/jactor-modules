@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
+import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
 import static java.util.Arrays.asList;
 
 public final class AddressBuilder extends Builder<AddressDomain> {
@@ -14,7 +15,7 @@ public final class AddressBuilder extends Builder<AddressDomain> {
     static final String COUNTRY_CANNOT_BE_NULL = "A country must be provided";
     static final String ZIP_CODE_CANNOT_BE_NULL = "A Zip code must be provided";
 
-    private final AddressEntity addressEntity = new AddressEntity();
+    private final AddressEntity addressEntity = anAddress().build();
 
     AddressBuilder() {
         super(asList(

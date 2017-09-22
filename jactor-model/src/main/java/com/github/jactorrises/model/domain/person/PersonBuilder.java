@@ -7,12 +7,13 @@ import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 
 import java.util.Optional;
 
+import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
 import static java.util.Collections.singletonList;
 
 public final class PersonBuilder extends Builder<PersonDomain> {
     static final String AN_ADDRESS_MUST_BE_PRESENT = "An address must be present";
 
-    private PersonEntity personEntity = new PersonEntity();
+    private PersonEntity personEntity = aPerson().build();
 
     PersonBuilder() {
         super(singletonList(
