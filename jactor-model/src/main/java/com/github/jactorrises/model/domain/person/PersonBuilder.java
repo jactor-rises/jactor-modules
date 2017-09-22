@@ -4,6 +4,7 @@ import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilder;
 
 import java.util.Optional;
 
@@ -13,7 +14,7 @@ import static java.util.Collections.singletonList;
 public final class PersonBuilder extends Builder<PersonDomain> {
     static final String AN_ADDRESS_MUST_BE_PRESENT = "An address must be present";
 
-    private PersonEntity personEntity = aPerson().build();
+    private PersonEntityBuilder personEntityBuilder = aPerson();
 
     PersonBuilder() {
         super(singletonList(
@@ -21,12 +22,8 @@ public final class PersonBuilder extends Builder<PersonDomain> {
         ));
     }
 
-    @Override protected PersonDomain buildBean() {
-        return new PersonDomain(personEntity);
-    }
-
     public PersonBuilder with(AddressDomain address) {
-        personEntity.setAddressEntity(address.getEntity());
+        personEntityBuilder.with(address.getEntity());
         return this;
     }
 
@@ -35,8 +32,12 @@ public final class PersonBuilder extends Builder<PersonDomain> {
     }
 
     public PersonBuilder withDescription(String description) {
-        personEntity.setDescription(description);
+        personEntityBuilder.withDescription(description);
         return this;
+    }
+
+    @Override protected PersonDomain buildBean() {
+        return new PersonDomain(personEntityBuilder.build());
     }
 
     public static PersonDomain build(PersonEntity person) {

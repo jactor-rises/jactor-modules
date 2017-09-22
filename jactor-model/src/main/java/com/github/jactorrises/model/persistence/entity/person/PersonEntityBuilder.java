@@ -9,7 +9,7 @@ import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 
 import java.util.Locale;
 
-public class PersonEntityBuilder extends Builder<PersonEntity>{
+public class PersonEntityBuilder extends Builder<PersonEntity> {
     private AddressEntity addressEntity;
     private Locale locale;
     private Name firstName;
@@ -20,9 +20,13 @@ public class PersonEntityBuilder extends Builder<PersonEntity>{
     PersonEntityBuilder() {
     }
 
-    public PersonEntityBuilder with(AddressEntityBuilder addressEntityBuilder) {
-        addressEntity = addressEntityBuilder.build();
+    public PersonEntityBuilder with(AddressEntity addressEntity) {
+        this.addressEntity = addressEntity;
         return this;
+    }
+
+    public PersonEntityBuilder with(AddressEntityBuilder addressEntityBuilder) {
+        return with(addressEntityBuilder.build());
     }
 
     public PersonEntityBuilder with(UserEntityBuilder userEntityBuilder) {
