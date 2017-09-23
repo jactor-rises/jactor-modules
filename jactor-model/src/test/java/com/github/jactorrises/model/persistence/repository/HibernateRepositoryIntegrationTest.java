@@ -26,6 +26,7 @@ import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEnti
 import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)
@@ -84,10 +85,7 @@ public class HibernateRepositoryIntegrationTest {
         int noOfEntities = session().createCriteria(UserEntity.class).list().size();
 
         Long id = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         ).getId();
 
         assertSoftly(softly -> {
@@ -99,10 +97,7 @@ public class HibernateRepositoryIntegrationTest {
     @Test
     public void shouldReadUserProperties() {
         Long id = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         ).getId();
 
         session().flush();
@@ -110,10 +105,7 @@ public class HibernateRepositoryIntegrationTest {
 
         UserEntity userEntity = hibernateRepository.load(UserEntity.class, id);
 
-        assertSoftly(softly -> {
-            softly.assertThat(userEntity.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
-            softly.assertThat(userEntity.getPassword()).as("password").isEqualTo("enter");
-        });
+        assertThat(userEntity.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
     }
 
     @Test
@@ -121,10 +113,7 @@ public class HibernateRepositoryIntegrationTest {
         int noOfEntities = session().createCriteria(GuestBookEntity.class).list().size();
 
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -143,10 +132,7 @@ public class HibernateRepositoryIntegrationTest {
     @Test
     public void shouldReadGuestBookProperties() {
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -172,10 +158,7 @@ public class HibernateRepositoryIntegrationTest {
         int noOfEntities = session().createCriteria(GuestBookEntryEntity.class).list().size();
 
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
@@ -202,10 +185,7 @@ public class HibernateRepositoryIntegrationTest {
     @Test
     public void shouldReadGuestBookEntryProperties() {
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
@@ -240,10 +220,7 @@ public class HibernateRepositoryIntegrationTest {
         int noOfEntities = session().createCriteria(BlogEntity.class).list().size();
 
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -262,10 +239,7 @@ public class HibernateRepositoryIntegrationTest {
     @Test
     public void shouldReadBlogProperties() {
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -291,10 +265,7 @@ public class HibernateRepositoryIntegrationTest {
         int noOfEntities = session().createCriteria(BlogEntryEntity.class).list().size();
 
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         BlogEntity blogEntity = hibernateRepository.saveOrUpdate(
@@ -321,10 +292,7 @@ public class HibernateRepositoryIntegrationTest {
     @Test
     public void shouldReadBlogEntryProperties() {
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
-                        .withPassword("enter")
-                        .build()
+                aUser().withUserName("jactor").build()
         );
 
         BlogEntity blogEntity = hibernateRepository.saveOrUpdate(
@@ -359,16 +327,12 @@ public class HibernateRepositoryIntegrationTest {
         hibernateRepository.saveOrUpdate(
                 aUser()
                         .withUserName("jactor")
-                        .withPassword("enter")
                         .build()
         );
 
         Optional<UserEntity> jactor = hibernateRepository.findUsing(new UserName("jactor"));
 
-        assertSoftly(softly -> {
-            softly.assertThat(jactor.isPresent()).as("jactor is present").isTrue();
-            softly.assertThat(jactor.get().getPassword()).isEqualTo("enter");
-        });
+        assertThat(jactor.isPresent()).as("jactor is present").isTrue();
     }
 
     private Session session() {

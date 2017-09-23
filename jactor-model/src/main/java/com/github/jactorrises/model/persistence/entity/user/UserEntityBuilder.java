@@ -9,7 +9,6 @@ import com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilde
 public class UserEntityBuilder extends Builder<UserEntity> {
     private EmailAddress emailAddress;
     private PersonEntity person;
-    private String password;
     private UserName userName;
 
     UserEntityBuilder() {
@@ -34,16 +33,10 @@ public class UserEntityBuilder extends Builder<UserEntity> {
         return this;
     }
 
-    public UserEntityBuilder withPassword(String password) {
-        this.password = password;
-        return this;
-    }
-
     @Override protected UserEntity buildBean() {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmailAddress(emailAddress);
         userEntity.setPersonEntity(person);
-        userEntity.setPassword(password);
         userEntity.setUserName(userName);
 
         return userEntity;

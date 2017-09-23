@@ -21,8 +21,7 @@ public final class UserBuilder extends Builder<UserDomain> {
     UserBuilder() {
         super(asList(
                 domain -> domain.getUserName() != null ? Optional.empty() : Optional.of(THE_USER_NAME_CANNOT_BE_NULL),
-                domain -> domain.getPerson() != null ? Optional.empty() : Optional.of(THE_USER_MUST_BE_A_PERSON),
-                domain -> domain.getPassword() != null ? Optional.empty() : Optional.of(THE_FIELD_CANNOT_BE_EMPTY)
+                domain -> domain.getPerson() != null ? Optional.empty() : Optional.of(THE_USER_MUST_BE_A_PERSON)
         ));
     }
 
@@ -38,11 +37,6 @@ public final class UserBuilder extends Builder<UserDomain> {
 
     public UserBuilder with(PersonBuilder personDomainBuilder) {
         return with(personDomainBuilder.build());
-    }
-
-    public UserBuilder withPassword(String password) {
-        userEntityBuilder.withPassword(password);
-        return this;
     }
 
     public UserBuilder withEmailAddress(String emailAddress) {

@@ -9,16 +9,18 @@ import com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilde
 import java.util.Optional;
 
 import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
 
 public final class PersonBuilder extends Builder<PersonDomain> {
     static final String AN_ADDRESS_MUST_BE_PRESENT = "An address must be present";
+    static final String A_PERSON_NEEDS_A_SURNAME = "A person needs a surname";
 
     private PersonEntityBuilder personEntityBuilder = aPerson();
 
     PersonBuilder() {
-        super(singletonList(
-                domain -> domain.getAddress() != null ? Optional.empty() : Optional.of(AN_ADDRESS_MUST_BE_PRESENT)
+        super(asList(
+                domain -> domain.getAddress() != null ? Optional.empty() : Optional.of(AN_ADDRESS_MUST_BE_PRESENT),
+                domain -> domain.getSurname() != null ? Optional.empty() : Optional.of(A_PERSON_NEEDS_A_SURNAME)
         ));
     }
 
@@ -33,6 +35,21 @@ public final class PersonBuilder extends Builder<PersonDomain> {
 
     public PersonBuilder withDescription(String description) {
         personEntityBuilder.withDescription(description);
+        return this;
+    }
+
+    PersonBuilder withFirstName(String firstName) {
+        personEntityBuilder.withFirstName(firstName);
+        return this;
+    }
+
+    public PersonBuilder withSurname(String surname) {
+        personEntityBuilder.withSurname(surname);
+        return this;
+    }
+
+    PersonBuilder withLocale(String locale) {
+        personEntityBuilder.withLocale(locale);
         return this;
     }
 

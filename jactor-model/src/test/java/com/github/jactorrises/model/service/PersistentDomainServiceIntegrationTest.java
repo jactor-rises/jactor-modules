@@ -40,9 +40,10 @@ public class PersistentDomainServiceIntegrationTest {
     @Test public void shouldSaveUserDomain() {
         persistentDomainService.saveOrUpdate(
                 UserDomain.aUser().withUserName("titten")
-                        .withPassword("demo")
                         .withEmailAddress("jactor@rises")
-                        .with(aPerson().withDescription("description")
+                        .with(aPerson()
+                                .withDescription("description")
+                                .withSurname("jacobsen")
                                 .with(anAddress().withAddressLine1("the streets")
                                         .withCity("Dirdal")
                                         .withCountry("NO")
@@ -59,7 +60,6 @@ public class PersistentDomainServiceIntegrationTest {
             softly.assertThat(possibleUser).isPresent();
             UserDomain userDomain = possibleUser.get();
 //            softly.assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")); todo fix: should work after story #131 is resolved
-            softly.assertThat(userDomain.getPassword()).as("user.password").isEqualTo("demo");
             softly.assertThat(userDomain.getPerson().getDescription()).as("user.description").isEqualTo("description");
         });
     }
@@ -72,11 +72,11 @@ public class PersistentDomainServiceIntegrationTest {
                 .withZipCode(1234);
         PersonDomain person = aPerson()
                 .withDescription("description")
+                .withSurname("jacobsen")
                 .with(address)
                 .build();
         UserDomain user = UserDomain.aUser()
                 .withUserName("titten")
-                .withPassword("demo")
                 .withEmailAddress("jactor@rises")
                 .with(person)
                 .build();
@@ -96,9 +96,10 @@ public class PersistentDomainServiceIntegrationTest {
 
     @Test public void willSaveGuestBookEntryWithRelations() {
         UserDomain userDomain = UserDomain.aUser().withUserName("titten")
-                .withPassword("demo")
                 .withEmailAddress("jactor@rises")
-                .with(aPerson().withDescription("description")
+                .with(aPerson()
+                        .withDescription("description")
+                        .withSurname("nevland")
                         .with(anAddress().withAddressLine1("the streets")
                                 .withCity("Dirdal")
                                 .withCountry("NO")

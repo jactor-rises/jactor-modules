@@ -25,7 +25,6 @@ import static java.util.Objects.hash;
 @Table(name = "T_USER")
 public class UserEntity extends PersistentEntity implements User {
 
-    @Column(name = "PASSWORD", nullable = false) private String password;
     @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
@@ -39,7 +38,6 @@ public class UserEntity extends PersistentEntity implements User {
     UserEntity(UserEntity user) {
         super(user);
         emailAddress = user.emailAddress;
-        password = user.getPassword();
         personEntity = user.copyPerson();
         userName = user.userName;
     }
@@ -72,10 +70,6 @@ public class UserEntity extends PersistentEntity implements User {
                 .toString();
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public UserName getUserName() {
         return userName != null ? userName.fetchUserName() : null;
     }
@@ -90,10 +84,6 @@ public class UserEntity extends PersistentEntity implements User {
 
     public boolean isUserNameEmailAddress() {
         return userName.isName(emailAddress);
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setEmailAddress(EmailAddress emailAddress) {

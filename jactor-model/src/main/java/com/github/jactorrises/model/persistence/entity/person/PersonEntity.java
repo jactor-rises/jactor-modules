@@ -9,15 +9,16 @@ import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -31,9 +32,9 @@ public class PersonEntity extends PersistentEntity implements Person {
     @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
     @Column(name = "DESCRIPTION") private String description;
     @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
-    @Transient private NameEmbeddable firstName;
-    @Transient private NameEmbeddable surname;
-    @Transient private Locale locale;
+    @Embedded @AttributeOverride(name = "name", column = @Column(name = "FIRST_NAME")) private NameEmbeddable firstName;
+    @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
+    @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
 
     PersonEntity() {
     }
@@ -44,7 +45,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         description = person.description;
         firstName = person.firstName;
         surname = person.surname;
-        locale = person.getLocale();
+        locale = person.locale;
         userEntity = person.copyUser();
     }
 
@@ -92,7 +93,7 @@ public class PersonEntity extends PersistentEntity implements Person {
     }
 
     @Override public Locale getLocale() {
-        return locale;
+        return locale.fetchLocale();
     }
 
     @Override public String getDescription() {
@@ -124,7 +125,7 @@ public class PersonEntity extends PersistentEntity implements Person {
     }
 
     void setLocale(Locale locale) {
-        this.locale = locale;
+        this.locale = new LocaleEmbeddable(locale);
     }
 
     public static PersonEntityBuilder aPerson() {

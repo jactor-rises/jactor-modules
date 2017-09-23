@@ -39,17 +39,17 @@ public class PersonEntityBuilder extends Builder<PersonEntity> {
         return this;
     }
 
-    PersonEntityBuilder withFirstName(String firstName) {
+    public PersonEntityBuilder withFirstName(String firstName) {
         this.firstName = new Name(firstName);
         return this;
     }
 
-    PersonEntityBuilder withSurname(String surname) {
+    public PersonEntityBuilder withSurname(String surname) {
         this.surname = new Name(surname);
         return this;
     }
 
-    PersonEntityBuilder withLocale(String locale) {
+    public PersonEntityBuilder withLocale(String locale) {
         this.locale = new Locale(locale);
         return this;
     }

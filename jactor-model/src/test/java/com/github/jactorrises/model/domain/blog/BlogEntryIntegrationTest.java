@@ -54,9 +54,10 @@ public class BlogEntryIntegrationTest {
 
     private UserEntity aPersistedUser() {
         UserEntity userEntity = aUser().withUserName("titten")
-                .withPassword("demo")
                 .withEmailAddress("jactor@rises")
-                .with(aPerson().withDescription("description")
+                .with(aPerson()
+                        .withDescription("description")
+                        .withSurname("jacobsen")
                         .with(anAddress().withAddressLine1("the streets")
                                 .withCity("Dirdal")
                                 .withCountry("NO")
