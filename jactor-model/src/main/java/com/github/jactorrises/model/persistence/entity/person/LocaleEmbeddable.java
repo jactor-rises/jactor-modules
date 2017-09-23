@@ -1,6 +1,9 @@
 package com.github.jactorrises.model.persistence.entity.person;
 
 import java.util.Locale;
+import java.util.Objects;
+
+import static java.util.Objects.hash;
 
 class LocaleEmbeddable {
     private final String locale;
@@ -16,5 +19,17 @@ class LocaleEmbeddable {
 
     Locale fetchLocale() {
         return new Locale(locale);
+    }
+
+    @Override public boolean equals(Object o) {
+        return o == this || o != null && o.getClass().equals(getClass()) && Objects.equals(locale, ((LocaleEmbeddable) o).locale);
+    }
+
+    @Override public int hashCode() {
+        return hash(locale);
+    }
+
+    @Override public String toString() {
+        return locale != null ? new Locale(locale).toString() : "nullx";
     }
 }
