@@ -45,6 +45,7 @@ class UserFacadeTest {
     private UserDomain aValidUser() {
         return aUser()
                 .with(PersonDomain.aPerson()
+                        .withSurname("jacobsen")
                         .with(anAddress()
                                 .withAddressLine1("on the road")
                                 .withZipCode(69)

@@ -41,7 +41,9 @@ public class PersistentDomainServiceIntegrationTest {
         persistentDomainService.saveOrUpdate(
                 UserDomain.aUser().withUserName("titten")
                         .withEmailAddress("jactor@rises")
-                        .with(aPerson().withDescription("description")
+                        .with(aPerson()
+                                .withDescription("description")
+                                .withSurname("jacobsen")
                                 .with(anAddress().withAddressLine1("the streets")
                                         .withCity("Dirdal")
                                         .withCountry("NO")
@@ -70,6 +72,7 @@ public class PersistentDomainServiceIntegrationTest {
                 .withZipCode(1234);
         PersonDomain person = aPerson()
                 .withDescription("description")
+                .withSurname("jacobsen")
                 .with(address)
                 .build();
         UserDomain user = UserDomain.aUser()
@@ -94,7 +97,9 @@ public class PersistentDomainServiceIntegrationTest {
     @Test public void willSaveGuestBookEntryWithRelations() {
         UserDomain userDomain = UserDomain.aUser().withUserName("titten")
                 .withEmailAddress("jactor@rises")
-                .with(aPerson().withDescription("description")
+                .with(aPerson()
+                        .withDescription("description")
+                        .withSurname("nevland")
                         .with(anAddress().withAddressLine1("the streets")
                                 .withCity("Dirdal")
                                 .withCountry("NO")

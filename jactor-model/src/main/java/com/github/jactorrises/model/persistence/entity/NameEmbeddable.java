@@ -20,7 +20,7 @@ public class NameEmbeddable {
     }
 
     public Name fetchName() {
-        return new Name(name);
+        return name != null ? new Name(name) : null;
     }
 
     @Override public int hashCode() {

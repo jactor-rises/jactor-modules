@@ -31,10 +31,13 @@ class UserBuilderTest {
     }
 
     private PersonBuilder aValidPerson() {
-        return aPerson().with(anAddress()
-                .withAddressLine1("out there")
-                .withZipCode(666)
-                .withCountry("NO")
-        );
+        return aPerson()
+                .withSurname("nevland")
+                .with(
+                        anAddress()
+                                .withAddressLine1("out there")
+                                .withZipCode(666)
+                                .withCountry("NO")
+                );
     }
 }
