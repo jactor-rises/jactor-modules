@@ -15,31 +15,19 @@ class UserBuilderTest {
 
     @DisplayName("should not build an instance without a user name")
     @Test void willNotBuildUserDomainWithoutUserName() {
-        assertThatIllegalArgumentException().isThrownBy(() -> aUser().with(aValidPerson()).withPassword("password").build())
+        assertThatIllegalArgumentException().isThrownBy(() -> aUser().with(aValidPerson()).build())
                 .withMessage(UserBuilder.THE_USER_NAME_CANNOT_BE_NULL);
     }
 
     @DisplayName("should not build an instance without a person")
     @Test void willNotBuildUserDomainWithoutPerson() {
-        assertThatIllegalArgumentException().isThrownBy(() -> aUser().withUserName("some user").withPassword("password").build())
+        assertThatIllegalArgumentException().isThrownBy(() -> aUser().withUserName("some user").build())
                 .withMessage(UserBuilder.THE_USER_MUST_BE_A_PERSON);
-    }
-
-    @DisplayName("should not build an instance without a password")
-    @Test void willNotBuildUserDomainWithoutPassword() {
-        assertThatIllegalArgumentException().isThrownBy(() -> aUser().withUserName("some user").with(aValidPerson()).build())
-                .withMessage(UserBuilder.THE_FIELD_CANNOT_BE_EMPTY);
-    }
-
-    @DisplayName("should not build an instance with an empty password")
-    @Test void willNotBuildUserDomainWithAnEmptyPassword() {
-        assertThatIllegalArgumentException().isThrownBy(() -> aUser().withUserName("some user").with(aValidPerson()).build())
-                .withMessage(UserBuilder.THE_FIELD_CANNOT_BE_EMPTY);
     }
 
     @DisplayName("should build an instance when all required fields are set")
     @Test void willBuildUserDomainWithAllRequiredProperties() {
-        assertThat(aUser().withUserName("some user").with(aValidPerson()).withPassword("password").build()).isNotNull();
+        assertThat(aUser().withUserName("some user").with(aValidPerson()).build()).isNotNull();
     }
 
     private PersonBuilder aValidPerson() {

@@ -51,7 +51,6 @@ class UserFacadeTest {
                                 .withCountry("NO")
                         )
                 ).withUserName("turbo")
-                .withPassword("something")
                 .build();
     }
 

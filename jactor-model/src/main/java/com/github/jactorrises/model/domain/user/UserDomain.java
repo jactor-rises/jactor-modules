@@ -15,10 +15,6 @@ public class UserDomain extends PersistentDomain<UserEntity, Long> implements Us
         super(userEntity);
     }
 
-    @Override public String getPassword() {
-        return getEntity().getPassword();
-    }
-
     @Override public UserName getUserName() {
         return getEntity().getUserName();
     }

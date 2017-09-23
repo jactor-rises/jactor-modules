@@ -5,8 +5,6 @@ import com.github.jactorrises.client.datatype.UserName;
 
 public interface User extends Persistent<Long> {
 
-    String getPassword();
-
     UserName getUserName();
 
     Person getPerson();
