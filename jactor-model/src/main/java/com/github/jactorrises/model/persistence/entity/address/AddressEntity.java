@@ -45,13 +45,16 @@ public class AddressEntity extends PersistentEntity implements Address {
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(getId(), ((AddressEntity) o).getId()) &&
                 Objects.equals(addressLine1, ((AddressEntity) o).addressLine1) &&
                 Objects.equals(addressLine2, ((AddressEntity) o).addressLine2) &&
                 Objects.equals(addressLine3, ((AddressEntity) o).addressLine3) &&
                 Objects.equals(city, ((AddressEntity) o).city) &&
-                Objects.equals(country, ((AddressEntity) o).country) &&
+                Objects.equals(getCountry(), fetchCountry(((AddressEntity) o).country)) &&
                 Objects.equals(zipCode, ((AddressEntity) o).zipCode);
+    }
+
+    private Country fetchCountry(CountryEmbaddable country) {
+        return country != null ? country.fetchCountry() : null;
     }
 
     public AddressEntity copy() {

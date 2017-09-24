@@ -8,6 +8,7 @@ import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,6 +26,7 @@ import static com.github.jactorrises.model.persistence.entity.blog.BlogEntity.aB
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -84,8 +86,23 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindUser() {
         int noOfEntities = session().createCriteria(UserEntity.class).list().size();
 
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         Long id = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         ).getId();
 
         assertSoftly(softly -> {
@@ -96,8 +113,23 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadUserProperties() {
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         Long id = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         ).getId();
 
         session().flush();
@@ -112,8 +144,23 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindGuestBook() {
         int noOfEntities = session().createCriteria(GuestBookEntity.class).list().size();
 
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -131,8 +178,23 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadGuestBookProperties() {
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -157,8 +219,23 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindGuestBookEntry() {
         int noOfEntities = session().createCriteria(GuestBookEntryEntity.class).list().size();
 
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
@@ -184,8 +261,23 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadGuestBookEntryProperties() {
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
@@ -219,8 +311,23 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindGuestBlog() {
         int noOfEntities = session().createCriteria(BlogEntity.class).list().size();
 
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -238,8 +345,23 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadBlogProperties() {
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
@@ -264,8 +386,23 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindBlogEntry() {
         int noOfEntities = session().createCriteria(BlogEntryEntity.class).list().size();
 
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         BlogEntity blogEntity = hibernateRepository.saveOrUpdate(
@@ -291,8 +428,23 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadBlogEntryProperties() {
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
+                        .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
         UserEntity userEntity = hibernateRepository.saveOrUpdate(
-                aUser().withUserName("jactor").build()
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         BlogEntity blogEntity = hibernateRepository.saveOrUpdate(
@@ -324,10 +476,23 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldFindDefaultUser() {
-        hibernateRepository.saveOrUpdate(
-                aUser()
-                        .withUserName("jactor")
+        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+                anAddress()
+                        .withAddressLine1("dark alley")
+                        .withZipCode(56789)
+                        .withCity("big apple")
                         .build()
+        );
+
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
+                aPerson()
+                        .with(addressEntity)
+                        .withSurname("jacobsen")
+                        .build()
+        );
+
+        hibernateRepository.saveOrUpdate(
+                aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Optional<UserEntity> jactor = hibernateRepository.findUsing(new UserName("jactor"));

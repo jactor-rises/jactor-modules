@@ -32,6 +32,6 @@ public class NameEmbeddable {
     }
 
     @Override public String toString() {
-        return name != null ? new Name(name).toString() : "";
+        return name != null ? new Name(name).toString() : "null";
     }
 }
