@@ -18,7 +18,7 @@ class LocaleEmbeddable {
     }
 
     Locale fetchLocale() {
-        return new Locale(locale);
+        return locale != null ? new Locale(locale) : null;
     }
 
     @Override public boolean equals(Object o) {
@@ -30,6 +30,6 @@ class LocaleEmbeddable {
     }
 
     @Override public String toString() {
-        return locale != null ? new Locale(locale).toString() : "nullx";
+        return locale != null ? new Locale(locale).toString() : "null";
     }
 }

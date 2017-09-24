@@ -65,14 +65,21 @@ public class PersonEntity extends PersistentEntity implements Person {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
                 Objects.equals(description, ((PersonEntity) o).description) &&
-                Objects.equals(firstName, ((PersonEntity) o).firstName) &&
-                Objects.equals(surname, ((PersonEntity) o).surname) &&
-                Objects.equals(userEntity, ((PersonEntity) o).userEntity) &&
-                Objects.equals(locale, ((PersonEntity) o).locale);
+                Objects.equals(getFirstName(), fetchName(((PersonEntity) o).firstName)) &&
+                Objects.equals(getSurname(), fetchName(((PersonEntity) o).surname)) &&
+                Objects.equals(getLocale(), fetchLocale((PersonEntity) o));
+    }
+
+    private Name fetchName(NameEmbeddable nameEmbeddable) {
+        return nameEmbeddable != null ? nameEmbeddable.fetchName() : null;
+    }
+
+    private Locale fetchLocale(PersonEntity personEntity) {
+        return personEntity != null ? personEntity.getLocale() : null;
     }
 
     @Override public int hashCode() {
-        return hash(addressEntity, description, firstName, surname, userEntity, locale);
+        return hash(addressEntity, description, firstName, surname, locale);
     }
 
     @Override public String toString() {
@@ -85,15 +92,15 @@ public class PersonEntity extends PersistentEntity implements Person {
     }
 
     @Override public Name getFirstName() {
-        return firstName.fetchName();
+        return firstName != null ? firstName.fetchName() : null;
     }
 
     @Override public Name getSurname() {
-        return surname.fetchName();
+        return surname != null ? surname.fetchName() : null;
     }
 
     @Override public Locale getLocale() {
-        return locale.fetchLocale();
+        return locale != null ? locale.fetchLocale() : null;
     }
 
     @Override public String getDescription() {
