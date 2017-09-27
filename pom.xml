@@ -22,10 +22,11 @@
         <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <junit.platform.verion>1.0.0</junit.platform.verion>
         <junit.vintage.version>${junit.version}.0</junit.vintage.version>
-        <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
-        <maven-site-plugin.version>3.4</maven-site-plugin.version>
+
+        <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
+        <maven-site-plugin.version>3.6</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <mockito.version>2.10.0</mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -147,7 +148,7 @@
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <includes>
-                            <include>**/Test.java</include>
+                            <include>**/*Test.java</include>
                         </includes>
                     </configuration>
                     <dependencies>
@@ -160,6 +161,11 @@
                             <groupId>org.junit.vintage</groupId>
                             <artifactId>junit-vintage-engine</artifactId>
                             <version>${junit.vintage.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.junit.jupiter</groupId>
+                            <artifactId>junit-jupiter-engine</artifactId>
+                            <version>${junit.jupiter.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
