@@ -26,11 +26,10 @@
         <mockito.version>2.10.0</mockito.version>
         <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
 
-        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
-        <maven-site-plugin.version>3.4</maven-site-plugin.version>
+        <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
+        <maven-site-plugin.version>3.6</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
-        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
