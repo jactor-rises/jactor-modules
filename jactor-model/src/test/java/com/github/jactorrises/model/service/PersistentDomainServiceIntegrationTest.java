@@ -2,7 +2,7 @@ package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.JactorModule;
+import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
@@ -27,7 +27,7 @@ import static com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain
 import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = JactorModule.class)
+@ContextConfiguration(classes = JactorModel.class)
 @Transactional
 public class PersistentDomainServiceIntegrationTest {
 

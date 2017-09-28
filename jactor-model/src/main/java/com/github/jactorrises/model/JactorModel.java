@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Bean;
 import static java.util.Arrays.sort;
 
 @SpringBootApplication
-public class JactorModule {
+public class JactorModel {
 
-    private static final Logger LOGGER = Logger.getLogger(JactorModule.class);
+    private static final Logger LOGGER = Logger.getLogger(JactorModel.class);
 
     @Autowired
     @Bean public UserFacade userFacade(UserDao userDao) {
@@ -23,7 +23,7 @@ public class JactorModule {
     }
 
     public static void main(String... args) {
-        display(SpringApplication.run(JactorModule.class, args));
+        display(SpringApplication.run(JactorModel.class, args));
     }
 
     private static void display(ApplicationContext ctx) {
