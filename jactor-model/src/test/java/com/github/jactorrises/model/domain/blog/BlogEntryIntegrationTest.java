@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.JactorModule;
+import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
@@ -24,7 +24,7 @@ import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = JactorModule.class)
+@ContextConfiguration(classes = JactorModel.class)
 @Transactional
 public class BlogEntryIntegrationTest {
 

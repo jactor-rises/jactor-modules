@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.JactorModule;
+import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
@@ -22,7 +22,7 @@ import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = JactorModule.class)
+@ContextConfiguration(classes = JactorModel.class)
 @Transactional
 public class BlogIntegrationTest {
 
