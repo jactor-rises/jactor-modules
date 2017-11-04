@@ -23,4 +23,3 @@ Src code for jactor-rises (client, module, persistence, and front end)
 * assertj
 * mockito
 * aspect j
-* sitemesh
