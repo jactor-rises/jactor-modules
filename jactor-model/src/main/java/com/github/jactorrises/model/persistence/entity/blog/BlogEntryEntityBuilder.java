@@ -1,8 +1,6 @@
 package com.github.jactorrises.model.persistence.entity.blog;
 
-import com.github.jactorrises.model.Builder;
-
-public class BlogEntryEntityBuilder extends Builder<BlogEntryEntity> {
+public class BlogEntryEntityBuilder {
     private BlogEntity blogEntity;
     private String entry;
     private String name;
@@ -25,7 +23,7 @@ public class BlogEntryEntityBuilder extends Builder<BlogEntryEntity> {
         return this;
     }
 
-    @Override protected BlogEntryEntity buildBean() {
+    public BlogEntryEntity build() {
         BlogEntryEntity blogEntryEntity = new BlogEntryEntity();
         blogEntryEntity.setBlog(blogEntity);
         blogEntryEntity.setCreatorName(name);

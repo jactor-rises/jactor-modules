@@ -1,7 +1,6 @@
 package com.github.jactorrises.model.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
@@ -9,7 +8,7 @@ import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 
 import java.util.Locale;
 
-public class PersonEntityBuilder extends Builder<PersonEntity> {
+public class PersonEntityBuilder {
     private AddressEntity addressEntity;
     private Locale locale;
     private Name firstName;
@@ -54,7 +53,7 @@ public class PersonEntityBuilder extends Builder<PersonEntity> {
         return this;
     }
 
-    @Override protected PersonEntity buildBean() {
+    public PersonEntity build() {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setAddressEntity(addressEntity);
         personEntity.setDescription(description);
