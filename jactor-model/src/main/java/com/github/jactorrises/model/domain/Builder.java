@@ -1,48 +1,24 @@
-package com.github.jactorrises.model;
+package com.github.jactorrises.model.domain;
 
-import com.github.jactorrises.model.domain.DomainValidater;
-
-import java.util.List;
 
 /**
- * A builder which validates fields on a domain before returning the instance using a {@link DomainValidater}
+ * A builder which validates fields on a domain before returning the instance using a {@link DomainValidator}
  *
  * @param <T> type of domain to build
  */
 public abstract class Builder<T> {
-    private static FieldValidator fieldValidator;
-    private final List<FieldValidator.ValidateField<T>> validateFields;
-    private final DomainValidater<T> domainValidater;
+    private final DomainValidator<T> domainValidator;
 
-    protected Builder(List<FieldValidator.ValidateField<T>> validateFields) {
-        this.validateFields = validateFields;
-        domainValidater = null;
+    protected Builder(DomainValidator<T> domainValidator) {
+        this.domainValidator = domainValidator;
     }
 
-    protected Builder(DomainValidater<T> domainValidater) {
-        this.domainValidater = domainValidater;
-        validateFields = null;
-    }
-
-    protected abstract T buildBean();
+    protected abstract T buildDomain();
 
     public T build() {
-        T domain = buildBean();
-
-        if (domainValidater != null) {
-            domainValidater.runOn(domain);
-        } else {
-            fieldValidator.validate(domain, validateFields);
-        }
+        T domain = buildDomain();
+        domainValidator.runOn(domain);
 
         return domain;
-    }
-
-    private static void useFieldValidator(FieldValidator fieldValidator) {
-        Builder.fieldValidator = fieldValidator;
-    }
-
-    static {
-        useFieldValidator(new FieldValidator());
     }
 }

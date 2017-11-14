@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.domain.guestbook;
 
-import com.github.jactorrises.model.Builder;
-import com.github.jactorrises.model.domain.DomainValidater;
+import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntityBuilder;
@@ -37,12 +37,12 @@ public final class GuestBookBuilder extends Builder<GuestBookDomain> {
         return this;
     }
 
-    @Override protected GuestBookDomain buildBean() {
+    @Override protected GuestBookDomain buildDomain() {
         return new GuestBookDomain(guestBookEntity.build());
     }
 
-    private static DomainValidater<GuestBookDomain> configureValidatetor() {
-        return new DomainValidater<GuestBookDomain>() {
+    private static DomainValidator<GuestBookDomain> configureValidatetor() {
+        return new DomainValidator<GuestBookDomain>() {
 
             @Override public void validate(GuestBookDomain domain) {
                 addIfInvalid(StringUtils.isBlank(domain.getTitle()), "title", FieldValidation.EMPTY);

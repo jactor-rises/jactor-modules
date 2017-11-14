@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.domain.user;
 
-import com.github.jactorrises.model.Builder;
-import com.github.jactorrises.model.domain.DomainValidater;
+import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.domain.person.PersonBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
@@ -35,12 +35,12 @@ public final class UserBuilder extends Builder<UserDomain> {
     }
 
     @Override
-    protected UserDomain buildBean() {
+    protected UserDomain buildDomain() {
         return new UserDomain(userEntityBuilder.build());
     }
 
-    private static DomainValidater<UserDomain> configureValidator() {
-        return new DomainValidater<UserDomain>() {
+    private static DomainValidator<UserDomain> configureValidator() {
+        return new DomainValidator<UserDomain>() {
 
             @Override public void validate(UserDomain domain) {
                 addIfInvalid(domain.getUserName() == null, "user name", FieldValidation.REQUIRED);

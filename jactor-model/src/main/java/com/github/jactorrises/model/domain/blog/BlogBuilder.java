@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.Builder;
-import com.github.jactorrises.model.domain.DomainValidater;
+import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
@@ -31,12 +31,12 @@ public final class BlogBuilder extends Builder<BlogDomain> {
         return with(userEntityBuilder.build());
     }
 
-    @Override protected BlogDomain buildBean() {
+    @Override protected BlogDomain buildDomain() {
         return new BlogDomain(blogEntityBuilder.build());
     }
 
-    private static DomainValidater<BlogDomain> configureValidator() {
-        return new DomainValidater<BlogDomain>() {
+    private static DomainValidator<BlogDomain> configureValidator() {
+        return new DomainValidator<BlogDomain>() {
 
             @Override public void validate(BlogDomain domain) {
                 addIfInvalid(StringUtils.isBlank(domain.getTitle()), "title", FieldValidation.EMPTY);

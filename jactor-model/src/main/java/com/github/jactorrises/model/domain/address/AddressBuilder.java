@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.domain.address;
 
-import com.github.jactorrises.model.Builder;
-import com.github.jactorrises.model.domain.DomainValidater;
+import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +45,7 @@ public final class AddressBuilder extends Builder<AddressDomain> {
         return this;
     }
 
-    @Override protected AddressDomain buildBean() {
+    @Override protected AddressDomain buildDomain() {
         return new AddressDomain(addressEntityBuilder.build());
     }
 
@@ -53,8 +53,8 @@ public final class AddressBuilder extends Builder<AddressDomain> {
         return new AddressDomain(addressEntity);
     }
 
-    private static DomainValidater<AddressDomain> configureValidator() {
-        return new DomainValidater<AddressDomain>() {
+    private static DomainValidator<AddressDomain> configureValidator() {
+        return new DomainValidator<AddressDomain>() {
 
             @Override public void validate(AddressDomain domain) {
                 addIfInvalid(StringUtils.isBlank(domain.getAddressLine1()), "address line 1", FieldValidation.EMPTY);
