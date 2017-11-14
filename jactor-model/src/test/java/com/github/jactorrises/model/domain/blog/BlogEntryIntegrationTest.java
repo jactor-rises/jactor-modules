@@ -32,7 +32,7 @@ public class BlogEntryIntegrationTest {
     private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
-        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntry("svada", "lada").build().getEntity());
+        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntry("some").withCreatorName("thing").build().getEntity());
 
         session().flush();
         session().clear();
@@ -41,8 +41,8 @@ public class BlogEntryIntegrationTest {
 
         assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
         assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").isNotNull();
-        assertThat(blogEntry.getCreatorName()).as("entry.creator").isEqualTo(new Name("lada"));
-        assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("svada");
+        assertThat(blogEntry.getCreatorName()).as("entry.creator").isEqualTo(new Name("thing"));
+        assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("some");
     }
 
     private BlogEntity aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {

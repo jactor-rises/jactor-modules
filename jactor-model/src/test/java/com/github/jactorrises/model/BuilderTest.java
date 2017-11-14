@@ -24,9 +24,7 @@ class BuilderTest {
                 .withMessage("example of invalid field");
     }
 
-    @SuppressWarnings("unchecked") private List<FieldValidator.ValidateField<Bean>> initAnListWith(
-            @SuppressWarnings("SameParameterValue") String invalidMessage
-    ) {
+    @SuppressWarnings("unchecked") private List<FieldValidator.ValidateField<Bean>> initAnListWith(@SuppressWarnings("SameParameterValue") String invalidMessage) {
         return Collections.singletonList(
                 (domain) -> invalidMessage == null ? Optional.empty() : Optional.of(invalidMessage)
         );

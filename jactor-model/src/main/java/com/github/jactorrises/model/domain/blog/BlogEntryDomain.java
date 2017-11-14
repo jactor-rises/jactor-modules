@@ -3,35 +3,36 @@ package com.github.jactorrises.model.domain.blog;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity;
 
 import java.time.LocalDateTime;
 
 public class BlogEntryDomain extends PersistentDomain<BlogEntryEntity, Long> implements BlogEntry {
 
+    private final BlogEntryEntity blogEntryEntity;
+
     BlogEntryDomain(BlogEntryEntity blogEntryEntity) {
-        super(blogEntryEntity);
+        this.blogEntryEntity = blogEntryEntity;
     }
 
     @Override public BlogDomain getBlog() {
-        return blogEntity() != null ? BlogBuilder.build(blogEntity()) : null;
-    }
-
-    private BlogEntity blogEntity() {
-        return getEntity().getBlog();
+        return blogEntryEntity.getBlog() != null ? new BlogDomain(blogEntryEntity.getBlog()) : null;
     }
 
     @Override public LocalDateTime getCreatedTime() {
-        return getEntity().getCreatedTime();
+        return blogEntryEntity.getCreatedTime();
     }
 
     @Override public String getEntry() {
-        return getEntity().getEntry();
+        return blogEntryEntity.getEntry();
     }
 
     @Override public Name getCreatorName() {
-        return getEntity().getCreatorName();
+        return blogEntryEntity.getCreatorName();
+    }
+
+    @Override public BlogEntryEntity getEntity() {
+        return blogEntryEntity;
     }
 
     static BlogEntryBuilder aBlogEntry() {

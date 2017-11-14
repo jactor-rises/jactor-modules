@@ -2,28 +2,27 @@ package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.domain.user.UserBuilder;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 
 public class GuestBookDomain extends PersistentDomain<GuestBookEntity, Long> implements GuestBook {
 
+    private final GuestBookEntity guestBookEntity;
+
     GuestBookDomain(GuestBookEntity guestBookEntity) {
-        super(guestBookEntity);
+        this.guestBookEntity = guestBookEntity;
     }
 
     @Override public String getTitle() {
-        return getEntity().getTitle();
+        return guestBookEntity.getTitle();
     }
 
-    @Override
-    public UserDomain getUser() {
-        return userEntity() != null ? UserBuilder.build(userEntity()) : null;
+    @Override public UserDomain getUser() {
+        return guestBookEntity.getUser() != null ? new UserDomain(guestBookEntity.getUser()) : null;
     }
 
-    private UserEntity userEntity() {
-        return getEntity().getUser();
+    @Override public GuestBookEntity getEntity() {
+        return guestBookEntity;
     }
 
     public static GuestBookBuilder aGuestBook() {

@@ -7,33 +7,34 @@ import org.junit.jupiter.api.Test;
 import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("The AdressDomainBuilder")
+@DisplayName("The AddressDomainBuilder")
 class AddressBuilderTest {
 
     @DisplayName("should not build an instance without an address line 1")
     @Test void willNotBuildDomainWithoutAddressLine1() {
-        assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withZipCode(1234).withCountry("NO").build())
-                .withMessage(AddressBuilder.ADDRESS_LINE_1_CANNOT_BE_EMPTY);
+        assertThatIllegalStateException().isThrownBy(() -> anAddress().withZipCode(1234).withCountry("NO").build())
+                .withMessageContaining("address line 1").withMessageContaining("cannot be empty");
     }
 
     @DisplayName("should not build an instance with an empty address line 1")
     @Test void willNotBuildDomainWithAnEmptyAddressLine1() {
-        assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withAddressLine1("").withZipCode(1234).withCountry("NO").build())
-                .withMessage(AddressBuilder.ADDRESS_LINE_1_CANNOT_BE_EMPTY);
+        assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("").withZipCode(1234).withCountry("NO").build())
+                .withMessageContaining("address line 1").withMessageContaining("cannot be empty");
     }
 
     @DisplayName("should not build an instance without a zip code")
     @Test void willNotBuildDomainWithoutZipCode() {
-        assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withCountry("NO").build())
-                .withMessage(AddressBuilder.ZIP_CODE_CANNOT_BE_NULL);
+        assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withCountry("NO").build())
+                .withMessageContaining("zip code").withMessageContaining("cannot be null");
     }
 
     @DisplayName("should not build an instance without a country")
     @Test void willNotBuildDomainWithoutCountry() {
-        assertThatIllegalArgumentException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withZipCode(1234).build())
-                .withMessage(AddressBuilder.COUNTRY_CANNOT_BE_NULL);
+        assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withZipCode(1234).build())
+                .withMessageContaining("country").withMessageContaining("cannot be null");
     }
 
     @DisplayName("should build an instance when all required properties are set")
@@ -47,7 +48,7 @@ class AddressBuilderTest {
         assertThat(addressDomain).isNotNull();
     }
 
-    @DisplayName("should build an instance with all properties set")
+    @DisplayName("should build an instance where all properties are expected")
     @Test void whenBuildingAnAddressAllAddressLinesAndItsCityCanAlsoBeAppended() {
         AddressDomain addressDomain = anAddress()
                 .withAddressLine1("somewhere")

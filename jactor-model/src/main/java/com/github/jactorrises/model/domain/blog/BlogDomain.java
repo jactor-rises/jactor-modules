@@ -2,34 +2,33 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.domain.user.UserBuilder;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 
 import java.time.LocalDate;
 
 public class BlogDomain extends PersistentDomain<BlogEntity, Long> implements Blog {
 
+    private final BlogEntity blogEntity;
+
     BlogDomain(BlogEntity blogEntity) {
-        super(blogEntity);
+        this.blogEntity = blogEntity;
     }
 
     @Override public String getTitle() {
-        return getEntity().getTitle();
+        return blogEntity.getTitle();
     }
 
-    @Override
-    public UserDomain getUser() {
-        return userEntity() != null ? UserBuilder.build(userEntity()) : null;
-    }
-
-    private UserEntity userEntity() {
-        return getEntity().getUser();
+    @Override public UserDomain getUser() {
+        return blogEntity.getUser() != null ? new UserDomain(blogEntity.getUser()) : null;
     }
 
     @Override public LocalDate getCreated() {
         return getEntity().getCreated();
+    }
+
+    @Override public BlogEntity getEntity() {
+        return blogEntity;
     }
 
     static BlogBuilder aBlog() {
