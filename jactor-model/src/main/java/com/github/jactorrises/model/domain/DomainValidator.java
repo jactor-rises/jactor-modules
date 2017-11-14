@@ -3,7 +3,7 @@ package com.github.jactorrises.model.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DomainValidater<T> {
+public abstract class DomainValidator<T> {
     private List<String> errors = new ArrayList<>();
 
     public abstract void validate(T domain);
