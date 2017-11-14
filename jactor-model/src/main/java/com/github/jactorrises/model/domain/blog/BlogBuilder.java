@@ -1,28 +1,20 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.Builder;
+import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Optional;
-
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntity.aBlog;
-import static java.util.Arrays.asList;
 
-public final class BlogBuilder extends Builder<BlogDomain> {
-    static final String THE_BLOG_MUST_BELONG_TO_A_USER = "The blog must belong to a user";
-    static final String THE_BLOG_MUST_HAVE_A_TITLE = "The blog must have a title";
-
+public final class BlogBuilder extends DomainBuilder<BlogDomain> {
     private final BlogEntityBuilder blogEntityBuilder = aBlog();
 
     BlogBuilder() {
-        super(asList(
-                domain -> StringUtils.isNotBlank(domain.getTitle()) ? Optional.empty() : Optional.of(THE_BLOG_MUST_HAVE_A_TITLE),
-                domain -> domain.getUser() != null ? Optional.empty() : Optional.of(THE_BLOG_MUST_BELONG_TO_A_USER)
-        ));
+        super(configureValidator());
     }
 
     BlogBuilder withTitleAs(String title) {
@@ -39,8 +31,18 @@ public final class BlogBuilder extends Builder<BlogDomain> {
         return with(userEntityBuilder.build());
     }
 
-    @Override protected BlogDomain buildBean() {
+    @Override protected BlogDomain buildDomain() {
         return new BlogDomain(blogEntityBuilder.build());
+    }
+
+    private static DomainValidator<BlogDomain> configureValidator() {
+        return new DomainValidator<BlogDomain>() {
+
+            @Override public void validate(BlogDomain domain) {
+                addIfInvalid(StringUtils.isBlank(domain.getTitle()), "title", FieldValidation.EMPTY);
+                addIfInvalid(domain.getUser() == null, "user", FieldValidation.REQUIRED);
+            }
+        };
     }
 
     public static BlogDomain build(BlogEntity blogEntity) {

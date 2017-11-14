@@ -9,34 +9,32 @@ import java.time.LocalDateTime;
 public abstract class PersistentDomain<T extends Persistent<I>, I> implements Persistent<I> {
     static final String THE_ENTITY_ON_THE_DOMAIN_CANNOT_BE_NULL = "The Entity on the domain cannot be null!";
 
-    private final T entity;
-
-    protected PersistentDomain(T entity) {
+    private T fetchEntity() {
+        T entity = getEntity();
         Validate.notNull(entity, THE_ENTITY_ON_THE_DOMAIN_CANNOT_BE_NULL);
-        this.entity = entity;
-    }
 
-    public T getEntity() {
         return entity;
     }
 
+    public abstract T getEntity();
+
     @Override public I getId() {
-        return entity.getId();
+        return fetchEntity().getId();
     }
 
     @Override public Name getCreatedBy() {
-        return entity.getCreatedBy();
+        return fetchEntity().getCreatedBy();
     }
 
     @Override public LocalDateTime getCreationTime() {
-        return entity.getCreationTime();
+        return fetchEntity().getCreationTime();
     }
 
     @Override public Name getUpdatedBy() {
-        return entity.getUpdatedBy();
+        return fetchEntity().getUpdatedBy();
     }
 
     @Override public LocalDateTime getUpdatedTime() {
-        return entity.getUpdatedTime();
+        return fetchEntity().getUpdatedTime();
     }
 }

@@ -2,11 +2,10 @@ package com.github.jactorrises.model.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.Builder;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilder;
 
-public class UserEntityBuilder extends Builder<UserEntity> {
+public class UserEntityBuilder {
     private EmailAddress emailAddress;
     private PersonEntity person;
     private UserName userName;
@@ -33,7 +32,7 @@ public class UserEntityBuilder extends Builder<UserEntity> {
         return this;
     }
 
-    @Override protected UserEntity buildBean() {
+    public UserEntity build() {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmailAddress(emailAddress);
         userEntity.setPersonEntity(person);

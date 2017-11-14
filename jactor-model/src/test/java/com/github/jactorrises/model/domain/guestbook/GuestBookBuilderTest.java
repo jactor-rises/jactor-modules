@@ -6,26 +6,27 @@ import org.junit.jupiter.api.Test;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @DisplayName("The GuestBookBuilder")
 class GuestBookBuilderTest {
 
     @DisplayName("should not build an instance without the title of the guest book")
     @Test void willNotBuildGuestBookWithoutTheTitleOfTheGuestBook() {
-        assertThatIllegalArgumentException().isThrownBy(() -> GuestBookDomain.aGuestBook().with(aUser()).build())
-                .withMessage(GuestBookBuilder.THE_TITLE_CANNOT_BE_BLANK);
+        assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().with(aUser()).build())
+                .withMessageContaining("title").withMessageContaining("cannot be empty");
     }
 
     @DisplayName("should not build an instance with an empty title for the guest book")
     @Test void willNotBuildGuestBookWithAnEmptyTitleOfTheGuestBook() {
-        assertThatIllegalArgumentException().isThrownBy(() -> GuestBookDomain.aGuestBook().withTitle("").with(aUser()).build())
-                .withMessage(GuestBookBuilder.THE_TITLE_CANNOT_BE_BLANK);
+        assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().withTitle("").with(aUser()).build())
+                .withMessageContaining("title").withMessageContaining("cannot be empty");
     }
 
     @DisplayName("should not build an instance without an owner of the guest book")
     @Test void willNotBuildGuestBookWithoutTheUserWhoIsTheOwnerOfTheGuestBook() {
-        assertThatIllegalArgumentException().isThrownBy(() -> GuestBookDomain.aGuestBook().withTitle("some title").build())
-                .withMessage(GuestBookBuilder.THE_GUEST_BOOK_MUST_BELONG_TO_A_USER);
+        assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().withTitle("some title").build())
+                .withMessageContaining("user").withMessageContaining("cannot be null");
     }
 
     @DisplayName("should build an instance when all required fields are set")

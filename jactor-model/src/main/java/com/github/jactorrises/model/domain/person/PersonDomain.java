@@ -3,46 +3,46 @@ package com.github.jactorrises.model.domain.person;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 
 import java.util.Locale;
 
 public class PersonDomain extends PersistentDomain<PersonEntity, Long> implements Person {
 
+    private final PersonEntity personEntity;
+
     public PersonDomain(PersonEntity personEntity) {
-        super(personEntity);
+        this.personEntity = personEntity;
     }
 
     @Override public String getDescription() {
-        return getEntity().getDescription();
+        return personEntity.getDescription();
     }
 
     @Override public UserDomain getUser() {
-        return new UserDomain(getEntity().getUser());
+        return new UserDomain(personEntity.getUser());
     }
 
     @Override public Name getFirstName() {
-        return getEntity().getFirstName();
+        return personEntity.getFirstName();
     }
 
     @Override public Name getSurname() {
-        return getEntity().getSurname();
+        return personEntity.getSurname();
     }
 
     @Override public Locale getLocale() {
-        return getEntity().getLocale();
+        return personEntity.getLocale();
     }
 
     @Override public AddressDomain getAddress() {
-        return addressEntity() != null ? AddressBuilder.build(addressEntity()) : null;
+        return personEntity.getAddress() != null ? new AddressDomain(personEntity.getAddress()) : null;
     }
 
-    private AddressEntity addressEntity() {
-        return getEntity().getAddress();
+    @Override public PersonEntity getEntity() {
+        return personEntity;
     }
 
     public static PersonBuilder aPerson() {

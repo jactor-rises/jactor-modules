@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
 import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @DisplayName("The PersonBuilder")
@@ -14,14 +14,14 @@ class PersonBuilderTest {
 
     @DisplayName("should not build an instance without an address")
     @Test void willNotBuildPersonDomainWithoutAnAddress() {
-        assertThatIllegalArgumentException().isThrownBy(() -> aPerson().withSurname("jacobsen").build())
-                .withMessage(PersonBuilder.AN_ADDRESS_MUST_BE_PRESENT);
+        assertThatIllegalStateException().isThrownBy(() -> aPerson().withSurname("jacobsen").build())
+                .withMessageContaining("address").withMessageContaining("cannot be null");
     }
 
-    @DisplayName("should build an instance when all required fields are set")
+    @DisplayName("should not build an instance without a surname")
     @Test void shouldNotBuildAnInstanceWitoutSurname() {
-        assertThatIllegalArgumentException().isThrownBy(() -> aPerson().with(aValidAddressBuilder()).build())
-                .withMessage(PersonBuilder.A_PERSON_NEEDS_A_SURNAME);
+        assertThatIllegalStateException().isThrownBy(() -> aPerson().with(aValidAddressBuilder()).build())
+                .withMessageContaining("surname").withMessageContaining("cannot be null");
     }
 
     @DisplayName("should build an instance when all required fields are set")

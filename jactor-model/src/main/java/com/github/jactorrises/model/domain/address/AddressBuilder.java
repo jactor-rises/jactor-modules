@@ -1,28 +1,18 @@
 package com.github.jactorrises.model.domain.address;
 
-import com.github.jactorrises.model.Builder;
+import com.github.jactorrises.model.domain.DomainBuilder;
+import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Optional;
-
 import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
-import static java.util.Arrays.asList;
 
-public final class AddressBuilder extends Builder<AddressDomain> {
-    static final String ADDRESS_LINE_1_CANNOT_BE_EMPTY = "Address line 1 cannot be empty";
-    static final String COUNTRY_CANNOT_BE_NULL = "A country must be provided";
-    static final String ZIP_CODE_CANNOT_BE_NULL = "A Zip code must be provided";
-
+public final class AddressBuilder extends DomainBuilder<AddressDomain> {
     private final AddressEntityBuilder addressEntityBuilder = anAddress();
 
     AddressBuilder() {
-        super(asList(
-                domain -> StringUtils.isNotBlank(domain.getAddressLine1()) ? Optional.empty() : Optional.of(ADDRESS_LINE_1_CANNOT_BE_EMPTY),
-                domain -> domain.getZipCode() != null ? Optional.empty() : Optional.of(ZIP_CODE_CANNOT_BE_NULL),
-                domain -> domain.getCountry() != null ? Optional.empty() : Optional.of(COUNTRY_CANNOT_BE_NULL)
-        ));
+        super(configureValidator());
     }
 
     public AddressBuilder withCity(String city) {
@@ -55,11 +45,22 @@ public final class AddressBuilder extends Builder<AddressDomain> {
         return this;
     }
 
-    @Override protected AddressDomain buildBean() {
+    @Override protected AddressDomain buildDomain() {
         return new AddressDomain(addressEntityBuilder.build());
     }
 
     public static AddressDomain build(AddressEntity addressEntity) {
         return new AddressDomain(addressEntity);
+    }
+
+    private static DomainValidator<AddressDomain> configureValidator() {
+        return new DomainValidator<AddressDomain>() {
+
+            @Override public void validate(AddressDomain domain) {
+                addIfInvalid(StringUtils.isBlank(domain.getAddressLine1()), "address line 1", FieldValidation.EMPTY);
+                addIfInvalid(domain.getCountry() == null, "country", FieldValidation.REQUIRED);
+                addIfInvalid(domain.getZipCode() == null, "zip code", FieldValidation.REQUIRED);
+            }
+        };
     }
 }

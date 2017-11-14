@@ -4,35 +4,35 @@ import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.domain.person.PersonBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
-import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 
 public class UserDomain extends PersistentDomain<UserEntity, Long> implements User {
 
+    private final UserEntity userEntity;
+
     public UserDomain(UserEntity userEntity) {
-        super(userEntity);
+        this.userEntity = userEntity;
     }
 
     @Override public UserName getUserName() {
-        return getEntity().getUserName();
+        return userEntity.getUserName();
     }
 
     @Override public PersonDomain getPerson() {
-        return personEntity() != null ? PersonBuilder.build(personEntity()) : null;
-    }
-
-    private PersonEntity personEntity() {
-        return getEntity().getPerson();
+        return userEntity.getPerson() != null ? new PersonDomain(userEntity.getPerson()) : null;
     }
 
     @Override public EmailAddress getEmailAddress() {
-        return getEntity().getEmailAddress();
+        return userEntity.getEmailAddress();
     }
 
     @Override public boolean isUserNameEmailAddress() {
-        return getEntity().isUserNameEmailAddress();
+        return userEntity.isUserNameEmailAddress();
+    }
+
+    @Override public UserEntity getEntity() {
+        return userEntity;
     }
 
     public static UserBuilder aUser() {
