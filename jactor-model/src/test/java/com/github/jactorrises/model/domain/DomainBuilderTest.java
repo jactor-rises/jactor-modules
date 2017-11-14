@@ -6,16 +6,16 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("A Builder")
-class BuilderTest {
+@DisplayName("A DomainBuilder")
+class DomainBuilderTest {
 
     @SuppressWarnings("unchecked") @DisplayName("should validate domain being build")
     @Test void shouldBuildDomainWhenBuildMethodIsInvoked() {
-        BuilderTest builderTest = new BuilderTest();
+        DomainBuilderTest builderTest = new DomainBuilderTest();
         DomainValidator domainValidatorMock = mock(DomainValidator.class);
 
-        (new Builder(domainValidatorMock) {
-            @Override protected BuilderTest buildDomain() {
+        (new DomainBuilder(domainValidatorMock) {
+            @Override protected DomainBuilderTest buildDomain() {
                 return builderTest;
             }
         }).build();

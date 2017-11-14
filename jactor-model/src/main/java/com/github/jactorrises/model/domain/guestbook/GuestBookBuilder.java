@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.guestbook;
 
-import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 
-public final class GuestBookBuilder extends Builder<GuestBookDomain> {
+public final class GuestBookBuilder extends DomainBuilder<GuestBookDomain> {
     private final GuestBookEntityBuilder guestBookEntity = aGuestBook();
 
     GuestBookBuilder() {

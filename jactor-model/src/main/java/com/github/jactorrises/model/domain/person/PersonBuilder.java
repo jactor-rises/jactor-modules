@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.person;
 
-import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
@@ -9,7 +9,7 @@ import com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilde
 
 import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
 
-public final class PersonBuilder extends Builder<PersonDomain> {
+public final class PersonBuilder extends DomainBuilder<PersonDomain> {
     private PersonEntityBuilder personEntityBuilder = aPerson();
 
     PersonBuilder() {

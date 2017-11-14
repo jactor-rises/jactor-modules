@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder;
@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 
-public final class BlogEntryBuilder extends Builder<BlogEntryDomain> {
+public final class BlogEntryBuilder extends DomainBuilder<BlogEntryDomain> {
     private final BlogEntryEntityBuilder blogEntryEntityBuilder = aBlogEntry();
 
     BlogEntryBuilder() {

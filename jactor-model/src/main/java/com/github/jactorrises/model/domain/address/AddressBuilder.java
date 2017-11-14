@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.address;
 
-import com.github.jactorrises.model.domain.Builder;
+import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder;
@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
 
-public final class AddressBuilder extends Builder<AddressDomain> {
+public final class AddressBuilder extends DomainBuilder<AddressDomain> {
     private final AddressEntityBuilder addressEntityBuilder = anAddress();
 
     AddressBuilder() {
