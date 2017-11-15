@@ -3,28 +3,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.7.RELEASE</version>
-        <relativePath/>
+        <groupId>com.github.jactor-rises</groupId>
+        <artifactId>jactor-rises</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.jactor-rises</groupId>
     <artifactId>jactor-model</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <name>jactor-rises::jactor-model</name>
 
     <properties>
-        <assertj.version>3.8.0</assertj.version>
         <commons-lang3.version>3.6</commons-lang3.version>
         <java.version>1.8</java.version>
-        <junit-jupiter.version>5.0.1</junit-jupiter.version>
-        <junit-platform.version>1.0.1</junit-platform.version>
-        <junit-vintage.version>4.12.1</junit-vintage.version>
-        <mockito.version>2.10.0</mockito.version>
-        <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
+        <junit-jupiter.version>5.0.2</junit-jupiter.version>
+        <junit-platform.version>1.0.2</junit-platform.version>
+        <junit-vintage.version>4.12.2</junit-vintage.version>
 
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
         <maven-site-plugin.version>3.6</maven-site-plugin.version>
@@ -41,10 +35,6 @@
         </dependency>
 
         <!-- third party -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
@@ -65,22 +55,12 @@
         <!-- Test scope -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -97,31 +77,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.github.jactor-rises</groupId>
-                <artifactId>jactor-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <!-- third party -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-autoconfigure</artifactId>
-                <version>${spring-boot.version}</version>
-            </dependency>
-
             <!-- test scope -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit-jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
@@ -132,18 +88,6 @@
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-launcher</artifactId>
                 <version>${junit-platform.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
