@@ -3,7 +3,7 @@ package com.github.jactorrises.model.persistence.repository;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder.anAddress;
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntity.aBlog;
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
@@ -44,7 +44,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldFindAddress() {
-        int noOfEntities = session().createCriteria(AddressEntity.class).list().size();
+        int noOfEntities = session().createCriteria(AddressOrm.class).list().size();
 
         Long id = hibernateRepository.saveOrUpdate(
                 anAddress()
@@ -56,7 +56,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(AddressEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(AddressOrm.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
@@ -73,12 +73,12 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        AddressEntity addressEntity = hibernateRepository.load(AddressEntity.class, id);
+        AddressOrm AddressOrm = hibernateRepository.load(AddressOrm.class, id);
 
         assertSoftly(softly -> {
-            softly.assertThat(addressEntity.getAddressLine1()).as("addressLine1").isEqualTo("living on the edge");
-            softly.assertThat(addressEntity.getZipCode()).as("zipCode").isEqualTo(1234);
-            softly.assertThat(addressEntity.getCity()).as("city").isEqualTo("metropolis");
+            softly.assertThat(AddressOrm.getAddressLine1()).as("addressLine1").isEqualTo("living on the edge");
+            softly.assertThat(AddressOrm.getZipCode()).as("zipCode").isEqualTo(1234);
+            softly.assertThat(AddressOrm.getCity()).as("city").isEqualTo("metropolis");
         });
     }
 
@@ -86,7 +86,7 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindUser() {
         int noOfEntities = session().createCriteria(UserEntity.class).list().size();
 
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -96,7 +96,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -113,7 +113,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadUserProperties() {
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -123,7 +123,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -144,7 +144,7 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindGuestBook() {
         int noOfEntities = session().createCriteria(GuestBookEntity.class).list().size();
 
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -154,7 +154,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -178,7 +178,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadGuestBookProperties() {
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -188,7 +188,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -219,7 +219,7 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindGuestBookEntry() {
         int noOfEntities = session().createCriteria(GuestBookEntryEntity.class).list().size();
 
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -229,7 +229,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -261,7 +261,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadGuestBookEntryProperties() {
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -271,7 +271,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -311,7 +311,7 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindGuestBlog() {
         int noOfEntities = session().createCriteria(BlogEntity.class).list().size();
 
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -321,7 +321,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -345,7 +345,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadBlogProperties() {
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -355,7 +355,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -386,7 +386,7 @@ public class HibernateRepositoryIntegrationTest {
     public void shouldFindBlogEntry() {
         int noOfEntities = session().createCriteria(BlogEntryEntity.class).list().size();
 
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -396,7 +396,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -428,7 +428,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldReadBlogEntryProperties() {
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -438,7 +438,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );
@@ -476,7 +476,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldFindDefaultUser() {
-        AddressEntity addressEntity = hibernateRepository.saveOrUpdate(
+        AddressOrm AddressOrm = hibernateRepository.saveOrUpdate(
                 anAddress()
                         .withAddressLine1("dark alley")
                         .withZipCode(56789)
@@ -486,7 +486,7 @@ public class HibernateRepositoryIntegrationTest {
 
         PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
-                        .with(addressEntity)
+                        .with(AddressOrm)
                         .withSurname("jacobsen")
                         .build()
         );

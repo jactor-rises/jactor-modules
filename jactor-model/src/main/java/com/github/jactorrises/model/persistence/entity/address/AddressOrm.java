@@ -1,8 +1,8 @@
 package com.github.jactorrises.model.persistence.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
-import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
+import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,7 +17,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_ADDRESS")
-public class AddressEntity extends PersistentEntity implements Address {
+public class AddressOrm extends PersistentEntity implements AddressEntity {
 
     @Embedded @AttributeOverride(name = "country", column = @Column(name = "COUNTRY")) private CountryEmbaddable country;
     @Column(name = "ZIP_CODE") private Integer zipCode;
@@ -26,13 +26,13 @@ public class AddressEntity extends PersistentEntity implements Address {
     @Column(name = "ADDRESS_LINE_3") private String addressLine3;
     @Column(name = "CITY") private String city;
 
-    AddressEntity() {
+    AddressOrm() {
     }
 
     /**
      * @param address to copy
      */
-    AddressEntity(AddressEntity address) {
+    private AddressOrm(AddressOrm address) {
         super(address);
 
         addressLine1 = address.getAddressLine1();
@@ -45,20 +45,20 @@ public class AddressEntity extends PersistentEntity implements Address {
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressLine1, ((AddressEntity) o).addressLine1) &&
-                Objects.equals(addressLine2, ((AddressEntity) o).addressLine2) &&
-                Objects.equals(addressLine3, ((AddressEntity) o).addressLine3) &&
-                Objects.equals(city, ((AddressEntity) o).city) &&
-                Objects.equals(getCountry(), fetchCountry(((AddressEntity) o).country)) &&
-                Objects.equals(zipCode, ((AddressEntity) o).zipCode);
+                Objects.equals(addressLine1, ((AddressOrm) o).addressLine1) &&
+                Objects.equals(addressLine2, ((AddressOrm) o).addressLine2) &&
+                Objects.equals(addressLine3, ((AddressOrm) o).addressLine3) &&
+                Objects.equals(city, ((AddressOrm) o).city) &&
+                Objects.equals(getCountry(), fetchCountry(((AddressOrm) o).country)) &&
+                Objects.equals(zipCode, ((AddressOrm) o).zipCode);
     }
 
     private Country fetchCountry(CountryEmbaddable country) {
         return country != null ? country.fetchCountry() : null;
     }
 
-    public AddressEntity copy() {
-        return new AddressEntity(this);
+    public AddressOrm copy() {
+        return new AddressOrm(this);
     }
 
     @Override public int hashCode() {
@@ -123,9 +123,5 @@ public class AddressEntity extends PersistentEntity implements Address {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public static AddressEntityBuilder anAddress() {
-        return new AddressEntityBuilder();
     }
 }

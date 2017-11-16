@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -29,7 +29,7 @@ import static java.util.Objects.hash;
 public class PersonEntity extends PersistentEntity implements Person {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
+    @JoinColumn(name = "ADDRESS_ID") private AddressOrm addressEntity;
     @Column(name = "DESCRIPTION") private String description;
     @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "FIRST_NAME")) private NameEmbeddable firstName;
@@ -49,7 +49,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         userEntity = person.copyUser();
     }
 
-    private AddressEntity copyAddress() {
+    private AddressOrm copyAddress() {
         return addressEntity != null ? addressEntity.copy() : null;
     }
 
@@ -87,7 +87,7 @@ public class PersonEntity extends PersistentEntity implements Person {
                 .appendSuper(super.toString()).append(firstName).append(surname).append(userEntity).append(addressEntity).toString();
     }
 
-    @Override public AddressEntity getAddress() {
+    @Override public AddressOrm getAddress() {
         return addressEntity;
     }
 
@@ -111,7 +111,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         return userEntity;
     }
 
-    void setAddressEntity(AddressEntity addressEntity) {
+    void setAddressEntity(AddressOrm addressEntity) {
         this.addressEntity = addressEntity;
     }
 

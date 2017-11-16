@@ -3,16 +3,16 @@ package com.github.jactorrises.model.persistence.entity.address;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("An AddressEntity")
-class AddressEntityTest {
+@DisplayName("An AddressOrm")
+class AddressOrmTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        AddressEntity base = anAddress()
+        AddressOrm base = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere else")
                 .withAddressLine3("way out there")
@@ -21,9 +21,9 @@ class AddressEntityTest {
                 .withCity("some city")
                 .build();
 
-        AddressEntity equal = new AddressEntity(base);
+        AddressOrm equal = base.copy();
 
-        AddressEntity notEqual = anAddress()
+        AddressOrm notEqual = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere in the")
                 .withAddressLine3("distance")
@@ -42,7 +42,7 @@ class AddressEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        AddressEntity base = anAddress()
+        AddressOrm base = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere else")
                 .withAddressLine3("way out there")
@@ -51,9 +51,9 @@ class AddressEntityTest {
                 .withCity("some city")
                 .build();
 
-        AddressEntity equal = new AddressEntity(base);
+        AddressOrm equal = base.copy();
 
-        AddressEntity notEqual = anAddress()
+        AddressOrm notEqual = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere place")
                 .withAddressLine3("in the distance")

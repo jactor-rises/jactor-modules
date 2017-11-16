@@ -11,7 +11,7 @@ public class AddressEntityBuilder {
     private String city;
     private Integer zipCode;
 
-    AddressEntityBuilder() {
+    private AddressEntityBuilder() {
     }
 
     public AddressEntityBuilder withAddressLine1(String addressLine1) {
@@ -44,15 +44,19 @@ public class AddressEntityBuilder {
         return this;
     }
 
-    public AddressEntity build() {
-        AddressEntity addressEntity = new AddressEntity();
-        addressEntity.setAddressLine1(addressLine1);
-        addressEntity.setAddressLine2(addressLine2);
-        addressEntity.setAddressLine3(addressLine3);
-        addressEntity.setZipCode(zipCode);
-        addressEntity.setCity(city);
-        addressEntity.setCountry(country);
+    public AddressOrm build() {
+        AddressOrm addressOrm = new AddressOrm();
+        addressOrm.setAddressLine1(addressLine1);
+        addressOrm.setAddressLine2(addressLine2);
+        addressOrm.setAddressLine3(addressLine3);
+        addressOrm.setZipCode(zipCode);
+        addressOrm.setCity(city);
+        addressOrm.setCountry(country);
 
-        return addressEntity;
+        return addressOrm;
+    }
+
+    public static AddressEntityBuilder anAddress() {
+        return new AddressEntityBuilder();
     }
 }

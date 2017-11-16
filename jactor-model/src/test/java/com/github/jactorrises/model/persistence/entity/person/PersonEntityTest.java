@@ -1,10 +1,9 @@
 package com.github.jactorrises.model.persistence.entity.person;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder.anAddress;
 import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
