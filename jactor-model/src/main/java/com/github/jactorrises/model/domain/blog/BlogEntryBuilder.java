@@ -2,9 +2,9 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder;
+import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;

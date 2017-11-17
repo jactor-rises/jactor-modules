@@ -24,7 +24,7 @@ import static java.util.Objects.hash;
 @Table(name = "T_BLOG_ENTRY")
 public class BlogEntryOrm extends PersistentEntity implements BlogEntryEntity {
 
-    @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogEntity blogEntity;
+    @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogOrm blogEntity;
 
     @Embedded @AttributeOverrides({
             @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
@@ -41,7 +41,7 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntryEntity {
         persistentEntry = blogEntryOrm.copyEntry();
     }
 
-    private BlogEntity copyBlog() {
+    private BlogOrm copyBlog() {
         return blogEntity.copy();
     }
 
@@ -71,12 +71,12 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntryEntity {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(blogEntity).append(persistentEntry).toString();
     }
 
-    @Override public BlogEntity getBlog() {
+    @Override public BlogOrm getBlog() {
         return blogEntity;
     }
 
     @Override public void setBlog(com.github.jactorrises.persistence.client.entity.BlogEntity blog) {
-        this.blogEntity = (BlogEntity) blog;
+        this.blogEntity = (BlogOrm) blog;
     }
 
     @Override public LocalDateTime getCreatedTime() {

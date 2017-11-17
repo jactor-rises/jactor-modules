@@ -3,6 +3,7 @@ package com.github.jactorrises.model.persistence.entity.blog;
 import com.github.jactorrises.model.persistence.entity.DateTextEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,25 +23,25 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG")
-public class BlogEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.BlogEntity {
+public class BlogOrm extends PersistentEntity implements BlogEntity {
 
     @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
 
-    BlogEntity() {
+    BlogOrm() {
         created = new DateTextEmbeddable(LocalDate.now());
     }
 
-    BlogEntity(BlogEntity blogEntity) {
+    private BlogOrm(BlogOrm blogEntity) {
         super(blogEntity);
         created = blogEntity.created;
         title = blogEntity.getTitle();
         userEntity = blogEntity.copyUser();
     }
 
-    BlogEntity copy() {
-        return new BlogEntity(this);
+    BlogOrm copy() {
+        return new BlogOrm(this);
     }
 
     private UserEntity copyUser() {
@@ -49,8 +50,8 @@ public class BlogEntity extends PersistentEntity implements com.github.jactorris
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(title, ((BlogEntity) o).title) &&
-                Objects.equals(userEntity, ((BlogEntity) o).userEntity);
+                Objects.equals(title, ((BlogOrm) o).title) &&
+                Objects.equals(userEntity, ((BlogOrm) o).userEntity);
     }
 
     @Override public int hashCode() {
@@ -84,9 +85,5 @@ public class BlogEntity extends PersistentEntity implements com.github.jactorris
 
     @Override public void setUserEntity(com.github.jactorrises.persistence.client.entity.UserEntity userEntity) {
         this.userEntity = (UserEntity) userEntity;
-    }
-
-    public static BlogEntityBuilder aBlog() {
-        return new BlogEntityBuilder();
     }
 }

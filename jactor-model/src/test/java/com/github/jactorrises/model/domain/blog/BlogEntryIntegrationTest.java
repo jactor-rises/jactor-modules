@@ -2,9 +2,9 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryOrm;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;

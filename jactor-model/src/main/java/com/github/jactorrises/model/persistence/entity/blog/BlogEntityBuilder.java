@@ -6,7 +6,7 @@ public class BlogEntityBuilder {
     private String title;
     private UserEntity userEntity;
 
-    BlogEntityBuilder() {
+    private BlogEntityBuilder() {
     }
 
     public BlogEntityBuilder withTitle(String title) {
@@ -19,11 +19,15 @@ public class BlogEntityBuilder {
         return this;
     }
 
-    public BlogEntity build() {
-        BlogEntity blogEntity = new BlogEntity();
-        blogEntity.setTitle(title);
-        blogEntity.setUserEntity(userEntity);
+    public BlogOrm build() {
+        BlogOrm blogOrm = new BlogOrm();
+        blogOrm.setTitle(title);
+        blogOrm.setUserEntity(userEntity);
 
-        return blogEntity;
+        return blogOrm;
+    }
+
+    public static BlogEntityBuilder aBlog() {
+        return new BlogEntityBuilder();
     }
 }

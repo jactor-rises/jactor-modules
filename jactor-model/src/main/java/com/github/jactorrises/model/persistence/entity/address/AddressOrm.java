@@ -101,27 +101,27 @@ public class AddressOrm extends PersistentEntity implements AddressEntity {
         return city;
     }
 
-    public void setCountry(Country country) {
+    @Override public void setCountry(Country country) {
         this.country = new CountryEmbaddable(country);
     }
 
-    public void setZipCode(Integer zipCode) {
+    @Override public void setZipCode(Integer zipCode) {
         this.zipCode = zipCode;
     }
 
-    public void setAddressLine1(String addressLine1) {
+    @Override public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
     }
 
-    public void setAddressLine2(String addressLine2) {
+    @Override public void setAddressLine2(String addressLine2) {
         this.addressLine2 = addressLine2;
     }
 
-    public void setAddressLine3(String addressLine3) {
+    @Override public void setAddressLine3(String addressLine3) {
         this.addressLine3 = addressLine3;
     }
 
-    public void setCity(String city) {
+    @Override public void setCity(String city) {
         this.city = city;
     }
 }

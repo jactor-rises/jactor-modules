@@ -9,27 +9,27 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static com.github.jactorrises.model.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder.aBlog;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A BlogEntity")
-class BlogEntityTest {
+@DisplayName("A BlogOrm")
+class BlogOrmTest {
     @BeforeEach void useNowAsPureDate() {
         NowAsPureDate.set();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogEntity base = aBlog()
+        BlogOrm base = aBlog()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
-        BlogEntity equal = new BlogEntity(base);
+        BlogOrm equal = base.copy();
 
-        BlogEntity notEqual = aBlog()
+        BlogOrm notEqual = aBlog()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();
@@ -44,14 +44,14 @@ class BlogEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogEntity base = aBlog()
+        BlogOrm base = aBlog()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
-        BlogEntity equal = new BlogEntity(base);
+        BlogOrm equal = base.copy();
 
-        BlogEntity notEqual = aBlog()
+        BlogOrm notEqual = aBlog()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();
@@ -67,18 +67,18 @@ class BlogEntityTest {
 
     @DisplayName("should set created when initialized")
     @Test void willSetCreatedWhenInitialized() {
-        assertThat(new BlogEntity().getCreated()).isEqualTo(LocalDate.now());
+        assertThat(new BlogOrm().getCreated()).isEqualTo(LocalDate.now());
     }
 
     @DisplayName("should have an implementation of the toString method")
     @Test void shouldHaveAnImplementationOfTheToStringMethod() {
-        BlogEntity blogEntityToTest = aBlog()
+        BlogOrm BlogOrmToTest = aBlog()
                 .with(aUser().build())
                 .withTitle("my blog")
                 .build();
 
-        assertThat(blogEntityToTest.toString())
-                .contains("BlogEntity")
+        assertThat(BlogOrmToTest.toString())
+                .contains("BlogOrm")
                 .contains("my blog")
                 .contains(new DateTextEmbeddable(LocalDate.now()).toString());
     }

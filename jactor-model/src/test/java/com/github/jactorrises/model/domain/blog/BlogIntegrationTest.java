@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.model.persistence.entity.blog.BlogOrm;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,14 +29,14 @@ public class BlogIntegrationTest {
     @Resource
     private SessionFactory sessionFactory;
 
-    @Test public void willSaveBlogEntityToThePersistentLayer() {
+    @Test public void willSaveBlogOrmToThePersistentLayer() {
         final UserEntity persistedUser = persistUser();
         Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getEntity());
 
         session().flush();
         session().clear();
 
-        BlogEntity blog = session().get(BlogEntity.class, id);
+        BlogOrm blog = session().get(BlogOrm.class, id);
 
         assertThat(blog.getCreated()).isEqualTo(LocalDate.now());
         assertThat(blog.getTitle()).isEqualTo("some blog");
