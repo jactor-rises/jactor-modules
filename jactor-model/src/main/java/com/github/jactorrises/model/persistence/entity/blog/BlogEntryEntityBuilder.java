@@ -5,7 +5,7 @@ public class BlogEntryEntityBuilder {
     private String entry;
     private String name;
 
-    BlogEntryEntityBuilder() {
+    private BlogEntryEntityBuilder() {
     }
 
     public BlogEntryEntityBuilder with(BlogEntity blogEntity) {
@@ -23,12 +23,16 @@ public class BlogEntryEntityBuilder {
         return this;
     }
 
-    public BlogEntryEntity build() {
-        BlogEntryEntity blogEntryEntity = new BlogEntryEntity();
-        blogEntryEntity.setBlog(blogEntity);
-        blogEntryEntity.setCreatorName(name);
-        blogEntryEntity.setEntry(entry);
+    public BlogEntryOrm build() {
+        BlogEntryOrm blogEntryOrm = new BlogEntryOrm();
+        blogEntryOrm.setBlog(blogEntity);
+        blogEntryOrm.setCreatorName(name);
+        blogEntryOrm.setEntry(entry);
 
-        return blogEntryEntity;
+        return blogEntryOrm;
+    }
+
+    public static BlogEntryEntityBuilder aBlogEntry() {
+        return new BlogEntryEntityBuilder();
     }
 }

@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.persistence.entity.blog;
 
-import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.model.persistence.entity.DateTextEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
@@ -23,7 +22,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG")
-public class BlogEntity extends PersistentEntity implements Blog {
+public class BlogEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.BlogEntity {
 
     @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
@@ -79,12 +78,12 @@ public class BlogEntity extends PersistentEntity implements Blog {
         return created.fetchLocalDate();
     }
 
-    public void setTitle(String title) {
+    @Override public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    @Override public void setUserEntity(com.github.jactorrises.persistence.client.entity.UserEntity userEntity) {
+        this.userEntity = (UserEntity) userEntity;
     }
 
     public static BlogEntityBuilder aBlog() {

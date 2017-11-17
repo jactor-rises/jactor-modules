@@ -6,27 +6,27 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A BlogEntryEntity")
-class BlogEntryEntityTest {
+@DisplayName("A BlogEntryOrm")
+class BlogEntryOrmTest {
     @BeforeEach void useNowAsPureDate() {
         NowAsPureDate.set();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogEntryEntity base = aBlogEntry()
+        BlogEntryOrm base = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
-        BlogEntryEntity equal = new BlogEntryEntity(base);
+        BlogEntryOrm equal = base.copy();
 
-        BlogEntryEntity notEqual = aBlogEntry()
+        BlogEntryOrm notEqual = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
@@ -42,15 +42,15 @@ class BlogEntryEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogEntryEntity base = aBlogEntry()
+        BlogEntryOrm base = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
-        BlogEntryEntity equal = new BlogEntryEntity(base);
+        BlogEntryOrm equal = base.copy();
 
-        BlogEntryEntity notEqual = aBlogEntry()
+        BlogEntryOrm notEqual = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")

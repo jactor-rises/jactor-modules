@@ -7,7 +7,7 @@ import com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;
 
 public final class BlogEntryBuilder extends DomainBuilder<BlogEntryDomain> {
     private final BlogEntryEntityBuilder blogEntryEntityBuilder = aBlogEntry();

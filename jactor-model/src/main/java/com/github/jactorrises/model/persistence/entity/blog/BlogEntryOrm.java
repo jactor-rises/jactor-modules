@@ -3,6 +3,7 @@ package com.github.jactorrises.model.persistence.entity.blog;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.entry.PersistentEntry;
+import com.github.jactorrises.persistence.client.entity.BlogEntryEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,7 +22,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
-public class BlogEntryEntity extends PersistentEntity {
+public class BlogEntryOrm extends PersistentEntity implements BlogEntryEntity {
 
     @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogEntity blogEntity;
 
@@ -31,13 +32,13 @@ public class BlogEntryEntity extends PersistentEntity {
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    BlogEntryEntity() {
+    BlogEntryOrm() {
     }
 
-    BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
-        super(blogEntryEntity);
-        blogEntity = blogEntryEntity.copyBlog();
-        persistentEntry = blogEntryEntity.copyEntry();
+    private BlogEntryOrm(BlogEntryOrm blogEntryOrm) {
+        super(blogEntryOrm);
+        blogEntity = blogEntryOrm.copyBlog();
+        persistentEntry = blogEntryOrm.copyEntry();
     }
 
     private BlogEntity copyBlog() {
@@ -48,11 +49,15 @@ public class BlogEntryEntity extends PersistentEntity {
         return persistentEntry.copy();
     }
 
-    @Override public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryEntity) o);
+    public BlogEntryOrm copy() {
+        return new BlogEntryOrm(this);
     }
 
-    private boolean isEqualTo(BlogEntryEntity o) {
+    @Override public boolean equals(Object o) {
+        return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryOrm) o);
+    }
+
+    private boolean isEqualTo(BlogEntryOrm o) {
         return Objects.equals(getId(), o.getId()) &&
                 Objects.equals(persistentEntry, o.persistentEntry) &&
                 Objects.equals(blogEntity, o.blogEntity);
@@ -66,35 +71,31 @@ public class BlogEntryEntity extends PersistentEntity {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(blogEntity).append(persistentEntry).toString();
     }
 
-    public BlogEntity getBlog() {
+    @Override public BlogEntity getBlog() {
         return blogEntity;
     }
 
-    public void setBlog(BlogEntity blog) {
-        this.blogEntity = blog;
+    @Override public void setBlog(com.github.jactorrises.persistence.client.entity.BlogEntity blog) {
+        this.blogEntity = (BlogEntity) blog;
     }
 
-    public LocalDateTime getCreatedTime() {
+    @Override public LocalDateTime getCreatedTime() {
         return persistentEntry.getCreatedTime();
     }
 
-    public Name getCreatorName() {
+    @Override public Name getCreatorName() {
         return persistentEntry.getCreatorName();
     }
 
-    public void setCreatorName(String creator) {
+    @Override public void setCreatorName(String creator) {
         persistentEntry.setCreatorName(creator);
     }
 
-    public String getEntry() {
+    @Override public String getEntry() {
         return persistentEntry.getEntry();
     }
 
-    public void setEntry(String entry) {
+    @Override public void setEntry(String entry) {
         persistentEntry.setEntry(entry);
-    }
-
-    public static BlogEntryEntityBuilder aBlogEntry() {
-        return new BlogEntryEntityBuilder();
     }
 }

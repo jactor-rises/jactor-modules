@@ -1,11 +1,11 @@
 package com.github.jactorrises.model.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -26,7 +26,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonEntity extends PersistentEntity implements Person {
+public class PersonEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.PersonEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressOrm addressEntity;
@@ -111,27 +111,27 @@ public class PersonEntity extends PersistentEntity implements Person {
         return userEntity;
     }
 
-    void setAddressEntity(AddressOrm addressEntity) {
-        this.addressEntity = addressEntity;
+    @Override public void setAddressEntity(AddressEntity addressEntity) {
+        this.addressEntity = (AddressOrm) addressEntity;
     }
 
-    public void setDescription(String description) {
+    @Override public void setDescription(String description) {
         this.description = description;
     }
 
-    void setFirstName(Name firstName) {
+    @Override public void setFirstName(Name firstName) {
         this.firstName = new NameEmbeddable(firstName);
     }
 
-    void setSurname(Name surname) {
+    @Override public void setSurname(Name surname) {
         this.surname = new NameEmbeddable(surname);
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    @Override public void setUserEntity(com.github.jactorrises.persistence.client.entity.UserEntity userEntity) {
+        this.userEntity = (UserEntity) userEntity;
     }
 
-    void setLocale(Locale locale) {
+    @Override public void setLocale(Locale locale) {
         this.locale = new LocaleEmbeddable(locale);
     }
 
