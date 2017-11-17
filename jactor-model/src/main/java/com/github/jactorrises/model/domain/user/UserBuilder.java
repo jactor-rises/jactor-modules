@@ -6,7 +6,7 @@ import com.github.jactorrises.model.domain.person.PersonBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 
-import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 
 public final class UserBuilder extends DomainBuilder<UserDomain> {
     private final UserEntityBuilder userEntityBuilder = aUser();

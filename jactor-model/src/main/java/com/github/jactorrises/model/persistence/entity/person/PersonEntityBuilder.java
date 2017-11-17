@@ -3,8 +3,8 @@ package com.github.jactorrises.model.persistence.entity.person;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
+import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
 
 import java.util.Locale;
@@ -17,7 +17,7 @@ public class PersonEntityBuilder {
     private Name firstName;
     private Name surname;
     private String description;
-    private UserEntity userEntity;
+    private UserOrm userEntity;
 
     PersonEntityBuilder() {
     }

@@ -3,9 +3,8 @@ package com.github.jactorrises.model.domain.guestbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @DisplayName("The GuestBookBuilder")

@@ -1,10 +1,13 @@
 package com.github.jactorrises.model.persistence.entity.blog;
 
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+
+import com.github.jactorrises.model.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.client.entity.BlogEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 public class BlogEntityBuilder {
     private String title;
-    private UserEntity userEntity;
+    private UserOrm userOrm;
 
     private BlogEntityBuilder() {
     }
@@ -14,15 +17,15 @@ public class BlogEntityBuilder {
         return this;
     }
 
-    public BlogEntityBuilder with(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public BlogEntityBuilder with(UserEntity useruserEntity) {
+        this.userOrm = (UserOrm) useruserEntity;
         return this;
     }
 
-    public BlogOrm build() {
+    public BlogEntity build() {
         BlogOrm blogOrm = new BlogOrm();
         blogOrm.setTitle(title);
-        blogOrm.setUserEntity(userEntity);
+        blogOrm.setUserEntity(userOrm);
 
         return blogOrm;
     }

@@ -10,11 +10,11 @@ public class UserEntityBuilder {
     private PersonEntity person;
     private UserName userName;
 
-    UserEntityBuilder() {
+    private UserEntityBuilder() {
     }
 
-    public UserEntityBuilder with(PersonEntity person) {
-        this.person = person;
+    public UserEntityBuilder with(com.github.jactorrises.persistence.client.entity.PersonEntity person) {
+        this.person = (PersonEntity) person;
         return this;
     }
 
@@ -32,12 +32,16 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntity build() {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmailAddress(emailAddress);
-        userEntity.setPersonEntity(person);
-        userEntity.setUserName(userName);
+    public UserOrm build() {
+        UserOrm userOrm = new UserOrm();
+        userOrm.setEmailAddress(emailAddress);
+        userOrm.setPersonEntity(person);
+        userOrm.setUserName(userName);
 
-        return userEntity;
+        return userOrm;
+    }
+
+    public static UserEntityBuilder aUser() {
+        return new UserEntityBuilder();
     }
 }

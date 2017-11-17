@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.persistence.client.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 import java.util.Optional;
 

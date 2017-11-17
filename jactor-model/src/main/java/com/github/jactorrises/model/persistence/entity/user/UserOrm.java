@@ -22,19 +22,19 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_USER")
-public class UserEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.UserEntity {
+public class UserOrm extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.UserEntity {
 
     @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
-    UserEntity() {
+    UserOrm() {
     }
 
     /**
      * @param user is used to create an entity
      */
-    UserEntity(UserEntity user) {
+    private UserOrm(UserOrm user) {
         super(user);
         emailAddress = user.emailAddress;
         personEntity = user.copyPerson();
@@ -45,15 +45,15 @@ public class UserEntity extends PersistentEntity implements com.github.jactorris
         return personEntity != null ? personEntity.copy() : null;
     }
 
-    public UserEntity copy() {
-        return new UserEntity(this);
+    public UserOrm copy() {
+        return new UserOrm(this);
     }
 
     @Override public boolean equals(Object o) {
         return o == this || o != null && getClass() == o.getClass() &&
-                Objects.equals(userName, ((UserEntity) o).userName) &&
-                Objects.equals(personEntity, ((UserEntity) o).personEntity) &&
-                Objects.equals(emailAddress, ((UserEntity) o).emailAddress);
+                Objects.equals(userName, ((UserOrm) o).userName) &&
+                Objects.equals(personEntity, ((UserOrm) o).personEntity) &&
+                Objects.equals(emailAddress, ((UserOrm) o).emailAddress);
     }
 
     @Override public int hashCode() {
@@ -95,9 +95,5 @@ public class UserEntity extends PersistentEntity implements com.github.jactorris
 
     public void setPersonEntity(com.github.jactorrises.persistence.client.entity.PersonEntity personEntity) {
         this.personEntity = (PersonEntity) personEntity;
-    }
-
-    public static UserEntityBuilder aUser() {
-        return new UserEntityBuilder();
     }
 }

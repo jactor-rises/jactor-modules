@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain;
 
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

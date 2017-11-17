@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -31,7 +31,7 @@ public class PersonEntity extends PersistentEntity implements com.github.jactorr
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressOrm addressEntity;
     @Column(name = "DESCRIPTION") private String description;
-    @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
+    @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserOrm userEntity;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "FIRST_NAME")) private NameEmbeddable firstName;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
     @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
@@ -53,7 +53,7 @@ public class PersonEntity extends PersistentEntity implements com.github.jactorr
         return addressEntity != null ? addressEntity.copy() : null;
     }
 
-    private UserEntity copyUser() {
+    private UserOrm copyUser() {
         return userEntity != null ? userEntity.copy() : null;
     }
 
@@ -107,7 +107,7 @@ public class PersonEntity extends PersistentEntity implements com.github.jactorr
         return description;
     }
 
-    @Override public UserEntity getUser() {
+    @Override public UserOrm getUser() {
         return userEntity;
     }
 
@@ -128,7 +128,7 @@ public class PersonEntity extends PersistentEntity implements com.github.jactorr
     }
 
     @Override public void setUserEntity(com.github.jactorrises.persistence.client.entity.UserEntity userEntity) {
-        this.userEntity = (UserEntity) userEntity;
+        this.userEntity = (UserOrm) userEntity;
     }
 
     @Override public void setLocale(Locale locale) {

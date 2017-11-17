@@ -5,7 +5,7 @@ import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.client.dao.UserDao;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 import java.util.Optional;
 

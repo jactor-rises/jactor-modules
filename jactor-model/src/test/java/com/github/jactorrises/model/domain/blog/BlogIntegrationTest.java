@@ -2,7 +2,7 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.model.persistence.entity.blog.BlogOrm;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class BlogIntegrationTest {
     private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogOrmToThePersistentLayer() {
-        final UserEntity persistedUser = persistUser();
+        final UserOrm persistedUser = persistUser();
         Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getEntity());
 
         session().flush();
@@ -43,8 +43,8 @@ public class BlogIntegrationTest {
         assertThat(blog.getUser().getId()).isEqualTo(persistedUser.getId());
     }
 
-    private UserEntity persistUser() {
-        UserEntity userEntity = aUser().withUserName("titten")
+    private UserOrm persistUser() {
+        UserOrm userEntity = (UserOrm) aUser().withUserName("titten")
                 .withEmailAddress("jactor@rises")
                 .with(aPerson()
                         .withSurname("nevland")

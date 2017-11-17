@@ -2,7 +2,7 @@ package com.github.jactorrises.model.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,7 +22,7 @@ import static java.util.Objects.hash;
 public class GuestBookEntity extends PersistentEntity implements GuestBook {
 
     @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
+    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm user;
 
     GuestBookEntity() {
     }
@@ -36,7 +36,7 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
         user = guestBook.copyUser();
     }
 
-    private UserEntity copyUser() {
+    private UserOrm copyUser() {
         return user != null ? user.copy() : null;
     }
 
@@ -66,7 +66,7 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
         return title;
     }
 
-    @Override public UserEntity getUser() {
+    @Override public UserOrm getUser() {
         return user;
     }
 
@@ -74,7 +74,7 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
         this.title = title;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(UserOrm user) {
         this.user = user;
     }
 

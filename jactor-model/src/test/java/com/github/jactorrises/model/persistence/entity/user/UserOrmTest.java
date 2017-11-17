@@ -4,25 +4,25 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A UserEntity")
-class UserEntityTest {
+@DisplayName("A UserOrm")
+class UserOrmTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test
     void willHaveCorrectImplementedHashCode() {
-        UserEntity base = aUser()
+        UserOrm base = aUser()
                 .with(aPerson())
                 .withEmailAddress("some@where")
                 .withUserName("some user")
                 .build();
 
-        UserEntity equal = new UserEntity(base);
+        UserOrm equal = base.copy();
 
-        UserEntity notEqual = aUser()
+        UserOrm notEqual = aUser()
                 .with(aPerson())
                 .withEmailAddress("any@where")
                 .withUserName("some other user")
@@ -39,15 +39,15 @@ class UserEntityTest {
     @DisplayName("should have an implementation of the equals method")
     @Test
     void willHaveCorrectImplementedEquals() {
-        UserEntity base = aUser()
+        UserOrm base = aUser()
                 .with(aPerson())
                 .withEmailAddress("some@where")
                 .withUserName("some user")
                 .build();
 
-        UserEntity equal = new UserEntity(base);
+        UserOrm equal = base.copy();
 
-        UserEntity notEqual = aUser()
+        UserOrm notEqual = aUser()
                 .with(aPerson())
                 .withEmailAddress("any@where")
                 .withUserName("some other user")
@@ -65,8 +65,9 @@ class UserEntityTest {
     @DisplayName("should not fail when reading email address with null value")
     @Test
     void shouldGetEmailAddress() {
-        UserEntity userEntityToTest = new UserEntity();
-        userEntityToTest.setEmailAddress(null);
-        assertThat(userEntityToTest.getEmailAddress()).isNull();
+        UserOrm userOrm = new UserOrm();
+        userOrm.setEmailAddress(null);
+
+        assertThat(userOrm.getEmailAddress()).isNull();
     }
 }

@@ -3,8 +3,8 @@ package com.github.jactorrises.model.domain.blog;
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 import java.time.LocalDate;
 

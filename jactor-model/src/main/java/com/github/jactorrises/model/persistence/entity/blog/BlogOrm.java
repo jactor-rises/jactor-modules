@@ -2,8 +2,9 @@ package com.github.jactorrises.model.persistence.entity.blog;
 
 import com.github.jactorrises.model.persistence.entity.DateTextEmbeddable;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -27,7 +28,7 @@ public class BlogOrm extends PersistentEntity implements BlogEntity {
 
     @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
+    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm userEntity;
 
     BlogOrm() {
         created = new DateTextEmbeddable(LocalDate.now());
@@ -44,7 +45,7 @@ public class BlogOrm extends PersistentEntity implements BlogEntity {
         return new BlogOrm(this);
     }
 
-    private UserEntity copyUser() {
+    private UserOrm copyUser() {
         return userEntity != null ? userEntity.copy() : null;
     }
 
@@ -71,7 +72,7 @@ public class BlogOrm extends PersistentEntity implements BlogEntity {
         return title;
     }
 
-    @Override public UserEntity getUser() {
+    @Override public UserOrm getUser() {
         return userEntity;
     }
 
@@ -83,7 +84,7 @@ public class BlogOrm extends PersistentEntity implements BlogEntity {
         this.title = title;
     }
 
-    @Override public void setUserEntity(com.github.jactorrises.persistence.client.entity.UserEntity userEntity) {
-        this.userEntity = (UserEntity) userEntity;
+    @Override public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = (UserOrm) userEntity;
     }
 }

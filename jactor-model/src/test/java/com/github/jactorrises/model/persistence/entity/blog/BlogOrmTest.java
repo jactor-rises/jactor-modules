@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder.aBlog;
-import static com.github.jactorrises.model.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -22,14 +22,14 @@ class BlogOrmTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogOrm base = aBlog()
+        BlogOrm base = (BlogOrm) aBlog()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
         BlogOrm equal = base.copy();
 
-        BlogOrm notEqual = aBlog()
+        BlogOrm notEqual = (BlogOrm) aBlog()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();
@@ -44,14 +44,14 @@ class BlogOrmTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogOrm base = aBlog()
+        BlogOrm base = (BlogOrm) aBlog()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
         BlogOrm equal = base.copy();
 
-        BlogOrm notEqual = aBlog()
+        BlogOrm notEqual = (BlogOrm) aBlog()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();
@@ -72,7 +72,7 @@ class BlogOrmTest {
 
     @DisplayName("should have an implementation of the toString method")
     @Test void shouldHaveAnImplementationOfTheToStringMethod() {
-        BlogOrm BlogOrmToTest = aBlog()
+        BlogOrm BlogOrmToTest = (BlogOrm) aBlog()
                 .with(aUser().build())
                 .withTitle("my blog")
                 .build();
