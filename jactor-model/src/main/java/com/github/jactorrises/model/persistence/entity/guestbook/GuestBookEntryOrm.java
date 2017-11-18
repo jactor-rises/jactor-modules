@@ -23,7 +23,7 @@ import static java.util.Objects.hash;
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
 public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntryEntity {
-    @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookEntity guestBookEntity;
+    @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookOrm guestBookEntity;
 
     @Embedded @AttributeOverrides({
             @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
@@ -44,7 +44,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
         return new GuestBookEntryOrm(this);
     }
 
-    private GuestBookEntity copyGuestBook() {
+    private GuestBookOrm copyGuestBook() {
         return guestBookEntity.copy();
     }
 
@@ -69,7 +69,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(guestBookEntity).append(persistentEntry).toString();
     }
 
-    @Override public GuestBookEntity getGuestBook() {
+    @Override public GuestBookOrm getGuestBook() {
         return guestBookEntity;
     }
 
@@ -86,7 +86,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
     }
 
     @Override public void setGuestBook(com.github.jactorrises.persistence.client.entity.GuestBookEntity guestBookEntity) {
-        this.guestBookEntity = (GuestBookEntity) guestBookEntity;
+        this.guestBookEntity = (GuestBookOrm) guestBookEntity;
     }
 
     @Override public void setEntry(String entry) {

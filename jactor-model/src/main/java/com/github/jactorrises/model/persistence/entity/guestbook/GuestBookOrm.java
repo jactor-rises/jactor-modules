@@ -2,6 +2,7 @@ package com.github.jactorrises.model.persistence.entity.guestbook;
 
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,18 +20,18 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK ")
-public class GuestBookEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.GuestBookEntity {
+public class GuestBookOrm extends PersistentEntity implements GuestBookEntity {
 
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm user;
 
-    GuestBookEntity() {
+    GuestBookOrm() {
     }
 
     /**
      * @param guestBook to copy...
      */
-    GuestBookEntity(GuestBookEntity guestBook) {
+    private GuestBookOrm(GuestBookOrm guestBook) {
         super(guestBook);
         title = guestBook.title;
         user = guestBook.copyUser();
@@ -40,14 +41,14 @@ public class GuestBookEntity extends PersistentEntity implements com.github.jact
         return user != null ? user.copy() : null;
     }
 
-    GuestBookEntity copy() {
-        return new GuestBookEntity(this);
+    GuestBookOrm copy() {
+        return new GuestBookOrm(this);
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(title, ((GuestBookEntity) o).title) &&
-                Objects.equals(user, ((GuestBookEntity) o).user);
+                Objects.equals(title, ((GuestBookOrm) o).title) &&
+                Objects.equals(user, ((GuestBookOrm) o).user);
     }
 
     @Override public int hashCode() {
@@ -76,9 +77,5 @@ public class GuestBookEntity extends PersistentEntity implements com.github.jact
 
     public void setUser(UserEntity user) {
         this.user = (UserOrm) user;
-    }
-
-    public static GuestBookEntityBuilder aGuestBook() {
-        return new GuestBookEntityBuilder();
     }
 }

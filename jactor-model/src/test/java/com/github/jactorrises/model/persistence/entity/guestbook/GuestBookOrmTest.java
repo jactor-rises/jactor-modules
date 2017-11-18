@@ -3,24 +3,24 @@ package com.github.jactorrises.model.persistence.entity.guestbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntityBuilder.aGuestBook;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A GuestBookEntity")
-class GuestBookEntityTest {
+@DisplayName("A GuestBookOrm")
+class GuestBookOrmTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        GuestBookEntity base = aGuestBook()
+        GuestBookOrm base = (GuestBookOrm) aGuestBook()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
-        GuestBookEntity equal = new GuestBookEntity(base);
+        GuestBookOrm equal = base.copy();
 
-        GuestBookEntity notEqual = aGuestBook()
+        GuestBookOrm notEqual = (GuestBookOrm) aGuestBook()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();
@@ -35,14 +35,14 @@ class GuestBookEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        GuestBookEntity base = aGuestBook()
+        GuestBookOrm base = (GuestBookOrm) aGuestBook()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
-        GuestBookEntity equal = new GuestBookEntity(base);
+        GuestBookOrm equal = base.copy();
 
-        GuestBookEntity notEqual = aGuestBook()
+        GuestBookOrm notEqual = (GuestBookOrm) aGuestBook()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();

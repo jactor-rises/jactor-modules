@@ -7,8 +7,8 @@ import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryOrm;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookOrm;
 import com.github.jactorrises.model.persistence.repository.HibernateRepository;
 import com.github.jactorrises.model.persistence.repository.RepositoryCriterion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class PersistentDomainService {
 
     GuestBookDomain findUnique(GuestBookCriterion guestBookCriterion) {
         return GuestBookBuilder.build(hibernateRepository.load(
-                new RepositoryCriterion<>(GuestBookEntity.class).with(guestBookCriterion.id)
+                new RepositoryCriterion<>(GuestBookOrm.class).with(guestBookCriterion.id)
         ));
     }
 

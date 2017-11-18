@@ -1,6 +1,7 @@
 package com.github.jactorrises.model.persistence.entity.guestbook;
 
 import com.github.jactorrises.model.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 public class GuestBookEntityBuilder {
@@ -8,7 +9,8 @@ public class GuestBookEntityBuilder {
     private String title;
     private UserOrm userEntity;
 
-    GuestBookEntityBuilder() { }
+    private GuestBookEntityBuilder() {
+    }
 
     public GuestBookEntityBuilder withTitle(String title) {
         this.title = title;
@@ -21,10 +23,14 @@ public class GuestBookEntityBuilder {
     }
 
     public GuestBookEntity build() {
-        GuestBookEntity guestBookEntity = new GuestBookEntity();
-        guestBookEntity.setTitle(title);
-        guestBookEntity.setUser(userEntity);
+        GuestBookOrm guestBookOrm = new GuestBookOrm();
+        guestBookOrm.setTitle(title);
+        guestBookOrm.setUser(userEntity);
 
-        return guestBookEntity;
+        return guestBookOrm;
+    }
+
+    public static GuestBookEntityBuilder aGuestBook() {
+        return new GuestBookEntityBuilder();
     }
 }
