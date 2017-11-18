@@ -1,7 +1,6 @@
 package com.github.jactorrises.model.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.entry.PersistentEntry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,7 +21,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryEntity extends PersistentEntity implements GuestBookEntry {
+public class GuestBookEntryEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity {
     @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookEntity guestBookEntity;
 
     @Embedded @AttributeOverrides({
@@ -81,15 +80,15 @@ public class GuestBookEntryEntity extends PersistentEntity implements GuestBookE
         return persistentEntry.getCreatorName();
     }
 
-    public void setGuestBook(GuestBookEntity guestBookEntity) {
-        this.guestBookEntity = guestBookEntity;
+    @Override public void setGuestBook(com.github.jactorrises.persistence.client.entity.GuestBookEntity guestBookEntity) {
+        this.guestBookEntity = (GuestBookEntity) guestBookEntity;
     }
 
-    public void setEntry(String entry) {
+    @Override public void setEntry(String entry) {
         persistentEntry.setEntry(entry);
     }
 
-    public void setCreatorName(String creatorName) {
+    @Override public void setCreatorName(String creatorName) {
         persistentEntry.setCreatorName(creatorName);
     }
 
