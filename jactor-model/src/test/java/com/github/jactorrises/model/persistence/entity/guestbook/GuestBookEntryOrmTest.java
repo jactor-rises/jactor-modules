@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntityBuilder.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A GuestBookEntryEntity")
-class GuestBookEntryEntityTest {
+@DisplayName("A GuestBookEntryOrm")
+class GuestBookEntryOrmTest {
 
     @BeforeEach void useNowAsPureDate() {
         NowAsPureDate.set();
@@ -22,15 +22,15 @@ class GuestBookEntryEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        GuestBookEntryEntity base = aGuestBookEntry()
+        GuestBookEntryOrm base = (GuestBookEntryOrm) aGuestBookEntry()
                 .with(new GuestBookEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
-        GuestBookEntryEntity equal = new GuestBookEntryEntity(base);
+        GuestBookEntryOrm equal = base.copy();
 
-        GuestBookEntryEntity notEqual = aGuestBookEntry()
+        GuestBookEntryOrm notEqual = (GuestBookEntryOrm) aGuestBookEntry()
                 .with(new GuestBookEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
@@ -46,15 +46,15 @@ class GuestBookEntryEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        GuestBookEntryEntity base = aGuestBookEntry()
+        GuestBookEntryOrm base = (GuestBookEntryOrm) aGuestBookEntry()
                 .with(new GuestBookEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
-        GuestBookEntryEntity equal = new GuestBookEntryEntity(base);
+        GuestBookEntryOrm equal = base.copy();
 
-        GuestBookEntryEntity notEqual = aGuestBookEntry()
+        GuestBookEntryOrm notEqual = (GuestBookEntryOrm) aGuestBookEntry()
                 .with(new GuestBookEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
@@ -71,12 +71,12 @@ class GuestBookEntryEntityTest {
 
     @DisplayName("should set created time when initialized")
     @Test void willHaveCreationTimeOnEntryWhenCreated() {
-        assertThat(new GuestBookEntryEntity().getCreatedTime()).isEqualTo(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
+        assertThat(new GuestBookEntryOrm().getCreatedTime()).isEqualTo(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
     }
 
     @DisplayName("should have an implementation of the toString method")
     @Test void shouldHaveAnImplementationOfTheToStringMethod() {
-        GuestBookEntryEntity guestBookEntryEntityToTest = aGuestBookEntry()
+        GuestBookEntryOrm guestBookEntryEntityToTest = (GuestBookEntryOrm) aGuestBookEntry()
                 .withCreatorName("jactor")
                 .withEntry("hi")
                 .build();

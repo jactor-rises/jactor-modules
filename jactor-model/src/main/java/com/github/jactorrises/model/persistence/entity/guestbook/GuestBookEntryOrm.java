@@ -3,6 +3,7 @@ package com.github.jactorrises.model.persistence.entity.guestbook;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.entry.PersistentEntry;
+import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,7 +22,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity {
+public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntryEntity {
     @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookEntity guestBookEntity;
 
     @Embedded @AttributeOverrides({
@@ -30,13 +31,17 @@ public class GuestBookEntryEntity extends PersistentEntity implements com.github
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    GuestBookEntryEntity() {
+    GuestBookEntryOrm() {
     }
 
-    GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
+    private GuestBookEntryOrm(GuestBookEntryOrm guestBookEntry) {
         super(guestBookEntry);
         guestBookEntity = guestBookEntry.copyGuestBook();
         persistentEntry = guestBookEntry.copyEntry();
+    }
+
+    public GuestBookEntryOrm copy() {
+        return new GuestBookEntryOrm(this);
     }
 
     private GuestBookEntity copyGuestBook() {
@@ -48,10 +53,10 @@ public class GuestBookEntryEntity extends PersistentEntity implements com.github
     }
 
     @Override public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryEntity) o);
+        return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryOrm) o);
     }
 
-    private boolean isEqualTo(GuestBookEntryEntity o) {
+    private boolean isEqualTo(GuestBookEntryOrm o) {
         return Objects.equals(persistentEntry, o.persistentEntry) &&
                 Objects.equals(guestBookEntity, o.guestBookEntity);
     }
@@ -90,9 +95,5 @@ public class GuestBookEntryEntity extends PersistentEntity implements com.github
 
     @Override public void setCreatorName(String creatorName) {
         persistentEntry.setCreatorName(creatorName);
-    }
-
-    public static GuestBookEntryEntityBuilder aGuestBookEntry() {
-        return new GuestBookEntryEntityBuilder();
     }
 }

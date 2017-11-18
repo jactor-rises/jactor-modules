@@ -7,10 +7,11 @@ import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.model.persistence.entity.blog.BlogEntryOrm;
 import com.github.jactorrises.model.persistence.entity.blog.BlogOrm;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryOrm;
 import com.github.jactorrises.model.persistence.entity.person.PersonOrm;
 import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
+import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,7 +28,7 @@ import static com.github.jactorrises.model.persistence.entity.address.AddressEnt
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder.aBlog;
 import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;
 import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntityBuilder.aGuestBookEntry;
 import static com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilder.aPerson;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -300,12 +301,12 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        GuestBookEntryEntity guestBookEntryEntity = hibernateRepository.load(GuestBookEntryEntity.class, id);
+        GuestBookEntryOrm guestBookEntryOrm = hibernateRepository.load(GuestBookEntryOrm.class, id);
 
         assertSoftly(softly -> {
-            softly.assertThat(guestBookEntryEntity.getGuestBook()).as("guest book").isEqualTo(guestBookEntity);
-            softly.assertThat(guestBookEntryEntity.getEntry()).as("entry").isEqualTo("hi. long time no see");
-            softly.assertThat(guestBookEntryEntity.getCreatorName()).as("creator name").isEqualTo(new Name("mate"));
+            softly.assertThat(guestBookEntryOrm.getGuestBook()).as("guest book").isEqualTo(guestBookEntity);
+            softly.assertThat(guestBookEntryOrm.getEntry()).as("entry").isEqualTo("hi. long time no see");
+            softly.assertThat(guestBookEntryOrm.getCreatorName()).as("creator name").isEqualTo(new Name("mate"));
         });
     }
 

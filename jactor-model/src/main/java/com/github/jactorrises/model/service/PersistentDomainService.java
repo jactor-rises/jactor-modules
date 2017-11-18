@@ -8,7 +8,7 @@ import com.github.jactorrises.model.domain.guestbook.GuestBookEntryBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryOrm;
 import com.github.jactorrises.model.persistence.repository.HibernateRepository;
 import com.github.jactorrises.model.persistence.repository.RepositoryCriterion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,8 @@ public class PersistentDomainService {
         this.hibernateRepository = hibernateRepository;
     }
 
-    @SuppressWarnings("unchecked") <T> T saveOrUpdate(PersistentDomain<?, ?> persistentDomain) {
+    void saveOrUpdate(PersistentDomain<?, ?> persistentDomain) {
         hibernateRepository.saveOrUpdate(persistentDomain.getEntity());
-        return (T) persistentDomain.getEntity().getId();
     }
 
     GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
@@ -39,7 +38,7 @@ public class PersistentDomainService {
         return guestBookDomain;
     }
 
-    public GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
+    GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
         saveOrUpdateGuestBook(guestBookEntryDomain.getGuestBook());
         saveOrUpdate(guestBookEntryDomain);
 
@@ -58,7 +57,7 @@ public class PersistentDomainService {
 
     GuestBookEntryDomain findUnique(GuestBookEntryCriterion guestBookEntryCriterion) {
         return GuestBookEntryBuilder.build(hibernateRepository.load(
-                new RepositoryCriterion<>(GuestBookEntryEntity.class).with(guestBookEntryCriterion.id)
+                new RepositoryCriterion<>(GuestBookEntryOrm.class).with(guestBookEntryCriterion.id)
         ));
     }
 
