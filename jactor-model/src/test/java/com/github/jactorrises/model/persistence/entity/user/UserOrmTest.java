@@ -3,7 +3,7 @@ package com.github.jactorrises.model.persistence.entity.user;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilder.aPerson;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -14,7 +14,7 @@ class UserOrmTest {
     @DisplayName("should have an implementation of the hash code method")
     @Test
     void willHaveCorrectImplementedHashCode() {
-        UserOrm base = aUser()
+        UserOrm base = (UserOrm) aUser()
                 .with(aPerson())
                 .withEmailAddress("some@where")
                 .withUserName("some user")
@@ -22,7 +22,7 @@ class UserOrmTest {
 
         UserOrm equal = base.copy();
 
-        UserOrm notEqual = aUser()
+        UserOrm notEqual = (UserOrm) aUser()
                 .with(aPerson())
                 .withEmailAddress("any@where")
                 .withUserName("some other user")
@@ -39,7 +39,7 @@ class UserOrmTest {
     @DisplayName("should have an implementation of the equals method")
     @Test
     void willHaveCorrectImplementedEquals() {
-        UserOrm base = aUser()
+        UserOrm base = (UserOrm) aUser()
                 .with(aPerson())
                 .withEmailAddress("some@where")
                 .withUserName("some user")
@@ -47,7 +47,7 @@ class UserOrmTest {
 
         UserOrm equal = base.copy();
 
-        UserOrm notEqual = aUser()
+        UserOrm notEqual = (UserOrm) aUser()
                 .with(aPerson())
                 .withEmailAddress("any@where")
                 .withUserName("some other user")

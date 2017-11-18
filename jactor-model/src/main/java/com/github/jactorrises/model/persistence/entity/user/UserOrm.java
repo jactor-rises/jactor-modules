@@ -3,7 +3,8 @@ package com.github.jactorrises.model.persistence.entity.user;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.persistence.entity.PersistentEntity;
-import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.model.persistence.entity.person.PersonOrm;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,10 +23,10 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_USER")
-public class UserOrm extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.UserEntity {
+public class UserOrm extends PersistentEntity implements UserEntity {
 
     @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
-    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
+    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonOrm personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
     UserOrm() {
@@ -41,7 +42,7 @@ public class UserOrm extends PersistentEntity implements com.github.jactorrises.
         userName = user.userName;
     }
 
-    private PersonEntity copyPerson() {
+    private PersonOrm copyPerson() {
         return personEntity != null ? personEntity.copy() : null;
     }
 
@@ -73,7 +74,7 @@ public class UserOrm extends PersistentEntity implements com.github.jactorrises.
         return userName != null ? userName.fetchUserName() : null;
     }
 
-    public PersonEntity getPerson() {
+    public PersonOrm getPerson() {
         return personEntity;
     }
 
@@ -94,6 +95,6 @@ public class UserOrm extends PersistentEntity implements com.github.jactorrises.
     }
 
     public void setPersonEntity(com.github.jactorrises.persistence.client.entity.PersonEntity personEntity) {
-        this.personEntity = (PersonEntity) personEntity;
+        this.personEntity = (PersonOrm) personEntity;
     }
 }

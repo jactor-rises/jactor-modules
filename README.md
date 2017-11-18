@@ -14,7 +14,7 @@ Src code for jactor-rises (client, module, persistence, and front end)
 * the jactor-rises application will run with spring-boot and tomcat embedded.
 * persistence in jactor-rises will be done with hsqldb and spring-boot
 
-### Some artifacts used in jactor-rises###
+### Some artifacts used in jactor-rises ###
 
 * spring framwork
 * spring-boot

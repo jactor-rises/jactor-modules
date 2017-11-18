@@ -6,6 +6,7 @@ import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
 import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
+import com.github.jactorrises.persistence.client.entity.PersonEntity;
 
 import java.util.Locale;
 
@@ -19,12 +20,13 @@ public class PersonEntityBuilder {
     private String description;
     private UserOrm userEntity;
 
-    PersonEntityBuilder() {
+    private PersonEntityBuilder() {
     }
 
     public PersonEntityBuilder with(AddressEntity entity) {
         if (entity instanceof AddressOrm) {
-            return with((AddressOrm) entity);
+            addressOrm = (AddressOrm) entity;
+            return this;
         }
 
         return with(anAddress()
@@ -37,17 +39,12 @@ public class PersonEntityBuilder {
         );
     }
 
-    public PersonEntityBuilder with(AddressOrm addressOrm) {
-        this.addressOrm = addressOrm;
-        return this;
-    }
-
     public PersonEntityBuilder with(AddressEntityBuilder addressEntityBuilder) {
         return with(addressEntityBuilder.build());
     }
 
     public PersonEntityBuilder with(UserEntityBuilder userEntityBuilder) {
-        userEntity = userEntityBuilder.build();
+        userEntity = (UserOrm) userEntityBuilder.build();
         return this;
     }
 
@@ -72,14 +69,18 @@ public class PersonEntityBuilder {
     }
 
     public PersonEntity build() {
-        PersonEntity personEntity = new PersonEntity();
-        personEntity.setAddressEntity(addressOrm);
-        personEntity.setDescription(description);
-        personEntity.setFirstName(firstName);
-        personEntity.setSurname(surname);
-        personEntity.setLocale(locale);
-        personEntity.setUserEntity(userEntity);
+        PersonOrm personOrm = new PersonOrm();
+        personOrm.setAddressEntity(addressOrm);
+        personOrm.setDescription(description);
+        personOrm.setFirstName(firstName);
+        personOrm.setSurname(surname);
+        personOrm.setLocale(locale);
+        personOrm.setUserEntity(userEntity);
 
-        return personEntity;
+        return personOrm;
+    }
+
+    public static PersonEntityBuilder aPerson() {
+        return new PersonEntityBuilder();
     }
 }

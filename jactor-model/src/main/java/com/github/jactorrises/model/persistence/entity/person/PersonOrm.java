@@ -6,6 +6,7 @@ import com.github.jactorrises.model.persistence.entity.PersistentEntity;
 import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
+import com.github.jactorrises.persistence.client.entity.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -26,7 +27,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonEntity extends PersistentEntity implements com.github.jactorrises.persistence.client.entity.PersonEntity {
+public class PersonOrm extends PersistentEntity implements PersonEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressOrm addressEntity;
@@ -36,10 +37,10 @@ public class PersonEntity extends PersistentEntity implements com.github.jactorr
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
     @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
 
-    PersonEntity() {
+    PersonOrm() {
     }
 
-    PersonEntity(PersonEntity person) {
+    private PersonOrm(PersonOrm person) {
         super(person);
         addressEntity = person.copyAddress();
         description = person.description;
@@ -57,25 +58,25 @@ public class PersonEntity extends PersistentEntity implements com.github.jactorr
         return userEntity != null ? userEntity.copy() : null;
     }
 
-    public PersonEntity copy() {
-        return new PersonEntity(this);
+    public PersonOrm copy() {
+        return new PersonOrm(this);
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
-                Objects.equals(description, ((PersonEntity) o).description) &&
-                Objects.equals(getFirstName(), fetchName(((PersonEntity) o).firstName)) &&
-                Objects.equals(getSurname(), fetchName(((PersonEntity) o).surname)) &&
-                Objects.equals(getLocale(), fetchLocale((PersonEntity) o));
+                Objects.equals(addressEntity, ((PersonOrm) o).addressEntity) &&
+                Objects.equals(description, ((PersonOrm) o).description) &&
+                Objects.equals(getFirstName(), fetchName(((PersonOrm) o).firstName)) &&
+                Objects.equals(getSurname(), fetchName(((PersonOrm) o).surname)) &&
+                Objects.equals(getLocale(), fetchLocale((PersonOrm) o));
     }
 
     private Name fetchName(NameEmbeddable nameEmbeddable) {
         return nameEmbeddable != null ? nameEmbeddable.fetchName() : null;
     }
 
-    private Locale fetchLocale(PersonEntity personEntity) {
-        return personEntity != null ? personEntity.getLocale() : null;
+    private Locale fetchLocale(PersonOrm personOrm) {
+        return personOrm != null ? personOrm.getLocale() : null;
     }
 
     @Override public int hashCode() {
@@ -133,9 +134,5 @@ public class PersonEntity extends PersistentEntity implements com.github.jactorr
 
     @Override public void setLocale(Locale locale) {
         this.locale = new LocaleEmbeddable(locale);
-    }
-
-    public static PersonEntityBuilder aPerson() {
-        return new PersonEntityBuilder();
     }
 }

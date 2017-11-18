@@ -12,7 +12,7 @@ class AddressOrmTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        AddressOrm base = anAddress()
+        AddressOrm base = (AddressOrm) anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere else")
                 .withAddressLine3("way out there")
@@ -23,7 +23,7 @@ class AddressOrmTest {
 
         AddressOrm equal = base.copy();
 
-        AddressOrm notEqual = anAddress()
+        AddressOrm notEqual = (AddressOrm) anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere in the")
                 .withAddressLine3("distance")
@@ -42,7 +42,7 @@ class AddressOrmTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        AddressOrm base = anAddress()
+        AddressOrm base = (AddressOrm) anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere else")
                 .withAddressLine3("way out there")
@@ -53,7 +53,7 @@ class AddressOrmTest {
 
         AddressOrm equal = base.copy();
 
-        AddressOrm notEqual = anAddress()
+        AddressOrm notEqual = (AddressOrm) anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere place")
                 .withAddressLine3("in the distance")

@@ -4,17 +4,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder.anAddress;
-import static com.github.jactorrises.model.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilder.aPerson;
 import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A PersonEntity")
-class PersonEntityTest {
+@DisplayName("A PersonOrm")
+class PersonOrmTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        PersonEntity base = aPerson()
+        PersonOrm base = (PersonOrm) aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")
@@ -23,9 +23,9 @@ class PersonEntityTest {
                 .withLocale("no")
                 .build();
 
-        PersonEntity equal = new PersonEntity(base);
+        PersonOrm equal = base.copy();
 
-        PersonEntity notEqual = aPerson()
+        PersonOrm notEqual = (PersonOrm) aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")
@@ -44,7 +44,7 @@ class PersonEntityTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        PersonEntity base = aPerson()
+        PersonOrm base = (PersonOrm) aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")
@@ -53,9 +53,9 @@ class PersonEntityTest {
                 .withLocale("no")
                 .build();
 
-        PersonEntity equal = new PersonEntity(base);
+        PersonOrm equal = base.copy();
 
-        PersonEntity notEqual = aPerson()
+        PersonOrm notEqual = (PersonOrm) aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")
