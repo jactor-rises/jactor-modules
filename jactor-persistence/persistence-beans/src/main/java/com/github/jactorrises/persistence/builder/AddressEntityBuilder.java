@@ -1,7 +1,8 @@
-package com.github.jactorrises.persistence.entity.address;
+package com.github.jactorrises.persistence.builder;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
+import com.github.jactorrises.persistence.entity.address.AddressOrm;
 
 public class AddressEntityBuilder {
 

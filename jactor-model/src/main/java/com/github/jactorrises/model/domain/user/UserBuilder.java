@@ -4,9 +4,9 @@ import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.domain.person.PersonBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
-import com.github.jactorrises.persistence.entity.user.UserEntityBuilder;
+import com.github.jactorrises.persistence.builder.UserEntityBuilder;
 
-import static com.github.jactorrises.persistence.entity.user.UserEntityBuilder.aUser;
+import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
 
 public final class UserBuilder extends DomainBuilder<UserDomain> {
     private final UserEntityBuilder userEntityBuilder = aUser();

@@ -1,5 +1,6 @@
-package com.github.jactorrises.persistence.entity.guestbook;
+package com.github.jactorrises.persistence.builder;
 
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookOrm;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;

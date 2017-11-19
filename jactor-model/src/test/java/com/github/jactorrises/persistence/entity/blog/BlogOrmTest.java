@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
-import static com.github.jactorrises.persistence.entity.user.UserEntityBuilder.aUser;
+import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

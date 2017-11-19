@@ -4,10 +4,10 @@ import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
-import com.github.jactorrises.persistence.entity.person.PersonEntityBuilder;
+import com.github.jactorrises.persistence.builder.PersonEntityBuilder;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
 
-import static com.github.jactorrises.persistence.entity.person.PersonEntityBuilder.aPerson;
+import static com.github.jactorrises.persistence.builder.PersonEntityBuilder.aPerson;
 
 public final class PersonBuilder extends DomainBuilder<PersonDomain> {
     private PersonEntityBuilder personEntityBuilder = aPerson();

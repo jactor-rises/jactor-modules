@@ -2,7 +2,7 @@ package com.github.jactorrises.model.domain.address;
 
 import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
-import com.github.jactorrises.persistence.entity.address.AddressEntityBuilder;
+import com.github.jactorrises.persistence.builder.AddressEntityBuilder;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import org.apache.commons.lang3.StringUtils;
 

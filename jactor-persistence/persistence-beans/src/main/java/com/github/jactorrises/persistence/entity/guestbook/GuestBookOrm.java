@@ -25,7 +25,7 @@ public class GuestBookOrm extends PersistentEntity implements GuestBookEntity {
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm user;
 
-    GuestBookOrm() {
+    public GuestBookOrm() {
     }
 
     /**

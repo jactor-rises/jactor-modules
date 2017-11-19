@@ -32,7 +32,7 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntryEntity {
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    BlogEntryOrm() {
+    public BlogEntryOrm() {
     }
 
     private BlogEntryOrm(BlogEntryOrm blogEntryOrm) {

@@ -26,7 +26,7 @@ public class AddressOrm extends PersistentEntity implements AddressEntity {
     @Column(name = "ADDRESS_LINE_3") private String addressLine3;
     @Column(name = "CITY") private String city;
 
-    AddressOrm() {
+    public AddressOrm() {
     }
 
     /**

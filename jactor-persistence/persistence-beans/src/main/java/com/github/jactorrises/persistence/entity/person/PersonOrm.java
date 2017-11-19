@@ -37,7 +37,7 @@ public class PersonOrm extends PersistentEntity implements PersonEntity {
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
     @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
 
-    PersonOrm() {
+    public PersonOrm() {
     }
 
     private PersonOrm(PersonOrm person) {

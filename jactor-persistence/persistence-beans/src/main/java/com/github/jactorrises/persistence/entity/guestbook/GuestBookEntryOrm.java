@@ -31,7 +31,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
-    GuestBookEntryOrm() {
+    public GuestBookEntryOrm() {
     }
 
     private GuestBookEntryOrm(GuestBookEntryOrm guestBookEntry) {

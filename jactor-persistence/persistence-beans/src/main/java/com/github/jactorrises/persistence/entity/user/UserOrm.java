@@ -29,7 +29,7 @@ public class UserOrm extends PersistentEntity implements UserEntity {
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonOrm personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
-    UserOrm() {
+    public UserOrm() {
     }
 
     /**

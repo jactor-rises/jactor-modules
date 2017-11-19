@@ -3,7 +3,7 @@ package com.github.jactorrises.model.domain.blog;
 import com.github.jactorrises.model.domain.DomainBuilder;
 import com.github.jactorrises.model.domain.DomainValidator;
 import com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder;
-import com.github.jactorrises.persistence.entity.user.UserEntityBuilder;
+import com.github.jactorrises.persistence.builder.UserEntityBuilder;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
 import org.apache.commons.lang3.StringUtils;
