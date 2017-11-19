@@ -33,10 +33,6 @@ public class HibernateRepository implements UserDao {
         return Optional.ofNullable(userEntity);
     }
 
-    @Override public void save(UserEntity userEntity) {
-        saveOrUpdate(userEntity);
-    }
-
     public <T extends Persistent<?>> T saveOrUpdate(T entity) {
         session().saveOrUpdate(entity);
         return entity;

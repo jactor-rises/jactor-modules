@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.entity.entry;
+package com.github.jactorrises.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.persistence.entity.DateTimeEmbeddable;

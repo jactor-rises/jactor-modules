@@ -1,6 +1,19 @@
 package com.github.jactorrises.client.domain;
 
-public interface BlogEntry extends Persistent<Long>, Entry {
+import com.github.jactorrises.client.datatype.Name;
+
+import java.time.LocalDateTime;
+
+public interface BlogEntry extends Persistent<Long> {
 
     Blog getBlog();
+
+    /** @return creation time of an entry */
+    LocalDateTime getCreatedTime();
+
+    /** @return the actual entry */
+    String getEntry();
+
+    /** @return the creator which is the originator of the entry */
+    Name getCreatorName();
 }

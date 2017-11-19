@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.entry.PersistentEntry;
+import com.github.jactorrises.persistence.entity.PersistentEntry;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

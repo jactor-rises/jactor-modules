@@ -8,6 +8,4 @@ import java.util.Optional;
 public interface UserDao {
 
     Optional<UserEntity> findUsing(UserName userName);
-
-    void save(UserEntity userEntity);
 }

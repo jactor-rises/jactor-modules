@@ -1,6 +1,5 @@
-package com.github.jactorrises.persistence.entity.entry;
+package com.github.jactorrises.persistence.entity;
 
-import com.github.jactorrises.persistence.entity.NowAsPureDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
