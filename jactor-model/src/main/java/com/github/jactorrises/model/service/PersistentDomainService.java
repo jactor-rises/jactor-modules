@@ -7,10 +7,10 @@ import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryOrm;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookOrm;
-import com.github.jactorrises.model.persistence.repository.HibernateRepository;
-import com.github.jactorrises.model.persistence.repository.RepositoryCriterion;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryOrm;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookOrm;
+import com.github.jactorrises.persistence.repository.HibernateRepository;
+import com.github.jactorrises.persistence.repository.RepositoryCriterion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,12 +1,12 @@
-package com.github.jactorrises.model.persistence.entity.blog;
+package com.github.jactorrises.persistence.entity.blog;
 
-import com.github.jactorrises.model.persistence.entity.NowAsPureDate;
+import com.github.jactorrises.persistence.entity.NowAsPureDate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

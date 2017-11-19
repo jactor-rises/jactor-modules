@@ -33,6 +33,10 @@
             <groupId>com.github.jactor-rises</groupId>
             <artifactId>jactor-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.jactor-rises.persistence</groupId>
+            <artifactId>persistence-beans</artifactId>
+        </dependency>
 
         <!-- third party -->
         <dependency>

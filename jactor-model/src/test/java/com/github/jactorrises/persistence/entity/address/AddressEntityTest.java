@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.persistence.entity.address;
+package com.github.jactorrises.persistence.entity.address;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder.anAddress;
+import static com.github.jactorrises.persistence.entity.address.AddressEntityBuilder.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

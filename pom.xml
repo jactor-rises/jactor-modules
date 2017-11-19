@@ -79,6 +79,11 @@
                 <artifactId>jactor-client</artifactId>
                 <version>${jactor.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises.persistence</groupId>
+                <artifactId>persistence-beans</artifactId>
+                <version>${jactor.version}</version>
+            </dependency>
 
             <!-- third party -->
             <dependency>

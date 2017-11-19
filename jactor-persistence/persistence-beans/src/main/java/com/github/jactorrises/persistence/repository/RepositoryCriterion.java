@@ -1,6 +1,6 @@
-package com.github.jactorrises.model.persistence.repository;
+package com.github.jactorrises.persistence.repository;
 
-import com.github.jactorrises.model.persistence.entity.PersistentEntity;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 
 public class RepositoryCriterion<T extends PersistentEntity> {
     private final Class<T> persistentClass;

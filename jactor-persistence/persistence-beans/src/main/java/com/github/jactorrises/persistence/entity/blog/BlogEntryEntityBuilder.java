@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.entity.blog;
+package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
 

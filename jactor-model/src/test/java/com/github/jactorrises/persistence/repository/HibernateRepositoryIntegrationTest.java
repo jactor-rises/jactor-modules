@@ -1,36 +1,38 @@
-package com.github.jactorrises.model.persistence.repository;
+package com.github.jactorrises.persistence.repository;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntryOrm;
-import com.github.jactorrises.model.persistence.entity.blog.BlogOrm;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryOrm;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookOrm;
-import com.github.jactorrises.model.persistence.entity.person.PersonOrm;
-import com.github.jactorrises.model.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.entity.address.AddressOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogOrm;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryOrm;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookOrm;
+import com.github.jactorrises.persistence.entity.person.PersonOrm;
+import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-import static com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder.anAddress;
-import static com.github.jactorrises.model.persistence.entity.blog.BlogEntityBuilder.aBlog;
-import static com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;
-import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntityBuilder.aGuestBook;
-import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntityBuilder.aGuestBookEntry;
-import static com.github.jactorrises.model.persistence.entity.person.PersonEntityBuilder.aPerson;
-import static com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder.aUser;
+import static com.github.jactorrises.persistence.entity.address.AddressEntityBuilder.anAddress;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntryEntityBuilder.aBlogEntry;
+import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntityBuilder.aGuestBook;
+import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntityBuilder.aGuestBookEntry;
+import static com.github.jactorrises.persistence.entity.person.PersonEntityBuilder.aPerson;
+import static com.github.jactorrises.persistence.entity.user.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 

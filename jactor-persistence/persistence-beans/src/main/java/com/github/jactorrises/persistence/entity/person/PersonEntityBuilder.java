@@ -1,16 +1,16 @@
-package com.github.jactorrises.model.persistence.entity.person;
+package com.github.jactorrises.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder;
-import com.github.jactorrises.model.persistence.entity.address.AddressOrm;
-import com.github.jactorrises.model.persistence.entity.user.UserEntityBuilder;
-import com.github.jactorrises.model.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.address.AddressEntityBuilder;
+import com.github.jactorrises.persistence.entity.address.AddressOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntityBuilder;
+import com.github.jactorrises.persistence.entity.user.UserOrm;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import com.github.jactorrises.persistence.client.entity.PersonEntity;
 
 import java.util.Locale;
 
-import static com.github.jactorrises.model.persistence.entity.address.AddressEntityBuilder.anAddress;
+import static com.github.jactorrises.persistence.entity.address.AddressEntityBuilder.anAddress;
 
 public class PersonEntityBuilder {
     private AddressOrm addressOrm;

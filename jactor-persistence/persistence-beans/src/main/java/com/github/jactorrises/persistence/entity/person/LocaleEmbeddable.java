@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.entity.person;
+package com.github.jactorrises.persistence.entity.person;
 
 import java.util.Locale;
 import java.util.Objects;

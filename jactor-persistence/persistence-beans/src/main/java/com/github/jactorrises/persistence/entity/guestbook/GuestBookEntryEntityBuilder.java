@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.entity.guestbook;
+package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;

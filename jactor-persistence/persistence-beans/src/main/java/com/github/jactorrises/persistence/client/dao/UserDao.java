@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.client.dao;
+package com.github.jactorrises.persistence.client.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.persistence.client.entity.UserEntity;

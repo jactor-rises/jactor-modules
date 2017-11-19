@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.entity.user;
+package com.github.jactorrises.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.UserName;
 

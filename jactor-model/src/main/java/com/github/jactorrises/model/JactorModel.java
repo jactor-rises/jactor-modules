@@ -2,8 +2,10 @@ package com.github.jactorrises.model;
 
 import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.model.facade.UserFacadeImpl;
-import com.github.jactorrises.model.persistence.client.dao.UserDao;
+import com.github.jactorrises.persistence.client.dao.UserDao;
+import com.github.jactorrises.persistence.repository.HibernateRepository;
 import org.apache.log4j.Logger;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -55,5 +57,10 @@ public class JactorModel {
         }
 
         return names;
+    }
+
+    @Bean
+    public UserDao userDao(SessionFactory sessionFactory) {
+        return new HibernateRepository(sessionFactory);
     }
 }

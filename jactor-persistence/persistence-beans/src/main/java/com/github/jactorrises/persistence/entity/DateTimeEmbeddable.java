@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.entity;
+package com.github.jactorrises.persistence.entity;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

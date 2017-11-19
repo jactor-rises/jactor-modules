@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.persistence.client.dao.UserDao;
+import com.github.jactorrises.persistence.client.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

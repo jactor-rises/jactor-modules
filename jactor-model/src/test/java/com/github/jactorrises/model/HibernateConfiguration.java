@@ -1,6 +1,8 @@
-package com.github.jactorrises.model.persistence;
+package com.github.jactorrises.model;
 
-import com.github.jactorrises.model.persistence.entity.PersistentEntity;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
+import com.github.jactorrises.persistence.repository.HibernateRepository;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -56,6 +58,11 @@ public class HibernateConfiguration {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
+    }
+
+    @Bean
+    public HibernateRepository hibernateRepository(SessionFactory session) {
+        return new HibernateRepository(session);
     }
 }
 

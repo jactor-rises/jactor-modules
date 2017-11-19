@@ -3,7 +3,7 @@ package com.github.jactorrises.model.domain.blog;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntryOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
 
 import java.time.LocalDateTime;
 

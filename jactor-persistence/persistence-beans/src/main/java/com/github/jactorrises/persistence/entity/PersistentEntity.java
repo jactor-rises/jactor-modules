@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.entity;
+package com.github.jactorrises.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Persistent;

@@ -1,8 +1,8 @@
-package com.github.jactorrises.model.persistence.entity.entry;
+package com.github.jactorrises.persistence.entity.entry;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.persistence.entity.DateTimeEmbeddable;
-import com.github.jactorrises.model.persistence.entity.Now;
+import com.github.jactorrises.persistence.entity.DateTimeEmbeddable;
+import com.github.jactorrises.persistence.entity.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

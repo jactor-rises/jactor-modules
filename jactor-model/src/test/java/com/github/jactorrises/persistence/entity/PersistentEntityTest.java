@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.persistence.entity;
+package com.github.jactorrises.persistence.entity;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

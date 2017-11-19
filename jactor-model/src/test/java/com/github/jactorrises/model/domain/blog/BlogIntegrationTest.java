@@ -1,8 +1,8 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.model.persistence.entity.blog.BlogOrm;
-import com.github.jactorrises.model.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogOrm;
+import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
