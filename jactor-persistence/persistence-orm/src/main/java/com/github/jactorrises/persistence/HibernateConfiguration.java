@@ -1,4 +1,4 @@
-package com.github.jactorrises.model;
+package com.github.jactorrises.persistence;
 
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.repository.HibernateRepository;

@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.repository;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.JactorModel;
+import com.github.jactorrises.persistence.JactorPersistence;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
@@ -25,17 +25,17 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static com.github.jactorrises.persistence.builder.AddressEntityBuilder.anAddress;
-import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
 import static com.github.jactorrises.persistence.builder.BlogEntryEntityBuilder.aBlogEntry;
 import static com.github.jactorrises.persistence.builder.GuestBookEntityBuilder.aGuestBook;
 import static com.github.jactorrises.persistence.builder.GuestBookEntryEntityBuilder.aGuestBookEntry;
 import static com.github.jactorrises.persistence.builder.PersonEntityBuilder.aPerson;
 import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = JactorModel.class)
+@ContextConfiguration(classes = JactorPersistence.class)
 @Transactional
 public class HibernateRepositoryIntegrationTest {
 
