@@ -12,6 +12,7 @@ import com.github.jactorrises.model.service.PersistentDomainService.GuestBookCri
 import com.github.jactorrises.model.service.PersistentDomainService.GuestBookEntryCriterion;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.SessionFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModel.class)
 @Transactional
+@Ignore(value = "#168: fix service aka separate model and persistence")
 public class PersistentDomainServiceIntegrationTest {
 
     @Autowired
@@ -59,7 +61,7 @@ public class PersistentDomainServiceIntegrationTest {
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(possibleUser).isPresent();
             UserDomain userDomain = possibleUser.get();
-//            softly.assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")); todo fix: should work after story #131 is resolved
+//            softly.assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")); todo fix: should work after story #152 is resolved
             softly.assertThat(userDomain.getPerson().getDescription()).as("user.description").isEqualTo("description");
         });
     }
