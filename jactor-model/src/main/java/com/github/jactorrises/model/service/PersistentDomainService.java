@@ -1,16 +1,12 @@
 package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.persistence.client.entity.Persistent;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.domain.guestbook.GuestBookBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
-import com.github.jactorrises.model.domain.guestbook.GuestBookEntryBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryOrm;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookOrm;
 import com.github.jactorrises.persistence.repository.HibernateRepository;
-import com.github.jactorrises.persistence.repository.RepositoryCriterion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,33 +45,9 @@ public class PersistentDomainService {
         return hibernateRepository.findUsing(userName).map(UserDomain::new);
     }
 
-    GuestBookDomain findUnique(GuestBookCriterion guestBookCriterion) {
-        return GuestBookBuilder.build(hibernateRepository.load(
-                new RepositoryCriterion<>(GuestBookOrm.class).with(guestBookCriterion.id)
-        ));
-    }
+    <I, T extends Persistent<I>> T findUnique(T persistentDomain) {
+        I id = persistentDomain.getId();
 
-    GuestBookEntryDomain findUnique(GuestBookEntryCriterion guestBookEntryCriterion) {
-        return GuestBookEntryBuilder.build(hibernateRepository.load(
-                new RepositoryCriterion<>(GuestBookEntryOrm.class).with(guestBookEntryCriterion.id)
-        ));
-    }
-
-    public static class GuestBookCriterion {
-        Long id;
-
-        public GuestBookCriterion with(Long id) {
-            this.id = id;
-            return this;
-        }
-    }
-
-    public static class GuestBookEntryCriterion {
-        Long id;
-
-        public GuestBookEntryCriterion with(Long id) {
-            this.id = id;
-            return this;
-        }
+        return hibernateRepository.load(persistentDomain.ge, id);
     }
 }

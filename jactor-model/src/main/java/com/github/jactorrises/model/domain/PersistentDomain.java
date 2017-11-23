@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.domain;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Persistent;
+import com.github.jactorrises.persistence.client.entity.Persistent;
 import org.apache.commons.lang3.Validate;
 
 import java.time.LocalDateTime;

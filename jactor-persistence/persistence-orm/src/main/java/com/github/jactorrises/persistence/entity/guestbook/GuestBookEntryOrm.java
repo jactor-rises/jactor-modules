@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.persistence.entity.PersistentEntity;
+import com.github.jactorrises.persistence.entity.PersistentOrm;
 import com.github.jactorrises.persistence.entity.PersistentEntry;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,7 +22,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntryEntity {
+public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntryEntity {
     @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookOrm guestBookEntity;
 
     @Embedded @AttributeOverrides({

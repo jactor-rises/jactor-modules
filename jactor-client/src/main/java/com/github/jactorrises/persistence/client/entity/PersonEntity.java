@@ -5,7 +5,7 @@ import com.github.jactorrises.client.domain.Person;
 
 import java.util.Locale;
 
-public interface PersonEntity extends Person {
+public interface PersonEntity extends Person, PersistentEntity<Long> {
 
     void setAddressEntity(AddressEntity adressEntity);
 

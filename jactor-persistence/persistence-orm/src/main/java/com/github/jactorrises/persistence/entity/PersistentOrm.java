@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.persistence.client.entity.Persistent;
+import com.github.jactorrises.persistence.client.entity.PersistentEntity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.AttributeOverride;
@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public abstract class PersistentEntity implements Persistent<Long> {
+public abstract class PersistentOrm implements PersistentEntity<Long> {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "ID") Long id;
 
@@ -23,18 +23,18 @@ public abstract class PersistentEntity implements Persistent<Long> {
     @Embedded @AttributeOverride(name = "timestamp", column = @Column(name = "UPDATED_TIME")) @Type(type = "timestamp") private DateTimeEmbeddable updatedTime;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "UPDATED_BY")) private NameEmbeddable updatedBy;
 
-    protected PersistentEntity() {
+    protected PersistentOrm() {
         createdBy = new NameEmbeddable(new Name("todo #156"));
         creationTime = new DateTimeEmbeddable(Now.asDate());
         updatedBy = new NameEmbeddable(new Name("todo #156"));
         updatedTime = new DateTimeEmbeddable(Now.asDate());
     }
 
-    public PersistentEntity(PersistentEntity persistentEntity) {
-        createdBy = persistentEntity.createdBy;
-        creationTime = persistentEntity.creationTime;
-        updatedBy = persistentEntity.updatedBy;
-        updatedTime = persistentEntity.updatedTime;
+    public PersistentOrm(PersistentOrm persistentOrm) {
+        createdBy = persistentOrm.createdBy;
+        creationTime = persistentOrm.creationTime;
+        updatedBy = persistentOrm.updatedBy;
+        updatedTime = persistentOrm.updatedTime;
     }
 
     @Override public String toString() {

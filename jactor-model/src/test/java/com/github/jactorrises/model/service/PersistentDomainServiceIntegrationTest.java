@@ -8,8 +8,6 @@ import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.service.PersistentDomainService.GuestBookCriterion;
-import com.github.jactorrises.model.service.PersistentDomainService.GuestBookEntryCriterion;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;
@@ -33,11 +31,9 @@ import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 @Ignore(value = "#168: fix service aka separate model and persistence")
 public class PersistentDomainServiceIntegrationTest {
 
-    @Autowired
-    private PersistentDomainService persistentDomainService;
+    @Autowired private PersistentDomainService persistentDomainService;
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @Autowired private SessionFactory sessionFactory;
 
     @Test public void shouldSaveUserDomain() {
         persistentDomainService.saveOrUpdate(
@@ -103,7 +99,7 @@ public class PersistentDomainServiceIntegrationTest {
                         .withDescription("description")
                         .withSurname("nevland")
                         .with(anAddress().withAddressLine1("the streets")
-                                .withCity("Dirdal")
+                                .withCity("Ålgård")
                                 .withCountry("NO")
                                 .withZipCode(1234)
                         )

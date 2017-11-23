@@ -1,11 +1,10 @@
 package com.github.jactorrises.persistence.repository;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.persistence.client.dao.UserDao;
-import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.user.UserNameEmbeddable;
+import com.github.jactorrises.persistence.client.dao.PersistentDao;
+import com.github.jactorrises.persistence.client.entity.PersistentEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.entity.user.UserNameEmbeddable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -16,12 +15,11 @@ import java.io.Serializable;
 import java.util.Optional;
 
 @Repository
-public class HibernateRepository implements UserDao {
+public class HibernateRepository implements PersistentDao {
 
     private final SessionFactory sessionFactory;
 
-    @Autowired
-    public HibernateRepository(SessionFactory sessionFactory) {
+    @Autowired public HibernateRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -33,17 +31,13 @@ public class HibernateRepository implements UserDao {
         return Optional.ofNullable(userEntity);
     }
 
-    public <T extends Persistent<?>> T saveOrUpdate(T entity) {
+    @Override public <I, T extends PersistentEntity<I>> T saveOrUpdate(T entity) {
         session().saveOrUpdate(entity);
-        return entity;
+         return entity;
     }
 
-    <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
+    @Override public <T extends PersistentEntity<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
         return session().load(entityClass, id);
-    }
-
-    public <T extends PersistentEntity> T load(RepositoryCriterion<T> someCritera) {
-        return load(someCritera.getPersistentClass(), someCritera.getId());
     }
 
     private Session session() {

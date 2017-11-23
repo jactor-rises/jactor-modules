@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence;
 
-import com.github.jactorrises.persistence.client.dao.UserDao;
+import com.github.jactorrises.persistence.client.dao.PersistentDao;
 import com.github.jactorrises.persistence.repository.HibernateRepository;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -46,15 +46,11 @@ public class JactorPersistence {
             }
         }
 
-        for (String name : beanNames) {
-            names.append(name);
-        }
-
         return names;
     }
 
     @Bean
-    public UserDao userDao(SessionFactory sessionFactory) {
+    public PersistentDao persistentDao(SessionFactory sessionFactory) {
         return new HibernateRepository(sessionFactory);
     }
 }
