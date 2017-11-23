@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Persistent;
+import com.github.jactorrises.persistence.client.entity.Persistent;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.AttributeOverride;

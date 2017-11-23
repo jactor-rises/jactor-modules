@@ -5,7 +5,7 @@ import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 import java.util.Optional;
 
-public interface UserDao {
+public interface PersistentDao {
 
     Optional<UserEntity> findUsing(UserName userName);
 }
