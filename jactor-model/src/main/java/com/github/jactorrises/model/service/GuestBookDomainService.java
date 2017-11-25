@@ -1,28 +1,29 @@
 package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.persistence.client.entity.Persistent;
-import com.github.jactorrises.model.domain.PersistentDomain;
+import com.github.jactorrises.client.domain.Persistent;
+import com.github.jactorrises.model.domain.DefaultPersistentDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.repository.HibernateRepository;
+import com.github.jactorrises.persistence.client.dao.PersistentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 @Service
 public class PersistentDomainService {
-    private final HibernateRepository hibernateRepository;
+    private final PersistentDao persistentDao;
 
     @Autowired
-    public PersistentDomainService(HibernateRepository hibernateRepository) {
-        this.hibernateRepository = hibernateRepository;
+    public PersistentDomainService(PersistentDao persistentDao) {
+        this.persistentDao = persistentDao;
     }
 
-    void saveOrUpdate(PersistentDomain<?, ?> persistentDomain) {
-        hibernateRepository.saveOrUpdate(persistentDomain.getEntity());
+    void saveOrUpdate(DefaultPersistentDomain<?, ?> defaultPersistentDomain) {
+        persistentDao.saveOrUpdate(defaultPersistentDomain.getEntity());
     }
 
     GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
@@ -42,12 +43,12 @@ public class PersistentDomainService {
     }
 
     Optional<UserDomain> findUser(UserName userName) {
-        return hibernateRepository.findUsing(userName).map(UserDomain::new);
+        return persistentDao.findUsing(userName).map(UserDomain::new);
     }
 
-    <I, T extends Persistent<I>> T findUnique(T persistentDomain) {
+    <T extends Persistent<I>, I extends Serializable> T findUnique(T persistentDomain) {
         I id = persistentDomain.getId();
 
-        return hibernateRepository.load(persistentDomain.ge, id);
+        return persistentDao.load(persistentDomain.getPersistent().getClass(), id);
     }
 }
