@@ -31,7 +31,7 @@ public final class GuestBookEntryBuilder extends DomainBuilder<GuestBookEntryDom
     }
 
     public GuestBookEntryBuilder with(GuestBookDomain guestBookDomain) {
-        return with(guestBookDomain.getEntity());
+        return with(guestBookDomain.getPersistence());
     }
 
     public GuestBookEntryBuilder with(GuestBookEntityBuilder guestBookEntityBuilder) {

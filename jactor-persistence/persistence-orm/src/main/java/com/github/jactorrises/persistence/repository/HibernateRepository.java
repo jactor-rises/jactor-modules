@@ -1,8 +1,8 @@
 package com.github.jactorrises.persistence.repository;
 
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.persistence.client.dao.PersistentDao;
-import com.github.jactorrises.persistence.client.entity.PersistentEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
 import com.github.jactorrises.persistence.entity.user.UserNameEmbeddable;
 import org.hibernate.Session;
@@ -31,12 +31,12 @@ public class HibernateRepository implements PersistentDao {
         return Optional.ofNullable(userEntity);
     }
 
-    @Override public <I, T extends PersistentEntity<I>> T saveOrUpdate(T entity) {
+    @Override public <I, T extends Persistent<I>> T saveOrUpdate(T entity) {
         session().saveOrUpdate(entity);
-         return entity;
+        return entity;
     }
 
-    @Override public <T extends PersistentEntity<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
+    @Override public <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
         return session().load(entityClass, id);
     }
 

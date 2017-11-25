@@ -2,9 +2,9 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;
@@ -27,14 +27,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModel.class)
 @Transactional
-@Ignore(value = "#168: fix service")
+@Ignore("#171: spring context")
 public class BlogEntryIntegrationTest {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @SuppressWarnings("SpringJavaAutowiringInspection") // located in jactor-persistence-orm...
+    @Autowired private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
-        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntry("some").withCreatorName("thing").build().getEntity());
+        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntry("some").withCreatorName("thing").build().getPersistence());
 
         session().flush();
         session().clear();
@@ -48,7 +48,7 @@ public class BlogEntryIntegrationTest {
     }
 
     private BlogEntity aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
-        BlogEntity blogEntity = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getEntity();
+        BlogEntity blogEntity = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getPersistence();
         session().save(blogEntity);
 
         return blogEntity;
@@ -66,7 +66,7 @@ public class BlogEntryIntegrationTest {
                                 .withZipCode(1234)
                         )
                 )
-                .build().getEntity();
+                .build().getPersistence();
 
         session().save(userEntity);
 

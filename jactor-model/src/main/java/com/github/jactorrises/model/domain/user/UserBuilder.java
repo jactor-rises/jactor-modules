@@ -21,7 +21,7 @@ public final class UserBuilder extends DomainBuilder<UserDomain> {
     }
 
     public UserBuilder with(PersonDomain personDomain) {
-        userEntityBuilder.with(personDomain.getEntity());
+        userEntityBuilder.with(personDomain.getPersistence());
         return this;
     }
 

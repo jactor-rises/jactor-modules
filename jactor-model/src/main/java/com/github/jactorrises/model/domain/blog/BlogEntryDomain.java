@@ -7,7 +7,7 @@ import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
 
 import java.time.LocalDateTime;
 
-public class BlogEntryDomain extends PersistentDomain<BlogEntryOrm, Long> implements BlogEntry {
+public class BlogEntryDomain extends PersistentDomain<Long> implements BlogEntry {
 
     private final BlogEntryOrm blogEntryEntity;
 
@@ -31,7 +31,7 @@ public class BlogEntryDomain extends PersistentDomain<BlogEntryOrm, Long> implem
         return blogEntryEntity.getCreatorName();
     }
 
-    @Override public BlogEntryOrm getEntity() {
+    @Override public BlogEntryOrm getPersistence() {
         return blogEntryEntity;
     }
 

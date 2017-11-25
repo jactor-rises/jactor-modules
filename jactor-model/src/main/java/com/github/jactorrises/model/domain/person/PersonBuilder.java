@@ -17,7 +17,7 @@ public final class PersonBuilder extends DomainBuilder<PersonDomain> {
     }
 
     public PersonBuilder with(AddressDomain address) {
-        personEntityBuilder.with(address.getEntity());
+        personEntityBuilder.with(address.getPersistence());
         return this;
     }
 

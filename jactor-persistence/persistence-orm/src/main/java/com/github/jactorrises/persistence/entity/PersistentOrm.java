@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.persistence.client.entity.PersistentEntity;
+import com.github.jactorrises.client.domain.Persistent;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.AttributeOverride;
@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public abstract class PersistentOrm implements PersistentEntity<Long> {
+public abstract class PersistentOrm implements Persistent<Long> {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "ID") Long id;
 

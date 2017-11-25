@@ -25,15 +25,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModel.class)
 @Transactional
-@Ignore(value = "#168: fix service")
+@Ignore("#171: spring context")
 public class BlogIntegrationTest {
 
-    @Resource
-    private SessionFactory sessionFactory;
+    @SuppressWarnings("SpringJavaAutowiringInspection") // located in jactor-persistence-orm...
+    @Resource private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogOrmToThePersistentLayer() {
         final UserOrm persistedUser = persistUser();
-        Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getEntity());
+        Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getPersistence());
 
         session().flush();
         session().clear();
@@ -57,7 +57,7 @@ public class BlogIntegrationTest {
                                 .withZipCode(1234)
                         )
                 ).build()
-                .getEntity();
+                .getPersistence();
 
         session().save(userEntity);
 

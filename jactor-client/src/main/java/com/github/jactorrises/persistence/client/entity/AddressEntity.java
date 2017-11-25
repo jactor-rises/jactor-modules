@@ -2,8 +2,9 @@ package com.github.jactorrises.persistence.client.entity;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
+import com.github.jactorrises.client.domain.Persistent;
 
-public interface AddressEntity extends Address, PersistentEntity<Long> {
+public interface AddressEntity extends Address, Persistent<Long> {
 
     void setCountry(Country country);
 

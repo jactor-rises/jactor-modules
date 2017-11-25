@@ -18,14 +18,12 @@ public final class BlogEntryBuilder extends DomainBuilder<BlogEntryDomain> {
 
     BlogEntryBuilder withEntry(String entry) {
         blogEntryEntityBuilder.withEntry(entry);
-
         return this;
     }
 
 
     BlogEntryBuilder withCreatorName(String creator) {
         blogEntryEntityBuilder.withCreatorName(creator);
-
         return this;
     }
 

@@ -1,29 +1,28 @@
 package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.model.domain.DefaultPersistentDomain;
+import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.persistence.client.dao.PersistentDao;
+import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
+import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 @Service
-public class PersistentDomainService {
+public class GuestBookDomainService {
     private final PersistentDao persistentDao;
 
-    @Autowired
-    public PersistentDomainService(PersistentDao persistentDao) {
+    @Autowired public GuestBookDomainService(PersistentDao persistentDao) {
         this.persistentDao = persistentDao;
     }
 
-    void saveOrUpdate(DefaultPersistentDomain<?, ?> defaultPersistentDomain) {
-        persistentDao.saveOrUpdate(defaultPersistentDomain.getEntity());
+    void saveOrUpdate(PersistentDomain<?> persistentDomain) {
+        persistentDao.saveOrUpdate(persistentDomain.getPersistence());
     }
 
     GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
@@ -46,9 +45,14 @@ public class PersistentDomainService {
         return persistentDao.findUsing(userName).map(UserDomain::new);
     }
 
-    <T extends Persistent<I>, I extends Serializable> T findUnique(T persistentDomain) {
-        I id = persistentDomain.getId();
+    GuestBookDomain findGuestBook(Long id) {
+        GuestBookEntity guestBookEntity = persistentDao.load(GuestBookEntity.class, id);
+        return new GuestBookDomain(guestBookEntity);
+    }
 
-        return persistentDao.load(persistentDomain.getPersistent().getClass(), id);
+    GuestBookEntryDomain findGuestBookEntry(Long id) {
+        GuestBookEntryEntity guestBookEntryEntity = persistentDao.load(GuestBookEntryEntity.class, id);
+        return new GuestBookEntryDomain(guestBookEntryEntity);
     }
 }
+

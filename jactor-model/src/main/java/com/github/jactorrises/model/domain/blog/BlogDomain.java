@@ -4,11 +4,10 @@ import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 import java.time.LocalDate;
 
-public class BlogDomain extends PersistentDomain<BlogEntity, Long> implements Blog {
+public class BlogDomain extends PersistentDomain<Long> implements Blog {
 
     private final BlogEntity blogEntity;
 
@@ -21,14 +20,14 @@ public class BlogDomain extends PersistentDomain<BlogEntity, Long> implements Bl
     }
 
     @Override public UserDomain getUser() {
-        return blogEntity.getUser() != null ? new UserDomain((UserEntity) blogEntity.getUser()) : null;
+        return blogEntity.getUser() != null ? new UserDomain(blogEntity.getUser()) : null;
     }
 
     @Override public LocalDate getCreated() {
-        return getEntity().getCreated();
+        return getPersistence().getCreated();
     }
 
-    @Override public BlogEntity getEntity() {
+    @Override public BlogEntity getPersistence() {
         return blogEntity;
     }
 

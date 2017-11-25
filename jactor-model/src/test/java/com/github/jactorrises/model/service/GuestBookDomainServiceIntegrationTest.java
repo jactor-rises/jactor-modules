@@ -28,15 +28,16 @@ import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModel.class)
 @Transactional
-@Ignore(value = "#168: fix service aka separate model and persistence")
-public class PersistentDomainServiceIntegrationTest {
+@Ignore("#:171: fix spring context... ")
+public class GuestBookDomainServiceIntegrationTest {
 
-    @Autowired private PersistentDomainService persistentDomainService;
+    @Autowired private GuestBookDomainService guestBookDomainService;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection") // located in jactor-persistence-orm...
     @Autowired private SessionFactory sessionFactory;
 
     @Test public void shouldSaveUserDomain() {
-        persistentDomainService.saveOrUpdate(
+        guestBookDomainService.saveOrUpdate(
                 UserDomain.aUser().withUserName("titten")
                         .withEmailAddress("jactor@rises")
                         .with(aPerson()
@@ -52,7 +53,7 @@ public class PersistentDomainServiceIntegrationTest {
 
         ensureDbCreation();
 
-        Optional<UserDomain> possibleUser = persistentDomainService.findUser(new UserName("titten"));
+        Optional<UserDomain> possibleUser = guestBookDomainService.findUser(new UserName("titten"));
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(possibleUser).isPresent();
@@ -79,11 +80,11 @@ public class PersistentDomainServiceIntegrationTest {
                 .with(person)
                 .build();
 
-        Long id = persistentDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getEntity().getId();
+        Long id = guestBookDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getPersistence().getId();
 
         ensureDbCreation();
 
-        GuestBookDomain guestBook = persistentDomainService.findUnique(new GuestBookCriterion().with(id));
+        GuestBookDomain guestBook = guestBookDomainService.findGuestBook(id);
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(guestBook.getTitle()).isEqualTo("my guest book");
@@ -108,11 +109,11 @@ public class PersistentDomainServiceIntegrationTest {
         GuestBookDomain guestBookDomain = aGuestBook().with(userDomain).withTitle("my guest book").build();
         GuestBookEntryDomain guestBookEntryDomain = aGuestBookEntry().with(guestBookDomain).withEntry("svada", "lada").build();
 
-        Long id = persistentDomainService.saveOrUpdateGuestBookEntry(guestBookEntryDomain).getId();
+        Long id = guestBookDomainService.saveOrUpdateGuestBookEntry(guestBookEntryDomain).getId();
 
         ensureDbCreation();
 
-        GuestBookEntryDomain guestBookEntry = persistentDomainService.findUnique(new GuestBookEntryCriterion().with(id));
+        GuestBookEntryDomain guestBookEntry = guestBookDomainService.findGuestBookEntry(id);
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(guestBookEntry.getGuestBook().getTitle()).as("guest book.title").isEqualTo("my guest book");

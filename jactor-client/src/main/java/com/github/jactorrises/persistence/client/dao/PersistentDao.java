@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.client.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.persistence.client.entity.PersistentEntity;
+import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.persistence.client.entity.UserEntity;
 
 import java.io.Serializable;
@@ -11,7 +11,7 @@ public interface PersistentDao {
 
     Optional<UserEntity> findUsing(UserName userName);
 
-    <I, T extends PersistentEntity<I>> T saveOrUpdate(T entity);
+    <I, T extends Persistent<I>> T saveOrUpdate(T entity);
 
-    <T extends PersistentEntity<I>, I extends Serializable> T load(Class<T> entityClass, I id);
+    <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id);
 }
