@@ -35,6 +35,7 @@
 
     <modules>
         <module>jactor-client</module>
+        <module>jactor-persistence</module>
         <module>jactor-model</module>
         <module>jactor-web</module>
     </modules>
@@ -76,6 +77,11 @@
             <dependency>
                 <groupId>com.github.jactor-rises</groupId>
                 <artifactId>jactor-client</artifactId>
+                <version>${jactor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises.persistence</groupId>
+                <artifactId>persistence-beans</artifactId>
                 <version>${jactor.version}</version>
             </dependency>
 

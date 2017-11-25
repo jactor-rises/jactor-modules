@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
-import static com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactorrises.persistence.builder.GuestBookEntityBuilder.aGuestBook;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 

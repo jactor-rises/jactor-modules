@@ -3,15 +3,15 @@ package com.github.jactorrises.model.domain.blog;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
 
 import java.time.LocalDateTime;
 
-public class BlogEntryDomain extends PersistentDomain<BlogEntryEntity, Long> implements BlogEntry {
+public class BlogEntryDomain extends PersistentDomain<Long> implements BlogEntry {
 
-    private final BlogEntryEntity blogEntryEntity;
+    private final BlogEntryOrm blogEntryEntity;
 
-    BlogEntryDomain(BlogEntryEntity blogEntryEntity) {
+    BlogEntryDomain(BlogEntryOrm blogEntryEntity) {
         this.blogEntryEntity = blogEntryEntity;
     }
 
@@ -31,7 +31,7 @@ public class BlogEntryDomain extends PersistentDomain<BlogEntryEntity, Long> imp
         return blogEntryEntity.getCreatorName();
     }
 
-    @Override public BlogEntryEntity getEntity() {
+    @Override public BlogEntryOrm getPersistence() {
         return blogEntryEntity;
     }
 

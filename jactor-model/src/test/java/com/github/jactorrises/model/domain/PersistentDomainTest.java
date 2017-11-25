@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain;
 
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +11,14 @@ import static org.mockito.Mockito.verify;
 @DisplayName("A PersistentDomain")
 class PersistentDomainTest {
 
-    private PersistentDomain<UserEntity, Long> persistentDomain = new TestPersistedDomain();
+    private PersistentDomain<Long> persistentDomain = new TestPersistedDomain();
     private UserEntity userEntity = null;
 
     @DisplayName("should fail if a domain is created for an entity which is null")
     @Test
     void shouldFailIfDomainIsCreatedForAnEntityWhichIsNull() {
         assertThatNullPointerException().isThrownBy(persistentDomain::getId)
-                .withMessage(PersistentDomain.THE_ENTITY_ON_THE_DOMAIN_CANNOT_BE_NULL);
+                .withMessage(PersistentDomain.THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
     }
 
     @Test
@@ -38,8 +38,8 @@ class PersistentDomainTest {
         verify(userEntity).getUpdatedTime();
     }
 
-    private class TestPersistedDomain extends PersistentDomain<UserEntity, Long> {
-        @Override public UserEntity getEntity() {
+    private class TestPersistedDomain extends PersistentDomain<Long> {
+        @Override public UserEntity getPersistence() {
             return userEntity;
         }
     }

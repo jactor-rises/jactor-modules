@@ -5,11 +5,11 @@ import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.persistence.client.entity.PersonEntity;
 
 import java.util.Locale;
 
-public class PersonDomain extends PersistentDomain<PersonEntity, Long> implements Person {
+public class PersonDomain extends PersistentDomain<Long> implements Person {
 
     private final PersonEntity personEntity;
 
@@ -41,7 +41,7 @@ public class PersonDomain extends PersistentDomain<PersonEntity, Long> implement
         return personEntity.getAddress() != null ? new AddressDomain(personEntity.getAddress()) : null;
     }
 
-    @Override public PersonEntity getEntity() {
+    @Override public PersonEntity getPersistence() {
         return personEntity;
     }
 

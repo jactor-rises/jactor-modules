@@ -3,9 +3,9 @@ package com.github.jactorrises.model.domain.address;
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.client.entity.AddressEntity;
 
-public class AddressDomain extends PersistentDomain<AddressEntity, Long> implements Address {
+public class AddressDomain extends PersistentDomain<Long> implements Address {
 
     private final AddressEntity addressEntity;
 
@@ -37,7 +37,7 @@ public class AddressDomain extends PersistentDomain<AddressEntity, Long> impleme
         return addressEntity.getZipCode();
     }
 
-    @Override public AddressEntity getEntity() {
+    @Override public AddressEntity getPersistence() {
         return addressEntity;
     }
 

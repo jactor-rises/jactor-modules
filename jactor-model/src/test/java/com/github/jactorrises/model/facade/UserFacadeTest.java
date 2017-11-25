@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.model.persistence.client.dao.UserDao;
+import com.github.jactorrises.persistence.client.dao.PersistentDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class UserFacadeTest {
     private UserFacadeImpl testUserFacadeImpl;
 
     @Mock
-    private UserDao userDaoMock;
+    private PersistentDao persistentDaoMock;
 
     @BeforeEach
     void initMocking() {
@@ -36,7 +36,7 @@ class UserFacadeTest {
     @DisplayName("should find a user when the user name only differs in case")
     @Test void willFindDefauldUser() {
         UserDomain user = aValidUser();
-        when(userDaoMock.findUsing(new UserName("jactor"))).thenReturn(Optional.of(user.getEntity()));
+        when(persistentDaoMock.findUsing(new UserName("jactor"))).thenReturn(Optional.of(user.getPersistence()));
         Optional<User> optionalUser = testUserFacadeImpl.findUsing(new UserName("JACTOR"));
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);
@@ -55,9 +55,9 @@ class UserFacadeTest {
                 .build();
     }
 
-    @DisplayName("should not return a user when the UserDao returns an empty optional ")
+    @DisplayName("should not return a user when the PersistentDao returns an empty optional ")
     @Test void willNotFindUnknownUser() {
-        when(userDaoMock.findUsing(new UserName("someone"))).thenReturn(Optional.empty());
+        when(persistentDaoMock.findUsing(new UserName("someone"))).thenReturn(Optional.empty());
         Optional<User> user = testUserFacadeImpl.findUsing(new UserName("someone"));
         assertThat(user.isPresent()).isEqualTo(false);
     }

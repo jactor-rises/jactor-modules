@@ -5,9 +5,9 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.person.PersonDomain;
-import com.github.jactorrises.model.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.client.entity.UserEntity;
 
-public class UserDomain extends PersistentDomain<UserEntity, Long> implements User {
+public class UserDomain extends PersistentDomain<Long> implements User {
 
     private final UserEntity userEntity;
 
@@ -31,7 +31,7 @@ public class UserDomain extends PersistentDomain<UserEntity, Long> implements Us
         return userEntity.isUserNameEmailAddress();
     }
 
-    @Override public UserEntity getEntity() {
+    @Override public UserEntity getPersistence() {
         return userEntity;
     }
 

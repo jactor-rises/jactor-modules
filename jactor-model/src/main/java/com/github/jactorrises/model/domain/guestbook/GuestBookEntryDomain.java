@@ -3,15 +3,15 @@ package com.github.jactorrises.model.domain.guestbook;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
 
 import java.time.LocalDateTime;
 
-public class GuestBookEntryDomain extends PersistentDomain<GuestBookEntryEntity, Long> implements GuestBookEntry {
+public class GuestBookEntryDomain extends PersistentDomain<Long> implements GuestBookEntry {
 
     private final GuestBookEntryEntity guestBookEntryEntity;
 
-    GuestBookEntryDomain(GuestBookEntryEntity guestBookEntryEntity) {
+    public GuestBookEntryDomain(GuestBookEntryEntity guestBookEntryEntity) {
         this.guestBookEntryEntity = guestBookEntryEntity;
     }
 
@@ -31,7 +31,7 @@ public class GuestBookEntryDomain extends PersistentDomain<GuestBookEntryEntity,
         return guestBookEntryEntity.getCreatorName();
     }
 
-    @Override public GuestBookEntryEntity getEntity() {
+    @Override public GuestBookEntryEntity getPersistence() {
         return guestBookEntryEntity;
     }
 
