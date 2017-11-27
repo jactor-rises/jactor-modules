@@ -31,7 +31,7 @@ public class HibernateRepository implements PersistentDao {
         return Optional.ofNullable(userEntity);
     }
 
-    @Override public <I, T extends Persistent<I>> T saveOrUpdate(T entity) {
+    @Override public <T extends Persistent<?>> T saveOrUpdate(T entity) {
         session().saveOrUpdate(entity);
         return entity;
     }

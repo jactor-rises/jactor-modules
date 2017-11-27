@@ -11,7 +11,7 @@ public interface PersistentDao {
 
     Optional<UserEntity> findUsing(UserName userName);
 
-    <I, T extends Persistent<I>> T saveOrUpdate(T entity);
+    <T extends Persistent<?>> T saveOrUpdate(T entity);
 
     <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id);
 }
