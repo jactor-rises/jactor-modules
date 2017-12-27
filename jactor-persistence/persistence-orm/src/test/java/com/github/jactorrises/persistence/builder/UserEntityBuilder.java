@@ -2,7 +2,6 @@ package com.github.jactorrises.persistence.builder;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 
@@ -14,8 +13,8 @@ public class UserEntityBuilder {
     private UserEntityBuilder() {
     }
 
-    public UserEntityBuilder with(com.github.jactorrises.persistence.client.entity.PersonEntity person) {
-        this.person = (PersonOrm) person;
+    public UserEntityBuilder with(PersonOrm person) {
+        this.person = person;
         return this;
     }
 
@@ -33,7 +32,7 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntity build() {
+    public UserOrm build() {
         UserOrm userOrm = new UserOrm();
         userOrm.setEmailAddress(emailAddress);
         userOrm.setPersonEntity(person);

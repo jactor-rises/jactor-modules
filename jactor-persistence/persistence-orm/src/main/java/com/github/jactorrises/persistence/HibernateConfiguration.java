@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence;
 
 import com.github.jactorrises.persistence.entity.PersistentOrm;
-import com.github.jactorrises.persistence.repository.HibernateRepository;
+import com.github.jactorrises.persistence.dao.HibernateRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;

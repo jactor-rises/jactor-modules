@@ -1,8 +1,9 @@
 package com.github.jactorrises.persistence.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
+import com.github.jactorrises.client.domain.Address;
+import com.github.jactorrises.persistence.client.dto.AddressDto;
 import com.github.jactorrises.persistence.entity.PersistentOrm;
-import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,7 +18,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_ADDRESS")
-public class AddressOrm extends PersistentOrm implements AddressEntity {
+public class AddressOrm extends PersistentOrm implements Address {
 
     @Embedded @AttributeOverride(name = "country", column = @Column(name = "COUNTRY")) private CountryEmbaddable country;
     @Column(name = "ZIP_CODE") private Integer zipCode;
@@ -43,6 +44,10 @@ public class AddressOrm extends PersistentOrm implements AddressEntity {
         zipCode = address.getZipCode();
     }
 
+    public AddressOrm(AddressDto addressDto) {
+        super(addressDto);
+    }
+
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(addressLine1, ((AddressOrm) o).addressLine1) &&
@@ -59,6 +64,18 @@ public class AddressOrm extends PersistentOrm implements AddressEntity {
 
     public AddressOrm copy() {
         return new AddressOrm(this);
+    }
+
+    public AddressDto asDto() {
+        AddressDto addressDto = new AddressDto();
+        addressDto.setAddressLine1(addressLine1);
+        addressDto.setAddressLine2(addressLine2);
+        addressDto.setAddressLine3(addressLine3);
+        addressDto.setCity(city);
+        addressDto.setCountry(country.fetchCountry());
+        addressDto.setZipCode(zipCode);
+
+        return addressDto;
     }
 
     @Override public int hashCode() {
@@ -101,27 +118,27 @@ public class AddressOrm extends PersistentOrm implements AddressEntity {
         return city;
     }
 
-    @Override public void setCountry(Country country) {
+    public void setCountry(Country country) {
         this.country = new CountryEmbaddable(country);
     }
 
-    @Override public void setZipCode(Integer zipCode) {
+    public void setZipCode(Integer zipCode) {
         this.zipCode = zipCode;
     }
 
-    @Override public void setAddressLine1(String addressLine1) {
+    public void setAddressLine1(String addressLine1) {
         this.addressLine1 = addressLine1;
     }
 
-    @Override public void setAddressLine2(String addressLine2) {
+    public void setAddressLine2(String addressLine2) {
         this.addressLine2 = addressLine2;
     }
 
-    @Override public void setAddressLine3(String addressLine3) {
+    public void setAddressLine3(String addressLine3) {
         this.addressLine3 = addressLine3;
     }
 
-    @Override public void setCity(String city) {
+    public void setCity(String city) {
         this.city = city;
     }
 }

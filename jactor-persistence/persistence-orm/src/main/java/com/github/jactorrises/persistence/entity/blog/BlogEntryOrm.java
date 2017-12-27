@@ -1,9 +1,10 @@
 package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.client.domain.BlogEntry;
+import com.github.jactorrises.persistence.client.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.entity.PersistentEntry;
-import com.github.jactorrises.persistence.client.entity.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.PersistentOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,7 +23,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
-public class BlogEntryOrm extends PersistentOrm implements BlogEntryEntity {
+public class BlogEntryOrm extends PersistentOrm implements BlogEntry {
 
     @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogOrm blogEntity;
 
@@ -47,6 +48,12 @@ public class BlogEntryOrm extends PersistentOrm implements BlogEntryEntity {
 
     private PersistentEntry copyEntry() {
         return persistentEntry.copy();
+    }
+
+    public BlogEntryOrm(BlogEntryDto blogEntryDto) {
+        super(blogEntryDto);
+        blogEntity = new BlogOrm(blogEntryDto.getBlog());
+        persistentEntry = new PersistentEntry(blogEntryDto.getCreatedTime(), blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     }
 
     public BlogEntryOrm copy() {
@@ -75,8 +82,8 @@ public class BlogEntryOrm extends PersistentOrm implements BlogEntryEntity {
         return blogEntity;
     }
 
-    @Override public void setBlog(com.github.jactorrises.persistence.client.entity.BlogEntity blog) {
-        this.blogEntity = (BlogOrm) blog;
+    public void setBlog(BlogOrm blog) {
+        this.blogEntity = blog;
     }
 
     @Override public LocalDateTime getCreatedTime() {
@@ -87,7 +94,7 @@ public class BlogEntryOrm extends PersistentOrm implements BlogEntryEntity {
         return persistentEntry.getCreatorName();
     }
 
-    @Override public void setCreatorName(String creator) {
+    public void setCreatorName(String creator) {
         persistentEntry.setCreatorName(creator);
     }
 
@@ -95,7 +102,7 @@ public class BlogEntryOrm extends PersistentOrm implements BlogEntryEntity {
         return persistentEntry.getEntry();
     }
 
-    @Override public void setEntry(String entry) {
+    public void setEntry(String entry) {
         persistentEntry.setEntry(entry);
     }
 }

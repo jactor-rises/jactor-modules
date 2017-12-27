@@ -1,6 +1,5 @@
 package com.github.jactorrises.persistence.builder;
 
-import com.github.jactorrises.persistence.client.entity.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
 import com.github.jactorrises.persistence.entity.blog.BlogOrm;
 
@@ -12,8 +11,8 @@ public class BlogEntryEntityBuilder {
     private BlogEntryEntityBuilder() {
     }
 
-    public BlogEntryEntityBuilder with(BlogEntity blogEntity) {
-        blogOrm = (BlogOrm) blogEntity;
+    public BlogEntryEntityBuilder with(BlogOrm blogEntity) {
+        blogOrm = blogEntity;
         return this;
     }
 

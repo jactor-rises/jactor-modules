@@ -1,7 +1,6 @@
 package com.github.jactorrises.persistence.builder;
 
 import com.github.jactorrises.client.datatype.Country;
-import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import com.github.jactorrises.persistence.entity.address.AddressOrm;
 
 public class AddressEntityBuilder {
@@ -46,7 +45,7 @@ public class AddressEntityBuilder {
         return this;
     }
 
-    public AddressEntity build() {
+    public AddressOrm build() {
         AddressOrm addressOrm = new AddressOrm();
         addressOrm.setAddressLine1(addressLine1);
         addressOrm.setAddressLine2(addressLine2);

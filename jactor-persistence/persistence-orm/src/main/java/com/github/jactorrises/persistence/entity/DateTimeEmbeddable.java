@@ -20,6 +20,10 @@ public class DateTimeEmbeddable {
         this.timestamp = timestamp;
     }
 
+    public DateTimeEmbeddable(LocalDateTime timestamp) {
+        this.timestamp = Date.from(timestamp.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
     public LocalDateTime fetchLocalDateTime() {
         return timestamp != null ? convert(timestamp.toInstant()) : null;
     }

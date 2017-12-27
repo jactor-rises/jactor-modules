@@ -1,9 +1,10 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.client.domain.GuestBookEntry;
+import com.github.jactorrises.persistence.client.dto.GuestBookEntryDto;
 import com.github.jactorrises.persistence.entity.PersistentEntry;
-import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.entity.PersistentOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,7 +23,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntryEntity {
+public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntry {
     @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookOrm guestBookEntity;
 
     @Embedded @AttributeOverrides({
@@ -32,12 +33,19 @@ public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntryEn
     }) private PersistentEntry persistentEntry = new PersistentEntry();
 
     public GuestBookEntryOrm() {
+        // empty...
     }
 
     private GuestBookEntryOrm(GuestBookEntryOrm guestBookEntry) {
         super(guestBookEntry);
         guestBookEntity = guestBookEntry.copyGuestBook();
         persistentEntry = guestBookEntry.copyEntry();
+    }
+
+    public GuestBookEntryOrm(GuestBookEntryDto guestBookEntry) {
+        super(guestBookEntry);
+        guestBookEntity = new GuestBookOrm(guestBookEntry.getGuestBook());
+        persistentEntry = new PersistentEntry(guestBookEntry.getCreatedTime(), guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     }
 
     public GuestBookEntryOrm copy() {
@@ -85,15 +93,15 @@ public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntryEn
         return persistentEntry.getCreatorName();
     }
 
-    @Override public void setGuestBook(com.github.jactorrises.persistence.client.entity.GuestBookEntity guestBookEntity) {
-        this.guestBookEntity = (GuestBookOrm) guestBookEntity;
+    public void setGuestBook(GuestBookOrm guestBookEntity) {
+        this.guestBookEntity = guestBookEntity;
     }
 
-    @Override public void setEntry(String entry) {
+    public void setEntry(String entry) {
         persistentEntry.setEntry(entry);
     }
 
-    @Override public void setCreatorName(String creatorName) {
+    public void setCreatorName(String creatorName) {
         persistentEntry.setCreatorName(creatorName);
     }
 }

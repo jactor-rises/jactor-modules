@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
 
@@ -37,6 +38,12 @@ public class PersistentEntry {
         creation.setTime(this.createdTime.getTime());
 
         return creation;
+    }
+
+    public PersistentEntry(LocalDateTime createdTime, Name creatorName, String entry) {
+        this.createdTime = Date.from(createdTime.atZone(ZoneId.systemDefault()).toInstant());
+        this.creatorName = creatorName.asString();
+        this.entry = entry;
     }
 
     public PersistentEntry copy() {

@@ -1,10 +1,11 @@
-package com.github.jactorrises.persistence.repository;
+package com.github.jactorrises.persistence.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.persistence.client.dao.PersistentDao;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.user.UserNameEmbeddable;
+import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -23,12 +24,12 @@ public class HibernateRepository implements PersistentDao {
         this.sessionFactory = sessionFactory;
     }
 
-    @Override public Optional<UserEntity> findUsing(UserName userName) {
-        UserEntity userEntity = (UserEntity) session().createCriteria(UserEntity.class)
+    @Override public Optional<UserDto> findUsing(UserName userName) {
+        UserOrm userEntity = (UserOrm) session().createCriteria(UserOrm.class)
                 .add(Restrictions.eq("userName", new UserNameEmbeddable(userName)))
                 .uniqueResult();
 
-        return Optional.ofNullable(userEntity);
+        return Optional.ofNullable(userEntity).map(UserOrm::asDto);
     }
 
     @Override public <T extends Persistent<?>> T saveOrUpdate(T entity) {
@@ -36,7 +37,7 @@ public class HibernateRepository implements PersistentDao {
         return entity;
     }
 
-    @Override public <T extends Persistent<I>, I extends Serializable> T load(Class<T> entityClass, I id) {
+    @Override public <T extends Persistent<I>, I extends Serializable> T fetch(Class<T> entityClass, I id) {
         return session().load(entityClass, id);
     }
 

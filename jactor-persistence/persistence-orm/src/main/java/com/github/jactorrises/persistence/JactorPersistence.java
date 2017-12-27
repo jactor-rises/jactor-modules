@@ -1,9 +1,10 @@
 package com.github.jactorrises.persistence;
 
 import com.github.jactorrises.persistence.client.dao.PersistentDao;
-import com.github.jactorrises.persistence.repository.HibernateRepository;
-import org.apache.log4j.Logger;
+import com.github.jactorrises.persistence.dao.HibernateRepository;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +15,7 @@ import static java.util.Arrays.sort;
 @SpringBootApplication
 public class JactorPersistence {
 
-    private static final Logger LOGGER = Logger.getLogger(JactorPersistence.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JactorPersistence.class);
 
     public static void main(String... args) {
         display(SpringApplication.run(JactorPersistence.class, args));
@@ -26,10 +27,12 @@ public class JactorPersistence {
         String[] beanDefinitions = ctx.getBeanDefinitionNames();
         sort(beanDefinitions);
 
-        LOGGER.debug(namesOf(beanDefinitions));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(namesOf(beanDefinitions));
+        }
     }
 
-    private static StringBuilder namesOf(String[] beanNames) {
+    private static String namesOf(String[] beanNames) {
         StringBuilder names = new StringBuilder();
 
         for (int i = 0; i < beanNames.length; i++) {
@@ -46,7 +49,7 @@ public class JactorPersistence {
             }
         }
 
-        return names;
+        return names.toString();
     }
 
     @Bean

@@ -2,6 +2,7 @@ package com.github.jactorrises.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Persistent;
+import com.github.jactorrises.persistence.client.dto.PersistentDto;
 import com.github.jactorrises.commons.time.Now;
 import org.hibernate.annotations.Type;
 
@@ -26,16 +27,23 @@ public abstract class PersistentOrm implements Persistent<Long> {
 
     protected PersistentOrm() {
         createdBy = new NameEmbeddable(new Name("todo #156"));
-        creationTime = new DateTimeEmbeddable(Now.asDate());
+        creationTime = new DateTimeEmbeddable(Now.asDateTime());
         updatedBy = new NameEmbeddable(new Name("todo #156"));
-        updatedTime = new DateTimeEmbeddable(Now.asDate());
+        updatedTime = new DateTimeEmbeddable(Now.asDateTime());
     }
 
-    public PersistentOrm(PersistentOrm persistentOrm) {
+    protected PersistentOrm(PersistentOrm persistentOrm) {
         createdBy = persistentOrm.createdBy;
         creationTime = persistentOrm.creationTime;
         updatedBy = persistentOrm.updatedBy;
         updatedTime = persistentOrm.updatedTime;
+    }
+
+    protected PersistentOrm(PersistentDto persistentDto) {
+        createdBy = new NameEmbeddable(persistentDto.getCreatedBy());
+        creationTime = new DateTimeEmbeddable(persistentDto.getCreationTime());
+        updatedBy = new NameEmbeddable(persistentDto.getUpdatedBy());
+        updatedTime = new DateTimeEmbeddable(persistentDto.getUpdatedTime());
     }
 
     @Override public String toString() {

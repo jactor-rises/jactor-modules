@@ -1,15 +1,11 @@
 package com.github.jactorrises.persistence.builder;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.persistence.client.entity.AddressEntity;
-import com.github.jactorrises.persistence.client.entity.PersonEntity;
 import com.github.jactorrises.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 
 import java.util.Locale;
-
-import static com.github.jactorrises.persistence.builder.AddressEntityBuilder.anAddress;
 
 public class PersonEntityBuilder {
     private AddressOrm addressOrm;
@@ -22,20 +18,9 @@ public class PersonEntityBuilder {
     private PersonEntityBuilder() {
     }
 
-    public PersonEntityBuilder with(AddressEntity entity) {
-        if (entity instanceof AddressOrm) {
-            addressOrm = (AddressOrm) entity;
-            return this;
-        }
-
-        return with(anAddress()
-                .withAddressLine1(entity.getAddressLine1())
-                .withAddressLine2(entity.getAddressLine2())
-                .withAddressLine3(entity.getAddressLine3())
-                .withCity(entity.getCity())
-                .withCountryCode(entity.getCountry().getCountryCode())
-                .withZipCode(entity.getZipCode())
-        );
+    public PersonEntityBuilder with(AddressOrm entity) {
+        addressOrm = entity;
+        return this;
     }
 
     public PersonEntityBuilder with(AddressEntityBuilder addressEntityBuilder) {
@@ -43,7 +28,7 @@ public class PersonEntityBuilder {
     }
 
     public PersonEntityBuilder with(UserEntityBuilder userEntityBuilder) {
-        userEntity = (UserOrm) userEntityBuilder.build();
+        userEntity = userEntityBuilder.build();
         return this;
     }
 
@@ -67,7 +52,7 @@ public class PersonEntityBuilder {
         return this;
     }
 
-    public PersonEntity build() {
+    public PersonOrm build() {
         PersonOrm personOrm = new PersonOrm();
         personOrm.setAddressEntity(addressOrm);
         personOrm.setDescription(description);
