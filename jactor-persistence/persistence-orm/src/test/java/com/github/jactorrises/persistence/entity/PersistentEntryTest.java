@@ -1,21 +1,22 @@
 package com.github.jactorrises.persistence.entity;
 
-import org.junit.jupiter.api.AfterEach;
+import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A PersistentEntry")
+@ExtendWith(NowAsPureDateExtension.class)
 class PersistentEntryTest {
 
     private PersistentEntry persistentEntryToTest;
 
     @BeforeEach
     void initClassToTest() {
-        NowAsPureDate.set();
         persistentEntryToTest = new PersistentEntry();
     }
 
@@ -72,10 +73,5 @@ class PersistentEntryTest {
     void shouldNotDisplayEntryInToStringWithMoreCharachtersThan50() {
         persistentEntryToTest.setEntry("123456789.123456789.123456789.123456789.ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         assertThat(persistentEntryToTest.toString()).contains(",123456789.123456789.123456789.123456789.ABCDEFG...");
-    }
-
-    @AfterEach
-    void removeNowAsPureDate() {
-        NowAsPureDate.remove();
     }
 }

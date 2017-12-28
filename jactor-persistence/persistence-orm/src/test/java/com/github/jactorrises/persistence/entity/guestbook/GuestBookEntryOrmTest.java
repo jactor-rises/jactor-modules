@@ -1,10 +1,9 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
-import com.github.jactorrises.persistence.entity.NowAsPureDate;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,10 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A GuestBookEntryOrm")
 class GuestBookEntryOrmTest {
-
-    @BeforeEach void useNowAsPureDate() {
-        NowAsPureDate.set();
-    }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
@@ -70,6 +65,7 @@ class GuestBookEntryOrmTest {
     }
 
     @DisplayName("should set created time when initialized")
+    @ExtendWith(NowAsPureDateExtension.class)
     @Test void willHaveCreationTimeOnEntryWhenCreated() {
         assertThat(new GuestBookEntryOrm().getCreatedTime()).isEqualTo(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
     }
@@ -85,9 +81,5 @@ class GuestBookEntryOrmTest {
                 .contains("jactor")
                 .contains("hi")
                 .contains(LocalDate.now().toString());
-    }
-
-    @AfterEach void removeNowAsPureDate() {
-        NowAsPureDate.remove();
     }
 }
