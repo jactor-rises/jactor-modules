@@ -1,16 +1,20 @@
 package com.github.jactorrises.model.domain.address;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.commons.builder.DomainValidator;
 import com.github.jactorrises.persistence.builder.AddressEntityBuilder;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
-import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
+
+import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
     private final AddressEntityBuilder addressEntityBuilder = AddressEntityBuilder.anAddress();
 
     AddressBuilder() {
-        super(configureValidator());
+        super(AddressBuilder::validInstance);
     }
 
     public AddressBuilder withCity(String city) {
@@ -43,22 +47,19 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
         return this;
     }
 
-    @Override protected AddressDomain buildDomain() {
+    @Override protected AddressDomain buildBean() {
         return new AddressDomain(addressEntityBuilder.build());
+    }
+
+    private static Optional<String> validInstance(AddressDomain addressDomain) {
+        return collectMessages(
+                fetchMessageIfStringWithoutValue("address line 1", addressDomain.getAddressLine1()),
+                fetchMessageIfFieldNotPresent("country", addressDomain.getCountry()),
+                fetchMessageIfFieldNotPresent("zip code", addressDomain.getZipCode())
+        );
     }
 
     public static AddressDomain build(AddressEntity addressEntity) {
         return new AddressDomain(addressEntity);
-    }
-
-    private static DomainValidator<AddressDomain> configureValidator() {
-        return new DomainValidator<AddressDomain>() {
-
-            @Override public void validate(AddressDomain domain) {
-                addIfInvalid(StringUtils.isBlank(domain.getAddressLine1()), "address line 1", FieldValidation.EMPTY);
-                addIfInvalid(domain.getCountry() == null, "country", FieldValidation.REQUIRED);
-                addIfInvalid(domain.getZipCode() == null, "zip code", FieldValidation.REQUIRED);
-            }
-        };
     }
 }

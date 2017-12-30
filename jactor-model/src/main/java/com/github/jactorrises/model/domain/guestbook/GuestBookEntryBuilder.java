@@ -1,20 +1,23 @@
 package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.commons.builder.DomainValidator;
 import com.github.jactorrises.persistence.builder.GuestBookEntityBuilder;
 import com.github.jactorrises.persistence.builder.GuestBookEntryEntityBuilder;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
 import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
-import org.apache.commons.lang3.StringUtils;
 
+import java.util.Optional;
+
+import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 import static com.github.jactorrises.persistence.builder.GuestBookEntryEntityBuilder.aGuestBookEntry;
 
 public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryDomain> {
     private final GuestBookEntryEntityBuilder guestBookEntryEntityBuilder = aGuestBookEntry();
 
     GuestBookEntryBuilder() {
-        super(configureValidator());
+        super(GuestBookEntryBuilder::validateInstance);
     }
 
     public GuestBookEntryBuilder withEntry(String entry, String guestName) {
@@ -38,19 +41,16 @@ public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryD
         return with(guestBookEntityBuilder.build());
     }
 
-    @Override protected GuestBookEntryDomain buildDomain() {
+    @Override protected GuestBookEntryDomain buildBean() {
         return new GuestBookEntryDomain(guestBookEntryEntityBuilder.build());
     }
 
-    private static DomainValidator<GuestBookEntryDomain> configureValidator() {
-        return new DomainValidator<GuestBookEntryDomain>() {
-
-            @Override public void validate(GuestBookEntryDomain domain) {
-                addIfInvalid(StringUtils.isBlank(domain.getEntry()), "entry", FieldValidation.EMPTY);
-                addIfInvalid(domain.getGuestBook() == null, "guestBook", FieldValidation.REQUIRED);
-                addIfInvalid(domain.getCreatorName() == null, "creatorName", FieldValidation.REQUIRED);
-            }
-        };
+    private static Optional<String> validateInstance(GuestBookEntryDomain guestBookEntryDomain) {
+        return collectMessages(
+                fetchMessageIfStringWithoutValue("entry", guestBookEntryDomain.getEntry()),
+                fetchMessageIfFieldNotPresent("guestBook", guestBookEntryDomain.getGuestBook()),
+                fetchMessageIfFieldNotPresent("creatorName", guestBookEntryDomain.getCreatorName())
+        );
     }
 
     public static GuestBookEntryDomain build(GuestBookEntryEntity guestBookEntryEntity) {

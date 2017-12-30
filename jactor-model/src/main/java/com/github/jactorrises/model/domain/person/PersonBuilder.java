@@ -1,19 +1,22 @@
 package com.github.jactorrises.model.domain.person;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.commons.builder.DomainValidator;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.persistence.builder.PersonEntityBuilder;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
 
+import java.util.Optional;
+
+import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 import static com.github.jactorrises.persistence.builder.PersonEntityBuilder.aPerson;
 
 public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
     private PersonEntityBuilder personEntityBuilder = aPerson();
 
     PersonBuilder() {
-        super(configureValidator());
+        super(PersonBuilder::validateInstance);
     }
 
     public PersonBuilder with(AddressDomain address) {
@@ -45,18 +48,15 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
         return this;
     }
 
-    @Override protected PersonDomain buildDomain() {
+    @Override protected PersonDomain buildBean() {
         return new PersonDomain(personEntityBuilder.build());
     }
 
-    private static DomainValidator<PersonDomain> configureValidator() {
-        return new DomainValidator<PersonDomain>() {
-
-            @Override public void validate(PersonDomain domain) {
-                addIfInvalid(domain.getAddress() == null, "address", FieldValidation.REQUIRED);
-                addIfInvalid(domain.getSurname() == null, "surname", FieldValidation.REQUIRED);
-            }
-        };
+    private static Optional<String> validateInstance(PersonDomain personDomain) {
+        return collectMessages(
+                fetchMessageIfFieldNotPresent("address", personDomain.getAddress()),
+                fetchMessageIfFieldNotPresent("surname", personDomain.getSurname())
+        );
     }
 
     public static PersonDomain build(PersonOrm person) {

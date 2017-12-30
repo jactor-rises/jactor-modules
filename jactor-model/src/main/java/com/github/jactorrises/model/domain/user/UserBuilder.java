@@ -1,18 +1,21 @@
 package com.github.jactorrises.model.domain.user;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.commons.builder.DomainValidator;
 import com.github.jactorrises.model.domain.person.PersonBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.persistence.builder.UserEntityBuilder;
 
+import java.util.Optional;
+
+import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
 
 public final class UserBuilder extends AbstractBuilder<UserDomain> {
     private final UserEntityBuilder userEntityBuilder = aUser();
 
     UserBuilder() {
-        super(configureValidator());
+        super(UserBuilder::validateDomain);
     }
 
     public UserBuilder withUserName(String userName) {
@@ -35,17 +38,14 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
     }
 
     @Override
-    protected UserDomain buildDomain() {
+    protected UserDomain buildBean() {
         return new UserDomain(userEntityBuilder.build());
     }
 
-    private static DomainValidator<UserDomain> configureValidator() {
-        return new DomainValidator<UserDomain>() {
-
-            @Override public void validate(UserDomain domain) {
-                addIfInvalid(domain.getUserName() == null, "user name", FieldValidation.REQUIRED);
-                addIfInvalid(domain.getPerson() == null, "person", FieldValidation.REQUIRED);
-            }
-        };
+    private static Optional<String> validateDomain(UserDomain userDomain) {
+        return collectMessages(
+                fetchMessageIfFieldNotPresent("user name", userDomain.getUserName()),
+                fetchMessageIfFieldNotPresent("person", userDomain.getPerson())
+        );
     }
 }

@@ -1,19 +1,22 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.commons.builder.DomainValidator;
-import com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder;
+import com.github.jactorrises.commons.builder.ValidInstance;
 import com.github.jactorrises.persistence.builder.BlogEntryEntityBuilder;
 import com.github.jactorrises.persistence.client.entity.BlogEntity;
-import org.apache.commons.lang3.StringUtils;
+import com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder;
 
+import java.util.Optional;
+
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 import static com.github.jactorrises.persistence.builder.BlogEntryEntityBuilder.aBlogEntry;
 
 public final class BlogEntryBuilder extends AbstractBuilder<BlogEntryDomain> {
     private final BlogEntryEntityBuilder blogEntryEntityBuilder = aBlogEntry();
 
     BlogEntryBuilder() {
-        super(configureValidatetor());
+        super(BlogEntryBuilder::validateInstance);
     }
 
     BlogEntryBuilder withEntry(String entry) {
@@ -36,18 +39,15 @@ public final class BlogEntryBuilder extends AbstractBuilder<BlogEntryDomain> {
         return with(blogEntityBuilder.build());
     }
 
-    private static DomainValidator<BlogEntryDomain> configureValidatetor() {
-        return new DomainValidator<BlogEntryDomain>() {
-
-            @Override public void validate(BlogEntryDomain domain) {
-                addIfInvalid(StringUtils.isBlank(domain.getEntry()), "entry", FieldValidation.EMPTY);
-                addIfInvalid(domain.getCreatorName() == null, "creatorName", FieldValidation.REQUIRED);
-                addIfInvalid(domain.getBlog() == null, "blog", FieldValidation.REQUIRED);
-            }
-        };
+    private static Optional<String> validateInstance(BlogEntryDomain blogEntryDomain) {
+        return ValidInstance.collectMessages(
+                fetchMessageIfStringWithoutValue("entry", blogEntryDomain.getEntry()),
+                fetchMessageIfFieldNotPresent("creatorName", blogEntryDomain.getCreatorName()),
+                fetchMessageIfFieldNotPresent("blog", blogEntryDomain.getBlog())
+        );
     }
 
-    @Override protected BlogEntryDomain buildDomain() {
+    @Override protected BlogEntryDomain buildBean() {
         return new BlogEntryDomain(blogEntryEntityBuilder.build());
     }
 }
