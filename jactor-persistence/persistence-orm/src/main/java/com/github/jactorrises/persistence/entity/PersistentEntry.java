@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.entity;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.time.Now;
+import com.github.jactorrises.commons.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

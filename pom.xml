@@ -34,6 +34,7 @@
 
     <modules>
         <module>jactor-client</module>
+        <module>jactor-commons</module>
         <module>jactor-test</module>
         <module>jactor-persistence</module>
         <module>jactor-model</module>
@@ -77,6 +78,11 @@
             <dependency>
                 <groupId>com.github.jactor-rises</groupId>
                 <artifactId>jactor-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises</groupId>
+                <artifactId>jactor-commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
