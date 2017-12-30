@@ -1,14 +1,14 @@
 package com.github.jactorrises.model.domain.user;
 
-import com.github.jactorrises.model.domain.DomainBuilder;
-import com.github.jactorrises.model.domain.DomainValidator;
+import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactorrises.commons.builder.DomainValidator;
 import com.github.jactorrises.model.domain.person.PersonBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.persistence.builder.UserEntityBuilder;
 
 import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
 
-public final class UserBuilder extends DomainBuilder<UserDomain> {
+public final class UserBuilder extends AbstractBuilder<UserDomain> {
     private final UserEntityBuilder userEntityBuilder = aUser();
 
     UserBuilder() {

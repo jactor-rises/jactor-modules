@@ -1,12 +1,12 @@
 package com.github.jactorrises.model.domain.address;
 
-import com.github.jactorrises.model.domain.DomainBuilder;
-import com.github.jactorrises.model.domain.DomainValidator;
+import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactorrises.commons.builder.DomainValidator;
 import com.github.jactorrises.persistence.builder.AddressEntityBuilder;
 import com.github.jactorrises.persistence.client.entity.AddressEntity;
 import org.apache.commons.lang3.StringUtils;
 
-public final class AddressBuilder extends DomainBuilder<AddressDomain> {
+public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
     private final AddressEntityBuilder addressEntityBuilder = AddressEntityBuilder.anAddress();
 
     AddressBuilder() {
