@@ -17,13 +17,13 @@ class UserBuilderTest {
     @DisplayName("should not build an instance without a user name")
     @Test void willNotBuildUserDomainWithoutUserName() {
         assertThatIllegalStateException().isThrownBy(() -> aUser().with(aValidPerson()).build())
-                .withMessageContaining("user name").withMessageContaining("cannot be null");
+                .withMessageContaining("user name").withMessageContaining("must be present");
     }
 
     @DisplayName("should not build an instance without a person")
     @Test void willNotBuildUserDomainWithoutPerson() {
         assertThatIllegalStateException().isThrownBy(() -> aUser().withUserName("some user").build())
-                .withMessageContaining("person").withMessageContaining("cannot be null");
+                .withMessageContaining("person").withMessageContaining("must be present");
     }
 
     @DisplayName("should build an instance when all required fields are set")

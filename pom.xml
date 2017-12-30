@@ -16,7 +16,6 @@
     <properties>
         <apache.commons.lang3.version>3.7</apache.commons.lang3.version>
         <assertj.version>3.8.0</assertj.version>
-        <jactor.version>1.0-SNAPSHOT</jactor.version>
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.2</junit-jupiter.version>
@@ -35,6 +34,8 @@
 
     <modules>
         <module>jactor-client</module>
+        <module>jactor-commons</module>
+        <module>jactor-test</module>
         <module>jactor-persistence</module>
         <module>jactor-model</module>
         <module>jactor-web</module>
@@ -77,12 +78,23 @@
             <dependency>
                 <groupId>com.github.jactor-rises</groupId>
                 <artifactId>jactor-client</artifactId>
-                <version>${jactor.version}</version>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises</groupId>
+                <artifactId>jactor-commons</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.jactor-rises.persistence</groupId>
                 <artifactId>persistence-beans</artifactId>
-                <version>${jactor.version}</version>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises</groupId>
+                <artifactId>jactor-test</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <!-- third party -->
@@ -97,7 +109,6 @@
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
                 <version>${junit-jupiter.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

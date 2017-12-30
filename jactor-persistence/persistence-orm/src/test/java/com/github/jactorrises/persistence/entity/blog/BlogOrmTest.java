@@ -1,24 +1,21 @@
 package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.persistence.entity.DateTextEmbeddable;
-import com.github.jactorrises.persistence.entity.NowAsPureDate;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.LocalDate;
 
-import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
 import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A BlogOrm")
+@ExtendWith(NowAsPureDateExtension.class)
 class BlogOrmTest {
-    @BeforeEach void useNowAsPureDate() {
-        NowAsPureDate.set();
-    }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
@@ -81,9 +78,5 @@ class BlogOrmTest {
                 .contains("BlogOrm")
                 .contains("my blog")
                 .contains(new DateTextEmbeddable(LocalDate.now()).toString());
-    }
-
-    @AfterEach void removeNowAsPureDate() {
-        NowAsPureDate.remove();
     }
 }

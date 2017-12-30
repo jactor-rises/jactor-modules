@@ -16,25 +16,25 @@ class AddressBuilderTest {
     @DisplayName("should not build an instance without an address line 1")
     @Test void willNotBuildDomainWithoutAddressLine1() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withZipCode(1234).withCountry("NO").build())
-                .withMessageContaining("address line 1").withMessageContaining("cannot be empty");
+                .withMessageContaining("address line 1").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance with an empty address line 1")
     @Test void willNotBuildDomainWithAnEmptyAddressLine1() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("").withZipCode(1234).withCountry("NO").build())
-                .withMessageContaining("address line 1").withMessageContaining("cannot be empty");
+                .withMessageContaining("address line 1").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance without a zip code")
     @Test void willNotBuildDomainWithoutZipCode() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withCountry("NO").build())
-                .withMessageContaining("zip code").withMessageContaining("cannot be null");
+                .withMessageContaining("zip code").withMessageContaining("must be present");
     }
 
     @DisplayName("should not build an instance without a country")
     @Test void willNotBuildDomainWithoutCountry() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withZipCode(1234).build())
-                .withMessageContaining("country").withMessageContaining("cannot be null");
+                .withMessageContaining("country").withMessageContaining("must be present");
     }
 
     @DisplayName("should build an instance when all required properties are set")

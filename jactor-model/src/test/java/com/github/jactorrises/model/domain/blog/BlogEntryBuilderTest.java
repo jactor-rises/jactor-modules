@@ -14,25 +14,25 @@ class BlogEntryBuilderTest {
     @DisplayName("should not build a blog entry without the entry")
     @Test void willNotBuildBlogEntryWithoutTheEntry() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry(null).withCreatorName("aCreator").with(BlogEntityBuilder.aBlog()).build())
-                .withMessageContaining("entry").withMessageContaining("cannot be empty");
+                .withMessageContaining("entry").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build a blog entry with an empty entry")
     @Test void willNotBuildBlogEntryWithAnEmptyEntry() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("").withCreatorName("aCreator").with(BlogEntityBuilder.aBlog()).build())
-                .withMessageContaining("entry").withMessageContaining("cannot be empty");
+                .withMessageContaining("entry").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build a blog entry without a blog")
     @Test void willNotBuildBlogEntryWithoutTheBlog() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("some entry").withCreatorName("aCreator").build())
-                .withMessageContaining("blog").withMessageContaining("cannot be null");
+                .withMessageContaining("blog").withMessageContaining("must be present");
     }
 
     @DisplayName("should not build a blog entry without the creator")
     @Test void willNotBuildBlogEntryWithoutTheCreator() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("some entry").withCreatorName(null).with(BlogEntityBuilder.aBlog()).build())
-                .withMessageContaining("creatorName").withMessageContaining("cannot be null");
+                .withMessageContaining("creatorName").withMessageContaining("must be present");
     }
 
     @DisplayName("should build a blog entry when all required fields are set")

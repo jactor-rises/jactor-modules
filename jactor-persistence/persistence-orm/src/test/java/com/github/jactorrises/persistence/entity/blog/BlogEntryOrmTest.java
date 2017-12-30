@@ -1,20 +1,17 @@
 package com.github.jactorrises.persistence.entity.blog;
 
-import com.github.jactorrises.persistence.entity.NowAsPureDate;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.github.jactorrises.persistence.builder.BlogEntryEntityBuilder.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A BlogEntryOrm")
+@ExtendWith(NowAsPureDateExtension.class)
 class BlogEntryOrmTest {
-    @BeforeEach void useNowAsPureDate() {
-        NowAsPureDate.set();
-    }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
@@ -63,9 +60,5 @@ class BlogEntryOrmTest {
                 () -> assertThat(base).as("base is not equal to notEqual").isNotEqualTo(notEqual),
                 () -> assertThat(base).as("base is not same instance as equal").isNotSameAs(equal)
         );
-    }
-
-    @AfterEach void removeNowAsPureDate() {
-        NowAsPureDate.remove();
     }
 }
