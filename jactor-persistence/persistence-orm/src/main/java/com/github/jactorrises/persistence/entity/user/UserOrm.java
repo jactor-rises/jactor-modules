@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.persistence.client.dto.UserDto;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -24,7 +24,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_USER")
-public class UserOrm extends PersistentOrm implements User {
+public class UserOrm extends PersistentEntity implements User {
 
     @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonOrm personEntity;

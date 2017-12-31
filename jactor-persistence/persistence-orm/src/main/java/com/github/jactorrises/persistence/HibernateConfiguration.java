@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence;
 
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.dao.HibernateRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class HibernateConfiguration {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(PersistentOrm.class.getPackage().getName());
+        sessionFactory.setPackagesToScan(PersistentEntity.class.getPackage().getName());
         Properties hibernateProperties = new Properties();
         hibernateProperties.put("hibernate.dialect", dialect);
         hibernateProperties.put("hibernate.show_sql", showSql);

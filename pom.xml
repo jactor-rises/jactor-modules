@@ -9,10 +9,6 @@
     <packaging>pom</packaging>
     <url>https://github.com/jactor-rises</url>
 
-    <prerequisites>
-        <maven>3.5</maven>
-    </prerequisites>
-
     <properties>
         <apache.commons.lang3.version>3.7</apache.commons.lang3.version>
         <assertj.version>3.8.0</assertj.version>

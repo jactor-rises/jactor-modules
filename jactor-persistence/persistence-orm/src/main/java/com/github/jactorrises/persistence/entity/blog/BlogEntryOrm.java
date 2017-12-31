@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.persistence.client.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.entity.EntryEmbeddable;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -23,7 +23,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
-public class BlogEntryOrm extends PersistentOrm implements BlogEntry {
+public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
 
     @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogOrm blogEntity;
 

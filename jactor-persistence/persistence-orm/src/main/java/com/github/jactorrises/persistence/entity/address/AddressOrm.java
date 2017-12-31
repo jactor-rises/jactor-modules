@@ -3,7 +3,7 @@ package com.github.jactorrises.persistence.entity.address;
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.persistence.client.dto.AddressDto;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -18,7 +18,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_ADDRESS")
-public class AddressOrm extends PersistentOrm implements Address {
+public class AddressOrm extends PersistentEntity implements Address {
 
     @Embedded @AttributeOverride(name = "country", column = @Column(name = "COUNTRY")) private CountryEmbaddable country;
     @Column(name = "ZIP_CODE") private Integer zipCode;

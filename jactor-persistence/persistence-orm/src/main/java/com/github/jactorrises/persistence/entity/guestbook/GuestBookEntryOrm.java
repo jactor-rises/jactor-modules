@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.persistence.client.dto.GuestBookEntryDto;
 import com.github.jactorrises.persistence.entity.EntryEmbeddable;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -23,7 +23,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntry {
+public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntry {
     @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookOrm guestBookEntity;
 
     @Embedded @AttributeOverrides({

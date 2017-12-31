@@ -16,7 +16,7 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public abstract class PersistentOrm implements Persistent<Long> {
+public abstract class PersistentEntity implements Persistent<Long> {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "ID") Long id;
 
@@ -25,21 +25,21 @@ public abstract class PersistentOrm implements Persistent<Long> {
     @Embedded @AttributeOverride(name = "timestamp", column = @Column(name = "UPDATED_TIME")) @Type(type = "timestamp") private DateTimeEmbeddable updatedTime;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "UPDATED_BY")) private NameEmbeddable updatedBy;
 
-    protected PersistentOrm() {
+    protected PersistentEntity() {
         createdBy = new NameEmbeddable(new Name("todo #156"));
         creationTime = new DateTimeEmbeddable(Now.asDateTime());
         updatedBy = new NameEmbeddable(new Name("todo #156"));
         updatedTime = new DateTimeEmbeddable(Now.asDateTime());
     }
 
-    protected PersistentOrm(PersistentOrm persistentOrm) {
+    protected PersistentEntity(PersistentEntity persistentOrm) {
         createdBy = persistentOrm.createdBy;
         creationTime = persistentOrm.creationTime;
         updatedBy = persistentOrm.updatedBy;
         updatedTime = persistentOrm.updatedTime;
     }
 
-    protected PersistentOrm(PersistentDto persistentDto) {
+    protected PersistentEntity(PersistentDto persistentDto) {
         createdBy = new NameEmbeddable(persistentDto.getCreatedBy());
         creationTime = new DateTimeEmbeddable(persistentDto.getCreationTime());
         updatedBy = new NameEmbeddable(persistentDto.getUpdatedBy());

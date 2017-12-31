@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@DisplayName("A PersistentOrm")
-class PersistentOrmTest {
+@DisplayName("A PersistentEntity")
+class PersistentEntityTest {
 
     @DisplayName("should have an implementation of the toString method")
     @Test void willHaveClassNameAndIdOnToStringMethod() {
-        assertThat(new TestPersistentOrm(101).toString()).isEqualTo("id=101");
+        assertThat(new TestPersistentEntity(101).toString()).isEqualTo("id=101");
     }
 
-    private class TestPersistentOrm extends PersistentOrm {
+    private class TestPersistentEntity extends PersistentEntity {
 
-        TestPersistentOrm(long id) {
+        TestPersistentEntity(long id) {
             super.id = id;
         }
     }

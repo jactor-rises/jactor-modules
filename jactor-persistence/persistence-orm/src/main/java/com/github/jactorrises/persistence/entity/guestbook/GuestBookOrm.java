@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.entity.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.persistence.client.dto.GuestBookDto;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -20,7 +20,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK ")
-public class GuestBookOrm extends PersistentOrm implements GuestBook {
+public class GuestBookOrm extends PersistentEntity implements GuestBook {
 
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm user;
@@ -37,7 +37,7 @@ public class GuestBookOrm extends PersistentOrm implements GuestBook {
         user = guestBook.copyUser();
     }
 
-    public GuestBookOrm(GuestBookDto guestBook) {
+    GuestBookOrm(GuestBookDto guestBook) {
         super(guestBook);
         title = guestBook.getTitle();
         user = new UserOrm(guestBook.getUser());

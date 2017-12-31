@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.persistence.client.dto.PersonDto;
 import com.github.jactorrises.persistence.entity.NameEmbeddable;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.address.AddressOrm;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,7 +27,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonOrm extends PersistentOrm implements Person {
+public class PersonOrm extends PersistentEntity implements Person {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressOrm addressEntity;

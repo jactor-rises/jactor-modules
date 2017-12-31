@@ -3,7 +3,7 @@ package com.github.jactorrises.persistence.entity.blog;
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.persistence.client.dto.BlogDto;
 import com.github.jactorrises.persistence.entity.DateTextEmbeddable;
-import com.github.jactorrises.persistence.entity.PersistentOrm;
+import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -24,7 +24,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG")
-public class BlogOrm extends PersistentOrm implements Blog {
+public class BlogOrm extends PersistentEntity implements Blog {
 
     @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
