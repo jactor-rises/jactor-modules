@@ -27,7 +27,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonOrm extends PersistentEntity implements Person {
+public class PersonEntity extends PersistentEntity implements Person {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
@@ -37,10 +37,10 @@ public class PersonOrm extends PersistentEntity implements Person {
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
     @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
 
-    public PersonOrm() {
+    public PersonEntity() {
     }
 
-    private PersonOrm(PersonOrm person) {
+    private PersonEntity(PersonEntity person) {
         super(person);
         addressEntity = person.copyAddress();
         description = person.description;
@@ -50,7 +50,7 @@ public class PersonOrm extends PersistentEntity implements Person {
         userEntity = person.copyUser();
     }
 
-    public PersonOrm(PersonDto person) {
+    public PersonEntity(PersonDto person) {
         super(person);
         addressEntity = person.getAddress() != null ? new AddressEntity(person.getAddress()) : null;
         description = person.getDescription();
@@ -68,25 +68,25 @@ public class PersonOrm extends PersistentEntity implements Person {
         return userEntity != null ? userEntity.copy() : null;
     }
 
-    public PersonOrm copy() {
-        return new PersonOrm(this);
+    public PersonEntity copy() {
+        return new PersonEntity(this);
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressEntity, ((PersonOrm) o).addressEntity) &&
-                Objects.equals(description, ((PersonOrm) o).description) &&
-                Objects.equals(getFirstName(), fetchName(((PersonOrm) o).firstName)) &&
-                Objects.equals(getSurname(), fetchName(((PersonOrm) o).surname)) &&
-                Objects.equals(getLocale(), fetchLocale((PersonOrm) o));
+                Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
+                Objects.equals(description, ((PersonEntity) o).description) &&
+                Objects.equals(getFirstName(), fetchName(((PersonEntity) o).firstName)) &&
+                Objects.equals(getSurname(), fetchName(((PersonEntity) o).surname)) &&
+                Objects.equals(getLocale(), fetchLocale((PersonEntity) o));
     }
 
     private Name fetchName(NameEmbeddable nameEmbeddable) {
         return nameEmbeddable != null ? nameEmbeddable.fetchName() : null;
     }
 
-    private Locale fetchLocale(PersonOrm personOrm) {
-        return personOrm != null ? personOrm.getLocale() : null;
+    private Locale fetchLocale(PersonEntity personEntity) {
+        return personEntity != null ? personEntity.getLocale() : null;
     }
 
     public PersonDto asDto() {

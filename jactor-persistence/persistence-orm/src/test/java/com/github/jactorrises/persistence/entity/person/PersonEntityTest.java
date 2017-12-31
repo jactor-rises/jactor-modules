@@ -9,12 +9,12 @@ import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A PersonOrm")
-class PersonOrmTest {
+@DisplayName("A PersonEntity")
+class PersonEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        PersonOrm base = (PersonOrm) aPerson()
+        PersonEntity base = aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")
@@ -23,9 +23,9 @@ class PersonOrmTest {
                 .withLocale("no")
                 .build();
 
-        PersonOrm equal = base.copy();
+        PersonEntity equal = base.copy();
 
-        PersonOrm notEqual = (PersonOrm) aPerson()
+        PersonEntity notEqual = aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")
@@ -44,7 +44,7 @@ class PersonOrmTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        PersonOrm base = (PersonOrm) aPerson()
+        PersonEntity base = aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")
@@ -53,9 +53,9 @@ class PersonOrmTest {
                 .withLocale("no")
                 .build();
 
-        PersonOrm equal = base.copy();
+        PersonEntity equal = base.copy();
 
-        PersonOrm notEqual = (PersonOrm) aPerson()
+        PersonEntity notEqual = aPerson()
                 .with(anAddress())
                 .with(aUser())
                 .withDescription("some description")

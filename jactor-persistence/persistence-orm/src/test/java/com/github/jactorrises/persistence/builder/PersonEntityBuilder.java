@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.builder;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.persistence.entity.person.PersonOrm;
+import com.github.jactorrises.persistence.entity.person.PersonEntity;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 
 import java.util.Locale;
@@ -52,16 +52,16 @@ public class PersonEntityBuilder {
         return this;
     }
 
-    public PersonOrm build() {
-        PersonOrm personOrm = new PersonOrm();
-        personOrm.setAddressEntity(addressEntity);
-        personOrm.setDescription(description);
-        personOrm.setFirstName(firstName);
-        personOrm.setSurname(surname);
-        personOrm.setLocale(locale);
-        personOrm.setUserEntity(userEntity);
+    public PersonEntity build() {
+        PersonEntity personEntity = new PersonEntity();
+        personEntity.setAddressEntity(addressEntity);
+        personEntity.setDescription(description);
+        personEntity.setFirstName(firstName);
+        personEntity.setSurname(surname);
+        personEntity.setLocale(locale);
+        personEntity.setUserEntity(userEntity);
 
-        return personOrm;
+        return personEntity;
     }
 
     public static PersonEntityBuilder aPerson() {

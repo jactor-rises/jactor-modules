@@ -5,7 +5,7 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.person.PersonOrm;
+import com.github.jactorrises.persistence.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -27,7 +27,7 @@ import static java.util.Objects.hash;
 public class UserOrm extends PersistentEntity implements User {
 
     @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
-    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonOrm personEntity;
+    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
     public UserOrm() {
@@ -46,11 +46,11 @@ public class UserOrm extends PersistentEntity implements User {
     public UserOrm(UserDto user) {
         super(user);
         emailAddress = user.getEmailAddress() != null ? new EmailAddressEmbeddable(user.getEmailAddress()) : null;
-        personEntity = new PersonOrm(user.getPerson());
+        personEntity = new PersonEntity(user.getPerson());
         userName = new UserNameEmbeddable(user.getUserName());
     }
 
-    private PersonOrm copyPerson() {
+    private PersonEntity copyPerson() {
         return personEntity != null ? personEntity.copy() : null;
     }
 
@@ -91,7 +91,7 @@ public class UserOrm extends PersistentEntity implements User {
         return userName != null ? userName.fetchUserName() : null;
     }
 
-    public PersonOrm getPerson() {
+    public PersonEntity getPerson() {
         return personEntity;
     }
 
@@ -111,7 +111,7 @@ public class UserOrm extends PersistentEntity implements User {
         this.userName = new UserNameEmbeddable(userName);
     }
 
-    public void setPersonEntity(PersonOrm personEntity) {
+    public void setPersonEntity(PersonEntity personEntity) {
         this.personEntity = personEntity;
     }
 }

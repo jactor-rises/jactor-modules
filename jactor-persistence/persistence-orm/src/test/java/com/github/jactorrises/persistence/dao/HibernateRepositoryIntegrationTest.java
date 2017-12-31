@@ -9,7 +9,7 @@ import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.github.jactorrises.persistence.entity.person.PersonOrm;
+import com.github.jactorrises.persistence.entity.person.PersonEntity;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -95,7 +95,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -122,7 +122,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -153,7 +153,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -187,7 +187,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -228,7 +228,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -270,7 +270,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -320,7 +320,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -354,7 +354,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -395,7 +395,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -437,7 +437,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
@@ -485,7 +485,7 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        PersonOrm personEntity = hibernateRepository.saveOrUpdate(
+        PersonEntity personEntity = hibernateRepository.saveOrUpdate(
                 aPerson()
                         .with(AddressEntity)
                         .withSurname("jacobsen")
