@@ -19,25 +19,25 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Entity
-@Table(name = "T_GUEST_BOOK ")
-public class GuestBookOrm extends PersistentEntity implements GuestBook {
+@Table(name = "T_GUEST_BOOK")
+public class GuestBookEntity extends PersistentEntity implements GuestBook {
 
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm user;
 
-    public GuestBookOrm() {
+    public GuestBookEntity() {
     }
 
     /**
      * @param guestBook to copy...
      */
-    private GuestBookOrm(GuestBookOrm guestBook) {
+    private GuestBookEntity(GuestBookEntity guestBook) {
         super(guestBook);
         title = guestBook.title;
         user = guestBook.copyUser();
     }
 
-    GuestBookOrm(GuestBookDto guestBook) {
+    GuestBookEntity(GuestBookDto guestBook) {
         super(guestBook);
         title = guestBook.getTitle();
         user = new UserOrm(guestBook.getUser());
@@ -47,14 +47,14 @@ public class GuestBookOrm extends PersistentEntity implements GuestBook {
         return user != null ? user.copy() : null;
     }
 
-    GuestBookOrm copy() {
-        return new GuestBookOrm(this);
+    GuestBookEntity copy() {
+        return new GuestBookEntity(this);
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(title, ((GuestBookOrm) o).title) &&
-                Objects.equals(user, ((GuestBookOrm) o).user);
+                Objects.equals(title, ((GuestBookEntity) o).title) &&
+                Objects.equals(user, ((GuestBookEntity) o).user);
     }
 
     @Override public int hashCode() {

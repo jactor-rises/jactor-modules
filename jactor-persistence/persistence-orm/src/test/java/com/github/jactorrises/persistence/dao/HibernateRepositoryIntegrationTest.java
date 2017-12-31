@@ -7,8 +7,8 @@ import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryOrm;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookOrm;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
@@ -143,7 +143,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldFindGuestBook() {
-        int noOfEntities = session().createCriteria(GuestBookOrm.class).list().size();
+        int noOfEntities = session().createCriteria(GuestBookEntity.class).list().size();
 
         AddressEntity AddressEntity = hibernateRepository.saveOrUpdate(
                 anAddress()
@@ -173,7 +173,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(GuestBookOrm.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(GuestBookEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
@@ -208,7 +208,7 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        GuestBookOrm guestBookEntity = hibernateRepository.fetch(GuestBookOrm.class, id);
+        GuestBookEntity guestBookEntity = hibernateRepository.fetch(GuestBookEntity.class, id);
 
         assertSoftly(softly -> {
             softly.assertThat(guestBookEntity.getTitle()).as("title").isEqualTo("no rest for the wicked");
@@ -239,7 +239,7 @@ public class HibernateRepositoryIntegrationTest {
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
-        GuestBookOrm guestBookEntity = hibernateRepository.saveOrUpdate(
+        GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
                 aGuestBook()
                         .withTitle("no rest for the wicked")
                         .with(userOrm)
@@ -281,7 +281,7 @@ public class HibernateRepositoryIntegrationTest {
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
-        GuestBookOrm guestBookEntity = hibernateRepository.saveOrUpdate(
+        GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
                 aGuestBook()
                         .withTitle("no rest for the wicked")
                         .with(userOrm)

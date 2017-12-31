@@ -24,7 +24,7 @@ import static java.util.Objects.hash;
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
 public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntry {
-    @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookOrm guestBookEntity;
+    @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookEntity guestBookEntity;
 
     @Embedded @AttributeOverrides({
             @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
@@ -44,7 +44,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
 
     public GuestBookEntryOrm(GuestBookEntryDto guestBookEntry) {
         super(guestBookEntry);
-        guestBookEntity = new GuestBookOrm(guestBookEntry.getGuestBook());
+        guestBookEntity = new GuestBookEntity(guestBookEntry.getGuestBook());
         persistentEntry = new EntryEmbeddable(guestBookEntry.getCreatedTime(), guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     }
 
@@ -52,7 +52,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
         return new GuestBookEntryOrm(this);
     }
 
-    private GuestBookOrm copyGuestBook() {
+    private GuestBookEntity copyGuestBook() {
         return guestBookEntity.copy();
     }
 
@@ -77,7 +77,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(guestBookEntity).append(persistentEntry).toString();
     }
 
-    @Override public GuestBookOrm getGuestBook() {
+    @Override public GuestBookEntity getGuestBook() {
         return guestBookEntity;
     }
 
@@ -93,7 +93,7 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
         return persistentEntry.getCreatorName();
     }
 
-    public void setGuestBook(GuestBookOrm guestBookEntity) {
+    public void setGuestBook(GuestBookEntity guestBookEntity) {
         this.guestBookEntity = guestBookEntity;
     }
 

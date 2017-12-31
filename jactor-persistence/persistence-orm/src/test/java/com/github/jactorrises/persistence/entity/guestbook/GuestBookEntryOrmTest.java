@@ -17,16 +17,16 @@ class GuestBookEntryOrmTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        GuestBookEntryOrm base = (GuestBookEntryOrm) aGuestBookEntry()
-                .with(new GuestBookOrm())
+        GuestBookEntryOrm base = aGuestBookEntry()
+                .with(new GuestBookEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
         GuestBookEntryOrm equal = base.copy();
 
-        GuestBookEntryOrm notEqual = (GuestBookEntryOrm) aGuestBookEntry()
-                .with(new GuestBookOrm())
+        GuestBookEntryOrm notEqual = aGuestBookEntry()
+                .with(new GuestBookEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
                 .build();
@@ -41,16 +41,16 @@ class GuestBookEntryOrmTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        GuestBookEntryOrm base = (GuestBookEntryOrm) aGuestBookEntry()
-                .with(new GuestBookOrm())
+        GuestBookEntryOrm base = aGuestBookEntry()
+                .with(new GuestBookEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
         GuestBookEntryOrm equal = base.copy();
 
-        GuestBookEntryOrm notEqual = (GuestBookEntryOrm) aGuestBookEntry()
-                .with(new GuestBookOrm())
+        GuestBookEntryOrm notEqual = aGuestBookEntry()
+                .with(new GuestBookEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
                 .build();
@@ -72,7 +72,7 @@ class GuestBookEntryOrmTest {
 
     @DisplayName("should have an implementation of the toString method")
     @Test void shouldHaveAnImplementationOfTheToStringMethod() {
-        GuestBookEntryOrm guestBookEntryEntityToTest = (GuestBookEntryOrm) aGuestBookEntry()
+        GuestBookEntryOrm guestBookEntryEntityToTest = aGuestBookEntry()
                 .withCreatorName("jactor")
                 .withEntry("hi")
                 .build();
