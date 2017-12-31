@@ -6,7 +6,7 @@ import com.github.jactorrises.persistence.JactorPersistence;
 import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryOrm;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookOrm;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
@@ -385,7 +385,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldFindBlogEntry() {
-        int noOfEntities = session().createCriteria(BlogEntryOrm.class).list().size();
+        int noOfEntities = session().createCriteria(BlogEntryEntity.class).list().size();
 
         AddressEntity AddressEntity = hibernateRepository.saveOrUpdate(
                 anAddress()
@@ -423,7 +423,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(BlogEntryOrm.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(BlogEntryEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
@@ -466,12 +466,12 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        BlogEntryOrm blogEntryOrm = hibernateRepository.fetch(BlogEntryOrm.class, id);
+        BlogEntryEntity blogEntryEntity = hibernateRepository.fetch(BlogEntryEntity.class, id);
 
         assertSoftly(softly -> {
-            softly.assertThat(blogEntryOrm.getBlog()).as("blog").isEqualTo(blogEntity);
-            softly.assertThat(blogEntryOrm.getEntry()).as("entry").isEqualTo("i do not sleep");
-            softly.assertThat(blogEntryOrm.getCreatorName()).as("creator name").isEqualTo(new Name("me"));
+            softly.assertThat(blogEntryEntity.getBlog()).as("blog").isEqualTo(blogEntity);
+            softly.assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("i do not sleep");
+            softly.assertThat(blogEntryEntity.getCreatorName()).as("creator name").isEqualTo(new Name("me"));
         });
     }
 

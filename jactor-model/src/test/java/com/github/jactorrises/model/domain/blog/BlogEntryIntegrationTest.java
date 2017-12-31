@@ -5,7 +5,7 @@ import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.persistence.client.dto.BlogDto;
 import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -41,7 +41,7 @@ public class BlogEntryIntegrationTest {
         session().flush();
         session().clear();
 
-        BlogEntryOrm blogEntry = session().get(BlogEntryOrm.class, id);
+        BlogEntryEntity blogEntry = session().get(BlogEntryEntity.class, id);
 
         assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
         assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").isNotNull();

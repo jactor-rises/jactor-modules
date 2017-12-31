@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.builder;
 
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 
 public class BlogEntryEntityBuilder {
     private BlogEntity blogEntity;
@@ -26,13 +26,13 @@ public class BlogEntryEntityBuilder {
         return this;
     }
 
-    public BlogEntryOrm build() {
-        BlogEntryOrm blogEntryOrm = new BlogEntryOrm();
-        blogEntryOrm.setBlog(blogEntity);
-        blogEntryOrm.setCreatorName(name);
-        blogEntryOrm.setEntry(entry);
+    public BlogEntryEntity build() {
+        BlogEntryEntity blogEntryEntity = new BlogEntryEntity();
+        blogEntryEntity.setBlog(blogEntity);
+        blogEntryEntity.setCreatorName(name);
+        blogEntryEntity.setEntry(entry);
 
-        return blogEntryOrm;
+        return blogEntryEntity;
     }
 
     public static BlogEntryEntityBuilder aBlogEntry() {

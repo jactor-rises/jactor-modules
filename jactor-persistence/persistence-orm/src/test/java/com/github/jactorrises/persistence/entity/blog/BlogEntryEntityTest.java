@@ -9,21 +9,21 @@ import static com.github.jactorrises.persistence.builder.BlogEntryEntityBuilder.
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A BlogEntryOrm")
+@DisplayName("A BlogEntryEntity")
 @ExtendWith(NowAsPureDateExtension.class)
-class BlogEntryOrmTest {
+class BlogEntryEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogEntryOrm base = aBlogEntry()
+        BlogEntryEntity base = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
-        BlogEntryOrm equal = base.copy();
+        BlogEntryEntity equal = base.copy();
 
-        BlogEntryOrm notEqual = aBlogEntry()
+        BlogEntryEntity notEqual = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
@@ -39,15 +39,15 @@ class BlogEntryOrmTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogEntryOrm base = aBlogEntry()
+        BlogEntryEntity base = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
 
-        BlogEntryOrm equal = base.copy();
+        BlogEntryEntity equal = base.copy();
 
-        BlogEntryOrm notEqual = aBlogEntry()
+        BlogEntryEntity notEqual = aBlogEntry()
                 .with(new BlogEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")

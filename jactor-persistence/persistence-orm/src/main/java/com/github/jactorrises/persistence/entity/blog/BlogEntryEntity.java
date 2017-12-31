@@ -23,7 +23,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
-public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
+public class BlogEntryEntity extends PersistentEntity implements BlogEntry {
 
     @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogEntity blogEntity;
 
@@ -33,13 +33,13 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private EntryEmbeddable persistentEntry = new EntryEmbeddable();
 
-    public BlogEntryOrm() {
+    public BlogEntryEntity() {
     }
 
-    private BlogEntryOrm(BlogEntryOrm blogEntryOrm) {
-        super(blogEntryOrm);
-        blogEntity = blogEntryOrm.copyBlog();
-        persistentEntry = blogEntryOrm.copyEntry();
+    private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
+        super(blogEntryEntity);
+        blogEntity = blogEntryEntity.copyBlog();
+        persistentEntry = blogEntryEntity.copyEntry();
     }
 
     private BlogEntity copyBlog() {
@@ -50,21 +50,21 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
         return persistentEntry.copy();
     }
 
-    public BlogEntryOrm(BlogEntryDto blogEntryDto) {
+    public BlogEntryEntity(BlogEntryDto blogEntryDto) {
         super(blogEntryDto);
         blogEntity = new BlogEntity(blogEntryDto.getBlog());
         persistentEntry = new EntryEmbeddable(blogEntryDto.getCreatedTime(), blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     }
 
-    public BlogEntryOrm copy() {
-        return new BlogEntryOrm(this);
+    public BlogEntryEntity copy() {
+        return new BlogEntryEntity(this);
     }
 
     @Override public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryOrm) o);
+        return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryEntity) o);
     }
 
-    private boolean isEqualTo(BlogEntryOrm o) {
+    private boolean isEqualTo(BlogEntryEntity o) {
         return Objects.equals(getId(), o.getId()) &&
                 Objects.equals(persistentEntry, o.persistentEntry) &&
                 Objects.equals(blogEntity, o.blogEntity);
