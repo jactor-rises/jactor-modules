@@ -1,8 +1,8 @@
-package com.github.jactorrises.persistence.client.dao;
+package com.github.jactorrises.client.persistence.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.persistence.client.dto.UserDto;
+import com.github.jactorrises.client.persistence.dto.UserDto;
 
 import java.io.Serializable;
 import java.util.Optional;

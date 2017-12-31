@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.domain.GuestBook;
 
@@ -10,7 +10,7 @@ public class GuestBookDto extends PersistentDto implements GuestBook {
         // empty, use setters
     }
 
-    public GuestBookDto(GuestBookDto guestBookDto) {
+    GuestBookDto(GuestBookDto guestBookDto) {
         super(guestBookDto);
         title = guestBookDto.getTitle();
         user = guestBookDto.getUser();

@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
@@ -15,7 +15,7 @@ public class BlogEntryDto extends PersistentDto implements BlogEntry {
         // empty, use setters
     }
 
-    public BlogEntryDto(BlogEntryDto blogEntryDto) {
+    BlogEntryDto(BlogEntryDto blogEntryDto) {
         super(blogEntryDto);
         blog = blogEntryDto.getBlog();
         createdTime = blogEntryDto.getCreatedTime();

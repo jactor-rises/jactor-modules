@@ -2,8 +2,8 @@ package com.github.jactorrises.persistence.dao;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.persistence.JactorPersistence;
-import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;

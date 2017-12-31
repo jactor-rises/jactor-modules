@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
-import com.github.jactorrises.persistence.client.dto.AddressDto;
+import com.github.jactorrises.client.persistence.dto.AddressDto;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
@@ -15,7 +15,7 @@ public class AddressDto extends PersistentDto implements Address {
         // empty, use setters
     }
 
-    public AddressDto(AddressDto addressDto) {
+    AddressDto(AddressDto addressDto) {
         super(addressDto);
         this.country = addressDto.getCountry();
         this.zipCode = addressDto.getZipCode();

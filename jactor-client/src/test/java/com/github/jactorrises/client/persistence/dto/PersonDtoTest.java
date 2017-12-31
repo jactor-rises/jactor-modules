@@ -1,47 +1,52 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.datatype.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A GuestBookEntryDto")
-class GuestBookEntryDtoTest {
+@DisplayName("A PersonDto")
+class PersonDtoTest {
 
     @DisplayName("should have a copy constructor")
     @Test
     void shouldHaveCopyConstructor() {
-        GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
-        guestBookEntryDto.setCreatedTime(LocalDateTime.now());
-        guestBookEntryDto.setCreatorName(new Name("me"));
-        guestBookEntryDto.setGuestBook(new GuestBookDto());
-        guestBookEntryDto.setEntry("entry");
+        PersonDto personDto = new PersonDto();
+        personDto.setAddress(new AddressDto());
+        personDto.setDescription("description");
+        personDto.setFirstName(new Name("first name"));
+        personDto.setLocale(Locale.getDefault());
+        personDto.setSurname(new Name("surname"));
+        personDto.setUser(new UserDto());
 
-        GuestBookEntryDto copied = new GuestBookEntryDto(guestBookEntryDto);
+        PersonDto copied = new PersonDto(personDto);
 
         assertAll(
-                () -> assertThat(copied.getCreatedTime()).as("created time").isEqualTo(guestBookEntryDto.getCreatedTime()),
-                () -> assertThat(copied.getCreatorName()).as("creator name").isEqualTo(guestBookEntryDto.getCreatorName()),
-                () -> assertThat(copied.getGuestBook()).as("guest book").isEqualTo(guestBookEntryDto.getGuestBook()),
-                () -> assertThat(copied.getEntry()).as("entry").isEqualTo(guestBookEntryDto.getEntry())
+                () -> assertThat(copied.getAddress()).as("address").isEqualTo(personDto.getAddress()),
+                () -> assertThat(copied.getDescription()).as("description").isEqualTo(personDto.getDescription()),
+                () -> assertThat(copied.getFirstName()).as("first name").isEqualTo(personDto.getFirstName()),
+                () -> assertThat(copied.getLocale()).as("locale").isEqualTo(personDto.getLocale()),
+                () -> assertThat(copied.getSurname()).as("surname").isEqualTo(personDto.getSurname()),
+                () -> assertThat(copied.getUser()).as("user").isEqualTo(personDto.getUser())
         );
     }
 
     @DisplayName("should give values to PersistentDto")
     @Test
     void shouldGiveValuesToPersistentDto() {
-        GuestBookEntryDto persistentDto = new GuestBookEntryDto();
+        PersonDto persistentDto = new PersonDto();
         persistentDto.setCreatedBy(new Name("jactor"));
         persistentDto.setCreationTime(LocalDateTime.now());
         persistentDto.setId(1L);
         persistentDto.setUpdatedBy(new Name("tip"));
         persistentDto.setUpdatedTime(LocalDateTime.now());
 
-        PersistentDto copied = new GuestBookEntryDto(persistentDto);
+        PersistentDto copied = new PersonDto(persistentDto);
 
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

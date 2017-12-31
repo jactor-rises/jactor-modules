@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.datatype.Name;
 import org.assertj.core.api.Assertions;

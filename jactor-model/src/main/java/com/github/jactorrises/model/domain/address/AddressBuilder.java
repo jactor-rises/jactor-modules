@@ -1,10 +1,10 @@
 package com.github.jactorrises.model.domain.address;
 
+import com.github.jactorrises.client.persistence.dto.AddressDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 
 import java.util.Optional;
 import com.github.jactorrises.client.datatype.Country;
-import com.github.jactorrises.persistence.client.dto.AddressDto;
 
 import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;

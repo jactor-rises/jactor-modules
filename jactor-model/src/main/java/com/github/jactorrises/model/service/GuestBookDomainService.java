@@ -1,13 +1,13 @@
 package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.persistence.dao.PersistentDao;
+import com.github.jactorrises.client.persistence.dto.GuestBookDto;
+import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.dao.PersistentDao;
-import com.github.jactorrises.persistence.client.dto.GuestBookDto;
-import com.github.jactorrises.persistence.client.dto.GuestBookEntryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

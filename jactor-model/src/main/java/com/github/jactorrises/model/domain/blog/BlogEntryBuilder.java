@@ -1,8 +1,8 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.persistence.client.dto.BlogDto;
-import com.github.jactorrises.persistence.client.dto.BlogEntryDto;
+import com.github.jactorrises.client.persistence.dto.BlogDto;
+import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.commons.builder.ValidInstance;
 

@@ -16,11 +16,11 @@ public class DateTimeEmbeddable {
         timestamp = null;
     }
 
-    public DateTimeEmbeddable(Date timestamp) {
+    DateTimeEmbeddable(Date timestamp) {
         this.timestamp = timestamp;
     }
 
-    public DateTimeEmbeddable(LocalDateTime timestamp) {
+    DateTimeEmbeddable(LocalDateTime timestamp) {
         this.timestamp = Date.from(timestamp.atZone(ZoneId.systemDefault()).toInstant());
     }
 

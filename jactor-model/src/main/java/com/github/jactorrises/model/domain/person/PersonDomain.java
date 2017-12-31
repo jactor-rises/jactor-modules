@@ -2,10 +2,10 @@ package com.github.jactorrises.model.domain.person;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
+import com.github.jactorrises.client.persistence.dto.PersonDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.dto.PersonDto;
 
 import java.util.Locale;
 

@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
-import com.github.jactorrises.persistence.client.dto.BlogEntryDto;
+import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;

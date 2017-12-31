@@ -3,7 +3,7 @@ package com.github.jactorrises.persistence.entity.user;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.persistence.client.dto.UserDto;
+import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;

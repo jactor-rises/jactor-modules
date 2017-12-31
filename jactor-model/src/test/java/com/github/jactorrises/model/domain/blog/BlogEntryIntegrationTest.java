@@ -1,9 +1,9 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.client.persistence.dto.BlogDto;
+import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.persistence.client.dto.BlogDto;
-import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.persistence.entity.user.UserEntity;

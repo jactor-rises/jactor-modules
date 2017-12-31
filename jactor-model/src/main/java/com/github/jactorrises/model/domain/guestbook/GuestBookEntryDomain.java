@@ -2,8 +2,8 @@ package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
+import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.persistence.client.dto.GuestBookEntryDto;
 
 import java.time.LocalDateTime;
 

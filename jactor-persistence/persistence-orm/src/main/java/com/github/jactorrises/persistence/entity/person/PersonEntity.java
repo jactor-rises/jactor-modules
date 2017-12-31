@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
-import com.github.jactorrises.persistence.client.dto.PersonDto;
+import com.github.jactorrises.client.persistence.dto.PersonDto;
 import com.github.jactorrises.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;

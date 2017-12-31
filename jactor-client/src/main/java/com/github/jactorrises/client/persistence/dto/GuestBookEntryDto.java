@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
@@ -15,7 +15,7 @@ public class GuestBookEntryDto extends PersistentDto implements GuestBookEntry {
         // empty, use setters
     }
 
-    public GuestBookEntryDto(GuestBookEntryDto guestBookEntryDto) {
+    GuestBookEntryDto(GuestBookEntryDto guestBookEntryDto) {
         super(guestBookEntryDto);
         guestBook = guestBookEntryDto.getGuestBook();
         createdTime = guestBookEntryDto.getCreatedTime();

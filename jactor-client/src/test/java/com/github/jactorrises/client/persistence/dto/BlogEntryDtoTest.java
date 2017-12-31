@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.datatype.Name;
 import org.junit.jupiter.api.DisplayName;
@@ -9,35 +9,39 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A GuestBookDto")
-class GuestBookDtoTest {
+@DisplayName("A BlogEntryDto")
+class BlogEntryDtoTest {
 
     @DisplayName("should have a copy constructor")
     @Test
     void shouldHaveCopyConstructor() {
-        GuestBookDto guestBookDto = new GuestBookDto();
-        guestBookDto.setTitle("title");
-        guestBookDto.setUser(new UserDto());
+        BlogEntryDto blogEntryDto = new BlogEntryDto();
+        blogEntryDto.setBlog(new BlogDto());
+        blogEntryDto.setCreatedTime(LocalDateTime.now());
+        blogEntryDto.setCreatorName(new Name("someone"));
+        blogEntryDto.setEntry("entry");
 
-        GuestBookDto copied = new GuestBookDto(guestBookDto);
+        BlogEntryDto copied = new BlogEntryDto(blogEntryDto);
 
         assertAll(
-                () -> assertThat(copied.getTitle()).as("title").isEqualTo(guestBookDto.getTitle()),
-                () -> assertThat(copied.getUser()).as("title").isEqualTo(guestBookDto.getUser())
+                () -> assertThat(copied.getBlog()).as("blog").isEqualTo(blogEntryDto.getBlog()),
+                () -> assertThat(copied.getCreatedTime()).as("created time").isEqualTo(blogEntryDto.getCreatedTime()),
+                () -> assertThat(copied.getCreatorName()).as("creator name").isEqualTo(blogEntryDto.getCreatorName()),
+                () -> assertThat(copied.getEntry()).as("entry").isEqualTo(blogEntryDto.getEntry())
         );
     }
 
     @DisplayName("should give values to PersistentDto")
     @Test
     void shouldGiveValuesToPersistentDto() {
-        GuestBookDto persistentDto = new GuestBookDto();
+        BlogEntryDto persistentDto = new BlogEntryDto();
         persistentDto.setCreatedBy(new Name("jactor"));
         persistentDto.setCreationTime(LocalDateTime.now());
         persistentDto.setId(1L);
         persistentDto.setUpdatedBy(new Name("tip"));
         persistentDto.setUpdatedTime(LocalDateTime.now());
 
-        PersistentDto copied = new GuestBookDto(persistentDto);
+        PersistentDto copied = new BlogEntryDto(persistentDto);
 
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

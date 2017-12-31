@@ -1,9 +1,9 @@
 package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
+import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.dto.GuestBookDto;
 
 public class GuestBookDomain extends PersistentDomain<Long> implements GuestBook {
 

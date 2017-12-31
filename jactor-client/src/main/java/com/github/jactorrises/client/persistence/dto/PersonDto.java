@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.client.dto;
+package com.github.jactorrises.client.persistence.dto;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
@@ -17,7 +17,7 @@ public class PersonDto extends PersistentDto implements Person {
         // empty, use setters
     }
 
-    public PersonDto(PersonDto person) {
+    PersonDto(PersonDto person) {
         super(person);
         address = person.getAddress();
         locale = person.getLocale();
