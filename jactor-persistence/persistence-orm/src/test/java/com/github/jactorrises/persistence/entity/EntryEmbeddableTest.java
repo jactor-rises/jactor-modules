@@ -9,27 +9,27 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A PersistentEntry")
+@DisplayName("An EntryEmbeddable")
 @ExtendWith(NowAsPureDateExtension.class)
-class PersistentEntryTest {
+class EntryEmbeddableTest {
 
-    private PersistentEntry persistentEntryToTest;
+    private EntryEmbeddable persistentEntryToTest;
 
     @BeforeEach
     void initClassToTest() {
-        persistentEntryToTest = new PersistentEntry();
+        persistentEntryToTest = new EntryEmbeddable();
     }
 
     @DisplayName("should have an implementation of the hash code method")
     @Test
     void willHaveCorrectlyImplementedHashCode() {
-        PersistentEntry base = persistentEntryToTest;
+        EntryEmbeddable base = persistentEntryToTest;
         base.setCreatorName("a creator");
         base.setEntry("some entry");
 
-        PersistentEntry equal = new PersistentEntry(base);
+        EntryEmbeddable equal = new EntryEmbeddable(base);
 
-        PersistentEntry notEqual = new PersistentEntry();
+        EntryEmbeddable notEqual = new EntryEmbeddable();
         notEqual.setCreatorName("another creator");
         notEqual.setEntry("another entry");
 
@@ -44,13 +44,13 @@ class PersistentEntryTest {
     @DisplayName("should have an implementation of the equals method")
     @Test
     void willHaveCorrectlyImplementedEquals() {
-        PersistentEntry base = persistentEntryToTest;
+        EntryEmbeddable base = persistentEntryToTest;
         base.setCreatorName("a creator");
         base.setEntry("some entry");
 
-        PersistentEntry equal = new PersistentEntry(base);
+        EntryEmbeddable equal = new EntryEmbeddable(base);
 
-        PersistentEntry notEqual = new PersistentEntry();
+        EntryEmbeddable notEqual = new EntryEmbeddable();
         notEqual.setCreatorName("another creator");
         notEqual.setEntry("another entry");
 

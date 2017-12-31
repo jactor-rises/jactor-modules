@@ -3,7 +3,7 @@ package com.github.jactorrises.persistence.entity.guestbook;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.persistence.client.dto.GuestBookEntryDto;
-import com.github.jactorrises.persistence.entity.PersistentEntry;
+import com.github.jactorrises.persistence.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -30,7 +30,7 @@ public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntry {
             @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
             @AttributeOverride(name = "creatorName", column = @Column(name = "GUEST_NAME")),
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
-    }) private PersistentEntry persistentEntry = new PersistentEntry();
+    }) private EntryEmbeddable persistentEntry = new EntryEmbeddable();
 
     public GuestBookEntryOrm() {
         // empty...
@@ -45,7 +45,7 @@ public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntry {
     public GuestBookEntryOrm(GuestBookEntryDto guestBookEntry) {
         super(guestBookEntry);
         guestBookEntity = new GuestBookOrm(guestBookEntry.getGuestBook());
-        persistentEntry = new PersistentEntry(guestBookEntry.getCreatedTime(), guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
+        persistentEntry = new EntryEmbeddable(guestBookEntry.getCreatedTime(), guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     }
 
     public GuestBookEntryOrm copy() {
@@ -56,7 +56,7 @@ public class GuestBookEntryOrm extends PersistentOrm implements GuestBookEntry {
         return guestBookEntity.copy();
     }
 
-    private PersistentEntry copyEntry() {
+    private EntryEmbeddable copyEntry() {
         return persistentEntry.copy();
     }
 

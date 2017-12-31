@@ -3,7 +3,7 @@ package com.github.jactorrises.persistence.entity.blog;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.persistence.client.dto.BlogEntryDto;
-import com.github.jactorrises.persistence.entity.PersistentEntry;
+import com.github.jactorrises.persistence.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -31,7 +31,7 @@ public class BlogEntryOrm extends PersistentOrm implements BlogEntry {
             @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
             @AttributeOverride(name = "creatorName", column = @Column(name = "CREATOR_NAME")),
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
-    }) private PersistentEntry persistentEntry = new PersistentEntry();
+    }) private EntryEmbeddable persistentEntry = new EntryEmbeddable();
 
     public BlogEntryOrm() {
     }
@@ -46,14 +46,14 @@ public class BlogEntryOrm extends PersistentOrm implements BlogEntry {
         return blogEntity.copy();
     }
 
-    private PersistentEntry copyEntry() {
+    private EntryEmbeddable copyEntry() {
         return persistentEntry.copy();
     }
 
     public BlogEntryOrm(BlogEntryDto blogEntryDto) {
         super(blogEntryDto);
         blogEntity = new BlogOrm(blogEntryDto.getBlog());
-        persistentEntry = new PersistentEntry(blogEntryDto.getCreatedTime(), blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
+        persistentEntry = new EntryEmbeddable(blogEntryDto.getCreatedTime(), blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     }
 
     public BlogEntryOrm copy() {

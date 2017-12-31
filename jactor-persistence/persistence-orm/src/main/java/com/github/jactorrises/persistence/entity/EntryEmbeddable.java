@@ -14,23 +14,23 @@ import java.util.Objects;
 import static java.util.Objects.hash;
 
 @Embeddable
-public class PersistentEntry {
+public class EntryEmbeddable {
 
     private Date createdTime;
     private String creatorName;
     private String entry;
 
-    public PersistentEntry() {
+    public EntryEmbeddable() {
         createdTime = Now.asDate();
     }
 
     /**
-     * @param persistentEntry is the entry to create a copy of
+     * @param entryEmbeddable is the entry to create a copy of
      */
-    PersistentEntry(PersistentEntry persistentEntry) {
-        creatorName = persistentEntry.creatorName;
-        createdTime = persistentEntry.copyCreatedTime();
-        entry = persistentEntry.entry;
+    EntryEmbeddable(EntryEmbeddable entryEmbeddable) {
+        creatorName = entryEmbeddable.creatorName;
+        createdTime = entryEmbeddable.copyCreatedTime();
+        entry = entryEmbeddable.entry;
     }
 
     private Date copyCreatedTime() {
@@ -40,31 +40,31 @@ public class PersistentEntry {
         return creation;
     }
 
-    public PersistentEntry(LocalDateTime createdTime, Name creatorName, String entry) {
+    public EntryEmbeddable(LocalDateTime createdTime, Name creatorName, String entry) {
         this.createdTime = Date.from(createdTime.atZone(ZoneId.systemDefault()).toInstant());
         this.creatorName = creatorName.asString();
         this.entry = entry;
     }
 
-    public PersistentEntry copy() {
-        return new PersistentEntry(this);
+    public EntryEmbeddable copy() {
+        return new EntryEmbeddable(this);
     }
 
     @Override public boolean equals(Object obj) {
-        return this == obj || obj != null && getClass() == obj.getClass() && isEqualTo((PersistentEntry) obj);
+        return this == obj || obj != null && getClass() == obj.getClass() && isEqualTo((EntryEmbeddable) obj);
     }
 
-    private boolean isEqualTo(PersistentEntry obj) {
+    private boolean isEqualTo(EntryEmbeddable obj) {
         return Objects.equals(createdTime, obj.createdTime) &&
                 Objects.equals(entry, obj.entry) &&
                 Objects.equals(creatorName, obj.creatorName);
     }
 
     @Override public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(getCreatedTime()).append(creatorName).append(entryAsString()).toString();
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(getCreatedTime()).append(creatorName).append(shortEntry()).toString();
     }
 
-    private String entryAsString() {
+    private String shortEntry() {
         if (entry == null || entry.length() < 50) {
             return entry;
         }
