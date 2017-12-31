@@ -25,7 +25,7 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
     }
 
     public UserBuilder with(PersonDomain personDomain) {
-        userDto.setPerson(personDomain.getPersistence());
+        userDto.setPerson(personDomain.getDto());
         return this;
     }
 

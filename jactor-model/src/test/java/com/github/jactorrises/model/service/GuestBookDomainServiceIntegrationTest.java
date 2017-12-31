@@ -82,7 +82,7 @@ public class GuestBookDomainServiceIntegrationTest {
                 .with(person)
                 .build();
 
-        Long id = guestBookDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getPersistence().getId();
+        Long id = guestBookDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getDto().getId();
 
         ensureDbCreation();
 

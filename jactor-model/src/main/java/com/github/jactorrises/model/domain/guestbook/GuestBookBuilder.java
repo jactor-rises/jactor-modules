@@ -29,7 +29,7 @@ public final class GuestBookBuilder extends AbstractBuilder<GuestBookDomain> {
     }
 
     public GuestBookBuilder with(UserDomain userDomain) {
-        with(userDomain.getPersistence());
+        with(userDomain.getDto());
         return this;
     }
 

@@ -20,7 +20,7 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
     }
 
     public PersonBuilder with(AddressDomain address) {
-        personDto.setAddress(address.getPersistence());
+        personDto.setAddress(address.getDto());
         return this;
     }
 

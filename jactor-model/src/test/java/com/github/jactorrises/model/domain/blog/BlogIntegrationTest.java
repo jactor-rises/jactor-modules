@@ -30,7 +30,7 @@ public class BlogIntegrationTest {
 
     @Test public void willSaveBlogOrmToThePersistentLayer() {
         final UserDto persistedUser = persistUser();
-        Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getPersistence());
+        Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getDto());
 
         session().flush();
         session().clear();
@@ -54,7 +54,7 @@ public class BlogIntegrationTest {
 //                                .withZipCode(1234)
 //                        )
 //                ).build()
-//                .getPersistence();
+//                .getDto();
 //
 //        session().save(userEntity);
 

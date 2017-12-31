@@ -31,7 +31,7 @@ public class UserDomain extends PersistentDomain<Long> implements User {
         return userDto.isUserNameEmailAddress();
     }
 
-    @Override public UserDto getPersistence() {
+    @Override public UserDto getDto() {
         return userDto;
     }
 

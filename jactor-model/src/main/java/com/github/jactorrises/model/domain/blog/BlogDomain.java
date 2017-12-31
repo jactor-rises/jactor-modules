@@ -24,10 +24,10 @@ public class BlogDomain extends PersistentDomain<Long> implements Blog {
     }
 
     @Override public LocalDate getCreated() {
-        return getPersistence().getCreated();
+        return getDto().getCreated();
     }
 
-    @Override public BlogDto getPersistence() {
+    @Override public BlogDto getDto() {
         return blogEntity;
     }
 

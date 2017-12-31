@@ -36,7 +36,7 @@ public class BlogEntryIntegrationTest {
     @Autowired private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
-        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntry("some").withCreatorName("thing").build().getPersistence());
+        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntry("some").withCreatorName("thing").build().getDto());
 
         session().flush();
         session().clear();
@@ -50,7 +50,7 @@ public class BlogEntryIntegrationTest {
     }
 
     private BlogDto aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
-        BlogDto blogDto = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getPersistence();
+        BlogDto blogDto = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getDto();
         session().save(new BlogOrm(blogDto));
 
         return blogDto;
@@ -68,7 +68,7 @@ public class BlogEntryIntegrationTest {
                                 .withZipCode(1234)
                         )
                 )
-                .build().getPersistence();
+                .build().getDto();
 
         session().save(new UserOrm(userDto));
 

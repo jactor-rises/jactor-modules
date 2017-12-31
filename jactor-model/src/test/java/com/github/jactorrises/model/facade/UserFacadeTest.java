@@ -36,7 +36,7 @@ class UserFacadeTest {
     @DisplayName("should find a user when the user name only differs in case")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void willFindUser() {
-        when(persistentDaoMock.findUsing(new UserName("jactor"))).thenReturn(Optional.of(aUserDomain().getPersistence()));
+        when(persistentDaoMock.findUsing(new UserName("jactor"))).thenReturn(Optional.of(aUserDomain().getDto()));
         Optional<User> optionalUser = testUserFacadeImpl.findUsing(new UserName("JACTOR"));
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);

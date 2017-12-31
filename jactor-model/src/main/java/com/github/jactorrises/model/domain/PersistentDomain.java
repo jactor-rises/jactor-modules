@@ -10,32 +10,32 @@ import java.time.LocalDateTime;
 public abstract class PersistentDomain<T extends Serializable> implements Persistent<T> {
     static final String THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL = "The persistent data the domain cannot be null!";
 
-    private Persistent<T> fetchPersistence() {
-        Persistent<T> entity = getPersistence();
+    private Persistent<T> fetchDto() {
+        Persistent<T> entity = getDto();
         Validate.notNull(entity, THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
 
         return entity;
     }
 
-    public abstract Persistent<T> getPersistence();
+    public abstract Persistent<T> getDto();
 
     @Override public T getId() {
-        return fetchPersistence().getId();
+        return fetchDto().getId();
     }
 
     @Override public Name getCreatedBy() {
-        return fetchPersistence().getCreatedBy();
+        return fetchDto().getCreatedBy();
     }
 
     @Override public LocalDateTime getCreationTime() {
-        return fetchPersistence().getCreationTime();
+        return fetchDto().getCreationTime();
     }
 
     @Override public Name getUpdatedBy() {
-        return fetchPersistence().getUpdatedBy();
+        return fetchDto().getUpdatedBy();
     }
 
     @Override public LocalDateTime getUpdatedTime() {
-        return fetchPersistence().getUpdatedTime();
+        return fetchDto().getUpdatedTime();
     }
 }

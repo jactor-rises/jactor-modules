@@ -31,7 +31,7 @@ public class BlogEntryDomain extends PersistentDomain<Long> implements BlogEntry
         return blogEntryDto.getCreatorName();
     }
 
-    @Override public BlogEntryDto getPersistence() {
+    @Override public BlogEntryDto getDto() {
         return blogEntryDto;
     }
 

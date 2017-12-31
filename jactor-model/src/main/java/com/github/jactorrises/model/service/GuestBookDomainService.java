@@ -22,7 +22,7 @@ public class GuestBookDomainService {
     }
 
     void saveOrUpdate(PersistentDomain<?> persistentDomain) {
-        persistentDao.saveOrUpdate(persistentDomain.getPersistence());
+        persistentDao.saveOrUpdate(persistentDomain.getDto());
     }
 
     GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {

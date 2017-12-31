@@ -37,7 +37,7 @@ public class AddressDomain extends PersistentDomain<Long> implements Address {
         return addressDto.getZipCode();
     }
 
-    @Override public AddressDto getPersistence() {
+    @Override public AddressDto getDto() {
         return addressDto;
     }
 

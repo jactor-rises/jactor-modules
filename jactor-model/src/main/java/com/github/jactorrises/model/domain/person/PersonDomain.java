@@ -41,7 +41,7 @@ public class PersonDomain extends PersistentDomain<Long> implements Person {
         return personDto.getAddress() != null ? new AddressDomain(personDto.getAddress()) : null;
     }
 
-    @Override public PersonDto getPersistence() {
+    @Override public PersonDto getDto() {
         return personDto;
     }
 

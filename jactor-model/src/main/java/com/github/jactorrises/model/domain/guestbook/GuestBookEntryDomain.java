@@ -31,7 +31,7 @@ public class GuestBookEntryDomain extends PersistentDomain<Long> implements Gues
         return guestBookEntryDto.getCreatorName();
     }
 
-    @Override public GuestBookEntryDto getPersistence() {
+    @Override public GuestBookEntryDto getDto() {
         return guestBookEntryDto;
     }
 

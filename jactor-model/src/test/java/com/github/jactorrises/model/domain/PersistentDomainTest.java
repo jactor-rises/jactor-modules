@@ -39,7 +39,7 @@ class PersistentDomainTest {
     }
 
     private class TestPersistedDomain extends PersistentDomain<Long> {
-        @Override public UserDto getPersistence() {
+        @Override public UserDto getDto() {
             return userDto;
         }
     }

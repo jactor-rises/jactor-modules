@@ -31,11 +31,11 @@ public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryD
     }
 
     public GuestBookEntryBuilder with(GuestBookBuilder guestBookBuilder) {
-        return with(guestBookBuilder.build().getPersistence());
+        return with(guestBookBuilder.build().getDto());
     }
 
     public GuestBookEntryBuilder with(GuestBookDomain guestBookDomain) {
-        return with(guestBookDomain.getPersistence());
+        return with(guestBookDomain.getDto());
     }
 
     @Override protected GuestBookEntryDomain buildBean() {

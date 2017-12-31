@@ -29,7 +29,7 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
     }
 
     public BlogBuilder with(UserBuilder userBuilder) {
-        return with(userBuilder.build().getPersistence());
+        return with(userBuilder.build().getDto());
     }
 
     @Override protected BlogDomain buildBean() {

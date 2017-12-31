@@ -21,7 +21,7 @@ public class GuestBookDomain extends PersistentDomain<Long> implements GuestBook
         return guestBookDto.getUser() != null ? new UserDomain(guestBookDto.getUser()) : null;
     }
 
-    @Override public GuestBookDto getPersistence() {
+    @Override public GuestBookDto getDto() {
         return guestBookDto;
     }
 
