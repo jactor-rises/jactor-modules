@@ -18,7 +18,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_ADDRESS")
-public class AddressOrm extends PersistentEntity implements Address {
+public class AddressEntity extends PersistentEntity implements Address {
 
     @Embedded @AttributeOverride(name = "country", column = @Column(name = "COUNTRY")) private CountryEmbaddable country;
     @Column(name = "ZIP_CODE") private Integer zipCode;
@@ -27,13 +27,13 @@ public class AddressOrm extends PersistentEntity implements Address {
     @Column(name = "ADDRESS_LINE_3") private String addressLine3;
     @Column(name = "CITY") private String city;
 
-    public AddressOrm() {
+    public AddressEntity() {
     }
 
     /**
      * @param address to copy
      */
-    private AddressOrm(AddressOrm address) {
+    private AddressEntity(AddressEntity address) {
         super(address);
 
         addressLine1 = address.getAddressLine1();
@@ -44,26 +44,26 @@ public class AddressOrm extends PersistentEntity implements Address {
         zipCode = address.getZipCode();
     }
 
-    public AddressOrm(AddressDto addressDto) {
+    public AddressEntity(AddressDto addressDto) {
         super(addressDto);
     }
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressLine1, ((AddressOrm) o).addressLine1) &&
-                Objects.equals(addressLine2, ((AddressOrm) o).addressLine2) &&
-                Objects.equals(addressLine3, ((AddressOrm) o).addressLine3) &&
-                Objects.equals(city, ((AddressOrm) o).city) &&
-                Objects.equals(getCountry(), fetchCountry(((AddressOrm) o).country)) &&
-                Objects.equals(zipCode, ((AddressOrm) o).zipCode);
+                Objects.equals(addressLine1, ((AddressEntity) o).addressLine1) &&
+                Objects.equals(addressLine2, ((AddressEntity) o).addressLine2) &&
+                Objects.equals(addressLine3, ((AddressEntity) o).addressLine3) &&
+                Objects.equals(city, ((AddressEntity) o).city) &&
+                Objects.equals(getCountry(), fetchCountry(((AddressEntity) o).country)) &&
+                Objects.equals(zipCode, ((AddressEntity) o).zipCode);
     }
 
     private Country fetchCountry(CountryEmbaddable country) {
         return country != null ? country.fetchCountry() : null;
     }
 
-    public AddressOrm copy() {
-        return new AddressOrm(this);
+    public AddressEntity copy() {
+        return new AddressEntity(this);
     }
 
     public AddressDto asDto() {

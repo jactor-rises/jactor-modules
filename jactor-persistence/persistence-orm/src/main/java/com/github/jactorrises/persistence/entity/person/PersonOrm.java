@@ -5,7 +5,7 @@ import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.persistence.client.dto.PersonDto;
 import com.github.jactorrises.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.address.AddressOrm;
+import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -30,7 +30,7 @@ import static java.util.Objects.hash;
 public class PersonOrm extends PersistentEntity implements Person {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ADDRESS_ID") private AddressOrm addressEntity;
+    @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
     @Column(name = "DESCRIPTION") private String description;
     @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserOrm userEntity;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "FIRST_NAME")) private NameEmbeddable firstName;
@@ -52,7 +52,7 @@ public class PersonOrm extends PersistentEntity implements Person {
 
     public PersonOrm(PersonDto person) {
         super(person);
-        addressEntity = person.getAddress() != null ? new AddressOrm(person.getAddress()) : null;
+        addressEntity = person.getAddress() != null ? new AddressEntity(person.getAddress()) : null;
         description = person.getDescription();
         firstName = person.getFirstName() != null ? new NameEmbeddable(person.getFirstName()) : null;
         surname = new NameEmbeddable(person.getSurname());
@@ -60,7 +60,7 @@ public class PersonOrm extends PersistentEntity implements Person {
         userEntity = person.getUser() != null ? new UserOrm(person.getUser()) : null;
     }
 
-    private AddressOrm copyAddress() {
+    private AddressEntity copyAddress() {
         return addressEntity != null ? addressEntity.copy() : null;
     }
 
@@ -110,7 +110,7 @@ public class PersonOrm extends PersistentEntity implements Person {
                 .appendSuper(super.toString()).append(firstName).append(surname).append(userEntity).append(addressEntity).toString();
     }
 
-    @Override public AddressOrm getAddress() {
+    @Override public AddressEntity getAddress() {
         return addressEntity;
     }
 
@@ -134,7 +134,7 @@ public class PersonOrm extends PersistentEntity implements Person {
         return userEntity;
     }
 
-    public void setAddressEntity(AddressOrm addressEntity) {
+    public void setAddressEntity(AddressEntity addressEntity) {
         this.addressEntity = addressEntity;
     }
 

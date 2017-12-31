@@ -7,12 +7,12 @@ import static com.github.jactorrises.persistence.builder.AddressEntityBuilder.an
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("An AddressOrm")
-class AddressOrmTest {
+@DisplayName("An AddressEntity")
+class AddressEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        AddressOrm base = (AddressOrm) anAddress()
+        AddressEntity base = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere else")
                 .withAddressLine3("way out there")
@@ -21,9 +21,9 @@ class AddressOrmTest {
                 .withCity("some city")
                 .build();
 
-        AddressOrm equal = base.copy();
+        AddressEntity equal = base.copy();
 
-        AddressOrm notEqual = (AddressOrm) anAddress()
+        AddressEntity notEqual = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere in the")
                 .withAddressLine3("distance")
@@ -42,7 +42,7 @@ class AddressOrmTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        AddressOrm base = (AddressOrm) anAddress()
+        AddressEntity base = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere else")
                 .withAddressLine3("way out there")
@@ -51,9 +51,9 @@ class AddressOrmTest {
                 .withCity("some city")
                 .build();
 
-        AddressOrm equal = base.copy();
+        AddressEntity equal = base.copy();
 
-        AddressOrm notEqual = (AddressOrm) anAddress()
+        AddressEntity notEqual = anAddress()
                 .withAddressLine1("somewhere")
                 .withAddressLine2("somewhere place")
                 .withAddressLine3("in the distance")
