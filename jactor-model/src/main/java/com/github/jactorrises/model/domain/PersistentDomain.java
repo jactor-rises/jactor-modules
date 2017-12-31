@@ -11,10 +11,10 @@ public abstract class PersistentDomain<T extends Serializable> implements Persis
     static final String THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL = "The persistent data the domain cannot be null!";
 
     private Persistent<T> fetchDto() {
-        Persistent<T> entity = getDto();
-        Validate.notNull(entity, THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
+        Persistent<T> dto = getDto();
+        Validate.notNull(dto, THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
 
-        return entity;
+        return dto;
     }
 
     public abstract Persistent<T> getDto();

@@ -5,7 +5,6 @@ import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.persistence.client.dao.PersistentDao;
-import com.github.jactorrises.persistence.client.dto.UserDto;
 
 import java.util.Optional;
 
@@ -18,9 +17,7 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override public Optional<User> findUsing(UserName userName) {
-        Optional<UserDto> userEntityOptional = persistentDao.findUsing(userName);
-
-        return userEntityOptional
+        return persistentDao.findUsing(userName)
                 .map(UserDomain::new);
     }
 }

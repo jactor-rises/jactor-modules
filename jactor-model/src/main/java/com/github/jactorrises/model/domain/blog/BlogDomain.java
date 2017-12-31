@@ -9,18 +9,18 @@ import java.time.LocalDate;
 
 public class BlogDomain extends PersistentDomain<Long> implements Blog {
 
-    private final BlogDto blogEntity;
+    private final BlogDto blogDto;
 
-    BlogDomain(BlogDto blogEntity) {
-        this.blogEntity = blogEntity;
+    BlogDomain(BlogDto blogDto) {
+        this.blogDto = blogDto;
     }
 
     @Override public String getTitle() {
-        return blogEntity.getTitle();
+        return blogDto.getTitle();
     }
 
     @Override public UserDomain getUser() {
-        return blogEntity.getUser() != null ? new UserDomain(blogEntity.getUser()) : null;
+        return blogDto.getUser() != null ? new UserDomain(blogDto.getUser()) : null;
     }
 
     @Override public LocalDate getCreated() {
@@ -28,7 +28,7 @@ public class BlogDomain extends PersistentDomain<Long> implements Blog {
     }
 
     @Override public BlogDto getDto() {
-        return blogEntity;
+        return blogDto;
     }
 
     static BlogBuilder aBlog() {
