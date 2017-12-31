@@ -10,7 +10,7 @@ import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.entity.person.PersonEntity;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -85,7 +85,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldFindUser() {
-        int noOfEntities = session().createCriteria(UserOrm.class).list().size();
+        int noOfEntities = session().createCriteria(UserEntity.class).list().size();
 
         AddressEntity AddressEntity = hibernateRepository.saveOrUpdate(
                 anAddress()
@@ -108,7 +108,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(UserOrm.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(UserEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
@@ -136,9 +136,9 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        UserOrm userOrm = hibernateRepository.fetch(UserOrm.class, id);
+        UserEntity userEntity = hibernateRepository.fetch(UserEntity.class, id);
 
-        assertThat(userOrm.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
+        assertThat(userEntity.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
     }
 
     @Test
@@ -160,14 +160,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
                 aGuestBook()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         ).getId();
 
@@ -194,14 +194,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
                 aGuestBook()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         ).getId();
 
@@ -212,7 +212,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(guestBookEntity.getTitle()).as("title").isEqualTo("no rest for the wicked");
-            softly.assertThat(guestBookEntity.getUser()).as("user").isEqualTo(userOrm);
+            softly.assertThat(guestBookEntity.getUser()).as("user").isEqualTo(userEntity);
         });
     }
 
@@ -235,14 +235,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
                 aGuestBook()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         );
 
@@ -277,14 +277,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         GuestBookEntity guestBookEntity = hibernateRepository.saveOrUpdate(
                 aGuestBook()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         );
 
@@ -327,14 +327,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
                 aBlog()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         ).getId();
 
@@ -361,14 +361,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         Long id = hibernateRepository.saveOrUpdate(
                 aBlog()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         ).getId();
 
@@ -379,7 +379,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(blogEntity.getTitle()).as("title").isEqualTo("no rest for the wicked");
-            softly.assertThat(blogEntity.getUser()).as("user").isEqualTo(userOrm);
+            softly.assertThat(blogEntity.getUser()).as("user").isEqualTo(userEntity);
         });
     }
 
@@ -402,14 +402,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         BlogEntity blogEntity = hibernateRepository.saveOrUpdate(
                 aBlog()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         );
 
@@ -444,14 +444,14 @@ public class HibernateRepositoryIntegrationTest {
                         .build()
         );
 
-        UserOrm userOrm = hibernateRepository.saveOrUpdate(
+        UserEntity userEntity = hibernateRepository.saveOrUpdate(
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
         BlogEntity blogEntity = hibernateRepository.saveOrUpdate(
                 aBlog()
                         .withTitle("no rest for the wicked")
-                        .with(userOrm)
+                        .with(userEntity)
                         .build()
         );
 

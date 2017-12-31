@@ -6,7 +6,7 @@ import com.github.jactorrises.persistence.client.dto.BlogDto;
 import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;
@@ -70,7 +70,7 @@ public class BlogEntryIntegrationTest {
                 )
                 .build().getDto();
 
-        session().save(new UserOrm(userDto));
+        session().save(new UserEntity(userDto));
 
         return userDto;
     }

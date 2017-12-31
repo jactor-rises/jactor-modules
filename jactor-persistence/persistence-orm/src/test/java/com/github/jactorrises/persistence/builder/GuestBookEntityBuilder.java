@@ -1,12 +1,12 @@
 package com.github.jactorrises.persistence.builder;
 
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 
 public class GuestBookEntityBuilder {
 
     private String title;
-    private UserOrm userEntity;
+    private UserEntity userEntity;
 
     private GuestBookEntityBuilder() {
     }
@@ -16,7 +16,7 @@ public class GuestBookEntityBuilder {
         return this;
     }
 
-    public GuestBookEntityBuilder with(UserOrm userEntity) {
+    public GuestBookEntityBuilder with(UserEntity userEntity) {
         this.userEntity = userEntity;
         return this;
     }

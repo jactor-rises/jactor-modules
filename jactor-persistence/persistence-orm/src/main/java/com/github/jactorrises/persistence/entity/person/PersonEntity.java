@@ -6,7 +6,7 @@ import com.github.jactorrises.persistence.client.dto.PersonDto;
 import com.github.jactorrises.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -32,7 +32,7 @@ public class PersonEntity extends PersistentEntity implements Person {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
     @Column(name = "DESCRIPTION") private String description;
-    @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserOrm userEntity;
+    @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "FIRST_NAME")) private NameEmbeddable firstName;
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
     @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
@@ -57,14 +57,14 @@ public class PersonEntity extends PersistentEntity implements Person {
         firstName = person.getFirstName() != null ? new NameEmbeddable(person.getFirstName()) : null;
         surname = new NameEmbeddable(person.getSurname());
         locale = person.getLocale() != null ? new LocaleEmbeddable(person.getLocale()) : null;
-        userEntity = person.getUser() != null ? new UserOrm(person.getUser()) : null;
+        userEntity = person.getUser() != null ? new UserEntity(person.getUser()) : null;
     }
 
     private AddressEntity copyAddress() {
         return addressEntity != null ? addressEntity.copy() : null;
     }
 
-    private UserOrm copyUser() {
+    private UserEntity copyUser() {
         return userEntity != null ? userEntity.copy() : null;
     }
 
@@ -130,7 +130,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         return description;
     }
 
-    @Override public UserOrm getUser() {
+    @Override public UserEntity getUser() {
         return userEntity;
     }
 
@@ -150,7 +150,7 @@ public class PersonEntity extends PersistentEntity implements Person {
         this.surname = new NameEmbeddable(surname);
     }
 
-    public void setUserEntity(UserOrm userEntity) {
+    public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
 

@@ -5,7 +5,7 @@ import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.persistence.client.dao.PersistentDao;
 import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.user.UserNameEmbeddable;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -25,11 +25,11 @@ public class HibernateRepository implements PersistentDao {
     }
 
     @Override public Optional<UserDto> findUsing(UserName userName) {
-        UserOrm userEntity = (UserOrm) session().createCriteria(UserOrm.class)
+        UserEntity userEntity = (UserEntity) session().createCriteria(UserEntity.class)
                 .add(Restrictions.eq("userName", new UserNameEmbeddable(userName)))
                 .uniqueResult();
 
-        return Optional.ofNullable(userEntity).map(UserOrm::asDto);
+        return Optional.ofNullable(userEntity).map(UserEntity::asDto);
     }
 
     @Override public <T extends Persistent<?>> T saveOrUpdate(T entity) {

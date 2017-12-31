@@ -43,7 +43,7 @@ public class BlogIntegrationTest {
     }
 
     private UserDto persistUser() {
-//        UserOrm userEntity = (UserOrm) aUser().withUserName("titten")
+//        UserEntity userEntity = aUser().withUserName("titten")
 //                .withEmailAddress("jactor@rises")
 //                .with(aPerson()
 //                        .withSurname("nevland")

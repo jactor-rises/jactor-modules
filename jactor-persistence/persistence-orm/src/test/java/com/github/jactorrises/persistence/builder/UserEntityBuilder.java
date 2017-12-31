@@ -3,7 +3,7 @@ package com.github.jactorrises.persistence.builder;
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.persistence.entity.person.PersonEntity;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 
 public class UserEntityBuilder {
     private EmailAddress emailAddress;
@@ -32,13 +32,13 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserOrm build() {
-        UserOrm userOrm = new UserOrm();
-        userOrm.setEmailAddress(emailAddress);
-        userOrm.setPersonEntity(person);
-        userOrm.setUserName(userName);
+    public UserEntity build() {
+        UserEntity useruserEntity = new UserEntity();
+        useruserEntity.setEmailAddress(emailAddress);
+        useruserEntity.setPersonEntity(person);
+        useruserEntity.setUserName(userName);
 
-        return userOrm;
+        return useruserEntity;
     }
 
     public static UserEntityBuilder aUser() {

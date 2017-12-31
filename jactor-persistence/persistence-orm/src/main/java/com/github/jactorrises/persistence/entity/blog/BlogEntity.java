@@ -4,7 +4,7 @@ import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.persistence.client.dto.BlogDto;
 import com.github.jactorrises.persistence.entity.DateTextEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
+import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -28,7 +28,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
 
     @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm userEntity;
+    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
 
     BlogEntity() {
         created = new DateTextEmbeddable(LocalDate.now());
@@ -45,7 +45,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
         super(blogDto);
         created = new DateTextEmbeddable(blogDto.getCreated());
         title = blogDto.getTitle();
-        userEntity = new UserOrm(blogDto.getUser());
+        userEntity = new UserEntity(blogDto.getUser());
 
     }
 
@@ -53,7 +53,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
         return new BlogEntity(this);
     }
 
-    private UserOrm copyUser() {
+    private UserEntity copyUser() {
         return userEntity != null ? userEntity.copy() : null;
     }
 
@@ -80,7 +80,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
         return title;
     }
 
-    @Override public UserOrm getUser() {
+    @Override public UserEntity getUser() {
         return userEntity;
     }
 
@@ -92,7 +92,7 @@ public class BlogEntity extends PersistentEntity implements Blog {
         this.title = title;
     }
 
-    public void setUserEntity(UserOrm userEntity) {
+    public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
 }

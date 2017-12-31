@@ -24,26 +24,26 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_USER")
-public class UserOrm extends PersistentEntity implements User {
+public class UserEntity extends PersistentEntity implements User {
 
     @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
-    public UserOrm() {
+    public UserEntity() {
     }
 
     /**
      * @param user is used to create an entity
      */
-    private UserOrm(UserOrm user) {
+    private UserEntity(UserEntity user) {
         super(user);
         emailAddress = user.emailAddress;
         personEntity = user.copyPerson();
         userName = user.userName;
     }
 
-    public UserOrm(UserDto user) {
+    public UserEntity(UserDto user) {
         super(user);
         emailAddress = user.getEmailAddress() != null ? new EmailAddressEmbeddable(user.getEmailAddress()) : null;
         personEntity = new PersonEntity(user.getPerson());
@@ -54,8 +54,8 @@ public class UserOrm extends PersistentEntity implements User {
         return personEntity != null ? personEntity.copy() : null;
     }
 
-    public UserOrm copy() {
-        return new UserOrm(this);
+    public UserEntity copy() {
+        return new UserEntity(this);
     }
 
     public UserDto asDto() {
@@ -69,9 +69,9 @@ public class UserOrm extends PersistentEntity implements User {
 
     @Override public boolean equals(Object o) {
         return o == this || o != null && getClass() == o.getClass() &&
-                Objects.equals(userName, ((UserOrm) o).userName) &&
-                Objects.equals(personEntity, ((UserOrm) o).personEntity) &&
-                Objects.equals(emailAddress, ((UserOrm) o).emailAddress);
+                Objects.equals(userName, ((UserEntity) o).userName) &&
+                Objects.equals(personEntity, ((UserEntity) o).personEntity) &&
+                Objects.equals(emailAddress, ((UserEntity) o).emailAddress);
     }
 
     @Override public int hashCode() {
