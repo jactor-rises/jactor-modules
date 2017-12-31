@@ -16,7 +16,7 @@ class BlogEntryOrmTest {
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
         BlogEntryOrm base = aBlogEntry()
-                .with(new BlogOrm())
+                .with(new BlogEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
@@ -24,7 +24,7 @@ class BlogEntryOrmTest {
         BlogEntryOrm equal = base.copy();
 
         BlogEntryOrm notEqual = aBlogEntry()
-                .with(new BlogOrm())
+                .with(new BlogEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
                 .build();
@@ -40,7 +40,7 @@ class BlogEntryOrmTest {
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
         BlogEntryOrm base = aBlogEntry()
-                .with(new BlogOrm())
+                .with(new BlogEntity())
                 .withCreatorName("some creator")
                 .withEntry("some entry")
                 .build();
@@ -48,7 +48,7 @@ class BlogEntryOrmTest {
         BlogEntryOrm equal = base.copy();
 
         BlogEntryOrm notEqual = aBlogEntry()
-                .with(new BlogOrm())
+                .with(new BlogEntity())
                 .withCreatorName("some other creator")
                 .withEntry("some other entry")
                 .build();

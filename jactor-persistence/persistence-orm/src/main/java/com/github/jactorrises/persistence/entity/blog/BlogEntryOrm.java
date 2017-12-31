@@ -25,7 +25,7 @@ import static java.util.Objects.hash;
 @Table(name = "T_BLOG_ENTRY")
 public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
 
-    @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogOrm blogEntity;
+    @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogEntity blogEntity;
 
     @Embedded @AttributeOverrides({
             @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
@@ -42,7 +42,7 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
         persistentEntry = blogEntryOrm.copyEntry();
     }
 
-    private BlogOrm copyBlog() {
+    private BlogEntity copyBlog() {
         return blogEntity.copy();
     }
 
@@ -52,7 +52,7 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
 
     public BlogEntryOrm(BlogEntryDto blogEntryDto) {
         super(blogEntryDto);
-        blogEntity = new BlogOrm(blogEntryDto.getBlog());
+        blogEntity = new BlogEntity(blogEntryDto.getBlog());
         persistentEntry = new EntryEmbeddable(blogEntryDto.getCreatedTime(), blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     }
 
@@ -78,11 +78,11 @@ public class BlogEntryOrm extends PersistentEntity implements BlogEntry {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(blogEntity).append(persistentEntry).toString();
     }
 
-    @Override public BlogOrm getBlog() {
+    @Override public BlogEntity getBlog() {
         return blogEntity;
     }
 
-    public void setBlog(BlogOrm blog) {
+    public void setBlog(BlogEntity blog) {
         this.blogEntity = blog;
     }
 

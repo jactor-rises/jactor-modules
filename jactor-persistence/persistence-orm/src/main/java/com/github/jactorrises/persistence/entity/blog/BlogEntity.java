@@ -24,24 +24,24 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG")
-public class BlogOrm extends PersistentEntity implements Blog {
+public class BlogEntity extends PersistentEntity implements Blog {
 
     @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserOrm userEntity;
 
-    BlogOrm() {
+    BlogEntity() {
         created = new DateTextEmbeddable(LocalDate.now());
     }
 
-    private BlogOrm(BlogOrm blogEntity) {
+    private BlogEntity(BlogEntity blogEntity) {
         super(blogEntity);
         created = blogEntity.created;
         title = blogEntity.getTitle();
         userEntity = blogEntity.copyUser();
     }
 
-    public BlogOrm(BlogDto blogDto) {
+    public BlogEntity(BlogDto blogDto) {
         super(blogDto);
         created = new DateTextEmbeddable(blogDto.getCreated());
         title = blogDto.getTitle();
@@ -49,8 +49,8 @@ public class BlogOrm extends PersistentEntity implements Blog {
 
     }
 
-    BlogOrm copy() {
-        return new BlogOrm(this);
+    BlogEntity copy() {
+        return new BlogEntity(this);
     }
 
     private UserOrm copyUser() {
@@ -59,8 +59,8 @@ public class BlogOrm extends PersistentEntity implements Blog {
 
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(title, ((BlogOrm) o).title) &&
-                Objects.equals(userEntity, ((BlogOrm) o).userEntity);
+                Objects.equals(title, ((BlogEntity) o).title) &&
+                Objects.equals(userEntity, ((BlogEntity) o).userEntity);
     }
 
     @Override public int hashCode() {

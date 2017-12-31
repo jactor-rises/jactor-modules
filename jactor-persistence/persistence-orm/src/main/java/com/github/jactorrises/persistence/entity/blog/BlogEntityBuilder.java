@@ -19,12 +19,12 @@ public class BlogEntityBuilder {
         return this;
     }
 
-    public BlogOrm build() {
-        BlogOrm blogOrm = new BlogOrm();
-        blogOrm.setTitle(title);
-        blogOrm.setUserEntity(userOrm);
+    public BlogEntity build() {
+        BlogEntity blogEntity = new BlogEntity();
+        blogEntity.setTitle(title);
+        blogEntity.setUserEntity(userOrm);
 
-        return blogOrm;
+        return blogEntity;
     }
 
     public static BlogEntityBuilder aBlog() {

@@ -4,8 +4,8 @@ import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.persistence.client.dto.BlogDto;
 import com.github.jactorrises.persistence.client.dto.UserDto;
+import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
-import com.github.jactorrises.persistence.entity.blog.BlogOrm;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -51,7 +51,7 @@ public class BlogEntryIntegrationTest {
 
     private BlogDto aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
         BlogDto blogDto = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getDto();
-        session().save(new BlogOrm(blogDto));
+        session().save(new BlogEntity(blogDto));
 
         return blogDto;
     }

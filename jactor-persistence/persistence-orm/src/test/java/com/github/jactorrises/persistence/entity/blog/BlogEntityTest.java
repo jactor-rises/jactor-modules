@@ -13,20 +13,20 @@ import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.a
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@DisplayName("A BlogOrm")
+@DisplayName("A BlogEntity")
 @ExtendWith(NowAsPureDateExtension.class)
-class BlogOrmTest {
+class BlogEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
-        BlogOrm base = (BlogOrm) aBlog()
+        BlogEntity base = aBlog()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
-        BlogOrm equal = base.copy();
+        BlogEntity equal = base.copy();
 
-        BlogOrm notEqual = (BlogOrm) aBlog()
+        BlogEntity notEqual = aBlog()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();
@@ -41,14 +41,14 @@ class BlogOrmTest {
 
     @DisplayName("should have an implementation of the equals method")
     @Test void willHaveCorrectImplementedEquals() {
-        BlogOrm base = (BlogOrm) aBlog()
+        BlogEntity base = aBlog()
                 .with(aUser().build())
                 .withTitle("title")
                 .build();
 
-        BlogOrm equal = base.copy();
+        BlogEntity equal = base.copy();
 
-        BlogOrm notEqual = (BlogOrm) aBlog()
+        BlogEntity notEqual = aBlog()
                 .with(aUser().build())
                 .withTitle("another title")
                 .build();
@@ -64,18 +64,18 @@ class BlogOrmTest {
 
     @DisplayName("should set created when initialized")
     @Test void willSetCreatedWhenInitialized() {
-        assertThat(new BlogOrm().getCreated()).isEqualTo(LocalDate.now());
+        assertThat(new BlogEntity().getCreated()).isEqualTo(LocalDate.now());
     }
 
     @DisplayName("should have an implementation of the toString method")
     @Test void shouldHaveAnImplementationOfTheToStringMethod() {
-        BlogOrm BlogOrmToTest = (BlogOrm) aBlog()
+        BlogEntity BlogOrmToTest = aBlog()
                 .with(aUser().build())
                 .withTitle("my blog")
                 .build();
 
         assertThat(BlogOrmToTest.toString())
-                .contains("BlogOrm")
+                .contains("BlogEntity")
                 .contains("my blog")
                 .contains(new DateTextEmbeddable(LocalDate.now()).toString());
     }
