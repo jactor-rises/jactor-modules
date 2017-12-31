@@ -1,8 +1,8 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.model.JactorModel;
+import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.blog.BlogOrm;
-import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;
@@ -16,23 +16,20 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
 import static com.github.jactorrises.model.domain.blog.BlogDomain.aBlog;
-import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
-import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModel.class)
 @Transactional
-@Ignore("#171: spring context")
+@Ignore("#176: rewrite using rest from persistence-orm")
 public class BlogIntegrationTest {
 
     @SuppressWarnings("SpringJavaAutowiringInspection") // located in jactor-persistence-orm...
     @Resource private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogOrmToThePersistentLayer() {
-        final UserOrm persistedUser = persistUser();
+        final UserDto persistedUser = persistUser();
         Serializable id = session().save(aBlog().withTitleAs("some blog").with(persistedUser).build().getPersistence());
 
         session().flush();
@@ -45,23 +42,24 @@ public class BlogIntegrationTest {
         assertThat(blog.getUser().getId()).isEqualTo(persistedUser.getId());
     }
 
-    private UserOrm persistUser() {
-        UserOrm userEntity = (UserOrm) aUser().withUserName("titten")
-                .withEmailAddress("jactor@rises")
-                .with(aPerson()
-                        .withSurname("nevland")
-                        .withDescription("description")
-                        .with(anAddress().withAddressLine1("the streets")
-                                .withCity("Dirdal")
-                                .withCountry("NO")
-                                .withZipCode(1234)
-                        )
-                ).build()
-                .getPersistence();
+    private UserDto persistUser() {
+//        UserOrm userEntity = (UserOrm) aUser().withUserName("titten")
+//                .withEmailAddress("jactor@rises")
+//                .with(aPerson()
+//                        .withSurname("nevland")
+//                        .withDescription("description")
+//                        .with(anAddress().withAddressLine1("the streets")
+//                                .withCity("Dirdal")
+//                                .withCountry("NO")
+//                                .withZipCode(1234)
+//                        )
+//                ).build()
+//                .getPersistence();
+//
+//        session().save(userEntity);
 
-        session().save(userEntity);
-
-        return userEntity;
+//        return userEntity;
+        return new UserDto();
     }
 
     private Session session() {

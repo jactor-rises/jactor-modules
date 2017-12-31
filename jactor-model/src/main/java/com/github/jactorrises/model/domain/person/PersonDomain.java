@@ -5,44 +5,44 @@ import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.entity.PersonEntity;
+import com.github.jactorrises.persistence.client.dto.PersonDto;
 
 import java.util.Locale;
 
 public class PersonDomain extends PersistentDomain<Long> implements Person {
 
-    private final PersonEntity personEntity;
+    private final PersonDto personDto;
 
-    public PersonDomain(PersonEntity personEntity) {
-        this.personEntity = personEntity;
+    public PersonDomain(PersonDto personDto) {
+        this.personDto = personDto;
     }
 
     @Override public String getDescription() {
-        return personEntity.getDescription();
+        return personDto.getDescription();
     }
 
     @Override public UserDomain getUser() {
-        return new UserDomain(personEntity.getUser());
+        return new UserDomain(personDto.getUser());
     }
 
     @Override public Name getFirstName() {
-        return personEntity.getFirstName();
+        return personDto.getFirstName();
     }
 
     @Override public Name getSurname() {
-        return personEntity.getSurname();
+        return personDto.getSurname();
     }
 
     @Override public Locale getLocale() {
-        return personEntity.getLocale();
+        return personDto.getLocale();
     }
 
     @Override public AddressDomain getAddress() {
-        return personEntity.getAddress() != null ? new AddressDomain(personEntity.getAddress()) : null;
+        return personDto.getAddress() != null ? new AddressDomain(personDto.getAddress()) : null;
     }
 
-    @Override public PersonEntity getPersistence() {
-        return personEntity;
+    @Override public PersonDto getPersistence() {
+        return personDto;
     }
 
     public static PersonBuilder aPerson() {

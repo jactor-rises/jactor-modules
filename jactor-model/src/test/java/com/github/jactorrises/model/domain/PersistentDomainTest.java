@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain;
 
-import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.client.dto.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import static org.mockito.Mockito.verify;
 class PersistentDomainTest {
 
     private PersistentDomain<Long> persistentDomain = new TestPersistedDomain();
-    private UserEntity userEntity = null;
+    private UserDto userDto = null;
 
     @DisplayName("should fail if a domain is created for an entity which is null")
     @Test
@@ -21,26 +21,26 @@ class PersistentDomainTest {
                 .withMessage(PersistentDomain.THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
     }
 
-    @Test
-    @DisplayName("should get the common properties of athe persistent entity")
+    @Test @SuppressWarnings("ResultOfMethodCallIgnored")
+    @DisplayName("should get the common properties of the dto")
     void shouldGetTheCommonPropertiesThePersistentEntity() {
-        userEntity = mock(UserEntity.class);
+        userDto = mock(UserDto.class);
         persistentDomain.getId();
         persistentDomain.getCreatedBy();
         persistentDomain.getCreationTime();
         persistentDomain.getUpdatedBy();
         persistentDomain.getUpdatedTime();
 
-        verify(userEntity).getId();
-        verify(userEntity).getCreatedBy();
-        verify(userEntity).getCreationTime();
-        verify(userEntity).getUpdatedBy();
-        verify(userEntity).getUpdatedTime();
+        verify(userDto).getId();
+        verify(userDto).getCreatedBy();
+        verify(userDto).getCreationTime();
+        verify(userDto).getUpdatedBy();
+        verify(userDto).getUpdatedTime();
     }
 
     private class TestPersistedDomain extends PersistentDomain<Long> {
-        @Override public UserEntity getPersistence() {
-            return userEntity;
+        @Override public UserDto getPersistence() {
+            return userDto;
         }
     }
 }

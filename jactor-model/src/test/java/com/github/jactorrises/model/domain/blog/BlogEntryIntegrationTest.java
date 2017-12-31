@@ -2,9 +2,11 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.persistence.client.entity.BlogEntity;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.client.dto.BlogDto;
+import com.github.jactorrises.persistence.client.dto.UserDto;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
+import com.github.jactorrises.persistence.entity.blog.BlogOrm;
+import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;
@@ -27,10 +29,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModel.class)
 @Transactional
-@Ignore("#171: spring context")
+@Ignore("#176: rewrite using rest from persistence-orm")
 public class BlogEntryIntegrationTest {
 
-    @SuppressWarnings("SpringJavaAutowiringInspection") // located in jactor-persistence-orm...
+    @SuppressWarnings({"SpringJavaInjectionPointsAutowiringInspection"}) // located in jactor-persistence-orm...
     @Autowired private SessionFactory sessionFactory;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
@@ -47,15 +49,15 @@ public class BlogEntryIntegrationTest {
         assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("some");
     }
 
-    private BlogEntity aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
-        BlogEntity blogEntity = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getPersistence();
-        session().save(blogEntity);
+    private BlogDto aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
+        BlogDto blogDto = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getPersistence();
+        session().save(new BlogOrm(blogDto));
 
-        return blogEntity;
+        return blogDto;
     }
 
-    private UserEntity aPersistedUser() {
-        UserEntity userEntity = aUser().withUserName("titten")
+    private UserDto aPersistedUser() {
+        UserDto userDto = aUser().withUserName("titten")
                 .withEmailAddress("jactor@rises")
                 .with(aPerson()
                         .withDescription("description")
@@ -68,9 +70,9 @@ public class BlogEntryIntegrationTest {
                 )
                 .build().getPersistence();
 
-        session().save(userEntity);
+        session().save(new UserOrm(userDto));
 
-        return userEntity;
+        return userDto;
     }
 
     private Session session() {

@@ -48,7 +48,7 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
     }
 
     @Override protected AddressDomain buildBean() {
-        return new AddressDomain(addressDto));
+        return new AddressDomain(addressDto);
     }
 
     private static Optional<String> validInstance(AddressDomain addressDomain) {

@@ -9,7 +9,7 @@ public class AddressDomain extends PersistentDomain<Long> implements Address {
 
     private final AddressDto addressDto;
 
-    AddressDomain(AddressDto addressDto) {
+    public AddressDomain(AddressDto addressDto) {
         this.addressDto = addressDto;
     }
 

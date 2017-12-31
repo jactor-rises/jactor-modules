@@ -6,8 +6,8 @@ import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.persistence.client.dao.PersistentDao;
-import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
-import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.client.dto.GuestBookDto;
+import com.github.jactorrises.persistence.client.dto.GuestBookEntryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +45,14 @@ public class GuestBookDomainService {
         return persistentDao.findUsing(userName).map(UserDomain::new);
     }
 
-    GuestBookDomain findGuestBook(Long id) {
-        GuestBookEntity guestBookEntity = persistentDao.load(GuestBookEntity.class, id);
-        return new GuestBookDomain(guestBookEntity);
+    GuestBookDomain fetchGuestBook(Long id) {
+        GuestBookDto guestBookDto = persistentDao.fetch(GuestBookDto.class, id);
+        return new GuestBookDomain(guestBookDto);
     }
 
-    GuestBookEntryDomain findGuestBookEntry(Long id) {
-        GuestBookEntryEntity guestBookEntryEntity = persistentDao.load(GuestBookEntryEntity.class, id);
-        return new GuestBookEntryDomain(guestBookEntryEntity);
+    GuestBookEntryDomain fetchGuestBookEntry(Long id) {
+        GuestBookEntryDto guestBookEntryDto = persistentDao.fetch(GuestBookEntryDto.class, id);
+        return new GuestBookEntryDomain(guestBookEntryDto);
     }
 }
 

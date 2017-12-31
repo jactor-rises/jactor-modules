@@ -1,15 +1,24 @@
 package com.github.jactorrises.model.domain.guestbook;
 
+import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import static com.github.jactorrises.model.domain.guestbook.GuestBookDomain.aGuestBook;
 import static com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
-import static com.github.jactorrises.persistence.builder.GuestBookEntityBuilder.aGuestBook;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @DisplayName("The GuestBookEntryBuilder")
+@ExtendWith(SuppressValidInstanceExtension.class)
 class GuestBookEntryBuilderTest {
+
+    @BeforeEach
+    void validateGuestBookEntryBuild() {
+        SuppressValidInstanceExtension.setValidate(GuestBookEntryDomain.class);
+    }
 
     @DisplayName("should not initialize a guest book entry without an entry")
     @Test void willNotBuildGuestBookEntryWithoutAnEntry() {

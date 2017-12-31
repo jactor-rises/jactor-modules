@@ -3,36 +3,36 @@ package com.github.jactorrises.model.domain.guestbook;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.persistence.client.entity.GuestBookEntryEntity;
+import com.github.jactorrises.persistence.client.dto.GuestBookEntryDto;
 
 import java.time.LocalDateTime;
 
 public class GuestBookEntryDomain extends PersistentDomain<Long> implements GuestBookEntry {
 
-    private final GuestBookEntryEntity guestBookEntryEntity;
+    private final GuestBookEntryDto guestBookEntryDto;
 
-    public GuestBookEntryDomain(GuestBookEntryEntity guestBookEntryEntity) {
-        this.guestBookEntryEntity = guestBookEntryEntity;
+    public GuestBookEntryDomain(GuestBookEntryDto guestBookEntryDto) {
+        this.guestBookEntryDto = guestBookEntryDto;
     }
 
     @Override public GuestBookDomain getGuestBook() {
-        return guestBookEntryEntity.getGuestBook() != null ? new GuestBookDomain(guestBookEntryEntity.getGuestBook()) : null;
+        return guestBookEntryDto.getGuestBook() != null ? new GuestBookDomain(guestBookEntryDto.getGuestBook()) : null;
     }
 
     @Override public LocalDateTime getCreatedTime() {
-        return guestBookEntryEntity.getCreatedTime();
+        return guestBookEntryDto.getCreatedTime();
     }
 
     @Override public String getEntry() {
-        return guestBookEntryEntity.getEntry();
+        return guestBookEntryDto.getEntry();
     }
 
     @Override public Name getCreatorName() {
-        return guestBookEntryEntity.getCreatorName();
+        return guestBookEntryDto.getCreatorName();
     }
 
-    @Override public GuestBookEntryEntity getPersistence() {
-        return guestBookEntryEntity;
+    @Override public GuestBookEntryDto getPersistence() {
+        return guestBookEntryDto;
     }
 
     public static GuestBookEntryBuilder aGuestBookEntry() {

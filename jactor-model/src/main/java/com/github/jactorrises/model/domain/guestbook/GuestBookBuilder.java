@@ -2,37 +2,30 @@ package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.builder.GuestBookEntityBuilder;
-import com.github.jactorrises.persistence.builder.UserEntityBuilder;
-import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.client.dto.GuestBookDto;
+import com.github.jactorrises.persistence.client.dto.UserDto;
 
 import java.util.Optional;
 
 import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
-import static com.github.jactorrises.persistence.builder.GuestBookEntityBuilder.aGuestBook;
 
 public final class GuestBookBuilder extends AbstractBuilder<GuestBookDomain> {
-    private final GuestBookEntityBuilder guestBookEntity = aGuestBook();
+    private final GuestBookDto guestBookDto = new GuestBookDto();
 
     GuestBookBuilder() {
         super(GuestBookBuilder::validateInstance);
     }
 
     public GuestBookBuilder withTitle(String title) {
-        guestBookEntity.withTitle(title);
+        guestBookDto.setTitle(title);
         return this;
     }
 
-    public GuestBookBuilder with(UserEntity userEntity) {
-        guestBookEntity.with(userEntity);
+    public GuestBookBuilder with(UserDto userDto) {
+        guestBookDto.setUser(userDto);
         return this;
-    }
-
-    public GuestBookBuilder with(UserEntityBuilder userEntityBuilder) {
-        return with(userEntityBuilder.build());
     }
 
     public GuestBookBuilder with(UserDomain userDomain) {
@@ -41,7 +34,7 @@ public final class GuestBookBuilder extends AbstractBuilder<GuestBookDomain> {
     }
 
     @Override protected GuestBookDomain buildBean() {
-        return new GuestBookDomain(guestBookEntity.build());
+        return new GuestBookDomain(guestBookDto);
     }
 
     private static Optional<String> validateInstance(GuestBookDomain guestBookDomain) {
@@ -51,7 +44,7 @@ public final class GuestBookBuilder extends AbstractBuilder<GuestBookDomain> {
         );
     }
 
-    public static GuestBookDomain build(GuestBookEntity guestBook) {
+    public static GuestBookDomain build(GuestBookDto guestBook) {
         return new GuestBookDomain(guestBook);
     }
 }

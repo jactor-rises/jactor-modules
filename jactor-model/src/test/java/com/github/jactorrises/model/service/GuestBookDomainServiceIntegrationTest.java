@@ -24,21 +24,23 @@ import static com.github.jactorrises.model.domain.address.AddressDomain.anAddres
 import static com.github.jactorrises.model.domain.guestbook.GuestBookDomain.aGuestBook;
 import static com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
 import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
+import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JactorModel.class)
 @Transactional
-@Ignore("#:171: fix spring context... ")
+@Ignore("#176: rewrite using rest from persistence-orm... ")
 public class GuestBookDomainServiceIntegrationTest {
 
     @Autowired private GuestBookDomainService guestBookDomainService;
 
-    @SuppressWarnings("SpringJavaAutowiringInspection") // located in jactor-persistence-orm...
+    // located in jactor-persistence-orm...
+    @SuppressWarnings({"SpringJavaAutowiringInspection", "SpringJavaInjectionPointsAutowiringInspection"})
     @Autowired private SessionFactory sessionFactory;
 
     @Test public void shouldSaveUserDomain() {
         guestBookDomainService.saveOrUpdate(
-                UserDomain.aUser().withUserName("titten")
+                aUser().withUserName("titten")
                         .withEmailAddress("jactor@rises")
                         .with(aPerson()
                                 .withDescription("description")
@@ -57,7 +59,7 @@ public class GuestBookDomainServiceIntegrationTest {
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(possibleUser).isPresent();
-            UserDomain userDomain = possibleUser.get();
+            UserDomain userDomain = possibleUser.orElse(aUser().build());
 //            softly.assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")); todo fix: should work after story #152 is resolved
             softly.assertThat(userDomain.getPerson().getDescription()).as("user.description").isEqualTo("description");
         });
@@ -74,7 +76,7 @@ public class GuestBookDomainServiceIntegrationTest {
                 .withSurname("jacobsen")
                 .with(address)
                 .build();
-        UserDomain user = UserDomain.aUser()
+        UserDomain user = aUser()
                 .withUserName("titten")
                 .withEmailAddress("jactor@rises")
                 .with(person)
@@ -84,7 +86,7 @@ public class GuestBookDomainServiceIntegrationTest {
 
         ensureDbCreation();
 
-        GuestBookDomain guestBook = guestBookDomainService.findGuestBook(id);
+        GuestBookDomain guestBook = guestBookDomainService.fetchGuestBook(id);
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(guestBook.getTitle()).isEqualTo("my guest book");
@@ -94,7 +96,7 @@ public class GuestBookDomainServiceIntegrationTest {
 
 
     @Test public void willSaveGuestBookEntryWithRelations() {
-        UserDomain userDomain = UserDomain.aUser().withUserName("titten")
+        UserDomain userDomain = aUser().withUserName("titten")
                 .withEmailAddress("jactor@rises")
                 .with(aPerson()
                         .withDescription("description")
@@ -113,7 +115,7 @@ public class GuestBookDomainServiceIntegrationTest {
 
         ensureDbCreation();
 
-        GuestBookEntryDomain guestBookEntry = guestBookDomainService.findGuestBookEntry(id);
+        GuestBookEntryDomain guestBookEntry = guestBookDomainService.fetchGuestBookEntry(id);
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(guestBookEntry.getGuestBook().getTitle()).as("guest book.title").isEqualTo("my guest book");

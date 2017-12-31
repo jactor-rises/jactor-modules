@@ -1,30 +1,31 @@
 package com.github.jactorrises.model.domain.user;
 
+import com.github.jactorrises.client.datatype.EmailAddress;
+import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.model.domain.person.PersonBuilder;
 import com.github.jactorrises.model.domain.person.PersonDomain;
-import com.github.jactorrises.persistence.builder.UserEntityBuilder;
+import com.github.jactorrises.persistence.client.dto.UserDto;
 
 import java.util.Optional;
 
 import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
 
 public final class UserBuilder extends AbstractBuilder<UserDomain> {
-    private final UserEntityBuilder userEntityBuilder = aUser();
+    private final UserDto userDto = new UserDto();
 
     UserBuilder() {
         super(UserBuilder::validateDomain);
     }
 
     public UserBuilder withUserName(String userName) {
-        userEntityBuilder.withUserName(userName);
+        userDto.setUserName(new UserName(userName));
         return this;
     }
 
     public UserBuilder with(PersonDomain personDomain) {
-        userEntityBuilder.with(personDomain.getPersistence());
+        userDto.setPerson(personDomain.getPersistence());
         return this;
     }
 
@@ -33,13 +34,13 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
     }
 
     public UserBuilder withEmailAddress(String emailAddress) {
-        userEntityBuilder.withEmailAddress(emailAddress);
+        userDto.setEmailAddress(new EmailAddress(emailAddress));
         return this;
     }
 
     @Override
     protected UserDomain buildBean() {
-        return new UserDomain(userEntityBuilder.build());
+        return new UserDomain(userDto);
     }
 
     private static Optional<String> validateDomain(UserDomain userDomain) {

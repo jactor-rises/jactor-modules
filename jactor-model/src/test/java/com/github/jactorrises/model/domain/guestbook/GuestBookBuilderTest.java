@@ -1,9 +1,9 @@
 package com.github.jactorrises.model.domain.guestbook;
 
+import com.github.jactorrises.persistence.client.dto.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
@@ -12,13 +12,13 @@ class GuestBookBuilderTest {
 
     @DisplayName("should not build an instance without the title of the guest book")
     @Test void willNotBuildGuestBookWithoutTheTitleOfTheGuestBook() {
-        assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().with(aUser()).build())
+        assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().with(new UserDto()).build())
                 .withMessageContaining("title").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance with an empty title for the guest book")
     @Test void willNotBuildGuestBookWithAnEmptyTitleOfTheGuestBook() {
-        assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().withTitle("").with(aUser()).build())
+        assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().withTitle("").with(new UserDto()).build())
                 .withMessageContaining("title").withMessageContaining("has no value");
     }
 
@@ -30,6 +30,6 @@ class GuestBookBuilderTest {
 
     @DisplayName("should build an instance when all required fields are set")
     @Test void willBuildGuestBookWhenAllRequiredFieldsAreSet() {
-        assertThat(GuestBookDomain.aGuestBook().withTitle("some title").with(aUser()).build()).isNotNull();
+        assertThat(GuestBookDomain.aGuestBook().withTitle("some title").with(new UserDto()).build()).isNotNull();
     }
 }
