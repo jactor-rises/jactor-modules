@@ -23,7 +23,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntry {
+public class GuestBookEntryEntity extends PersistentEntity implements GuestBookEntry {
     @ManyToOne() @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookEntity guestBookEntity;
 
     @Embedded @AttributeOverrides({
@@ -32,24 +32,24 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private EntryEmbeddable persistentEntry = new EntryEmbeddable();
 
-    public GuestBookEntryOrm() {
+    public GuestBookEntryEntity() {
         // empty...
     }
 
-    private GuestBookEntryOrm(GuestBookEntryOrm guestBookEntry) {
+    private GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
         super(guestBookEntry);
         guestBookEntity = guestBookEntry.copyGuestBook();
         persistentEntry = guestBookEntry.copyEntry();
     }
 
-    public GuestBookEntryOrm(GuestBookEntryDto guestBookEntry) {
+    public GuestBookEntryEntity(GuestBookEntryDto guestBookEntry) {
         super(guestBookEntry);
         guestBookEntity = new GuestBookEntity(guestBookEntry.getGuestBook());
         persistentEntry = new EntryEmbeddable(guestBookEntry.getCreatedTime(), guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     }
 
-    public GuestBookEntryOrm copy() {
-        return new GuestBookEntryOrm(this);
+    public GuestBookEntryEntity copy() {
+        return new GuestBookEntryEntity(this);
     }
 
     private GuestBookEntity copyGuestBook() {
@@ -61,10 +61,10 @@ public class GuestBookEntryOrm extends PersistentEntity implements GuestBookEntr
     }
 
     @Override public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryOrm) o);
+        return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryEntity) o);
     }
 
-    private boolean isEqualTo(GuestBookEntryOrm o) {
+    private boolean isEqualTo(GuestBookEntryEntity o) {
         return Objects.equals(persistentEntry, o.persistentEntry) &&
                 Objects.equals(guestBookEntity, o.guestBookEntity);
     }

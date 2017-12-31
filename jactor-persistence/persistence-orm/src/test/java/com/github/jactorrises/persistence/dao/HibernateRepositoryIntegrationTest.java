@@ -8,7 +8,7 @@ import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryOrm;
+import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.entity.person.PersonOrm;
 import com.github.jactorrises.persistence.entity.user.UserOrm;
 import org.hibernate.Session;
@@ -218,7 +218,7 @@ public class HibernateRepositoryIntegrationTest {
 
     @Test
     public void shouldFindGuestBookEntry() {
-        int noOfEntities = session().createCriteria(GuestBookEntryOrm.class).list().size();
+        int noOfEntities = session().createCriteria(GuestBookEntryEntity.class).list().size();
 
         AddressEntity AddressEntity = hibernateRepository.saveOrUpdate(
                 anAddress()
@@ -256,7 +256,7 @@ public class HibernateRepositoryIntegrationTest {
 
         assertSoftly(softly -> {
             softly.assertThat(id).as("id").isNotNull();
-            softly.assertThat(session().createCriteria(GuestBookEntryOrm.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
+            softly.assertThat(session().createCriteria(GuestBookEntryEntity.class).list()).as("persisted entities").hasSize(noOfEntities + 1);
         });
     }
 
@@ -299,12 +299,12 @@ public class HibernateRepositoryIntegrationTest {
         session().flush();
         session().clear();
 
-        GuestBookEntryOrm guestBookEntryOrm = hibernateRepository.fetch(GuestBookEntryOrm.class, id);
+        GuestBookEntryEntity guestBookEntryEntity = hibernateRepository.fetch(GuestBookEntryEntity.class, id);
 
         assertSoftly(softly -> {
-            softly.assertThat(guestBookEntryOrm.getGuestBook()).as("guest book").isEqualTo(guestBookEntity);
-            softly.assertThat(guestBookEntryOrm.getEntry()).as("entry").isEqualTo("hi. long time no see");
-            softly.assertThat(guestBookEntryOrm.getCreatorName()).as("creator name").isEqualTo(new Name("mate"));
+            softly.assertThat(guestBookEntryEntity.getGuestBook()).as("guest book").isEqualTo(guestBookEntity);
+            softly.assertThat(guestBookEntryEntity.getEntry()).as("entry").isEqualTo("hi. long time no see");
+            softly.assertThat(guestBookEntryEntity.getCreatorName()).as("creator name").isEqualTo(new Name("mate"));
         });
     }
 
