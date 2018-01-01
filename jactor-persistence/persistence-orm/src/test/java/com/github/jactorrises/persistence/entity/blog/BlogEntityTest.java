@@ -8,8 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.LocalDate;
 
-import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
-import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

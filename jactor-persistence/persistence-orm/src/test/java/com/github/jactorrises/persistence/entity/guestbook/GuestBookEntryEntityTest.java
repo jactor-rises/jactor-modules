@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static com.github.jactorrises.persistence.builder.GuestBookEntryEntityBuilder.aGuestBookEntry;
+import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

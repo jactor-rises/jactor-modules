@@ -1,6 +1,5 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
-import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
@@ -20,12 +19,12 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK")
-public class GuestBookEntity extends PersistentEntity implements GuestBook {
+public class GuestBookEntity extends PersistentEntity {
 
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
 
-    public GuestBookEntity() {
+    GuestBookEntity() {
     }
 
     /**
@@ -69,11 +68,11 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
                 .toString();
     }
 
-    @Override public String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    @Override public UserEntity getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
@@ -83,5 +82,9 @@ public class GuestBookEntity extends PersistentEntity implements GuestBook {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public static GuestBookEntityBuilder aGuestBook() {
+        return new GuestBookEntityBuilder();
     }
 }

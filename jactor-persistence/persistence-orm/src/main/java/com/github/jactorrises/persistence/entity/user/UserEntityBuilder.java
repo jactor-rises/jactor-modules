@@ -1,16 +1,18 @@
-package com.github.jactorrises.persistence.builder;
+package com.github.jactorrises.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.persistence.entity.person.PersonEntityBuilder;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
 
-public class UserEntityBuilder {
+public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
     private EmailAddress emailAddress;
     private PersonEntity person;
     private UserName userName;
 
-    private UserEntityBuilder() {
+    UserEntityBuilder() {
     }
 
     public UserEntityBuilder with(PersonEntity person) {
@@ -32,16 +34,12 @@ public class UserEntityBuilder {
         return this;
     }
 
-    public UserEntity build() {
+   @Override public UserEntity buildBean() {
         UserEntity useruserEntity = new UserEntity();
         useruserEntity.setEmailAddress(emailAddress);
         useruserEntity.setPersonEntity(person);
         useruserEntity.setUserName(userName);
 
         return useruserEntity;
-    }
-
-    public static UserEntityBuilder aUser() {
-        return new UserEntityBuilder();
     }
 }

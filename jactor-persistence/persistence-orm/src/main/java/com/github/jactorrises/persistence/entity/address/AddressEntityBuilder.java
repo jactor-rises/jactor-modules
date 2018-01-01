@@ -1,9 +1,9 @@
-package com.github.jactorrises.persistence.builder;
+package com.github.jactorrises.persistence.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
-import com.github.jactorrises.persistence.entity.address.AddressEntity;
+import com.github.jactorrises.commons.builder.AbstractBuilder;
 
-public class AddressEntityBuilder {
+public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
 
     private Country country;
     private String addressLine1;
@@ -12,7 +12,7 @@ public class AddressEntityBuilder {
     private String city;
     private Integer zipCode;
 
-    private AddressEntityBuilder() {
+    AddressEntityBuilder() {
     }
 
     public AddressEntityBuilder withAddressLine1(String addressLine1) {
@@ -45,7 +45,7 @@ public class AddressEntityBuilder {
         return this;
     }
 
-    public AddressEntity build() {
+    @Override protected AddressEntity buildBean() {
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setAddressLine1(addressLine1);
         addressEntity.setAddressLine2(addressLine2);
@@ -55,9 +55,5 @@ public class AddressEntityBuilder {
         addressEntity.setCountry(country);
 
         return addressEntity;
-    }
-
-    public static AddressEntityBuilder anAddress() {
-        return new AddressEntityBuilder();
     }
 }

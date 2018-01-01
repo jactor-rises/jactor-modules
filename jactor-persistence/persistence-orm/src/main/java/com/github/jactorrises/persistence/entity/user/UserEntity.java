@@ -2,7 +2,6 @@ package com.github.jactorrises.persistence.entity.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.person.PersonEntity;
@@ -24,13 +23,13 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_USER")
-public class UserEntity extends PersistentEntity implements User {
+public class UserEntity extends PersistentEntity {
 
     @Embedded @AttributeOverride(name = "userName", column = @Column(name = "USER_NAME", nullable = false)) private UserNameEmbeddable userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
     @Embedded @AttributeOverride(name = "emailAddress", column = @Column(name = "EMAIL")) private EmailAddressEmbeddable emailAddress;
 
-    public UserEntity() {
+    UserEntity() {
     }
 
     /**
@@ -113,5 +112,9 @@ public class UserEntity extends PersistentEntity implements User {
 
     public void setPersonEntity(PersonEntity personEntity) {
         this.personEntity = personEntity;
+    }
+
+    public static UserEntityBuilder aUser() {
+        return new UserEntityBuilder();
     }
 }

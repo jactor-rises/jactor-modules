@@ -1,13 +1,15 @@
-package com.github.jactorrises.persistence.builder;
+package com.github.jactorrises.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
+import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.persistence.entity.person.PersonEntity;
+import com.github.jactorrises.persistence.entity.address.AddressEntityBuilder;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.entity.user.UserEntityBuilder;
 
 import java.util.Locale;
 
-public class PersonEntityBuilder {
+public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     private AddressEntity addressEntity;
     private Locale locale;
     private Name firstName;
@@ -15,7 +17,7 @@ public class PersonEntityBuilder {
     private String description;
     private UserEntity userEntity;
 
-    private PersonEntityBuilder() {
+    PersonEntityBuilder() {
     }
 
     public PersonEntityBuilder with(AddressEntity entity) {
@@ -52,7 +54,7 @@ public class PersonEntityBuilder {
         return this;
     }
 
-    public PersonEntity build() {
+    @Override protected PersonEntity buildBean() {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setAddressEntity(addressEntity);
         personEntity.setDescription(description);
@@ -62,9 +64,5 @@ public class PersonEntityBuilder {
         personEntity.setUserEntity(userEntity);
 
         return personEntity;
-    }
-
-    public static PersonEntityBuilder aPerson() {
-        return new PersonEntityBuilder();
     }
 }

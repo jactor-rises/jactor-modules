@@ -3,9 +3,9 @@ package com.github.jactorrises.persistence.entity.person;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.persistence.builder.AddressEntityBuilder.anAddress;
-import static com.github.jactorrises.persistence.builder.PersonEntityBuilder.aPerson;
-import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
+import static com.github.jactorrises.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

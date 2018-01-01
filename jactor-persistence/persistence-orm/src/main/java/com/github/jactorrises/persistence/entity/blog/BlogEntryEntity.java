@@ -1,7 +1,6 @@
 package com.github.jactorrises.persistence.entity.blog;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
@@ -23,7 +22,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
-public class BlogEntryEntity extends PersistentEntity implements BlogEntry {
+public class BlogEntryEntity extends PersistentEntity {
 
     @ManyToOne() @JoinColumn(name = "BLOG_ID") private BlogEntity blogEntity;
 
@@ -33,7 +32,7 @@ public class BlogEntryEntity extends PersistentEntity implements BlogEntry {
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
     }) private EntryEmbeddable persistentEntry = new EntryEmbeddable();
 
-    public BlogEntryEntity() {
+    BlogEntryEntity() {
     }
 
     private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
@@ -78,7 +77,7 @@ public class BlogEntryEntity extends PersistentEntity implements BlogEntry {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(blogEntity).append(persistentEntry).toString();
     }
 
-    @Override public BlogEntity getBlog() {
+    public BlogEntity getBlog() {
         return blogEntity;
     }
 
@@ -86,11 +85,11 @@ public class BlogEntryEntity extends PersistentEntity implements BlogEntry {
         this.blogEntity = blog;
     }
 
-    @Override public LocalDateTime getCreatedTime() {
+    public LocalDateTime getCreatedTime() {
         return persistentEntry.getCreatedTime();
     }
 
-    @Override public Name getCreatorName() {
+    public Name getCreatorName() {
         return persistentEntry.getCreatorName();
     }
 
@@ -98,11 +97,15 @@ public class BlogEntryEntity extends PersistentEntity implements BlogEntry {
         persistentEntry.setCreatorName(creator);
     }
 
-    @Override public String getEntry() {
+    public String getEntry() {
         return persistentEntry.getEntry();
     }
 
     public void setEntry(String entry) {
         persistentEntry.setEntry(entry);
+    }
+
+    public static BlogEntryEntityBuilder aBlogEntry() {
+        return new BlogEntryEntityBuilder();
     }
 }

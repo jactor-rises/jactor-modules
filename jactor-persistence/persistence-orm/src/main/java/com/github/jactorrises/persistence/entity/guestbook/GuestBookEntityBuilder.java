@@ -1,14 +1,14 @@
-package com.github.jactorrises.persistence.builder;
+package com.github.jactorrises.persistence.entity.guestbook;
 
-import com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
 
-public class GuestBookEntityBuilder {
+public class GuestBookEntityBuilder extends AbstractBuilder<GuestBookEntity> {
 
     private String title;
     private UserEntity userEntity;
 
-    private GuestBookEntityBuilder() {
+    GuestBookEntityBuilder() {
     }
 
     public GuestBookEntityBuilder withTitle(String title) {
@@ -21,15 +21,11 @@ public class GuestBookEntityBuilder {
         return this;
     }
 
-    public GuestBookEntity build() {
+    @Override protected GuestBookEntity buildBean() {
         GuestBookEntity guestBookEntity = new GuestBookEntity();
         guestBookEntity.setTitle(title);
         guestBookEntity.setUser(userEntity);
 
         return guestBookEntity;
-    }
-
-    public static GuestBookEntityBuilder aGuestBook() {
-        return new GuestBookEntityBuilder();
     }
 }

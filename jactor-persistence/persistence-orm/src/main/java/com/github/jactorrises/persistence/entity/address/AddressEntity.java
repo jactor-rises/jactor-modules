@@ -27,7 +27,7 @@ public class AddressEntity extends PersistentEntity implements Address {
     @Column(name = "ADDRESS_LINE_3") private String addressLine3;
     @Column(name = "CITY") private String city;
 
-    public AddressEntity() {
+    AddressEntity() {
     }
 
     /**
@@ -140,5 +140,9 @@ public class AddressEntity extends PersistentEntity implements Address {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public static AddressEntityBuilder anAddress() {
+        return new AddressEntityBuilder();
     }
 }

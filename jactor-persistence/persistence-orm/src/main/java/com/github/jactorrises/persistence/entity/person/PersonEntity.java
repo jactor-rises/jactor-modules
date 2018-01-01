@@ -1,7 +1,6 @@
 package com.github.jactorrises.persistence.entity.person;
 
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Person;
 import com.github.jactorrises.client.persistence.dto.PersonDto;
 import com.github.jactorrises.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
@@ -27,7 +26,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonEntity extends PersistentEntity implements Person {
+public class PersonEntity extends PersistentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
@@ -37,7 +36,7 @@ public class PersonEntity extends PersistentEntity implements Person {
     @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
     @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
 
-    public PersonEntity() {
+    PersonEntity() {
     }
 
     private PersonEntity(PersonEntity person) {
@@ -110,27 +109,27 @@ public class PersonEntity extends PersistentEntity implements Person {
                 .appendSuper(super.toString()).append(firstName).append(surname).append(userEntity).append(addressEntity).toString();
     }
 
-    @Override public AddressEntity getAddress() {
+    public AddressEntity getAddress() {
         return addressEntity;
     }
 
-    @Override public Name getFirstName() {
+    public Name getFirstName() {
         return firstName != null ? firstName.fetchName() : null;
     }
 
-    @Override public Name getSurname() {
+    public Name getSurname() {
         return surname != null ? surname.fetchName() : null;
     }
 
-    @Override public Locale getLocale() {
+    public Locale getLocale() {
         return locale != null ? locale.fetchLocale() : null;
     }
 
-    @Override public String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    @Override public UserEntity getUser() {
+    public UserEntity getUser() {
         return userEntity;
     }
 
@@ -156,5 +155,9 @@ public class PersonEntity extends PersistentEntity implements Person {
 
     public void setLocale(Locale locale) {
         this.locale = new LocaleEmbeddable(locale);
+    }
+
+    public static PersonEntityBuilder aPerson() {
+        return new PersonEntityBuilder();
     }
 }

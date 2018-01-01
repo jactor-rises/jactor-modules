@@ -22,13 +22,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-import static com.github.jactorrises.persistence.builder.AddressEntityBuilder.anAddress;
-import static com.github.jactorrises.persistence.builder.BlogEntryEntityBuilder.aBlogEntry;
-import static com.github.jactorrises.persistence.builder.GuestBookEntityBuilder.aGuestBook;
-import static com.github.jactorrises.persistence.builder.GuestBookEntryEntityBuilder.aGuestBookEntry;
-import static com.github.jactorrises.persistence.builder.PersonEntityBuilder.aPerson;
-import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
-import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
+import static com.github.jactorrises.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactorrises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactorrises.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 

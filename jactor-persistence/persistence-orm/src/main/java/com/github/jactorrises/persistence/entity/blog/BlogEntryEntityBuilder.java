@@ -1,14 +1,13 @@
-package com.github.jactorrises.persistence.builder;
+package com.github.jactorrises.persistence.entity.blog;
 
-import com.github.jactorrises.persistence.entity.blog.BlogEntity;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactorrises.commons.builder.AbstractBuilder;
 
-public class BlogEntryEntityBuilder {
+public class BlogEntryEntityBuilder extends AbstractBuilder<BlogEntryEntity> {
     private BlogEntity blogEntity;
     private String entry;
     private String name;
 
-    private BlogEntryEntityBuilder() {
+    BlogEntryEntityBuilder() {
     }
 
     public BlogEntryEntityBuilder with(BlogEntity blogEntity) {
@@ -26,16 +25,12 @@ public class BlogEntryEntityBuilder {
         return this;
     }
 
-    public BlogEntryEntity build() {
+    @Override protected BlogEntryEntity buildBean() {
         BlogEntryEntity blogEntryEntity = new BlogEntryEntity();
         blogEntryEntity.setBlog(blogEntity);
         blogEntryEntity.setCreatorName(name);
         blogEntryEntity.setEntry(entry);
 
         return blogEntryEntity;
-    }
-
-    public static BlogEntryEntityBuilder aBlogEntry() {
-        return new BlogEntryEntityBuilder();
     }
 }
