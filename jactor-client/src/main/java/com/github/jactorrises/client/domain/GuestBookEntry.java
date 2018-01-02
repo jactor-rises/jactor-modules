@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 
 import java.time.LocalDateTime;
 
-public interface GuestBookEntry extends Persistent<Long> {
+public interface GuestBookEntry extends Persistent {
 
     GuestBook getGuestBook();
 

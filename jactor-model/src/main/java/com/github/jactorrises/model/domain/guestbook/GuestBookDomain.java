@@ -5,7 +5,7 @@ import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
 
-public class GuestBookDomain extends PersistentDomain<Long> implements GuestBook {
+public class GuestBookDomain extends PersistentDomain implements GuestBook {
 
     private final GuestBookDto guestBookDto;
 

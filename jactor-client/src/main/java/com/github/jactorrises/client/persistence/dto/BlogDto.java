@@ -1,10 +1,8 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.domain.Blog;
-
 import java.time.LocalDate;
 
-public class BlogDto extends PersistentDto implements Blog {
+public class BlogDto extends PersistentDto {
     private LocalDate created;
     private String title;
     private UserDto user;
@@ -20,15 +18,15 @@ public class BlogDto extends PersistentDto implements Blog {
         user = blogDto.getUser();
     }
 
-    @Override public LocalDate getCreated() {
+    public LocalDate getCreated() {
         return created;
     }
 
-    @Override public String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    @Override public UserDto getUser() {
+    public UserDto getUser() {
         return user;
     }
 

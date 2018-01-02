@@ -1,16 +1,15 @@
 package com.github.jactorrises.persistence.entity.address;
 
-import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 
 public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
 
-    private Country country;
+    private Integer zipCode;
     private String addressLine1;
     private String addressLine2;
     private String addressLine3;
     private String city;
-    private Integer zipCode;
+    private String country;
 
     AddressEntityBuilder() {
     }
@@ -31,7 +30,7 @@ public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
     }
 
     public AddressEntityBuilder withCountryCode(String countryCode) {
-        country = new Country(countryCode);
+        country = countryCode;
         return this;
     }
 

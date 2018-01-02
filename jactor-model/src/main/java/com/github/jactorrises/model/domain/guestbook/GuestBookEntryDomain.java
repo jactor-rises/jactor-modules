@@ -7,7 +7,7 @@ import com.github.jactorrises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;
 
-public class GuestBookEntryDomain extends PersistentDomain<Long> implements GuestBookEntry {
+public class GuestBookEntryDomain extends PersistentDomain implements GuestBookEntry {
 
     private final GuestBookEntryDto guestBookEntryDto;
 
@@ -28,7 +28,7 @@ public class GuestBookEntryDomain extends PersistentDomain<Long> implements Gues
     }
 
     @Override public Name getCreatorName() {
-        return guestBookEntryDto.getCreatorName();
+        return new Name(guestBookEntryDto.getCreatorName());
     }
 
     @Override public GuestBookEntryDto getDto() {

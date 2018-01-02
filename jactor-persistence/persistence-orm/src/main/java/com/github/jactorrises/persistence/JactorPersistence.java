@@ -1,6 +1,5 @@
 package com.github.jactorrises.persistence;
 
-import com.github.jactorrises.client.persistence.dao.PersistentDao;
 import com.github.jactorrises.persistence.dao.HibernateRepository;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -53,7 +52,7 @@ public class JactorPersistence {
     }
 
     @Bean
-    public PersistentDao persistentDao(SessionFactory sessionFactory) {
+    public HibernateRepository hibernateRepository(SessionFactory sessionFactory) {
         return new HibernateRepository(sessionFactory);
     }
 }

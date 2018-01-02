@@ -1,8 +1,6 @@
-package com.github.jactorrises.model.facade;
+package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.persistence.service.UserDaoService;
 import org.springframework.stereotype.Service;
@@ -10,15 +8,19 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserFacadeImpl implements UserFacade {
-
+public class UserDomainService {
     private final UserDaoService userDaoService;
 
-    public UserFacadeImpl(UserDaoService userDaoService) {
+    public UserDomainService(UserDaoService userDaoService) {
         this.userDaoService = userDaoService;
     }
 
-    @Override public Optional<User> findUsing(UserName userName) {
+    public UserDomain saveOrUpdateUser(UserDomain userDomain) {
+        userDomain.setId(userDaoService.saveOrUpdate(userDomain.getDto()));
+        return userDomain;
+    }
+
+    public Optional<UserDomain> find(UserName userName) {
         return userDaoService.find(userName).map(UserDomain::new);
     }
 }

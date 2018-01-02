@@ -1,12 +1,10 @@
 package com.github.jactorrises.model.domain.person;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.persistence.dto.PersonDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 
-import java.util.Locale;
 import java.util.Optional;
 
 import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
@@ -34,17 +32,17 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
     }
 
     PersonBuilder withFirstName(String firstName) {
-        personDto.setFirstName(new Name(firstName));
+        personDto.setFirstName(firstName);
         return this;
     }
 
     public PersonBuilder withSurname(String surname) {
-        personDto.setSurname(new Name(surname));
+        personDto.setSurname(surname);
         return this;
     }
 
     PersonBuilder withLocale(String locale) {
-        personDto.setLocale(new Locale(locale));
+        personDto.setLocale(locale);
         return this;
     }
 

@@ -1,7 +1,5 @@
 package com.github.jactorrises.model.domain.user;
 
-import com.github.jactorrises.client.datatype.EmailAddress;
-import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.model.domain.person.PersonBuilder;
@@ -20,7 +18,7 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
     }
 
     public UserBuilder withUserName(String userName) {
-        userDto.setUserName(new UserName(userName));
+        userDto.setUserName(userName);
         return this;
     }
 
@@ -34,7 +32,7 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
     }
 
     public UserBuilder withEmailAddress(String emailAddress) {
-        userDto.setEmailAddress(new EmailAddress(emailAddress));
+        userDto.setEmailAddress(emailAddress);
         return this;
     }
 

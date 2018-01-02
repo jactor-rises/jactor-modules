@@ -1,6 +1,5 @@
 package com.github.jactorrises.persistence.entity.guestbook;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.persistence.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -81,7 +80,7 @@ public class GuestBookEntryEntity extends PersistentEntity {
         return persistentEntry.getEntry();
     }
 
-    public Name getCreatorName() {
+    public String getCreatorName() {
         return persistentEntry.getCreatorName();
     }
 

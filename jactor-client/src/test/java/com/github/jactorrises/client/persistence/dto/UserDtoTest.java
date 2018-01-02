@@ -1,8 +1,5 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.EmailAddress;
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.datatype.UserName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +15,9 @@ class UserDtoTest {
     @Test
     void shouldHaveCopyConstructor() {
         UserDto userDto = new UserDto();
-        userDto.setEmailAddress(new EmailAddress("somewhere@time"));
+        userDto.setEmailAddress("somewhere@time");
         userDto.setPerson(new PersonDto());
-        userDto.setUserName(new UserName("me"));
+        userDto.setUserName("me");
 
         UserDto copied = new UserDto(userDto);
 
@@ -35,10 +32,10 @@ class UserDtoTest {
     @Test
     void shouldGiveValuesToPersistentDto() {
         UserDto persistentDto = new UserDto();
-        persistentDto.setCreatedBy(new Name("jactor"));
+        persistentDto.setCreatedBy("jactor");
         persistentDto.setCreationTime(LocalDateTime.now());
         persistentDto.setId(1L);
-        persistentDto.setUpdatedBy(new Name("tip"));
+        persistentDto.setUpdatedBy("tip");
         persistentDto.setUpdatedTime(LocalDateTime.now());
 
         PersistentDto copied = new UserDto(persistentDto);
@@ -46,7 +43,7 @@ class UserDtoTest {
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
                 () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
-                () -> assertThat(copied.getId()).as("id").isEqualByComparingTo(persistentDto.getId()),
+                () -> assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
                 () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
                 () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
         );

@@ -7,7 +7,7 @@ import com.github.jactorrises.model.domain.user.UserDomain;
 
 import java.time.LocalDate;
 
-public class BlogDomain extends PersistentDomain<Long> implements Blog {
+public class BlogDomain extends PersistentDomain implements Blog {
 
     private final BlogDto blogDto;
 

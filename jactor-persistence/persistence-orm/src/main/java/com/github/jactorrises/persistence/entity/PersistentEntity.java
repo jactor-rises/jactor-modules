@@ -1,7 +1,5 @@
 package com.github.jactorrises.persistence.entity;
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Persistent;
 import com.github.jactorrises.client.persistence.dto.PersistentDto;
 import com.github.jactorrises.commons.time.Now;
 import org.hibernate.annotations.Type;
@@ -16,19 +14,19 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public abstract class PersistentEntity implements Persistent<Long> {
+public abstract class PersistentEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "ID") Long id;
 
     @Embedded @AttributeOverride(name = "timestamp", column = @Column(name = "CREATION_TIME")) @Type(type = "timestamp") private DateTimeEmbeddable creationTime;
-    @Embedded @AttributeOverride(name = "name", column = @Column(name = "CREATED_BY")) private NameEmbeddable createdBy;
+    @Column(name = "CREATED_BY") private String createdBy;
     @Embedded @AttributeOverride(name = "timestamp", column = @Column(name = "UPDATED_TIME")) @Type(type = "timestamp") private DateTimeEmbeddable updatedTime;
-    @Embedded @AttributeOverride(name = "name", column = @Column(name = "UPDATED_BY")) private NameEmbeddable updatedBy;
+    @Column(name = "UPDATED_BY") private String updatedBy;
 
     protected PersistentEntity() {
-        createdBy = new NameEmbeddable(new Name("todo #156"));
+        createdBy = "todo #156";
         creationTime = new DateTimeEmbeddable(Now.asDateTime());
-        updatedBy = new NameEmbeddable(new Name("todo #156"));
+        updatedBy = "todo #156";
         updatedTime = new DateTimeEmbeddable(Now.asDateTime());
     }
 
@@ -40,9 +38,9 @@ public abstract class PersistentEntity implements Persistent<Long> {
     }
 
     protected PersistentEntity(PersistentDto persistentDto) {
-        createdBy = new NameEmbeddable(persistentDto.getCreatedBy());
+        createdBy = persistentDto.getCreatedBy();
         creationTime = new DateTimeEmbeddable(persistentDto.getCreationTime());
-        updatedBy = new NameEmbeddable(persistentDto.getUpdatedBy());
+        updatedBy = persistentDto.getUpdatedBy();
         updatedTime = new DateTimeEmbeddable(persistentDto.getUpdatedTime());
     }
 
@@ -50,23 +48,23 @@ public abstract class PersistentEntity implements Persistent<Long> {
         return "id=" + id;
     }
 
-    @Override public Name getCreatedBy() {
-        return createdBy.fetchName();
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    @Override public LocalDateTime getCreationTime() {
+    public LocalDateTime getCreationTime() {
         return creationTime.fetchLocalDateTime();
     }
 
-    @Override public Long getId() {
+    public Long getId() {
         return id;
     }
 
-    @Override public Name getUpdatedBy() {
-        return updatedBy.fetchName();
+    public String getUpdatedBy() {
+        return updatedBy;
     }
 
-    @Override public LocalDateTime getUpdatedTime() {
+    public LocalDateTime getUpdatedTime() {
         return updatedTime.fetchLocalDateTime();
     }
 }

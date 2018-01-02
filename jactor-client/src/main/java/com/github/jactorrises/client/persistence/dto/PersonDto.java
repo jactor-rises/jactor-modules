@@ -1,15 +1,10 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Person;
-
-import java.util.Locale;
-
-public class PersonDto extends PersistentDto implements Person {
+public class PersonDto extends PersistentDto {
     private AddressDto address;
-    private Locale locale;
-    private Name firstName;
-    private Name surname;
+    private String locale;
+    private String firstName;
+    private String surname;
     private String description;
     private UserDto user;
 
@@ -27,27 +22,27 @@ public class PersonDto extends PersistentDto implements Person {
         user = person.getUser();
     }
 
-    @Override public String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    @Override public UserDto getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    @Override public AddressDto getAddress() {
+    public AddressDto getAddress() {
         return address;
     }
 
-    @Override public Name getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    @Override public Name getSurname() {
+    public String getSurname() {
         return surname;
     }
 
-    @Override public Locale getLocale() {
+    public String getLocale() {
         return locale;
     }
 
@@ -55,15 +50,15 @@ public class PersonDto extends PersistentDto implements Person {
         this.address = address;
     }
 
-    public void setLocale(Locale locale) {
+    public void setLocale(String locale) {
         this.locale = locale;
     }
 
-    public void setFirstName(Name firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public void setSurname(Name surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 

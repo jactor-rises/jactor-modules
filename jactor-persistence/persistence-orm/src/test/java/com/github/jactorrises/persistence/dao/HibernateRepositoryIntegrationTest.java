@@ -1,6 +1,5 @@
 package com.github.jactorrises.persistence.dao;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.persistence.JactorPersistence;
@@ -138,7 +137,7 @@ public class HibernateRepositoryIntegrationTest {
 
         UserEntity userEntity = hibernateRepository.fetch(UserEntity.class, id);
 
-        assertThat(userEntity.getUserName()).as("userName").isEqualTo(new UserName("jactor"));
+        assertThat(userEntity.getUserName()).as("userName").isEqualTo("jactor");
     }
 
     @Test
@@ -304,7 +303,7 @@ public class HibernateRepositoryIntegrationTest {
         assertSoftly(softly -> {
             softly.assertThat(guestBookEntryEntity.getGuestBook()).as("guest book").isEqualTo(guestBookEntity);
             softly.assertThat(guestBookEntryEntity.getEntry()).as("entry").isEqualTo("hi. long time no see");
-            softly.assertThat(guestBookEntryEntity.getCreatorName()).as("creator name").isEqualTo(new Name("mate"));
+            softly.assertThat(guestBookEntryEntity.getCreatorName()).as("creator name").isEqualTo("mate");
         });
     }
 
@@ -471,7 +470,7 @@ public class HibernateRepositoryIntegrationTest {
         assertSoftly(softly -> {
             softly.assertThat(blogEntryEntity.getBlog()).as("blog").isEqualTo(blogEntity);
             softly.assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("i do not sleep");
-            softly.assertThat(blogEntryEntity.getCreatorName()).as("creator name").isEqualTo(new Name("me"));
+            softly.assertThat(blogEntryEntity.getCreatorName()).as("creator name").isEqualTo("me");
         });
     }
 

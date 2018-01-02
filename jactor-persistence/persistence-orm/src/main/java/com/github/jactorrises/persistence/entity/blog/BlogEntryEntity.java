@@ -1,6 +1,5 @@
 package com.github.jactorrises.persistence.entity.blog;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
@@ -89,7 +88,7 @@ public class BlogEntryEntity extends PersistentEntity {
         return persistentEntry.getCreatedTime();
     }
 
-    public Name getCreatorName() {
+    public String getCreatorName() {
         return persistentEntry.getCreatorName();
     }
 

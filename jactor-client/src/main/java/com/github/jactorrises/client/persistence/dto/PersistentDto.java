@@ -1,14 +1,12 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Persistent;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class PersistentDto implements Persistent<Long> {
-    private Long id;
-    private Name createdBy;
-    private Name updatedBy;
+public abstract class PersistentDto {
+    private Serializable id;
+    private String createdBy;
+    private String updatedBy;
     private LocalDateTime creationTime;
     private LocalDateTime updatedTime;
 
@@ -16,7 +14,7 @@ public abstract class PersistentDto implements Persistent<Long> {
         // empty, use setters...
     }
 
-    PersistentDto(Persistent<Long> persistent) {
+    PersistentDto(PersistentDto persistent) {
         createdBy = persistent.getCreatedBy();
         creationTime = persistent.getCreationTime();
         id = persistent.getId();
@@ -24,40 +22,40 @@ public abstract class PersistentDto implements Persistent<Long> {
         updatedTime = persistent.getUpdatedTime();
     }
 
-    @Override public Long getId() {
+    public Serializable getId() {
         return id;
     }
 
-    @Override public Name getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    @Override public LocalDateTime getCreationTime() {
+    public LocalDateTime getCreationTime() {
         return creationTime;
     }
 
-    @Override public Name getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    @Override public LocalDateTime getUpdatedTime() {
+    public LocalDateTime getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setId(Long id) {
+    public void setId(Serializable id) {
         this.id = id;
     }
 
-    public void setCreatedBy(Name createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
-    }
-
-    public void setUpdatedBy(Name updatedBy) {
-        this.updatedBy = updatedBy;
     }
 
     public void setCreationTime(LocalDateTime creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public void setUpdatedTime(LocalDateTime updatedTime) {

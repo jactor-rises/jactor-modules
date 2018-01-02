@@ -1,8 +1,10 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Country;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -18,7 +20,7 @@ class AddressDtoTest {
         addressDto.setAddressLine2("address line two");
         addressDto.setAddressLine3("address line three");
         addressDto.setCity("oslo");
-        addressDto.setCountry(new Country("NO"));
+        addressDto.setCountry("NO");
         addressDto.setZipCode(1234);
 
         AddressDto copied = new AddressDto(addressDto);
@@ -30,6 +32,27 @@ class AddressDtoTest {
                 () -> assertThat(copied.getCity()).as("city").isEqualTo(addressDto.getCity()),
                 () -> assertThat(copied.getCountry()).as("country").isEqualTo(addressDto.getCountry()),
                 () -> assertThat(copied.getZipCode()).as("zip code").isEqualTo(addressDto.getZipCode())
+        );
+    }
+
+    @DisplayName("should give values to PersistentDto")
+    @Test
+    void shouldGiveValuesToPersistentDto() {
+        AddressDto persistentDto = new AddressDto();
+        persistentDto.setCreatedBy("jactor");
+        persistentDto.setCreationTime(LocalDateTime.now());
+        persistentDto.setId(1L);
+        persistentDto.setUpdatedBy("tip");
+        persistentDto.setUpdatedTime(LocalDateTime.now());
+
+        PersistentDto copied = new AddressDto(persistentDto);
+
+        assertAll(
+                () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
+                () -> Assertions.assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
+                () -> Assertions.assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
+                () -> Assertions.assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
+                () -> Assertions.assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
         );
     }
 }

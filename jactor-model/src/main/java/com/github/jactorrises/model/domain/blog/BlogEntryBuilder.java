@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.persistence.dto.BlogDto;
 import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
@@ -25,7 +24,7 @@ public final class BlogEntryBuilder extends AbstractBuilder<BlogEntryDomain> {
 
 
     BlogEntryBuilder withCreatorName(String creator) {
-        blogEntryDto.setCreatorName(new Name(creator));
+        blogEntryDto.setCreatorName(creator);
         return this;
     }
 

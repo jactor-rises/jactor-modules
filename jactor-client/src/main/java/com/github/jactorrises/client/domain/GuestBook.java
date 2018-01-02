@@ -1,6 +1,6 @@
 package com.github.jactorrises.client.domain;
 
-public interface GuestBook extends Persistent<Long> {
+public interface GuestBook extends Persistent {
 
     String getTitle();
 

@@ -2,22 +2,22 @@ package com.github.jactorrises.model.service;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
+import com.github.jactorrises.persistence.JactorPersistence;
 import org.assertj.core.api.SoftAssertions;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
@@ -27,19 +27,20 @@ import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = JactorModel.class)
-@Transactional
+@SpringBootTest(classes = JactorPersistence.class)
 @Ignore("#176: rewrite using rest from persistence-orm... ")
-public class GuestBookDomainServiceIntegrationTest {
+public class DomainServicesIntegrationTest {
 
     @Autowired private GuestBookDomainService guestBookDomainService;
+
+    @Autowired private UserDomainService userDomainService;
 
     // located in jactor-persistence-orm...
     @SuppressWarnings({"SpringJavaAutowiringInspection", "SpringJavaInjectionPointsAutowiringInspection"})
     @Autowired private SessionFactory sessionFactory;
 
     @Test public void shouldSaveUserDomain() {
-        guestBookDomainService.saveOrUpdate(
+        userDomainService.saveOrUpdateUser(
                 aUser().withUserName("titten")
                         .withEmailAddress("jactor@rises")
                         .with(aPerson()
@@ -55,7 +56,7 @@ public class GuestBookDomainServiceIntegrationTest {
 
         ensureDbCreation();
 
-        Optional<UserDomain> possibleUser = guestBookDomainService.findUser(new UserName("titten"));
+        Optional<UserDomain> possibleUser = userDomainService.find(new UserName("titten"));
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(possibleUser).isPresent();
@@ -82,7 +83,7 @@ public class GuestBookDomainServiceIntegrationTest {
                 .with(person)
                 .build();
 
-        Long id = guestBookDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getDto().getId();
+        Serializable id = guestBookDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getDto().getId();
 
         ensureDbCreation();
 
@@ -111,7 +112,7 @@ public class GuestBookDomainServiceIntegrationTest {
         GuestBookDomain guestBookDomain = aGuestBook().with(userDomain).withTitle("my guest book").build();
         GuestBookEntryDomain guestBookEntryDomain = aGuestBookEntry().with(guestBookDomain).withEntry("svada", "lada").build();
 
-        Long id = guestBookDomainService.saveOrUpdateGuestBookEntry(guestBookEntryDomain).getId();
+        Serializable id = guestBookDomainService.saveOrUpdateGuestBookEntry(guestBookEntryDomain).getId();
 
         ensureDbCreation();
 

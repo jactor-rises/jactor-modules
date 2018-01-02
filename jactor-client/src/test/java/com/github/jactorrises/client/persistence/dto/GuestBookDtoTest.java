@@ -1,6 +1,5 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,10 +30,10 @@ class GuestBookDtoTest {
     @Test
     void shouldGiveValuesToPersistentDto() {
         GuestBookDto persistentDto = new GuestBookDto();
-        persistentDto.setCreatedBy(new Name("jactor"));
+        persistentDto.setCreatedBy("jactor");
         persistentDto.setCreationTime(LocalDateTime.now());
         persistentDto.setId(1L);
-        persistentDto.setUpdatedBy(new Name("tip"));
+        persistentDto.setUpdatedBy("tip");
         persistentDto.setUpdatedTime(LocalDateTime.now());
 
         PersistentDto copied = new GuestBookDto(persistentDto);
@@ -42,7 +41,7 @@ class GuestBookDtoTest {
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
                 () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
-                () -> assertThat(copied.getId()).as("id").isEqualByComparingTo(persistentDto.getId()),
+                () -> assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
                 () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
                 () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
         );

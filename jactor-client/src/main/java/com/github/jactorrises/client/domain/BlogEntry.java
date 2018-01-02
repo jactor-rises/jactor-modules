@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 
 import java.time.LocalDateTime;
 
-public interface BlogEntry extends Persistent<Long> {
+public interface BlogEntry extends Persistent {
 
     Blog getBlog();
 

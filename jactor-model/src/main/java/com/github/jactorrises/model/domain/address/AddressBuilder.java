@@ -4,7 +4,6 @@ import com.github.jactorrises.client.persistence.dto.AddressDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 
 import java.util.Optional;
-import com.github.jactorrises.client.datatype.Country;
 
 import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
@@ -23,7 +22,7 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
     }
 
     public AddressBuilder withCountry(String country) {
-        addressDto.setCountry(new Country(country));
+        addressDto.setCountry(country);
         return this;
     }
 

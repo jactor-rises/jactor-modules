@@ -7,7 +7,7 @@ import com.github.jactorrises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;
 
-public class BlogEntryDomain extends PersistentDomain<Long> implements BlogEntry {
+public class BlogEntryDomain extends PersistentDomain implements BlogEntry {
 
     private final BlogEntryDto blogEntryDto;
 
@@ -28,7 +28,7 @@ public class BlogEntryDomain extends PersistentDomain<Long> implements BlogEntry
     }
 
     @Override public Name getCreatorName() {
-        return blogEntryDto.getCreatorName();
+        return new Name(blogEntryDto.getCreatorName());
     }
 
     @Override public BlogEntryDto getDto() {

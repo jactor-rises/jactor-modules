@@ -1,6 +1,5 @@
 package com.github.jactorrises.persistence.entity;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.commons.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -40,9 +39,9 @@ public class EntryEmbeddable {
         return creation;
     }
 
-    public EntryEmbeddable(LocalDateTime createdTime, Name creatorName, String entry) {
+    public EntryEmbeddable(LocalDateTime createdTime, String creatorName, String entry) {
         this.createdTime = Date.from(createdTime.atZone(ZoneId.systemDefault()).toInstant());
-        this.creatorName = creatorName.asString();
+        this.creatorName = creatorName;
         this.entry = entry;
     }
 
@@ -80,8 +79,8 @@ public class EntryEmbeddable {
         return entry;
     }
 
-    public Name getCreatorName() {
-        return creatorName != null ? new Name(creatorName) : null;
+    public String getCreatorName() {
+        return creatorName;
     }
 
     public void setEntry(String entry) {

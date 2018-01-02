@@ -9,7 +9,7 @@ import com.github.jactorrises.model.domain.user.UserDomain;
 
 import java.util.Locale;
 
-public class PersonDomain extends PersistentDomain<Long> implements Person {
+public class PersonDomain extends PersistentDomain implements Person {
 
     private final PersonDto personDto;
 
@@ -26,15 +26,15 @@ public class PersonDomain extends PersistentDomain<Long> implements Person {
     }
 
     @Override public Name getFirstName() {
-        return personDto.getFirstName();
+        return personDto.getFirstName() != null ? new Name(personDto.getFirstName()) : null;
     }
 
     @Override public Name getSurname() {
-        return personDto.getSurname();
+        return personDto.getSurname() != null ? new Name(personDto.getSurname()) : null;
     }
 
     @Override public Locale getLocale() {
-        return personDto.getLocale();
+        return personDto.getLocale() != null ? new Locale(personDto.getLocale()) : null;
     }
 
     @Override public AddressDomain getAddress() {

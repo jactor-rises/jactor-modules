@@ -2,7 +2,7 @@ package com.github.jactorrises.client.domain;
 
 import com.github.jactorrises.client.datatype.Country;
 
-public interface Address extends Persistent<Long> {
+public interface Address extends Persistent {
 
     String getAddressLine1();
 

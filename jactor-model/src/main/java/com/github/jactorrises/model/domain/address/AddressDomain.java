@@ -5,7 +5,7 @@ import com.github.jactorrises.client.domain.Address;
 import com.github.jactorrises.client.persistence.dto.AddressDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 
-public class AddressDomain extends PersistentDomain<Long> implements Address {
+public class AddressDomain extends PersistentDomain implements Address {
 
     private final AddressDto addressDto;
 
@@ -30,7 +30,7 @@ public class AddressDomain extends PersistentDomain<Long> implements Address {
     }
 
     @Override public Country getCountry() {
-        return addressDto.getCountry();
+        return addressDto.getCountry() != null ? new Country(addressDto.getCountry()) : null;
     }
 
     @Override public Integer getZipCode() {

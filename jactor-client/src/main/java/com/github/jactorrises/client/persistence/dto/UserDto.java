@@ -1,13 +1,9 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.EmailAddress;
-import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.User;
-
-public class UserDto extends PersistentDto implements User {
-    private EmailAddress emailAddress;
+public class UserDto extends PersistentDto {
+    private String emailAddress;
     private PersonDto person;
-    private UserName userName;
+    private String userName;
 
     public UserDto() {
         // empty, use setters...
@@ -20,23 +16,19 @@ public class UserDto extends PersistentDto implements User {
         userName = user.getUserName();
     }
 
-    @Override public UserName getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    @Override public PersonDto getPerson() {
+    public PersonDto getPerson() {
         return person;
     }
 
-    @Override public EmailAddress getEmailAddress() {
+    public String getEmailAddress() {
         return emailAddress;
     }
 
-    @Override public boolean isUserNameEmailAddress() {
-        return emailAddress.isSameAs(userName);
-    }
-
-    public void setEmailAddress(EmailAddress emailAddress) {
+    public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
@@ -44,7 +36,7 @@ public class UserDto extends PersistentDto implements User {
         this.person = person;
     }
 
-    public void setUserName(UserName userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 }

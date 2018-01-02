@@ -7,7 +7,7 @@ import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 
-public class UserDomain extends PersistentDomain<Long> implements User {
+public class UserDomain extends PersistentDomain implements User {
 
     private final UserDto userDto;
 
@@ -16,7 +16,7 @@ public class UserDomain extends PersistentDomain<Long> implements User {
     }
 
     @Override public UserName getUserName() {
-        return userDto.getUserName();
+        return userDto.getUserName() != null ? new UserName(userDto.getUserName()) : null;
     }
 
     @Override public PersonDomain getPerson() {
@@ -24,11 +24,7 @@ public class UserDomain extends PersistentDomain<Long> implements User {
     }
 
     @Override public EmailAddress getEmailAddress() {
-        return userDto.getEmailAddress();
-    }
-
-    @Override public boolean isUserNameEmailAddress() {
-        return userDto.isUserNameEmailAddress();
+        return new EmailAddress(userDto.getEmailAddress());
     }
 
     @Override public UserDto getDto() {

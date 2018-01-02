@@ -1,6 +1,5 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +16,7 @@ class GuestBookEntryDtoTest {
     void shouldHaveCopyConstructor() {
         GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
         guestBookEntryDto.setCreatedTime(LocalDateTime.now());
-        guestBookEntryDto.setCreatorName(new Name("me"));
+        guestBookEntryDto.setCreatorName("me");
         guestBookEntryDto.setGuestBook(new GuestBookDto());
         guestBookEntryDto.setEntry("entry");
 
@@ -35,10 +34,10 @@ class GuestBookEntryDtoTest {
     @Test
     void shouldGiveValuesToPersistentDto() {
         GuestBookEntryDto persistentDto = new GuestBookEntryDto();
-        persistentDto.setCreatedBy(new Name("jactor"));
+        persistentDto.setCreatedBy("jactor");
         persistentDto.setCreationTime(LocalDateTime.now());
         persistentDto.setId(1L);
-        persistentDto.setUpdatedBy(new Name("tip"));
+        persistentDto.setUpdatedBy("tip");
         persistentDto.setUpdatedTime(LocalDateTime.now());
 
         PersistentDto copied = new GuestBookEntryDto(persistentDto);
@@ -46,7 +45,7 @@ class GuestBookEntryDtoTest {
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
                 () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
-                () -> assertThat(copied.getId()).as("id").isEqualByComparingTo(persistentDto.getId()),
+                () -> assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
                 () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
                 () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
         );

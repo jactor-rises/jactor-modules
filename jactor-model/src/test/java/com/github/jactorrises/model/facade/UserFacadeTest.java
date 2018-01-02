@@ -2,8 +2,8 @@ package com.github.jactorrises.model.facade;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.client.persistence.dao.PersistentDao;
-import com.github.jactorrises.model.domain.user.UserDomain;
+import com.github.jactorrises.client.persistence.dto.UserDto;
+import com.github.jactorrises.persistence.service.UserDaoService;
 import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -26,30 +25,25 @@ class UserFacadeTest {
     private UserFacadeImpl testUserFacadeImpl;
 
     @Mock
-    private PersistentDao persistentDaoMock;
+    private UserDaoService userDaoServiceMock;
 
     @BeforeEach
     void initMocking() {
         MockitoAnnotations.initMocks(this);
     }
 
+    @DisplayName("should return an empty Optional when the UserDaoService cannot find a dto for the given user name")
+    @Test void willNotFindUnknownUser() {
+        Optional<User> user = testUserFacadeImpl.findUsing(new UserName("someone"));
+        assertThat(user.isPresent()).isEqualTo(false);
+    }
+
     @DisplayName("should find a user when the user name only differs in case")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void willFindUser() {
-        when(persistentDaoMock.findUsing(new UserName("jactor"))).thenReturn(Optional.of(aUserDomain().getDto()));
+        when(userDaoServiceMock.find(new UserName("jactor"))).thenReturn(Optional.of(new UserDto()));
         Optional<User> optionalUser = testUserFacadeImpl.findUsing(new UserName("JACTOR"));
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);
-    }
-
-    private UserDomain aUserDomain() {
-        return aUser().build();
-    }
-
-    @DisplayName("should not return a user when the PersistentDao returns an empty optional ")
-    @Test void willNotFindUnknownUser() {
-        when(persistentDaoMock.findUsing(new UserName("someone"))).thenReturn(Optional.empty());
-        Optional<User> user = testUserFacadeImpl.findUsing(new UserName("someone"));
-        assertThat(user.isPresent()).isEqualTo(false);
     }
 }

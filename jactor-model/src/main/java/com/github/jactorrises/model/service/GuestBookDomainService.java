@@ -1,57 +1,39 @@
 package com.github.jactorrises.model.service;
 
-import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.persistence.dao.PersistentDao;
 import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
-import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactorrises.model.domain.user.UserDomain;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.jactorrises.persistence.service.GuestBookDaoService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.io.Serializable;
 
 @Service
 public class GuestBookDomainService {
-    private final PersistentDao persistentDao;
+    private final GuestBookDaoService guestBookDaoService;
 
-    @Autowired public GuestBookDomainService(PersistentDao persistentDao) {
-        this.persistentDao = persistentDao;
-    }
-
-    void saveOrUpdate(PersistentDomain<?> persistentDomain) {
-        persistentDao.saveOrUpdate(persistentDomain.getDto());
+    public GuestBookDomainService(GuestBookDaoService guestBookDaoService) {
+        this.guestBookDaoService = guestBookDaoService;
     }
 
     GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
-        saveOrUpdate(guestBookDomain.getUser().getPerson().getAddress());
-        saveOrUpdate(guestBookDomain.getUser().getPerson());
-        saveOrUpdate(guestBookDomain.getUser());
-        saveOrUpdate(guestBookDomain);
-
-        return guestBookDomain;
+        return new GuestBookDomain(guestBookDaoService.saveOrUpdate(guestBookDomain.getDto()));
     }
 
     GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
-        saveOrUpdateGuestBook(guestBookEntryDomain.getGuestBook());
-        saveOrUpdate(guestBookEntryDomain);
-
-        return guestBookEntryDomain;
+        return new GuestBookEntryDomain(guestBookDaoService.saveOrUpdate(guestBookEntryDomain.getDto()));
     }
 
-    Optional<UserDomain> findUser(UserName userName) {
-        return persistentDao.findUsing(userName).map(UserDomain::new);
-    }
+    GuestBookDomain fetchGuestBook(Serializable id) {
+        GuestBookDto guestBookDto = guestBookDaoService.fetch(GuestBookDto.class, id);
 
-    GuestBookDomain fetchGuestBook(Long id) {
-        GuestBookDto guestBookDto = persistentDao.fetch(GuestBookDto.class, id);
         return new GuestBookDomain(guestBookDto);
     }
 
-    GuestBookEntryDomain fetchGuestBookEntry(Long id) {
-        GuestBookEntryDto guestBookEntryDto = persistentDao.fetch(GuestBookEntryDto.class, id);
+    GuestBookEntryDomain fetchGuestBookEntry(Serializable id) {
+        GuestBookEntryDto guestBookEntryDto = guestBookDaoService.fetch(GuestBookEntryDto.class, id);
+
         return new GuestBookEntryDomain(guestBookEntryDto);
     }
 }

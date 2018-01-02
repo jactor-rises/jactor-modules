@@ -1,25 +1,20 @@
 package com.github.jactorrises.persistence.entity.person;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.persistence.dto.PersonDto;
-import com.github.jactorrises.persistence.entity.NameEmbeddable;
 import com.github.jactorrises.persistence.entity.PersistentEntity;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.Locale;
 import java.util.Objects;
 
 import static java.util.Objects.hash;
@@ -28,13 +23,13 @@ import static java.util.Objects.hash;
 @Table(name = "T_PERSON")
 public class PersonEntity extends PersistentEntity {
 
+    @Column(name = "DESCRIPTION") private String description;
+    @Column(name = "FIRST_NAME") private String firstName;
+    @Column(name = "LOCALE") private String locale;
+    @Column(name = "SURNAME", nullable = false) private String surname;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
-    @Column(name = "DESCRIPTION") private String description;
     @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
-    @Embedded @AttributeOverride(name = "name", column = @Column(name = "FIRST_NAME")) private NameEmbeddable firstName;
-    @Embedded @AttributeOverride(name = "name", column = @Column(name = "SURNAME", nullable = false)) private NameEmbeddable surname;
-    @Embedded @AttributeOverride(name = "locale", column = @Column(name = "LOCALE")) private LocaleEmbeddable locale;
 
     PersonEntity() {
     }
@@ -53,9 +48,9 @@ public class PersonEntity extends PersistentEntity {
         super(person);
         addressEntity = person.getAddress() != null ? new AddressEntity(person.getAddress()) : null;
         description = person.getDescription();
-        firstName = person.getFirstName() != null ? new NameEmbeddable(person.getFirstName()) : null;
-        surname = new NameEmbeddable(person.getSurname());
-        locale = person.getLocale() != null ? new LocaleEmbeddable(person.getLocale()) : null;
+        firstName = person.getFirstName();
+        surname = person.getSurname();
+        locale = person.getLocale();
         userEntity = person.getUser() != null ? new UserEntity(person.getUser()) : null;
     }
 
@@ -75,26 +70,18 @@ public class PersonEntity extends PersistentEntity {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
                 Objects.equals(description, ((PersonEntity) o).description) &&
-                Objects.equals(getFirstName(), fetchName(((PersonEntity) o).firstName)) &&
-                Objects.equals(getSurname(), fetchName(((PersonEntity) o).surname)) &&
-                Objects.equals(getLocale(), fetchLocale((PersonEntity) o));
-    }
-
-    private Name fetchName(NameEmbeddable nameEmbeddable) {
-        return nameEmbeddable != null ? nameEmbeddable.fetchName() : null;
-    }
-
-    private Locale fetchLocale(PersonEntity personEntity) {
-        return personEntity != null ? personEntity.getLocale() : null;
+                Objects.equals(getFirstName(), ((PersonEntity) o).firstName) &&
+                Objects.equals(getSurname(), ((PersonEntity) o).surname) &&
+                Objects.equals(getLocale(), ((PersonEntity) o).getLocale());
     }
 
     public PersonDto asDto() {
         PersonDto personDto = new PersonDto();
         personDto.setAddress(addressEntity.asDto());
         personDto.setDescription(description);
-        personDto.setFirstName(firstName.fetchName());
-        personDto.setSurname(surname.fetchName());
-        personDto.setLocale(locale.fetchLocale());
+        personDto.setFirstName(firstName);
+        personDto.setSurname(surname);
+        personDto.setLocale(locale);
         personDto.setUser(userEntity != null ? userEntity.asDto() : null);
 
         return personDto;
@@ -113,16 +100,16 @@ public class PersonEntity extends PersistentEntity {
         return addressEntity;
     }
 
-    public Name getFirstName() {
-        return firstName != null ? firstName.fetchName() : null;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public Name getSurname() {
-        return surname != null ? surname.fetchName() : null;
+    public String getSurname() {
+        return surname;
     }
 
-    public Locale getLocale() {
-        return locale != null ? locale.fetchLocale() : null;
+    public String getLocale() {
+        return locale;
     }
 
     public String getDescription() {
@@ -141,20 +128,20 @@ public class PersonEntity extends PersistentEntity {
         this.description = description;
     }
 
-    public void setFirstName(Name firstName) {
-        this.firstName = new NameEmbeddable(firstName);
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setSurname(Name surname) {
-        this.surname = new NameEmbeddable(surname);
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
 
-    public void setLocale(Locale locale) {
-        this.locale = new LocaleEmbeddable(locale);
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     public static PersonEntityBuilder aPerson() {

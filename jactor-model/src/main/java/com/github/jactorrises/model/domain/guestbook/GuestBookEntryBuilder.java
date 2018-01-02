@@ -1,6 +1,5 @@
 package com.github.jactorrises.model.domain.guestbook;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
@@ -19,7 +18,7 @@ public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryD
     }
 
     public GuestBookEntryBuilder withEntry(String entry, String guestName) {
-        guestBookEntryDto.setCreatorName(new Name(guestName));
+        guestBookEntryDto.setCreatorName(guestName);
         guestBookEntryDto.setEntry(entry);
 
         return this;

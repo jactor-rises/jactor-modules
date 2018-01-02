@@ -1,20 +1,17 @@
 package com.github.jactorrises.persistence.entity.person;
 
-import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.address.AddressEntityBuilder;
 import com.github.jactorrises.persistence.entity.user.UserEntity;
 import com.github.jactorrises.persistence.entity.user.UserEntityBuilder;
 
-import java.util.Locale;
-
 public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     private AddressEntity addressEntity;
-    private Locale locale;
-    private Name firstName;
-    private Name surname;
     private String description;
+    private String firstName;
+    private String surname;
+    private String locale;
     private UserEntity userEntity;
 
     PersonEntityBuilder() {
@@ -40,17 +37,17 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     }
 
     public PersonEntityBuilder withFirstName(String firstName) {
-        this.firstName = new Name(firstName);
+        this.firstName = firstName;
         return this;
     }
 
     public PersonEntityBuilder withSurname(String surname) {
-        this.surname = new Name(surname);
+        this.surname = surname;
         return this;
     }
 
     public PersonEntityBuilder withLocale(String locale) {
-        this.locale = new Locale(locale);
+        this.locale = locale;
         return this;
     }
 

@@ -1,14 +1,11 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.GuestBookEntry;
-
 import java.time.LocalDateTime;
 
-public class GuestBookEntryDto extends PersistentDto implements GuestBookEntry {
+public class GuestBookEntryDto extends PersistentDto {
     private GuestBookDto guestBook;
     private LocalDateTime createdTime;
-    private Name creatorName;
+    private String creatorName;
     private String entry;
 
     public GuestBookEntryDto() {
@@ -23,19 +20,19 @@ public class GuestBookEntryDto extends PersistentDto implements GuestBookEntry {
         entry = guestBookEntryDto.getEntry();
     }
 
-    @Override public GuestBookDto getGuestBook() {
+    public GuestBookDto getGuestBook() {
         return guestBook;
     }
 
-    @Override public LocalDateTime getCreatedTime() {
+    public LocalDateTime getCreatedTime() {
         return createdTime;
     }
 
-    @Override public Name getCreatorName() {
+    public String getCreatorName() {
         return creatorName;
     }
 
-    @Override public String getEntry() {
+    public String getEntry() {
         return entry;
     }
 
@@ -43,7 +40,7 @@ public class GuestBookEntryDto extends PersistentDto implements GuestBookEntry {
         this.createdTime = createdTime;
     }
 
-    public void setCreatorName(Name creatorNmae) {
+    public void setCreatorName(String creatorNmae) {
         this.creatorName = creatorNmae;
     }
 

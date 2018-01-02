@@ -1,14 +1,11 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.BlogEntry;
-
 import java.time.LocalDateTime;
 
-public class BlogEntryDto extends PersistentDto implements BlogEntry {
+public class BlogEntryDto extends PersistentDto {
     private BlogDto blog;
     private LocalDateTime createdTime;
-    private Name creatorName;
+    private String creatorName;
     private String entry;
 
     public BlogEntryDto() {
@@ -23,19 +20,19 @@ public class BlogEntryDto extends PersistentDto implements BlogEntry {
         entry = blogEntryDto.getEntry();
     }
 
-    @Override public BlogDto getBlog() {
+    public BlogDto getBlog() {
         return blog;
     }
 
-    @Override public LocalDateTime getCreatedTime() {
+    public LocalDateTime getCreatedTime() {
         return createdTime;
     }
 
-    @Override public Name getCreatorName() {
+    public String getCreatorName() {
         return creatorName;
     }
 
-    @Override public String getEntry() {
+    public String getEntry() {
         return entry;
     }
 
@@ -47,7 +44,7 @@ public class BlogEntryDto extends PersistentDto implements BlogEntry {
         this.createdTime = createdTime;
     }
 
-    public void setCreatorName(Name creatorName) {
+    public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
     }
 

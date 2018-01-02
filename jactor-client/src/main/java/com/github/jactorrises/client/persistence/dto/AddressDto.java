@@ -1,15 +1,12 @@
 package com.github.jactorrises.client.persistence.dto;
 
-import com.github.jactorrises.client.datatype.Country;
-import com.github.jactorrises.client.domain.Address;
-
-public class AddressDto extends PersistentDto implements Address {
-    private Country country;
+public class AddressDto extends PersistentDto {
     private Integer zipCode;
     private String addressLine1;
     private String addressLine2;
     private String addressLine3;
     private String city;
+    private String country;
 
     public AddressDto() {
         // empty, use setters
@@ -17,35 +14,35 @@ public class AddressDto extends PersistentDto implements Address {
 
     AddressDto(AddressDto addressDto) {
         super(addressDto);
-        this.country = addressDto.getCountry();
-        this.zipCode = addressDto.getZipCode();
         this.addressLine1 = addressDto.getAddressLine1();
         this.addressLine2 = addressDto.getAddressLine2();
         this.addressLine3 = addressDto.getAddressLine3();
         this.city = addressDto.getCity();
+        this.country = addressDto.getCountry();
+        this.zipCode = addressDto.getZipCode();
     }
 
-    @Override public String getAddressLine1() {
+    public String getAddressLine1() {
         return addressLine1;
     }
 
-    @Override public String getAddressLine2() {
+    public String getAddressLine2() {
         return addressLine2;
     }
 
-    @Override public String getAddressLine3() {
+    public String getAddressLine3() {
         return addressLine3;
     }
 
-    @Override public String getCity() {
+    public String getCity() {
         return city;
     }
 
-    @Override public Country getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    @Override public Integer getZipCode() {
+    public Integer getZipCode() {
         return zipCode;
     }
 
@@ -61,7 +58,7 @@ public class AddressDto extends PersistentDto implements Address {
         this.addressLine3 = addressLine3;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
