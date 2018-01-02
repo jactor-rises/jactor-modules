@@ -1,20 +1,23 @@
 package com.github.jactorrises.model.service;
 
+import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.model.JactorModel;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.model.domain.person.PersonDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.JactorPersistence;
+import com.github.jactorrises.persistence.PersistenceBeans;
+import com.github.jactorrises.persistence.PersistenceOrmApplication;
 import org.assertj.core.api.SoftAssertions;
-import org.hibernate.SessionFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.Serializable;
@@ -27,17 +30,14 @@ import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
 import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = JactorPersistence.class)
+@SpringBootTest(classes = PersistenceOrmApplication.class)
+@Import({JactorModel.class, PersistenceBeans.class})
 @Ignore("#176: rewrite using rest from persistence-orm... ")
 public class DomainServicesIntegrationTest {
 
     @Autowired private GuestBookDomainService guestBookDomainService;
 
     @Autowired private UserDomainService userDomainService;
-
-    // located in jactor-persistence-orm...
-    @SuppressWarnings({"SpringJavaAutowiringInspection", "SpringJavaInjectionPointsAutowiringInspection"})
-    @Autowired private SessionFactory sessionFactory;
 
     @Test public void shouldSaveUserDomain() {
         userDomainService.saveOrUpdateUser(
@@ -54,14 +54,12 @@ public class DomainServicesIntegrationTest {
                         ).build()
         );
 
-        ensureDbCreation();
-
         Optional<UserDomain> possibleUser = userDomainService.find(new UserName("titten"));
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(possibleUser).isPresent();
             UserDomain userDomain = possibleUser.orElse(aUser().build());
-//            softly.assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")); todo fix: should work after story #152 is resolved
+            softly.assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises"));
             softly.assertThat(userDomain.getPerson().getDescription()).as("user.description").isEqualTo("description");
         });
     }
@@ -84,8 +82,6 @@ public class DomainServicesIntegrationTest {
                 .build();
 
         Serializable id = guestBookDomainService.saveOrUpdateGuestBook(aGuestBook().withTitle("my guest book").with(user).build()).getDto().getId();
-
-        ensureDbCreation();
 
         GuestBookDomain guestBook = guestBookDomainService.fetchGuestBook(id);
 
@@ -114,8 +110,6 @@ public class DomainServicesIntegrationTest {
 
         Serializable id = guestBookDomainService.saveOrUpdateGuestBookEntry(guestBookEntryDomain).getId();
 
-        ensureDbCreation();
-
         GuestBookEntryDomain guestBookEntry = guestBookDomainService.fetchGuestBookEntry(id);
 
         SoftAssertions.assertSoftly(softly -> {
@@ -124,10 +118,5 @@ public class DomainServicesIntegrationTest {
             softly.assertThat(guestBookEntry.getCreatorName()).as("entry.creatorName").isEqualTo(new Name("lada"));
             softly.assertThat(guestBookEntry.getEntry()).as("entry.entry").isEqualTo("svada");
         });
-    }
-
-    private void ensureDbCreation() {
-        sessionFactory.getCurrentSession().flush();
-        sessionFactory.getCurrentSession().clear();
     }
 }

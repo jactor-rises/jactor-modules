@@ -14,10 +14,10 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 @DisplayName("A PersistentDomain")
 class PersistentDomainTest {
 
-    @DisplayName("should fail if a domain is created for an entity which is null")
+    @DisplayName("should fail if a domain is created with a dto which is null")
     @Test @SuppressWarnings("ResultOfMethodCallIgnored")
-    void shouldFailIfDomainIsCreatedForAnEntityWhichIsNull() {
-        assertThatNullPointerException().isThrownBy(new TestPersistedDomain(null)::getId)
+    void shouldFailIfDomainIsCreatedForDtoWhichIsNull() {
+        assertThatNullPointerException().isThrownBy(new TestPersistedDomain(null)::fetchDto)
                 .withMessage(PersistentDomain.THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
     }
 

@@ -12,12 +12,12 @@ import org.springframework.context.annotation.Bean;
 import static java.util.Arrays.sort;
 
 @SpringBootApplication
-public class JactorPersistence {
+public class PersistenceOrmApplication {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JactorPersistence.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersistenceOrmApplication.class);
 
     public static void main(String... args) {
-        display(SpringApplication.run(JactorPersistence.class, args));
+        display(SpringApplication.run(PersistenceOrmApplication.class, args));
     }
 
     private static void display(ApplicationContext ctx) {

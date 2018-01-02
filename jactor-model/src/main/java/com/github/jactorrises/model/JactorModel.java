@@ -1,43 +1,32 @@
 package com.github.jactorrises.model;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
+import com.github.jactorrises.client.facade.UserFacade;
+import com.github.jactorrises.model.facade.UserFacadeImpl;
+import com.github.jactorrises.model.service.GuestBookDomainService;
+import com.github.jactorrises.model.service.UserDomainService;
+import com.github.jactorrises.persistence.PersistenceBeans;
+import com.github.jactorrises.persistence.service.GuestBookDaoService;
+import com.github.jactorrises.persistence.service.UserDaoService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import static java.util.Arrays.sort;
-
-@SpringBootApplication
+@Configuration
+@Import({PersistenceBeans.class})
 public class JactorModel {
-    public static void main(String... args) {
-        display(SpringApplication.run(JactorModel.class, args));
+
+    @Bean
+    public UserFacade userFacade(UserDaoService userDaoService) {
+        return new UserFacadeImpl(userDaoService);
     }
 
-    private static void display(ApplicationContext ctx) {
-        String[] beanDefinitions = ctx.getBeanDefinitionNames();
-        sort(beanDefinitions);
-
-        System.out.println(namesOf(beanDefinitions));
+    @Bean
+    public GuestBookDomainService guestBookDomainService(GuestBookDaoService guestBookDaoService) {
+        return new GuestBookDomainService(guestBookDaoService);
     }
 
-    private static StringBuilder namesOf(String[] beanNames) {
-        int count = 0;
-        StringBuilder names = new StringBuilder();
-
-        for (String name : beanNames) {
-            if (count != 0) {
-                names.append(", ");
-            }
-
-            count++;
-
-            if (count == 5 || name.contains(".")) {
-                names.append("\n-> ");
-                count = 0;
-            }
-
-            names.append(name);
-        }
-
-        return names;
+    @Bean
+    public UserDomainService userDaoService(UserDaoService userDaoService) {
+        return new UserDomainService(userDaoService);
     }
 }

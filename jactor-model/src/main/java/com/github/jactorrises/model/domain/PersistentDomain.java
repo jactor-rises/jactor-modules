@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public abstract class PersistentDomain implements Persistent {
     static final String THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL = "The persistent data the domain cannot be null!";
 
-    private PersistentDto fetchDto() {
+    PersistentDto fetchDto() {
         PersistentDto dto = getDto();
         Validate.notNull(dto, THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
 

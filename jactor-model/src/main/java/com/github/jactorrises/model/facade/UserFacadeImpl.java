@@ -5,11 +5,9 @@ import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.model.domain.user.UserDomain;
 import com.github.jactorrises.persistence.service.UserDaoService;
-import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
 public class UserFacadeImpl implements UserFacade {
 
     private final UserDaoService userDaoService;

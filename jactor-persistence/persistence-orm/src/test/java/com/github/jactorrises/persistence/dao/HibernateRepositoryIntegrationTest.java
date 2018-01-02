@@ -2,7 +2,7 @@ package com.github.jactorrises.persistence.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.persistence.dto.UserDto;
-import com.github.jactorrises.persistence.JactorPersistence;
+import com.github.jactorrises.persistence.PersistenceOrmApplication;
 import com.github.jactorrises.persistence.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.entity.blog.BlogEntryEntity;
@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = JactorPersistence.class)
+@ContextConfiguration(classes = PersistenceOrmApplication.class)
 @Transactional
 public class HibernateRepositoryIntegrationTest {
 
