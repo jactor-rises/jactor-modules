@@ -44,6 +44,16 @@ public abstract class PersistentEntity {
         updatedTime = new DateTimeEmbeddable(persistentDto.getUpdatedTime());
     }
 
+    protected <T extends PersistentDto> T addPersistentData(T persistentDto) {
+        persistentDto.setId(id);
+        persistentDto.setCreatedBy(createdBy);
+        persistentDto.setCreationTime(creationTime.fetchLocalDateTime());
+        persistentDto.setUpdatedBy(updatedBy);
+        persistentDto.setUpdatedTime(updatedTime.fetchLocalDateTime());
+
+        return persistentDto;
+    }
+
     @Override public String toString() {
         return "id=" + id;
     }

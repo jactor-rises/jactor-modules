@@ -1,8 +1,10 @@
 package com.github.jactorrises.client.persistence.dto;
 
 public class UserDto extends PersistentDto {
-    private String emailAddress;
+    private BlogDto blog;
+    private GuestBookDto guestBook;
     private PersonDto person;
+    private String emailAddress;
     private String userName;
 
     public UserDto() {
@@ -11,13 +13,19 @@ public class UserDto extends PersistentDto {
 
     public UserDto(UserDto user) {
         super(user);
-        person = user.getPerson();
+        blog = user.getBlog();
+        guestBook = user.getGuestBook();
         emailAddress = user.getEmailAddress();
+        person = user.getPerson();
         userName = user.getUserName();
     }
 
-    public String getUserName() {
-        return userName;
+    public BlogDto getBlog() {
+        return blog;
+    }
+
+    public GuestBookDto getGuestBook() {
+        return guestBook;
     }
 
     public PersonDto getPerson() {
@@ -26,6 +34,18 @@ public class UserDto extends PersistentDto {
 
     public String getEmailAddress() {
         return emailAddress;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setBlog(BlogDto blog) {
+        this.blog = blog;
+    }
+
+    public void setGuestBook(GuestBookDto guestBook) {
+        this.guestBook = guestBook;
     }
 
     public void setEmailAddress(String emailAddress) {

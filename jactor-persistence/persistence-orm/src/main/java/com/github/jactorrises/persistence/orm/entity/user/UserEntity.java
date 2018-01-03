@@ -2,6 +2,8 @@ package com.github.jactorrises.persistence.orm.entity.user;
 
 import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
+import com.github.jactorrises.persistence.orm.entity.blog.BlogEntity;
+import com.github.jactorrises.persistence.orm.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.persistence.orm.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -24,6 +26,8 @@ public class UserEntity extends PersistentEntity {
     @Column(name = "EMAIL") private String emailAddress;
     @Column(name = "USER_NAME", nullable = false) private String userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
+    @OneToOne(mappedBy = "user") private GuestBookEntity guestBook;
+    @OneToOne(mappedBy = "userEntity") private BlogEntity blog;
 
     UserEntity() {
     }
@@ -33,20 +37,20 @@ public class UserEntity extends PersistentEntity {
      */
     private UserEntity(UserEntity user) {
         super(user);
+        blog = user.blog != null ? user.blog.copy() : null;
+        guestBook = user.guestBook != null ? user.guestBook.copy() : null;
         emailAddress = user.emailAddress;
-        personEntity = user.copyPerson();
+        personEntity = user.personEntity != null ? user.personEntity.copy() : null;
         userName = user.userName;
     }
 
     public UserEntity(UserDto user) {
         super(user);
+        blog = user.getBlog() != null ? new BlogEntity(user.getBlog()) : null;
+        guestBook = user.getGuestBook() != null ? new GuestBookEntity(user.getGuestBook()) : null;
         emailAddress = user.getEmailAddress();
         personEntity = new PersonEntity(user.getPerson());
         userName = user.getUserName();
-    }
-
-    private PersonEntity copyPerson() {
-        return personEntity != null ? personEntity.copy() : null;
     }
 
     public UserEntity copy() {
@@ -54,7 +58,9 @@ public class UserEntity extends PersistentEntity {
     }
 
     public UserDto asDto() {
-        UserDto userDto = new UserDto();
+        UserDto userDto = addPersistentData(new UserDto());
+        userDto.setBlog(blog != null ? blog.asDto() : null);
+        userDto.setGuestBook(guestBook != null ? guestBook.asDto() : null);
         userDto.setEmailAddress(emailAddress);
         userDto.setPerson(personEntity.asDto());
         userDto.setUserName(userName);
@@ -64,9 +70,9 @@ public class UserEntity extends PersistentEntity {
 
     @Override public boolean equals(Object o) {
         return o == this || o != null && getClass() == o.getClass() &&
-                Objects.equals(userName, ((UserEntity) o).userName) &&
+                Objects.equals(emailAddress, ((UserEntity) o).emailAddress) &&
                 Objects.equals(personEntity, ((UserEntity) o).personEntity) &&
-                Objects.equals(emailAddress, ((UserEntity) o).emailAddress);
+                Objects.equals(userName, ((UserEntity) o).userName);
     }
 
     @Override public int hashCode() {
@@ -77,8 +83,10 @@ public class UserEntity extends PersistentEntity {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
                 .appendSuper(super.toString())
                 .append(userName)
-                .append(personEntity)
                 .append(emailAddress)
+                .append(blog)
+                .append(guestBook)
+                .append(personEntity)
                 .toString();
     }
 

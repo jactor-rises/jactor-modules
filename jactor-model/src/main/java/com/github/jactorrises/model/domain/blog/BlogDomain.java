@@ -11,7 +11,7 @@ public class BlogDomain extends PersistentDomain implements Blog {
 
     private final BlogDto blogDto;
 
-    BlogDomain(BlogDto blogDto) {
+    public BlogDomain(BlogDto blogDto) {
         this.blogDto = blogDto;
     }
 

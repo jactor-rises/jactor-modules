@@ -36,7 +36,7 @@ public class GuestBookEntity extends PersistentEntity {
         user = guestBook.copyUser();
     }
 
-    GuestBookEntity(GuestBookDto guestBook) {
+    public GuestBookEntity(GuestBookDto guestBook) {
         super(guestBook);
         title = guestBook.getTitle();
         user = new UserEntity(guestBook.getUser());
@@ -46,8 +46,16 @@ public class GuestBookEntity extends PersistentEntity {
         return user != null ? user.copy() : null;
     }
 
-    GuestBookEntity copy() {
+    public GuestBookEntity copy() {
         return new GuestBookEntity(this);
+    }
+
+    public GuestBookDto asDto() {
+        GuestBookDto guestBook = new GuestBookDto();
+        guestBook.setTitle(title);
+        guestBook.setUser(user.asDto());
+
+        return guestBook;
     }
 
     @Override public boolean equals(Object o) {

@@ -59,7 +59,7 @@ public class AddressEntity extends PersistentEntity {
     }
 
     public AddressDto asDto() {
-        AddressDto addressDto = new AddressDto();
+        AddressDto addressDto = addPersistentData(new AddressDto());
         addressDto.setAddressLine1(addressLine1);
         addressDto.setAddressLine2(addressLine2);
         addressDto.setAddressLine3(addressLine3);

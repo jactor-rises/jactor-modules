@@ -76,7 +76,7 @@ public class PersonEntity extends PersistentEntity {
     }
 
     public PersonDto asDto() {
-        PersonDto personDto = new PersonDto();
+        PersonDto personDto = addPersistentData(new PersonDto());
         personDto.setAddress(addressEntity.asDto());
         personDto.setDescription(description);
         personDto.setFirstName(firstName);

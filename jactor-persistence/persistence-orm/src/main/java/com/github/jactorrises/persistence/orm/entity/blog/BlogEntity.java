@@ -48,12 +48,21 @@ public class BlogEntity extends PersistentEntity {
 
     }
 
-    BlogEntity copy() {
+    public BlogEntity copy() {
         return new BlogEntity(this);
     }
 
     private UserEntity copyUser() {
         return userEntity != null ? userEntity.copy() : null;
+    }
+
+    public BlogDto asDto() {
+        BlogDto blogDto = addPersistentData(new BlogDto());
+        blogDto.setCreated(created.fetchLocalDate());
+        blogDto.setTitle(title);
+        blogDto.setUser(userEntity.asDto());
+
+        return blogDto;
     }
 
     @Override public boolean equals(Object o) {

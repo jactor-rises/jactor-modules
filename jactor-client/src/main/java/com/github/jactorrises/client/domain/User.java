@@ -7,11 +7,15 @@ public interface User extends Persistent {
 
     UserName getUserName();
 
+    Blog getBlog();
+
+    GuestBook getGuestBook();
+
     Person getPerson();
 
     EmailAddress getEmailAddress();
 
     default boolean isUserNameEmailAddress() {
-        return getEmailAddress().isSameAs(getUserName());
+        return getEmailAddress() != null && getEmailAddress().isSameAs(getUserName());
     }
 }

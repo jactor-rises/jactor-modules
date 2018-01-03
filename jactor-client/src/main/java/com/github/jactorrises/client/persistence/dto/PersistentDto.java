@@ -11,7 +11,10 @@ public abstract class PersistentDto {
     private LocalDateTime updatedTime;
 
     PersistentDto() {
-        // empty, use setters...
+        createdBy = "todo: #156";
+        creationTime = LocalDateTime.now();
+        updatedBy = "todo: #156";
+        updatedTime = LocalDateTime.now();
     }
 
     PersistentDto(PersistentDto persistent) {
