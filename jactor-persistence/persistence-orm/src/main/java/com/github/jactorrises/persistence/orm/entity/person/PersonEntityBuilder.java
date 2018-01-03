@@ -6,6 +6,11 @@ import com.github.jactorrises.persistence.orm.entity.address.AddressEntityBuilde
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntityBuilder;
 
+import java.util.Optional;
+
+import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+
 public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     private AddressEntity addressEntity;
     private String description;
@@ -15,6 +20,7 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     private UserEntity userEntity;
 
     PersonEntityBuilder() {
+        super(PersonEntityBuilder::validate);
     }
 
     public PersonEntityBuilder with(AddressEntity entity) {
@@ -61,5 +67,11 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
         personEntity.setUserEntity(userEntity);
 
         return personEntity;
+    }
+
+    private static Optional<String> validate(PersonEntity personEntity) {
+        return collectMessages(
+                fetchMessageIfFieldNotPresent("address", personEntity.getAddress())
+        );
     }
 }

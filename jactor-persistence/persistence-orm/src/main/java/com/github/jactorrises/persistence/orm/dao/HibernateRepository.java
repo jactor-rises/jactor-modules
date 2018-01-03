@@ -1,7 +1,6 @@
 package com.github.jactorrises.persistence.orm.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,12 +20,12 @@ public class HibernateRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public Optional<UserDto> findUsing(UserName userName) {
+    public Optional<UserEntity> findUsing(UserName userName) {
         UserEntity userEntity = (UserEntity) session().createCriteria(UserEntity.class)
                 .add(Restrictions.eq("userName", userName.asString()))
                 .uniqueResult();
 
-        return Optional.ofNullable(userEntity).map(UserEntity::asDto);
+        return Optional.ofNullable(userEntity);
     }
 
     public <T> T saveOrUpdate(T entity) {

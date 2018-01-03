@@ -10,6 +10,7 @@ import com.github.jactorrises.persistence.orm.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.persistence.orm.entity.guestbook.GuestBookEntryEntity;
 import com.github.jactorrises.persistence.orm.entity.person.PersonEntity;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
+import com.github.jactorrises.persistence.orm.service.UserService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
@@ -38,6 +39,9 @@ public class HibernateRepositoryIntegrationTest {
 
     @Autowired
     private HibernateRepository hibernateRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -495,7 +499,7 @@ public class HibernateRepositoryIntegrationTest {
                 aUser().with(personEntity).withUserName("jactor").build()
         );
 
-        Optional<UserDto> jactor = hibernateRepository.findUsing(new UserName("jactor"));
+        Optional<UserDto> jactor = userService.findUsing(new UserName("jactor"));
 
         assertThat(jactor.isPresent()).as("jactor is present").isTrue();
     }

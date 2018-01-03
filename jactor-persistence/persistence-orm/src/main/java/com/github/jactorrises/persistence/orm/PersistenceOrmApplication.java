@@ -8,10 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import static java.util.Arrays.sort;
 
 @SpringBootApplication
+@EnableTransactionManagement
 public class PersistenceOrmApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersistenceOrmApplication.class);
@@ -21,34 +23,16 @@ public class PersistenceOrmApplication {
     }
 
     private static void display(ApplicationContext ctx) {
-        LOGGER.debug("Available beans:");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("Available beans:");
 
-        String[] beanDefinitions = ctx.getBeanDefinitionNames();
-        sort(beanDefinitions);
+            String[] beanDefinitions = ctx.getBeanDefinitionNames();
+            sort(beanDefinitions);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(namesOf(beanDefinitions));
-        }
-    }
-
-    private static String namesOf(String[] beanNames) {
-        StringBuilder names = new StringBuilder();
-
-        for (int i = 0; i < beanNames.length; i++) {
-            String name = beanNames[i];
-
-            if (i % 5 == 0 || name.contains(".")) {
-                names.append("\n-> ");
-            }
-
-            names.append(name);
-
-            if (i % 5 == 0) {
-                names.append(", ");
+            for (String beanDefinition : beanDefinitions) {
+                LOGGER.info("-> " + beanDefinition);
             }
         }
-
-        return names.toString();
     }
 
     @Bean

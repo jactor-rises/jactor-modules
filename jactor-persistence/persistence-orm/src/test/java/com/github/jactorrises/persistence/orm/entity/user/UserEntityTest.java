@@ -1,7 +1,9 @@
 package com.github.jactorrises.persistence.orm.entity.user;
 
+import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.github.jactorrises.persistence.orm.entity.person.PersonEntity.aPerson;
 import static com.github.jactorrises.persistence.orm.entity.user.UserEntity.aUser;
@@ -9,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A UserEntity")
+@ExtendWith(SuppressValidInstanceExtension.class)
 class UserEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")

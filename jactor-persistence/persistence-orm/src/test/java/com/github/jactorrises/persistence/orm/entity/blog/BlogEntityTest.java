@@ -2,6 +2,7 @@ package com.github.jactorrises.persistence.orm.entity.blog;
 
 import com.github.jactorrises.persistence.orm.entity.DateTextEmbeddable;
 import com.github.jactorrises.test.extension.NowAsPureDateExtension;
+import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A BlogEntity")
 @ExtendWith(NowAsPureDateExtension.class)
+@ExtendWith(SuppressValidInstanceExtension.class)
 class BlogEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")

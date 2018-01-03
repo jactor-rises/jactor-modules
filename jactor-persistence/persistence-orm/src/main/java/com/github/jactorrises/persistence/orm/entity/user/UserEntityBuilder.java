@@ -4,12 +4,19 @@ import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.persistence.orm.entity.person.PersonEntity;
 import com.github.jactorrises.persistence.orm.entity.person.PersonEntityBuilder;
 
+import java.util.Optional;
+
+import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
+
 public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
     private String emailAddress;
     private PersonEntity person;
     private String userName;
 
     UserEntityBuilder() {
+        super(UserEntityBuilder::validate);
     }
 
     public UserEntityBuilder with(PersonEntity person) {
@@ -38,5 +45,12 @@ public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
         useruserEntity.setUserName(userName);
 
         return useruserEntity;
+    }
+
+    private static Optional<String> validate(UserEntity userEntity) {
+        return collectMessages(
+                fetchMessageIfStringWithoutValue("user name", userEntity.getUserName()),
+                fetchMessageIfFieldNotPresent("person", userEntity.getPerson())
+        );
     }
 }
