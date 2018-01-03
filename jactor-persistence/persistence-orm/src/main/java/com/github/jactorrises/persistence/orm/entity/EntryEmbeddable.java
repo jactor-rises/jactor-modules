@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.entity;
+package com.github.jactorrises.persistence.orm.entity;
 
 import com.github.jactorrises.commons.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;

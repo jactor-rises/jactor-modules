@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence;
+package com.github.jactorrises.persistence.beans;
 
 import com.github.jactorrises.persistence.service.GuestBookDaoService;
 import com.github.jactorrises.persistence.service.UserDaoService;

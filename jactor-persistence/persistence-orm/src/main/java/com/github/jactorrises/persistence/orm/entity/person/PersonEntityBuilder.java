@@ -1,10 +1,10 @@
-package com.github.jactorrises.persistence.entity.person;
+package com.github.jactorrises.persistence.orm.entity.person;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.persistence.entity.address.AddressEntity;
-import com.github.jactorrises.persistence.entity.address.AddressEntityBuilder;
-import com.github.jactorrises.persistence.entity.user.UserEntity;
-import com.github.jactorrises.persistence.entity.user.UserEntityBuilder;
+import com.github.jactorrises.persistence.orm.entity.address.AddressEntity;
+import com.github.jactorrises.persistence.orm.entity.address.AddressEntityBuilder;
+import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
+import com.github.jactorrises.persistence.orm.entity.user.UserEntityBuilder;
 
 public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     private AddressEntity addressEntity;

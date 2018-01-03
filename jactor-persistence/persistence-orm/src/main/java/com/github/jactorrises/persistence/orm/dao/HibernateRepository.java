@@ -1,8 +1,8 @@
-package com.github.jactorrises.persistence.dao;
+package com.github.jactorrises.persistence.orm.dao;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.persistence.dto.UserDto;
-import com.github.jactorrises.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;

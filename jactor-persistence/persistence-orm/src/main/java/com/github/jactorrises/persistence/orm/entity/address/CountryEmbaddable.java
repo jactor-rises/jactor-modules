@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.entity.address;
+package com.github.jactorrises.persistence.orm.entity.address;
 
 import com.github.jactorrises.client.datatype.Country;
 

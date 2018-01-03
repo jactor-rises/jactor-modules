@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.entity;
+package com.github.jactorrises.persistence.orm.entity;
 
 import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.BeforeEach;

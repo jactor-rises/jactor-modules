@@ -1,8 +1,8 @@
-package com.github.jactorrises.persistence.entity.user;
+package com.github.jactorrises.persistence.orm.entity.user;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.persistence.entity.person.PersonEntity;
-import com.github.jactorrises.persistence.entity.person.PersonEntityBuilder;
+import com.github.jactorrises.persistence.orm.entity.person.PersonEntity;
+import com.github.jactorrises.persistence.orm.entity.person.PersonEntityBuilder;
 
 public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
     private String emailAddress;

@@ -1,6 +1,6 @@
-package com.github.jactorrises.persistence;
+package com.github.jactorrises.persistence.orm;
 
-import com.github.jactorrises.persistence.dao.HibernateRepository;
+import com.github.jactorrises.persistence.orm.dao.HibernateRepository;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

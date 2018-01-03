@@ -1,7 +1,7 @@
-package com.github.jactorrises.persistence.entity.address;
+package com.github.jactorrises.persistence.orm.entity.address;
 
 import com.github.jactorrises.client.persistence.dto.AddressDto;
-import com.github.jactorrises.persistence.entity.PersistentEntity;
+import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

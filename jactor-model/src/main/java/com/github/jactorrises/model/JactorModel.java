@@ -4,7 +4,7 @@ import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.model.facade.UserFacadeImpl;
 import com.github.jactorrises.model.service.GuestBookDomainService;
 import com.github.jactorrises.model.service.UserDomainService;
-import com.github.jactorrises.persistence.PersistenceBeans;
+import com.github.jactorrises.persistence.beans.PersistenceBeans;
 import com.github.jactorrises.persistence.service.GuestBookDaoService;
 import com.github.jactorrises.persistence.service.UserDaoService;
 import org.springframework.context.annotation.Bean;

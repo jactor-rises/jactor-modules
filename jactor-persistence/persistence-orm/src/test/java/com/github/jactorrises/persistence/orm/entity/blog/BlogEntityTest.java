@@ -1,6 +1,6 @@
-package com.github.jactorrises.persistence.entity.blog;
+package com.github.jactorrises.persistence.orm.entity.blog;
 
-import com.github.jactorrises.persistence.entity.DateTextEmbeddable;
+import com.github.jactorrises.persistence.orm.entity.DateTextEmbeddable;
 import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,8 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.LocalDate;
 
-import static com.github.jactorrises.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.persistence.orm.entity.blog.BlogEntity.aBlog;
+import static com.github.jactorrises.persistence.orm.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

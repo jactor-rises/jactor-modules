@@ -1,7 +1,7 @@
-package com.github.jactorrises.persistence.entity.blog;
+package com.github.jactorrises.persistence.orm.entity.blog;
 
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.persistence.entity.user.UserEntity;
+import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 
 public class BlogEntityBuilder extends AbstractBuilder<BlogEntity> {
     private String title;

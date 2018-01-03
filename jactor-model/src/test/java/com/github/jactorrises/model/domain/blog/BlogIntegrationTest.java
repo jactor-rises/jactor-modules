@@ -2,7 +2,7 @@ package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.persistence.entity.blog.BlogEntity;
+import com.github.jactorrises.persistence.orm.entity.blog.BlogEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Ignore;

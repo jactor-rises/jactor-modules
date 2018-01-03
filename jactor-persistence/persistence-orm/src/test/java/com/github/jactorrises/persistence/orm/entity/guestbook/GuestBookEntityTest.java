@@ -1,10 +1,10 @@
-package com.github.jactorrises.persistence.entity.guestbook;
+package com.github.jactorrises.persistence.orm.entity.guestbook;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.persistence.orm.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactorrises.persistence.orm.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

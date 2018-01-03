@@ -1,11 +1,11 @@
-package com.github.jactorrises.persistence.entity.person;
+package com.github.jactorrises.persistence.orm.entity.person;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactorrises.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactorrises.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactorrises.persistence.orm.entity.address.AddressEntity.anAddress;
+import static com.github.jactorrises.persistence.orm.entity.person.PersonEntity.aPerson;
+import static com.github.jactorrises.persistence.orm.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

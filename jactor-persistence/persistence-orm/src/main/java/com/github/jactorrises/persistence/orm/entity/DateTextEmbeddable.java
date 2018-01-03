@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.entity;
+package com.github.jactorrises.persistence.orm.entity;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
