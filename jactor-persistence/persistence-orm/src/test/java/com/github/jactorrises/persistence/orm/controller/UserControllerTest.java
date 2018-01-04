@@ -38,13 +38,13 @@ public class UserControllerTest {
     }
 
     @Test public void shouldUseHibernateRepositoryToFindUser() throws Exception {
-        mockMvc.perform(get("/user/find?userName=jactor")).andExpect(status().isOk());
+        mockMvc.perform(get("/user/jactor")).andExpect(status().isOk());
 
         verify(userServiceMock).findUsing(new UserName("jactor"));
     }
 
     @Test public void shouldNotFindUser() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/user/find?userName=someone"))
+        MvcResult mvcResult = mockMvc.perform(get("/user/someone"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -63,7 +63,7 @@ public class UserControllerTest {
                 )
         );
 
-        MvcResult mvcResult = mockMvc.perform(get("/user/find?userName=someone"))
+        MvcResult mvcResult = mockMvc.perform(get("/user/someone"))
                 .andExpect(status().isOk())
                 .andReturn();
 
