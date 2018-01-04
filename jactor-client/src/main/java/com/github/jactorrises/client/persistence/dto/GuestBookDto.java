@@ -1,6 +1,9 @@
 package com.github.jactorrises.client.persistence.dto;
 
+import java.util.Set;
+
 public class GuestBookDto extends PersistentDto {
+    private Set<GuestBookEntryDto> entries;
     private String title;
     private UserDto user;
 
@@ -10,8 +13,13 @@ public class GuestBookDto extends PersistentDto {
 
     GuestBookDto(GuestBookDto guestBookDto) {
         super(guestBookDto);
+        entries = guestBookDto.getEntries();
         title = guestBookDto.getTitle();
         user = guestBookDto.getUser();
+    }
+
+    public Set<GuestBookEntryDto> getEntries() {
+        return entries;
     }
 
     public String getTitle() {
@@ -20,6 +28,10 @@ public class GuestBookDto extends PersistentDto {
 
     public UserDto getUser() {
         return user;
+    }
+
+    public void setEntries(Set<GuestBookEntryDto> entries) {
+        this.entries = entries;
     }
 
     public void setTitle(String title) {

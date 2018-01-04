@@ -1,11 +1,14 @@
 package com.github.jactorrises.model.domain.blog;
 
 import com.github.jactorrises.client.domain.Blog;
+import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.client.persistence.dto.BlogDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
 
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BlogDomain extends PersistentDomain implements Blog {
 
@@ -25,6 +28,10 @@ public class BlogDomain extends PersistentDomain implements Blog {
 
     @Override public LocalDate getCreated() {
         return getDto().getCreated();
+    }
+
+    @Override public Set<BlogEntry> getEntries() {
+        return blogDto.getEntries().stream().map(BlogEntryDomain::new).collect(Collectors.toSet());
     }
 
     @Override public BlogDto getDto() {

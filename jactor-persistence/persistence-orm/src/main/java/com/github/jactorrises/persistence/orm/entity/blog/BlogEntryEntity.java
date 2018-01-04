@@ -1,5 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.blog;
 
+import com.github.jactorrises.client.persistence.dto.BlogDto;
 import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.orm.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
@@ -56,6 +57,16 @@ public class BlogEntryEntity extends PersistentEntity {
 
     public BlogEntryEntity copy() {
         return new BlogEntryEntity(this);
+    }
+
+    BlogEntryDto asDto(BlogDto blogDto) {
+        BlogEntryDto blogEntryDto = new BlogEntryDto();
+        blogEntryDto.setBlog(blogDto);
+        blogEntryDto.setCreatorName(persistentEntry.getCreatorName());
+        blogEntryDto.setCreatedTime(persistentEntry.getCreatedTime());
+        blogEntryDto.setEntry(persistentEntry.getEntry());
+
+        return blogEntryDto;
     }
 
     @Override public boolean equals(Object o) {

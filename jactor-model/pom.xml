@@ -30,6 +30,11 @@
             <groupId>com.github.jactor-rises.persistence</groupId>
             <artifactId>persistence-beans</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.jactor-rises.persistence</groupId>
+            <artifactId>persistence-orm</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- third party -->
         <dependency>

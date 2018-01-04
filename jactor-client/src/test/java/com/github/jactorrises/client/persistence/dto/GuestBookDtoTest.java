@@ -4,7 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -15,12 +17,14 @@ class GuestBookDtoTest {
     @Test
     void shouldHaveCopyConstructor() {
         GuestBookDto guestBookDto = new GuestBookDto();
+        guestBookDto.setEntries(new HashSet<>(singletonList(new GuestBookEntryDto())));
         guestBookDto.setTitle("title");
         guestBookDto.setUser(new UserDto());
 
         GuestBookDto copied = new GuestBookDto(guestBookDto);
 
         assertAll(
+                () -> assertThat(copied.getEntries()).as("entries").isEqualTo(guestBookDto.getEntries()),
                 () -> assertThat(copied.getTitle()).as("title").isEqualTo(guestBookDto.getTitle()),
                 () -> assertThat(copied.getUser()).as("title").isEqualTo(guestBookDto.getUser())
         );

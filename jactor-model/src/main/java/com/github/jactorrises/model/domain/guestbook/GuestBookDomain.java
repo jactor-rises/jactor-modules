@@ -1,9 +1,13 @@
 package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
+import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GuestBookDomain extends PersistentDomain implements GuestBook {
 
@@ -19,6 +23,10 @@ public class GuestBookDomain extends PersistentDomain implements GuestBook {
 
     @Override public UserDomain getUser() {
         return guestBookDto.getUser() != null ? new UserDomain(guestBookDto.getUser()) : null;
+    }
+
+    @Override public Set<GuestBookEntry> getEntries() {
+        return guestBookDto.getEntries().stream().map(GuestBookEntryDomain::new).collect(Collectors.toSet());
     }
 
     @Override public GuestBookDto getDto() {

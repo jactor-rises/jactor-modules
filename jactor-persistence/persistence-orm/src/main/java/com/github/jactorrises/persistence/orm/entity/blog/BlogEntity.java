@@ -14,12 +14,16 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static java.util.Objects.hash;
+import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(name = "T_BLOG")
@@ -28,6 +32,7 @@ public class BlogEntity extends PersistentEntity {
     @Embedded @AttributeOverride(name = "dateAsText", column = @Column(name = "CREATED")) private DateTextEmbeddable created;
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
+    @OneToMany(mappedBy = "blogEntity") private Set<BlogEntryEntity> entries = new HashSet<>();
 
     BlogEntity() {
         created = new DateTextEmbeddable(LocalDate.now());
@@ -59,6 +64,7 @@ public class BlogEntity extends PersistentEntity {
     public BlogDto asDto() {
         BlogDto blogDto = addPersistentData(new BlogDto());
         blogDto.setCreated(created.fetchLocalDate());
+        blogDto.setEntries(entries.stream().map(bee -> bee.asDto(blogDto)).collect(toSet()));
         blogDto.setTitle(title);
         blogDto.setUser(userEntity.asDto());
 

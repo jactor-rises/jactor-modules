@@ -11,11 +11,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static java.util.Objects.hash;
+import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(name = "T_GUEST_BOOK")
@@ -23,6 +27,7 @@ public class GuestBookEntity extends PersistentEntity {
 
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
+    @OneToMany(mappedBy = "guestBookEntity") private Set<GuestBookEntryEntity> entries = new HashSet<>();
 
     GuestBookEntity() {
     }
@@ -52,6 +57,7 @@ public class GuestBookEntity extends PersistentEntity {
 
     public GuestBookDto asDto() {
         GuestBookDto guestBook = new GuestBookDto();
+        guestBook.setEntries(entries.stream().map(gbee -> gbee.asDto(guestBook)).collect(toSet()));
         guestBook.setTitle(title);
         guestBook.setUser(user.asDto());
 

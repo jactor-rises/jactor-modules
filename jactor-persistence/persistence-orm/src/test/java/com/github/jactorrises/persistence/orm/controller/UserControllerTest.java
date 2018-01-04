@@ -44,7 +44,7 @@ public class UserControllerTest {
     }
 
     @Test public void shouldNotFindUser() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/user/find?userName=someoner"))
+        MvcResult mvcResult = mockMvc.perform(get("/user/find?userName=someone"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -63,7 +63,7 @@ public class UserControllerTest {
                 )
         );
 
-        MvcResult mvcResult = mockMvc.perform(get("/user/find?userName=someoner"))
+        MvcResult mvcResult = mockMvc.perform(get("/user/find?userName=someone"))
                 .andExpect(status().isOk())
                 .andReturn();
 

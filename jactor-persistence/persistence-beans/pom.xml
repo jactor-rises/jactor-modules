@@ -24,6 +24,13 @@
         <dependency>
             <groupId>com.github.jactor-rises.persistence</groupId>
             <artifactId>persistence-orm</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- third party -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
         </dependency>
     </dependencies>
 </project>

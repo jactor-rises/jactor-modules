@@ -1,5 +1,7 @@
 package com.github.jactorrises.persistence.orm.entity.guestbook;
 
+import com.github.jactorrises.client.persistence.dto.GuestBookDto;
+import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
 import com.github.jactorrises.persistence.orm.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -49,6 +51,16 @@ public class GuestBookEntryEntity extends PersistentEntity {
 
     private EntryEmbeddable copyEntry() {
         return persistentEntry.copy();
+    }
+
+    GuestBookEntryDto asDto(GuestBookDto guestBook) {
+        GuestBookEntryDto guestBookEntry = new GuestBookEntryDto();
+        guestBookEntry.setCreatorName(persistentEntry.getCreatorName());
+        guestBookEntry.setCreatedTime(persistentEntry.getCreatedTime());
+        guestBookEntry.setEntry(persistentEntry.getEntry());
+        guestBookEntry.setGuestBook(guestBook);
+
+        return guestBookEntry;
     }
 
     @Override public boolean equals(Object o) {

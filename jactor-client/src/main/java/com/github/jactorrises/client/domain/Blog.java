@@ -1,6 +1,7 @@
 package com.github.jactorrises.client.domain;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public interface Blog extends Persistent {
     String getTitle();
@@ -8,4 +9,6 @@ public interface Blog extends Persistent {
     User getUser();
 
     LocalDate getCreated();
+
+    Set<BlogEntry> getEntries();
 }
