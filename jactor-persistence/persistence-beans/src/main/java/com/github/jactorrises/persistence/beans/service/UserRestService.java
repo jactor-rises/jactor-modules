@@ -1,14 +1,20 @@
-package com.github.jactorrises.persistence.service;
+package com.github.jactorrises.persistence.beans.service;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.persistence.dto.UserDto;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 public class UserDaoService {
-    public Serializable saveOrUpdate(UserDto userDto) {
-        return userDto.getId();
+    private final RestTemplate restTemplate;
+
+    public UserDaoService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    public UserDto saveOrUpdate(UserDto userDto) {
+        return userDto;
     }
 
     public Optional<UserDto> find(UserName userName) {
