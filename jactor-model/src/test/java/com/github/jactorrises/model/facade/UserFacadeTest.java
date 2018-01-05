@@ -3,7 +3,7 @@ package com.github.jactorrises.model.facade;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.persistence.dto.UserDto;
-import com.github.jactorrises.persistence.service.UserDaoService;
+import com.github.jactorrises.persistence.beans.service.UserRestService;
 import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,14 +25,14 @@ class UserFacadeTest {
     private UserFacadeImpl testUserFacadeImpl;
 
     @Mock
-    private UserDaoService userDaoServiceMock;
+    private UserRestService userRestServiceMock;
 
     @BeforeEach
     void initMocking() {
         MockitoAnnotations.initMocks(this);
     }
 
-    @DisplayName("should return an empty Optional when the UserDaoService cannot find a dto for the given user name")
+    @DisplayName("should return an empty Optional when the UserRestService cannot find a dto for the given user name")
     @Test void willNotFindUnknownUser() {
         Optional<User> user = testUserFacadeImpl.findUsing(new UserName("someone"));
         assertThat(user.isPresent()).isEqualTo(false);
@@ -41,7 +41,7 @@ class UserFacadeTest {
     @DisplayName("should find a user when the user name only differs in case")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void willFindUser() {
-        when(userDaoServiceMock.find(new UserName("jactor"))).thenReturn(Optional.of(new UserDto()));
+        when(userRestServiceMock.find(new UserName("jactor"))).thenReturn(Optional.of(new UserDto()));
         Optional<User> optionalUser = testUserFacadeImpl.findUsing(new UserName("JACTOR"));
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);

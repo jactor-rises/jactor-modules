@@ -4,13 +4,14 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.persistence.dto.UserDto;
 import com.github.jactorrises.persistence.orm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserController {
 
     private final UserService userServicey;

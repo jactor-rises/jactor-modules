@@ -6,10 +6,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
-public class UserDaoService {
+public class UserRestService {
     private final RestTemplate restTemplate;
 
-    public UserDaoService(RestTemplate restTemplate) {
+    public UserRestService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

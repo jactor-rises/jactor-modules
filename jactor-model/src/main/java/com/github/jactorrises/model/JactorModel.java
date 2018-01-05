@@ -5,8 +5,8 @@ import com.github.jactorrises.model.facade.UserFacadeImpl;
 import com.github.jactorrises.model.service.GuestBookDomainService;
 import com.github.jactorrises.model.service.UserDomainService;
 import com.github.jactorrises.persistence.beans.PersistenceBeans;
-import com.github.jactorrises.persistence.service.GuestBookDaoService;
-import com.github.jactorrises.persistence.service.UserDaoService;
+import com.github.jactorrises.persistence.beans.service.GuestBookRestService;
+import com.github.jactorrises.persistence.beans.service.UserRestService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,17 +16,17 @@ import org.springframework.context.annotation.Import;
 public class JactorModel {
 
     @Bean
-    public UserFacade userFacade(UserDaoService userDaoService) {
-        return new UserFacadeImpl(userDaoService);
+    public UserFacade userFacade(UserRestService userRestService) {
+        return new UserFacadeImpl(userRestService);
     }
 
     @Bean
-    public GuestBookDomainService guestBookDomainService(GuestBookDaoService guestBookDaoService) {
-        return new GuestBookDomainService(guestBookDaoService);
+    public GuestBookDomainService guestBookDomainService(GuestBookRestService guestBookRestService) {
+        return new GuestBookDomainService(guestBookRestService);
     }
 
     @Bean
-    public UserDomainService userDaoService(UserDaoService userDaoService) {
-        return new UserDomainService(userDaoService);
+    public UserDomainService userDaoService(UserRestService userRestService) {
+        return new UserDomainService(userRestService);
     }
 }

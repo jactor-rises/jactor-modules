@@ -4,35 +4,35 @@ import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactorrises.persistence.service.GuestBookDaoService;
+import com.github.jactorrises.persistence.beans.service.GuestBookRestService;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 
 @Service
 public class GuestBookDomainService {
-    private final GuestBookDaoService guestBookDaoService;
+    private final GuestBookRestService guestBookRestService;
 
-    public GuestBookDomainService(GuestBookDaoService guestBookDaoService) {
-        this.guestBookDaoService = guestBookDaoService;
+    public GuestBookDomainService(GuestBookRestService guestBookRestService) {
+        this.guestBookRestService = guestBookRestService;
     }
 
     GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
-        return new GuestBookDomain(guestBookDaoService.saveOrUpdate(guestBookDomain.getDto()));
+        return new GuestBookDomain(guestBookRestService.saveOrUpdate(guestBookDomain.getDto()));
     }
 
     GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
-        return new GuestBookEntryDomain(guestBookDaoService.saveOrUpdate(guestBookEntryDomain.getDto()));
+        return new GuestBookEntryDomain(guestBookRestService.saveOrUpdate(guestBookEntryDomain.getDto()));
     }
 
     GuestBookDomain fetchGuestBook(Serializable id) {
-        GuestBookDto guestBookDto = guestBookDaoService.fetch(GuestBookDto.class, id);
+        GuestBookDto guestBookDto = guestBookRestService.fetch(GuestBookDto.class, id);
 
         return new GuestBookDomain(guestBookDto);
     }
 
     GuestBookEntryDomain fetchGuestBookEntry(Serializable id) {
-        GuestBookEntryDto guestBookEntryDto = guestBookDaoService.fetch(GuestBookEntryDto.class, id);
+        GuestBookEntryDto guestBookEntryDto = guestBookRestService.fetch(GuestBookEntryDto.class, id);
 
         return new GuestBookEntryDomain(guestBookEntryDto);
     }

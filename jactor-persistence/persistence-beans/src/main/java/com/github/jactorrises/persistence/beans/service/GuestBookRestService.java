@@ -6,10 +6,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 
-public class GuestBookDaoService {
+public class GuestBookRestService {
     private final RestTemplate restTemplate;
 
-    public GuestBookDaoService(RestTemplate restTemplate) {
+    public GuestBookRestService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

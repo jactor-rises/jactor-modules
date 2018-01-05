@@ -32,6 +32,13 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
         return with(userBuilder.build().getDto());
     }
 
+    public BlogBuilder with(BlogEntryBuilder blogEntryBuilder) {
+        blogEntryBuilder.with(blogDto);
+        blogDto.getEntries().add(blogEntryBuilder.build().getDto());
+
+        return this;
+    }
+
     @Override protected BlogDomain buildBean() {
         return new BlogDomain(blogDto);
     }
