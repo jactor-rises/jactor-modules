@@ -26,13 +26,13 @@ public class GuestBookDomainService {
     }
 
     GuestBookDomain fetchGuestBook(Serializable id) {
-        GuestBookDto guestBookDto = guestBookRestService.fetch(GuestBookDto.class, id);
+        GuestBookDto guestBookDto = guestBookRestService.fetch(id);
 
         return new GuestBookDomain(guestBookDto);
     }
 
     GuestBookEntryDomain fetchGuestBookEntry(Serializable id) {
-        GuestBookEntryDto guestBookEntryDto = guestBookRestService.fetch(GuestBookEntryDto.class, id);
+        GuestBookEntryDto guestBookEntryDto = guestBookRestService.fetchEntry(id);
 
         return new GuestBookEntryDomain(guestBookEntryDto);
     }

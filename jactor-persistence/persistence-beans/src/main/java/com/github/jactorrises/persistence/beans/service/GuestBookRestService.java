@@ -2,32 +2,68 @@ package com.github.jactorrises.persistence.beans.service;
 
 import com.github.jactorrises.client.persistence.dto.GuestBookDto;
 import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 
-public class GuestBookRestService {
-    private final RestTemplate restTemplate;
+public class GuestBookRestService extends AbstractRestService {
 
-    public GuestBookRestService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    private final String baseUrl;
+
+    public GuestBookRestService(RestTemplate restTemplate, String baseUrl) {
+        super(restTemplate);
+        this.baseUrl = baseUrl;
     }
 
     public GuestBookDto saveOrUpdate(GuestBookDto guestBookDto) {
-        GuestBookDto persistedDto = new GuestBookDto();
-        persistedDto.setId(guestBookDto.getId() != null ? guestBookDto.getId() : 1L);
+        if (guestBookDto.getId() == null) {
+            return save(guestBookDto);
+        }
 
-        return persistedDto;
+        put(baseUrl + "/update", guestBookDto);
+
+        return guestBookDto;
     }
 
     public GuestBookEntryDto saveOrUpdate(GuestBookEntryDto guestBookEntryDto) {
-        GuestBookEntryDto persistedDto = new GuestBookEntryDto();
-        persistedDto.setId(guestBookEntryDto.getId() != null ? guestBookEntryDto.getId() : 1L);
+        if (guestBookEntryDto.getId() == null) {
+            return save(guestBookEntryDto);
+        }
 
-        return persistedDto;
+        put(baseUrl + "/entry/update", guestBookEntryDto);
+
+        return guestBookEntryDto;
     }
 
-    public <T> T fetch(Class<T> dtoClass, Serializable id) {
-        throw new UnsupportedOperationException(String.format("WIP: %s, %s", dtoClass.getSimpleName(), id));
+    private GuestBookDto save(GuestBookDto guestBookDto) {
+        ResponseEntity<GuestBookDto> responseEntity = exchange(
+                baseUrl + "/save", HttpMethod.POST, new HttpEntity<>(guestBookDto), GuestBookDto.class
+        );
+
+        return bodyOf(responseEntity);
+    }
+
+    private GuestBookEntryDto save(GuestBookEntryDto guestBookEntryDto) {
+        ResponseEntity<GuestBookEntryDto> responseEntity = exchange(
+                baseUrl + "/entry/save", HttpMethod.POST, new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
+        );
+
+        return bodyOf(responseEntity);
+    }
+
+    public GuestBookDto fetch(Serializable id) {
+        ResponseEntity<GuestBookDto> responseEntity = getForEntity(baseUrl + '/' + id, GuestBookDto.class);
+
+        return bodyOf(responseEntity);
+    }
+
+    public GuestBookEntryDto fetchEntry(Serializable id) {
+        ResponseEntity<GuestBookEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + id, GuestBookEntryDto.class);
+
+        return bodyOf(responseEntity);
     }
 }

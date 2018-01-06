@@ -26,8 +26,17 @@ class AbstractRestService {
     }
 
     <T> T bodyOf(ResponseEntity<T> responseEntity) {
-        if (responseEntity == null || isNot2xxSuccessful(responseEntity.getStatusCode())) {
-            throw new IllegalStateException("Bad configuration of REST service");
+        if (responseEntity == null) {
+            throw new IllegalStateException("No response from REST service");
+        }
+
+        if (isNot2xxSuccessful(responseEntity.getStatusCode())) {
+            String badConfiguredResponseMesssage = String.format("Bad configuration of REST service! ResponseCode: %s(%d)",
+                    responseEntity.getStatusCode().name(),
+                    responseEntity.getStatusCodeValue()
+            );
+
+            throw new IllegalStateException(badConfiguredResponseMesssage);
         }
 
         return responseEntity.getBody();

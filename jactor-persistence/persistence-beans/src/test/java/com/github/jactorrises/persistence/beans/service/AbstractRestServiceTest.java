@@ -20,7 +20,7 @@ class AbstractRestServiceTest {
     @Test void shouldThrowExceptionWhenNull() {
         assertThatIllegalStateException().isThrownBy(() -> (new AbstractRestService(null) {
                 }).bodyOf(null)
-        ).withMessage("Bad configuration of REST service");
+        ).withMessage("No response from REST service");
     }
 
     @DisplayName("should throw exception when response entity has a HttpStatus not in 2xx range")
@@ -28,7 +28,8 @@ class AbstractRestServiceTest {
     void shouldThrowExceptionWhenNotSuccessfulStatus(HttpStatus httpStatus) {
         assertThatIllegalStateException().isThrownBy(() -> (new AbstractRestService(null) {
                 }).bodyOf(new ResponseEntity<>(httpStatus))
-        ).withMessage("Bad configuration of REST service");
+        ).withMessageContaining("Bad configuration of REST service")
+        .withMessageContaining("ResponseCode: " + httpStatus.name());
     }
 
     @DisplayName("should return body of response when response entity has a HttpStatus in 2xx range")

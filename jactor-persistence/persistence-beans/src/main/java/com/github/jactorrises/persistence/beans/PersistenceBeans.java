@@ -15,10 +15,10 @@ public class PersistenceBeans {
     }
 
     @Bean public GuestBookRestService guestBookDaoService() {
-        return new GuestBookRestService(new RestTemplate());
+        return new GuestBookRestService(new RestTemplate(), null);
     }
 
     @Bean public UserRestService userDaoService() {
-        return new UserRestService(new RestTemplate());
+        return new UserRestService(new RestTemplate(), null);
     }
 }

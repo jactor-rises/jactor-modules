@@ -1,6 +1,7 @@
 package com.github.jactorrises.persistence.beans.service;
 
 import com.github.jactorrises.client.persistence.dto.BlogDto;
+import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,6 @@ public class BlogRestService extends AbstractRestService {
         this.baseUrl = baseUrl;
     }
 
-    public BlogDto fetch(Serializable id) {
-        ResponseEntity<BlogDto> responseEntity = getForEntity(baseUrl + '/' + id, BlogDto.class);
-
-        return bodyOf(responseEntity);
-    }
-
     public BlogDto saveOrUpdate(BlogDto blogDto) {
         if (blogDto.getId() == null) {
             return save(blogDto);
@@ -37,6 +32,18 @@ public class BlogRestService extends AbstractRestService {
         ResponseEntity<BlogDto> responseEntity = exchange(
                 baseUrl + "/save", HttpMethod.POST, new HttpEntity<>(blogDto), BlogDto.class
         );
+
+        return bodyOf(responseEntity);
+    }
+
+    public BlogDto fetch(Serializable id) {
+        ResponseEntity<BlogDto> responseEntity = getForEntity(baseUrl + '/' + id, BlogDto.class);
+
+        return bodyOf(responseEntity);
+    }
+
+    public BlogEntryDto fetchEntry(Serializable id) {
+        ResponseEntity<BlogEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + id, BlogEntryDto.class);
 
         return bodyOf(responseEntity);
     }
