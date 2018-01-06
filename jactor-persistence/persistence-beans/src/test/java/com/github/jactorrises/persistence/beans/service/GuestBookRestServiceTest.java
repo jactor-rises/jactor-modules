@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.beans.service;
 
-import com.github.jactorrises.client.persistence.dto.GuestBookDto;
-import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
+import com.github.jactorrises.client.dto.GuestBookDto;
+import com.github.jactorrises.client.dto.GuestBookEntryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class GuestBookRestServiceTest {
         when(restTemplateMock.getForEntity(anyString(), eq(GuestBookEntryDto.class)))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        guestBookRestService.fetch(1L);
+        guestBookRestService.fetchEntry(1L);
 
         verify(restTemplateMock).getForEntity(eq("/guestBook/entry/1"), eq(GuestBookEntryDto.class));
     }

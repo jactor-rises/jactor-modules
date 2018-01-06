@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.beans.service;
 
-import com.github.jactorrises.client.persistence.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

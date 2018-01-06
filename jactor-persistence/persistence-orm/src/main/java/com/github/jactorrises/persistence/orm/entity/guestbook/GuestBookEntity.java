@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.guestbook;
 
-import com.github.jactorrises.client.persistence.dto.GuestBookDto;
+import com.github.jactorrises.client.dto.GuestBookDto;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;

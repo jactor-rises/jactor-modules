@@ -1,8 +1,9 @@
 package com.github.jactorrises.model.domain.blog;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.client.domain.BlogEntry;
-import com.github.jactorrises.client.persistence.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
 
@@ -27,7 +28,7 @@ public class BlogDomain extends PersistentDomain implements Blog {
     }
 
     @Override public LocalDate getCreated() {
-        return getDto().getCreated();
+        return FieldConverter.convertDate(getDto().getCreated());
     }
 
     @Override public Set<BlogEntry> getEntries() {

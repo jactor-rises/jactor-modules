@@ -1,6 +1,8 @@
-package com.github.jactorrises.client.persistence.dto;
+package com.github.jactorrises.client.dto;
 
-public class PersonDto extends PersistentDto {
+import java.io.Serializable;
+
+public class PersonDto extends PersistentDto implements Serializable {
     private AddressDto address;
     private String locale;
     private String firstName;

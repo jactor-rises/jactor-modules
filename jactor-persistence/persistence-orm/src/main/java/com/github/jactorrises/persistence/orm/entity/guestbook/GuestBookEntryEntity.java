@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.entity.guestbook;
 
-import com.github.jactorrises.client.persistence.dto.GuestBookDto;
-import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
+import com.github.jactorrises.client.dto.GuestBookDto;
+import com.github.jactorrises.client.dto.GuestBookEntryDto;
 import com.github.jactorrises.persistence.orm.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,7 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static java.util.Objects.hash;
@@ -84,7 +83,7 @@ public class GuestBookEntryEntity extends PersistentEntity {
         return guestBookEntity;
     }
 
-    public LocalDateTime getCreatedTime() {
+    public String getCreatedTime() {
         return persistentEntry.getCreatedTime();
     }
 

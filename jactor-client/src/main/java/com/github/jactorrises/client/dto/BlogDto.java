@@ -1,11 +1,11 @@
-package com.github.jactorrises.client.persistence.dto;
+package com.github.jactorrises.client.dto;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.util.Set;
 
-public class BlogDto extends PersistentDto {
-    private LocalDate created;
+public class BlogDto extends PersistentDto implements Serializable {
     private Set<BlogEntryDto> entries;
+    private String created;
     private String title;
     private UserDto user;
 
@@ -21,7 +21,7 @@ public class BlogDto extends PersistentDto {
         user = blogDto.getUser();
     }
 
-    public LocalDate getCreated() {
+    public String getCreated() {
         return created;
     }
 
@@ -37,7 +37,7 @@ public class BlogDto extends PersistentDto {
         return user;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 

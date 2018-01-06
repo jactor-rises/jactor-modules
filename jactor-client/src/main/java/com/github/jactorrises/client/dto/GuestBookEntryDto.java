@@ -1,10 +1,10 @@
-package com.github.jactorrises.client.persistence.dto;
+package com.github.jactorrises.client.dto;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 
-public class GuestBookEntryDto extends PersistentDto {
+public class GuestBookEntryDto extends PersistentDto implements Serializable {
     private GuestBookDto guestBook;
-    private LocalDateTime createdTime;
+    private String createdTime;
     private String creatorName;
     private String entry;
 
@@ -24,7 +24,7 @@ public class GuestBookEntryDto extends PersistentDto {
         return guestBook;
     }
 
-    public LocalDateTime getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
@@ -36,7 +36,7 @@ public class GuestBookEntryDto extends PersistentDto {
         return entry;
     }
 
-    public void setCreatedTime(LocalDateTime createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 

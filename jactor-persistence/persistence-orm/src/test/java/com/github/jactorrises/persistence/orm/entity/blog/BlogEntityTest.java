@@ -1,5 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.blog;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.persistence.orm.entity.DateTextEmbeddable;
 import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
@@ -66,7 +67,7 @@ class BlogEntityTest {
 
     @DisplayName("should set created when initialized")
     @Test void willSetCreatedWhenInitialized() {
-        assertThat(new BlogEntity().getCreated()).isEqualTo(LocalDate.now());
+        assertThat(new BlogEntity().getCreated()).isEqualTo(FieldConverter.convert(LocalDate.now()));
     }
 
     @DisplayName("should have an implementation of the toString method")

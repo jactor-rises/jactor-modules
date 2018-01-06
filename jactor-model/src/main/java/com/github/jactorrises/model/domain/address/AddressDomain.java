@@ -2,7 +2,7 @@ package com.github.jactorrises.model.domain.address;
 
 import com.github.jactorrises.client.datatype.Country;
 import com.github.jactorrises.client.domain.Address;
-import com.github.jactorrises.client.persistence.dto.AddressDto;
+import com.github.jactorrises.client.dto.AddressDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 
 public class AddressDomain extends PersistentDomain implements Address {

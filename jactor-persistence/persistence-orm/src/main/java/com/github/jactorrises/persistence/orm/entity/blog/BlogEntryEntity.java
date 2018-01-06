@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.entity.blog;
 
-import com.github.jactorrises.client.persistence.dto.BlogDto;
-import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
+import com.github.jactorrises.client.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.orm.entity.EntryEmbeddable;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,7 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static java.util.Objects.hash;
@@ -35,7 +34,7 @@ public class BlogEntryEntity extends PersistentEntity {
     BlogEntryEntity() {
     }
 
-    private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
+    public BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
         super(blogEntryEntity);
         blogEntity = blogEntryEntity.copyBlog();
         persistentEntry = blogEntryEntity.copyEntry();
@@ -74,8 +73,7 @@ public class BlogEntryEntity extends PersistentEntity {
     }
 
     private boolean isEqualTo(BlogEntryEntity o) {
-        return Objects.equals(getId(), o.getId()) &&
-                Objects.equals(persistentEntry, o.persistentEntry) &&
+        return Objects.equals(persistentEntry, o.persistentEntry) &&
                 Objects.equals(blogEntity, o.blogEntity);
     }
 
@@ -93,10 +91,6 @@ public class BlogEntryEntity extends PersistentEntity {
 
     public void setBlog(BlogEntity blog) {
         this.blogEntity = blog;
-    }
-
-    public LocalDateTime getCreatedTime() {
-        return persistentEntry.getCreatedTime();
     }
 
     public String getCreatorName() {

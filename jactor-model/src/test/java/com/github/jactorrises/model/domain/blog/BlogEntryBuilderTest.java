@@ -1,6 +1,6 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.client.persistence.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

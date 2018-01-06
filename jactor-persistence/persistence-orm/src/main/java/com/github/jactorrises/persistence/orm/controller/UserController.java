@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.controller;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.persistence.dto.UserDto;
+import com.github.jactorrises.client.dto.UserDto;
 import com.github.jactorrises.persistence.orm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

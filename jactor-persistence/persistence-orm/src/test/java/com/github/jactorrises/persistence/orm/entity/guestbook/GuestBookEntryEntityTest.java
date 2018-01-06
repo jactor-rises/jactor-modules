@@ -1,5 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.guestbook;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,9 @@ class GuestBookEntryEntityTest {
     @DisplayName("should set created time when initialized")
     @ExtendWith(NowAsPureDateExtension.class)
     @Test void willHaveCreationTimeOnEntryWhenCreated() {
-        assertThat(new GuestBookEntryEntity().getCreatedTime()).isEqualTo(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0));
+        assertThat(new GuestBookEntryEntity().getCreatedTime()).isEqualTo(
+                FieldConverter.convert(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0))
+        );
     }
 
     @DisplayName("should have an implementation of the toString method")
@@ -80,6 +83,6 @@ class GuestBookEntryEntityTest {
         assertThat(guestBookEntryEntityToTest.toString())
                 .contains("jactor")
                 .contains("hi")
-                .contains(LocalDate.now().toString());
+                .contains(FieldConverter.convert(LocalDate.now()));
     }
 }

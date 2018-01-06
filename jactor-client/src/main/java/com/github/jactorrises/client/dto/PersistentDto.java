@@ -1,20 +1,22 @@
-package com.github.jactorrises.client.persistence.dto;
+package com.github.jactorrises.client.dto;
+
+import com.github.jactorrises.client.converter.FieldConverter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class PersistentDto {
+public abstract class PersistentDto implements Serializable {
     private Serializable id;
     private String createdBy;
+    private String creationTime;
     private String updatedBy;
-    private LocalDateTime creationTime;
-    private LocalDateTime updatedTime;
+    private String updatedTime;
 
     PersistentDto() {
         createdBy = "todo: #156";
-        creationTime = LocalDateTime.now();
+        creationTime = FieldConverter.convert(LocalDateTime.now());
         updatedBy = "todo: #156";
-        updatedTime = LocalDateTime.now();
+        updatedTime = FieldConverter.convert(LocalDateTime.now());
     }
 
     PersistentDto(PersistentDto persistent) {
@@ -33,7 +35,7 @@ public abstract class PersistentDto {
         return createdBy;
     }
 
-    public LocalDateTime getCreationTime() {
+    public String getCreationTime() {
         return creationTime;
     }
 
@@ -41,7 +43,7 @@ public abstract class PersistentDto {
         return updatedBy;
     }
 
-    public LocalDateTime getUpdatedTime() {
+    public String getUpdatedTime() {
         return updatedTime;
     }
 
@@ -53,7 +55,7 @@ public abstract class PersistentDto {
         this.createdBy = createdBy;
     }
 
-    public void setCreationTime(LocalDateTime creationTime) {
+    public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
     }
 
@@ -61,7 +63,7 @@ public abstract class PersistentDto {
         this.updatedBy = updatedBy;
     }
 
-    public void setUpdatedTime(LocalDateTime updatedTime) {
+    public void setUpdatedTime(String updatedTime) {
         this.updatedTime = updatedTime;
     }
 }

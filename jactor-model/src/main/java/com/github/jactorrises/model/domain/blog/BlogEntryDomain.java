@@ -1,8 +1,9 @@
 package com.github.jactorrises.model.domain.blog;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.BlogEntry;
-import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
+import com.github.jactorrises.client.dto.BlogEntryDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class BlogEntryDomain extends PersistentDomain implements BlogEntry {
     }
 
     @Override public LocalDateTime getCreatedTime() {
-        return blogEntryDto.getCreatedTime();
+        return FieldConverter.convertDateTime(blogEntryDto.getCreatedTime());
     }
 
     @Override public String getEntry() {

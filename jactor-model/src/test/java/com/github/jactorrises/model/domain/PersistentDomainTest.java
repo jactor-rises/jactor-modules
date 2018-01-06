@@ -1,8 +1,9 @@
 package com.github.jactorrises.model.domain;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.persistence.dto.PersistentDto;
-import com.github.jactorrises.client.persistence.dto.UserDto;
+import com.github.jactorrises.client.dto.PersistentDto;
+import com.github.jactorrises.client.dto.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,29 +15,27 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 @DisplayName("A PersistentDomain")
 class PersistentDomainTest {
 
-    @DisplayName("should fail if a domain is created with a dto which is null")
-    @Test @SuppressWarnings("ResultOfMethodCallIgnored")
-    void shouldFailIfDomainIsCreatedForDtoWhichIsNull() {
+    @DisplayName("should fail if a domain is created with a dto which is null") @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Test void shouldFailIfDomainIsCreatedForDtoWhichIsNull() {
         assertThatNullPointerException().isThrownBy(new TestPersistedDomain(null)::fetchDto)
                 .withMessage(PersistentDomain.THE_PERSISTENT_DATA_ON_THE_DOMAIN_CANNOT_BE_NULL);
     }
 
     @DisplayName("should get the common properties of the dto")
-    @Test
-    void shouldGetTheCommonPropertiesThePersistentEntity() {
+    @Test void shouldGetTheCommonPropertiesThePersistentEntity() {
         UserDto userDto = new UserDto();
         userDto.setId(1L);
         userDto.setCreatedBy("me");
-        userDto.setCreationTime(LocalDateTime.now().withNano(0).minusDays(1));
+        userDto.setCreationTime(FieldConverter.convert(LocalDateTime.now().minusDays(1)));
         userDto.setUpdatedBy("you");
-        userDto.setUpdatedTime(LocalDateTime.now().withNano(0));
+        userDto.setUpdatedTime(FieldConverter.convert(LocalDateTime.now()));
 
         TestPersistedDomain persistentDomain = new TestPersistedDomain(userDto);
         assertThat(persistentDomain.getId()).as("id").isEqualTo(1L);
         assertThat(persistentDomain.getCreatedBy()).as("creator").isEqualTo(new Name("me"));
-        assertThat(persistentDomain.getCreationTime()).as("created time").isEqualTo(LocalDateTime.now().withNano(0).minusDays(1));
+        assertThat(persistentDomain.getCreationTime()).as("created time").isEqualTo(FieldConverter.convertDateTime(userDto.getCreationTime()));
         assertThat(persistentDomain.getUpdatedBy()).as("updated by").isEqualTo(new Name("you"));
-        assertThat(persistentDomain.getUpdatedTime()).as("updatet time").isEqualTo(LocalDateTime.now().withNano(0));
+        assertThat(persistentDomain.getUpdatedTime()).as("updatet time").isEqualTo(FieldConverter.convertDateTime(userDto.getUpdatedTime()));
     }
 
     private class TestPersistedDomain extends PersistentDomain {

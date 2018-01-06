@@ -1,13 +1,11 @@
 package com.github.jactorrises.persistence.orm.entity;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.commons.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Embeddable;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Objects;
 
 import static java.util.Objects.hash;
@@ -15,33 +13,26 @@ import static java.util.Objects.hash;
 @Embeddable
 public class EntryEmbeddable {
 
-    private Date createdTime;
     private String creatorName;
+    private String createdTime;
     private String entry;
 
     public EntryEmbeddable() {
-        createdTime = Now.asDate();
+        createdTime = FieldConverter.convert(Now.asDateTime());
     }
 
     /**
      * @param entryEmbeddable is the entry to create a copy of
      */
     EntryEmbeddable(EntryEmbeddable entryEmbeddable) {
-        creatorName = entryEmbeddable.creatorName;
-        createdTime = entryEmbeddable.copyCreatedTime();
-        entry = entryEmbeddable.entry;
+        creatorName = entryEmbeddable.getCreatorName();
+        createdTime = entryEmbeddable.getCreatedTime();
+        entry = entryEmbeddable.getEntry();
     }
 
-    private Date copyCreatedTime() {
-        Date creation = new Date();
-        creation.setTime(this.createdTime.getTime());
-
-        return creation;
-    }
-
-    public EntryEmbeddable(LocalDateTime createdTime, String creatorName, String entry) {
-        this.createdTime = Date.from(createdTime.atZone(ZoneId.systemDefault()).toInstant());
+    public EntryEmbeddable(String createdTime, String creatorName, String entry) {
         this.creatorName = creatorName;
+        this.createdTime = createdTime;
         this.entry = entry;
     }
 
@@ -91,7 +82,7 @@ public class EntryEmbeddable {
         this.creatorName = creatorName;
     }
 
-    public LocalDateTime getCreatedTime() {
-        return new DateTimeEmbeddable(createdTime).fetchLocalDateTime();
+    public String getCreatedTime() {
+        return createdTime;
     }
 }

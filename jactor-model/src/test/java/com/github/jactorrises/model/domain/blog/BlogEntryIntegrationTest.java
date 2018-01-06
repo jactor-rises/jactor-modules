@@ -1,8 +1,9 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.client.persistence.dto.BlogDto;
-import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
-import com.github.jactorrises.client.persistence.dto.UserDto;
+import com.github.jactorrises.client.converter.FieldConverter;
+import com.github.jactorrises.client.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogEntryDto;
+import com.github.jactorrises.client.dto.UserDto;
 import com.github.jactorrises.persistence.beans.PersistenceBeans;
 import com.github.jactorrises.persistence.beans.service.BlogRestService;
 import com.github.jactorrises.persistence.beans.service.UserRestService;
@@ -46,15 +47,11 @@ public class BlogEntryIntegrationTest {
         assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("some entry");
     }
 
-    private Condition<? super LocalDateTime> withinThisMinute() {
+    private Condition<? super String> withinThisMinute() {
         return new Condition<>(
-                localDateTime -> LocalDateTime.now().withNano(0).withSecond(0).isBefore(localDateTime),
+                localDateTime -> LocalDateTime.now().withNano(0).withSecond(0).isBefore(FieldConverter.convertDateTime(localDateTime)),
                 "within this minute"
         );
-    }
-
-    private LocalDateTime creationTimeFromFirstEntry(BlogDto blog) {
-        return blog.getEntries().iterator().next().getCreatedTime();
     }
 
     @SuppressWarnings("SameParameterValue") private BlogDto createBlogForPersistedUser(String blogTitle, String entry, String creatorName) {

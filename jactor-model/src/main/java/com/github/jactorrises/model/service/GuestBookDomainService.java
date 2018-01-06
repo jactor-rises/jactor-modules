@@ -1,7 +1,7 @@
 package com.github.jactorrises.model.service;
 
-import com.github.jactorrises.client.persistence.dto.GuestBookDto;
-import com.github.jactorrises.client.persistence.dto.GuestBookEntryDto;
+import com.github.jactorrises.client.dto.GuestBookDto;
+import com.github.jactorrises.client.dto.GuestBookEntryDto;
 import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.persistence.beans.service.GuestBookRestService;

@@ -2,7 +2,7 @@ package com.github.jactorrises.model.facade;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
-import com.github.jactorrises.client.persistence.dto.UserDto;
+import com.github.jactorrises.client.dto.UserDto;
 import com.github.jactorrises.persistence.beans.service.UserRestService;
 import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;

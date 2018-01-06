@@ -1,8 +1,9 @@
 package com.github.jactorrises.model.domain;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Persistent;
-import com.github.jactorrises.client.persistence.dto.PersistentDto;
+import com.github.jactorrises.client.dto.PersistentDto;
 import org.apache.commons.lang3.Validate;
 
 import java.io.Serializable;
@@ -29,7 +30,7 @@ public abstract class PersistentDomain implements Persistent {
     }
 
     @Override public LocalDateTime getCreationTime() {
-        return fetchDto().getCreationTime();
+        return FieldConverter.convertDateTime(fetchDto().getCreationTime());
     }
 
     @Override public Name getUpdatedBy() {
@@ -37,10 +38,6 @@ public abstract class PersistentDomain implements Persistent {
     }
 
     @Override public LocalDateTime getUpdatedTime() {
-        return fetchDto().getUpdatedTime();
-    }
-
-    public void setId(Serializable id) {
-        fetchDto().setId(id);
+        return FieldConverter.convertDateTime(fetchDto().getUpdatedTime());
     }
 }

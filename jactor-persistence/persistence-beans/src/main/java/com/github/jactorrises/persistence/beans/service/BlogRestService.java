@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.beans.service;
 
-import com.github.jactorrises.client.persistence.dto.BlogDto;
-import com.github.jactorrises.client.persistence.dto.BlogEntryDto;
+import com.github.jactorrises.client.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogEntryDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

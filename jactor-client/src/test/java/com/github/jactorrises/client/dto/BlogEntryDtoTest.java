@@ -1,5 +1,6 @@
-package com.github.jactorrises.client.persistence.dto;
+package com.github.jactorrises.client.dto;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class BlogEntryDtoTest {
     void shouldHaveCopyConstructor() {
         BlogEntryDto blogEntryDto = new BlogEntryDto();
         blogEntryDto.setBlog(new BlogDto());
-        blogEntryDto.setCreatedTime(LocalDateTime.now());
+        blogEntryDto.setCreatedTime(FieldConverter.convert(LocalDateTime.now()));
         blogEntryDto.setCreatorName("someone");
         blogEntryDto.setEntry("entry");
 
@@ -35,10 +36,10 @@ class BlogEntryDtoTest {
     void shouldGiveValuesToPersistentDto() {
         BlogEntryDto persistentDto = new BlogEntryDto();
         persistentDto.setCreatedBy("jactor");
-        persistentDto.setCreationTime(LocalDateTime.now());
+        persistentDto.setCreationTime(FieldConverter.convert(LocalDateTime.now()));
         persistentDto.setId(1L);
         persistentDto.setUpdatedBy("tip");
-        persistentDto.setUpdatedTime(LocalDateTime.now());
+        persistentDto.setUpdatedTime(FieldConverter.convert(LocalDateTime.now()));
 
         PersistentDto copied = new BlogEntryDto(persistentDto);
 

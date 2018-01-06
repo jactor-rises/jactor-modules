@@ -1,5 +1,6 @@
-package com.github.jactorrises.client.persistence.dto;
+package com.github.jactorrises.client.dto;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,10 +36,10 @@ class GuestBookDtoTest {
     void shouldGiveValuesToPersistentDto() {
         GuestBookDto persistentDto = new GuestBookDto();
         persistentDto.setCreatedBy("jactor");
-        persistentDto.setCreationTime(LocalDateTime.now());
+        persistentDto.setCreationTime(FieldConverter.convert(LocalDateTime.now()));
         persistentDto.setId(1L);
         persistentDto.setUpdatedBy("tip");
-        persistentDto.setUpdatedTime(LocalDateTime.now());
+        persistentDto.setUpdatedTime(FieldConverter.convert(LocalDateTime.now()));
 
         PersistentDto copied = new GuestBookDto(persistentDto);
 

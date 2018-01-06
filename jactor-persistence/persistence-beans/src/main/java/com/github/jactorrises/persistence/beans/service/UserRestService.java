@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.beans.service;
 
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.persistence.dto.UserDto;
+import com.github.jactorrises.client.dto.UserDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
