@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public abstract class PersistentDto implements Serializable {
-    private Serializable id;
+    private Long id;
     private String createdBy;
     private String creationTime;
     private String updatedBy;
@@ -27,7 +27,7 @@ public abstract class PersistentDto implements Serializable {
         updatedTime = persistent.getUpdatedTime();
     }
 
-    public Serializable getId() {
+    public Long getId() {
         return id;
     }
 
@@ -47,7 +47,7 @@ public abstract class PersistentDto implements Serializable {
         return updatedTime;
     }
 
-    public void setId(Serializable id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

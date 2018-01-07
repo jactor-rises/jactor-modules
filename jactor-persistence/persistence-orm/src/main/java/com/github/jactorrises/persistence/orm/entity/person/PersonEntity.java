@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -27,9 +26,8 @@ public class PersonEntity extends PersistentEntity {
     @Column(name = "FIRST_NAME") private String firstName;
     @Column(name = "LOCALE") private String locale;
     @Column(name = "SURNAME", nullable = false) private String surname;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ADDRESS_ID") private AddressEntity addressEntity;
-    @OneToOne(mappedBy = "personEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL) private UserEntity userEntity;
+    @JoinColumn(name = "ADDRESS_ID") @ManyToOne(cascade = CascadeType.ALL) private AddressEntity addressEntity;
+    @OneToOne(mappedBy = "personEntity", cascade = CascadeType.ALL) private UserEntity userEntity;
 
     PersonEntity() {
     }
@@ -70,9 +68,9 @@ public class PersonEntity extends PersistentEntity {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
                 Objects.equals(description, ((PersonEntity) o).description) &&
-                Objects.equals(getFirstName(), ((PersonEntity) o).firstName) &&
-                Objects.equals(getSurname(), ((PersonEntity) o).surname) &&
-                Objects.equals(getLocale(), ((PersonEntity) o).getLocale());
+                Objects.equals(firstName, ((PersonEntity) o).firstName) &&
+                Objects.equals(surname, ((PersonEntity) o).surname) &&
+                Objects.equals(locale, ((PersonEntity) o).locale);
     }
 
     public PersonDto asDto() {
@@ -98,22 +96,6 @@ public class PersonEntity extends PersistentEntity {
 
     public AddressEntity getAddress() {
         return addressEntity;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public UserEntity getUser() {

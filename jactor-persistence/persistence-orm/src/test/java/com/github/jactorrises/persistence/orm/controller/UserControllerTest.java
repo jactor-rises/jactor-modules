@@ -1,12 +1,15 @@
 package com.github.jactorrises.persistence.orm.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactorrises.client.dto.UserDto;
 import com.github.jactorrises.persistence.orm.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,10 +26,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration
 public class UserControllerTest {
 
     private MockMvc mockMvc;
@@ -37,15 +41,9 @@ public class UserControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userServiceMock)).build();
     }
 
-    @Test public void shouldUseHibernateRepositoryToFindUser() throws Exception {
-        mockMvc.perform(get("/user/jactor")).andExpect(status().isOk());
-
-        verify(userServiceMock).findUsing(new UserName("jactor"));
-    }
-
     @Test public void shouldNotFindUser() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/user/someone"))
-                .andExpect(status().isOk())
+        MvcResult mvcResult = mockMvc.perform(get("/user/find/someone"))
+                .andExpect(status().isNoContent())
                 .andReturn();
 
         assertThat(mvcResult.getResponse().getContentAsString())
@@ -55,7 +53,7 @@ public class UserControllerTest {
     @Test public void shouldFindUser() throws Exception {
         when(userServiceMock.findUsing(any(UserName.class))).thenAnswer(
                 invocationOnMock -> Optional.of(
-                        aUser().withUserName("someone").with(
+                        aUser().withUserName("jactor").with(
                                 aPerson().with(
                                         anAddress()
                                 )
@@ -63,17 +61,53 @@ public class UserControllerTest {
                 )
         );
 
-        MvcResult mvcResult = mockMvc.perform(get("/user/someone"))
+        MvcResult mvcResult = mockMvc.perform(get("/user/find/jactor"))
                 .andExpect(status().isOk())
                 .andReturn();
 
         assertThat(mvcResult.getResponse().getContentAsString())
-                .contains("someone")
+                .contains("jactor")
                 .contains("person")
                 .contains("address");
+
+        verify(userServiceMock).findUsing(new UserName("jactor"));
     }
 
-    @Configuration
-    class TestConfig {
+    @Test public void shouldFetchUser() throws Exception {
+        mockMvc.perform(get("/user/get/1")).andExpect(status().isOk());
+
+        verify(userServiceMock).fetch(1L);
+    }
+
+    @Test public void shouldPersistUser() throws Exception {
+        UserDto userDto = new UserDto();
+        UserDto savedUserDto = new UserDto();
+        savedUserDto.setId(110L);
+
+        when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(savedUserDto);
+
+        mockMvc.perform(post("/user/persist")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writeValueAsBytes(userDto))
+        )
+                .andExpect(header().stringValues("/user/get/110"))
+                .andExpect(status().isCreated());
+
+        verify(userServiceMock).saveOrUpdate(any(UserDto.class));
+    }
+
+    @Test public void shouldUpdateUser() throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setId(110L);
+
+        when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(userDto);
+
+        mockMvc.perform(post("/user/persist")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writeValueAsBytes(userDto))
+        )
+                .andExpect(status().isOk());
+
+        verify(userServiceMock).saveOrUpdate(any(UserDto.class));
     }
 }

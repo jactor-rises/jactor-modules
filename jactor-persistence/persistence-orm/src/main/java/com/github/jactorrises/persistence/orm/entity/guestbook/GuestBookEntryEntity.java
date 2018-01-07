@@ -40,6 +40,12 @@ public class GuestBookEntryEntity extends PersistentEntity {
         persistentEntry = guestBookEntry.copyEntry();
     }
 
+    public GuestBookEntryEntity(GuestBookEntryDto guestBookEntry) {
+        super(guestBookEntry);
+        guestBookEntity = new GuestBookEntity(guestBookEntry.getGuestBook());
+        persistentEntry = new EntryEmbeddable(guestBookEntry.getCreatedTime(), guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
+    }
+
     public GuestBookEntryEntity copy() {
         return new GuestBookEntryEntity(this);
     }
@@ -60,6 +66,10 @@ public class GuestBookEntryEntity extends PersistentEntity {
         guestBookEntry.setGuestBook(guestBook);
 
         return guestBookEntry;
+    }
+
+    public GuestBookEntryDto asDto() {
+        return asDto(guestBookEntity.asDto());
     }
 
     @Override public boolean equals(Object o) {

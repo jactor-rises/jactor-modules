@@ -40,7 +40,7 @@ class UserRestServiceTest {
 
         userRestService.find(new UserName("jactor"));
 
-        verify(restTemplateMock).getForEntity(eq("/user/jactor"), eq(UserDto.class));
+        verify(restTemplateMock).getForEntity(eq("/user/find/jactor"), eq(UserDto.class));
     }
 
     @DisplayName("should use RestTemplate GET to fetch a user")
@@ -50,7 +50,7 @@ class UserRestServiceTest {
 
         userRestService.fetch(1L);
 
-        verify(restTemplateMock).getForEntity(eq("/user/1"), eq(UserDto.class));
+        verify(restTemplateMock).getForEntity(eq("/user/get/1"), eq(UserDto.class));
     }
 
     @DisplayName("should exchange user values with HttpMethod.POST when saving")
@@ -62,19 +62,8 @@ class UserRestServiceTest {
         userRestService.saveOrUpdate(userDto);
 
         verify(restTemplateMock).exchange(
-                eq("/user/save"), eq(HttpMethod.POST), eq(new HttpEntity<>(userDto)), eq(UserDto.class)
+                eq("/user/persist"), eq(HttpMethod.POST), eq(new HttpEntity<>(userDto)), eq(UserDto.class)
         );
     }
 
-    @DisplayName("should update user values with HttpMethod.PUT")
-    @Test void shouldUpdateUserValuesWithHttpPut() {
-        when(restTemplateMock.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(UserDto.class)))
-                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
-
-        UserDto userDto = new UserDto();
-        userDto.setId(1L);
-        userRestService.saveOrUpdate(userDto);
-
-        verify(restTemplateMock).put(eq("/user/update"), eq(userDto));
-    }
 }

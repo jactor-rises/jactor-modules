@@ -29,8 +29,8 @@ public class BlogEntity extends PersistentEntity {
 
     @Column(name = "CREATED") private String created;
     @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity userEntity;
-    @OneToMany(mappedBy = "blogEntity") private Set<BlogEntryEntity> entries = new HashSet<>();
+    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH) private UserEntity userEntity;
+    @OneToMany(mappedBy = "blogEntity", fetch = FetchType.EAGER) private Set<BlogEntryEntity> entries = new HashSet<>();
 
     BlogEntity() {
         created = FieldConverter.convert(LocalDate.now());
@@ -39,7 +39,7 @@ public class BlogEntity extends PersistentEntity {
     private BlogEntity(BlogEntity blogEntity) {
         super(blogEntity);
         created = blogEntity.created;
-        entries = blogEntity.entries.stream().map(BlogEntryEntity::new).collect(toSet());
+        entries = blogEntity.entries.stream().map(BlogEntryEntity::copy).collect(toSet());
         title = blogEntity.getTitle();
         userEntity = blogEntity.copyUser();
     }

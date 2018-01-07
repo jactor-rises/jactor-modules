@@ -34,7 +34,14 @@ public class HibernateRepository {
     }
 
     public <T, I extends Serializable> T fetch(Class<T> entityClass, I id) {
-        return session().load(entityClass, id);
+        T entity = session().load(entityClass, id);
+
+        if (entity == null) {
+            String errorMessage = String.format("%s is an unknown id for %s", String.valueOf(id), entityClass.getName());
+            throw new IllegalStateException(errorMessage);
+        }
+
+        return entity;
     }
 
     private Session session() {

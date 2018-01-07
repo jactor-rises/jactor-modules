@@ -19,18 +19,16 @@ public class BlogRestService extends AbstractRestService {
     }
 
     public BlogDto saveOrUpdate(BlogDto blogDto) {
-        if (blogDto.getId() == null) {
-            return save(blogDto);
-        }
+        ResponseEntity<BlogDto> responseEntity = exchange(
+                baseUrl + "/persist", HttpMethod.POST, new HttpEntity<>(blogDto), BlogDto.class
+        );
 
-        put(baseUrl + "/update", blogDto);
-
-        return blogDto;
+        return bodyOf(responseEntity);
     }
 
-    private BlogDto save(BlogDto blogDto) {
-        ResponseEntity<BlogDto> responseEntity = exchange(
-                baseUrl + "/save", HttpMethod.POST, new HttpEntity<>(blogDto), BlogDto.class
+    public BlogEntryDto saveOrUpdate(BlogEntryDto blogEntryDto) {
+        ResponseEntity<BlogEntryDto> responseEntity = exchange(
+                baseUrl + "/entry/persist", HttpMethod.POST, new HttpEntity<>(blogEntryDto), BlogEntryDto.class
         );
 
         return bodyOf(responseEntity);
@@ -42,8 +40,8 @@ public class BlogRestService extends AbstractRestService {
         return bodyOf(responseEntity);
     }
 
-    public BlogEntryDto fetchEntry(Serializable id) {
-        ResponseEntity<BlogEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + id, BlogEntryDto.class);
+    public BlogEntryDto fetchEntry(Serializable entryId) {
+        ResponseEntity<BlogEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + entryId, BlogEntryDto.class);
 
         return bodyOf(responseEntity);
     }

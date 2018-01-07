@@ -6,7 +6,6 @@ import com.github.jactorrises.persistence.orm.dao.HibernateRepository;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -20,7 +19,15 @@ public class UserService {
         this.hibernateRepository = hibernateRepository;
     }
 
-    @Transactional public Optional<UserDto> findUsing(UserName userName) {
+    public Optional<UserDto> findUsing(UserName userName) {
         return hibernateRepository.findUsing(userName).map(UserEntity::asDto);
+    }
+
+    public UserDto fetch(Long id) {
+        return hibernateRepository.fetch(UserEntity.class, id).asDto();
+    }
+
+    public UserDto saveOrUpdate(UserDto userDto) {
+        return hibernateRepository.saveOrUpdate(new UserEntity(userDto)).asDto();
     }
 }

@@ -27,7 +27,7 @@ public class GuestBookEntity extends PersistentEntity {
 
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY) private UserEntity user;
-    @OneToMany(mappedBy = "guestBookEntity") private Set<GuestBookEntryEntity> entries = new HashSet<>();
+    @OneToMany(mappedBy = "guestBookEntity", fetch = FetchType.EAGER) private Set<GuestBookEntryEntity> entries = new HashSet<>();
 
     GuestBookEntity() {
     }

@@ -21,31 +21,21 @@ public class UserRestService extends AbstractRestService {
 
 
     public UserDto saveOrUpdate(UserDto userDto) {
-        if (userDto.getId() == null) {
-            return save(userDto);
-        }
-
-        put(baseUrl + "/update", userDto);
-
-        return userDto;
-    }
-
-    private UserDto save(UserDto userDto) {
         ResponseEntity<UserDto> responseEntity = exchange(
-                baseUrl + "/save", HttpMethod.POST, new HttpEntity<>(userDto), UserDto.class
+                baseUrl + "/persist", HttpMethod.POST, new HttpEntity<>(userDto), UserDto.class
         );
 
         return bodyOf(responseEntity);
     }
 
     public UserDto fetch(Serializable id) {
-        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + '/' + id, UserDto.class);
+        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + "/get/" + id, UserDto.class);
 
         return bodyOf(responseEntity);
     }
 
     public Optional<UserDto> find(UserName userName) {
-        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + '/' + userName.asString(), UserDto.class);
+        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + "/find/" + userName.asString(), UserDto.class);
 
         return Optional.ofNullable(bodyOf(responseEntity));
     }

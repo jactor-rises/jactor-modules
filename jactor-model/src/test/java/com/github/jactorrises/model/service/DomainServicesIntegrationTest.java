@@ -32,7 +32,7 @@ import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PersistenceOrmApplication.class)
 @Import({JactorModel.class, PersistenceBeans.class})
-@Ignore("#176: rewrite using rest from persistence-orm... ")
+@Ignore("#181: rewrite as spring-boot test in PersistenceOrmApplication")
 public class DomainServicesIntegrationTest {
 
     @Autowired private GuestBookDomainService guestBookDomainService;

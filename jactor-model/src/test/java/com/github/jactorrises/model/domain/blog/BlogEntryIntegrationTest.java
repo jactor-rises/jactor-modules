@@ -9,6 +9,7 @@ import com.github.jactorrises.persistence.beans.service.BlogRestService;
 import com.github.jactorrises.persistence.beans.service.UserRestService;
 import com.github.jactorrises.persistence.orm.PersistenceOrmApplication;
 import org.assertj.core.api.Condition;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {PersistenceOrmApplication.class, PersistenceBeans.class})
 @Transactional
+@Ignore("#181: rewrite as spring-boot test in PersistenceOrmApplication")
 public class BlogEntryIntegrationTest {
 
     @Autowired private BlogRestService blogRestService;

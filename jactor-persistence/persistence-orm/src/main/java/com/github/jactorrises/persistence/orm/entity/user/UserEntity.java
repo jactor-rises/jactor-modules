@@ -11,7 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -25,7 +24,7 @@ public class UserEntity extends PersistentEntity {
 
     @Column(name = "EMAIL") private String emailAddress;
     @Column(name = "USER_NAME", nullable = false) private String userName;
-    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) private PersonEntity personEntity;
+    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL) private PersonEntity personEntity;
     @OneToOne(mappedBy = "user") private GuestBookEntity guestBook;
     @OneToOne(mappedBy = "userEntity") private BlogEntity blog;
 

@@ -34,7 +34,7 @@ public class BlogEntryEntity extends PersistentEntity {
     BlogEntryEntity() {
     }
 
-    public BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
+    private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
         super(blogEntryEntity);
         blogEntity = blogEntryEntity.copyBlog();
         persistentEntry = blogEntryEntity.copyEntry();
@@ -66,6 +66,10 @@ public class BlogEntryEntity extends PersistentEntity {
         blogEntryDto.setEntry(persistentEntry.getEntry());
 
         return blogEntryDto;
+    }
+
+    public BlogEntryDto asDto() {
+        return asDto(blogEntity.asDto());
     }
 
     @Override public boolean equals(Object o) {

@@ -62,23 +62,11 @@ class GuestBookRestServiceTest {
         guestBookRestService.saveOrUpdate(guestBookDto);
 
         verify(restTemplateMock).exchange(
-                eq("/guestBook/save"), eq(HttpMethod.POST), eq(new HttpEntity<>(guestBookDto)), eq(GuestBookDto.class)
+                eq("/guestBook/persist"), eq(HttpMethod.POST), eq(new HttpEntity<>(guestBookDto)), eq(GuestBookDto.class)
         );
     }
 
-    @DisplayName("should update guest book values with HttpMethod.PUT")
-    @Test void shouldUpdateGuestBookValuesWithHttpPut() {
-        when(restTemplateMock.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(GuestBookDto.class)))
-                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
-
-        GuestBookDto guestBookDto = new GuestBookDto();
-        guestBookDto.setId(1L);
-        guestBookRestService.saveOrUpdate(guestBookDto);
-
-        verify(restTemplateMock).put(eq("/guestBook/update"), eq(guestBookDto));
-    }
-
-    @DisplayName("should exchange guest book entry values with HttpMethod.POST when saving")
+    @DisplayName("should exchange guest book entry values with HttpMethod.POST when persisting")
     @Test void shouldExchangeGuestBookEntryValuesWithHttpPostWhenSaveOrUpdate() {
         when(restTemplateMock.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(GuestBookEntryDto.class)))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
@@ -87,19 +75,7 @@ class GuestBookRestServiceTest {
         guestBookRestService.saveOrUpdate(guestBookEntryDto);
 
         verify(restTemplateMock).exchange(
-                eq("/guestBook/entry/save"), eq(HttpMethod.POST), eq(new HttpEntity<>(guestBookEntryDto)), eq(GuestBookEntryDto.class)
+                eq("/guestBook/entry/persist"), eq(HttpMethod.POST), eq(new HttpEntity<>(guestBookEntryDto)), eq(GuestBookEntryDto.class)
         );
-    }
-
-    @DisplayName("should update guest book entry values with HttpMethod.PUT")
-    @Test void shouldUpdateGuestBookEntryaluesWithHttpPut() {
-        when(restTemplateMock.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(GuestBookEntryDto.class)))
-                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
-
-        GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
-        guestBookEntryDto.setId(1L);
-        guestBookRestService.saveOrUpdate(guestBookEntryDto);
-
-        verify(restTemplateMock).put(eq("/guestBook/entry/update"), eq(guestBookEntryDto));
     }
 }

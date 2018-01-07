@@ -1,6 +1,7 @@
 package com.github.jactorrises.persistence.beans.service;
 
 import com.github.jactorrises.client.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogEntryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,17 @@ class BlogRestServiceTest {
         verify(restTemplateMock).getForEntity(eq("/blog/1"), eq(BlogDto.class));
     }
 
-    @DisplayName("should exchange blog values with HttpMethod.POST when saving")
+    @DisplayName("should use RestTemplate GET to fetch a blog entry")
+    @Test void shouldUseRestTemplateGetToFetchBlogEntry() {
+        when(restTemplateMock.getForEntity(anyString(), eq(BlogEntryDto.class)))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
+
+        blogRestService.fetchEntry(1L);
+
+        verify(restTemplateMock).getForEntity(eq("/blog/entry/1"), eq(BlogEntryDto.class));
+    }
+
+    @DisplayName("should exchange blog values with HttpMethod.POST when persisting")
     @Test void shouldExchangeBlogValuesWithHttpPostWhenSaveOrUpdate() {
         when(restTemplateMock.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(BlogDto.class)))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
@@ -51,19 +62,20 @@ class BlogRestServiceTest {
         blogRestService.saveOrUpdate(blogDto);
 
         verify(restTemplateMock).exchange(
-                eq("/blog/save"), eq(HttpMethod.POST), eq(new HttpEntity<>(blogDto)), eq(BlogDto.class)
+                eq("/blog/persist"), eq(HttpMethod.POST), eq(new HttpEntity<>(blogDto)), eq(BlogDto.class)
         );
     }
 
-    @DisplayName("should update blog values with HttpMethod.PUT")
-    @Test void shouldUpdateBlogValuesWithHttpPut() {
-        when(restTemplateMock.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(BlogDto.class)))
+    @DisplayName("should exchange blog entry values with HttpMethod.POST when persisting")
+    @Test void shouldExchangeBlogEntryValuesWithHttpPostWhenSaveOrUpdate() {
+        when(restTemplateMock.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(BlogEntryDto.class)))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        BlogDto blogDto = new BlogDto();
-        blogDto.setId(1L);
-        blogRestService.saveOrUpdate(blogDto);
+        BlogEntryDto blogEntryDto = new BlogEntryDto();
+        blogRestService.saveOrUpdate(blogEntryDto);
 
-        verify(restTemplateMock).put(eq("/blog/update"), eq(blogDto));
+        verify(restTemplateMock).exchange(
+                eq("/blog/entry/persist"), eq(HttpMethod.POST), eq(new HttpEntity<>(blogEntryDto)), eq(BlogEntryDto.class)
+        );
     }
 }

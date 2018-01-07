@@ -19,36 +19,16 @@ public class GuestBookRestService extends AbstractRestService {
     }
 
     public GuestBookDto saveOrUpdate(GuestBookDto guestBookDto) {
-        if (guestBookDto.getId() == null) {
-            return save(guestBookDto);
-        }
-
-        put(baseUrl + "/update", guestBookDto);
-
-        return guestBookDto;
-    }
-
-    public GuestBookEntryDto saveOrUpdate(GuestBookEntryDto guestBookEntryDto) {
-        if (guestBookEntryDto.getId() == null) {
-            return save(guestBookEntryDto);
-        }
-
-        put(baseUrl + "/entry/update", guestBookEntryDto);
-
-        return guestBookEntryDto;
-    }
-
-    private GuestBookDto save(GuestBookDto guestBookDto) {
         ResponseEntity<GuestBookDto> responseEntity = exchange(
-                baseUrl + "/save", HttpMethod.POST, new HttpEntity<>(guestBookDto), GuestBookDto.class
+                baseUrl + "/persist", HttpMethod.POST, new HttpEntity<>(guestBookDto), GuestBookDto.class
         );
 
         return bodyOf(responseEntity);
     }
 
-    private GuestBookEntryDto save(GuestBookEntryDto guestBookEntryDto) {
+    public GuestBookEntryDto saveOrUpdate(GuestBookEntryDto guestBookEntryDto) {
         ResponseEntity<GuestBookEntryDto> responseEntity = exchange(
-                baseUrl + "/entry/save", HttpMethod.POST, new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
+                baseUrl + "/entry/persist", HttpMethod.POST, new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
         );
 
         return bodyOf(responseEntity);
@@ -60,8 +40,8 @@ public class GuestBookRestService extends AbstractRestService {
         return bodyOf(responseEntity);
     }
 
-    public GuestBookEntryDto fetchEntry(Serializable id) {
-        ResponseEntity<GuestBookEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + id, GuestBookEntryDto.class);
+    public GuestBookEntryDto fetchEntry(Serializable entryId) {
+        ResponseEntity<GuestBookEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + entryId, GuestBookEntryDto.class);
 
         return bodyOf(responseEntity);
     }
