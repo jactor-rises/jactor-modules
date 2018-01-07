@@ -14,18 +14,7 @@
     <name>jactor-rises::jactor-model</name>
 
     <properties>
-        <commons-lang3.version>3.6</commons-lang3.version>
-        <java.version>1.8</java.version>
-        <junit-jupiter.version>5.0.2</junit-jupiter.version>
         <junit-platform.version>1.0.2</junit-platform.version>
-        <junit-vintage.version>4.12.2</junit-vintage.version>
-
-        <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
-        <maven-site-plugin.version>3.6</maven-site-plugin.version>
-        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -40,6 +29,11 @@
         <dependency>
             <groupId>com.github.jactor-rises.persistence</groupId>
             <artifactId>persistence-beans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jactor-rises.persistence</groupId>
+            <artifactId>persistence-orm</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- third party -->
@@ -111,12 +105,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-            </plugin>
-
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>

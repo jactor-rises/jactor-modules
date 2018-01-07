@@ -1,8 +1,7 @@
 package com.github.jactorrises.model.domain.address;
 
+import com.github.jactorrises.client.dto.AddressDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.persistence.builder.AddressEntityBuilder;
-import com.github.jactorrises.persistence.client.entity.AddressEntity;
 
 import java.util.Optional;
 
@@ -11,44 +10,44 @@ import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageI
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
-    private final AddressEntityBuilder addressEntityBuilder = AddressEntityBuilder.anAddress();
+    private final AddressDto addressDto = new AddressDto();
 
     AddressBuilder() {
         super(AddressBuilder::validInstance);
     }
 
     public AddressBuilder withCity(String city) {
-        addressEntityBuilder.withCity(city);
+        addressDto.setCity(city);
         return this;
     }
 
     public AddressBuilder withCountry(String country) {
-        addressEntityBuilder.withCountryCode(country);
+        addressDto.setCountry(country);
         return this;
     }
 
     public AddressBuilder withAddressLine1(String addressLine1) {
-        addressEntityBuilder.withAddressLine1(addressLine1);
+        addressDto.setAddressLine1(addressLine1);
         return this;
     }
 
-    AddressBuilder appendAddressLine2(String addressLine2) {
-        addressEntityBuilder.withAddressLine2(addressLine2);
+    AddressBuilder appendAddressLine2(@SuppressWarnings("SameParameterValue") String addressLine2) {
+        addressDto.setAddressLine2(addressLine2);
         return this;
     }
 
-    AddressBuilder appendAddressLine3(String addressLine3) {
-        addressEntityBuilder.withAddressLine3(addressLine3);
+    AddressBuilder appendAddressLine3(@SuppressWarnings("SameParameterValue") String addressLine3) {
+        addressDto.setAddressLine3(addressLine3);
         return this;
     }
 
     public AddressBuilder withZipCode(Integer zipCode) {
-        addressEntityBuilder.withZipCode(zipCode);
+        addressDto.setZipCode(zipCode);
         return this;
     }
 
     @Override protected AddressDomain buildBean() {
-        return new AddressDomain(addressEntityBuilder.build());
+        return new AddressDomain(addressDto);
     }
 
     private static Optional<String> validInstance(AddressDomain addressDomain) {
@@ -59,7 +58,7 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
         );
     }
 
-    public static AddressDomain build(AddressEntity addressEntity) {
-        return new AddressDomain(addressEntity);
+    public static AddressDomain build(AddressDto addressDto) {
+        return new AddressDomain(addressDto);
     }
 }

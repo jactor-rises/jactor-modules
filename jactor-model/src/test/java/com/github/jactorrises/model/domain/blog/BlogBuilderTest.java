@@ -1,14 +1,23 @@
 package com.github.jactorrises.model.domain.blog;
 
+import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.jactorrises.persistence.builder.UserEntityBuilder.aUser;
+import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @DisplayName("The BlogBuilder")
+@ExtendWith(SuppressValidInstanceExtension.class)
 class BlogBuilderTest {
+
+    @BeforeEach
+    void validateBlogBuild() {
+        SuppressValidInstanceExtension.setValidate(BlogDomain.class);
+    }
 
     @DisplayName("should not build a blog without a title")
     @Test void skalIkkeByggeUtenTittel() {

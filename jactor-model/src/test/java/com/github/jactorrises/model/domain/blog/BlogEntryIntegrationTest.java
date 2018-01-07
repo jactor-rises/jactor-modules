@@ -1,21 +1,23 @@
 package com.github.jactorrises.model.domain.blog;
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.persistence.client.entity.BlogEntity;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
-import com.github.jactorrises.persistence.entity.blog.BlogEntryOrm;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.github.jactorrises.client.converter.FieldConverter;
+import com.github.jactorrises.client.dto.BlogDto;
+import com.github.jactorrises.client.dto.BlogEntryDto;
+import com.github.jactorrises.client.dto.UserDto;
+import com.github.jactorrises.persistence.beans.PersistenceBeans;
+import com.github.jactorrises.persistence.beans.service.BlogRestService;
+import com.github.jactorrises.persistence.beans.service.UserRestService;
+import com.github.jactorrises.persistence.orm.PersistenceOrmApplication;
+import org.assertj.core.api.Condition;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
 import static com.github.jactorrises.model.domain.blog.BlogDomain.aBlog;
@@ -25,37 +27,45 @@ import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = JactorModel.class)
+@SpringBootTest(classes = {PersistenceOrmApplication.class, PersistenceBeans.class})
 @Transactional
-@Ignore("#171: spring context")
+@Ignore("#181: rewrite as spring-boot test in PersistenceOrmApplication")
 public class BlogEntryIntegrationTest {
 
-    @SuppressWarnings("SpringJavaAutowiringInspection") // located in jactor-persistence-orm...
-    @Autowired private SessionFactory sessionFactory;
+    @Autowired private BlogRestService blogRestService;
+
+    @Autowired private UserRestService userRestService;
 
     @Test public void willSaveBlogEntryEntityToThePersistentLayer() {
-        Serializable id = session().save(aBlogEntry().with(aPersistedBlogTitled("my blog")).withEntry("some").withCreatorName("thing").build().getPersistence());
+        BlogDto blog = blogRestService.saveOrUpdate(
+                createBlogForPersistedUser("my blog", "some entry", "me")
+        );
 
-        session().flush();
-        session().clear();
-
-        BlogEntryOrm blogEntry = session().get(BlogEntryOrm.class, id);
+        BlogEntryDto blogEntry = blog.getEntries().iterator().next();
 
         assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
-        assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").isNotNull();
-        assertThat(blogEntry.getCreatorName()).as("entry.creator").isEqualTo(new Name("thing"));
-        assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("some");
+        assertThat(blogEntry.getCreatorName()).as("entry.creator").isEqualTo("me");
+        assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").is(withinThisMinute());
+        assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("some entry");
     }
 
-    private BlogEntity aPersistedBlogTitled(@SuppressWarnings("SameParameterValue") String blogTitled) {
-        BlogEntity blogEntity = aBlog().with(aPersistedUser()).withTitleAs(blogTitled).build().getPersistence();
-        session().save(blogEntity);
-
-        return blogEntity;
+    private Condition<? super String> withinThisMinute() {
+        return new Condition<>(
+                localDateTime -> LocalDateTime.now().withNano(0).withSecond(0).isBefore(FieldConverter.convertDateTime(localDateTime)),
+                "within this minute"
+        );
     }
 
-    private UserEntity aPersistedUser() {
-        UserEntity userEntity = aUser().withUserName("titten")
+    @SuppressWarnings("SameParameterValue") private BlogDto createBlogForPersistedUser(String blogTitle, String entry, String creatorName) {
+        UserDto userDto = aPersistedUser(creatorName);
+
+        return aBlog().with(userDto).withTitleAs(blogTitle).with(
+                aBlogEntry().withEntry(entry).withCreatorName(creatorName)
+        ).build().getDto();
+    }
+
+    private UserDto aPersistedUser(String creatorName) {
+        UserDto userDto = aUser().withUserName(creatorName)
                 .withEmailAddress("jactor@rises")
                 .with(aPerson()
                         .withDescription("description")
@@ -66,14 +76,8 @@ public class BlogEntryIntegrationTest {
                                 .withZipCode(1234)
                         )
                 )
-                .build().getPersistence();
+                .build().getDto();
 
-        session().save(userEntity);
-
-        return userEntity;
-    }
-
-    private Session session() {
-        return sessionFactory.getCurrentSession();
+        return userRestService.saveOrUpdate(userDto);
     }
 }

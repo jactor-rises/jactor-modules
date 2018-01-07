@@ -4,23 +4,19 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.dao.PersistentDao;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
+import com.github.jactorrises.persistence.beans.service.UserRestService;
 
 import java.util.Optional;
 
 public class UserFacadeImpl implements UserFacade {
 
-    private final PersistentDao persistentDao;
+    private final UserRestService userRestService;
 
-    public UserFacadeImpl(PersistentDao persistentDao) {
-        this.persistentDao = persistentDao;
+    public UserFacadeImpl(UserRestService userRestService) {
+        this.userRestService = userRestService;
     }
 
     @Override public Optional<User> findUsing(UserName userName) {
-        Optional<UserEntity> userEntityOptional = persistentDao.findUsing(userName);
-
-        return userEntityOptional
-                .map(UserDomain::new);
+        return userRestService.find(userName).map(UserDomain::new);
     }
 }

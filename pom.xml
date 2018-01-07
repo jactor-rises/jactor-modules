@@ -9,13 +9,9 @@
     <packaging>pom</packaging>
     <url>https://github.com/jactor-rises</url>
 
-    <prerequisites>
-        <maven>3.5</maven>
-    </prerequisites>
-
     <properties>
         <apache.commons.lang3.version>3.7</apache.commons.lang3.version>
-        <assertj.version>3.8.0</assertj.version>
+        <assertj.version>3.9.0</assertj.version>
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.2</junit-jupiter.version>
@@ -91,6 +87,17 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.github.jactor-rises.persistence</groupId>
+                <artifactId>persistence-orm</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jactor-rises</groupId>
+                <artifactId>jactor-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.jactor-rises</groupId>
                 <artifactId>jactor-test</artifactId>
                 <version>${project.version}</version>
@@ -106,15 +113,9 @@
 
             <!-- testing -->
             <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit-jupiter.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.assertj</groupId>
@@ -122,10 +123,19 @@
                 <version>${assertj.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit-jupiter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit-jupiter.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <!-- Import dependency management from Spring Boot -->

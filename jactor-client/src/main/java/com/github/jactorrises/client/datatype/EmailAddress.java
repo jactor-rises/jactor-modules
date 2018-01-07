@@ -36,16 +36,16 @@ public class EmailAddress {
         this.suffix = suffix;
     }
 
+    public boolean isSameAs(UserName userName) {
+        return userName != null && userName.equals(new UserName(asString()));
+    }
+
     @Override public int hashCode() {
         return hash(prefix, suffix);
     }
 
     @Override public boolean equals(Object obj) {
-        return obj == this || isSameClasses(obj) && haveEqualValues((EmailAddress) obj);
-    }
-
-    private boolean isSameClasses(Object obj) {
-        return obj != null && obj.getClass().equals(this.getClass());
+        return obj == this || obj != null && obj.getClass().equals(this.getClass()) && haveEqualValues((EmailAddress) obj);
     }
 
     private boolean haveEqualValues(EmailAddress obj) {

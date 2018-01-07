@@ -2,47 +2,47 @@ package com.github.jactorrises.model.domain.person;
 
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.Person;
+import com.github.jactorrises.client.dto.PersonDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.address.AddressDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.entity.PersonEntity;
 
 import java.util.Locale;
 
-public class PersonDomain extends PersistentDomain<Long> implements Person {
+public class PersonDomain extends PersistentDomain implements Person {
 
-    private final PersonEntity personEntity;
+    private final PersonDto personDto;
 
-    public PersonDomain(PersonEntity personEntity) {
-        this.personEntity = personEntity;
+    public PersonDomain(PersonDto personDto) {
+        this.personDto = personDto;
     }
 
     @Override public String getDescription() {
-        return personEntity.getDescription();
+        return personDto.getDescription();
     }
 
     @Override public UserDomain getUser() {
-        return new UserDomain(personEntity.getUser());
+        return new UserDomain(personDto.getUser());
     }
 
     @Override public Name getFirstName() {
-        return personEntity.getFirstName();
+        return personDto.getFirstName() != null ? new Name(personDto.getFirstName()) : null;
     }
 
     @Override public Name getSurname() {
-        return personEntity.getSurname();
+        return personDto.getSurname() != null ? new Name(personDto.getSurname()) : null;
     }
 
     @Override public Locale getLocale() {
-        return personEntity.getLocale();
+        return personDto.getLocale() != null ? new Locale(personDto.getLocale()) : null;
     }
 
     @Override public AddressDomain getAddress() {
-        return personEntity.getAddress() != null ? new AddressDomain(personEntity.getAddress()) : null;
+        return personDto.getAddress() != null ? new AddressDomain(personDto.getAddress()) : null;
     }
 
-    @Override public PersonEntity getPersistence() {
-        return personEntity;
+    @Override public PersonDto getDto() {
+        return personDto;
     }
 
     public static PersonBuilder aPerson() {

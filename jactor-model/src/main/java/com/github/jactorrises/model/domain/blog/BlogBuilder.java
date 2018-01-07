@@ -1,41 +1,46 @@
 package com.github.jactorrises.model.domain.blog;
 
+import com.github.jactorrises.client.dto.BlogDto;
+import com.github.jactorrises.client.dto.UserDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.persistence.builder.UserEntityBuilder;
-import com.github.jactorrises.persistence.client.entity.BlogEntity;
-import com.github.jactorrises.persistence.client.entity.UserEntity;
-import com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder;
+import com.github.jactorrises.model.domain.user.UserBuilder;
 
 import java.util.Optional;
 
 import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
-import static com.github.jactorrises.persistence.entity.blog.BlogEntityBuilder.aBlog;
 
 public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
-    private final BlogEntityBuilder blogEntityBuilder = aBlog();
+    private final BlogDto blogDto = new BlogDto();
 
     BlogBuilder() {
         super(BlogBuilder::validateInstance);
     }
 
     BlogBuilder withTitleAs(String title) {
-        blogEntityBuilder.withTitle(title);
+        blogDto.setTitle(title);
         return this;
     }
 
-    public BlogBuilder with(UserEntity userEntity) {
-        blogEntityBuilder.with(userEntity);
+    public BlogBuilder with(UserDto userDto) {
+        blogDto.setUser(userDto);
         return this;
     }
 
-    public BlogBuilder with(UserEntityBuilder userEntityBuilder) {
-        return with(userEntityBuilder.build());
+    public BlogBuilder with(UserBuilder userBuilder) {
+        return with(userBuilder.build().getDto());
+    }
+
+    public BlogBuilder with(BlogEntryBuilder blogEntryBuilder) {
+        blogEntryBuilder.with(blogDto);
+        blogDto.getEntries().add(blogEntryBuilder.build().getDto());
+
+        return this;
     }
 
     @Override protected BlogDomain buildBean() {
-        return new BlogDomain(blogEntityBuilder.build());
+        return new BlogDomain(blogDto);
     }
 
     private static Optional<String> validateInstance(BlogDomain blogDomain) {
@@ -45,7 +50,7 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
         );
     }
 
-    public static BlogDomain build(BlogEntity blogEntity) {
-        return new BlogDomain(blogEntity);
+    public static BlogDomain build(BlogDto blogDto) {
+        return new BlogDomain(blogDto);
     }
 }

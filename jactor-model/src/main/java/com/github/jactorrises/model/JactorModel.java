@@ -1,43 +1,32 @@
 package com.github.jactorrises.model;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
+import com.github.jactorrises.client.facade.UserFacade;
+import com.github.jactorrises.model.facade.UserFacadeImpl;
+import com.github.jactorrises.model.service.GuestBookDomainService;
+import com.github.jactorrises.model.service.UserDomainService;
+import com.github.jactorrises.persistence.beans.PersistenceBeans;
+import com.github.jactorrises.persistence.beans.service.GuestBookRestService;
+import com.github.jactorrises.persistence.beans.service.UserRestService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import static java.util.Arrays.sort;
-
-@SpringBootApplication
+@Configuration
+@Import({PersistenceBeans.class})
 public class JactorModel {
-    public static void main(String... args) {
-        display(SpringApplication.run(JactorModel.class, args));
+
+    @Bean
+    public UserFacade userFacade(UserRestService userRestService) {
+        return new UserFacadeImpl(userRestService);
     }
 
-    private static void display(ApplicationContext ctx) {
-        String[] beanDefinitions = ctx.getBeanDefinitionNames();
-        sort(beanDefinitions);
-
-        System.out.println(namesOf(beanDefinitions));
+    @Bean
+    public GuestBookDomainService guestBookDomainService(GuestBookRestService guestBookRestService) {
+        return new GuestBookDomainService(guestBookRestService);
     }
 
-    private static StringBuilder namesOf(String[] beanNames) {
-        int count = 0;
-        StringBuilder names = new StringBuilder();
-
-        for (String name : beanNames) {
-            if (count != 0) {
-                names.append(", ");
-            }
-
-            count++;
-
-            if (count == 5 || name.contains(".")) {
-                names.append("\n-> ");
-                count = 0;
-            }
-
-            names.append(name);
-        }
-
-        return names;
+    @Bean
+    public UserDomainService userDaoService(UserRestService userRestService) {
+        return new UserDomainService(userRestService);
     }
 }

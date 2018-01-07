@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.Name;
 
 import java.util.Locale;
 
-public interface Person extends Persistent<Long> {
+public interface Person extends Persistent {
 
     String getDescription();
 

@@ -1,26 +1,24 @@
 package com.github.jactorrises.model.domain.person;
 
+import com.github.jactorrises.client.dto.PersonDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.model.domain.address.AddressBuilder;
 import com.github.jactorrises.model.domain.address.AddressDomain;
-import com.github.jactorrises.persistence.builder.PersonEntityBuilder;
-import com.github.jactorrises.persistence.entity.person.PersonOrm;
 
 import java.util.Optional;
 
 import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
 import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactorrises.persistence.builder.PersonEntityBuilder.aPerson;
 
 public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
-    private PersonEntityBuilder personEntityBuilder = aPerson();
+    private PersonDto personDto = new PersonDto();
 
     PersonBuilder() {
         super(PersonBuilder::validateInstance);
     }
 
     public PersonBuilder with(AddressDomain address) {
-        personEntityBuilder.with(address.getPersistence());
+        personDto.setAddress(address.getDto());
         return this;
     }
 
@@ -29,27 +27,27 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
     }
 
     public PersonBuilder withDescription(String description) {
-        personEntityBuilder.withDescription(description);
+        personDto.setDescription(description);
         return this;
     }
 
     PersonBuilder withFirstName(String firstName) {
-        personEntityBuilder.withFirstName(firstName);
+        personDto.setFirstName(firstName);
         return this;
     }
 
     public PersonBuilder withSurname(String surname) {
-        personEntityBuilder.withSurname(surname);
+        personDto.setSurname(surname);
         return this;
     }
 
     PersonBuilder withLocale(String locale) {
-        personEntityBuilder.withLocale(locale);
+        personDto.setLocale(locale);
         return this;
     }
 
     @Override protected PersonDomain buildBean() {
-        return new PersonDomain(personEntityBuilder.build());
+        return new PersonDomain(personDto);
     }
 
     private static Optional<String> validateInstance(PersonDomain personDomain) {
@@ -59,7 +57,7 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
         );
     }
 
-    public static PersonDomain build(PersonOrm person) {
+    public static PersonDomain build(PersonDto person) {
         return new PersonDomain(person);
     }
 }

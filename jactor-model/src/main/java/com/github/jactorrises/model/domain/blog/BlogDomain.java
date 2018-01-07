@@ -1,34 +1,42 @@
 package com.github.jactorrises.model.domain.blog;
 
+import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.domain.Blog;
+import com.github.jactorrises.client.domain.BlogEntry;
+import com.github.jactorrises.client.dto.BlogDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.entity.BlogEntity;
 
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class BlogDomain extends PersistentDomain<Long> implements Blog {
+public class BlogDomain extends PersistentDomain implements Blog {
 
-    private final BlogEntity blogEntity;
+    private final BlogDto blogDto;
 
-    BlogDomain(BlogEntity blogEntity) {
-        this.blogEntity = blogEntity;
+    public BlogDomain(BlogDto blogDto) {
+        this.blogDto = blogDto;
     }
 
     @Override public String getTitle() {
-        return blogEntity.getTitle();
+        return blogDto.getTitle();
     }
 
     @Override public UserDomain getUser() {
-        return blogEntity.getUser() != null ? new UserDomain(blogEntity.getUser()) : null;
+        return blogDto.getUser() != null ? new UserDomain(blogDto.getUser()) : null;
     }
 
     @Override public LocalDate getCreated() {
-        return getPersistence().getCreated();
+        return FieldConverter.convertDate(getDto().getCreated());
     }
 
-    @Override public BlogEntity getPersistence() {
-        return blogEntity;
+    @Override public Set<BlogEntry> getEntries() {
+        return blogDto.getEntries().stream().map(BlogEntryDomain::new).collect(Collectors.toSet());
+    }
+
+    @Override public BlogDto getDto() {
+        return blogDto;
     }
 
     static BlogBuilder aBlog() {

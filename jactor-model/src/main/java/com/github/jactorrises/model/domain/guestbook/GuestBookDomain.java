@@ -1,28 +1,36 @@
 package com.github.jactorrises.model.domain.guestbook;
 
 import com.github.jactorrises.client.domain.GuestBook;
+import com.github.jactorrises.client.domain.GuestBookEntry;
+import com.github.jactorrises.client.dto.GuestBookDto;
 import com.github.jactorrises.model.domain.PersistentDomain;
 import com.github.jactorrises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.client.entity.GuestBookEntity;
 
-public class GuestBookDomain extends PersistentDomain<Long> implements GuestBook {
+import java.util.Set;
+import java.util.stream.Collectors;
 
-    private final GuestBookEntity guestBookEntity;
+public class GuestBookDomain extends PersistentDomain implements GuestBook {
 
-    public GuestBookDomain(GuestBookEntity guestBookEntity) {
-        this.guestBookEntity = guestBookEntity;
+    private final GuestBookDto guestBookDto;
+
+    public GuestBookDomain(GuestBookDto guestBookDto) {
+        this.guestBookDto = guestBookDto;
     }
 
     @Override public String getTitle() {
-        return guestBookEntity.getTitle();
+        return guestBookDto.getTitle();
     }
 
     @Override public UserDomain getUser() {
-        return guestBookEntity.getUser() != null ? new UserDomain(guestBookEntity.getUser()) : null;
+        return guestBookDto.getUser() != null ? new UserDomain(guestBookDto.getUser()) : null;
     }
 
-    @Override public GuestBookEntity getPersistence() {
-        return guestBookEntity;
+    @Override public Set<GuestBookEntry> getEntries() {
+        return guestBookDto.getEntries().stream().map(GuestBookEntryDomain::new).collect(Collectors.toSet());
+    }
+
+    @Override public GuestBookDto getDto() {
+        return guestBookDto;
     }
 
     public static GuestBookBuilder aGuestBook() {
