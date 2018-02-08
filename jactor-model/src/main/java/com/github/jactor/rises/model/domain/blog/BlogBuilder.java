@@ -1,7 +1,7 @@
 package com.github.jactor.rises.model.domain.blog;
 
-import com.github.jactorrises.client.dto.BlogDto;
-import com.github.jactorrises.client.dto.UserDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 import com.github.jactor.rises.model.domain.user.UserBuilder;
 

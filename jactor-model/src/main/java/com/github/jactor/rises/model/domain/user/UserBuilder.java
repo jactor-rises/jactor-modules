@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.domain.user;
 
-import com.github.jactorrises.client.dto.UserDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 import com.github.jactor.rises.model.domain.person.PersonBuilder;
 import com.github.jactor.rises.model.domain.person.PersonDomain;

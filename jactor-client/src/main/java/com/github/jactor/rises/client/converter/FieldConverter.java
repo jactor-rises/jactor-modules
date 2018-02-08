@@ -1,4 +1,4 @@
-package com.github.jactorrises.client.converter;
+package com.github.jactor.rises.client.converter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

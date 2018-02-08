@@ -1,6 +1,6 @@
-package com.github.jactorrises.client.domain;
+package com.github.jactor.rises.client.domain;
 
-import com.github.jactorrises.client.datatype.Name;
+import com.github.jactor.rises.client.datatype.Name;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

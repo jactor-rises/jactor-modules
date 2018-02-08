@@ -1,9 +1,9 @@
 package com.github.jactor.rises.model.domain.blog;
 
-import com.github.jactorrises.client.converter.FieldConverter;
-import com.github.jactorrises.client.dto.BlogDto;
-import com.github.jactorrises.client.dto.BlogEntryDto;
-import com.github.jactorrises.client.dto.UserDto;
+import com.github.jactor.rises.client.converter.FieldConverter;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.beans.PersistenceBeans;
 import com.github.jactor.rises.persistence.beans.service.BlogRestService;
 import com.github.jactor.rises.persistence.beans.service.UserRestService;

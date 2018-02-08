@@ -1,4 +1,4 @@
-package com.github.jactorrises.client.datatype;
+package com.github.jactor.rises.client.datatype;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

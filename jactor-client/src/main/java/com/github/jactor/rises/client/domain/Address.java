@@ -1,6 +1,6 @@
-package com.github.jactorrises.client.domain;
+package com.github.jactor.rises.client.domain;
 
-import com.github.jactorrises.client.datatype.Country;
+import com.github.jactor.rises.client.datatype.Country;
 
 public interface Address extends Persistent {
 

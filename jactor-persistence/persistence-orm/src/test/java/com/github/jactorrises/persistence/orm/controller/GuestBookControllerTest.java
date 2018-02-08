@@ -3,8 +3,8 @@ package com.github.jactorrises.persistence.orm.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jactorrises.client.dto.GuestBookDto;
-import com.github.jactorrises.client.dto.GuestBookEntryDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactorrises.persistence.orm.service.GuestBookService;
 import org.junit.Before;
 import org.junit.Test;

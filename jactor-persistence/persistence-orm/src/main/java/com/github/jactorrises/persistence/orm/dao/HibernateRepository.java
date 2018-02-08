@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.dao;
 
-import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

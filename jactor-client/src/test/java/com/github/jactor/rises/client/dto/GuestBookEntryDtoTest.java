@@ -1,6 +1,6 @@
-package com.github.jactorrises.client.dto;
+package com.github.jactor.rises.client.dto;
 
-import com.github.jactorrises.client.converter.FieldConverter;
+import com.github.jactor.rises.client.converter.FieldConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

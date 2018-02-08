@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.entity;
 
-import com.github.jactorrises.client.converter.FieldConverter;
-import com.github.jactorrises.client.dto.PersistentDto;
+import com.github.jactor.rises.client.converter.FieldConverter;
+import com.github.jactor.rises.client.dto.PersistentDto;
 import com.github.jactor.rises.commons.time.Now;
 
 import javax.persistence.Column;

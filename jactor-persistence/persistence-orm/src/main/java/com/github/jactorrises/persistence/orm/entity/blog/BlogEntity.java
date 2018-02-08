@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.entity.blog;
 
-import com.github.jactorrises.client.converter.FieldConverter;
-import com.github.jactorrises.client.dto.BlogDto;
+import com.github.jactor.rises.client.converter.FieldConverter;
+import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;

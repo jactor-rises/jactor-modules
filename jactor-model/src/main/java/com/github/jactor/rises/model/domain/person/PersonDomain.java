@@ -1,8 +1,8 @@
 package com.github.jactor.rises.model.domain.person;
 
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.domain.Person;
-import com.github.jactorrises.client.dto.PersonDto;
+import com.github.jactor.rises.client.datatype.Name;
+import com.github.jactor.rises.client.domain.Person;
+import com.github.jactor.rises.client.dto.PersonDto;
 import com.github.jactor.rises.model.domain.PersistentDomain;
 import com.github.jactor.rises.model.domain.address.AddressDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;

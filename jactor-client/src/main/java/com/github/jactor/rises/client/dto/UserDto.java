@@ -1,4 +1,4 @@
-package com.github.jactorrises.client.dto;
+package com.github.jactor.rises.client.dto;
 
 import java.io.Serializable;
 

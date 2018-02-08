@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.domain.address;
 
-import com.github.jactorrises.client.dto.AddressDto;
+import com.github.jactor.rises.client.dto.AddressDto;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 
 import java.util.Optional;

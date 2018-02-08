@@ -1,8 +1,8 @@
 package com.github.jactor.rises.model.domain.guestbook;
 
-import com.github.jactorrises.client.domain.GuestBook;
-import com.github.jactorrises.client.domain.GuestBookEntry;
-import com.github.jactorrises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.domain.GuestBook;
+import com.github.jactor.rises.client.domain.GuestBookEntry;
+import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.model.domain.PersistentDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
 

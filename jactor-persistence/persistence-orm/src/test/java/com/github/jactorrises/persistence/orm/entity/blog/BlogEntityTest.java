@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.blog;
 
-import com.github.jactorrises.client.converter.FieldConverter;
+import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactorrises.persistence.orm.entity.DateTextEmbeddable;
 import com.github.jactor.rises.test.extension.NowAsPureDateExtension;
 import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;

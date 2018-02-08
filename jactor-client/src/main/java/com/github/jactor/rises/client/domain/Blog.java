@@ -1,4 +1,4 @@
-package com.github.jactorrises.client.domain;
+package com.github.jactor.rises.client.domain;
 
 import java.time.LocalDate;
 import java.util.Set;

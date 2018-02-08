@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity;
 
-import com.github.jactorrises.client.converter.FieldConverter;
+import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.commons.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

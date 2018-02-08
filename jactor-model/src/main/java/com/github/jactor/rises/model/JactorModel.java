@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model;
 
-import com.github.jactorrises.client.facade.UserFacade;
+import com.github.jactor.rises.client.facade.UserFacade;
 import com.github.jactor.rises.model.facade.UserFacadeImpl;
 import com.github.jactor.rises.model.service.GuestBookDomainService;
 import com.github.jactor.rises.model.service.UserDomainService;

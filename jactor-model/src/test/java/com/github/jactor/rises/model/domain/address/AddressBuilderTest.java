@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.domain.address;
 
-import com.github.jactorrises.client.datatype.Country;
+import com.github.jactor.rises.client.datatype.Country;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

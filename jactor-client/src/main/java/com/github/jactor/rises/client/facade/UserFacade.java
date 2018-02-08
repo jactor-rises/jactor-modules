@@ -1,7 +1,7 @@
-package com.github.jactorrises.client.facade;
+package com.github.jactor.rises.client.facade;
 
-import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.client.domain.User;
+import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.domain.User;
 
 import java.util.Optional;
 

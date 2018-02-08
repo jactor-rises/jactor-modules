@@ -1,8 +1,8 @@
 package com.github.jactor.rises.model.service;
 
-import com.github.jactorrises.client.datatype.EmailAddress;
-import com.github.jactorrises.client.datatype.Name;
-import com.github.jactorrises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.EmailAddress;
+import com.github.jactor.rises.client.datatype.Name;
+import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.model.JactorModel;
 import com.github.jactor.rises.model.domain.address.AddressBuilder;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;

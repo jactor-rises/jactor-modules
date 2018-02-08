@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.beans.service;
 
-import com.github.jactorrises.client.dto.GuestBookDto;
-import com.github.jactorrises.client.dto.GuestBookEntryDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
