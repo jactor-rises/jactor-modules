@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.beans.service;
+package com.github.jactor.rises.persistence.beans.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

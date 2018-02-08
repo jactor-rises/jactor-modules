@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.beans.service;
+package com.github.jactor.rises.persistence.beans.service;
 
 import com.github.jactorrises.client.dto.BlogDto;
 import com.github.jactorrises.client.dto.BlogEntryDto;

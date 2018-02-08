@@ -4,7 +4,7 @@ import com.github.jactorrises.client.dto.GuestBookDto;
 import com.github.jactorrises.client.dto.GuestBookEntryDto;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactorrises.persistence.beans.service.GuestBookRestService;
+import com.github.jactor.rises.persistence.beans.service.GuestBookRestService;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;

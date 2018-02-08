@@ -4,7 +4,7 @@ import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.facade.UserFacade;
 import com.github.jactor.rises.model.domain.user.UserDomain;
-import com.github.jactorrises.persistence.beans.service.UserRestService;
+import com.github.jactor.rises.persistence.beans.service.UserRestService;
 
 import java.util.Optional;
 

@@ -1,8 +1,8 @@
-package com.github.jactorrises.persistence.beans;
+package com.github.jactor.rises.persistence.beans;
 
-import com.github.jactorrises.persistence.beans.service.BlogRestService;
-import com.github.jactorrises.persistence.beans.service.GuestBookRestService;
-import com.github.jactorrises.persistence.beans.service.UserRestService;
+import com.github.jactor.rises.persistence.beans.service.BlogRestService;
+import com.github.jactor.rises.persistence.beans.service.GuestBookRestService;
+import com.github.jactor.rises.persistence.beans.service.UserRestService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
