@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.entity.guestbook;
 
-import com.github.jactorrises.client.converter.FieldConverter;
-import com.github.jactorrises.test.extension.NowAsPureDateExtension;
+import com.github.jactor.rises.client.converter.FieldConverter;
+import com.github.jactor.rises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

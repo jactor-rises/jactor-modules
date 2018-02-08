@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.guestbook;
 
-import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.AbstractBuilder;
 
 public class GuestBookEntryEntityBuilder extends AbstractBuilder<GuestBookEntryEntity> {
     private GuestBookEntity guestBookEntity;

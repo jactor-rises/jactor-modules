@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.address;
 
-import com.github.jactorrises.client.datatype.Country;
+import com.github.jactor.rises.client.datatype.Country;
 
 import java.util.Objects;
 

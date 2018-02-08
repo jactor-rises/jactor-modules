@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.controller;
 
-import com.github.jactorrises.client.dto.BlogDto;
-import com.github.jactorrises.client.dto.BlogEntryDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.orm.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

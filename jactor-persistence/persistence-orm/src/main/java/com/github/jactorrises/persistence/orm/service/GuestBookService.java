@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.service;
 
-import com.github.jactorrises.client.dto.GuestBookDto;
-import com.github.jactorrises.client.dto.GuestBookEntryDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactorrises.persistence.orm.dao.HibernateRepository;
 import com.github.jactorrises.persistence.orm.entity.guestbook.GuestBookEntity;
 import com.github.jactorrises.persistence.orm.entity.guestbook.GuestBookEntryEntity;

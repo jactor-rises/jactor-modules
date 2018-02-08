@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.person;
 
-import com.github.jactorrises.client.dto.PersonDto;
+import com.github.jactor.rises.client.dto.PersonDto;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import com.github.jactorrises.persistence.orm.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;

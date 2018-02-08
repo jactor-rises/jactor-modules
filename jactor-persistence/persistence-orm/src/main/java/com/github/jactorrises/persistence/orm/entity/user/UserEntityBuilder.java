@@ -1,14 +1,14 @@
 package com.github.jactorrises.persistence.orm.entity.user;
 
-import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.persistence.orm.entity.person.PersonEntity;
 import com.github.jactorrises.persistence.orm.entity.person.PersonEntityBuilder;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
+import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
     private String emailAddress;

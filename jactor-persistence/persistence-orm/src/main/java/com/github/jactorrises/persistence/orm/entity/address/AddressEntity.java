@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.address;
 
-import com.github.jactorrises.client.dto.AddressDto;
+import com.github.jactor.rises.client.dto.AddressDto;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -94,11 +94,11 @@ public class AddressEntity extends PersistentEntity {
         return addressLine1;
     }
 
-    public String getAddressLine2() {
+    private String getAddressLine2() {
         return addressLine2;
     }
 
-    public String getAddressLine3() {
+    private String getAddressLine3() {
         return addressLine3;
     }
 
@@ -106,7 +106,7 @@ public class AddressEntity extends PersistentEntity {
         return city;
     }
 
-    public String getCountry() {
+    private String getCountry() {
         return country;
     }
 

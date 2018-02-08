@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.user;
 
-import com.github.jactorrises.client.dto.UserDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
 import com.github.jactorrises.persistence.orm.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.orm.entity.guestbook.GuestBookEntity;

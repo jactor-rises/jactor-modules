@@ -1,7 +1,7 @@
 package com.github.jactorrises.persistence.orm.service;
 
-import com.github.jactorrises.client.dto.BlogDto;
-import com.github.jactorrises.client.dto.BlogEntryDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactorrises.persistence.orm.dao.HibernateRepository;
 import com.github.jactorrises.persistence.orm.entity.blog.BlogEntity;
 import com.github.jactorrises.persistence.orm.entity.blog.BlogEntryEntity;
