@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.address;
 
-import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.AbstractBuilder;
 
 public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
 

@@ -2,13 +2,13 @@ package com.github.jactor.rises.model.domain.blog;
 
 import com.github.jactorrises.client.dto.BlogDto;
 import com.github.jactorrises.client.dto.BlogEntryDto;
-import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.commons.builder.ValidInstance;
+import com.github.jactor.rises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.ValidInstance;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public final class BlogEntryBuilder extends AbstractBuilder<BlogEntryDomain> {
     private final BlogEntryDto blogEntryDto = new BlogEntryDto();

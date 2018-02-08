@@ -1,14 +1,14 @@
 package com.github.jactor.rises.model.domain.person;
 
 import com.github.jactorrises.client.dto.PersonDto;
-import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.AbstractBuilder;
 import com.github.jactor.rises.model.domain.address.AddressBuilder;
 import com.github.jactor.rises.model.domain.address.AddressDomain;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 
 public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
     private PersonDto personDto = new PersonDto();

@@ -2,13 +2,13 @@ package com.github.jactor.rises.model.domain.guestbook;
 
 import com.github.jactorrises.client.dto.GuestBookDto;
 import com.github.jactorrises.client.dto.GuestBookEntryDto;
-import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.AbstractBuilder;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
+import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryDomain> {
     private final GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();

@@ -1,6 +1,6 @@
 package com.github.jactorrises.persistence.orm.entity.person;
 
-import com.github.jactorrises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.AbstractBuilder;
 import com.github.jactorrises.persistence.orm.entity.address.AddressEntity;
 import com.github.jactorrises.persistence.orm.entity.address.AddressEntityBuilder;
 import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
@@ -8,8 +8,8 @@ import com.github.jactorrises.persistence.orm.entity.user.UserEntityBuilder;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactorrises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
+import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
+import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 
 public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     private AddressEntity addressEntity;
