@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.domain.blog;
+package com.github.jactor.rises.model.domain.blog;
 
 import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.dto.BlogDto;
@@ -19,11 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
-import static com.github.jactorrises.model.domain.blog.BlogDomain.aBlog;
-import static com.github.jactorrises.model.domain.blog.BlogEntryDomain.aBlogEntry;
-import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
-import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
+import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
+import static com.github.jactor.rises.model.domain.blog.BlogDomain.aBlog;
+import static com.github.jactor.rises.model.domain.blog.BlogEntryDomain.aBlogEntry;
+import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
+import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)

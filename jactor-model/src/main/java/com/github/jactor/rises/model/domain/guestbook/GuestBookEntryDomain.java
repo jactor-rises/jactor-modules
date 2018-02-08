@@ -1,10 +1,10 @@
-package com.github.jactorrises.model.domain.guestbook;
+package com.github.jactor.rises.model.domain.guestbook;
 
 import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.domain.GuestBookEntry;
 import com.github.jactorrises.client.dto.GuestBookEntryDto;
-import com.github.jactorrises.model.domain.PersistentDomain;
+import com.github.jactor.rises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.domain.guestbook;
+package com.github.jactor.rises.model.domain.guestbook;
 
 import com.github.jactorrises.client.dto.UserDto;
 import org.junit.jupiter.api.DisplayName;

@@ -1,9 +1,9 @@
-package com.github.jactorrises.model;
+package com.github.jactor.rises.model;
 
 import com.github.jactorrises.client.facade.UserFacade;
-import com.github.jactorrises.model.facade.UserFacadeImpl;
-import com.github.jactorrises.model.service.GuestBookDomainService;
-import com.github.jactorrises.model.service.UserDomainService;
+import com.github.jactor.rises.model.facade.UserFacadeImpl;
+import com.github.jactor.rises.model.service.GuestBookDomainService;
+import com.github.jactor.rises.model.service.UserDomainService;
 import com.github.jactorrises.persistence.beans.PersistenceBeans;
 import com.github.jactorrises.persistence.beans.service.GuestBookRestService;
 import com.github.jactorrises.persistence.beans.service.UserRestService;

@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.domain.address;
+package com.github.jactor.rises.model.domain.address;
 
 import com.github.jactorrises.client.dto.AddressDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;

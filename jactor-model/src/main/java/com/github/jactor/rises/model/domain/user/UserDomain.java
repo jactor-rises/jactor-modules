@@ -1,14 +1,14 @@
-package com.github.jactorrises.model.domain.user;
+package com.github.jactor.rises.model.domain.user;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.GuestBook;
 import com.github.jactorrises.client.domain.User;
 import com.github.jactorrises.client.dto.UserDto;
-import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.domain.blog.BlogDomain;
-import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
-import com.github.jactorrises.model.domain.person.PersonDomain;
+import com.github.jactor.rises.model.domain.PersistentDomain;
+import com.github.jactor.rises.model.domain.blog.BlogDomain;
+import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
+import com.github.jactor.rises.model.domain.person.PersonDomain;
 
 public class UserDomain extends PersistentDomain implements User {
 

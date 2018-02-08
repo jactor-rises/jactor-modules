@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.domain.guestbook;
+package com.github.jactor.rises.model.domain.guestbook;
 
 import com.github.jactorrises.client.dto.GuestBookDto;
 import com.github.jactorrises.client.dto.UserDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.model.domain.user.UserDomain;
+import com.github.jactor.rises.model.domain.user.UserDomain;
 
 import java.util.Optional;
 

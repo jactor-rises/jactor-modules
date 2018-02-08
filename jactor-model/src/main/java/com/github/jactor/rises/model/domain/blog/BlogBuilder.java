@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.domain.blog;
+package com.github.jactor.rises.model.domain.blog;
 
 import com.github.jactorrises.client.dto.BlogDto;
 import com.github.jactorrises.client.dto.UserDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.model.domain.user.UserBuilder;
+import com.github.jactor.rises.model.domain.user.UserBuilder;
 
 import java.util.Optional;
 

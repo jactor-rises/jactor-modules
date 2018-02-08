@@ -1,14 +1,14 @@
-package com.github.jactorrises.model.service;
+package com.github.jactor.rises.model.service;
 
 import com.github.jactorrises.client.datatype.EmailAddress;
 import com.github.jactorrises.client.datatype.Name;
 import com.github.jactorrises.client.datatype.UserName;
-import com.github.jactorrises.model.JactorModel;
-import com.github.jactorrises.model.domain.address.AddressBuilder;
-import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
-import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactorrises.model.domain.person.PersonDomain;
-import com.github.jactorrises.model.domain.user.UserDomain;
+import com.github.jactor.rises.model.JactorModel;
+import com.github.jactor.rises.model.domain.address.AddressBuilder;
+import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
+import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
+import com.github.jactor.rises.model.domain.person.PersonDomain;
+import com.github.jactor.rises.model.domain.user.UserDomain;
 import com.github.jactorrises.persistence.beans.PersistenceBeans;
 import com.github.jactorrises.persistence.orm.PersistenceOrmApplication;
 import org.assertj.core.api.SoftAssertions;
@@ -23,11 +23,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.Serializable;
 import java.util.Optional;
 
-import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
-import static com.github.jactorrises.model.domain.guestbook.GuestBookDomain.aGuestBook;
-import static com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
-import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
-import static com.github.jactorrises.model.domain.user.UserDomain.aUser;
+import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
+import static com.github.jactor.rises.model.domain.guestbook.GuestBookDomain.aGuestBook;
+import static com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
+import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
+import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PersistenceOrmApplication.class)

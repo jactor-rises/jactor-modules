@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.facade;
+package com.github.jactor.rises.model.facade;
 
 import com.github.jactorrises.client.datatype.UserName;
 import com.github.jactorrises.client.domain.User;

@@ -1,11 +1,11 @@
-package com.github.jactorrises.model.domain.blog;
+package com.github.jactor.rises.model.domain.blog;
 
 import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.domain.Blog;
 import com.github.jactorrises.client.domain.BlogEntry;
 import com.github.jactorrises.client.dto.BlogDto;
-import com.github.jactorrises.model.domain.PersistentDomain;
-import com.github.jactorrises.model.domain.user.UserDomain;
+import com.github.jactor.rises.model.domain.PersistentDomain;
+import com.github.jactor.rises.model.domain.user.UserDomain;
 
 import java.time.LocalDate;
 import java.util.Set;

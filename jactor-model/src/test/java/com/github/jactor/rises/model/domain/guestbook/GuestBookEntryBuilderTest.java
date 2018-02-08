@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.domain.guestbook;
+package com.github.jactor.rises.model.domain.guestbook;
 
 import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.jactorrises.model.domain.guestbook.GuestBookDomain.aGuestBook;
-import static com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
+import static com.github.jactor.rises.model.domain.guestbook.GuestBookDomain.aGuestBook;
+import static com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 

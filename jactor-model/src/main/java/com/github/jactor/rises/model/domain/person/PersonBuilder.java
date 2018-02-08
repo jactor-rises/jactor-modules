@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.domain.person;
+package com.github.jactor.rises.model.domain.person;
 
 import com.github.jactorrises.client.dto.PersonDto;
 import com.github.jactorrises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.model.domain.address.AddressBuilder;
-import com.github.jactorrises.model.domain.address.AddressDomain;
+import com.github.jactor.rises.model.domain.address.AddressBuilder;
+import com.github.jactor.rises.model.domain.address.AddressDomain;
 
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
-package com.github.jactorrises.model.service;
+package com.github.jactor.rises.model.service;
 
 import com.github.jactorrises.client.dto.GuestBookDto;
 import com.github.jactorrises.client.dto.GuestBookEntryDto;
-import com.github.jactorrises.model.domain.guestbook.GuestBookDomain;
-import com.github.jactorrises.model.domain.guestbook.GuestBookEntryDomain;
+import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
+import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactorrises.persistence.beans.service.GuestBookRestService;
 import org.springframework.stereotype.Service;
 

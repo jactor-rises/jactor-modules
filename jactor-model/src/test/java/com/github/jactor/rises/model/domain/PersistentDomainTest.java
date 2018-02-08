@@ -1,4 +1,4 @@
-package com.github.jactorrises.model.domain;
+package com.github.jactor.rises.model.domain;
 
 import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.client.datatype.Name;

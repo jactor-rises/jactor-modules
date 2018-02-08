@@ -1,11 +1,11 @@
-package com.github.jactorrises.model.domain.person;
+package com.github.jactor.rises.model.domain.person;
 
-import com.github.jactorrises.model.domain.address.AddressBuilder;
+import com.github.jactor.rises.model.domain.address.AddressBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactorrises.model.domain.address.AddressDomain.anAddress;
-import static com.github.jactorrises.model.domain.person.PersonDomain.aPerson;
+import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
+import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
