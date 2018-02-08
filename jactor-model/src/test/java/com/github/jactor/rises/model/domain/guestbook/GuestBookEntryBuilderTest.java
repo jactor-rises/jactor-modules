@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.domain.guestbook;
 
-import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
+import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

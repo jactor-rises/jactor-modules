@@ -2,8 +2,8 @@ package com.github.jactorrises.persistence.orm.entity.blog;
 
 import com.github.jactorrises.client.converter.FieldConverter;
 import com.github.jactorrises.persistence.orm.entity.DateTextEmbeddable;
-import com.github.jactorrises.test.extension.NowAsPureDateExtension;
-import com.github.jactorrises.test.extension.SuppressValidInstanceExtension;
+import com.github.jactor.rises.test.extension.NowAsPureDateExtension;
+import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
