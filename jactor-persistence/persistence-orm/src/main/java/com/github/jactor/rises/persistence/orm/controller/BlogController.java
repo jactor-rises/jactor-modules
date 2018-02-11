@@ -1,8 +1,8 @@
-package com.github.jactorrises.persistence.orm.controller;
+package com.github.jactor.rises.persistence.orm.controller;
 
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.BlogEntryDto;
-import com.github.jactorrises.persistence.orm.service.BlogService;
+import com.github.jactor.rises.persistence.orm.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.orm.entity.blog;
+package com.github.jactor.rises.persistence.orm.entity.blog;
 
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 

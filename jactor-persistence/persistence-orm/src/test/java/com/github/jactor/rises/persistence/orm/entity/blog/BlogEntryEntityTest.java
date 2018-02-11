@@ -1,11 +1,11 @@
-package com.github.jactorrises.persistence.orm.entity.blog;
+package com.github.jactor.rises.persistence.orm.entity.blog;
 
 import com.github.jactor.rises.test.extension.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.jactorrises.persistence.orm.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactor.rises.persistence.orm.entity.blog.BlogEntryEntity.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

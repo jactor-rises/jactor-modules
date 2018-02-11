@@ -1,10 +1,10 @@
-package com.github.jactorrises.persistence.orm.entity.person;
+package com.github.jactor.rises.persistence.orm.entity.person;
 
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.persistence.orm.entity.address.AddressEntity;
-import com.github.jactorrises.persistence.orm.entity.address.AddressEntityBuilder;
-import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
-import com.github.jactorrises.persistence.orm.entity.user.UserEntityBuilder;
+import com.github.jactor.rises.persistence.orm.entity.address.AddressEntity;
+import com.github.jactor.rises.persistence.orm.entity.address.AddressEntityBuilder;
+import com.github.jactor.rises.persistence.orm.entity.user.UserEntity;
+import com.github.jactor.rises.persistence.orm.entity.user.UserEntityBuilder;
 
 import java.util.Optional;
 

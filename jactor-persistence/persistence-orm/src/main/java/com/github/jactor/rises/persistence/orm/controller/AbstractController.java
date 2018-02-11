@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.orm.controller;
+package com.github.jactor.rises.persistence.orm.controller;
 
 import com.github.jactor.rises.client.dto.PersistentDto;
 import org.springframework.http.HttpStatus;

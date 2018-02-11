@@ -10,7 +10,7 @@ import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactor.rises.model.domain.person.PersonDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
 import com.github.jactor.rises.persistence.beans.PersistenceBeans;
-import com.github.jactorrises.persistence.orm.PersistenceOrmApplication;
+import com.github.jactor.rises.persistence.orm.PersistenceOrmApplication;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Ignore;
 import org.junit.Test;

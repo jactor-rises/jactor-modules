@@ -1,8 +1,8 @@
-package com.github.jactorrises.persistence.orm.entity.user;
+package com.github.jactor.rises.persistence.orm.entity.user;
 
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
-import com.github.jactorrises.persistence.orm.entity.person.PersonEntity;
-import com.github.jactorrises.persistence.orm.entity.person.PersonEntityBuilder;
+import com.github.jactor.rises.persistence.orm.entity.person.PersonEntity;
+import com.github.jactor.rises.persistence.orm.entity.person.PersonEntityBuilder;
 
 import java.util.Optional;
 

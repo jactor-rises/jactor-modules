@@ -1,9 +1,9 @@
-package com.github.jactorrises.persistence.orm.entity.blog;
+package com.github.jactor.rises.persistence.orm.entity.blog;
 
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.BlogEntryDto;
-import com.github.jactorrises.persistence.orm.entity.EntryEmbeddable;
-import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
+import com.github.jactor.rises.persistence.orm.entity.EntryEmbeddable;
+import com.github.jactor.rises.persistence.orm.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.orm.entity;
+package com.github.jactor.rises.persistence.orm.entity;
 
 import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.commons.time.Now;

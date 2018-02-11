@@ -1,4 +1,4 @@
-package com.github.jactorrises.persistence.orm.entity.guestbook;
+package com.github.jactor.rises.persistence.orm.entity.guestbook;
 
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 

@@ -1,9 +1,9 @@
-package com.github.jactorrises.persistence.orm.entity.guestbook;
+package com.github.jactor.rises.persistence.orm.entity.guestbook;
 
 import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.client.dto.GuestBookEntryDto;
-import com.github.jactorrises.persistence.orm.entity.EntryEmbeddable;
-import com.github.jactorrises.persistence.orm.entity.PersistentEntity;
+import com.github.jactor.rises.persistence.orm.entity.EntryEmbeddable;
+import com.github.jactor.rises.persistence.orm.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

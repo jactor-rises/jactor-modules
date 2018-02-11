@@ -1,10 +1,10 @@
-package com.github.jactorrises.persistence.orm.controller;
+package com.github.jactor.rises.persistence.orm.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.client.dto.UserDto;
-import com.github.jactorrises.persistence.orm.service.UserService;
+import com.github.jactor.rises.persistence.orm.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +18,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static com.github.jactorrises.persistence.orm.entity.address.AddressEntity.anAddress;
-import static com.github.jactorrises.persistence.orm.entity.person.PersonEntity.aPerson;
-import static com.github.jactorrises.persistence.orm.entity.user.UserEntity.aUser;
+import static com.github.jactor.rises.persistence.orm.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.rises.persistence.orm.entity.person.PersonEntity.aPerson;
+import static com.github.jactor.rises.persistence.orm.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;

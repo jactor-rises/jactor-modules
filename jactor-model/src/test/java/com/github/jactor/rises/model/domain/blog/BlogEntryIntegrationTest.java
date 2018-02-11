@@ -7,7 +7,7 @@ import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.beans.PersistenceBeans;
 import com.github.jactor.rises.persistence.beans.service.BlogRestService;
 import com.github.jactor.rises.persistence.beans.service.UserRestService;
-import com.github.jactorrises.persistence.orm.PersistenceOrmApplication;
+import com.github.jactor.rises.persistence.orm.PersistenceOrmApplication;
 import org.assertj.core.api.Condition;
 import org.junit.Ignore;
 import org.junit.Test;

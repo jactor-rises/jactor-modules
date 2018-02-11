@@ -1,9 +1,9 @@
-package com.github.jactorrises.persistence.orm.service;
+package com.github.jactor.rises.persistence.orm.service;
 
 import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.client.dto.UserDto;
-import com.github.jactorrises.persistence.orm.dao.HibernateRepository;
-import com.github.jactorrises.persistence.orm.entity.user.UserEntity;
+import com.github.jactor.rises.persistence.orm.dao.HibernateRepository;
+import com.github.jactor.rises.persistence.orm.entity.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
