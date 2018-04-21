@@ -17,7 +17,7 @@
     <description>The object-relation mapped beans in jactor persistence</description>
 
     <properties>
-        <junit-platform.version>1.0.2</junit-platform.version>
+        <junit-platform.version>1.0.3</junit-platform.version>
     </properties>
 
     <dependencies>

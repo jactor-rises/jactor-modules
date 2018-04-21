@@ -14,7 +14,7 @@
     <name>jactor-rises::jactor-model</name>
 
     <properties>
-        <junit-platform.version>1.0.2</junit-platform.version>
+        <junit-platform.version>1.0.3</junit-platform.version>
     </properties>
 
     <dependencies>
@@ -87,6 +87,15 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.5.10.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- test scope -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
