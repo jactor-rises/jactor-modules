@@ -19,12 +19,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.jactor-rises</groupId>
-            <artifactId>jactor-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jactor-rises</groupId>
-            <artifactId>jactor-commons</artifactId>
+            <groupId>com.github.jactor-rises.commons</groupId>
+            <artifactId>client</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.jactor-rises.persistence</groupId>
@@ -44,8 +40,8 @@
 
         <!-- Test scope -->
         <dependency>
-            <groupId>com.github.jactor-rises</groupId>
-            <artifactId>jactor-test</artifactId>
+            <groupId>com.github.jactor-rises.commons</groupId>
+            <artifactId>test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

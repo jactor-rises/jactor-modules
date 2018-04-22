@@ -18,8 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.jactor-rises</groupId>
-            <artifactId>jactor-client</artifactId>
+            <groupId>com.github.jactor-rises.commons</groupId>
+            <artifactId>client</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.jactor-rises.persistence</groupId>
