@@ -13,7 +13,7 @@
     <artifactId>persistence-orm</artifactId>
     <packaging>jar</packaging>
 
-    <name>jactor-rises::persistence::orm</name>
+    <name>jactor-module::persistence::orm</name>
     <description>The object-relation mapped beans in jactor persistence</description>
 
     <properties>

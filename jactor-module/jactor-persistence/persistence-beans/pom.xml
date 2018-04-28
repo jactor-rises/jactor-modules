@@ -13,7 +13,7 @@
     <artifactId>persistence-beans</artifactId>
     <packaging>jar</packaging>
 
-    <name>jactor-rises::persistence::beans</name>
+    <name>jactor-module::persistence::beans</name>
     <description>The common beans used in a persistence build</description>
 
     <dependencies>
