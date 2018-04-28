@@ -11,27 +11,25 @@
 
     <properties>
         <apache.commons.lang3.version>3.7</apache.commons.lang3.version>
-        <assertj.version>3.9.0</assertj.version>
+        <assertj.version>3.9.1</assertj.version>
         <java.version>1.8</java.version>
         <junit.version>4.12</junit.version>
-        <junit-jupiter.version>5.0.2</junit-jupiter.version>
-        <junit-platform.verion>1.0.2</junit-platform.verion>
-        <junit-vintage.version>${junit.version}.2</junit-vintage.version>
+        <junit-jupiter.version>5.0.3</junit-jupiter.version>
+        <junit-platform.verion>1.0.3</junit-platform.verion>
+        <junit-vintage.version>${junit.version}.3</junit-vintage.version>
 
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
         <maven-site-plugin.version>3.6</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-        <mockito.version>2.13.0</mockito.version>
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <mockito.version>2.18.3</mockito.version>
+        <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <modules>
-        <module>jactor-client</module>
         <module>jactor-commons</module>
-        <module>jactor-test</module>
         <module>jactor-persistence</module>
         <module>jactor-model</module>
         <module>jactor-web</module>
@@ -72,14 +70,15 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.github.jactor-rises</groupId>
-                <artifactId>jactor-client</artifactId>
+                <groupId>com.github.jactor-rises.commons</groupId>
+                <artifactId>client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.jactor-rises</groupId>
-                <artifactId>jactor-commons</artifactId>
+                <groupId>com.github.jactor-rises.commons</groupId>
+                <artifactId>test</artifactId>
                 <version>${project.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.jactor-rises.persistence</groupId>
@@ -96,12 +95,6 @@
                 <groupId>com.github.jactor-rises</groupId>
                 <artifactId>jactor-model</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.jactor-rises</groupId>
-                <artifactId>jactor-test</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
             </dependency>
 
             <!-- third party -->
