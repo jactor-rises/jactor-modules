@@ -12,7 +12,7 @@ Src code for jactor-rises (client, module, persistence, and front end)
 
 * a working version with a user interface is not working right know
 * the jactor-rises application will run with spring-boot and tomcat embedded.
-* persistence in jactor-rises will be done with hsqldb and spring-boot
+* persistence in jactor-rises will be done with h2 and spring-boot
 
 ### Some artifacts used in jactor-rises ###
 
