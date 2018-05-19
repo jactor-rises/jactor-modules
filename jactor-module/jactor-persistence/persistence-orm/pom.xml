@@ -5,15 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.jactor-rises.persistence</groupId>
+        <groupId>com.github.jactor-rises</groupId>
         <artifactId>jactor-persistence</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>com.github.jactor-rises.jactor-persistence</groupId>
     <artifactId>persistence-orm</artifactId>
     <packaging>jar</packaging>
 
-    <name>jactor-module::persistence::orm</name>
+    <name>jactor-module::jactor-persistence::orm</name>
     <description>The object-relation mapped beans in jactor persistence</description>
 
     <properties>
@@ -22,12 +23,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.jactor-rises.commons</groupId>
-            <artifactId>client</artifactId>
+            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <artifactId>jactor-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.jactor-rises.commons</groupId>
-            <artifactId>test</artifactId>
+            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <artifactId>jactor-test</artifactId>
             <scope>test</scope>
         </dependency>
 

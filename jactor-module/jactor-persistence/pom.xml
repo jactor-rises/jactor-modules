@@ -10,7 +10,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.github.jactor-rises.persistence</groupId>
     <artifactId>jactor-persistence</artifactId>
     <packaging>pom</packaging>
 

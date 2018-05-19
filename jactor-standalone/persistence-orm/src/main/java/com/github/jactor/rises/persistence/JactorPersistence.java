@@ -1,5 +1,6 @@
 package com.github.jactor.rises.persistence;
 
+import com.github.jactor.rises.commons.framework.SpringBeanNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -26,8 +27,15 @@ public class JactorPersistence {
             String arguments = noArgs ? "without arguemnts!" : "with arguments: " + String.join(" ", args) + '!';
 
             LOGGER.info("Starting {}", arguments);
+
+            SpringBeanNames springBeanNames = new SpringBeanNames();
+            stream(applicationContext.getBeanDefinitionNames()).sorted().forEach(springBeanNames::add);
+
             LOGGER.info("Available beans:");
-            stream(applicationContext.getBeanDefinitionNames()).sorted().forEach(name -> LOGGER.info("- {}", name));
+            springBeanNames.getBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::info);
+
+            LOGGER.debug("Available spring beans:");
+            springBeanNames.getNamesOfSpringBeans().stream().map(name -> "- " + name).forEach(LOGGER::debug);
         }
     }
 

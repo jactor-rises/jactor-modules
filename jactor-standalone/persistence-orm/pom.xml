@@ -11,8 +11,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.github.jactor-rises.standalone</groupId>
-    <artifactId>persistence-orm</artifactId>
+    <groupId>com.github.jactor-rises.jactor-standalone</groupId>
+    <artifactId>jactor-persistence-orm</artifactId>
     <name>jactor-rises::jactor-standalone::persistence-orm</name>
 
     <version>1.0-SNAPSHOT</version>
@@ -25,6 +25,13 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <artifactId>jactor-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- third party -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
