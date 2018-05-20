@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
@@ -14,7 +15,9 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_ADDRESS")
-public class AddressEntity extends PersistentEntity {
+public class AddressEntity extends PersistentEntity<Long> {
+
+    @Id private Long id;
 
     @Column(name = "ADDRESS_LINE_1", nullable = false) private String addressLine1;
     @Column(name = "ADDRESS_LINE_2") private String addressLine2;
@@ -45,10 +48,13 @@ public class AddressEntity extends PersistentEntity {
     }
 
     @Override public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         AddressEntity addressEntity = (AddressEntity) o;
 
-        return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressLine1, addressEntity.addressLine1) &&
+        return this == o || Objects.equals(addressLine1, addressEntity.addressLine1) &&
                 Objects.equals(addressLine2, addressEntity.addressLine2) &&
                 Objects.equals(addressLine3, addressEntity.addressLine3) &&
                 Objects.equals(city, addressEntity.city) &&
@@ -57,7 +63,7 @@ public class AddressEntity extends PersistentEntity {
     }
 
     public AddressEntity copy() {
-        return new AddressEntity(this).asCopy();
+        return new AddressEntity(this);
     }
 
     public NewAddressDto asDto() {
@@ -88,6 +94,14 @@ public class AddressEntity extends PersistentEntity {
                 .toString();
     }
 
+    @Override public Long getId() {
+        return id;
+    }
+
+    @Override public void setId(Long id) {
+        this.id = id;
+    }
+
     public Integer getZipCode() {
         return zipCode;
     }
@@ -96,11 +110,11 @@ public class AddressEntity extends PersistentEntity {
         return addressLine1;
     }
 
-    private String getAddressLine2() {
+    public String getAddressLine2() {
         return addressLine2;
     }
 
-    private String getAddressLine3() {
+    public String getAddressLine3() {
         return addressLine3;
     }
 
