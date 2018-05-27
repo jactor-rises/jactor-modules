@@ -3,6 +3,8 @@ package com.github.jactor.rises.persistence.entity.person;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.entity.address.AddressEntityBuilder;
+import com.github.jactor.rises.persistence.entity.user.UserEntity;
+import com.github.jactor.rises.persistence.entity.user.UserEntityBuilder;
 
 import java.util.Optional;
 
@@ -10,12 +12,13 @@ import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessa
 import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 
 public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
+    private PersonEntity personToBuild = new PersonEntity();
     private AddressEntity addressEntity;
     private String description;
     private String firstName;
     private String surname;
     private String locale;
-//    private UserEntity userEntity;
+    private UserEntity userEntity;
 
     PersonEntityBuilder() {
         super(PersonEntityBuilder::validate);
@@ -30,10 +33,10 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
         return with(addressEntityBuilder.build());
     }
 
-//    public PersonEntityBuilder with(UserEntityBuilder userEntityBuilder) {
-//        userEntity = userEntityBuilder.build();
-//        return this;
-//    }
+    public PersonEntityBuilder with(UserEntityBuilder userEntityBuilder) {
+        userEntity = userEntityBuilder.with(personToBuild).build();
+        return this;
+    }
 
     public PersonEntityBuilder withDescription(String description) {
         this.description = description;
@@ -56,15 +59,18 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     }
 
     @Override protected PersonEntity buildBean() {
-        PersonEntity personEntity = new PersonEntity();
-        personEntity.setAddressEntity(addressEntity);
-        personEntity.setDescription(description);
-        personEntity.setFirstName(firstName);
-        personEntity.setSurname(surname);
-        personEntity.setLocale(locale);
-//        personEntity.setUserEntity(userEntity);
+        personToBuild.setAddressEntity(addressEntity);
+        personToBuild.setDescription(description);
+        personToBuild.setFirstName(firstName);
+        personToBuild.setSurname(surname);
+        personToBuild.setLocale(locale);
+        personToBuild.setUserEntity(userEntity);
 
-        return personEntity;
+        if (userEntity != null && userEntity.getPerson() == null) {
+            userEntity.setPersonEntity(personToBuild);
+        }
+
+        return personToBuild;
     }
 
     private static Optional<String> validate(PersonEntity personEntity) {

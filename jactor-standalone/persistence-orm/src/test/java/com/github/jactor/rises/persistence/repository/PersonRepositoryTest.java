@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -51,14 +52,14 @@ class PersonRepositoryTest {
                 .build();
 
         personRepository.save(personToPersist);
-        Optional<PersonEntity> personEntityById = personRepository.findById(personToPersist.getId());
+        Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
 
         assertAll(
-                () -> assertThat(personEntityById).isPresent(),
+                () -> assertThat(personById).isPresent(),
                 () -> {
-                    PersonEntity personEntity = personEntityById.orElseThrow(this::error);
+                    PersonEntity personEntity = personById.orElseThrow(this::notFoundError);
                     assertAll(
-                            () -> assertThat(personEntity.getAddressEntity()).as("address").isEqualTo(personEntity.getAddressEntity()),
+                            () -> assertThat(personEntity.getAddressEntity()).as("address").isEqualTo(personToPersist.getAddressEntity()),
                             () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("Me, myself, and I"),
                             () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("no_NO"),
                             () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Turbo"),
@@ -84,26 +85,57 @@ class PersonRepositoryTest {
         personToPersist.setLocale("dk_DK");
         personToPersist.setFirstName("Dr. A.");
         personToPersist.setSurname("Cula");
+        personToPersist.setUserEntity(
+                aUser().with(personToPersist).withUserName("sucker").withEmailAddress("bloody@suckers.com").build()
+        );
 
         personRepository.save(personToPersist);
 
-        Optional<PersonEntity> personEntityById = personRepository.findById(personToPersist.getId());
+        Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
 
         assertAll(
-                () -> assertThat(personEntityById).isPresent(),
+                () -> assertThat(personById).isPresent(),
                 () -> {
-                    PersonEntity personEntity = personEntityById.orElseThrow(this::error);
+                    PersonEntity personEntity = personById.orElseThrow(this::notFoundError);
                     assertAll(
                             () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("There is no try"),
                             () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("dk_DK"),
                             () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Dr. A."),
-                            () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Cula")
+                            () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Cula"),
+                            () -> assertThat(personEntity.getUserEntity()).isEqualTo(personToPersist.getUserEntity())
                     );
                 }
         );
     }
 
-    private AssertionError error() {
+    @DisplayName("should be able to relate a user")
+    @Test void shouldRelateUser() {
+        PersonEntity personToPersist = aPerson()
+                .with(anAddress().withAddressLine1("somewhere").withZipCode(1234).withCity("Out there"))
+                .withSurname("Adder")
+                .with(aUser().withUserName("black").withEmailAddress("public@services.com"))
+                .build();
+
+        personRepository.save(personToPersist);
+
+        Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
+
+
+        assertAll(
+                () -> assertThat(personById).isPresent(),
+                () -> {
+                    PersonEntity personEntity = personById.orElseThrow(this::notFoundError);
+                    assertAll(
+                            () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Adder"),
+                            () -> assertThat(personEntity.getUserEntity()).as("user").isNotNull(),
+                            () -> assertThat(personEntity.getUserEntity().getEmailAddress()).as("user email").isEqualTo("public@services.com"),
+                            () -> assertThat(personEntity.getUserEntity().getUserName()).as("user name").isEqualTo("black")
+                    );
+                }
+        );
+    }
+
+    private AssertionError notFoundError() {
         return new AssertionError("person not found");
     }
 }

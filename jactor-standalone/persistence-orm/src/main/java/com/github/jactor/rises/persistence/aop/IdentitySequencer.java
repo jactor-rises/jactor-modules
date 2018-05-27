@@ -3,6 +3,7 @@ package com.github.jactor.rises.persistence.aop;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
+import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -33,14 +34,36 @@ public class IdentitySequencer {
         }
 
         if (persistentEntity instanceof PersonEntity) {
-            AddressEntity addressEntity = ((PersonEntity) persistentEntity).getAddressEntity();
-
-            if (addressEntity.getId() == null) {
-                addressEntity.setId(fetchNextValFor(addressEntity.getClass()));
-            }
+            addSequenceToDependenciesOfPersonEntity(((PersonEntity) persistentEntity));
+        } else if (persistentEntity instanceof UserEntity) {
+            addSequenceToDependenciesOfUserEntity((UserEntity) persistentEntity);
         }
 
+
         return persistentEntity;
+    }
+
+    private void addSequenceToDependenciesOfPersonEntity(PersonEntity personEntity) {
+        AddressEntity addressEntity = personEntity.getAddressEntity();
+        UserEntity userEntity = personEntity.getUserEntity();
+
+        if (addressEntity.getId() == null) {
+            addressEntity.setId(fetchNextValFor(addressEntity.getClass()));
+        }
+
+        if (userEntity != null && userEntity.getId() == null) {
+            userEntity.setId(fetchNextValFor(userEntity.getClass()));
+        }
+    }
+
+    private void addSequenceToDependenciesOfUserEntity(UserEntity userEntity) {
+        PersonEntity personEntity = userEntity.getPerson();
+
+        if (personEntity.getId() == null) {
+            personEntity.setId(fetchNextValFor(personEntity.getClass()));
+        }
+
+        addSequenceToDependenciesOfPersonEntity(personEntity);
     }
 
     private Long fetchNextValFor(Class<?> aClass) {
