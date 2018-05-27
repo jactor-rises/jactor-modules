@@ -2,6 +2,7 @@ package com.github.jactor.rises.persistence.entity.user;
 
 import com.github.jactor.rises.client.dto.NewUserDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
+import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -11,9 +12,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.hash;
 
@@ -26,8 +31,8 @@ public class UserEntity extends PersistentEntity<Long> {
     @Column(name = "EMAIL") private String emailAddress;
     @Column(name = "USER_NAME", nullable = false) private String userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL) private PersonEntity personEntity;
-//    @OneToOne(mappedBy = "user") private GuestBookEntity guestBook;
-//    @OneToOne(mappedBy = "userEntity") private BlogEntity blog;
+    //    @OneToOne(mappedBy = "user") private GuestBookEntity guestBook;
+    @OneToMany(mappedBy = "userEntity") private Set<BlogEntity> blogs = new HashSet<>();
 
     UserEntity() {
     }
@@ -37,7 +42,7 @@ public class UserEntity extends PersistentEntity<Long> {
      */
     private UserEntity(UserEntity user) {
         super(user);
-//        blog = user.blog != null ? user.blog.copy() : null;
+        blogs = user.getBlogs().stream().map(BlogEntity::copy).collect(Collectors.toSet());
 //        guestBook = user.guestBook != null ? user.guestBook.copy() : null;
         emailAddress = user.emailAddress;
         personEntity = user.personEntity != null ? user.personEntity.copy() : null;
@@ -46,7 +51,7 @@ public class UserEntity extends PersistentEntity<Long> {
 
     public UserEntity(NewUserDto user) {
         super(user);
-//        blog = user.getBlog() != null ? new BlogEntity(user.getBlog()) : null;
+        blogs = user.getBlogs().stream().map(BlogEntity::new).collect(Collectors.toSet());
 //        guestBook = user.getGuestBook() != null ? new GuestBookEntity(user.getGuestBook()) : null;
         emailAddress = user.getEmailAddress();
         personEntity = new PersonEntity(user.getPerson());
@@ -59,7 +64,7 @@ public class UserEntity extends PersistentEntity<Long> {
 
     public NewUserDto asDto() {
         NewUserDto userDto = addPersistentData(new NewUserDto());
-//        userDto.setBlog(blog != null ? blog.asDto() : null);
+        blogs.forEach(blogEntity -> userDto.addBlog(blogEntity.asDto()));
 //        userDto.setGuestBook(guestBook != null ? guestBook.asDto() : null);
         userDto.setEmailAddress(emailAddress);
         userDto.setPerson(personEntity.asDto());
@@ -84,7 +89,7 @@ public class UserEntity extends PersistentEntity<Long> {
                 .appendSuper(super.toString())
                 .append(userName)
                 .append(emailAddress)
-//                .append(blog)
+                .append(blogs)
 //                .append(guestBook)
                 .append(personEntity)
                 .toString();
@@ -96,6 +101,10 @@ public class UserEntity extends PersistentEntity<Long> {
 
     @Override public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<BlogEntity> getBlogs() {
+        return blogs;
     }
 
     public String getUserName() {

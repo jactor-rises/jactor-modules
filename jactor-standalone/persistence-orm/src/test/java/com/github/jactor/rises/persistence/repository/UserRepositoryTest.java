@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.repository;
 
 import com.github.jactor.rises.persistence.JactorPersistence;
-import com.github.jactor.rises.persistence.entity.person.PersonEntity;
+import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class UserRepositoryTest {
 
     @Autowired private UserRepository userRepository;
-    @Autowired private PersonRepository personRepository;
 
     @DisplayName("should find default user")
     @Test void shouldFindDefaultUser() {
@@ -35,9 +35,11 @@ class UserRepositoryTest {
         assertAll(
                 () -> assertThat(userByName).as("default user").isPresent(),
                 () -> {
-                    UserEntity userEntity = userByName.orElseThrow(this::error);
-                    assertThat(userEntity.getEmailAddress()).as("user email").isEqualTo("tor.egil.jacobsen@gmail.com");
-                    assertThat(userEntity.getPerson().getFirstName()).as("user first name").isEqualTo("Tor Egil");
+                    UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
+                    assertAll(
+                            () -> assertThat(userEntity.getEmailAddress()).as("user email").isEqualTo("tor.egil.jacobsen@gmail.com"),
+                            () -> assertThat(userEntity.getPerson().getFirstName()).as("user first name").isEqualTo("Tor Egil")
+                    );
                 }
         );
     }
@@ -57,12 +59,12 @@ class UserRepositoryTest {
                 .build();
 
         userRepository.save(userToPersist);
-        Optional<UserEntity> userEntityById = userRepository.findById(userToPersist.getId());
+        Optional<UserEntity> userById = userRepository.findById(userToPersist.getId());
 
         assertAll(
-                () -> assertThat(userEntityById).isPresent(),
+                () -> assertThat(userById).isPresent(),
                 () -> {
-                    UserEntity userEntity = userEntityById.orElseThrow(this::error);
+                    UserEntity userEntity = userById.orElseThrow(this::userNotFound);
                     assertAll(
                             () -> assertThat(userEntity.getPerson()).as("person").isEqualTo(userToPersist.getPerson()),
                             () -> assertThat(userEntity.getUserName()).as("userName").isEqualTo("smuggler"),
@@ -72,8 +74,8 @@ class UserRepositoryTest {
         );
     }
 
-    @DisplayName("should write then update a user entity")
-    @Test void shouldWriteThenUpdateUserEntity() {
+    @DisplayName("should write then update and read a user entity")
+    @Test void shouldWriteThenUpdateAndReadUserEntity() {
         UserEntity userToPersist = aUser()
                 .with(aPerson()
                         .withSurname("Solo")
@@ -98,7 +100,7 @@ class UserRepositoryTest {
         assertAll(
                 () -> assertThat(userByName).isPresent(),
                 () -> {
-                    UserEntity userEntity = userByName.orElseThrow(this::error);
+                    UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
                     assertAll(
                             () -> assertThat(userEntity.getUserName()).as("userName").isEqualTo("lukewarm"),
                             () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("luke@force.com")
@@ -107,7 +109,7 @@ class UserRepositoryTest {
         );
     }
 
-    private AssertionError error() {
+    private AssertionError userNotFound() {
         return new AssertionError("no user found");
     }
 }

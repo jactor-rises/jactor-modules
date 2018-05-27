@@ -69,8 +69,8 @@ class PersonRepositoryTest {
         );
     }
 
-    @DisplayName("should write then update a person entity")
-    @Test void shouldWriteThenUpdatePersonEntity() {
+    @DisplayName("should write then update and read a person entity")
+    @Test void shouldWriteThenUpdateAndReadPersonEntity() {
         PersonEntity personToPersist = aPerson()
                 .with(anAddress().withAddressLine1("somewhere").withZipCode(1234).withCity("Spring"))
                 .withDescription("Me, myself, and I")

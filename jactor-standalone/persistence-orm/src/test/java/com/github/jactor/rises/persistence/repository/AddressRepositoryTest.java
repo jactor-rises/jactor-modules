@@ -70,7 +70,7 @@ class AddressRepositoryTest {
         assertAll(
                 () -> assertThat(addressEntityById).isPresent(),
                 () -> {
-                    AddressEntity addressEntity = addressEntityById.orElseThrow(this::error);
+                    AddressEntity addressEntity = addressEntityById.orElseThrow(this::addressNotFound);
                     assertAll(
                             () -> assertThat(addressEntity.getAddressLine1()).as("address line 1").isEqualTo("somewhere out there"),
                             () -> assertThat(addressEntity.getAddressLine2()).as("address line 2").isEqualTo("where the streets have no name"),
@@ -83,8 +83,8 @@ class AddressRepositoryTest {
         );
     }
 
-    @DisplayName("should write then update an address entity")
-    @Test void shouldWriteThenUpdateAnAddressEntity() {
+    @DisplayName("should write then update and read an address entity")
+    @Test void shouldWriteThenUpdateAndReadAnAddressEntity() {
         AddressEntity addressEntityToPersist = anAddress()
                 .withAddressLine1("somewhere out there")
                 .withAddressLine2("where the streets have no name")
@@ -95,22 +95,24 @@ class AddressRepositoryTest {
                 .build();
 
         addressRepository.save(addressEntityToPersist);
+        AddressEntity addressEntitySaved = addressRepository.findById(addressEntityToPersist.getId()).orElseThrow(this::addressNotFound);
 
-        addressEntityToPersist.setAddressLine1("the truth is out there");
-        addressEntityToPersist.setAddressLine2("among the stars");
-        addressEntityToPersist.setAddressLine3("there will be life");
-        addressEntityToPersist.setZipCode(666);
-        addressEntityToPersist.setCity("Cloud city");
-        addressEntityToPersist.setCountry("XX");
 
-        addressRepository.save(addressEntityToPersist);
+        addressEntitySaved.setAddressLine1("the truth is out there");
+        addressEntitySaved.setAddressLine2("among the stars");
+        addressEntitySaved.setAddressLine3("there will be life");
+        addressEntitySaved.setZipCode(666);
+        addressEntitySaved.setCity("Cloud city");
+        addressEntitySaved.setCountry("XX");
+
+        addressRepository.save(addressEntitySaved);
 
         Optional<AddressEntity> addressEntityById = addressRepository.findById(addressEntityToPersist.getId());
 
         assertAll(
                 () -> assertThat(addressEntityById).isPresent(),
                 () -> {
-                    AddressEntity addressEntity = addressEntityById.orElseThrow(this::error);
+                    AddressEntity addressEntity = addressEntityById.orElseThrow(this::addressNotFound);
                     assertAll(
                             () -> assertThat(addressEntity.getAddressLine1()).as("address line 1").isEqualTo("the truth is out there"),
                             () -> assertThat(addressEntity.getAddressLine2()).as("address line 2").isEqualTo("among the stars"),
@@ -123,7 +125,7 @@ class AddressRepositoryTest {
         );
     }
 
-    private AssertionError error() {
+    private AssertionError addressNotFound() {
         return new AssertionError("address not found");
     }
 }
