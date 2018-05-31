@@ -3,12 +3,9 @@ package com.github.jactor.rises.model.domain.guestbook;
 import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.MissingFields;
 
 import java.util.Optional;
-
-import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryDomain> {
     private final GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
@@ -41,12 +38,12 @@ public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryD
         return new GuestBookEntryDomain(guestBookEntryDto);
     }
 
-    private static Optional<String> validateInstance(GuestBookEntryDomain guestBookEntryDomain) {
-        return collectMessages(
-                fetchMessageIfStringWithoutValue("entry", guestBookEntryDomain.getEntry()),
-                fetchMessageIfFieldNotPresent("guestBook", guestBookEntryDomain.getGuestBook()),
-                fetchMessageIfFieldNotPresent("creatorName", guestBookEntryDomain.getCreatorName())
-        );
+    private static Optional<MissingFields> validateInstance(GuestBookEntryDomain guestBookEntryDomain, MissingFields missingFields) {
+        missingFields.addInvalidFieldWhenBlank("entry", guestBookEntryDomain.getEntry());
+        missingFields.addInvalidFieldWhenNoValue("guestBook", guestBookEntryDomain.getGuestBook());
+        missingFields.addInvalidFieldWhenNoValue("createdBy", guestBookEntryDomain.getCreatedBy());
+
+        return missingFields.presentWhenFieldsAreMissing();
     }
 
     public static GuestBookEntryDomain build(GuestBookEntryDto guestBookEntryDto) {

@@ -91,11 +91,19 @@ public class PersonEntity extends PersistentEntity {
 
     @Override public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .appendSuper(super.toString()).append(firstName).append(surname).append(userEntity).append(addressEntity).toString();
+                .appendSuper(super.toString()).append("firstname", firstName)
+                .append("surname", surname)
+                .append("userEntity", userEntity)
+                .append("addressEntity", addressEntity)
+                .toString();
     }
 
     public AddressEntity getAddress() {
         return addressEntity;
+    }
+
+    String getSurname() {
+        return surname;
     }
 
     public UserEntity getUser() {

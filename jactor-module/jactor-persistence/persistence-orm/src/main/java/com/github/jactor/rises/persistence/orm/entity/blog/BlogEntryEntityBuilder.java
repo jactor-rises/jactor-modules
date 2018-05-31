@@ -2,12 +2,15 @@ package com.github.jactor.rises.persistence.orm.entity.blog;
 
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 
+import java.util.Optional;
+
 public class BlogEntryEntityBuilder extends AbstractBuilder<BlogEntryEntity> {
     private BlogEntity blogEntity;
     private String entry;
     private String name;
 
     BlogEntryEntityBuilder() {
+        super((bee, be) -> Optional.empty());
     }
 
     public BlogEntryEntityBuilder with(BlogEntity blogEntity) {

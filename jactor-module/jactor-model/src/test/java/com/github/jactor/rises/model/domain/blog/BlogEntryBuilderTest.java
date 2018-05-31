@@ -27,7 +27,7 @@ class BlogEntryBuilderTest {
     @DisplayName("should not build a blog entry without a blog")
     @Test void willNotBuildBlogEntryWithoutTheBlog() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("some entry").withCreatorName("aCreator").build())
-                .withMessageContaining("blog").withMessageContaining("must be present");
+                .withMessageContaining("blog").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build a blog entry without the creator")

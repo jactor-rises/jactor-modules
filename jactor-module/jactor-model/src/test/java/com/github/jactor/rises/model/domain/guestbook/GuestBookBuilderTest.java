@@ -25,7 +25,7 @@ class GuestBookBuilderTest {
     @DisplayName("should not build an instance without an owner of the guest book")
     @Test void willNotBuildGuestBookWithoutTheUserWhoIsTheOwnerOfTheGuestBook() {
         assertThatIllegalStateException().isThrownBy(() -> GuestBookDomain.aGuestBook().withTitle("some title").build())
-                .withMessageContaining("user").withMessageContaining("must be present");
+                .withMessageContaining("user").withMessageContaining("has no value");
     }
 
     @DisplayName("should build an instance when all required fields are set")

@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.orm.entity.guestbook;
 
-import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;
+import com.github.jactor.rises.persistence.orm.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A GuestBookEntity")
-@ExtendWith(SuppressValidInstanceExtension.class)
+@ExtendWith(RequiredFieldsExtension.class)
 class GuestBookEntityTest {
 
     @DisplayName("should have an implementation of the hash code method")

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -16,25 +15,25 @@ class AddressBuilderTest {
     @DisplayName("should not build an instance without an address line 1")
     @Test void willNotBuildDomainWithoutAddressLine1() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withZipCode(1234).withCountry("NO").build())
-                .withMessageContaining("address line 1").withMessageContaining("has no value");
+                .withMessageContaining("addressLine1").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance with an empty address line 1")
     @Test void willNotBuildDomainWithAnEmptyAddressLine1() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("").withZipCode(1234).withCountry("NO").build())
-                .withMessageContaining("address line 1").withMessageContaining("has no value");
+                .withMessageContaining("addressLine1").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance without a zip code")
     @Test void willNotBuildDomainWithoutZipCode() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withCountry("NO").build())
-                .withMessageContaining("zip code").withMessageContaining("must be present");
+                .withMessageContaining("zipCode").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance without a country")
     @Test void willNotBuildDomainWithoutCountry() {
         assertThatIllegalStateException().isThrownBy(() -> anAddress().withAddressLine1("somewhere").withZipCode(1234).build())
-                .withMessageContaining("country").withMessageContaining("must be present");
+                .withMessageContaining("country").withMessageContaining("has no value");
     }
 
     @DisplayName("should build an instance when all required properties are set")
@@ -52,8 +51,8 @@ class AddressBuilderTest {
     @Test void whenBuildingAnAddressAllAddressLinesAndItsCityCanAlsoBeAppended() {
         AddressDomain addressDomain = anAddress()
                 .withAddressLine1("somewhere")
-                .appendAddressLine2("somewhere else")
-                .appendAddressLine3("way out there")
+                .withAddressLine2("somewhere else")
+                .withAddressLine3("way out there")
                 .withCity("some city")
                 .withCountry("NO")
                 .withZipCode(1234)

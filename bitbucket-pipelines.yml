@@ -14,5 +14,7 @@ pipelines:
         script:
         - cd jactor-commons
         - mvn install
-        - cd ../jactor-module
+        - cd ../jactor-standalone/persistence-orm
+        - mvn -B verify
+        - cd ../../jactor-module
         - mvn -B verify

@@ -16,8 +16,8 @@ import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 class GuestBookEntryBuilderTest {
 
     @BeforeEach
-    void validateGuestBookEntryBuild() {
-        SuppressValidInstanceExtension.setValidate(GuestBookEntryDomain.class);
+    void suppress() {
+        SuppressValidInstanceExtension.suppressFor(GuestBookDomain.class);
     }
 
     @DisplayName("should not initialize a guest book entry without an entry")
@@ -35,7 +35,7 @@ class GuestBookEntryBuilderTest {
     @DisplayName("should not initialize a guest book entry without the guest book")
     @Test void willNotBuildGuestBookEntryWithoutTheGuestBook() {
         assertThatIllegalStateException().isThrownBy(() -> aGuestBookEntry().withEntry("some entry", "guestName").build())
-                .withMessageContaining("guestBook").withMessageContaining("must be present");
+                .withMessageContaining("guestBook").withMessageContaining("has no value");
     }
 
     @DisplayName("should initialize a guest book entry when all requred fields are set")

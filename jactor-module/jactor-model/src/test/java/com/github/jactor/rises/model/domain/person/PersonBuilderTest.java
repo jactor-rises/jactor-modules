@@ -1,46 +1,48 @@
 package com.github.jactor.rises.model.domain.person;
 
-import com.github.jactor.rises.model.domain.address.AddressBuilder;
+import com.github.jactor.rises.model.domain.address.AddressDomain;
+import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
 import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@DisplayName("The PersonBuilder")
+@ExtendWith(SuppressValidInstanceExtension.class)
+@DisplayName("A PersonBuilder")
 class PersonBuilderTest {
+
+    @BeforeEach
+    void suppressValidationForAnAddress() {
+        SuppressValidInstanceExtension.suppressFor(AddressDomain.class);
+    }
 
     @DisplayName("should not build an instance without an address")
     @Test void willNotBuildPersonDomainWithoutAnAddress() {
         assertThatIllegalStateException().isThrownBy(() -> aPerson().withSurname("jacobsen").build())
-                .withMessageContaining("address").withMessageContaining("must be present");
+                .withMessageContaining("address").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance without a surname")
     @Test void shouldNotBuildAnInstanceWitoutSurname() {
-        assertThatIllegalStateException().isThrownBy(() -> aPerson().with(aValidAddressBuilder()).build())
-                .withMessageContaining("surname").withMessageContaining("must be present");
+        assertThatIllegalStateException().isThrownBy(() -> aPerson().with(anAddress()).build())
+                .withMessageContaining("surname").withMessageContaining("has no value");
     }
 
     @DisplayName("should build an instance when all required fields are set")
     @Test void willBuildPersonDomainWhenAllRequiredFieldsAreSet() {
         assertThat(
                 aPerson()
-                .with(aValidAddressBuilder())
-                .withSurname("nevland")
-                .withDescription("description field only for coverage")
-                .withFirstName("anne (for coverage only")
-                .withLocale("no") // for coverage only
-                .build()
+                        .with(anAddress())
+                        .withSurname("nevland")
+                        .withDescription("description field only for coverage")
+                        .withFirstName("anne (for coverage only")
+                        .withLocale("no") // for coverage only
+                        .build()
         ).isNotNull();
-    }
-
-    private AddressBuilder aValidAddressBuilder() {
-        return anAddress()
-                .withAddressLine1("somewhere")
-                .withZipCode(1234)
-                .withCountry("NO");
     }
 }
