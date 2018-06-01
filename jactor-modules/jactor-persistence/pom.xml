@@ -6,14 +6,14 @@
 
     <parent>
         <groupId>com.github.jactor-rises</groupId>
-        <artifactId>jactor-module</artifactId>
+        <artifactId>jactor-modules</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>jactor-persistence</artifactId>
     <packaging>pom</packaging>
 
-    <name>jactor-module::jactor-persistence</name>
+    <name>jactor-modules::jactor-persistence</name>
     <description>The persistence build</description>
 
     <modules>
