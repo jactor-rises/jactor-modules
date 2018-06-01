@@ -13,7 +13,7 @@ pipelines:
         - maven
         script:
         - cd jactor-commons
-        - mvn -B install
+        - mvn install
         - cd ../jactor-standalone/persistence-orm
         - mvn -B verify
         - cd ../../jactor-module

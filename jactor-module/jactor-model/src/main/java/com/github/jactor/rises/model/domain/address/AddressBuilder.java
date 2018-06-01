@@ -2,12 +2,9 @@ package com.github.jactor.rises.model.domain.address;
 
 import com.github.jactor.rises.client.dto.AddressDto;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.MissingFields;
 
 import java.util.Optional;
-
-import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
     private final AddressDto addressDto = new AddressDto();
@@ -31,12 +28,12 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
         return this;
     }
 
-    AddressBuilder appendAddressLine2(@SuppressWarnings("SameParameterValue") String addressLine2) {
+    AddressBuilder withAddressLine2(@SuppressWarnings("SameParameterValue") String addressLine2) {
         addressDto.setAddressLine2(addressLine2);
         return this;
     }
 
-    AddressBuilder appendAddressLine3(@SuppressWarnings("SameParameterValue") String addressLine3) {
+    AddressBuilder withAddressLine3(@SuppressWarnings("SameParameterValue") String addressLine3) {
         addressDto.setAddressLine3(addressLine3);
         return this;
     }
@@ -50,12 +47,12 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
         return new AddressDomain(addressDto);
     }
 
-    private static Optional<String> validInstance(AddressDomain addressDomain) {
-        return collectMessages(
-                fetchMessageIfStringWithoutValue("address line 1", addressDomain.getAddressLine1()),
-                fetchMessageIfFieldNotPresent("country", addressDomain.getCountry()),
-                fetchMessageIfFieldNotPresent("zip code", addressDomain.getZipCode())
-        );
+    private static Optional<MissingFields> validInstance(AddressDomain addressDomain, MissingFields missingFields) {
+        missingFields.addInvalidFieldWhenBlank("addressLine1", addressDomain.getAddressLine1());
+        missingFields.addInvalidFieldWhenNoValue("country", addressDomain.getCountry());
+        missingFields.addInvalidFieldWhenNoValue("zipCode", addressDomain.getZipCode());
+
+        return missingFields.presentWhenFieldsAreMissing();
     }
 
     public static AddressDomain build(AddressDto addressDto) {

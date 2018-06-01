@@ -3,13 +3,10 @@ package com.github.jactor.rises.model.domain.blog;
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.MissingFields;
 import com.github.jactor.rises.model.domain.user.UserBuilder;
 
 import java.util.Optional;
-
-import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfStringWithoutValue;
 
 public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
     private final BlogDto blogDto = new BlogDto();
@@ -43,11 +40,11 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
         return new BlogDomain(blogDto);
     }
 
-    private static Optional<String> validateInstance(BlogDomain blogDomain) {
-        return collectMessages(
-                fetchMessageIfStringWithoutValue("title", blogDomain.getTitle()),
-                fetchMessageIfFieldNotPresent("user", blogDomain.getUser())
-        );
+    private static Optional<MissingFields> validateInstance(BlogDomain blogDomain, MissingFields missingFields) {
+        missingFields.addInvalidFieldWhenBlank("title", blogDomain.getTitle());
+        missingFields.addInvalidFieldWhenNoValue("user", blogDomain.getUser());
+
+        return missingFields.presentWhenFieldsAreMissing();
     }
 
     public static BlogDomain build(BlogDto blogDto) {

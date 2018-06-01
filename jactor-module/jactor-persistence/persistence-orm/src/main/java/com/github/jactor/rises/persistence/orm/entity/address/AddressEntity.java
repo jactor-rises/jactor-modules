@@ -75,14 +75,14 @@ public class AddressEntity extends PersistentEntity {
     }
 
     @Override public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .appendSuper(super.toString())
-                .append(getAddressLine1())
-                .append(getAddressLine2())
-                .append(getAddressLine3())
-                .append(getCity())
-                .append(getCountry())
-                .append(getZipCode())
+                .append("addressLine1", getAddressLine1())
+                .append("addressLine2", getAddressLine2())
+                .append("addressLine3", getAddressLine3())
+                .append("city", getCity())
+                .append("country", getCountry())
+                .append("zipCode", getZipCode())
                 .toString();
     }
 

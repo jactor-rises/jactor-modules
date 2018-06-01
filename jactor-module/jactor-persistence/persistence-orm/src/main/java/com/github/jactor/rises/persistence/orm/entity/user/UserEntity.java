@@ -79,7 +79,7 @@ public class UserEntity extends PersistentEntity {
     }
 
     @Override public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .appendSuper(super.toString())
                 .append(userName)
                 .append(emailAddress)
@@ -109,7 +109,7 @@ public class UserEntity extends PersistentEntity {
         this.userName = userName;
     }
 
-    public void setPersonEntity(PersonEntity personEntity) {
+    public void setPerson(PersonEntity personEntity) {
         this.personEntity = personEntity;
     }
 

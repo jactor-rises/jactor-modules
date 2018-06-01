@@ -3,12 +3,15 @@ package com.github.jactor.rises.persistence.orm.entity.guestbook;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
 import com.github.jactor.rises.persistence.orm.entity.user.UserEntity;
 
+import java.util.Optional;
+
 public class GuestBookEntityBuilder extends AbstractBuilder<GuestBookEntity> {
 
     private String title;
     private UserEntity userEntity;
 
     GuestBookEntityBuilder() {
+        super((gb, be) -> Optional.empty());
     }
 
     public GuestBookEntityBuilder withTitle(String title) {

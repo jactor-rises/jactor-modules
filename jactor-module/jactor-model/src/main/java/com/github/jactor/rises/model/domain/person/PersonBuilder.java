@@ -2,13 +2,11 @@ package com.github.jactor.rises.model.domain.person;
 
 import com.github.jactor.rises.client.dto.PersonDto;
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.MissingFields;
 import com.github.jactor.rises.model.domain.address.AddressBuilder;
 import com.github.jactor.rises.model.domain.address.AddressDomain;
 
 import java.util.Optional;
-
-import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 
 public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
     private PersonDto personDto = new PersonDto();
@@ -50,11 +48,11 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
         return new PersonDomain(personDto);
     }
 
-    private static Optional<String> validateInstance(PersonDomain personDomain) {
-        return collectMessages(
-                fetchMessageIfFieldNotPresent("address", personDomain.getAddress()),
-                fetchMessageIfFieldNotPresent("surname", personDomain.getSurname())
-        );
+    private static Optional<MissingFields> validateInstance(PersonDomain personDomain, MissingFields missingFields) {
+        missingFields.addInvalidFieldWhenNoValue("address", personDomain.getAddress());
+        missingFields.addInvalidFieldWhenNoValue("surname", personDomain.getSurname());
+
+        return missingFields.presentWhenFieldsAreMissing();
     }
 
     public static PersonDomain build(PersonDto person) {
