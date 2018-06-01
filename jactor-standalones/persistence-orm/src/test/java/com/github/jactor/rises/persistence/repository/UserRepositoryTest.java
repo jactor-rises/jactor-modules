@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;

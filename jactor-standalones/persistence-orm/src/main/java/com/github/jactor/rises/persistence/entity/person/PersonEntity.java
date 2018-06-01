@@ -30,7 +30,7 @@ public class PersonEntity extends PersistentEntity<Long> {
     @Column(name = "FIRST_NAME") private String firstName;
     @Column(name = "LOCALE") private String locale;
     @Column(name = "SURNAME", nullable = false) private String surname;
-    @JoinColumn(name = "ADDRESS_ID") @ManyToOne(cascade = CascadeType.ALL, optional = false) private AddressEntity addressEntity;
+    @JoinColumn(name = "ADDRESS_ID") @ManyToOne(cascade = CascadeType.MERGE, optional = false) private AddressEntity addressEntity;
     @OneToOne(mappedBy = "personEntity", cascade = CascadeType.ALL) private UserEntity userEntity;
 
     PersonEntity() {
@@ -38,30 +38,23 @@ public class PersonEntity extends PersistentEntity<Long> {
 
     private PersonEntity(PersonEntity person) {
         super(person);
-        addressEntity = Optional.ofNullable(person.getAddressEntity())
-                .map(AddressEntity::copy)
-                .orElse(null);
+        Optional.ofNullable(person.getAddressEntity()).ifPresent(ae -> addressEntity = ae.copy());
         description = person.description;
         firstName = person.firstName;
         surname = person.surname;
         locale = person.locale;
-        userEntity = Optional.ofNullable(person.getUserEntity())
-                .map(UserEntity::copy)
-                .orElse(null);
+        Optional.ofNullable(person.getUserEntity()).ifPresent(ue -> userEntity = ue.copy());
     }
 
     public PersonEntity(NewPersonDto person) {
         super(person);
-        addressEntity = Optional.ofNullable(person.getAddress())
-                .map(AddressEntity::new)
-                .orElse(null);
+        Optional.ofNullable(person.getAddress()).ifPresent(adto -> addressEntity = new AddressEntity(adto));
         description = person.getDescription();
         firstName = person.getFirstName();
         surname = person.getSurname();
         locale = person.getLocale();
-        userEntity = Optional.ofNullable(person.getUser())
-                .map(UserEntity::new)
-                .orElse(null);
+        Optional.ofNullable(person.getUser()).ifPresent(udto -> userEntity = new UserEntity(udto));
+
     }
 
     public PersonEntity copy() {
@@ -100,8 +93,9 @@ public class PersonEntity extends PersistentEntity<Long> {
     @Override public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .appendSuper(super.toString()).append(firstName).append(surname)
-                .append(userEntity)
-                .append(addressEntity).toString();
+                .append("userEntity", userEntity)
+                .append("addressEntity", addressEntity)
+                .toString();
     }
 
     @Override public Long getId() {
@@ -136,7 +130,7 @@ public class PersonEntity extends PersistentEntity<Long> {
         return userEntity;
     }
 
-    @SuppressWarnings("WeakerAccess") /*user in reflection */ public void setAddressEntity(AddressEntity addressEntity) {
+    @SuppressWarnings("WeakerAccess") /* used by reflection */ public void setAddressEntity(AddressEntity addressEntity) {
         this.addressEntity = addressEntity;
     }
 

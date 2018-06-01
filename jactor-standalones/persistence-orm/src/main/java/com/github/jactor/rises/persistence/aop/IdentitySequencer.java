@@ -2,6 +2,7 @@ package com.github.jactor.rises.persistence.aop;
 
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
+import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import org.aspectj.lang.JoinPoint;
@@ -29,21 +30,21 @@ public class IdentitySequencer {
     }
 
     private PersistentEntity<Long> addSequencedId(PersistentEntity<Long> persistentEntity) {
-        if (persistentEntity.getId() == null) {
-            persistentEntity.setId(fetchNextValFor(persistentEntity.getClass()));
-        }
+        addSequence(persistentEntity);
 
         if (persistentEntity instanceof PersonEntity) {
-            addSequenceToDependenciesOfPersonEntity(((PersonEntity) persistentEntity));
+            addSequenceToDependencies(((PersonEntity) persistentEntity));
         } else if (persistentEntity instanceof UserEntity) {
-            addSequenceToDependenciesOfUserEntity((UserEntity) persistentEntity);
+            addSequenceToDependencies((UserEntity) persistentEntity);
+        } else if (persistentEntity instanceof BlogEntity) {
+            addSequenceToDependencies((BlogEntity) persistentEntity);
         }
-
 
         return persistentEntity;
     }
 
-    private void addSequenceToDependenciesOfPersonEntity(PersonEntity personEntity) {
+    private void addSequenceToDependencies(PersonEntity personEntity) {
+        addSequence(personEntity);
         AddressEntity addressEntity = personEntity.getAddressEntity();
         UserEntity userEntity = personEntity.getUserEntity();
 
@@ -56,14 +57,26 @@ public class IdentitySequencer {
         }
     }
 
-    private void addSequenceToDependenciesOfUserEntity(UserEntity userEntity) {
+    private void addSequenceToDependencies(UserEntity userEntity) {
+        addSequence(userEntity);
         PersonEntity personEntity = userEntity.getPerson();
 
         if (personEntity.getId() == null) {
             personEntity.setId(fetchNextValFor(personEntity.getClass()));
         }
 
-        addSequenceToDependenciesOfPersonEntity(personEntity);
+        addSequenceToDependencies(personEntity);
+    }
+
+    private void addSequenceToDependencies(BlogEntity blogEntity) {
+        addSequence(blogEntity);
+        addSequenceToDependencies(blogEntity.getUser());
+    }
+
+    private void addSequence(PersistentEntity<Long> persistentEntity) {
+        if (persistentEntity.getId() == null) {
+            persistentEntity.setId(fetchNextValFor(persistentEntity.getClass()));
+        }
     }
 
     private Long fetchNextValFor(Class<?> aClass) {

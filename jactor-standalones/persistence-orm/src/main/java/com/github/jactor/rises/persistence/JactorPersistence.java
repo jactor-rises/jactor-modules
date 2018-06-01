@@ -24,7 +24,7 @@ public class JactorPersistence {
     private void inspect(ApplicationContext applicationContext, String[] args) {
         if (LOGGER.isInfoEnabled()) {
             boolean noArgs = args == null || args.length == 0;
-            String arguments = noArgs ? "without arguemnts!" : "with arguments: " + String.join(" ", args) + '!';
+            String arguments = noArgs ? "without arguments!" : "with arguments: " + String.join(" ", args) + '!';
 
             LOGGER.info("Starting {}", arguments);
 

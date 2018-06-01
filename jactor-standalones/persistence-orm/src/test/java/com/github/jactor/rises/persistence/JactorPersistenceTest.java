@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DisplayName("A com.github.jactor.rises.persistence.JactorPersistence")
+@DisplayName("A JactorPersistence")
 class JactorPersistenceTest {
 
     @Autowired private CommandLineRunner commandLineRunner;

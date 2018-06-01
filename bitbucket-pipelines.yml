@@ -12,9 +12,4 @@ pipelines:
         caches:
         - maven
         script:
-        - cd jactor-commons
-        - mvn install
-        - cd ../jactor-standalones/persistence-orm
-        - mvn -B verify
-        - cd ../../jactor-modules
-        - mvn -B verify
+        - ./build.sh

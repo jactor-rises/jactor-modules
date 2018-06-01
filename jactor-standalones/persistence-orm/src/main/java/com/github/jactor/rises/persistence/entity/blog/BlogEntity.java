@@ -24,9 +24,10 @@ import static java.util.Objects.hash;
 public class BlogEntity extends PersistentEntity<Long> {
 
     @Id private Long id;
+
     @Column(name = "CREATED") private LocalDate created;
     @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.DETACH) private UserEntity userEntity;
+    @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.MERGE) private UserEntity userEntity;
 //    @OneToMany(mappedBy = "blogEntity", fetch = FetchType.EAGER) private Set<BlogEntryEntity> entries = new HashSet<>();
 
     BlogEntity() {
@@ -90,6 +91,10 @@ public class BlogEntity extends PersistentEntity<Long> {
         this.id = id;
     }
 
+    public LocalDate getCreated() {
+        return created;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -98,15 +103,11 @@ public class BlogEntity extends PersistentEntity<Long> {
         return userEntity;
     }
 
-    public LocalDate getCreated() {
-        return created;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    void setUserEntity(UserEntity userEntity) {
+    @SuppressWarnings("WeakerAccess") /* used by reflection */ public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
 

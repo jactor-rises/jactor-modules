@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
-@DisplayName("A IdentitySequencer")
+@DisplayName("An IdentitySequencer")
 @ExtendWith(RequiredFieldsExtension.class)
 class IdentitySequencerTest {
 
