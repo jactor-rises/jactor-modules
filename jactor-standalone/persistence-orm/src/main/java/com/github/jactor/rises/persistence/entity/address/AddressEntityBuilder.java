@@ -1,6 +1,9 @@
 package com.github.jactor.rises.persistence.entity.address;
 
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.MissingFields;
+
+import java.util.Optional;
 
 public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
 
@@ -12,6 +15,7 @@ public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
     private String country;
 
     AddressEntityBuilder() {
+        super(AddressEntityBuilder::validate);
     }
 
     public AddressEntityBuilder withAddressLine1(String addressLine1) {
@@ -54,5 +58,13 @@ public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
         addressEntity.setCountry(country);
 
         return addressEntity;
+    }
+
+    private static Optional<MissingFields> validate(AddressEntity addressEntity, MissingFields missingFields) {
+        missingFields.addInvalidFieldWhenBlank("addressLine1", addressEntity.getAddressLine1());
+        missingFields.addInvalidFieldWhenBlank("city", addressEntity.getCity());
+        missingFields.addInvalidFieldWhenNoValue("zipCode", addressEntity.getZipCode());
+
+        return missingFields.presentWhenFieldsAreMissing();
     }
 }

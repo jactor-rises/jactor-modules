@@ -1,15 +1,13 @@
 package com.github.jactor.rises.persistence.entity.person;
 
 import com.github.jactor.rises.commons.builder.AbstractBuilder;
+import com.github.jactor.rises.commons.builder.MissingFields;
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.entity.address.AddressEntityBuilder;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntityBuilder;
 
 import java.util.Optional;
-
-import static com.github.jactor.rises.commons.builder.ValidInstance.collectMessages;
-import static com.github.jactor.rises.commons.builder.ValidInstance.fetchMessageIfFieldNotPresent;
 
 public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     private PersonEntity personToBuild = new PersonEntity();
@@ -73,9 +71,10 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
         return personToBuild;
     }
 
-    private static Optional<String> validate(PersonEntity personEntity) {
-        return collectMessages(
-                fetchMessageIfFieldNotPresent("address", personEntity.getAddressEntity())
-        );
+    private static Optional<MissingFields> validate(PersonEntity personEntity, MissingFields missingFields) {
+        missingFields.addInvalidFieldWhenNoValue("addressEntity", personEntity.getAddressEntity());
+        missingFields.addInvalidFieldWhenBlank("surname", personEntity.getSurname());
+
+        return missingFields.presentWhenFieldsAreMissing();
     }
 }

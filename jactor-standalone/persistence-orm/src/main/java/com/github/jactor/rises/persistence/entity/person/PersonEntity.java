@@ -136,7 +136,7 @@ public class PersonEntity extends PersistentEntity<Long> {
         return userEntity;
     }
 
-    void setAddressEntity(AddressEntity addressEntity) {
+    @SuppressWarnings("WeakerAccess") /*user in reflection */ public void setAddressEntity(AddressEntity addressEntity) {
         this.addressEntity = addressEntity;
     }
 

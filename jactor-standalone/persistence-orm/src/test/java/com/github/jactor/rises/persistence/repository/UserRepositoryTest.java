@@ -1,8 +1,8 @@
 package com.github.jactor.rises.persistence.repository;
 
 import com.github.jactor.rises.persistence.JactorPersistence;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
+import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(SpringExtension.class)
+@ExtendWith(RequiredFieldsExtension.class)
 @SpringBootTest(classes = {JactorPersistence.class})
 @Transactional
 @DisplayName("A UserRepository")
@@ -47,14 +47,8 @@ class UserRepositoryTest {
     @DisplayName("should write then read a user entity")
     @Test void shouldWriteThenReadUserEntity() {
         UserEntity userToPersist = aUser()
-                .with(aPerson()
-                        .withSurname("Solo")
-                        .with(anAddress()
-                                .withAddressLine1("Far far away")
-                                .withZipCode(1001)
-                                .withCity("Tantooine")
-                        )
-                ).withUserName("smuggler")
+                .with(aPerson())
+                .withUserName("smuggler")
                 .withEmailAddress("smuggle.fast@tantooine.com")
                 .build();
 
@@ -77,14 +71,8 @@ class UserRepositoryTest {
     @DisplayName("should write then update and read a user entity")
     @Test void shouldWriteThenUpdateAndReadUserEntity() {
         UserEntity userToPersist = aUser()
-                .with(aPerson()
-                        .withSurname("Solo")
-                        .with(anAddress()
-                                .withAddressLine1("Far far away")
-                                .withZipCode(1001)
-                                .withCity("Tantooine")
-                        )
-                ).withUserName("smuggler")
+                .with(aPerson())
+                .withUserName("smuggler")
                 .withEmailAddress("smuggle.fast@tantooine.com")
                 .build();
 

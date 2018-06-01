@@ -2,6 +2,7 @@ package com.github.jactor.rises.persistence.repository;
 
 import com.github.jactor.rises.persistence.JactorPersistence;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
+import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(SpringExtension.class)
+@ExtendWith(RequiredFieldsExtension.class)
 @SpringBootTest(classes = {JactorPersistence.class})
 @Transactional
 @DisplayName("A PersonRepository")
@@ -44,7 +46,7 @@ class PersonRepositoryTest {
     @DisplayName("should write then read a person entity")
     @Test void shouldWriteThenReadPersonEntity() {
         PersonEntity personToPersist = aPerson()
-                .with(anAddress().withAddressLine1("somewhere").withZipCode(1234).withCity("Spring"))
+                .with(anAddress())
                 .withDescription("Me, myself, and I")
                 .withLocale("no_NO")
                 .withFirstName("Turbo")
@@ -72,7 +74,7 @@ class PersonRepositoryTest {
     @DisplayName("should write then update and read a person entity")
     @Test void shouldWriteThenUpdateAndReadPersonEntity() {
         PersonEntity personToPersist = aPerson()
-                .with(anAddress().withAddressLine1("somewhere").withZipCode(1234).withCity("Spring"))
+                .with(anAddress())
                 .withDescription("Me, myself, and I")
                 .withLocale("no_NO")
                 .withFirstName("Turbo")
@@ -111,7 +113,7 @@ class PersonRepositoryTest {
     @DisplayName("should be able to relate a user")
     @Test void shouldRelateUser() {
         PersonEntity personToPersist = aPerson()
-                .with(anAddress().withAddressLine1("somewhere").withZipCode(1234).withCity("Out there"))
+                .with(anAddress())
                 .withSurname("Adder")
                 .with(aUser().withUserName("black").withEmailAddress("public@services.com"))
                 .build();

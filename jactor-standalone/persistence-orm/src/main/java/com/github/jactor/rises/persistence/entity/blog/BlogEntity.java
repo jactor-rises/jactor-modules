@@ -1,6 +1,5 @@
 package com.github.jactor.rises.persistence.entity.blog;
 
-import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.dto.NewBlogDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
@@ -25,13 +24,13 @@ import static java.util.Objects.hash;
 public class BlogEntity extends PersistentEntity<Long> {
 
     @Id private Long id;
-    @Column(name = "CREATED") private String created;
+    @Column(name = "CREATED") private LocalDate created;
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.DETACH) private UserEntity userEntity;
 //    @OneToMany(mappedBy = "blogEntity", fetch = FetchType.EAGER) private Set<BlogEntryEntity> entries = new HashSet<>();
 
     BlogEntity() {
-        created = FieldConverter.convert(LocalDate.now());
+        created = LocalDate.now();
     }
 
     private BlogEntity(BlogEntity blogEntity) {
@@ -99,7 +98,7 @@ public class BlogEntity extends PersistentEntity<Long> {
         return userEntity;
     }
 
-    public String getCreated() {
+    public LocalDate getCreated() {
         return created;
     }
 

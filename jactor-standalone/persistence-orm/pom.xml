@@ -30,6 +30,11 @@
             <artifactId>jactor-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <artifactId>jactor-test</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <!-- third party -->
         <dependency>
