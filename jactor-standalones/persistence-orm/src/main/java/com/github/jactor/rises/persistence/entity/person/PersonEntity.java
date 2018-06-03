@@ -61,15 +61,6 @@ public class PersonEntity extends PersistentEntity<Long> {
         return new PersonEntity(this);
     }
 
-    @Override public boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
-                Objects.equals(description, ((PersonEntity) o).description) &&
-                Objects.equals(firstName, ((PersonEntity) o).firstName) &&
-                Objects.equals(surname, ((PersonEntity) o).surname) &&
-                Objects.equals(locale, ((PersonEntity) o).locale);
-    }
-
     public NewPersonDto asDto() {
         NewPersonDto personDto = addPersistentData(new NewPersonDto());
         personDto.setAddress(addressEntity.asDto());
@@ -80,6 +71,21 @@ public class PersonEntity extends PersistentEntity<Long> {
         Optional.ofNullable(userEntity).map(UserEntity::asDto).ifPresent(personDto::setUser);
 
         return personDto;
+    }
+
+    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+        id = fetchId(sequencer);
+        addSequencedIdToDependencies(addressEntity, sequencer);
+        addSequencedIdToDependencies(userEntity, sequencer);
+    }
+
+    @Override public boolean equals(Object o) {
+        return this == o || o != null && getClass() == o.getClass() &&
+                Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
+                Objects.equals(description, ((PersonEntity) o).description) &&
+                Objects.equals(firstName, ((PersonEntity) o).firstName) &&
+                Objects.equals(surname, ((PersonEntity) o).surname) &&
+                Objects.equals(locale, ((PersonEntity) o).locale);
     }
 
     @Override public int hashCode() {
@@ -96,10 +102,6 @@ public class PersonEntity extends PersistentEntity<Long> {
 
     @Override public Long getId() {
         return id;
-    }
-
-    @Override public void setId(Long id) {
-        this.id = id;
     }
 
     public AddressEntity getAddressEntity() {

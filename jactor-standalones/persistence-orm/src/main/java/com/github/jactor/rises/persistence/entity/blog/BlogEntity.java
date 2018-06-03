@@ -32,7 +32,7 @@ public class BlogEntity extends PersistentEntity<Long> {
 
     @Column(name = "CREATED") private LocalDate created;
     @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.MERGE) private UserEntity userEntity;
+    @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private UserEntity userEntity;
     @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.MERGE) private Set<BlogEntryEntity> entries = new HashSet<>();
 
     BlogEntity() {
@@ -74,6 +74,12 @@ public class BlogEntity extends PersistentEntity<Long> {
         entries.add(blogEntryEntity);
     }
 
+    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+        id = fetchId(sequencer);
+        addSequencedIdToDependencies(userEntity, sequencer);
+        entries.forEach(blogEntryEntity -> addSequencedIdToDependencies(blogEntryEntity, sequencer));
+    }
+
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(title, ((BlogEntity) o).title) &&
@@ -95,10 +101,6 @@ public class BlogEntity extends PersistentEntity<Long> {
 
     @Override public Long getId() {
         return id;
-    }
-
-    @Override public void setId(Long id) {
-        this.id = id;
     }
 
     public LocalDate getCreated() {

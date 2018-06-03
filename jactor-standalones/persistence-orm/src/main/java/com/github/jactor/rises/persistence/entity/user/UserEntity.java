@@ -3,6 +3,7 @@ package com.github.jactor.rises.persistence.entity.user;
 import com.github.jactor.rises.client.dto.NewUserDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -17,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,8 +34,8 @@ public class UserEntity extends PersistentEntity<Long> {
     @Column(name = "EMAIL") private String emailAddress;
     @Column(name = "USER_NAME", nullable = false) private String userName;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.MERGE) private PersonEntity personEntity;
-    //    @OneToOne(mappedBy = "user") private GuestBookEntity guestBook;
-    @OneToMany(mappedBy = "userEntity") private Set<BlogEntity> blogs = new HashSet<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private GuestBookEntity guestBook;
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private Set<BlogEntity> blogs = new HashSet<>();
 
     UserEntity() {
     }
@@ -42,8 +45,9 @@ public class UserEntity extends PersistentEntity<Long> {
      */
     private UserEntity(UserEntity user) {
         super(user);
-        blogs = user.getBlogs().stream().map(BlogEntity::copy).collect(Collectors.toSet());
-//        guestBook = user.guestBook != null ? user.guestBook.copy() : null;
+        blogs = user.blogs.stream().map(BlogEntity::copy).collect(Collectors.toSet());
+        Optional.ofNullable(user.guestBook).ifPresent(gb -> guestBook = gb.copy());
+        guestBook = user.guestBook != null ? user.guestBook.copy() : null;
         emailAddress = user.emailAddress;
         personEntity = user.personEntity != null ? user.personEntity.copy() : null;
         userName = user.userName;
@@ -52,7 +56,8 @@ public class UserEntity extends PersistentEntity<Long> {
     public UserEntity(NewUserDto user) {
         super(user);
         blogs = user.getBlogs().stream().map(BlogEntity::new).collect(Collectors.toSet());
-//        guestBook = user.getGuestBook() != null ? new GuestBookEntity(user.getGuestBook()) : null;
+        Optional.ofNullable(user.getGuestBook()).ifPresent(gb -> guestBook = new GuestBookEntity(gb));
+        guestBook = user.getGuestBook() != null ? new GuestBookEntity(user.getGuestBook()) : null;
         emailAddress = user.getEmailAddress();
         personEntity = new PersonEntity(user.getPerson());
         userName = user.getUserName();
@@ -65,12 +70,19 @@ public class UserEntity extends PersistentEntity<Long> {
     public NewUserDto asDto() {
         NewUserDto userDto = addPersistentData(new NewUserDto());
         blogs.forEach(blogEntity -> userDto.addBlog(blogEntity.asDto()));
-//        userDto.setGuestBook(guestBook != null ? guestBook.asDto() : null);
+        Optional.ofNullable(guestBook).ifPresent(gb -> userDto.setGuestBook(gb.asDto()));
         userDto.setEmailAddress(emailAddress);
         userDto.setPerson(personEntity.asDto());
         userDto.setUserName(userName);
 
         return userDto;
+    }
+
+    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+        id = fetchId(sequencer);
+        addSequencedIdToDependencies(personEntity, sequencer);
+        addSequencedIdToDependencies(guestBook, sequencer);
+        blogs.forEach(blogEntity -> addSequencedIdToDependencies(blogEntity, sequencer));
     }
 
     @Override public boolean equals(Object o) {
@@ -97,14 +109,6 @@ public class UserEntity extends PersistentEntity<Long> {
 
     @Override public Long getId() {
         return id;
-    }
-
-    @Override public void setId(Long id) {
-        this.id = id;
-    }
-
-    private Set<BlogEntity> getBlogs() {
-        return blogs;
     }
 
     public String getUserName() {

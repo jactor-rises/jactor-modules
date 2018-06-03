@@ -47,13 +47,28 @@ public abstract class PersistentEntity<I extends Serializable> { // the type of 
         return persistentDto;
     }
 
+    @SuppressWarnings("unchecked") public PersistentEntity<Long> addSequencedId(Sequencer sequencer) {
+        addSequencedIdAlsoIncludingDependencies(sequencer);
+        return (PersistentEntity<Long>) this;
+    }
+
+    protected <E extends PersistentEntity<Long>> void addSequencedIdToDependencies(E entity, Sequencer sequencer) {
+        if (entity != null && entity.getId() == null) {
+            entity.addSequencedIdAlsoIncludingDependencies(sequencer);
+        }
+    }
+
     @Override public String toString() {
         return "id=" + getId();
     }
 
     public abstract I getId();
 
-    public abstract void setId(I id);
+    public abstract void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer);
+
+    protected Long fetchId(Sequencer sequencer) {
+        return getId() == null ? sequencer.nextVal(getClass()) : (Long) getId();
+    }
 
     public LocalDateTime getCreationTime() {
         return creationTime;
@@ -69,5 +84,9 @@ public abstract class PersistentEntity<I extends Serializable> { // the type of 
 
     protected void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public interface Sequencer {
+        Long nextVal(Class<?> entityClass);
     }
 }

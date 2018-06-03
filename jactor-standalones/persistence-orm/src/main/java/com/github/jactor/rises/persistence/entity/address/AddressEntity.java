@@ -47,21 +47,6 @@ public class AddressEntity extends PersistentEntity<Long> {
         super(addressDto);
     }
 
-    @Override public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        AddressEntity addressEntity = (AddressEntity) o;
-
-        return this == o || Objects.equals(addressLine1, addressEntity.addressLine1) &&
-                Objects.equals(addressLine2, addressEntity.addressLine2) &&
-                Objects.equals(addressLine3, addressEntity.addressLine3) &&
-                Objects.equals(city, addressEntity.city) &&
-                Objects.equals(country, addressEntity.country) &&
-                Objects.equals(zipCode, addressEntity.zipCode);
-    }
-
     public AddressEntity copy() {
         return new AddressEntity(this);
     }
@@ -76,6 +61,25 @@ public class AddressEntity extends PersistentEntity<Long> {
         addressDto.setZipCode(zipCode);
 
         return addressDto;
+    }
+
+    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+        id = fetchId(sequencer);
+    }
+
+    @Override public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        AddressEntity addressEntity = (AddressEntity) o;
+
+        return this == o || Objects.equals(addressLine1, addressEntity.addressLine1) &&
+                Objects.equals(addressLine2, addressEntity.addressLine2) &&
+                Objects.equals(addressLine3, addressEntity.addressLine3) &&
+                Objects.equals(city, addressEntity.city) &&
+                Objects.equals(country, addressEntity.country) &&
+                Objects.equals(zipCode, addressEntity.zipCode);
     }
 
     @Override public int hashCode() {
@@ -96,10 +100,6 @@ public class AddressEntity extends PersistentEntity<Long> {
 
     @Override public Long getId() {
         return id;
-    }
-
-    @Override public void setId(Long id) {
-        this.id = id;
     }
 
     public Integer getZipCode() {

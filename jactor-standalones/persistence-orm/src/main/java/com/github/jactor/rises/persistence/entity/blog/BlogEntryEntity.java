@@ -44,7 +44,7 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable = blogEntryEntity.copyEntry();
     }
 
-    public BlogEntryEntity(NewBlogEntryDto blogEntryDto) {
+    BlogEntryEntity(NewBlogEntryDto blogEntryDto) {
         super(blogEntryDto);
         blog = new BlogEntity(blogEntryDto.getBlog());
         entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
@@ -85,6 +85,11 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable.setEntry(entry);
     }
 
+    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+        id = fetchId(sequencer);
+        addSequencedIdToDependencies(blog, sequencer);
+    }
+
     @Override public boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryEntity) o);
     }
@@ -104,10 +109,6 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
 
     @Override public Long getId() {
         return id;
-    }
-
-    @Override public void setId(Long id) {
-        this.id = id;
     }
 
     public BlogEntity getBlog() {
