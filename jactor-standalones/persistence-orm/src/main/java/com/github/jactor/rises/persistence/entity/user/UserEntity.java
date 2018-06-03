@@ -30,7 +30,7 @@ public class UserEntity extends PersistentEntity<Long> {
 
     @Column(name = "EMAIL") private String emailAddress;
     @Column(name = "USER_NAME", nullable = false) private String userName;
-    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.ALL) private PersonEntity personEntity;
+    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.MERGE) private PersonEntity personEntity;
     //    @OneToOne(mappedBy = "user") private GuestBookEntity guestBook;
     @OneToMany(mappedBy = "userEntity") private Set<BlogEntity> blogs = new HashSet<>();
 
@@ -103,7 +103,7 @@ public class UserEntity extends PersistentEntity<Long> {
         this.id = id;
     }
 
-    public Set<BlogEntity> getBlogs() {
+    private Set<BlogEntity> getBlogs() {
         return blogs;
     }
 

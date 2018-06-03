@@ -3,6 +3,7 @@ package com.github.jactor.rises.persistence.aop;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import org.aspectj.lang.JoinPoint;
@@ -38,6 +39,8 @@ public class IdentitySequencer {
             addSequenceToDependencies((UserEntity) persistentEntity);
         } else if (persistentEntity instanceof BlogEntity) {
             addSequenceToDependencies((BlogEntity) persistentEntity);
+        } else if (persistentEntity instanceof BlogEntryEntity) {
+            addSequenceToDependencies((BlogEntryEntity) persistentEntity);
         }
 
         return persistentEntity;
@@ -71,6 +74,15 @@ public class IdentitySequencer {
     private void addSequenceToDependencies(BlogEntity blogEntity) {
         addSequence(blogEntity);
         addSequenceToDependencies(blogEntity.getUser());
+        blogEntity.getEntries().forEach(this::addSequenceToDependencies);
+    }
+
+    private void addSequenceToDependencies(BlogEntryEntity blogEntryEntity) {
+        addSequence(blogEntryEntity);
+
+        if (blogEntryEntity.getBlog().getId() == null) {
+            addSequenceToDependencies(blogEntryEntity.getBlog());
+        }
     }
 
     private void addSequence(PersistentEntity<Long> persistentEntity) {

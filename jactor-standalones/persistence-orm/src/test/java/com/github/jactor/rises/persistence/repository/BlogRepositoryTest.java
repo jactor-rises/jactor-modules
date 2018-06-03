@@ -2,6 +2,7 @@ package com.github.jactor.rises.persistence.repository;
 
 import com.github.jactor.rises.persistence.JactorPersistence;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -94,11 +96,30 @@ class BlogRepositoryTest {
         );
     }
 
-    private AssertionError blogNotFound() {
-        return new AssertionError("Blog not found");
+    @DisplayName("should be able to relate a blog entry")
+    @Test void shouldRelateBlogEntry() {
+        BlogEntity blogEntityToSave = aBlog()
+                .with(aUser())
+                .withTitle("Blah")
+                .build();
+
+        BlogEntryEntity blogEntryToSave = aBlogEntry().withCreatorName("arnold").withEntry("i'll be back").with(blogEntityToSave).build();
+        blogEntityToSave.add(blogEntryToSave);
+
+        blogRepositoryToTest.save(blogEntityToSave);
+        BlogEntity blogById = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
+
+        assertAll(
+                () -> assertThat(blogById.getEntries()).as("entries").hasSize(1),
+                () -> {
+                    BlogEntryEntity blogEntryEntity = blogById.getEntries().iterator().next();
+                    assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("i'll be back");
+                    assertThat(blogEntryEntity.getCreatorName()).as("creatorName").isEqualTo("arnold");
+                }
+        );
     }
 
-    private AssertionError defaultUserNotFound() {
-        return new AssertionError("User 'jactor' not found");
+    private AssertionError blogNotFound() {
+        return new AssertionError("Blog not found");
     }
 }

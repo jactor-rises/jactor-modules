@@ -1,6 +1,7 @@
 package com.github.jactor.rises.persistence.extension;
 
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
+import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import com.github.jactor.rises.test.extension.validate.fields.AbstractRequiredFieldsExtension;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static java.util.Arrays.asList;
 
 public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
@@ -28,9 +30,20 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
                 .build();
     }
 
+    private static UserEntity aUserWithRequiredFields() {
+        return aUser()
+                .with(aPersonWithRequiredValues())
+                .withUserName(uniqueName())
+                .build();
+    }
+
+    private static String uniqueName() {
+        return "testName@" + LocalDateTime.now();
+    }
+
     static {
         AbstractRequiredFieldsExtension.withRequiredFields(UserEntity.class, asList(
-                new ClassFieldValue("userName", () -> "testNameTimed_" + LocalDateTime.now()),
+                new ClassFieldValue("userName", RequiredFieldsExtension::uniqueName),
                 new ClassFieldValue("personEntity", RequiredFieldsExtension::aPersonWithRequiredValues)
         ));
 
@@ -44,5 +57,10 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
                 new ClassFieldValue("zipCode", () -> 1001),
                 new ClassFieldValue("city", () -> "Testing")
         ));
-    }
+
+        AbstractRequiredFieldsExtension.withRequiredFields(BlogEntity.class, asList(
+                new ClassFieldValue("title", () -> "test title"),
+                new ClassFieldValue("userEntity", RequiredFieldsExtension::aUserWithRequiredFields)
+        ));
+     }
 }

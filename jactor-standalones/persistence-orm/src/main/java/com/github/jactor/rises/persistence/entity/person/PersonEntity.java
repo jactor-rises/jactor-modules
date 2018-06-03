@@ -31,7 +31,7 @@ public class PersonEntity extends PersistentEntity<Long> {
     @Column(name = "LOCALE") private String locale;
     @Column(name = "SURNAME", nullable = false) private String surname;
     @JoinColumn(name = "ADDRESS_ID") @ManyToOne(cascade = CascadeType.MERGE, optional = false) private AddressEntity addressEntity;
-    @OneToOne(mappedBy = "personEntity", cascade = CascadeType.ALL) private UserEntity userEntity;
+    @OneToOne(mappedBy = "personEntity", cascade = CascadeType.MERGE) private UserEntity userEntity;
 
     PersonEntity() {
     }
@@ -77,11 +77,7 @@ public class PersonEntity extends PersistentEntity<Long> {
         personDto.setFirstName(firstName);
         personDto.setSurname(surname);
         personDto.setLocale(locale);
-        personDto.setUser(
-                Optional.ofNullable(userEntity)
-                        .map(UserEntity::asDto)
-                        .orElse(null)
-        );
+        Optional.ofNullable(userEntity).map(UserEntity::asDto).ifPresent(personDto::setUser);
 
         return personDto;
     }

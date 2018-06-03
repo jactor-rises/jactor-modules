@@ -54,4 +54,20 @@ public abstract class PersistentEntity<I extends Serializable> { // the type of 
     public abstract I getId();
 
     public abstract void setId(I id);
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
+
+    public LocalDateTime getUpdatedTime() {
+        return updatedTime;
+    }
+
+    protected void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    protected void setUpdatedTime(LocalDateTime updatedTime) {
+        this.updatedTime = updatedTime;
+    }
 }

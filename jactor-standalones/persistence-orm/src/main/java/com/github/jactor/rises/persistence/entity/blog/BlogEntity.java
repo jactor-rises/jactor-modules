@@ -9,15 +9,20 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Objects.hash;
+import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(name = "T_BLOG")
@@ -28,7 +33,7 @@ public class BlogEntity extends PersistentEntity<Long> {
     @Column(name = "CREATED") private LocalDate created;
     @Column(name = "TITLE") private String title;
     @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.MERGE) private UserEntity userEntity;
-//    @OneToMany(mappedBy = "blogEntity", fetch = FetchType.EAGER) private Set<BlogEntryEntity> entries = new HashSet<>();
+    @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.MERGE) private Set<BlogEntryEntity> entries = new HashSet<>();
 
     BlogEntity() {
         created = LocalDate.now();
@@ -37,7 +42,7 @@ public class BlogEntity extends PersistentEntity<Long> {
     private BlogEntity(BlogEntity blogEntity) {
         super(blogEntity);
         created = blogEntity.created;
-        //      entries = blogEntity.entries.stream().map(BlogEntryEntity::copy).collect(toSet());
+        entries = blogEntity.entries.stream().map(BlogEntryEntity::copy).collect(toSet());
         title = blogEntity.getTitle();
         userEntity = Optional.ofNullable(blogEntity.getUser()).map(UserEntity::copy).orElse(null);
     }
@@ -45,7 +50,7 @@ public class BlogEntity extends PersistentEntity<Long> {
     public BlogEntity(NewBlogDto blogDto) {
         super(blogDto);
         created = blogDto.getCreated();
-        //    entries = blogDto.getEntries().stream().map(BlogEntryEntity::new).collect(toSet());
+        entries = blogDto.getEntries().stream().map(BlogEntryEntity::new).collect(toSet());
         title = blogDto.getTitle();
         userEntity = new UserEntity(blogDto.getUser());
     }
@@ -57,11 +62,16 @@ public class BlogEntity extends PersistentEntity<Long> {
     public NewBlogDto asDto() {
         NewBlogDto blogDto = addPersistentData(new NewBlogDto());
         blogDto.setCreated(created);
-        //        blogDto.setEntries(entries.stream().map(bee -> bee.asDto(blogDto)).collect(toSet()));
+        blogDto.setEntries(entries.stream().map(bee -> bee.asDto(blogDto)).collect(toSet()));
         blogDto.setTitle(title);
         blogDto.setUser(userEntity.asDto());
 
         return blogDto;
+    }
+
+    public void add(BlogEntryEntity blogEntryEntity) {
+        blogEntryEntity.setBlog(this);
+        entries.add(blogEntryEntity);
     }
 
     @Override public boolean equals(Object o) {
@@ -93,6 +103,10 @@ public class BlogEntity extends PersistentEntity<Long> {
 
     public LocalDate getCreated() {
         return created;
+    }
+
+    public Set<BlogEntryEntity> getEntries() {
+        return entries;
     }
 
     public String getTitle() {
