@@ -1,7 +1,7 @@
 package com.github.jactor.rises.model.domain.blog;
 
 import com.github.jactor.rises.model.domain.user.UserDomain;
-import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;
+import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
 package com.github.jactor.rises.persistence.orm.entity.person;
 
 import com.github.jactor.rises.persistence.orm.RequiredFieldsExtension;
-import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

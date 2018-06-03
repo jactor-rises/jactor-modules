@@ -3,8 +3,8 @@ package com.github.jactor.rises.persistence.orm;
 import com.github.jactor.rises.persistence.orm.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.orm.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.orm.entity.user.UserEntity;
-import com.github.jactor.rises.test.extension.fields.AbstractRequiredFieldsExtension;
-import com.github.jactor.rises.test.extension.fields.ClassFieldValue;
+import com.github.jactor.rises.test.extension.validate.fields.AbstractRequiredFieldsExtension;
+import com.github.jactor.rises.test.extension.validate.fields.ClassFieldValue;
 
 import java.time.LocalDateTime;
 
@@ -44,5 +44,5 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
                 new ClassFieldValue("zipCode", () -> 1001),
                 new ClassFieldValue("city", () -> "Testing")
         ));
-     }
+    }
 }

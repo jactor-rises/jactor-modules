@@ -4,7 +4,7 @@ import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.beans.service.UserRestService;
-import com.github.jactor.rises.test.extension.SuppressValidInstanceExtension;
+import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

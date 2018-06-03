@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.orm.entity.blog;
 
-import com.github.jactor.rises.test.extension.NowAsPureDateExtension;
+import com.github.jactor.rises.test.extension.time.NowAsPureDateExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
