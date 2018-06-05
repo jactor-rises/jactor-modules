@@ -2,6 +2,7 @@ package com.github.jactor.rises.persistence.extension;
 
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import com.github.jactor.rises.test.extension.validate.fields.AbstractRequiredFieldsExtension;
@@ -38,7 +39,7 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
     }
 
     private static String uniqueName() {
-        return "testName@" + LocalDateTime.now();
+        return "testName_" + LocalDateTime.now();
     }
 
     static {
@@ -61,6 +62,11 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
         AbstractRequiredFieldsExtension.withRequiredFields(BlogEntity.class, asList(
                 new ClassFieldValue("title", () -> "test title"),
                 new ClassFieldValue("userEntity", RequiredFieldsExtension::aUserWithRequiredFields)
+        ));
+
+        AbstractRequiredFieldsExtension.withRequiredFields(GuestBookEntity.class, asList(
+                new ClassFieldValue("title", () -> "test title"),
+                new ClassFieldValue("user", RequiredFieldsExtension::aUserWithRequiredFields)
         ));
      }
 }

@@ -104,12 +104,13 @@ class BlogEntryRepositoryTest {
                 .build();
 
         blogEntryRepository.save(blogEntryToSave);
-        List<BlogEntryEntity> entryByBlog = blogEntryRepository.findByBlog(knownBlog);
+        List<BlogEntryEntity> entriesByBlog = blogEntryRepository.findByBlog(knownBlog);
 
         assertAll(
-                () -> assertThat(entryByBlog).as("entryByBlog").hasSize(1),
-                () -> assertThat(entryByBlog.get(0).getCreatorName()).as("entry.creatorName").isEqualTo("shrek"),
-                () -> assertThat(entryByBlog.get(0).getEntry()).as("entry.entry").isEqualTo("far far away")
+                () -> assertThat(blogEntryRepository.findAll()).as("all entries").hasSize(2),
+                () -> assertThat(entriesByBlog).as("entriesByBlog").hasSize(1),
+                () -> assertThat(entriesByBlog.get(0).getCreatorName()).as("entry.creatorName").isEqualTo("shrek"),
+                () -> assertThat(entriesByBlog.get(0).getEntry()).as("entry.entry").isEqualTo("far far away")
         );
     }
 
