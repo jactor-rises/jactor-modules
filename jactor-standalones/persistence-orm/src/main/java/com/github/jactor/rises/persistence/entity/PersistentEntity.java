@@ -66,6 +66,8 @@ public abstract class PersistentEntity<I extends Serializable> { // the type of 
 
     public abstract void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer);
 
+    public abstract PersistentEntity<I> copy();
+
     protected Long fetchId(Sequencer sequencer) {
         return getId() == null ? sequencer.nextVal(getClass()) : (Long) getId();
     }

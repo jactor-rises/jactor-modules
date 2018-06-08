@@ -37,6 +37,7 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
     }) private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
     BlogEntryEntity() {
+        // used by jpa
     }
 
     private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
@@ -57,10 +58,6 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
 
     private EntryEmbeddable copyEntry() {
         return entryEmbeddable.copy();
-    }
-
-    BlogEntryEntity copy() {
-        return new BlogEntryEntity(this);
     }
 
     public NewBlogEntryDto asDto() {
@@ -84,6 +81,10 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
     public void update(String entry) {
         setUpdatedTime(Now.asDateTime());
         entryEmbeddable.setEntry(entry);
+    }
+
+    @Override public BlogEntryEntity copy() {
+        return new BlogEntryEntity(this);
     }
 
     @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {

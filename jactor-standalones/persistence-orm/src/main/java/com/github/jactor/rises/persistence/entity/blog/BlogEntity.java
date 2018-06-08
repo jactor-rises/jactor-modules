@@ -55,10 +55,6 @@ public class BlogEntity extends PersistentEntity<Long> {
         Optional.ofNullable(blogDto.getUser()).ifPresent(user -> userEntity = new UserEntity(user));
     }
 
-    public BlogEntity copy() {
-        return new BlogEntity(this);
-    }
-
     public NewBlogDto asDto() {
         NewBlogDto blogDto = addPersistentData(new NewBlogDto());
         blogDto.setCreated(created);
@@ -72,6 +68,10 @@ public class BlogEntity extends PersistentEntity<Long> {
     public void add(BlogEntryEntity blogEntryEntity) {
         blogEntryEntity.setBlog(this);
         entries.add(blogEntryEntity);
+    }
+
+    @Override public BlogEntity copy() {
+        return new BlogEntity(this);
     }
 
     @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {

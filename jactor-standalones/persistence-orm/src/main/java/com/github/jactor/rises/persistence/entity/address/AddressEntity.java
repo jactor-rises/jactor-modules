@@ -47,10 +47,6 @@ public class AddressEntity extends PersistentEntity<Long> {
         super(addressDto);
     }
 
-    public AddressEntity copy() {
-        return new AddressEntity(this);
-    }
-
     public NewAddressDto asDto() {
         NewAddressDto addressDto = addPersistentData(new NewAddressDto());
         addressDto.setAddressLine1(addressLine1);
@@ -61,6 +57,10 @@ public class AddressEntity extends PersistentEntity<Long> {
         addressDto.setZipCode(zipCode);
 
         return addressDto;
+    }
+
+    @Override public AddressEntity copy() {
+        return new AddressEntity(this);
     }
 
     @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {

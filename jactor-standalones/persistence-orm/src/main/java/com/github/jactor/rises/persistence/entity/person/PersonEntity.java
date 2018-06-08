@@ -43,7 +43,6 @@ public class PersonEntity extends PersistentEntity<Long> {
         firstName = person.firstName;
         surname = person.surname;
         locale = person.locale;
-        Optional.ofNullable(person.getUserEntity()).ifPresent(ue -> userEntity = ue.copy());
     }
 
     public PersonEntity(NewPersonDto person) {
@@ -57,10 +56,6 @@ public class PersonEntity extends PersistentEntity<Long> {
 
     }
 
-    public PersonEntity copy() {
-        return new PersonEntity(this);
-    }
-
     public NewPersonDto asDto() {
         NewPersonDto personDto = addPersistentData(new NewPersonDto());
         personDto.setAddress(addressEntity.asDto());
@@ -71,6 +66,10 @@ public class PersonEntity extends PersistentEntity<Long> {
         Optional.ofNullable(userEntity).map(UserEntity::asDto).ifPresent(personDto::setUser);
 
         return personDto;
+    }
+
+    @Override public PersonEntity copy() {
+        return new PersonEntity(this);
     }
 
     @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {

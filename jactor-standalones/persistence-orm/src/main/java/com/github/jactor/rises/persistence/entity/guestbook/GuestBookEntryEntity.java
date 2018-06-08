@@ -37,7 +37,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
     }) private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
     GuestBookEntryEntity() {
-        // empty...
+        // used by jpa
     }
 
     private GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
@@ -50,10 +50,6 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         super(guestBookEntry);
         guestBook = new GuestBookEntity(guestBookEntry.getGuestBook());
         entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
-    }
-
-    public GuestBookEntryEntity copy() {
-        return new GuestBookEntryEntity(this);
     }
 
     private GuestBookEntity copyGuestBook() {
@@ -87,6 +83,10 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable.setEntry(entry);
     }
 
+    @Override public GuestBookEntryEntity copy() {
+        return new GuestBookEntryEntity(this);
+    }
+
     @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
         addSequencedIdToDependencies(guestBook, sequencer);
@@ -113,7 +113,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return id;
     }
 
-    public GuestBookEntity getGuestBook() {
+    GuestBookEntity getGuestBook() {
         return guestBook;
     }
 
@@ -125,7 +125,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return entryEmbeddable.getCreatorName();
     }
 
-    public void setGuestBook(GuestBookEntity guestBookEntity) {
+    void setGuestBook(GuestBookEntity guestBookEntity) {
         this.guestBook = guestBookEntity;
     }
 

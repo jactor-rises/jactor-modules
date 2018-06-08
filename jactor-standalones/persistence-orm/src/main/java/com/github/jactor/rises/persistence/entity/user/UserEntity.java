@@ -102,7 +102,7 @@ public class UserEntity extends PersistentEntity<Long> {
                 .append(userName)
                 .append(emailAddress)
                 .append(blogs)
-//                .append(guestBook)
+                .append("guestbook.id=" + (guestBook != null ? guestBook.getId() : null))
                 .append(personEntity)
                 .toString();
     }
@@ -125,6 +125,10 @@ public class UserEntity extends PersistentEntity<Long> {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public void setGuestBook(GuestBookEntity guestBook) {
+        this.guestBook = guestBook;
     }
 
     public void setUserName(String userName) {

@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Objects.hash;
@@ -33,6 +34,7 @@ public class GuestBookEntity extends PersistentEntity<Long> {
     @OneToMany(mappedBy = "guestBook", cascade = CascadeType.MERGE, fetch = FetchType.EAGER) private Set<GuestBookEntryEntity> entries = new HashSet<>();
 
     GuestBookEntity() {
+        // used by jpa
     }
 
     /**
@@ -53,11 +55,7 @@ public class GuestBookEntity extends PersistentEntity<Long> {
     }
 
     private UserEntity copyUser() {
-        return user != null ? user.copy() : null;
-    }
-
-    public GuestBookEntity copy() {
-        return new GuestBookEntity(this);
+        return Optional.ofNullable(user).map(UserEntity::copy).orElse(null);
     }
 
     public NewGuestBookDto asDto() {
@@ -67,6 +65,10 @@ public class GuestBookEntity extends PersistentEntity<Long> {
         guestBook.setUser(user.asDto());
 
         return guestBook;
+    }
+
+    @Override public GuestBookEntity copy() {
+        return new GuestBookEntity(this);
     }
 
     @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
