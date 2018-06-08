@@ -87,7 +87,7 @@ class BlogRepositoryTest {
 
         blogRepositoryToTest.save(blogEntityToSave);
 
-        List<BlogEntity> blogs = blogRepositoryToTest.findBlogEntitiesByTitle("Blah");
+        List<BlogEntity> blogs = blogRepositoryToTest.findBlogsByTitle("Blah");
 
         assertAll(
                 () -> assertThat(blogs).as("blogs").hasSize(1),

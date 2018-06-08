@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface BlogRepository extends CrudRepository<BlogEntity, Long> {
-    List<BlogEntity> findBlogEntitiesByTitle(String title);
+    List<BlogEntity> findBlogsByTitle(String title);
 }

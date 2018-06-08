@@ -44,7 +44,7 @@ public class BlogEntity extends PersistentEntity<Long> {
         created = blogEntity.created;
         entries = blogEntity.entries.stream().map(BlogEntryEntity::copy).collect(toSet());
         title = blogEntity.getTitle();
-        userEntity = Optional.ofNullable(blogEntity.getUser()).map(UserEntity::copy).orElse(null);
+        Optional.ofNullable(blogEntity.getUser()).ifPresent(user -> userEntity = user.copy());
     }
 
     public BlogEntity(NewBlogDto blogDto) {
@@ -52,7 +52,7 @@ public class BlogEntity extends PersistentEntity<Long> {
         created = blogDto.getCreated();
         entries = blogDto.getEntries().stream().map(BlogEntryEntity::new).collect(toSet());
         title = blogDto.getTitle();
-        userEntity = new UserEntity(blogDto.getUser());
+        Optional.ofNullable(blogDto.getUser()).ifPresent(user -> userEntity = new UserEntity(user));
     }
 
     public BlogEntity copy() {
@@ -64,7 +64,7 @@ public class BlogEntity extends PersistentEntity<Long> {
         blogDto.setCreated(created);
         blogDto.setEntries(entries.stream().map(bee -> bee.asDto(blogDto)).collect(toSet()));
         blogDto.setTitle(title);
-        blogDto.setUser(userEntity.asDto());
+        Optional.ofNullable(userEntity).ifPresent(usr -> blogDto.setUser(usr.asDto()));
 
         return blogDto;
     }

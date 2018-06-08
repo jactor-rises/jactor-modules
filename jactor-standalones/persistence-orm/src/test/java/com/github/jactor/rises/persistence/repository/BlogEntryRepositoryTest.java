@@ -84,7 +84,7 @@ class BlogEntryRepositoryTest {
         );
     }
 
-    @DisplayName("should write two entries and on two blogs then find entry on blog")
+    @DisplayName("should write two entries and on two blogs then find entry for the right blog")
     @Test void shouldWriteTwoEntriesOnTwoBlogsThenFindEntryOnBlog() {
         blogEntryRepository.save(
                 aBlogEntry()
@@ -104,7 +104,7 @@ class BlogEntryRepositoryTest {
                 .build();
 
         blogEntryRepository.save(blogEntryToSave);
-        List<BlogEntryEntity> entriesByBlog = blogEntryRepository.findByBlog(knownBlog);
+        List<BlogEntryEntity> entriesByBlog = blogEntryRepository.findByBlog_Id(knownBlog.getId());
 
         assertAll(
                 () -> assertThat(blogEntryRepository.findAll()).as("all entries").hasSize(2),

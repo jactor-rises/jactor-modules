@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.hash;
 
@@ -44,9 +45,9 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable = blogEntryEntity.copyEntry();
     }
 
-    BlogEntryEntity(NewBlogEntryDto blogEntryDto) {
+    public BlogEntryEntity(NewBlogEntryDto blogEntryDto) {
         super(blogEntryDto);
-        blog = new BlogEntity(blogEntryDto.getBlog());
+        Optional.ofNullable(blogEntryDto.getBlog()).ifPresent(blogDto -> blog = new BlogEntity(blogDto));
         entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     }
 

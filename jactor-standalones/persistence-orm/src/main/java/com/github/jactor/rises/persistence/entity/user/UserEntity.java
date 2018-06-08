@@ -59,7 +59,7 @@ public class UserEntity extends PersistentEntity<Long> {
         Optional.ofNullable(user.getGuestBook()).ifPresent(gb -> guestBook = new GuestBookEntity(gb));
         guestBook = user.getGuestBook() != null ? new GuestBookEntity(user.getGuestBook()) : null;
         emailAddress = user.getEmailAddress();
-        personEntity = new PersonEntity(user.getPerson());
+        Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
         userName = user.getUserName();
     }
 
@@ -72,7 +72,7 @@ public class UserEntity extends PersistentEntity<Long> {
         blogs.forEach(blogEntity -> userDto.addBlog(blogEntity.asDto()));
         Optional.ofNullable(guestBook).ifPresent(gb -> userDto.setGuestBook(gb.asDto()));
         userDto.setEmailAddress(emailAddress);
-        userDto.setPerson(personEntity.asDto());
+        Optional.ofNullable(personEntity).ifPresent(pen -> userDto.setPerson(pen.asDto()));
         userDto.setUserName(userName);
 
         return userDto;
