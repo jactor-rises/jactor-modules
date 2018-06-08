@@ -38,6 +38,7 @@ public class UserEntity extends PersistentEntity<Long> {
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private Set<BlogEntity> blogs = new HashSet<>();
 
     UserEntity() {
+        // used by builder
     }
 
     /**

@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.hash;
 
@@ -37,7 +38,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
     }) private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
     GuestBookEntryEntity() {
-        // used by jpa
+        // used by builder
     }
 
     private GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
@@ -46,9 +47,9 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable = guestBookEntry.copyEntry();
     }
 
-    GuestBookEntryEntity(NewGuestBookEntryDto guestBookEntry) {
+    public GuestBookEntryEntity(NewGuestBookEntryDto guestBookEntry) {
         super(guestBookEntry);
-        guestBook = new GuestBookEntity(guestBookEntry.getGuestBook());
+        Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).ifPresent(guestBookEntity -> guestBook = guestBookEntity);
         entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     }
 
@@ -113,9 +114,9 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return id;
     }
 
-    GuestBookEntity getGuestBook() {
+    @SuppressWarnings("WeakerAccess") public GuestBookEntity getGuestBook() {
         return guestBook;
-    }
+    } // used by reflection
 
     public String getEntry() {
         return entryEmbeddable.getEntry();
@@ -125,9 +126,9 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return entryEmbeddable.getCreatorName();
     }
 
-    void setGuestBook(GuestBookEntity guestBookEntity) {
+    @SuppressWarnings("WeakerAccess") public void setGuestBook(GuestBookEntity guestBookEntity) {
         this.guestBook = guestBookEntity;
-    }
+    } // user by reflection
 
     public void setCreatorName(String creatorName) {
         entryEmbeddable.setCreatorName(creatorName);

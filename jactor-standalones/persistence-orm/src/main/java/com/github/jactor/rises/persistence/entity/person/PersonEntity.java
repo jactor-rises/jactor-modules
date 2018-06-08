@@ -34,6 +34,7 @@ public class PersonEntity extends PersistentEntity<Long> {
     @OneToOne(mappedBy = "personEntity", cascade = CascadeType.MERGE) private UserEntity userEntity;
 
     PersonEntity() {
+        // used by builder
     }
 
     private PersonEntity(PersonEntity person) {

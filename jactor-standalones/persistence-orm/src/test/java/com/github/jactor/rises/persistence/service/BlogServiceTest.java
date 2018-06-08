@@ -35,19 +35,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(RequiredFieldsExtension.class)
 class BlogServiceTest {
 
-    @InjectMocks
-    private BlogService blogServiceToTest;
+    @InjectMocks private BlogService blogServiceToTest;
+    @Mock private BlogRepository blogRepositoryMock;
+    @Mock private BlogEntryRepository blogEntryRepositoryMock;
 
-    @Mock
-    private BlogRepository blogRepositoryMock;
-
-    @Mock
-    private BlogEntryRepository blogEntryRepositoryMock;
-
-    @BeforeEach
-    void initMocking() {
-        MockitoAnnotations.initMocks(this);
-    }
+    @BeforeEach void initMocking() {
+            MockitoAnnotations.initMocks(this);
+        }
 
     @DisplayName("should map blog to dto")
     @Test void shouldMapBlogToDto() {

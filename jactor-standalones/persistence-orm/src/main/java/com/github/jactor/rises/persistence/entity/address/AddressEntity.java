@@ -27,6 +27,7 @@ public class AddressEntity extends PersistentEntity<Long> {
     @Column(name = "ZIP_CODE", nullable = false) private Integer zipCode;
 
     AddressEntity() {
+        // used by builder
     }
 
     /**

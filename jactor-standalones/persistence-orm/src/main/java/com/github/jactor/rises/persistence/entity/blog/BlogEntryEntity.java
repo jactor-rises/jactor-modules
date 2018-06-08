@@ -37,7 +37,7 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
     }) private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
     BlogEntryEntity() {
-        // used by jpa
+        // used by builder
     }
 
     private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {

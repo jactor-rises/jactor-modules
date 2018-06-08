@@ -4,6 +4,7 @@ import com.github.jactor.rises.persistence.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import com.github.jactor.rises.test.extension.validate.fields.AbstractRequiredFieldsExtension;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 
 import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static java.util.Arrays.asList;
@@ -44,6 +46,13 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
         return aBlog()
                 .with(aUserWithRequiredFields())
                 .withTitle("here we go again")
+                .build();
+    }
+
+    private static GuestBookEntity aGuestBookWithRequiredFields() {
+        return aGuestBook()
+                .with(aUserWithRequiredFields())
+                .withTitle("home is best")
                 .build();
     }
 
@@ -82,6 +91,12 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
         AbstractRequiredFieldsExtension.withRequiredFields(GuestBookEntity.class, asList(
                 new ClassFieldValue("title", () -> "test title"),
                 new ClassFieldValue("user", RequiredFieldsExtension::aUserWithRequiredFields)
+        ));
+
+        AbstractRequiredFieldsExtension.withRequiredFields(GuestBookEntryEntity.class, asList(
+                new ClassFieldValue("entry", () -> "jibberish"),
+                new ClassFieldValue("name", () -> "McTest"),
+                new ClassFieldValue("guestBook", RequiredFieldsExtension::aGuestBookWithRequiredFields)
         ));
     }
 }

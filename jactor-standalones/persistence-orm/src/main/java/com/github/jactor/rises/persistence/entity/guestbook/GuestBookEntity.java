@@ -34,7 +34,7 @@ public class GuestBookEntity extends PersistentEntity<Long> {
     @OneToMany(mappedBy = "guestBook", cascade = CascadeType.MERGE, fetch = FetchType.EAGER) private Set<GuestBookEntryEntity> entries = new HashSet<>();
 
     GuestBookEntity() {
-        // used by jpa
+        // used by builder
     }
 
     /**
@@ -50,7 +50,7 @@ public class GuestBookEntity extends PersistentEntity<Long> {
     public GuestBookEntity(NewGuestBookDto guestBook) {
         super(guestBook);
         title = guestBook.getTitle();
-        user = new UserEntity(guestBook.getUser());
+        Optional.ofNullable(guestBook.getUser()).map(UserEntity::new).ifPresent(userEntity -> user = userEntity);
         entries = guestBook.getEntries().stream().map(GuestBookEntryEntity::new).collect(toSet());
     }
 
@@ -62,7 +62,7 @@ public class GuestBookEntity extends PersistentEntity<Long> {
         NewGuestBookDto guestBook = new NewGuestBookDto();
         guestBook.setEntries(entries.stream().map(gbee -> gbee.asDto(guestBook)).collect(toSet()));
         guestBook.setTitle(title);
-        guestBook.setUser(user.asDto());
+        Optional.ofNullable(user).map(UserEntity::asDto).ifPresent(guestBook::setUser);
 
         return guestBook;
     }
@@ -96,6 +96,10 @@ public class GuestBookEntity extends PersistentEntity<Long> {
 
     @Override public Long getId() {
         return id;
+    }
+
+    public Set<GuestBookEntryEntity> getEntries() {
+        return entries;
     }
 
     public String getTitle() {
