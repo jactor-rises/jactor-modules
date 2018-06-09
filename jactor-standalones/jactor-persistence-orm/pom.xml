@@ -13,7 +13,7 @@
 
     <groupId>com.github.jactor-rises.jactor-standalones</groupId>
     <artifactId>jactor-persistence-orm</artifactId>
-    <name>jactor-rises::jactor-standalones::persistence-orm</name>
+    <name>jactor-rises::jactor-standalones::jactor-persistence-orm</name>
 
     <version>1.0-SNAPSHOT</version>
 

@@ -7,7 +7,7 @@ if [ $STATUS -gt 0 ]; then
   exit 1
 fi
 
-cd ../jactor-standalones/persistence-orm
+cd ../jactor-standalones/jactor-persistence-orm
 mvn clean install
 STATUS=$?
 
