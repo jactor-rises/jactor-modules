@@ -85,7 +85,7 @@ class GuestBookControllerTest {
 
     @DisplayName("should create a guest book")
     @Test void shouldCreateGuestBook() throws Exception {
-        NewGuestBookDto blogDto = new NewGuestBookDto();
+        NewGuestBookDto guestBookDto = new NewGuestBookDto();
         NewGuestBookDto createdDto = new NewGuestBookDto();
         createdDto.setId(1L);
 
@@ -93,7 +93,36 @@ class GuestBookControllerTest {
 
         mockMvc.perform(post("/guestBook/persist")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(blogDto))
+                .content(objectMapper.writeValueAsBytes(guestBookDto))
+        )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(equalTo(1))));
+    }
+
+    @DisplayName("should persist changes to existing guest book entry")
+    @Test void shouldPersistChangesToExistingGuestBookEntry() throws Exception {
+        NewGuestBookEntryDto guestBookEntryDto = new NewGuestBookEntryDto();
+        guestBookEntryDto.setId(1L);
+
+        mockMvc.perform(post("/guestBook/entry/persist")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsBytes(guestBookEntryDto))
+        ).andExpect(status().isOk());
+
+        verify(guestBookServiceMock).saveOrUpdate(any(NewGuestBookEntryDto.class));
+    }
+
+    @DisplayName("should create a guest book entry")
+    @Test void shouldCreateGuestBookEntry() throws Exception {
+        NewGuestBookEntryDto guestBookEntryDto = new NewGuestBookEntryDto();
+        NewGuestBookEntryDto createdDto = new NewGuestBookEntryDto();
+        createdDto.setId(1L);
+
+        when(guestBookServiceMock.saveOrUpdate(any(NewGuestBookEntryDto.class))).thenReturn(createdDto);
+
+        mockMvc.perform(post("/guestBook/entry/persist")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsBytes(guestBookEntryDto))
         )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(equalTo(1))));
