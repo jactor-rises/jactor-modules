@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.NewGuestBookDto;
-import com.github.jactor.rises.client.dto.NewGuestBookEntryDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
 import com.github.jactor.rises.persistence.repository.GuestBookEntryRepository;
@@ -23,22 +23,22 @@ public class GuestBookService {
         this.guestBookEntryRepository = guestBookEntryRepository;
     }
 
-    public Optional<NewGuestBookDto> find(Long id) {
+    public Optional<GuestBookDto> find(Long id) {
         return guestBookRepository.findById(id).map(GuestBookEntity::asDto);
     }
 
-    public Optional<NewGuestBookEntryDto> findEntry(Long id) {
+    public Optional<GuestBookEntryDto> findEntry(Long id) {
         return guestBookEntryRepository.findById(id).map(GuestBookEntryEntity::asDto);
     }
 
-    public NewGuestBookDto saveOrUpdate(NewGuestBookDto guestBookDto) {
+    public GuestBookDto saveOrUpdate(GuestBookDto guestBookDto) {
         GuestBookEntity guestBookEntity = new GuestBookEntity(guestBookDto);
         guestBookRepository.save(guestBookEntity);
 
         return guestBookEntity.asDto();
     }
 
-    public NewGuestBookEntryDto saveOrUpdate(NewGuestBookEntryDto guestBookEntryDto) {
+    public GuestBookEntryDto saveOrUpdate(GuestBookEntryDto guestBookEntryDto) {
         GuestBookEntryEntity guestBookEntryEntity = new GuestBookEntryEntity(guestBookEntryDto);
         guestBookEntryRepository.save(guestBookEntryEntity);
 

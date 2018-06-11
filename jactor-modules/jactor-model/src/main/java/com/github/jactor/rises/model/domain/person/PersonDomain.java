@@ -8,6 +8,7 @@ import com.github.jactor.rises.model.domain.address.AddressDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
 
 import java.util.Locale;
+import java.util.Optional;
 
 public class PersonDomain extends PersistentDomain implements Person {
 
@@ -26,19 +27,19 @@ public class PersonDomain extends PersistentDomain implements Person {
     }
 
     @Override public Name getFirstName() {
-        return personDto.getFirstName() != null ? new Name(personDto.getFirstName()) : null;
+        return Optional.ofNullable(personDto.getFirstName()).map(Name::new).orElse(null);
     }
 
     @Override public Name getSurname() {
-        return personDto.getSurname() != null ? new Name(personDto.getSurname()) : null;
+        return Optional.ofNullable(personDto.getSurname()).map(Name::new).orElse(null);
     }
 
     @Override public Locale getLocale() {
-        return personDto.getLocale() != null ? new Locale(personDto.getLocale()) : null;
+        return Optional.ofNullable(personDto.getLocale()).map(Locale::new).orElse(null);
     }
 
     @Override public AddressDomain getAddress() {
-        return personDto.getAddress() != null ? new AddressDomain(personDto.getAddress()) : null;
+        return Optional.ofNullable(personDto.getAddress()).map(AddressDomain::new).orElse(null);
     }
 
     @Override public PersonDto getDto() {

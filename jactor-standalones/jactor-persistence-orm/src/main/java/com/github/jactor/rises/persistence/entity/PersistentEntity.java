@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.entity;
 
-import com.github.jactor.rises.client.dto.NewPersistentDto;
+import com.github.jactor.rises.client.dto.PersistentDto;
 import com.github.jactor.rises.commons.time.Now;
 
 import javax.persistence.Column;
@@ -30,14 +30,14 @@ public abstract class PersistentEntity<I extends Serializable> { // the type of 
         updatedTime = persistentEntity.updatedTime;
     }
 
-    protected PersistentEntity(NewPersistentDto<Long> persistentDto) {
+    protected PersistentEntity(PersistentDto<Long> persistentDto) {
         createdBy = persistentDto.getCreatedBy();
         creationTime = persistentDto.getCreationTime();
         updatedBy = persistentDto.getUpdatedBy();
         updatedTime = persistentDto.getUpdatedTime();
     }
 
-    protected <T extends NewPersistentDto<I>> T addPersistentData(T persistentDto) {
+    protected <T extends PersistentDto<I>> T addPersistentData(T persistentDto) {
         persistentDto.setId(getId());
         persistentDto.setCreatedBy(createdBy);
         persistentDto.setCreationTime(creationTime);

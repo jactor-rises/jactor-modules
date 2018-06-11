@@ -1,8 +1,8 @@
 package com.github.jactor.rises.persistence.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jactor.rises.client.dto.NewBlogDto;
-import com.github.jactor.rises.client.dto.NewBlogEntryDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactor.rises.persistence.JactorPersistence;
 import com.github.jactor.rises.persistence.service.BlogService;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ class BlogControllerTest {
 
     @DisplayName("should find a blog")
     @Test void shouldFindBlog() throws Exception {
-        when(blogServiceMock.find(1L)).thenReturn(Optional.of(new NewBlogDto()));
+        when(blogServiceMock.find(1L)).thenReturn(Optional.of(new BlogDto()));
 
         mockMvc.perform(get("/blog/get/1")).andExpect(status().isOk());
     }
@@ -59,7 +59,7 @@ class BlogControllerTest {
 
     @DisplayName("should find a blog entry")
     @Test void shouldFindBlogEntry() throws Exception {
-        when(blogServiceMock.findEntryBy(1L)).thenReturn(Optional.of(new NewBlogEntryDto()));
+        when(blogServiceMock.findEntryBy(1L)).thenReturn(Optional.of(new BlogEntryDto()));
 
         mockMvc.perform(get("/blog/entry/get/1")).andExpect(status().isOk());
     }
@@ -80,7 +80,7 @@ class BlogControllerTest {
 
     @DisplayName("should find blogs by title")
     @Test void shouldFindBlogs() throws Exception {
-        when(blogServiceMock.findBlogsBy("Anything")).thenReturn(Collections.singletonList(new NewBlogDto()));
+        when(blogServiceMock.findBlogsBy("Anything")).thenReturn(Collections.singletonList(new BlogDto()));
 
         mockMvc.perform(get("/blog/find/Anything")).andExpect(status().isOk());
     }
@@ -94,14 +94,14 @@ class BlogControllerTest {
 
     @DisplayName("should find blog entries by blog id")
     @Test void shouldFindBlogEntries() throws Exception {
-        when(blogServiceMock.findEntriesForBlog(1L)).thenReturn(Collections.singletonList(new NewBlogEntryDto()));
+        when(blogServiceMock.findEntriesForBlog(1L)).thenReturn(Collections.singletonList(new BlogEntryDto()));
 
         mockMvc.perform(get("/blog/1/entries/find")).andExpect(status().isOk());
     }
 
     @DisplayName("should persist changes to existing blog")
     @Test void shouldPersistChangesToExistingBlog() throws Exception {
-        NewBlogDto blogDto = new NewBlogDto();
+        BlogDto blogDto = new BlogDto();
         blogDto.setId(1L);
 
         mockMvc.perform(post("/blog/persist")
@@ -109,16 +109,16 @@ class BlogControllerTest {
                 .content(objectMapper.writeValueAsBytes(blogDto))
         ).andExpect(status().isOk());
 
-        verify(blogServiceMock).saveOrUpdate(any(NewBlogDto.class));
+        verify(blogServiceMock).saveOrUpdate(any(BlogDto.class));
     }
 
     @DisplayName("should create a blog")
     @Test void shouldCreateBlog() throws Exception {
-        NewBlogDto blogDto = new NewBlogDto();
-        NewBlogDto createdDto = new NewBlogDto();
+        BlogDto blogDto = new BlogDto();
+        BlogDto createdDto = new BlogDto();
         createdDto.setId(1L);
 
-        when(blogServiceMock.saveOrUpdate(any(NewBlogDto.class))).thenReturn(createdDto);
+        when(blogServiceMock.saveOrUpdate(any(BlogDto.class))).thenReturn(createdDto);
 
         mockMvc.perform(post("/blog/persist")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -130,7 +130,7 @@ class BlogControllerTest {
 
     @DisplayName("should persist changes to existing blog entry")
     @Test void shouldPersistChangesToExistingBlogEntry() throws Exception {
-        NewBlogEntryDto blogEntryDto = new NewBlogEntryDto();
+        BlogEntryDto blogEntryDto = new BlogEntryDto();
         blogEntryDto.setId(1L);
 
         mockMvc.perform(post("/blog/entry/persist")
@@ -138,16 +138,16 @@ class BlogControllerTest {
                 .content(objectMapper.writeValueAsBytes(blogEntryDto))
         ).andExpect(status().isOk());
 
-        verify(blogServiceMock).saveOrUpdate(any(NewBlogEntryDto.class));
+        verify(blogServiceMock).saveOrUpdate(any(BlogEntryDto.class));
     }
 
     @DisplayName("should create blog entry")
     @Test void shouldCreateBlogEntry() throws Exception {
-        NewBlogEntryDto blogEntryDto = new NewBlogEntryDto();
-        NewBlogEntryDto createdDto = new NewBlogEntryDto();
+        BlogEntryDto blogEntryDto = new BlogEntryDto();
+        BlogEntryDto createdDto = new BlogEntryDto();
         createdDto.setId(1L);
 
-        when(blogServiceMock.saveOrUpdate(any(NewBlogEntryDto.class))).thenReturn(createdDto);
+        when(blogServiceMock.saveOrUpdate(any(BlogEntryDto.class))).thenReturn(createdDto);
 
         mockMvc.perform(post("/blog/entry/persist")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -156,6 +156,6 @@ class BlogControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(equalTo(1))));
 
-        verify(blogServiceMock).saveOrUpdate(any(NewBlogEntryDto.class));
+        verify(blogServiceMock).saveOrUpdate(any(BlogEntryDto.class));
     }
 }

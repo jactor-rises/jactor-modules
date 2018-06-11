@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.entity.user;
 
-import com.github.jactor.rises.client.dto.NewUserDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
@@ -54,7 +54,7 @@ public class UserEntity extends PersistentEntity<Long> {
         userName = user.userName;
     }
 
-    public UserEntity(NewUserDto user) {
+    public UserEntity(UserDto user) {
         super(user);
         blogs = user.getBlogs().stream().map(BlogEntity::new).collect(Collectors.toSet());
         Optional.ofNullable(user.getGuestBook()).ifPresent(gb -> guestBook = new GuestBookEntity(gb));
@@ -68,8 +68,8 @@ public class UserEntity extends PersistentEntity<Long> {
         return new UserEntity(this);
     }
 
-    public NewUserDto asDto() {
-        NewUserDto userDto = addPersistentData(new NewUserDto());
+    public UserDto asDto() {
+        UserDto userDto = addPersistentData(new UserDto());
         blogs.forEach(blogEntity -> userDto.addBlog(blogEntity.asDto()));
         Optional.ofNullable(guestBook).ifPresent(gb -> userDto.setGuestBook(gb.asDto()));
         userDto.setEmailAddress(emailAddress);

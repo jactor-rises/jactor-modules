@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.entity.blog;
 
-import com.github.jactor.rises.client.dto.NewBlogDto;
-import com.github.jactor.rises.client.dto.NewBlogEntryDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactor.rises.commons.time.Now;
 import com.github.jactor.rises.persistence.entity.EntryEmbeddable;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
@@ -46,7 +46,7 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable = blogEntryEntity.copyEntry();
     }
 
-    public BlogEntryEntity(NewBlogEntryDto blogEntryDto) {
+    public BlogEntryEntity(BlogEntryDto blogEntryDto) {
         super(blogEntryDto);
         Optional.ofNullable(blogEntryDto.getBlog()).ifPresent(blogDto -> blog = new BlogEntity(blogDto));
         entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
@@ -60,12 +60,12 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         return entryEmbeddable.copy();
     }
 
-    public NewBlogEntryDto asDto() {
+    public BlogEntryDto asDto() {
         return asDto(blog.asDto());
     }
 
-    NewBlogEntryDto asDto(NewBlogDto blogDto) {
-        NewBlogEntryDto blogEntryDto = new NewBlogEntryDto();
+    BlogEntryDto asDto(BlogDto blogDto) {
+        BlogEntryDto blogEntryDto = new BlogEntryDto();
         blogEntryDto.setBlog(blogDto);
         blogEntryDto.setCreatorName(entryEmbeddable.getCreatorName());
         blogEntryDto.setEntry(entryEmbeddable.getEntry());

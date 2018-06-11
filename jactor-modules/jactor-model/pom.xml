@@ -22,20 +22,15 @@
             <groupId>com.github.jactor-rises.jactor-commons</groupId>
             <artifactId>jactor-client</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.jactor-rises.jactor-persistence</groupId>
-            <artifactId>persistence-beans</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.jactor-rises.jactor-persistence</groupId>
-            <artifactId>persistence-orm</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <!-- third party -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Test scope -->

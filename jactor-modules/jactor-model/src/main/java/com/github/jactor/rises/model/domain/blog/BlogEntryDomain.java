@@ -1,12 +1,12 @@
 package com.github.jactor.rises.model.domain.blog;
 
-import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.datatype.Name;
 import com.github.jactor.rises.client.domain.BlogEntry;
 import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactor.rises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class BlogEntryDomain extends PersistentDomain implements BlogEntry {
 
@@ -17,11 +17,11 @@ public class BlogEntryDomain extends PersistentDomain implements BlogEntry {
     }
 
     @Override public BlogDomain getBlog() {
-        return blogEntryDto.getBlog() != null ? new BlogDomain(blogEntryDto.getBlog()) : null;
+        return Optional.ofNullable(blogEntryDto.getBlog()).map(BlogDomain::new).orElse(null);
     }
 
     @Override public LocalDateTime getCreatedTime() {
-        return FieldConverter.convertDateTime(blogEntryDto.getCreatedTime());
+        return blogEntryDto.getCreationTime();
     }
 
     @Override public String getEntry() {
@@ -29,7 +29,7 @@ public class BlogEntryDomain extends PersistentDomain implements BlogEntry {
     }
 
     @Override public Name getCreatorName() {
-        return new Name(blogEntryDto.getCreatorName());
+        return Optional.ofNullable(blogEntryDto.getCreatorName()).map(Name::new).orElse(null);
     }
 
     @Override public BlogEntryDto getDto() {

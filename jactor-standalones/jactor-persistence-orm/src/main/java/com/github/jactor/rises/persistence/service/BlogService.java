@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.NewBlogDto;
-import com.github.jactor.rises.client.dto.NewBlogEntryDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactor.rises.persistence.repository.BlogEntryRepository;
@@ -25,34 +25,34 @@ public class BlogService {
         this.blogRepository = blogRepository;
     }
 
-    public Optional<NewBlogDto> find(Long id) {
+    public Optional<BlogDto> find(Long id) {
         return blogRepository.findById(id).map(BlogEntity::asDto);
     }
 
-    public Optional<NewBlogEntryDto> findEntryBy(Long blogEntryId) {
+    public Optional<BlogEntryDto> findEntryBy(Long blogEntryId) {
         return blogEntryRepository.findById(blogEntryId).map(BlogEntryEntity::asDto);
     }
 
-    public List<NewBlogDto> findBlogsBy(String title) {
+    public List<BlogDto> findBlogsBy(String title) {
         return blogRepository.findBlogsByTitle(title).stream()
                 .map(BlogEntity::asDto)
                 .collect(Collectors.toList());
     }
 
-    public List<NewBlogEntryDto> findEntriesForBlog(Long blogId) {
+    public List<BlogEntryDto> findEntriesForBlog(Long blogId) {
         return blogEntryRepository.findByBlog_Id(blogId).stream()
                 .map(BlogEntryEntity::asDto)
                 .collect(Collectors.toList());
     }
 
-    public NewBlogDto saveOrUpdate(NewBlogDto blogDto) {
+    public BlogDto saveOrUpdate(BlogDto blogDto) {
         BlogEntity blogEntity = new BlogEntity(blogDto);
         blogRepository.save(blogEntity);
 
         return blogEntity.asDto();
     }
 
-    public NewBlogEntryDto saveOrUpdate(NewBlogEntryDto blogEntryDto) {
+    public BlogEntryDto saveOrUpdate(BlogEntryDto blogEntryDto) {
         BlogEntryEntity blogEntryEntity = new BlogEntryEntity(blogEntryDto);
         blogEntryRepository.save(blogEntryEntity);
 

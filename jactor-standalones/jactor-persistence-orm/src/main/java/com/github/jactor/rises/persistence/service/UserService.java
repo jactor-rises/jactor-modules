@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.NewUserDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import com.github.jactor.rises.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +18,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<NewUserDto> find(String userName) {
+    public Optional<UserDto> find(String userName) {
         return userRepository.findByUserName(userName).map(UserEntity::asDto);
     }
 
-    public Optional<NewUserDto> find(Long id) {
+    public Optional<UserDto> find(Long id) {
         return userRepository.findById(id).map(UserEntity::asDto);
     }
 
-    public NewUserDto saveOrUpdate(NewUserDto userDto) {
+    public UserDto saveOrUpdate(UserDto userDto) {
         UserEntity userEntity = new UserEntity(userDto);
         userRepository.save(userEntity);
 

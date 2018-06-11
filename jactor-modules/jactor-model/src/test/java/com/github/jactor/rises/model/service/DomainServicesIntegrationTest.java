@@ -9,7 +9,6 @@ import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactor.rises.model.domain.person.PersonDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
-import com.github.jactor.rises.persistence.orm.PersistenceOrmApplication;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,7 +28,7 @@ import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
 import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PersistenceOrmApplication.class)
+@SpringBootTest(classes = Object.class)
 @Import({JactorModel.class})
 @Ignore("#193: spring-context")
 public class DomainServicesIntegrationTest {

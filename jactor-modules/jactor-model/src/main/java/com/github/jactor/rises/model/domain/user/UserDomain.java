@@ -10,6 +10,10 @@ import com.github.jactor.rises.model.domain.blog.BlogDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.person.PersonDomain;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class UserDomain extends PersistentDomain implements User {
 
     private final UserDto userDto;
@@ -19,23 +23,23 @@ public class UserDomain extends PersistentDomain implements User {
     }
 
     @Override public UserName getUserName() {
-        return userDto.getUserName() != null ? new UserName(userDto.getUserName()) : null;
+        return Optional.ofNullable(userDto.getUserName()).map(UserName::new).orElse(null);
     }
 
-    @Override public BlogDomain getBlog() {
-        return userDto.getBlog() != null ? new BlogDomain(userDto.getBlog()) : null;
+    @Override public Set<BlogDomain> getBlogs() {
+        return userDto.getBlogs().stream().map(BlogDomain::new).collect(Collectors.toSet());
     }
 
     @Override public GuestBook getGuestBook() {
-        return userDto.getGuestBook() != null ? new GuestBookDomain(userDto.getGuestBook()) : null;
+        return Optional.ofNullable(userDto.getGuestBook()).map(GuestBookDomain::new).orElse(null);
     }
 
     @Override public PersonDomain getPerson() {
-        return userDto.getPerson() != null ? new PersonDomain(userDto.getPerson()) : null;
+        return Optional.ofNullable(userDto.getPerson()).map(PersonDomain::new).orElse(null);
     }
 
     @Override public EmailAddress getEmailAddress() {
-        return new EmailAddress(userDto.getEmailAddress());
+        return Optional.ofNullable(userDto.getEmailAddress()).map(EmailAddress::new).orElse(null);
     }
 
     @Override public UserDto getDto() {

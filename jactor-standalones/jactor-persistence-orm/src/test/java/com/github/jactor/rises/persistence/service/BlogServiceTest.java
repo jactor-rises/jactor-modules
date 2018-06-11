@@ -1,8 +1,8 @@
 package com.github.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.NewBlogDto;
-import com.github.jactor.rises.client.dto.NewBlogEntryDto;
-import com.github.jactor.rises.client.dto.NewUserDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
 import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
@@ -48,7 +48,7 @@ class BlogServiceTest {
         Optional<BlogEntity> blogEntity = Optional.of(aBlog().withTitle("full speed ahead").build());
         when(blogRepositoryMock.findById(1001L)).thenReturn(blogEntity);
 
-        NewBlogDto blog = blogServiceToTest.find(1001L).orElseThrow(mockError());
+        BlogDto blog = blogServiceToTest.find(1001L).orElseThrow(mockError());
 
         assertThat(blog.getTitle()).as("title").isEqualTo("full speed ahead");
     }
@@ -58,7 +58,7 @@ class BlogServiceTest {
         Optional<BlogEntryEntity> anEntry = Optional.of(aBlogEntry().withCreatorName("me").withEntry("too").build());
         when(blogEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
 
-        NewBlogEntryDto blogEntry = blogServiceToTest.findEntryBy(1001L).orElseThrow(mockError());
+        BlogEntryDto blogEntry = blogServiceToTest.findEntryBy(1001L).orElseThrow(mockError());
 
         assertAll(
                 () -> assertThat(blogEntry.getCreatorName()).as("creator name").isEqualTo("me"),
@@ -75,7 +75,7 @@ class BlogServiceTest {
         List<BlogEntity> blogsToFind = Collections.singletonList(aBlog().withTitle("Star Wars").build());
         when(blogRepositoryMock.findBlogsByTitle("Star Wars")).thenReturn(blogsToFind);
 
-        List<NewBlogDto> blogForTitle = blogServiceToTest.findBlogsBy("Star Wars");
+        List<BlogDto> blogForTitle = blogServiceToTest.findBlogsBy("Star Wars");
 
         assertThat(blogForTitle).hasSize(1);
     }
@@ -85,7 +85,7 @@ class BlogServiceTest {
         List<BlogEntryEntity> blogEntryEntities = Collections.singletonList(aBlogEntry().withCreatorName("you").withEntry("too").build());
         when(blogEntryRepositoryMock.findByBlog_Id(1001L)).thenReturn(blogEntryEntities);
 
-        List<NewBlogEntryDto> blogEntries = blogServiceToTest.findEntriesForBlog(1001L);
+        List<BlogEntryDto> blogEntries = blogServiceToTest.findEntriesForBlog(1001L);
 
         assertAll(
                 () -> assertThat(blogEntries).as("entries").hasSize(1),
@@ -96,11 +96,11 @@ class BlogServiceTest {
 
     @DisplayName("should save BlogDto as BlogEntity")
     @Test void shouldSaveBlogDtoAsBlogEntity() {
-        NewBlogDto blogDto = new NewBlogDto();
+        BlogDto blogDto = new BlogDto();
         blogDto.setCreated(now());
-        blogDto.setEntries(new HashSet<>(Collections.singletonList(new NewBlogEntryDto())));
+        blogDto.setEntries(new HashSet<>(Collections.singletonList(new BlogEntryDto())));
         blogDto.setTitle("some blog");
-        blogDto.setUser(new NewUserDto());
+        blogDto.setUser(new UserDto());
 
         blogServiceToTest.saveOrUpdate(blogDto);
 
@@ -119,8 +119,8 @@ class BlogServiceTest {
 
     @DisplayName("should save BlogEntryDto as BlogEntryEntity")
     @Test void shouldSaveBlogEntryDtoAsBlogEntryEntity() {
-        NewBlogEntryDto blogEntryDto = new NewBlogEntryDto();
-        blogEntryDto.setBlog(new NewBlogDto());
+        BlogEntryDto blogEntryDto = new BlogEntryDto();
+        blogEntryDto.setBlog(new BlogDto());
         blogEntryDto.setCreatorName("me");
         blogEntryDto.setEntry("if i where a rich man...");
 

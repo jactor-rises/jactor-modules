@@ -6,6 +6,7 @@ import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.model.domain.PersistentDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class GuestBookDomain extends PersistentDomain implements GuestBook {
     }
 
     @Override public UserDomain getUser() {
-        return guestBookDto.getUser() != null ? new UserDomain(guestBookDto.getUser()) : null;
+        return Optional.ofNullable(guestBookDto.getUser()).map(UserDomain::new).orElse(null);
     }
 
     @Override public Set<GuestBookEntry> getEntries() {

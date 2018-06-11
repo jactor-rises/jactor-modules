@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.entity.guestbook;
 
-import com.github.jactor.rises.client.dto.NewGuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -47,7 +47,7 @@ public class GuestBookEntity extends PersistentEntity<Long> {
         entries = guestBook.entries.stream().map(GuestBookEntryEntity::copy).collect(toSet());
     }
 
-    public GuestBookEntity(NewGuestBookDto guestBook) {
+    public GuestBookEntity(GuestBookDto guestBook) {
         super(guestBook);
         title = guestBook.getTitle();
         Optional.ofNullable(guestBook.getUser()).map(UserEntity::new).ifPresent(userEntity -> user = userEntity);
@@ -58,8 +58,8 @@ public class GuestBookEntity extends PersistentEntity<Long> {
         return Optional.ofNullable(user).map(UserEntity::copy).orElse(null);
     }
 
-    public NewGuestBookDto asDto() {
-        NewGuestBookDto guestBook = new NewGuestBookDto();
+    public GuestBookDto asDto() {
+        GuestBookDto guestBook = new GuestBookDto();
         guestBook.setEntries(entries.stream().map(gbee -> gbee.asDto(guestBook)).collect(toSet()));
         guestBook.setTitle(title);
         Optional.ofNullable(user).map(UserEntity::asDto).ifPresent(guestBook::setUser);

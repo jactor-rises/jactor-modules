@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.entity.guestbook;
 
-import com.github.jactor.rises.client.dto.NewGuestBookDto;
-import com.github.jactor.rises.client.dto.NewGuestBookEntryDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactor.rises.commons.time.Now;
 import com.github.jactor.rises.persistence.entity.EntryEmbeddable;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
@@ -47,7 +47,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable = guestBookEntry.copyEntry();
     }
 
-    public GuestBookEntryEntity(NewGuestBookEntryDto guestBookEntry) {
+    public GuestBookEntryEntity(GuestBookEntryDto guestBookEntry) {
         super(guestBookEntry);
         Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).ifPresent(guestBookEntity -> guestBook = guestBookEntity);
         entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
@@ -61,12 +61,12 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return entryEmbeddable.copy();
     }
 
-    public NewGuestBookEntryDto asDto() {
+    public GuestBookEntryDto asDto() {
         return asDto(guestBook.asDto());
     }
 
-    NewGuestBookEntryDto asDto(NewGuestBookDto guestBook) {
-        NewGuestBookEntryDto guestBookEntry = new NewGuestBookEntryDto();
+    GuestBookEntryDto asDto(GuestBookDto guestBook) {
+        GuestBookEntryDto guestBookEntry = new GuestBookEntryDto();
         guestBookEntry.setCreatorName(entryEmbeddable.getCreatorName());
         guestBookEntry.setEntry(entryEmbeddable.getEntry());
         guestBookEntry.setGuestBook(guestBook);

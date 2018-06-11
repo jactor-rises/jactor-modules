@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.NewUserDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import com.github.jactor.rises.persistence.repository.UserRepository;
 import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
@@ -35,7 +35,7 @@ class UserServiceTest {
     @DisplayName("should map a user entity to a dto")
     @Test void shouldMapUserToDto() {
         when(userRepositoryMock.findByUserName("jactor")).thenReturn(Optional.of(aUser().withUserName("jactor").build()));
-        NewUserDto user = userServiceToTest.find("jactor").orElseThrow(() -> new AssertionError("mocking?"));
+        UserDto user = userServiceToTest.find("jactor").orElseThrow(() -> new AssertionError("mocking?"));
 
         assertAll(
                 () -> assertThat(user).as("user").isNotNull(),
@@ -46,7 +46,7 @@ class UserServiceTest {
     @DisplayName("should also map a user entity to a dto when finding by id")
     @Test void shouldMapUserToDtoWhenFindingById() {
         when(userRepositoryMock.findById(69L)).thenReturn(Optional.of(aUser().withUserName("jactor").build()));
-        NewUserDto user = userServiceToTest.find(69L).orElseThrow(() -> new AssertionError("mocking?"));
+        UserDto user = userServiceToTest.find(69L).orElseThrow(() -> new AssertionError("mocking?"));
 
         assertAll(
                 () -> assertThat(user).as("user").isNotNull(),
@@ -56,7 +56,7 @@ class UserServiceTest {
 
     @DisplayName("should save UserDto as UserEntity")
     @Test void shouldSavedUserDtoAsUserEntity() {
-        NewUserDto userDto = new NewUserDto();
+        UserDto userDto = new UserDto();
         userDto.setUserName("marley");
 
         userServiceToTest.saveOrUpdate(userDto);

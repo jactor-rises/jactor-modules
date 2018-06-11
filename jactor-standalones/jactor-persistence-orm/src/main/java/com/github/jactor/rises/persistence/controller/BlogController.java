@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.controller;
 
-import com.github.jactor.rises.client.dto.NewBlogDto;
-import com.github.jactor.rises.client.dto.NewBlogEntryDto;
+import com.github.jactor.rises.client.dto.BlogDto;
+import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactor.rises.persistence.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,38 +29,38 @@ public class BlogController extends AbstractController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<NewBlogDto> get(@PathVariable("id") Long blogId) {
-        Optional<NewBlogDto> possibleBlogDto = blogService.find(blogId);
+    public ResponseEntity<BlogDto> get(@PathVariable("id") Long blogId) {
+        Optional<BlogDto> possibleBlogDto = blogService.find(blogId);
 
-        return possibleBlogDto.map(newBlogDto -> new ResponseEntity<>(newBlogDto, HttpStatus.OK))
+        return possibleBlogDto.map(blogDto -> new ResponseEntity<>(blogDto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @GetMapping("/entry/get/{id}")
-    public ResponseEntity<NewBlogEntryDto> getEntryById(@PathVariable("id") Long blogEntryId) {
-        Optional<NewBlogEntryDto> possibleEntry = blogService.findEntryBy(blogEntryId);
+    public ResponseEntity<BlogEntryDto> getEntryById(@PathVariable("id") Long blogEntryId) {
+        Optional<BlogEntryDto> possibleEntry = blogService.findEntryBy(blogEntryId);
 
-        return possibleEntry.map(newBlogEntryDto -> new ResponseEntity<>(newBlogEntryDto, HttpStatus.OK))
+        return possibleEntry.map(blogEntryDto -> new ResponseEntity<>(blogEntryDto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @GetMapping("/find/{title}")
-    public ResponseEntity<List<NewBlogDto>> findByTitle(@PathVariable("title") String title) {
-        List<NewBlogDto> blogsByTitle = blogService.findBlogsBy(title);
+    public ResponseEntity<List<BlogDto>> findByTitle(@PathVariable("title") String title) {
+        List<BlogDto> blogsByTitle = blogService.findBlogsBy(title);
 
         return new ResponseEntity<>(blogsByTitle, blogsByTitle.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
     }
 
     @GetMapping("/{id}/entries/find")
-    public ResponseEntity<List<NewBlogEntryDto>> findEntriesByBlogId(@PathVariable("id") Long blogId) {
-        List<NewBlogEntryDto> entriesForBlog = blogService.findEntriesForBlog(blogId);
+    public ResponseEntity<List<BlogEntryDto>> findEntriesByBlogId(@PathVariable("id") Long blogId) {
+        List<BlogEntryDto> entriesForBlog = blogService.findEntriesForBlog(blogId);
 
         return new ResponseEntity<>(entriesForBlog, entriesForBlog.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK);
     }
 
     @PostMapping("/persist")
-    public ResponseEntity<NewBlogDto> persist(@RequestBody NewBlogDto blogDto) {
-        NewBlogDto saved = blogService.saveOrUpdate(blogDto);
+    public ResponseEntity<BlogDto> persist(@RequestBody BlogDto blogDto) {
+        BlogDto saved = blogService.saveOrUpdate(blogDto);
 
         if (blogDto.getId() == null) {
             return aCreatedResponseEntity(saved, String.format("/blog/get/%s", saved.getId()));
@@ -70,8 +70,8 @@ public class BlogController extends AbstractController {
     }
 
     @PostMapping("/entry/persist")
-    public ResponseEntity<NewBlogEntryDto> persist(@RequestBody NewBlogEntryDto blogEntryDto) {
-        NewBlogEntryDto saved = blogService.saveOrUpdate(blogEntryDto);
+    public ResponseEntity<BlogEntryDto> persist(@RequestBody BlogEntryDto blogEntryDto) {
+        BlogEntryDto saved = blogService.saveOrUpdate(blogEntryDto);
 
         if (blogEntryDto.getId() == null) {
             return aCreatedResponseEntity(saved, String.format("/blog/entries/get/%s", saved.getId()));

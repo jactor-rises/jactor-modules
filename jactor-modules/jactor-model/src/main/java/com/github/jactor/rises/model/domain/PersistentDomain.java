@@ -1,6 +1,5 @@
 package com.github.jactor.rises.model.domain;
 
-import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.datatype.Name;
 import com.github.jactor.rises.client.domain.Persistent;
 import com.github.jactor.rises.client.dto.PersistentDto;
@@ -30,7 +29,7 @@ public abstract class PersistentDomain implements Persistent {
     }
 
     @Override public LocalDateTime getCreationTime() {
-        return FieldConverter.convertDateTime(fetchDto().getCreationTime());
+        return fetchDto().getCreationTime();
     }
 
     @Override public Name getUpdatedBy() {
@@ -38,6 +37,6 @@ public abstract class PersistentDomain implements Persistent {
     }
 
     @Override public LocalDateTime getUpdatedTime() {
-        return FieldConverter.convertDateTime(fetchDto().getUpdatedTime());
+        return fetchDto().getUpdatedTime();
     }
 }

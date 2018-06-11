@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import static com.github.jactor.rises.model.domain.blog.BlogEntryDomain.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 @DisplayName("The BlogEntryBuilder")
 class BlogEntryBuilderTest {
@@ -32,8 +31,8 @@ class BlogEntryBuilderTest {
 
     @DisplayName("should not build a blog entry without the creator")
     @Test void willNotBuildBlogEntryWithoutTheCreator() {
-        assertThatNullPointerException().isThrownBy(() -> aBlogEntry().withEntry("some entry").withCreatorName(null).with(new BlogDto()).build())
-                .withMessageContaining("A name must be given");
+        assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("some entry").withCreatorName(null).with(new BlogDto()).build())
+                .withMessageContaining("creatorName").withMessageContaining("has no value");
     }
 
     @DisplayName("should build a blog entry when all required fields are set")

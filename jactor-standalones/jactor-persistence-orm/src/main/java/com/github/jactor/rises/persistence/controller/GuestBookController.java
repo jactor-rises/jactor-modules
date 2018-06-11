@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.controller;
 
-import com.github.jactor.rises.client.dto.NewGuestBookDto;
-import com.github.jactor.rises.client.dto.NewGuestBookEntryDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactor.rises.persistence.service.GuestBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,27 +28,27 @@ public class GuestBookController extends AbstractController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<NewGuestBookDto> get(@PathVariable("id") Long id) {
-        Optional<NewGuestBookDto> foundGuestBookDto = guestBookService.find(id);
+    public ResponseEntity<GuestBookDto> get(@PathVariable("id") Long id) {
+        Optional<GuestBookDto> foundGuestBookDto = guestBookService.find(id);
 
         return foundGuestBookDto
-                .map(newGuestBookDto -> new ResponseEntity<>(newGuestBookDto, HttpStatus.OK))
+                .map(guestBookDto -> new ResponseEntity<>(guestBookDto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
 
     }
 
     @GetMapping("/get/entry/{id}")
-    public ResponseEntity<NewGuestBookEntryDto> getEntry(@PathVariable("id") Long id) {
-        Optional<NewGuestBookEntryDto> foundGuestBookEntryDto = guestBookService.findEntry(id);
+    public ResponseEntity<GuestBookEntryDto> getEntry(@PathVariable("id") Long id) {
+        Optional<GuestBookEntryDto> foundGuestBookEntryDto = guestBookService.findEntry(id);
 
         return foundGuestBookEntryDto
-                .map(newGuestBookDto -> new ResponseEntity<>(newGuestBookDto, HttpStatus.OK))
+                .map(guestBookDto -> new ResponseEntity<>(guestBookDto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @PostMapping("/persist")
-    public ResponseEntity<NewGuestBookDto> persist(@RequestBody NewGuestBookDto guestBookDto) {
-        NewGuestBookDto saved = guestBookService.saveOrUpdate(guestBookDto);
+    public ResponseEntity<GuestBookDto> persist(@RequestBody GuestBookDto guestBookDto) {
+        GuestBookDto saved = guestBookService.saveOrUpdate(guestBookDto);
 
         if (guestBookDto.getId() == null) {
             return aCreatedResponseEntity(saved, String.format("/guestBook/get/%s", saved.getId()));
@@ -58,8 +58,8 @@ public class GuestBookController extends AbstractController {
     }
 
     @PostMapping("/entry/persist")
-    public ResponseEntity<NewGuestBookEntryDto> persist(@RequestBody NewGuestBookEntryDto guestBookEntryDto) {
-        NewGuestBookEntryDto saved = guestBookService.saveOrUpdate(guestBookEntryDto);
+    public ResponseEntity<GuestBookEntryDto> persist(@RequestBody GuestBookEntryDto guestBookEntryDto) {
+        GuestBookEntryDto saved = guestBookService.saveOrUpdate(guestBookEntryDto);
 
         if (guestBookEntryDto.getId() == null) {
             return aCreatedResponseEntity(saved, String.format("/guestBook/get/entry/%s", saved.getId()));

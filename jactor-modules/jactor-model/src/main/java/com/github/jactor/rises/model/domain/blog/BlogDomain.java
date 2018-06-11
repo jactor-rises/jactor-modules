@@ -1,6 +1,5 @@
 package com.github.jactor.rises.model.domain.blog;
 
-import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.domain.Blog;
 import com.github.jactor.rises.client.domain.BlogEntry;
 import com.github.jactor.rises.client.dto.BlogDto;
@@ -8,6 +7,7 @@ import com.github.jactor.rises.model.domain.PersistentDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,11 +24,11 @@ public class BlogDomain extends PersistentDomain implements Blog {
     }
 
     @Override public UserDomain getUser() {
-        return blogDto.getUser() != null ? new UserDomain(blogDto.getUser()) : null;
+        return Optional.ofNullable(blogDto.getUser()).map(UserDomain::new).orElse(null);
     }
 
     @Override public LocalDate getCreated() {
-        return FieldConverter.convertDate(getDto().getCreated());
+        return getDto().getCreated();
     }
 
     @Override public Set<BlogEntry> getEntries() {

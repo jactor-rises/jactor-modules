@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.entity.blog;
 
-import com.github.jactor.rises.client.dto.NewBlogDto;
+import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -47,7 +47,7 @@ public class BlogEntity extends PersistentEntity<Long> {
         Optional.ofNullable(blogEntity.getUser()).ifPresent(user -> userEntity = user.copy());
     }
 
-    public BlogEntity(NewBlogDto blogDto) {
+    public BlogEntity(BlogDto blogDto) {
         super(blogDto);
         created = blogDto.getCreated();
         entries = blogDto.getEntries().stream().map(BlogEntryEntity::new).collect(toSet());
@@ -55,8 +55,8 @@ public class BlogEntity extends PersistentEntity<Long> {
         Optional.ofNullable(blogDto.getUser()).ifPresent(user -> userEntity = new UserEntity(user));
     }
 
-    public NewBlogDto asDto() {
-        NewBlogDto blogDto = addPersistentData(new NewBlogDto());
+    public BlogDto asDto() {
+        BlogDto blogDto = addPersistentData(new BlogDto());
         blogDto.setCreated(created);
         blogDto.setEntries(entries.stream().map(bee -> bee.asDto(blogDto)).collect(toSet()));
         blogDto.setTitle(title);

@@ -1,12 +1,12 @@
 package com.github.jactor.rises.model.domain.guestbook;
 
-import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.datatype.Name;
 import com.github.jactor.rises.client.domain.GuestBookEntry;
 import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactor.rises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class GuestBookEntryDomain extends PersistentDomain implements GuestBookEntry {
 
@@ -17,11 +17,11 @@ public class GuestBookEntryDomain extends PersistentDomain implements GuestBookE
     }
 
     @Override public GuestBookDomain getGuestBook() {
-        return guestBookEntryDto.getGuestBook() != null ? new GuestBookDomain(guestBookEntryDto.getGuestBook()) : null;
+        return Optional.ofNullable(guestBookEntryDto.getGuestBook()).map(GuestBookDomain::new).orElse(null);
     }
 
     @Override public LocalDateTime getCreatedTime() {
-        return FieldConverter.convertDateTime(guestBookEntryDto.getCreatedTime());
+        return guestBookEntryDto.getCreationTime();
     }
 
     @Override public String getEntry() {
@@ -29,7 +29,7 @@ public class GuestBookEntryDomain extends PersistentDomain implements GuestBookE
     }
 
     @Override public Name getCreatorName() {
-        return new Name(guestBookEntryDto.getCreatorName());
+        return Optional.ofNullable(guestBookEntryDto.getCreatorName()).map(Name::new).orElse(null);
     }
 
     @Override public GuestBookEntryDto getDto() {

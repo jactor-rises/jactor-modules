@@ -1,8 +1,8 @@
 package com.github.jactor.rises.persistence.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jactor.rises.client.dto.NewGuestBookDto;
-import com.github.jactor.rises.client.dto.NewGuestBookEntryDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import com.github.jactor.rises.persistence.JactorPersistence;
 import com.github.jactor.rises.persistence.service.GuestBookService;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class GuestBookControllerTest {
 
     @DisplayName("should find a guest book")
     @Test void shouldFindGuestBook() throws Exception {
-        when(guestBookServiceMock.find(1L)).thenReturn(Optional.of(new NewGuestBookDto()));
+        when(guestBookServiceMock.find(1L)).thenReturn(Optional.of(new GuestBookDto()));
 
         mockMvc.perform(get("/guestBook/get/1")).andExpect(status().isOk());
     }
@@ -65,14 +65,14 @@ class GuestBookControllerTest {
 
     @DisplayName("should find a guest book entry")
     @Test void shouldFindGuestBookEntry() throws Exception {
-        when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.of(new NewGuestBookEntryDto()));
+        when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.of(new GuestBookEntryDto()));
 
         mockMvc.perform(get("/guestBook/get/entry/1")).andExpect(status().isOk());
     }
 
     @DisplayName("should persist changes to existing guest book")
     @Test void shouldPersistChangesToExistingGuestBook() throws Exception {
-        NewGuestBookDto guestBookDto = new NewGuestBookDto();
+        GuestBookDto guestBookDto = new GuestBookDto();
         guestBookDto.setId(1L);
 
         mockMvc.perform(post("/guestBook/persist")
@@ -80,16 +80,16 @@ class GuestBookControllerTest {
                 .content(objectMapper.writeValueAsBytes(guestBookDto))
         ).andExpect(status().isOk());
 
-        verify(guestBookServiceMock).saveOrUpdate(any(NewGuestBookDto.class));
+        verify(guestBookServiceMock).saveOrUpdate(any(GuestBookDto.class));
     }
 
     @DisplayName("should create a guest book")
     @Test void shouldCreateGuestBook() throws Exception {
-        NewGuestBookDto guestBookDto = new NewGuestBookDto();
-        NewGuestBookDto createdDto = new NewGuestBookDto();
+        GuestBookDto guestBookDto = new GuestBookDto();
+        GuestBookDto createdDto = new GuestBookDto();
         createdDto.setId(1L);
 
-        when(guestBookServiceMock.saveOrUpdate(any(NewGuestBookDto.class))).thenReturn(createdDto);
+        when(guestBookServiceMock.saveOrUpdate(any(GuestBookDto.class))).thenReturn(createdDto);
 
         mockMvc.perform(post("/guestBook/persist")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -101,7 +101,7 @@ class GuestBookControllerTest {
 
     @DisplayName("should persist changes to existing guest book entry")
     @Test void shouldPersistChangesToExistingGuestBookEntry() throws Exception {
-        NewGuestBookEntryDto guestBookEntryDto = new NewGuestBookEntryDto();
+        GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
         guestBookEntryDto.setId(1L);
 
         mockMvc.perform(post("/guestBook/entry/persist")
@@ -109,16 +109,16 @@ class GuestBookControllerTest {
                 .content(objectMapper.writeValueAsBytes(guestBookEntryDto))
         ).andExpect(status().isOk());
 
-        verify(guestBookServiceMock).saveOrUpdate(any(NewGuestBookEntryDto.class));
+        verify(guestBookServiceMock).saveOrUpdate(any(GuestBookEntryDto.class));
     }
 
     @DisplayName("should create a guest book entry")
     @Test void shouldCreateGuestBookEntry() throws Exception {
-        NewGuestBookEntryDto guestBookEntryDto = new NewGuestBookEntryDto();
-        NewGuestBookEntryDto createdDto = new NewGuestBookEntryDto();
+        GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
+        GuestBookEntryDto createdDto = new GuestBookEntryDto();
         createdDto.setId(1L);
 
-        when(guestBookServiceMock.saveOrUpdate(any(NewGuestBookEntryDto.class))).thenReturn(createdDto);
+        when(guestBookServiceMock.saveOrUpdate(any(GuestBookEntryDto.class))).thenReturn(createdDto);
 
         mockMvc.perform(post("/guestBook/entry/persist")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

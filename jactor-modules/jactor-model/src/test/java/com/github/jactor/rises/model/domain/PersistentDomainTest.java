@@ -1,6 +1,5 @@
 package com.github.jactor.rises.model.domain;
 
-import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.datatype.Name;
 import com.github.jactor.rises.client.dto.PersistentDto;
 import com.github.jactor.rises.client.dto.UserDto;
@@ -26,16 +25,16 @@ class PersistentDomainTest {
         UserDto userDto = new UserDto();
         userDto.setId(1L);
         userDto.setCreatedBy("me");
-        userDto.setCreationTime(FieldConverter.convert(LocalDateTime.now().minusDays(1)));
+        userDto.setCreationTime(LocalDateTime.now().minusDays(1));
         userDto.setUpdatedBy("you");
-        userDto.setUpdatedTime(FieldConverter.convert(LocalDateTime.now()));
+        userDto.setUpdatedTime(LocalDateTime.now());
 
         TestPersistedDomain persistentDomain = new TestPersistedDomain(userDto);
         assertThat(persistentDomain.getId()).as("id").isEqualTo(1L);
         assertThat(persistentDomain.getCreatedBy()).as("creator").isEqualTo(new Name("me"));
-        assertThat(persistentDomain.getCreationTime()).as("created time").isEqualTo(FieldConverter.convertDateTime(userDto.getCreationTime()));
+        assertThat(persistentDomain.getCreationTime()).as("created time").isEqualTo(userDto.getCreationTime());
         assertThat(persistentDomain.getUpdatedBy()).as("updated by").isEqualTo(new Name("you"));
-        assertThat(persistentDomain.getUpdatedTime()).as("updatet time").isEqualTo(FieldConverter.convertDateTime(userDto.getUpdatedTime()));
+        assertThat(persistentDomain.getUpdatedTime()).as("updatet time").isEqualTo(userDto.getUpdatedTime());
     }
 
     private class TestPersistedDomain extends PersistentDomain {

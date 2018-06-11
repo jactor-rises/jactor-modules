@@ -1,13 +1,11 @@
 package com.github.jactor.rises.model.domain.blog;
 
-import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.model.service.rest.BlogRestService;
 import com.github.jactor.rises.model.service.rest.UserRestService;
-import com.github.jactor.rises.persistence.orm.PersistenceOrmApplication;
-import org.assertj.core.api.Condition;
+import com.github.jactor.rises.test.extension.time.NowAsPureDateExtension;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
 import static com.github.jactor.rises.model.domain.blog.BlogDomain.aBlog;
@@ -26,7 +22,7 @@ import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {PersistenceOrmApplication.class})
+@SpringBootTest(classes = {Object.class})
 @Transactional
 @Ignore("#193: spring-context")
 public class BlogEntryIntegrationTest {
@@ -44,15 +40,8 @@ public class BlogEntryIntegrationTest {
 
         assertThat(blogEntry.getBlog().getTitle()).as("blog.title").isEqualTo("my blog");
         assertThat(blogEntry.getCreatorName()).as("entry.creator").isEqualTo("me");
-        assertThat(blogEntry.getCreatedTime()).as("entry.createdTime").is(withinThisMinute());
+        assertThat(blogEntry.getCreationTime().minusMinutes(1)).as("entry.createdTime").isEqualTo(NowAsPureDateExtension.asDateTime());
         assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("some entry");
-    }
-
-    private Condition<? super String> withinThisMinute() {
-        return new Condition<>(
-                localDateTime -> LocalDateTime.now().withNano(0).withSecond(0).isBefore(FieldConverter.convertDateTime(localDateTime)),
-                "within this minute"
-        );
     }
 
     @SuppressWarnings("SameParameterValue") private BlogDto createBlogForPersistedUser(String blogTitle, String entry, String creatorName) {

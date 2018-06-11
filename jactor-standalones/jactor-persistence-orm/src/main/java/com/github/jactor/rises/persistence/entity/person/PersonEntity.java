@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.entity.person;
 
-import com.github.jactor.rises.client.dto.NewPersonDto;
+import com.github.jactor.rises.client.dto.PersonDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import com.github.jactor.rises.persistence.entity.address.AddressEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
@@ -46,7 +46,7 @@ public class PersonEntity extends PersistentEntity<Long> {
         locale = person.locale;
     }
 
-    public PersonEntity(NewPersonDto person) {
+    public PersonEntity(PersonDto person) {
         super(person);
         Optional.ofNullable(person.getAddress()).ifPresent(adto -> addressEntity = new AddressEntity(adto));
         description = person.getDescription();
@@ -57,8 +57,8 @@ public class PersonEntity extends PersistentEntity<Long> {
 
     }
 
-    public NewPersonDto asDto() {
-        NewPersonDto personDto = addPersistentData(new NewPersonDto());
+    public PersonDto asDto() {
+        PersonDto personDto = addPersistentData(new PersonDto());
         personDto.setAddress(addressEntity.asDto());
         personDto.setDescription(description);
         personDto.setFirstName(firstName);

@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.entity.address;
 
-import com.github.jactor.rises.client.dto.NewAddressDto;
+import com.github.jactor.rises.client.dto.AddressDto;
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -44,12 +44,12 @@ public class AddressEntity extends PersistentEntity<Long> {
         zipCode = address.getZipCode();
     }
 
-    public AddressEntity(NewAddressDto addressDto) {
+    public AddressEntity(AddressDto addressDto) {
         super(addressDto);
     }
 
-    public NewAddressDto asDto() {
-        NewAddressDto addressDto = addPersistentData(new NewAddressDto());
+    public AddressDto asDto() {
+        AddressDto addressDto = addPersistentData(new AddressDto());
         addressDto.setAddressLine1(addressLine1);
         addressDto.setAddressLine2(addressLine2);
         addressDto.setAddressLine3(addressLine3);

@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.controller;
 
-import com.github.jactor.rises.client.dto.NewAddressDto;
+import com.github.jactor.rises.client.dto.AddressDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -13,9 +13,9 @@ class AbstractControllerTest {
 
     @DisplayName("should return a response containing HTTP_STATUS 500 when the path is not according to the RFC 2396 specification")
     @Test void shouldRespondWithInternalErrorWhenSyntaxIsWrong() {
-        ResponseEntity<NewAddressDto> toCreate = new AbstractController() {
+        ResponseEntity<AddressDto> toCreate = new AbstractController() {
         }
-                .aCreatedResponseEntity(new NewAddressDto(), ":path:with.errors...");
+                .aCreatedResponseEntity(new AddressDto(), ":path:with.errors...");
 
         assertThat(toCreate.getStatusCode()).as("create response http status")
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,8 +1,8 @@
 package com.github.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.NewGuestBookDto;
-import com.github.jactor.rises.client.dto.NewGuestBookEntryDto;
-import com.github.jactor.rises.client.dto.NewUserDto;
+import com.github.jactor.rises.client.dto.GuestBookDto;
+import com.github.jactor.rises.client.dto.GuestBookEntryDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
 import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
@@ -47,7 +47,7 @@ class GuestBookServiceTest {
         Optional<GuestBookEntity> guestBookEntity = Optional.of(aGuestBook().withTitle("@home").build());
         when(guestBookRepositoryMock.findById(1001L)).thenReturn(guestBookEntity);
 
-        NewGuestBookDto guestBookDto = guestBookServiceToTest.find(1001L).orElseThrow(mockError());
+        GuestBookDto guestBookDto = guestBookServiceToTest.find(1001L).orElseThrow(mockError());
 
         assertThat(guestBookDto.getTitle()).as("title").isEqualTo("@home");
     }
@@ -57,7 +57,7 @@ class GuestBookServiceTest {
         Optional<GuestBookEntryEntity> anEntry = Optional.of(aGuestBookEntry().withCreatorName("me").withEntry("too").build());
         when(guestBookEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
 
-        NewGuestBookEntryDto guestBookEntryDto = guestBookServiceToTest.findEntry(1001L).orElseThrow(mockError());
+        GuestBookEntryDto guestBookEntryDto = guestBookServiceToTest.findEntry(1001L).orElseThrow(mockError());
 
         assertAll(
                 () -> assertThat(guestBookEntryDto.getCreatorName()).as("creator name").isEqualTo("me"),
@@ -71,10 +71,10 @@ class GuestBookServiceTest {
 
     @DisplayName("should save GuestBookDto as GuestBookEntity")
     @Test void shouldSaveGuestBookDtoAsGuestBookEntity() {
-        NewGuestBookDto guestBookDto = new NewGuestBookDto();
-        guestBookDto.setEntries(new HashSet<>(Collections.singletonList(new NewGuestBookEntryDto())));
+        GuestBookDto guestBookDto = new GuestBookDto();
+        guestBookDto.setEntries(new HashSet<>(Collections.singletonList(new GuestBookEntryDto())));
         guestBookDto.setTitle("home sweet home");
-        guestBookDto.setUser(new NewUserDto());
+        guestBookDto.setUser(new UserDto());
 
         guestBookServiceToTest.saveOrUpdate(guestBookDto);
 
@@ -91,8 +91,8 @@ class GuestBookServiceTest {
 
     @DisplayName("should save GuestBookEntryDto as GuestBookEntryEntity")
     @Test void shouldSaveBlogEntryDtoAsBlogEntryEntity() {
-        NewGuestBookEntryDto blogEntryDto = new NewGuestBookEntryDto();
-        blogEntryDto.setGuestBook(new NewGuestBookDto());
+        GuestBookEntryDto blogEntryDto = new GuestBookEntryDto();
+        blogEntryDto.setGuestBook(new GuestBookDto());
         blogEntryDto.setCreatorName("me");
         blogEntryDto.setEntry("if i where a rich man...");
 

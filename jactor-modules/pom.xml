@@ -15,7 +15,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>jactor-persistence</module>
         <module>jactor-model</module>
         <module>jactor-web</module>
     </modules>

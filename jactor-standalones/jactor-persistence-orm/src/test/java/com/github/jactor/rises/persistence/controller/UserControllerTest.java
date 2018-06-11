@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jactor.rises.client.dto.NewUserDto;
+import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.persistence.JactorPersistence;
 import com.github.jactor.rises.persistence.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class UserControllerTest {
 
     @DisplayName("should find a user by username")
     @Test void shouldFindByUsername() throws Exception {
-        when(userServiceMock.find("me")).thenReturn(Optional.of(new NewUserDto()));
+        when(userServiceMock.find("me")).thenReturn(Optional.of(new UserDto()));
 
         mockMvc.perform(get("/user/find/me")).andExpect(status().isOk());
     }
@@ -64,14 +64,14 @@ class UserControllerTest {
 
     @DisplayName("should find a user by id")
     @Test void shouldFindById() throws Exception {
-        when(userServiceMock.find(1L)).thenReturn(Optional.of(new NewUserDto()));
+        when(userServiceMock.find(1L)).thenReturn(Optional.of(new UserDto()));
 
         mockMvc.perform(get("/user/get/1")).andExpect(status().isOk());
     }
 
     @DisplayName("should persist changes to existing user")
     @Test void shouldPersistChangesToExistingUser() throws Exception {
-        NewUserDto userDto = new NewUserDto();
+        UserDto userDto = new UserDto();
         userDto.setId(1L);
 
         mockMvc.perform(post("/user/persist")
@@ -79,16 +79,16 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsBytes(userDto))
         ).andExpect(status().isOk());
 
-        verify(userServiceMock).saveOrUpdate(any(NewUserDto.class));
+        verify(userServiceMock).saveOrUpdate(any(UserDto.class));
     }
 
     @DisplayName("should create a user")
     @Test void shouldCreateGuestUser() throws Exception {
-        NewUserDto userDto = new NewUserDto();
-        NewUserDto createdDto = new NewUserDto();
+        UserDto userDto = new UserDto();
+        UserDto createdDto = new UserDto();
         createdDto.setId(1L);
 
-        when(userServiceMock.saveOrUpdate(any(NewUserDto.class))).thenReturn(createdDto);
+        when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(createdDto);
 
         mockMvc.perform(post("/user/persist")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
