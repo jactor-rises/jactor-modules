@@ -1,6 +1,6 @@
 # README #
 
-Src code for jactor-rises (client, module, persistence, and front end)
+Source code for jactor-rises (client, module, persistence, and front end)
 
 ### What is this repository for? ###
 
@@ -19,7 +19,7 @@ Src code for jactor-rises (client, module, persistence, and front end)
 * spring framwork
 * spring-boot
 * hibernate
-* hsqldb and h2
+* h2
 * assertj
 * mockito
 * aspect j
