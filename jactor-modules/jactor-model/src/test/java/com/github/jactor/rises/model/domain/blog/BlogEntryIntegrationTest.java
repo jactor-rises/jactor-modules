@@ -4,9 +4,8 @@ import com.github.jactor.rises.client.converter.FieldConverter;
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.BlogEntryDto;
 import com.github.jactor.rises.client.dto.UserDto;
-import com.github.jactor.rises.persistence.beans.PersistenceBeans;
-import com.github.jactor.rises.persistence.beans.service.BlogRestService;
-import com.github.jactor.rises.persistence.beans.service.UserRestService;
+import com.github.jactor.rises.model.service.rest.BlogRestService;
+import com.github.jactor.rises.model.service.rest.UserRestService;
 import com.github.jactor.rises.persistence.orm.PersistenceOrmApplication;
 import org.assertj.core.api.Condition;
 import org.junit.Ignore;
@@ -27,9 +26,9 @@ import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {PersistenceOrmApplication.class, PersistenceBeans.class})
+@SpringBootTest(classes = {PersistenceOrmApplication.class})
 @Transactional
-@Ignore("#181: rewrite as spring-boot test in PersistenceOrmApplication")
+@Ignore("#193: spring-context")
 public class BlogEntryIntegrationTest {
 
     @Autowired private BlogRestService blogRestService;

@@ -1,4 +1,4 @@
-package com.github.jactor.rises.persistence.beans.service;
+package com.github.jactor.rises.model.service.rest;
 
 import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.client.dto.GuestBookEntryDto;

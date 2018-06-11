@@ -2,7 +2,7 @@ package com.github.jactor.rises.model.service;
 
 import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.model.domain.user.UserDomain;
-import com.github.jactor.rises.persistence.beans.service.UserRestService;
+import com.github.jactor.rises.model.service.rest.UserRestService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

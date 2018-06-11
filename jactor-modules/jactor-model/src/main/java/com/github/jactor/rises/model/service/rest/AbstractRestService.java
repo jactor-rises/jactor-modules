@@ -1,4 +1,4 @@
-package com.github.jactor.rises.persistence.beans.service;
+package com.github.jactor.rises.model.service.rest;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;

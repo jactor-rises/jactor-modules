@@ -4,15 +4,13 @@ import com.github.jactor.rises.client.facade.UserFacade;
 import com.github.jactor.rises.model.facade.UserFacadeImpl;
 import com.github.jactor.rises.model.service.GuestBookDomainService;
 import com.github.jactor.rises.model.service.UserDomainService;
-import com.github.jactor.rises.persistence.beans.PersistenceBeans;
-import com.github.jactor.rises.persistence.beans.service.GuestBookRestService;
-import com.github.jactor.rises.persistence.beans.service.UserRestService;
+import com.github.jactor.rises.model.service.rest.GuestBookRestService;
+import com.github.jactor.rises.model.service.rest.UserRestService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({PersistenceBeans.class})
+// todo: #193: spring context for services exposed to usage of jactor-rises
 public class JactorModel {
 
     @Bean

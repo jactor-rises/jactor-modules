@@ -3,7 +3,7 @@ package com.github.jactor.rises.model.facade;
 import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.dto.UserDto;
-import com.github.jactor.rises.persistence.beans.service.UserRestService;
+import com.github.jactor.rises.model.service.rest.UserRestService;
 import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

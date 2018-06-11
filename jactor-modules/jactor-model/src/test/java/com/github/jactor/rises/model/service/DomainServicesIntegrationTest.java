@@ -9,7 +9,6 @@ import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactor.rises.model.domain.person.PersonDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
-import com.github.jactor.rises.persistence.beans.PersistenceBeans;
 import com.github.jactor.rises.persistence.orm.PersistenceOrmApplication;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Ignore;
@@ -31,8 +30,8 @@ import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PersistenceOrmApplication.class)
-@Import({JactorModel.class, PersistenceBeans.class})
-@Ignore("#181: rewrite as spring-boot test in PersistenceOrmApplication")
+@Import({JactorModel.class})
+@Ignore("#193: spring-context")
 public class DomainServicesIntegrationTest {
 
     @Autowired private GuestBookDomainService guestBookDomainService;
