@@ -8,11 +8,8 @@ image: maven:3.5.0-jdk-8
 pipelines:
   default:
     - step:
-        name: build jactor-commons (client and test) then jactor-module (persistence, module, and web)
+        name: build jactor-commons (client and test) and jactor-standalones (persistence-orm), then jactor-modules (module, and web)
         caches:
         - maven
         script:
-        - cd jactor-commons
-        - mvn install
-        - cd ../jactor-module
-        - mvn -B verify
+        - ./build.sh

@@ -1,11 +1,11 @@
 # README #
 
-Src code for jactor-rises (client, module, persistence, and front end)
+Source code for jactor-rises (client, module, persistence, and front end)
 
 ### What is this repository for? ###
 
 * Src code and issues regarding jactor-rises
-* his has none releases yet and is created for my own learning
+* this has none releases yet and is created for my own learning
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
@@ -19,7 +19,7 @@ Src code for jactor-rises (client, module, persistence, and front end)
 * spring framwork
 * spring-boot
 * hibernate
-* hsqldb
+* h2
 * assertj
 * mockito
 * aspect j
