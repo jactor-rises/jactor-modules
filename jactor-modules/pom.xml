@@ -17,6 +17,5 @@
     <modules>
         <module>jactor-io</module>
         <module>jactor-model</module>
-        <module>jactor-web</module>
     </modules>
 </project>
