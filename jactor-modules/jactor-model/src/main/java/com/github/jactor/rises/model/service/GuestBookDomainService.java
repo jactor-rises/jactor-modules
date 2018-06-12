@@ -2,14 +2,12 @@ package com.github.jactor.rises.model.service;
 
 import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.client.dto.GuestBookEntryDto;
+import com.github.jactor.rises.io.rest.GuestBookRestService;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactor.rises.model.service.rest.GuestBookRestService;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 
-@Service
 public class GuestBookDomainService {
     private final GuestBookRestService guestBookRestService;
 

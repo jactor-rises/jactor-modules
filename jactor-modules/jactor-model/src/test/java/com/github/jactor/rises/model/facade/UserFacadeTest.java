@@ -3,7 +3,7 @@ package com.github.jactor.rises.model.facade;
 import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.dto.UserDto;
-import com.github.jactor.rises.model.service.rest.UserRestService;
+import com.github.jactor.rises.io.rest.UserRestService;
 import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,14 +21,11 @@ import static org.mockito.Mockito.when;
 @DisplayName("A UserFacade")
 class UserFacadeTest {
 
-    @InjectMocks
-    private UserFacadeImpl testUserFacadeImpl;
+    private @InjectMocks UserFacadeImpl testUserFacadeImpl;
 
-    @Mock
-    private UserRestService userRestServiceMock;
+    private @Mock UserRestService userRestServiceMock;
 
-    @BeforeEach
-    void initMocking() {
+    @BeforeEach void initMocking() {
         MockitoAnnotations.initMocks(this);
     }
 

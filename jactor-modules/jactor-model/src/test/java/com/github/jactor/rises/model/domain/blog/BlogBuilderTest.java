@@ -28,18 +28,18 @@ class BlogBuilderTest {
 
     @DisplayName("should not build a blog with an empty title")
     @Test void skalIkkeByggeMedTomTittel() {
-        assertThatIllegalStateException().isThrownBy(() -> BlogDomain.aBlog().with(aUser()).withTitleAs("").build())
+        assertThatIllegalStateException().isThrownBy(() -> BlogDomain.aBlog().with(aUser()).withTitle("").build())
                 .withMessageContaining("title").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build a blog without a user")
     @Test void skalIkkeByggeUtenBruker() {
-        assertThatIllegalStateException().isThrownBy(() -> BlogDomain.aBlog().withTitleAs("the title").build())
+        assertThatIllegalStateException().isThrownBy(() -> BlogDomain.aBlog().withTitle("the title").build())
                 .withMessageContaining("user").withMessageContaining("has no value");
     }
 
     @DisplayName("should build a blog with a user and a title")
     @Test void skalByggeMedTittelOgBruker() {
-        assertThat(BlogDomain.aBlog().withTitleAs("title").with(aUser()).build()).isNotNull();
+        assertThat(BlogDomain.aBlog().withTitle("title").with(aUser()).build()).isNotNull();
     }
 }
