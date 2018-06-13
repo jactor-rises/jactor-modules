@@ -15,21 +15,21 @@ public class GuestBookDomainService {
         this.guestBookRestService = guestBookRestService;
     }
 
-    GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
+    public GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
         return new GuestBookDomain(guestBookRestService.saveOrUpdate(guestBookDomain.getDto()));
     }
 
-    GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
+    public GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
         return new GuestBookEntryDomain(guestBookRestService.saveOrUpdate(guestBookEntryDomain.getDto()));
     }
 
-    GuestBookDomain fetchGuestBook(Serializable id) {
+    public GuestBookDomain fetchGuestBook(Serializable id) {
         GuestBookDto guestBookDto = guestBookRestService.fetch(id);
 
         return new GuestBookDomain(guestBookDto);
     }
 
-    GuestBookEntryDomain fetchGuestBookEntry(Serializable id) {
+    public GuestBookEntryDomain fetchGuestBookEntry(Serializable id) {
         GuestBookEntryDto guestBookEntryDto = guestBookRestService.fetchEntry(id);
 
         return new GuestBookEntryDomain(guestBookEntryDto);

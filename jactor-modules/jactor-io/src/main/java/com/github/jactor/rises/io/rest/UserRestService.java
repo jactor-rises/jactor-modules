@@ -3,7 +3,6 @@ package com.github.jactor.rises.io.rest;
 import com.github.jactor.rises.client.datatype.UserName;
 import com.github.jactor.rises.client.dto.UserDto;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,17 +20,17 @@ public class UserRestService extends AbstractRestService {
 
 
     public UserDto saveOrUpdate(UserDto userDto) {
-        ResponseEntity<UserDto> responseEntity = exchange(
-                baseUrl + "/persist", HttpMethod.POST, new HttpEntity<>(userDto), UserDto.class
+        ResponseEntity<UserDto> responseEntity = exchangePost(
+                baseUrl + "/persist", new HttpEntity<>(userDto), UserDto.class
         );
 
         return bodyOf(responseEntity);
     }
 
-    public UserDto fetch(Serializable id) {
+    public Optional<UserDto> fetch(Serializable id) {
         ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + "/get/" + id, UserDto.class);
 
-        return bodyOf(responseEntity);
+        return Optional.ofNullable(bodyOf(responseEntity));
     }
 
     public Optional<UserDto> find(UserName userName) {

@@ -11,20 +11,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-import static com.github.jactor.rises.client.dto.AddressDto.anAddress;
 import static com.github.jactor.rises.client.dto.BlogDto.aBlog;
 import static com.github.jactor.rises.client.dto.BlogEntryDto.aBlogEntry;
-import static com.github.jactor.rises.client.dto.PersonDto.aPerson;
 import static com.github.jactor.rises.client.dto.UserDto.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(NowAsPureDateExtension.class)
 @SpringBootTest(classes = {Object.class})
-@Transactional
 @Disabled("#193: spring-context")
 class BlogEntryIntegrationTest {
 
@@ -63,18 +59,7 @@ class BlogEntryIntegrationTest {
         UserDto userDto = aUser()
                 .withUserName(creatorName)
                 .withEmailAddress("jactor@rises")
-                .with(aPerson()
-                        .withDescription("description")
-                        .withSurname("smith")
-                        .with(anAddress()
-                                .withAddressLine1("the streets")
-                                .withAddressLine2("with")
-                                .withAddressLine3("no name")
-                                .withCity("Ocean")
-                                .withCountry("NO")
-                                .withZipCode(1234)
-                        )
-                ).build();
+                .build();
 
         return userRestService.saveOrUpdate(userDto);
     }

@@ -3,7 +3,6 @@ package com.github.jactor.rises.io.rest;
 import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.client.dto.GuestBookEntryDto;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,16 +18,16 @@ public class GuestBookRestService extends AbstractRestService {
     }
 
     public GuestBookDto saveOrUpdate(GuestBookDto guestBookDto) {
-        ResponseEntity<GuestBookDto> responseEntity = exchange(
-                baseUrl + "/persist", HttpMethod.POST, new HttpEntity<>(guestBookDto), GuestBookDto.class
+        ResponseEntity<GuestBookDto> responseEntity = exchangePost(
+                baseUrl + "/persist", new HttpEntity<>(guestBookDto), GuestBookDto.class
         );
 
         return bodyOf(responseEntity);
     }
 
     public GuestBookEntryDto saveOrUpdate(GuestBookEntryDto guestBookEntryDto) {
-        ResponseEntity<GuestBookEntryDto> responseEntity = exchange(
-                baseUrl + "/entry/persist", HttpMethod.POST, new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
+        ResponseEntity<GuestBookEntryDto> responseEntity = exchangePost(
+                baseUrl + "/entry/persist", new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
         );
 
         return bodyOf(responseEntity);

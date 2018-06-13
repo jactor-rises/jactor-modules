@@ -13,12 +13,12 @@ class AbstractRestService {
         this.restTemplate = restTemplate;
     }
 
-    <T> ResponseEntity<T> getForEntity(String url, Class<T> requstedClass) {
-        return restTemplate.getForEntity(url, requstedClass);
+    <T> ResponseEntity<T> getForEntity(String url, Class<T> requestedClass) {
+        return restTemplate.getForEntity(url, requestedClass);
     }
 
-    <T> ResponseEntity<T> exchange(String url, HttpMethod httpMethod, HttpEntity<T> httpEntity, Class<T> requstedClass) {
-        return restTemplate.exchange(url, httpMethod, httpEntity, requstedClass);
+    <T> ResponseEntity<T> exchangePost(String url, HttpEntity<T> httpEntity, Class<T> requstedClass) {
+        return restTemplate.exchange(url, HttpMethod.POST, httpEntity, requstedClass);
     }
 
     void put(String url, Object updateObject) {

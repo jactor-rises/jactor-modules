@@ -3,7 +3,7 @@ package com.github.jactor.rises.model.facade;
 import com.github.jactor.rises.client.datatype.EmailAddress;
 import com.github.jactor.rises.client.datatype.Name;
 import com.github.jactor.rises.client.datatype.UserName;
-import com.github.jactor.rises.model.JactorModel;
+import com.github.jactor.rises.io.ctx.JactorIo;
 import com.github.jactor.rises.model.domain.address.AddressBuilder;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
@@ -12,13 +12,11 @@ import com.github.jactor.rises.model.domain.user.UserDomain;
 import com.github.jactor.rises.model.service.GuestBookDomainService;
 import com.github.jactor.rises.model.service.UserDomainService;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -29,17 +27,15 @@ import static com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomai
 import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
 import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Object.class)
-@Import({JactorModel.class})
-@Ignore("#193: spring-context")
-public class DomainServicesIntegrationTest {
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {JactorFacade.class, JactorIo.class})
+class DomainServicesIntegrationTest {
 
-    @Autowired private GuestBookDomainService guestBookDomainService;
+    private @Autowired GuestBookDomainService guestBookDomainService;
+    private @Autowired UserDomainService userDomainService;
 
-    @Autowired private UserDomainService userDomainService;
 
-    @Test public void shouldSaveUserDomain() {
+    @Test void shouldSaveUserDomain() {
         userDomainService.saveOrUpdateUser(
                 aUser().withUserName("titten")
                         .withEmailAddress("jactor@rises")
@@ -64,7 +60,7 @@ public class DomainServicesIntegrationTest {
         });
     }
 
-    @Test public void willSaveGuestbookWithRelations() {
+    @Test void willSaveGuestbookWithRelations() {
         AddressBuilder address = anAddress()
                 .withAddressLine1("the streets")
                 .withCity("Dirdal")
@@ -92,7 +88,7 @@ public class DomainServicesIntegrationTest {
     }
 
 
-    @Test public void willSaveGuestBookEntryWithRelations() {
+    @Test void willSaveGuestBookEntryWithRelations() {
         UserDomain userDomain = aUser().withUserName("titten")
                 .withEmailAddress("jactor@rises")
                 .with(aPerson()
