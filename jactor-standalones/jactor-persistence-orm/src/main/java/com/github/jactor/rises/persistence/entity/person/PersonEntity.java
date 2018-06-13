@@ -53,7 +53,6 @@ public class PersonEntity extends PersistentEntity<Long> {
         firstName = person.getFirstName();
         surname = person.getSurname();
         locale = person.getLocale();
-        Optional.ofNullable(person.getUser()).ifPresent(udto -> userEntity = new UserEntity(udto));
 
     }
 
@@ -64,7 +63,6 @@ public class PersonEntity extends PersistentEntity<Long> {
         personDto.setFirstName(firstName);
         personDto.setSurname(surname);
         personDto.setLocale(locale);
-        Optional.ofNullable(userEntity).map(UserEntity::asDto).ifPresent(personDto::setUser);
 
         return personDto;
     }
