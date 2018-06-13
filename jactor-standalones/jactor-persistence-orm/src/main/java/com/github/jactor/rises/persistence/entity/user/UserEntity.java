@@ -56,9 +56,6 @@ public class UserEntity extends PersistentEntity<Long> {
 
     public UserEntity(UserDto user) {
         super(user);
-        blogs = user.getBlogs().stream().map(BlogEntity::new).collect(Collectors.toSet());
-        Optional.ofNullable(user.getGuestBook()).ifPresent(gb -> guestBook = new GuestBookEntity(gb));
-        guestBook = user.getGuestBook() != null ? new GuestBookEntity(user.getGuestBook()) : null;
         emailAddress = user.getEmailAddress();
         Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
         userName = user.getUserName();
@@ -70,8 +67,6 @@ public class UserEntity extends PersistentEntity<Long> {
 
     public UserDto asDto() {
         UserDto userDto = addPersistentData(new UserDto());
-        blogs.forEach(blogEntity -> userDto.addBlog(blogEntity.asDto()));
-        Optional.ofNullable(guestBook).ifPresent(gb -> userDto.setGuestBook(gb.asDto()));
         userDto.setEmailAddress(emailAddress);
         Optional.ofNullable(personEntity).ifPresent(pen -> userDto.setPerson(pen.asDto()));
         userDto.setUserName(userName);
