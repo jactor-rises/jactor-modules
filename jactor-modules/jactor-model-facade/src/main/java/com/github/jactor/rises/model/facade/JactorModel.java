@@ -1,11 +1,11 @@
 package com.github.jactor.rises.model.facade;
 
 import com.github.jactor.rises.client.facade.UserFacade;
+import com.github.jactor.rises.io.rest.GuestBookRestService;
+import com.github.jactor.rises.io.rest.UserRestService;
 import com.github.jactor.rises.model.facade.UserFacadeImpl;
 import com.github.jactor.rises.model.service.GuestBookDomainService;
 import com.github.jactor.rises.model.service.UserDomainService;
-import com.github.jactor.rises.model.service.rest.GuestBookRestService;
-import com.github.jactor.rises.model.service.rest.UserRestService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

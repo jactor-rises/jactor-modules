@@ -15,7 +15,7 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
         super(BlogBuilder::validateInstance);
     }
 
-    BlogBuilder withTitleAs(String title) {
+    BlogBuilder withTitle(String title) {
         blogDto.setTitle(title);
         return this;
     }

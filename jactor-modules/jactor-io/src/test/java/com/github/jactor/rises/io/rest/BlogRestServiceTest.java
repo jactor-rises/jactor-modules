@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.service.rest;
+package com.github.jactor.rises.io.rest;
 
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.BlogEntryDto;

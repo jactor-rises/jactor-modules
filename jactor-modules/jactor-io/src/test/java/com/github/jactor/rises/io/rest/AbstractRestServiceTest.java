@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.service.rest;
+package com.github.jactor.rises.io.rest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
