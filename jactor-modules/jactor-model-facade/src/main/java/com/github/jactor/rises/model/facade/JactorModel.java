@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model;
+package com.github.jactor.rises.model.facade;
 
 import com.github.jactor.rises.client.facade.UserFacade;
 import com.github.jactor.rises.model.facade.UserFacadeImpl;

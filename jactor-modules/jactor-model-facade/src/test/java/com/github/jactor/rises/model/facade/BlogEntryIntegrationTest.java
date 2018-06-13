@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.domain.blog;
+package com.github.jactor.rises.model.facade;
 
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.BlogEntryDto;

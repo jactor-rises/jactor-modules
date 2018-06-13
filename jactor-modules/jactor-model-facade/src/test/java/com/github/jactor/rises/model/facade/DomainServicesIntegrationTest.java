@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.service;
+package com.github.jactor.rises.model.facade;
 
 import com.github.jactor.rises.client.datatype.EmailAddress;
 import com.github.jactor.rises.client.datatype.Name;
@@ -9,6 +9,8 @@ import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
 import com.github.jactor.rises.model.domain.person.PersonDomain;
 import com.github.jactor.rises.model.domain.user.UserDomain;
+import com.github.jactor.rises.model.service.GuestBookDomainService;
+import com.github.jactor.rises.model.service.UserDomainService;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Ignore;
 import org.junit.Test;
