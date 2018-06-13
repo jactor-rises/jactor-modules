@@ -22,10 +22,6 @@ public class PersonDomain extends PersistentDomain implements Person {
         return personDto.getDescription();
     }
 
-    @Override public UserDomain getUser() {
-        return new UserDomain(personDto.getUser());
-    }
-
     @Override public Name getFirstName() {
         return Optional.ofNullable(personDto.getFirstName()).map(Name::new).orElse(null);
     }
