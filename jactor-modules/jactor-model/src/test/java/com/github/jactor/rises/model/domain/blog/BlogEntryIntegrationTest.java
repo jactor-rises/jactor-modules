@@ -53,7 +53,8 @@ public class BlogEntryIntegrationTest {
     }
 
     private UserDto aPersistedUser(String creatorName) {
-        UserDto userDto = aUser().withUserName(creatorName)
+        UserDto userDto = aUser()
+                .withUsername(creatorName)
                 .withEmailAddress("jactor@rises")
                 .with(aPerson()
                         .withDescription("description")
@@ -63,8 +64,7 @@ public class BlogEntryIntegrationTest {
                                 .withCountry("NO")
                                 .withZipCode(1234)
                         )
-                )
-                .build().getDto();
+                ).build().getDto();
 
         return userRestService.saveOrUpdate(userDto);
     }

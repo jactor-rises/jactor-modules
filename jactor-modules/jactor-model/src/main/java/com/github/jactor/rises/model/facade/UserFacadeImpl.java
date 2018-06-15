@@ -1,9 +1,8 @@
 package com.github.jactor.rises.model.facade;
 
-import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.facade.UserFacade;
-import com.github.jactor.rises.model.domain.user.UserDomain;
 import com.github.jactor.rises.model.service.rest.UserRestService;
 
 import java.util.Optional;
@@ -16,7 +15,7 @@ public class UserFacadeImpl implements UserFacade {
         this.userRestService = userRestService;
     }
 
-    @Override public Optional<User> findUsing(UserName userName) {
-        return userRestService.find(userName).map(UserDomain::new);
+    @Override public Optional<User> find(Username username) {
+        return userRestService.find(username);
     }
 }

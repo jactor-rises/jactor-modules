@@ -21,6 +21,6 @@ public class UserDomainService {
     }
 
     @SuppressWarnings("unchecked") public <T extends User> Optional<T> find(Username username) {
-        return userRestService.find(username).map(UserDomain::new).map(userDomain -> (T) userDomain);
+        return userRestService.find(username).map(userDomain -> (T) userDomain);
     }
 }

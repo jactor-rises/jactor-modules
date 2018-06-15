@@ -2,7 +2,7 @@ package com.github.jactor.rises.model.service;
 
 import com.github.jactor.rises.client.datatype.EmailAddress;
 import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.model.JactorModel;
 import com.github.jactor.rises.model.domain.address.AddressBuilder;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
@@ -39,7 +39,7 @@ public class DomainServicesIntegrationTest {
 
     @Test public void shouldSaveUserDomain() {
         userDomainService.saveOrUpdateUser(
-                aUser().withUserName("titten")
+                aUser().withUsername("titten")
                         .withEmailAddress("jactor@rises")
                         .with(aPerson()
                                 .withDescription("description")
@@ -52,7 +52,7 @@ public class DomainServicesIntegrationTest {
                         ).build()
         );
 
-        Optional<UserDomain> possibleUser = userDomainService.find(new UserName("titten"));
+        Optional<UserDomain> possibleUser = userDomainService.find(new Username("titten"));
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(possibleUser).isPresent();
@@ -74,7 +74,7 @@ public class DomainServicesIntegrationTest {
                 .with(address)
                 .build();
         UserDomain user = aUser()
-                .withUserName("titten")
+                .withUsername("titten")
                 .withEmailAddress("jactor@rises")
                 .with(person)
                 .build();
@@ -91,7 +91,7 @@ public class DomainServicesIntegrationTest {
 
 
     @Test public void willSaveGuestBookEntryWithRelations() {
-        UserDomain userDomain = aUser().withUserName("titten")
+        UserDomain userDomain = aUser().withUsername("titten")
                 .withEmailAddress("jactor@rises")
                 .with(aPerson()
                         .withDescription("description")
