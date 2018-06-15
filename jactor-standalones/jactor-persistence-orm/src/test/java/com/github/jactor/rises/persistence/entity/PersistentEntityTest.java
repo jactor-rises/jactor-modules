@@ -72,7 +72,7 @@ class PersistentEntityTest {
         persistentEntityToTest = aUser()
                 .with(aPerson())
                 .withEmailAddress("i.am@home")
-                .withUserName("jactor")
+                .withUsername("jactor")
                 .build().addSequencedId(aClass -> 1L);
 
         PersistentEntity<?> copy = persistentEntityToTest.copy();

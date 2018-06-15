@@ -88,7 +88,7 @@ class PersonRepositoryTest {
         personToPersist.setFirstName("Dr. A.");
         personToPersist.setSurname("Cula");
         personToPersist.setUserEntity(
-                aUser().with(personToPersist).withUserName("sucker").withEmailAddress("bloody@suckers.com").build()
+                aUser().with(personToPersist).withUsername("sucker").withEmailAddress("bloody@suckers.com").build()
         );
 
         personRepository.save(personToPersist);
@@ -115,7 +115,7 @@ class PersonRepositoryTest {
         PersonEntity personToPersist = aPerson()
                 .with(anAddress())
                 .withSurname("Adder")
-                .with(aUser().withUserName("black").withEmailAddress("public@services.com"))
+                .with(aUser().withUsername("black").withEmailAddress("public@services.com"))
                 .build();
 
         personRepository.save(personToPersist);
@@ -131,7 +131,7 @@ class PersonRepositoryTest {
                             () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Adder"),
                             () -> assertThat(personEntity.getUserEntity()).as("user").isNotNull(),
                             () -> assertThat(personEntity.getUserEntity().getEmailAddress()).as("user email").isEqualTo("public@services.com"),
-                            () -> assertThat(personEntity.getUserEntity().getUserName()).as("user name").isEqualTo("black")
+                            () -> assertThat(personEntity.getUserEntity().getUsername()).as("user name").isEqualTo("black")
                     );
                 }
         );

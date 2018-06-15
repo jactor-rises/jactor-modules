@@ -1,7 +1,7 @@
 package com.github.jactor.rises.model.domain.user;
 
 import com.github.jactor.rises.client.datatype.EmailAddress;
-import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.model.domain.PersistentDomain;
@@ -17,8 +17,8 @@ public class UserDomain extends PersistentDomain implements User {
         this.userDto = userDto;
     }
 
-    @Override public UserName getUserName() {
-        return Optional.ofNullable(userDto.getUserName()).map(UserName::new).orElse(null);
+    @Override public Username getUsername() {
+        return Optional.ofNullable(userDto.getUsername()).map(Username::new).orElse(null);
     }
 
     @Override public PersonDomain getPerson() {

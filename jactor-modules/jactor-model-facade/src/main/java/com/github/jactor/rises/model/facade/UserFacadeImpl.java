@@ -3,19 +3,19 @@ package com.github.jactor.rises.model.facade;
 import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.facade.UserFacade;
-import com.github.jactor.rises.model.service.rest.UserRestService;
+import com.github.jactor.rises.model.service.UserDomainService;
 
 import java.util.Optional;
 
 public class UserFacadeImpl implements UserFacade {
 
-    private final UserRestService userRestService;
+    private final UserDomainService userDomainService;
 
-    public UserFacadeImpl(UserRestService userRestService) {
-        this.userRestService = userRestService;
+    UserFacadeImpl(UserDomainService userDomainService) {
+        this.userDomainService = userDomainService;
     }
 
     @Override public Optional<User> find(Username username) {
-        return userRestService.find(username);
+        return userDomainService.find(username);
     }
 }

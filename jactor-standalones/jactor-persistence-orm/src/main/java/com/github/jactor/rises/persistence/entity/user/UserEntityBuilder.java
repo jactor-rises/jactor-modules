@@ -10,7 +10,7 @@ import java.util.Optional;
 public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
     private String emailAddress;
     private PersonEntity person;
-    private String userName;
+    private String username;
 
     UserEntityBuilder() {
         super(UserEntityBuilder::validate);
@@ -30,8 +30,8 @@ public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
         return this;
     }
 
-    public UserEntityBuilder withUserName(String userName) {
-        this.userName = userName;
+    public UserEntityBuilder withUsername(String username) {
+        this.username = username;
         return this;
     }
 
@@ -39,13 +39,13 @@ public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
         UserEntity useruserEntity = new UserEntity();
         useruserEntity.setEmailAddress(emailAddress);
         useruserEntity.setPersonEntity(person);
-        useruserEntity.setUserName(userName);
+        useruserEntity.setUsername(username);
 
         return useruserEntity;
     }
 
     private static Optional<MissingFields> validate(UserEntity userEntity, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("userName", userEntity.getUserName());
+        missingFields.addInvalidFieldWhenBlank("username", userEntity.getUsername());
         missingFields.addInvalidFieldWhenNoValue("personEntity", userEntity.getPerson());
 
         return missingFields.presentWhenFieldsAreMissing();
