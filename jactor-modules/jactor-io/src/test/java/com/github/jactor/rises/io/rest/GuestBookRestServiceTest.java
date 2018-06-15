@@ -23,14 +23,11 @@ import static org.mockito.Mockito.when;
 class GuestBookRestServiceTest {
 
     private GuestBookRestService guestBookRestService;
+    private @Mock RestTemplate restTemplateMock;
 
-    @Mock
-    private RestTemplate restTemplateMock;
-
-    @BeforeEach
-    void initAndMock() {
+    @BeforeEach void initAndMock() {
         MockitoAnnotations.initMocks(this);
-        guestBookRestService = new GuestBookRestService(restTemplateMock, "/guestBook");
+        guestBookRestService = new GuestBookRestService(restTemplateMock, "");
     }
 
     @DisplayName("should use RestTemplate GET to fetch a guest book")
@@ -40,7 +37,7 @@ class GuestBookRestServiceTest {
 
         guestBookRestService.fetch(1L);
 
-        verify(restTemplateMock).getForEntity(eq("/guestBook/1"), eq(GuestBookDto.class));
+        verify(restTemplateMock).getForEntity(eq("/guestBook/get/1"), eq(GuestBookDto.class));
     }
 
     @DisplayName("should use RestTemplate GET to fetch a guest book entry")
@@ -50,7 +47,7 @@ class GuestBookRestServiceTest {
 
         guestBookRestService.fetchEntry(1L);
 
-        verify(restTemplateMock).getForEntity(eq("/guestBook/entry/1"), eq(GuestBookEntryDto.class));
+        verify(restTemplateMock).getForEntity(eq("/guestBook/entry/get/1"), eq(GuestBookEntryDto.class));
     }
 
     @DisplayName("should exchange guest book values with HttpMethod.POST when saving")

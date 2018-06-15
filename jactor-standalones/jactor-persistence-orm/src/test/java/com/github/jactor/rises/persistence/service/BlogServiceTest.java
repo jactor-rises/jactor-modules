@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -35,13 +34,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(RequiredFieldsExtension.class)
 class BlogServiceTest {
 
-    @InjectMocks private BlogService blogServiceToTest;
-    @Mock private BlogRepository blogRepositoryMock;
-    @Mock private BlogEntryRepository blogEntryRepositoryMock;
+    private @InjectMocks BlogService blogServiceToTest;
+    private @Mock BlogRepository blogRepositoryMock;
+    private @Mock BlogEntryRepository blogEntryRepositoryMock;
+    private @Mock @SuppressWarnings("unused") /* used by mockito */ UserService userServiceMock;
 
     @BeforeEach void initMocking() {
-            MockitoAnnotations.initMocks(this);
-        }
+        MockitoAnnotations.initMocks(this);
+    }
 
     @DisplayName("should map blog to dto")
     @Test void shouldMapBlogToDto() {
@@ -98,7 +98,6 @@ class BlogServiceTest {
     @Test void shouldSaveBlogDtoAsBlogEntity() {
         BlogDto blogDto = new BlogDto();
         blogDto.setCreated(now());
-        blogDto.setEntries(new HashSet<>(Collections.singletonList(new BlogEntryDto())));
         blogDto.setTitle("some blog");
         blogDto.setUser(new UserDto());
 
@@ -111,7 +110,6 @@ class BlogServiceTest {
 
         assertAll(
                 () -> assertThat(blogEntity.getCreated()).as("created").isEqualTo(now()),
-                () -> assertThat(blogEntity.getEntries()).as("entries").hasSize(1),
                 () -> assertThat(blogEntity.getTitle()).as("title").isEqualTo("some blog"),
                 () -> assertThat(blogEntity.getUser()).as("user").isNotNull()
         );

@@ -10,16 +10,13 @@ import java.io.Serializable;
 
 public class BlogRestService extends AbstractRestService {
 
-    private final String baseUrl;
-
     public BlogRestService(RestTemplate restTemplate, String baseUrl) {
-        super(restTemplate);
-        this.baseUrl = baseUrl;
+        super(restTemplate, baseUrl);
     }
 
     public BlogDto saveOrUpdate(BlogDto blogDto) {
         ResponseEntity<BlogDto> responseEntity = exchangePost(
-                baseUrl + "/persist", new HttpEntity<>(blogDto), BlogDto.class
+                fullUrl("/blog/persist"), new HttpEntity<>(blogDto), BlogDto.class
         );
 
         return bodyOf(responseEntity);
@@ -27,20 +24,20 @@ public class BlogRestService extends AbstractRestService {
 
     public BlogEntryDto saveOrUpdate(BlogEntryDto blogEntryDto) {
         ResponseEntity<BlogEntryDto> responseEntity = exchangePost(
-                baseUrl + "/entry/persist", new HttpEntity<>(blogEntryDto), BlogEntryDto.class
+                fullUrl("/blog/entry/persist"), new HttpEntity<>(blogEntryDto), BlogEntryDto.class
         );
 
         return bodyOf(responseEntity);
     }
 
     public BlogDto fetch(Serializable id) {
-        ResponseEntity<BlogDto> responseEntity = getForEntity(baseUrl + '/' + id, BlogDto.class);
+        ResponseEntity<BlogDto> responseEntity = getForEntity(fullUrl("/blog/get/" + id), BlogDto.class);
 
         return bodyOf(responseEntity);
     }
 
     public BlogEntryDto fetchEntry(Serializable entryId) {
-        ResponseEntity<BlogEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + entryId, BlogEntryDto.class);
+        ResponseEntity<BlogEntryDto> responseEntity = getForEntity(fullUrl("/blog/entry/get/" + entryId), BlogEntryDto.class);
 
         return bodyOf(responseEntity);
     }

@@ -10,16 +10,13 @@ import java.io.Serializable;
 
 public class GuestBookRestService extends AbstractRestService {
 
-    private final String baseUrl;
-
     public GuestBookRestService(RestTemplate restTemplate, String baseUrl) {
-        super(restTemplate);
-        this.baseUrl = baseUrl;
+        super(restTemplate, baseUrl);
     }
 
     public GuestBookDto saveOrUpdate(GuestBookDto guestBookDto) {
         ResponseEntity<GuestBookDto> responseEntity = exchangePost(
-                baseUrl + "/persist", new HttpEntity<>(guestBookDto), GuestBookDto.class
+                fullUrl("/guestBook/persist"), new HttpEntity<>(guestBookDto), GuestBookDto.class
         );
 
         return bodyOf(responseEntity);
@@ -27,20 +24,20 @@ public class GuestBookRestService extends AbstractRestService {
 
     public GuestBookEntryDto saveOrUpdate(GuestBookEntryDto guestBookEntryDto) {
         ResponseEntity<GuestBookEntryDto> responseEntity = exchangePost(
-                baseUrl + "/entry/persist", new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
+                fullUrl("/guestBook/entry/persist"), new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
         );
 
         return bodyOf(responseEntity);
     }
 
     public GuestBookDto fetch(Serializable id) {
-        ResponseEntity<GuestBookDto> responseEntity = getForEntity(baseUrl + '/' + id, GuestBookDto.class);
+        ResponseEntity<GuestBookDto> responseEntity = getForEntity(fullUrl("/guestBook/get/" + id), GuestBookDto.class);
 
         return bodyOf(responseEntity);
     }
 
     public GuestBookEntryDto fetchEntry(Serializable entryId) {
-        ResponseEntity<GuestBookEntryDto> responseEntity = getForEntity(baseUrl + "/entry/" + entryId, GuestBookEntryDto.class);
+        ResponseEntity<GuestBookEntryDto> responseEntity = getForEntity(fullUrl("/guestBook/entry/get/" + entryId), GuestBookEntryDto.class);
 
         return bodyOf(responseEntity);
     }

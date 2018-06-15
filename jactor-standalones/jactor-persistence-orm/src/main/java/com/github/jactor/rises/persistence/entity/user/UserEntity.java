@@ -29,13 +29,13 @@ import static java.util.Objects.hash;
 @Table(name = "T_USER")
 public class UserEntity extends PersistentEntity<Long> {
 
-    @Id private Long id;
+    private @Id Long id;
 
-    @Column(name = "EMAIL") private String emailAddress;
-    @Column(name = "USER_NAME", nullable = false) private String username;
-    @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.MERGE) private PersonEntity personEntity;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private GuestBookEntity guestBook;
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private Set<BlogEntity> blogs = new HashSet<>();
+    private @Column(name = "EMAIL") String emailAddress;
+    private @Column(name = "USER_NAME", nullable = false) String username;
+    private @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.MERGE) PersonEntity personEntity;
+    private @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) GuestBookEntity guestBook;
+    private @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) Set<BlogEntity> blogs = new HashSet<>();
 
     UserEntity() {
         // used by builder
@@ -48,9 +48,8 @@ public class UserEntity extends PersistentEntity<Long> {
         super(user);
         blogs = user.blogs.stream().map(BlogEntity::copy).collect(Collectors.toSet());
         Optional.ofNullable(user.guestBook).ifPresent(gb -> guestBook = gb.copy());
-        guestBook = user.guestBook != null ? user.guestBook.copy() : null;
         emailAddress = user.emailAddress;
-        personEntity = user.personEntity != null ? user.personEntity.copy() : null;
+        Optional.ofNullable(user.personEntity).ifPresent(pen -> personEntity = pen.copy());
         username = user.username;
     }
 
@@ -59,10 +58,6 @@ public class UserEntity extends PersistentEntity<Long> {
         emailAddress = user.getEmailAddress();
         Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
         username = user.getUsername();
-    }
-
-    public UserEntity copy() {
-        return new UserEntity(this);
     }
 
     public UserDto asDto() {
@@ -74,25 +69,29 @@ public class UserEntity extends PersistentEntity<Long> {
         return userDto;
     }
 
-    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+    public @Override UserEntity copy() {
+        return new UserEntity(this);
+    }
+
+    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
         addSequencedIdToDependencies(personEntity, sequencer);
         addSequencedIdToDependencies(guestBook, sequencer);
         blogs.forEach(blogEntity -> addSequencedIdToDependencies(blogEntity, sequencer));
     }
 
-    @Override public boolean equals(Object o) {
+    public @Override boolean equals(Object o) {
         return o == this || o != null && getClass() == o.getClass() &&
                 Objects.equals(emailAddress, ((UserEntity) o).emailAddress) &&
                 Objects.equals(personEntity, ((UserEntity) o).personEntity) &&
                 Objects.equals(username, ((UserEntity) o).username);
     }
 
-    @Override public int hashCode() {
+    public @Override int hashCode() {
         return hash(username, personEntity, emailAddress);
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
                 .appendSuper(super.toString())
                 .append(username)
@@ -103,8 +102,12 @@ public class UserEntity extends PersistentEntity<Long> {
                 .toString();
     }
 
-    @Override public Long getId() {
+    public @Override Long getId() {
         return id;
+    }
+
+    protected  @Override void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {

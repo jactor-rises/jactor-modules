@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class PersistentEntity<I extends Serializable> { // the type of id
 
-    @Column(name = "CREATION_TIME") private LocalDateTime creationTime;
-    @Column(name = "CREATED_BY") private String createdBy;
-    @Column(name = "UPDATED_TIME") private LocalDateTime updatedTime;
-    @Column(name = "UPDATED_BY") private String updatedBy;
+    private @Column(name = "CREATION_TIME") LocalDateTime creationTime;
+    private @Column(name = "CREATED_BY") String createdBy;
+    private @Column(name = "UPDATED_TIME") LocalDateTime updatedTime;
+    private @Column(name = "UPDATED_BY") String updatedBy;
 
     protected PersistentEntity() {
         createdBy = "todo #156";
@@ -30,7 +30,8 @@ public abstract class PersistentEntity<I extends Serializable> { // the type of 
         updatedTime = persistentEntity.updatedTime;
     }
 
-    protected PersistentEntity(PersistentDto<Long> persistentDto) {
+    protected PersistentEntity(PersistentDto<I> persistentDto) {
+        setId(persistentDto.getId());
         createdBy = persistentDto.getCreatedBy();
         creationTime = persistentDto.getCreationTime();
         updatedBy = persistentDto.getUpdatedBy();
@@ -58,15 +59,17 @@ public abstract class PersistentEntity<I extends Serializable> { // the type of 
         }
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return "id=" + getId();
     }
-
-    public abstract I getId();
 
     public abstract void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer);
 
     public abstract PersistentEntity<I> copy();
+
+    public abstract I getId();
+
+    protected abstract void setId(I id);
 
     protected Long fetchId(Sequencer sequencer) {
         return getId() == null ? sequencer.nextVal(getClass()) : (Long) getId();

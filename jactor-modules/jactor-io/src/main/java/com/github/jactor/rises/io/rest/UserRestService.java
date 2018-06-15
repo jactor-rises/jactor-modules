@@ -11,30 +11,27 @@ import java.util.Optional;
 
 public class UserRestService extends AbstractRestService {
 
-    private final String baseUrl;
-
     public UserRestService(RestTemplate restTemplate, String baseUrl) {
-        super(restTemplate);
-        this.baseUrl = baseUrl;
+        super(restTemplate, baseUrl);
     }
 
 
     public UserDto saveOrUpdate(UserDto userDto) {
         ResponseEntity<UserDto> responseEntity = exchangePost(
-                baseUrl + "/persist", new HttpEntity<>(userDto), UserDto.class
+                fullUrl("/user/persist"), new HttpEntity<>(userDto), UserDto.class
         );
 
         return bodyOf(responseEntity);
     }
 
     public Optional<UserDto> fetch(Serializable id) {
-        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + "/get/" + id, UserDto.class);
+        ResponseEntity<UserDto> responseEntity = getForEntity(fullUrl("/user/get/" + id), UserDto.class);
 
         return Optional.ofNullable(bodyOf(responseEntity));
     }
 
     public Optional<UserDto> find(Username username) {
-        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + "/find/" + username.asString(), UserDto.class);
+        ResponseEntity<UserDto> responseEntity = getForEntity(fullUrl("/user/find/" + username.asString()), UserDto.class);
 
         return Optional.ofNullable(bodyOf(responseEntity));
     }

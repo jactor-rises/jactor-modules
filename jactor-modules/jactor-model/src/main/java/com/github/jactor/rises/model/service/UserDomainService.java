@@ -14,7 +14,7 @@ public class UserDomainService {
         this.userRestService = userRestService;
     }
 
-    public UserDomain saveOrUpdateUser(UserDomain userDomain) {
+    public UserDomain saveOrUpdate(UserDomain userDomain) {
         return new UserDomain(userRestService.saveOrUpdate(userDomain.getDto()));
     }
 

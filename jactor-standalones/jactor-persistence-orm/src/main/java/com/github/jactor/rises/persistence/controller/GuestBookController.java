@@ -37,7 +37,7 @@ public class GuestBookController extends AbstractController {
 
     }
 
-    @GetMapping("/get/entry/{id}")
+    @GetMapping("/entry/get/{id}")
     public ResponseEntity<GuestBookEntryDto> getEntry(@PathVariable("id") Long id) {
         Optional<GuestBookEntryDto> foundGuestBookEntryDto = guestBookService.findEntry(id);
 

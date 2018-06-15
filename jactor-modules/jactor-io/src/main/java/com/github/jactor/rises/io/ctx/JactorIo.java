@@ -10,15 +10,17 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class JactorIo {
 
+    private static final String HTTP_LOCALHOST = "http://localhost:8080/jactor-persistence-orm";
+
     @Bean public BlogRestService blogRestService() {
-        return new BlogRestService(new RestTemplate(), "http://localhost:8080");
+        return new BlogRestService(new RestTemplate(), HTTP_LOCALHOST);
     }
 
     @Bean public GuestBookRestService guestBookRestService() {
-        return new GuestBookRestService(new RestTemplate(), "http://localhost:8080");
+        return new GuestBookRestService(new RestTemplate(), HTTP_LOCALHOST);
     }
 
     @Bean public UserRestService userRestService() {
-        return new UserRestService(new RestTemplate(), "http://localhost:8080");
+        return new UserRestService(new RestTemplate(), HTTP_LOCALHOST);
     }
 }

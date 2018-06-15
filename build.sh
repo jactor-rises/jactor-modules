@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export MAVEN_OPTS=-Xmx1024m
+
 cd jactor-commons
 mvn clean install
 STATUS=$?

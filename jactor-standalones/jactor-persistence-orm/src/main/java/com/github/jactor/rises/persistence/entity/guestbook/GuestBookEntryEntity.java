@@ -27,15 +27,14 @@ import static java.util.Objects.hash;
 @Table(name = "T_GUEST_BOOK_ENTRY")
 public class GuestBookEntryEntity extends PersistentEntity<Long> {
 
-    @Id private Long id;
+    private @Id Long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE) @JoinColumn(name = "GUEST_BOOK_ID") private GuestBookEntity guestBook;
-
-    @Embedded @AttributeOverrides({
+    private @ManyToOne(cascade = CascadeType.MERGE) @JoinColumn(name = "GUEST_BOOK_ID") GuestBookEntity guestBook;
+    private @Embedded @AttributeOverrides({
             @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
             @AttributeOverride(name = "creatorName", column = @Column(name = "GUEST_NAME")),
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
-    }) private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
+    }) EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
     GuestBookEntryEntity() {
         // used by builder
@@ -66,7 +65,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
     }
 
     GuestBookEntryDto asDto(GuestBookDto guestBook) {
-        GuestBookEntryDto guestBookEntry = new GuestBookEntryDto();
+        GuestBookEntryDto guestBookEntry = addPersistentData(new GuestBookEntryDto());
         guestBookEntry.setCreatorName(entryEmbeddable.getCreatorName());
         guestBookEntry.setEntry(entryEmbeddable.getEntry());
         guestBookEntry.setGuestBook(guestBook);
@@ -84,16 +83,16 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable.setEntry(entry);
     }
 
-    @Override public GuestBookEntryEntity copy() {
+    public @Override GuestBookEntryEntity copy() {
         return new GuestBookEntryEntity(this);
     }
 
-    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
         addSequencedIdToDependencies(guestBook, sequencer);
     }
 
-    @Override public boolean equals(Object o) {
+    public @Override boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryEntity) o);
     }
 
@@ -102,16 +101,20 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
                 Objects.equals(guestBook, o.guestBook);
     }
 
-    @Override public int hashCode() {
+    public @Override int hashCode() {
         return hash(guestBook, entryEmbeddable);
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(guestBook).append(entryEmbeddable).toString();
     }
 
-    @Override public Long getId() {
+    public @Override Long getId() {
         return id;
+    }
+
+    protected @Override void setId(Long id) {
+        this.id = id;
     }
 
     @SuppressWarnings("WeakerAccess") public GuestBookEntity getGuestBook() {

@@ -7,6 +7,7 @@ import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public class GuestBookDomainService {
     private final GuestBookRestService guestBookRestService;
@@ -15,24 +16,24 @@ public class GuestBookDomainService {
         this.guestBookRestService = guestBookRestService;
     }
 
-    public GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
+    public GuestBookDomain saveOrUpdate(GuestBookDomain guestBookDomain) {
         return new GuestBookDomain(guestBookRestService.saveOrUpdate(guestBookDomain.getDto()));
     }
 
-    public GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
+    public GuestBookEntryDomain saveOrUpdateEntry(GuestBookEntryDomain guestBookEntryDomain) {
         return new GuestBookEntryDomain(guestBookRestService.saveOrUpdate(guestBookEntryDomain.getDto()));
     }
 
-    public GuestBookDomain fetchGuestBook(Serializable id) {
+    public Optional<GuestBookDomain> find(Serializable id) {
         GuestBookDto guestBookDto = guestBookRestService.fetch(id);
 
-        return new GuestBookDomain(guestBookDto);
+        return Optional.ofNullable(guestBookDto).map(GuestBookDomain::new);
     }
 
-    public GuestBookEntryDomain fetchGuestBookEntry(Serializable id) {
+    public Optional<GuestBookEntryDomain> findEntry(Serializable id) {
         GuestBookEntryDto guestBookEntryDto = guestBookRestService.fetchEntry(id);
 
-        return new GuestBookEntryDomain(guestBookEntryDto);
+        return Optional.ofNullable(guestBookEntryDto).map(GuestBookEntryDomain::new);
     }
 }
 
