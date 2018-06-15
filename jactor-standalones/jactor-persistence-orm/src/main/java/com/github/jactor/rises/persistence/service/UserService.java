@@ -18,8 +18,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<UserDto> find(String userName) {
-        return userRepository.findByUserName(userName).map(UserEntity::asDto);
+    public Optional<UserDto> find(String username) {
+        return userRepository.findByUsername(username).map(UserEntity::asDto);
     }
 
     public Optional<UserDto> find(Long id) {

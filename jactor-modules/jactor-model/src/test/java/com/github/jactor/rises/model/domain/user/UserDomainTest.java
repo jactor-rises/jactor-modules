@@ -13,7 +13,7 @@ class UserDomainTest {
     @Test void shouldVerifyUsernameVsEmail() {
         UserDto userDto = new UserDto();
         userDto.setEmailAddress("someone@out.there");
-        userDto.setUserName("someone@out.there");
+        userDto.setUsername("someone@out.there");
 
         assertThat(new UserDomain(userDto).isUserNameEmailAddress()).isTrue();
     }

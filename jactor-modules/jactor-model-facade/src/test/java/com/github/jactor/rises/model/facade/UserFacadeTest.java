@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.facade;
 
-import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.model.service.UserDomainService;
 import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
@@ -31,15 +31,15 @@ class UserFacadeTest {
 
     @DisplayName("should return an empty Optional when the UserRestService cannot find a dto for the given user name")
     @Test void willNotFindUnknownUser() {
-        Optional<User> user = testUserFacadeImpl.find(new UserName("someone"));
+        Optional<User> user = testUserFacadeImpl.find(new Username("someone"));
         assertThat(user.isPresent()).isEqualTo(false);
     }
 
     @DisplayName("should find a user when the user name only differs in case")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void willFindUser() {
-        when(userDomainServiceMock.find(new UserName("jactor"))).thenReturn(Optional.of(aUser().build()));
-        Optional<User> optionalUser = testUserFacadeImpl.find(new UserName("JACTOR"));
+        when(userDomainServiceMock.find(new Username("jactor"))).thenReturn(Optional.of(aUser().build()));
+        Optional<User> optionalUser = testUserFacadeImpl.find(new Username("JACTOR"));
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);
     }

@@ -29,7 +29,7 @@ class UserRepositoryTest {
 
     @DisplayName("should find default user")
     @Test void shouldFindDefaultUser() {
-        Optional<UserEntity> userByName = userRepository.findByUserName("jactor");
+        Optional<UserEntity> userByName = userRepository.findByUsername("jactor");
 
         assertAll(
                 () -> assertThat(userByName).as("default user").isPresent(),
@@ -47,7 +47,7 @@ class UserRepositoryTest {
     @Test void shouldWriteThenReadUserEntity() {
         UserEntity userToPersist = aUser()
                 .with(aPerson())
-                .withUserName("smuggler")
+                .withUsername("smuggler")
                 .withEmailAddress("smuggle.fast@tantooine.com")
                 .build();
 
@@ -60,7 +60,7 @@ class UserRepositoryTest {
                     UserEntity userEntity = userById.orElseThrow(this::userNotFound);
                     assertAll(
                             () -> assertThat(userEntity.getPerson()).as("person").isEqualTo(userToPersist.getPerson()),
-                            () -> assertThat(userEntity.getUserName()).as("userName").isEqualTo("smuggler"),
+                            () -> assertThat(userEntity.getUsername()).as("username").isEqualTo("smuggler"),
                             () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("smuggle.fast@tantooine.com")
                     );
                 }
@@ -71,25 +71,25 @@ class UserRepositoryTest {
     @Test void shouldWriteThenUpdateAndReadUserEntity() {
         UserEntity userToPersist = aUser()
                 .with(aPerson())
-                .withUserName("smuggler")
+                .withUsername("smuggler")
                 .withEmailAddress("smuggle.fast@tantooine.com")
                 .build();
 
         userRepository.save(userToPersist);
 
         userToPersist.setEmailAddress("luke@force.com");
-        userToPersist.setUserName("lukewarm");
+        userToPersist.setUsername("lukewarm");
 
         userRepository.save(userToPersist);
 
-        Optional<UserEntity> userByName = userRepository.findByUserName("lukewarm");
+        Optional<UserEntity> userByName = userRepository.findByUsername("lukewarm");
 
         assertAll(
                 () -> assertThat(userByName).isPresent(),
                 () -> {
                     UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
                     assertAll(
-                            () -> assertThat(userEntity.getUserName()).as("userName").isEqualTo("lukewarm"),
+                            () -> assertThat(userEntity.getUsername()).as("username").isEqualTo("lukewarm"),
                             () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("luke@force.com")
                     );
                 }

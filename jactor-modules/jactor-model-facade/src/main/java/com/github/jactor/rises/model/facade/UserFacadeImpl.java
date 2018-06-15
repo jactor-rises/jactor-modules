@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.facade;
 
-import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.facade.UserFacade;
 import com.github.jactor.rises.model.service.UserDomainService;
@@ -19,7 +19,7 @@ public class UserFacadeImpl implements UserFacade {
         return userDomainService.ferch(id);
     }
 
-    @Override public Optional<User> find(UserName userName) {
-        return userDomainService.find(userName);
+    @Override public Optional<User> find(Username username) {
+        return userDomainService.find(username);
     }
 }
