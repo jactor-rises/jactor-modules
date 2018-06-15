@@ -32,7 +32,7 @@ public class UserEntity extends PersistentEntity<Long> {
     @Id private Long id;
 
     @Column(name = "EMAIL") private String emailAddress;
-    @Column(name = "USER_NAME", nullable = false) private String userName;
+    @Column(name = "USER_NAME", nullable = false) private String username;
     @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.MERGE) private PersonEntity personEntity;
     @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private GuestBookEntity guestBook;
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private Set<BlogEntity> blogs = new HashSet<>();
@@ -51,14 +51,14 @@ public class UserEntity extends PersistentEntity<Long> {
         guestBook = user.guestBook != null ? user.guestBook.copy() : null;
         emailAddress = user.emailAddress;
         personEntity = user.personEntity != null ? user.personEntity.copy() : null;
-        userName = user.userName;
+        username = user.username;
     }
 
     public UserEntity(UserDto user) {
         super(user);
         emailAddress = user.getEmailAddress();
         Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
-        userName = user.getUserName();
+        username = user.getUsername();
     }
 
     public UserEntity copy() {
@@ -69,7 +69,7 @@ public class UserEntity extends PersistentEntity<Long> {
         UserDto userDto = addPersistentData(new UserDto());
         userDto.setEmailAddress(emailAddress);
         Optional.ofNullable(personEntity).ifPresent(pen -> userDto.setPerson(pen.asDto()));
-        userDto.setUserName(userName);
+        userDto.setUsername(username);
 
         return userDto;
     }
@@ -85,17 +85,17 @@ public class UserEntity extends PersistentEntity<Long> {
         return o == this || o != null && getClass() == o.getClass() &&
                 Objects.equals(emailAddress, ((UserEntity) o).emailAddress) &&
                 Objects.equals(personEntity, ((UserEntity) o).personEntity) &&
-                Objects.equals(userName, ((UserEntity) o).userName);
+                Objects.equals(username, ((UserEntity) o).username);
     }
 
     @Override public int hashCode() {
-        return hash(userName, personEntity, emailAddress);
+        return hash(username, personEntity, emailAddress);
     }
 
     @Override public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
                 .appendSuper(super.toString())
-                .append(userName)
+                .append(username)
                 .append(emailAddress)
                 .append(blogs)
                 .append("guestbook.id=" + (guestBook != null ? guestBook.getId() : null))
@@ -107,8 +107,8 @@ public class UserEntity extends PersistentEntity<Long> {
         return id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     public PersonEntity getPerson() {
@@ -127,8 +127,8 @@ public class UserEntity extends PersistentEntity<Long> {
         this.guestBook = guestBook;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPersonEntity(PersonEntity personEntity) {

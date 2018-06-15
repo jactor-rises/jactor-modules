@@ -24,9 +24,9 @@ public class UserController extends AbstractController {
         this.userServicey = userServicey;
     }
 
-    @GetMapping("/find/{userName}")
-    public ResponseEntity<UserDto> find(@PathVariable("userName") String userName) {
-        return userServicey.find(userName)
+    @GetMapping("/find/{username}")
+    public ResponseEntity<UserDto> find(@PathVariable("username") String username) {
+        return userServicey.find(username)
                 .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }

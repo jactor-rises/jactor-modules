@@ -34,30 +34,30 @@ class UserServiceTest {
 
     @DisplayName("should map a user entity to a dto")
     @Test void shouldMapUserToDto() {
-        when(userRepositoryMock.findByUserName("jactor")).thenReturn(Optional.of(aUser().withUserName("jactor").build()));
+        when(userRepositoryMock.findByUsername("jactor")).thenReturn(Optional.of(aUser().withUsername("jactor").build()));
         UserDto user = userServiceToTest.find("jactor").orElseThrow(() -> new AssertionError("mocking?"));
 
         assertAll(
                 () -> assertThat(user).as("user").isNotNull(),
-                () -> assertThat(user.getUserName()).as("user.userName").isEqualTo("jactor")
+                () -> assertThat(user.getUsername()).as("user.username").isEqualTo("jactor")
         );
     }
 
     @DisplayName("should also map a user entity to a dto when finding by id")
     @Test void shouldMapUserToDtoWhenFindingById() {
-        when(userRepositoryMock.findById(69L)).thenReturn(Optional.of(aUser().withUserName("jactor").build()));
+        when(userRepositoryMock.findById(69L)).thenReturn(Optional.of(aUser().withUsername("jactor").build()));
         UserDto user = userServiceToTest.find(69L).orElseThrow(() -> new AssertionError("mocking?"));
 
         assertAll(
                 () -> assertThat(user).as("user").isNotNull(),
-                () -> assertThat(user.getUserName()).as("user.userName").isEqualTo("jactor")
+                () -> assertThat(user.getUsername()).as("user.username").isEqualTo("jactor")
         );
     }
 
     @DisplayName("should save UserDto as UserEntity")
     @Test void shouldSavedUserDtoAsUserEntity() {
         UserDto userDto = new UserDto();
-        userDto.setUserName("marley");
+        userDto.setUsername("marley");
 
         userServiceToTest.saveOrUpdate(userDto);
 
@@ -65,6 +65,6 @@ class UserServiceTest {
         verify(userRepositoryMock).save(argCaptor.capture());
         UserEntity userEntity = argCaptor.getValue();
 
-        assertThat(userEntity.getUserName()).as("username").isEqualTo("marley");
+        assertThat(userEntity.getUsername()).as("username").isEqualTo("marley");
     }
 }

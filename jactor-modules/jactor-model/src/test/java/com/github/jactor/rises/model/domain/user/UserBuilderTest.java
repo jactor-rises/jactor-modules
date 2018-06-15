@@ -8,27 +8,26 @@ import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddre
 import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
 import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @DisplayName("The UserBuilder")
 class UserBuilderTest {
 
-    @DisplayName("should not build an instance without a user name")
-    @Test void willNotBuildUserDomainWithoutUserName() {
+    @DisplayName("should not build an instance without a username")
+    @Test void shouldNotBuildUserDomainWithoutUsername() {
         assertThatIllegalStateException().isThrownBy(() -> aUser().with(aValidPerson()).build())
-                .withMessageContaining("userName").withMessageContaining("has no value");
+                .withMessageContaining("username").withMessageContaining("has no value");
     }
 
     @DisplayName("should not build an instance without a person")
-    @Test void willNotBuildUserDomainWithoutPerson() {
-        assertThatIllegalStateException().isThrownBy(() -> aUser().withUserName("some user").build())
+    @Test void shooldNotBuildUserDomainWithoutPerson() {
+        assertThatIllegalStateException().isThrownBy(() -> aUser().withUsername("some user").build())
                 .withMessageContaining("person").withMessageContaining("has no value");
     }
 
     @DisplayName("should build an instance when all required fields are set")
-    @Test void willBuildUserDomainWithAllRequiredProperties() {
-        assertThat(aUser().withUserName("some user").with(aValidPerson()).build()).isNotNull();
+    @Test void shouldBuildUserDomainWithAllRequiredProperties() {
+        assertThat(aUser().withUsername("some user").with(aValidPerson()).build()).isNotNull();
     }
 
     private PersonBuilder aValidPerson() {

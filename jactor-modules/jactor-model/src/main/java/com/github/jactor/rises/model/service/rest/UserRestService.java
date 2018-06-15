@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.service.rest;
 
-import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.dto.UserDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -34,8 +34,8 @@ public class UserRestService extends AbstractRestService {
         return bodyOf(responseEntity);
     }
 
-    public Optional<UserDto> find(UserName userName) {
-        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + "/find/" + userName.asString(), UserDto.class);
+    public Optional<UserDto> find(Username username) {
+        ResponseEntity<UserDto> responseEntity = getForEntity(baseUrl + "/find/" + username.asString(), UserDto.class);
 
         return Optional.ofNullable(bodyOf(responseEntity));
     }

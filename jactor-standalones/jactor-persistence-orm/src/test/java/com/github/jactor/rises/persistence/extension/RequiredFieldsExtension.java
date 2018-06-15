@@ -38,7 +38,7 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
     private static UserEntity aUserWithRequiredFields() {
         return aUser()
                 .with(aPersonWithRequiredValues())
-                .withUserName(uniqueName())
+                .withUsername(uniqueName())
                 .build();
     }
 
@@ -62,7 +62,7 @@ public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {
 
     static {
         AbstractRequiredFieldsExtension.withRequiredFields(UserEntity.class, asList(
-                new ClassFieldValue("userName", RequiredFieldsExtension::uniqueName),
+                new ClassFieldValue("username", RequiredFieldsExtension::uniqueName),
                 new ClassFieldValue("personEntity", RequiredFieldsExtension::aPersonWithRequiredValues)
         ));
 

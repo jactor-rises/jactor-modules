@@ -1,6 +1,6 @@
 package com.github.jactor.rises.model.service.rest;
 
-import com.github.jactor.rises.client.datatype.UserName;
+import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,7 @@ class UserRestServiceTest {
         when(restTemplateMock.getForEntity(anyString(), eq(UserDto.class)))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        userRestService.find(new UserName("jactor"));
+        userRestService.find(new Username("jactor"));
 
         verify(restTemplateMock).getForEntity(eq("/user/find/jactor"), eq(UserDto.class));
     }

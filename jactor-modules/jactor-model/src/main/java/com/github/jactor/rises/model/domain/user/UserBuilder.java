@@ -15,8 +15,8 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
         super(UserBuilder::validateDomain);
     }
 
-    public UserBuilder withUserName(String userName) {
-        userDto.setUserName(userName);
+    public UserBuilder withUsername(String username) {
+        userDto.setUsername(username);
         return this;
     }
 
@@ -40,7 +40,7 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
     }
 
     private static Optional<MissingFields> validateDomain(UserDomain userDomain, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenNoValue("userName", userDomain.getUserName());
+        missingFields.addInvalidFieldWhenNoValue("username", userDomain.getUsername());
         missingFields.addInvalidFieldWhenNoValue("person", userDomain.getPerson());
 
         return missingFields.presentWhenFieldsAreMissing();
