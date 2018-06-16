@@ -60,7 +60,6 @@ public class GuestBookEntity extends PersistentEntity<Long> {
 
     public GuestBookDto asDto() {
         GuestBookDto guestBook = addPersistentData(new GuestBookDto());
-        guestBook.setEntries(entries.stream().map(gbee -> gbee.asDto(guestBook)).collect(toSet()));
         guestBook.setTitle(title);
         Optional.ofNullable(user).map(UserEntity::asDto).ifPresent(guestBook::setUser);
 

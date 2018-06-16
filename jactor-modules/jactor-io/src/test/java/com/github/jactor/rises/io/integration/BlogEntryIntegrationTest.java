@@ -5,8 +5,7 @@ import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.io.ctx.JactorIo;
 import com.github.jactor.rises.io.rest.BlogRestService;
 import com.github.jactor.rises.io.rest.UserRestService;
-import com.github.jactor.rises.test.extension.time.NowAsPureDateExtension;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.URL;
 import java.time.LocalDateTime;
 
 import static com.github.jactor.rises.client.dto.AddressDto.anAddress;
@@ -24,15 +27,34 @@ import static com.github.jactor.rises.client.dto.PersonDto.aPerson;
 import static com.github.jactor.rises.client.dto.UserDto.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @DisplayName("The BlogEntryIntegrationTest")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = JactorIo.class)
-@Disabled("#199: need to create a @BeforeEach method that verifies that JactorPersistence is running")
 class BlogEntryIntegrationTest {
 
     private @Autowired BlogRestService blogRestService;
     private @Autowired UserRestService userRestService;
+
+    @BeforeEach void assumeJactorPersistenceRunning() throws IOException {
+        URL url = new URL("http://localhost:1099/jactor-persistence-orm/actuator/health");
+        assumeTrue(isServerRunning(url), "Integration test can only run when server i 'UP'");
+    }
+
+    private boolean isServerRunning(URL url) throws IOException {
+        boolean serverRunning = false;
+
+        try {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
+                serverRunning = reader.lines().anyMatch(line -> line.contains("\"status\":\"UP\""));
+            }
+        } catch (ConnectException e) {
+            // server is not running...
+        }
+
+        return serverRunning;
+    }
 
     @DisplayName("should save blog entry")
     @Test void shouldSaveBlogEntryEntity() {
