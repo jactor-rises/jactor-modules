@@ -4,9 +4,11 @@ import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.io.rest.UserRestService;
 import com.github.jactor.rises.model.domain.user.UserDomain;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class UserDomainService {
     private final UserRestService userRestService;
 

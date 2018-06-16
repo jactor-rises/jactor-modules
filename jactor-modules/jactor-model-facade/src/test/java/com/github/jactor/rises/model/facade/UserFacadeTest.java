@@ -30,14 +30,14 @@ class UserFacadeTest {
     }
 
     @DisplayName("should return an empty Optional when the UserRestService cannot find a dto for the given user name")
-    @Test void willNotFindUnknownUser() {
+    @Test void shouldNotFindUnknownUser() {
         Optional<User> user = testUserFacadeImpl.find(new Username("someone"));
         assertThat(user.isPresent()).isEqualTo(false);
     }
 
     @DisplayName("should find a user when the user name only differs in case")
     @ExtendWith(SuppressValidInstanceExtension.class)
-    @Test void willFindUser() {
+    @Test void shouldFindUser() {
         when(userDomainServiceMock.find(new Username("jactor"))).thenReturn(Optional.of(aUser().build()));
         Optional<User> optionalUser = testUserFacadeImpl.find(new Username("JACTOR"));
 
