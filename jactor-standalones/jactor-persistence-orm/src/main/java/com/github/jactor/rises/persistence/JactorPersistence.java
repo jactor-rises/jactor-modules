@@ -22,17 +22,17 @@ public class JactorPersistence {
     }
 
     private void inspect(ApplicationContext applicationContext, String[] args) {
-        if (LOGGER.isInfoEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             boolean noArgs = args == null || args.length == 0;
             String arguments = noArgs ? "without arguments!" : "with arguments: " + String.join(" ", args) + '!';
 
-            LOGGER.info("Starting {}", arguments);
+            LOGGER.debug("Starting {}", arguments);
 
             SpringBeanNames springBeanNames = new SpringBeanNames();
             stream(applicationContext.getBeanDefinitionNames()).sorted().forEach(springBeanNames::add);
 
-            LOGGER.info("Available beans:");
-            springBeanNames.getBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::info);
+            LOGGER.debug("Available beans:");
+            springBeanNames.getBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::debug);
 
             LOGGER.debug("Available spring beans:");
             springBeanNames.getNamesOfSpringBeans().stream().map(name -> "- " + name).forEach(LOGGER::debug);

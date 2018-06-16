@@ -24,14 +24,14 @@ import static java.util.Objects.hash;
 @Table(name = "T_PERSON")
 public class PersonEntity extends PersistentEntity<Long> {
 
-    @Id private Long id;
+    private @Id Long id;
 
-    @Column(name = "DESCRIPTION") private String description;
-    @Column(name = "FIRST_NAME") private String firstName;
-    @Column(name = "LOCALE") private String locale;
-    @Column(name = "SURNAME", nullable = false) private String surname;
-    @JoinColumn(name = "ADDRESS_ID") @ManyToOne(cascade = CascadeType.MERGE, optional = false) private AddressEntity addressEntity;
-    @OneToOne(mappedBy = "personEntity", cascade = CascadeType.MERGE) private UserEntity userEntity;
+    private @Column(name = "DESCRIPTION") String description;
+    private @Column(name = "FIRST_NAME") String firstName;
+    private @Column(name = "LOCALE") String locale;
+    private @Column(name = "SURNAME", nullable = false) String surname;
+    private @JoinColumn(name = "ADDRESS_ID") @ManyToOne(cascade = CascadeType.MERGE, optional = false) AddressEntity addressEntity;
+    private @OneToOne(mappedBy = "personEntity", cascade = CascadeType.MERGE) UserEntity userEntity;
 
     PersonEntity() {
         // used by builder
@@ -67,17 +67,17 @@ public class PersonEntity extends PersistentEntity<Long> {
         return personDto;
     }
 
-    @Override public PersonEntity copy() {
+    public @Override PersonEntity copy() {
         return new PersonEntity(this);
     }
 
-    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
         addSequencedIdToDependencies(addressEntity, sequencer);
         addSequencedIdToDependencies(userEntity, sequencer);
     }
 
-    @Override public boolean equals(Object o) {
+    public @Override boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
                 Objects.equals(description, ((PersonEntity) o).description) &&
@@ -86,11 +86,11 @@ public class PersonEntity extends PersistentEntity<Long> {
                 Objects.equals(locale, ((PersonEntity) o).locale);
     }
 
-    @Override public int hashCode() {
+    public @Override int hashCode() {
         return hash(addressEntity, description, firstName, surname, locale);
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .appendSuper(super.toString()).append(firstName).append(surname)
                 .append("userEntity", userEntity)
@@ -98,8 +98,12 @@ public class PersonEntity extends PersistentEntity<Long> {
                 .toString();
     }
 
-    @Override public Long getId() {
+    public @Override Long getId() {
         return id;
+    }
+
+    protected @Override void setId(Long id) {
+        this.id = id;
     }
 
     public AddressEntity getAddressEntity() {

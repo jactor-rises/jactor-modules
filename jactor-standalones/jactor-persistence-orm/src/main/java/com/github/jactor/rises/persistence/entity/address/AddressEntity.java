@@ -17,14 +17,14 @@ import static java.util.Objects.hash;
 @Table(name = "T_ADDRESS")
 public class AddressEntity extends PersistentEntity<Long> {
 
-    @Id private Long id;
+    private @Id Long id;
 
-    @Column(name = "ADDRESS_LINE_1", nullable = false) private String addressLine1;
-    @Column(name = "ADDRESS_LINE_2") private String addressLine2;
-    @Column(name = "ADDRESS_LINE_3") private String addressLine3;
-    @Column(name = "CITY", nullable = false) private String city;
-    @Column(name = "COUNTRY") private String country;
-    @Column(name = "ZIP_CODE", nullable = false) private Integer zipCode;
+    private @Column(name = "ADDRESS_LINE_1", nullable = false) String addressLine1;
+    private @Column(name = "ADDRESS_LINE_2") String addressLine2;
+    private @Column(name = "ADDRESS_LINE_3") String addressLine3;
+    private @Column(name = "CITY", nullable = false) String city;
+    private @Column(name = "COUNTRY") String country;
+    private @Column(name = "ZIP_CODE", nullable = false) Integer zipCode;
 
     AddressEntity() {
         // used by builder
@@ -40,12 +40,19 @@ public class AddressEntity extends PersistentEntity<Long> {
         addressLine2 = address.getAddressLine2();
         addressLine3 = address.getAddressLine3();
         city = address.getCity();
-        country = address.country;
+        country = address.getCountry();
         zipCode = address.getZipCode();
     }
 
     public AddressEntity(AddressDto addressDto) {
         super(addressDto);
+
+        addressLine1 = addressDto.getAddressLine1();
+        addressLine2 = addressDto.getAddressLine2();
+        addressLine3 = addressDto.getAddressLine3();
+        city = addressDto.getCity();
+        country = addressDto.getCountry();
+        zipCode = addressDto.getZipCode();
     }
 
     public AddressDto asDto() {
@@ -60,15 +67,15 @@ public class AddressEntity extends PersistentEntity<Long> {
         return addressDto;
     }
 
-    @Override public AddressEntity copy() {
+    public @Override AddressEntity copy() {
         return new AddressEntity(this);
     }
 
-    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
     }
 
-    @Override public boolean equals(Object o) {
+    public @Override boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
@@ -83,11 +90,11 @@ public class AddressEntity extends PersistentEntity<Long> {
                 Objects.equals(zipCode, addressEntity.zipCode);
     }
 
-    @Override public int hashCode() {
+    public @Override int hashCode() {
         return hash(addressLine1, addressLine2, addressLine3, city, country, zipCode);
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
                 .appendSuper(super.toString())
                 .append(getAddressLine1())
@@ -99,8 +106,12 @@ public class AddressEntity extends PersistentEntity<Long> {
                 .toString();
     }
 
-    @Override public Long getId() {
+    public @Override Long getId() {
         return id;
+    }
+
+    protected @Override void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getZipCode() {

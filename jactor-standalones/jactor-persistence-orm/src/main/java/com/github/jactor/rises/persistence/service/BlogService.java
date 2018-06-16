@@ -18,11 +18,13 @@ public class BlogService {
 
     private final BlogEntryRepository blogEntryRepository;
     private final BlogRepository blogRepository;
+    private final UserService userService;
 
     @Autowired
-    public BlogService(BlogRepository blogRepository, BlogEntryRepository blogEntryRepository) {
+    public BlogService(BlogRepository blogRepository, BlogEntryRepository blogEntryRepository, UserService userService) {
         this.blogEntryRepository = blogEntryRepository;
         this.blogRepository = blogRepository;
+        this.userService = userService;
     }
 
     public Optional<BlogDto> find(Long id) {
@@ -46,6 +48,9 @@ public class BlogService {
     }
 
     public BlogDto saveOrUpdate(BlogDto blogDto) {
+        userService.find(fetchUsername(blogDto))
+                .ifPresent(blogDto::setUser);
+
         BlogEntity blogEntity = new BlogEntity(blogDto);
         blogRepository.save(blogEntity);
 
@@ -53,9 +58,20 @@ public class BlogService {
     }
 
     public BlogEntryDto saveOrUpdate(BlogEntryDto blogEntryDto) {
+        userService.find(fetchUsername(blogEntryDto.getBlog()))
+                .ifPresent(userDto -> blogEntryDto.getBlog().setUser(userDto));
+
         BlogEntryEntity blogEntryEntity = new BlogEntryEntity(blogEntryDto);
         blogEntryRepository.save(blogEntryEntity);
 
         return blogEntryEntity.asDto();
+    }
+
+    private String fetchUsername(BlogDto blogDto) {
+        if (blogDto == null || blogDto.getUser() == null) {
+            return null;
+        }
+
+        return blogDto.getUser().getUsername();
     }
 }

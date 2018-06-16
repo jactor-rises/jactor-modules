@@ -27,11 +27,11 @@ import static java.util.stream.Collectors.toSet;
 @Table(name = "T_GUEST_BOOK")
 public class GuestBookEntity extends PersistentEntity<Long> {
 
-    @Id private Long id;
+    private @Id Long id;
 
-    @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private UserEntity user;
-    @OneToMany(mappedBy = "guestBook", cascade = CascadeType.MERGE, fetch = FetchType.EAGER) private Set<GuestBookEntryEntity> entries = new HashSet<>();
+    private @Column(name = "TITLE") String title;
+    private @JoinColumn(name = "USER_ID") @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY) UserEntity user;
+    private @OneToMany(mappedBy = "guestBook", cascade = CascadeType.MERGE, fetch = FetchType.EAGER) Set<GuestBookEntryEntity> entries = new HashSet<>();
 
     GuestBookEntity() {
         // used by builder
@@ -59,7 +59,7 @@ public class GuestBookEntity extends PersistentEntity<Long> {
     }
 
     public GuestBookDto asDto() {
-        GuestBookDto guestBook = new GuestBookDto();
+        GuestBookDto guestBook = addPersistentData(new GuestBookDto());
         guestBook.setEntries(entries.stream().map(gbee -> gbee.asDto(guestBook)).collect(toSet()));
         guestBook.setTitle(title);
         Optional.ofNullable(user).map(UserEntity::asDto).ifPresent(guestBook::setUser);
@@ -67,26 +67,26 @@ public class GuestBookEntity extends PersistentEntity<Long> {
         return guestBook;
     }
 
-    @Override public GuestBookEntity copy() {
+    public @Override GuestBookEntity copy() {
         return new GuestBookEntity(this);
     }
 
-    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
         addSequencedIdToDependencies(user, sequencer);
     }
 
-    @Override public boolean equals(Object o) {
+    public @Override boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(title, ((GuestBookEntity) o).title) &&
                 Objects.equals(user, ((GuestBookEntity) o).user);
     }
 
-    @Override public int hashCode() {
+    public @Override int hashCode() {
         return hash(title, user);
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
                 .appendSuper(super.toString())
                 .append(title)
@@ -94,8 +94,12 @@ public class GuestBookEntity extends PersistentEntity<Long> {
                 .toString();
     }
 
-    @Override public Long getId() {
+    public @Override Long getId() {
         return id;
+    }
+
+    protected @Override void setId(Long id) {
+        this.id = id;
     }
 
     public Set<GuestBookEntryEntity> getEntries() {

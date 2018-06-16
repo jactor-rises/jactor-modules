@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.service.rest;
+package com.github.jactor.rises.io.rest;
 
 import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.dto.UserDto;
@@ -23,14 +23,12 @@ import static org.mockito.Mockito.when;
 class UserRestServiceTest {
 
     private UserRestService userRestService;
-
-    @Mock
-    private RestTemplate restTemplateMock;
+    private @Mock RestTemplate restTemplateMock;
 
     @BeforeEach
     void initAndMock() {
         MockitoAnnotations.initMocks(this);
-        userRestService = new UserRestService(restTemplateMock, "/user");
+        userRestService = new UserRestService(restTemplateMock, "");
     }
 
     @DisplayName("should use RestTemplate GET to find a user")

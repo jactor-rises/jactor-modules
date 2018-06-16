@@ -2,14 +2,13 @@ package com.github.jactor.rises.model.service;
 
 import com.github.jactor.rises.client.dto.GuestBookDto;
 import com.github.jactor.rises.client.dto.GuestBookEntryDto;
+import com.github.jactor.rises.io.rest.GuestBookRestService;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookDomain;
 import com.github.jactor.rises.model.domain.guestbook.GuestBookEntryDomain;
-import com.github.jactor.rises.model.service.rest.GuestBookRestService;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.util.Optional;
 
-@Service
 public class GuestBookDomainService {
     private final GuestBookRestService guestBookRestService;
 
@@ -17,24 +16,24 @@ public class GuestBookDomainService {
         this.guestBookRestService = guestBookRestService;
     }
 
-    GuestBookDomain saveOrUpdateGuestBook(GuestBookDomain guestBookDomain) {
+    public GuestBookDomain saveOrUpdate(GuestBookDomain guestBookDomain) {
         return new GuestBookDomain(guestBookRestService.saveOrUpdate(guestBookDomain.getDto()));
     }
 
-    GuestBookEntryDomain saveOrUpdateGuestBookEntry(GuestBookEntryDomain guestBookEntryDomain) {
+    public GuestBookEntryDomain saveOrUpdateEntry(GuestBookEntryDomain guestBookEntryDomain) {
         return new GuestBookEntryDomain(guestBookRestService.saveOrUpdate(guestBookEntryDomain.getDto()));
     }
 
-    GuestBookDomain fetchGuestBook(Serializable id) {
+    public Optional<GuestBookDomain> find(Serializable id) {
         GuestBookDto guestBookDto = guestBookRestService.fetch(id);
 
-        return new GuestBookDomain(guestBookDto);
+        return Optional.ofNullable(guestBookDto).map(GuestBookDomain::new);
     }
 
-    GuestBookEntryDomain fetchGuestBookEntry(Serializable id) {
+    public Optional<GuestBookEntryDomain> findEntry(Serializable id) {
         GuestBookEntryDto guestBookEntryDto = guestBookRestService.fetchEntry(id);
 
-        return new GuestBookEntryDomain(guestBookEntryDto);
+        return Optional.ofNullable(guestBookEntryDto).map(GuestBookEntryDomain::new);
     }
 }
 

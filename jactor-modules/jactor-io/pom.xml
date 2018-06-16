@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>com.github.jactor-rises</groupId>
@@ -9,17 +9,23 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>jactor-model</artifactId>
-    <name>jactor-modules::jactor-model</name>
+    <artifactId>jactor-io</artifactId>
+    <name>jactor-modules::jactor-io</name>
 
     <dependencies>
         <dependency>
             <groupId>com.github.jactor-rises.jactor-commons</groupId>
             <artifactId>jactor-client</artifactId>
         </dependency>
+
+        <!-- third party -->
         <dependency>
-            <groupId>com.github.jactor-rises</groupId>
-            <artifactId>jactor-io</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Test scope -->
@@ -28,6 +34,8 @@
             <artifactId>jactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- third party -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
@@ -43,5 +51,18 @@
             <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.0.4.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
 </project>

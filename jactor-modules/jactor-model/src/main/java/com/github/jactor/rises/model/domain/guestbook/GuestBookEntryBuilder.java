@@ -14,8 +14,8 @@ public final class GuestBookEntryBuilder extends AbstractBuilder<GuestBookEntryD
         super(GuestBookEntryBuilder::validateInstance);
     }
 
-    public GuestBookEntryBuilder withEntry(String entry, String guestName) {
-        guestBookEntryDto.setCreatorName(guestName);
+    public GuestBookEntryBuilder withEntry(String entry, String creatorName) {
+        guestBookEntryDto.setCreatorName(creatorName);
         guestBookEntryDto.setEntry(entry);
 
         return this;

@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.service.rest;
+package com.github.jactor.rises.io.rest;
 
 import com.github.jactor.rises.client.dto.BlogDto;
 import com.github.jactor.rises.client.dto.BlogEntryDto;
@@ -22,15 +22,12 @@ import static org.mockito.Mockito.when;
 @DisplayName("A BlogRestService")
 class BlogRestServiceTest {
 
-    @Mock
-    private RestTemplate restTemplateMock;
-
     private BlogRestService blogRestService;
+    private @Mock RestTemplate restTemplateMock;
 
-    @BeforeEach
-    void initAndMock() {
+    @BeforeEach void initAndMock() {
         MockitoAnnotations.initMocks(this);
-        blogRestService = new BlogRestService(restTemplateMock, "/blog");
+        blogRestService = new BlogRestService(restTemplateMock, "");
     }
 
     @DisplayName("should use RestTemplate GET to fetch a blog")
@@ -40,7 +37,7 @@ class BlogRestServiceTest {
 
         blogRestService.fetch(1L);
 
-        verify(restTemplateMock).getForEntity(eq("/blog/1"), eq(BlogDto.class));
+        verify(restTemplateMock).getForEntity(eq("/blog/get/1"), eq(BlogDto.class));
     }
 
     @DisplayName("should use RestTemplate GET to fetch a blog entry")
@@ -50,7 +47,7 @@ class BlogRestServiceTest {
 
         blogRestService.fetchEntry(1L);
 
-        verify(restTemplateMock).getForEntity(eq("/blog/entry/1"), eq(BlogEntryDto.class));
+        verify(restTemplateMock).getForEntity(eq("/blog/entry/get/1"), eq(BlogEntryDto.class));
     }
 
     @DisplayName("should exchange blog values with HttpMethod.POST when persisting")

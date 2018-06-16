@@ -27,14 +27,13 @@ import static java.util.Objects.hash;
 @Table(name = "T_BLOG_ENTRY")
 public class BlogEntryEntity extends PersistentEntity<Long> {
 
-    @Id private Long id;
+    private @Id Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL) @JoinColumn(name = "BLOG_ID") private BlogEntity blog;
-
-    @Embedded @AttributeOverrides({
+    private @ManyToOne(cascade = CascadeType.ALL) @JoinColumn(name = "BLOG_ID") BlogEntity blog;
+    private @Embedded @AttributeOverrides({
             @AttributeOverride(name = "creatorName", column = @Column(name = "CREATOR_NAME")),
             @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
-    }) private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
+    }) EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
     BlogEntryEntity() {
         // used by builder
@@ -64,7 +63,7 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         return asDto(blog.asDto());
     }
 
-    BlogEntryDto asDto(BlogDto blogDto) {
+    private BlogEntryDto asDto(BlogDto blogDto) {
         BlogEntryDto blogEntryDto = new BlogEntryDto();
         blogEntryDto.setBlog(blogDto);
         blogEntryDto.setCreatorName(entryEmbeddable.getCreatorName());
@@ -83,16 +82,16 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable.setEntry(entry);
     }
 
-    @Override public BlogEntryEntity copy() {
+    public @Override BlogEntryEntity copy() {
         return new BlogEntryEntity(this);
     }
 
-    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
         addSequencedIdToDependencies(blog, sequencer);
     }
 
-    @Override public boolean equals(Object o) {
+    public @Override boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() && isEqualTo((BlogEntryEntity) o);
     }
 
@@ -101,16 +100,20 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
                 Objects.equals(blog, o.blog);
     }
 
-    @Override public int hashCode() {
+    public @Override int hashCode() {
         return hash(blog, entryEmbeddable);
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(blog).append(entryEmbeddable).toString();
     }
 
-    @Override public Long getId() {
+    public @Override Long getId() {
         return id;
+    }
+
+    protected @Override void setId(Long id) {
+        this.id = id;
     }
 
     public BlogEntity getBlog() {

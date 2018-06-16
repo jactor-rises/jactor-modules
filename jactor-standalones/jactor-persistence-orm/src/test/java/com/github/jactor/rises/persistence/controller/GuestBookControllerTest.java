@@ -60,14 +60,14 @@ class GuestBookControllerTest {
     @Test void shouldNotFindGuestBookEntry() throws Exception {
         when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/guestBook/get/entry/1")).andExpect(status().isNoContent());
+        mockMvc.perform(get("/guestBook/entry/get/1")).andExpect(status().isNoContent());
     }
 
     @DisplayName("should find a guest book entry")
     @Test void shouldFindGuestBookEntry() throws Exception {
         when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.of(new GuestBookEntryDto()));
 
-        mockMvc.perform(get("/guestBook/get/entry/1")).andExpect(status().isOk());
+        mockMvc.perform(get("/guestBook/entry/get/1")).andExpect(status().isOk());
     }
 
     @DisplayName("should persist changes to existing guest book")

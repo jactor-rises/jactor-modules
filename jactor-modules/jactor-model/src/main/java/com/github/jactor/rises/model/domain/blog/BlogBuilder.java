@@ -15,7 +15,7 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
         super(BlogBuilder::validateInstance);
     }
 
-    BlogBuilder withTitleAs(String title) {
+    BlogBuilder withTitle(String title) {
         blogDto.setTitle(title);
         return this;
     }
@@ -27,13 +27,6 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
 
     public BlogBuilder with(UserBuilder userBuilder) {
         return with(userBuilder.build().getDto());
-    }
-
-    public BlogBuilder with(BlogEntryBuilder blogEntryBuilder) {
-        blogEntryBuilder.with(blogDto);
-        blogDto.getEntries().add(blogEntryBuilder.build().getDto());
-
-        return this;
     }
 
     @Override protected BlogDomain buildBean() {

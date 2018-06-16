@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.service.rest;
+package com.github.jactor.rises.io.rest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class AbstractRestServiceTest {
     @DisplayName("should throw exception when response entity is null")
     @Test void shouldThrowExceptionWhenNull() {
         assertThatIllegalStateException().isThrownBy(() -> (
-                        new AbstractRestService(null) {
+                        new AbstractRestService(null, null) {
                         }
                 ).bodyOf(null)
         ).withMessage("No response from REST service");
@@ -29,7 +29,7 @@ class AbstractRestServiceTest {
     @ParameterizedTest(name = "Status not successful => {0}") @MethodSource("unsuccessfulHttpStatus")
     void shouldThrowExceptionWhenNotSuccessfulStatus(HttpStatus httpStatus) {
         assertThatIllegalStateException().isThrownBy(() -> (
-                        new AbstractRestService(null) {
+                        new AbstractRestService(null, null) {
                         }
                 ).bodyOf(new ResponseEntity<>(httpStatus))
         ).withMessageContaining("Bad configuration of REST service")
@@ -40,7 +40,7 @@ class AbstractRestServiceTest {
     @ParameterizedTest(name = "Status successful => {0}") @MethodSource("successfulHttpStatus")
     void shouldReturnBodyWhenSuccessfulStatus(HttpStatus httpStatus) {
         assertThat(
-                (new AbstractRestService(null) {
+                (new AbstractRestService(null, null) {
                 }).bodyOf(new ResponseEntity<>(new Object(), httpStatus))
         ).isNotNull();
     }

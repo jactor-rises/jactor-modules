@@ -15,6 +15,10 @@ public class UserFacadeImpl implements UserFacade {
         this.userDomainService = userDomainService;
     }
 
+    @Override public Optional<User> fetch(Long id) {
+        return userDomainService.ferch(id);
+    }
+
     @Override public Optional<User> find(Username username) {
         return userDomainService.find(username);
     }

@@ -28,12 +28,12 @@ import static java.util.stream.Collectors.toSet;
 @Table(name = "T_BLOG")
 public class BlogEntity extends PersistentEntity<Long> {
 
-    @Id private Long id;
+    private @Id Long id;
 
-    @Column(name = "CREATED") private LocalDate created;
-    @Column(name = "TITLE") private String title;
-    @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY) private UserEntity userEntity;
-    @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.MERGE) private Set<BlogEntryEntity> entries = new HashSet<>();
+    private @Column(name = "CREATED") LocalDate created;
+    private @Column(name = "TITLE") String title;
+    private @JoinColumn(name = "USER_ID") @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY) UserEntity userEntity;
+    private @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.MERGE) Set<BlogEntryEntity> entries = new HashSet<>();
 
     BlogEntity() {
         created = LocalDate.now();
@@ -50,7 +50,6 @@ public class BlogEntity extends PersistentEntity<Long> {
     public BlogEntity(BlogDto blogDto) {
         super(blogDto);
         created = blogDto.getCreated();
-        entries = blogDto.getEntries().stream().map(BlogEntryEntity::new).collect(toSet());
         title = blogDto.getTitle();
         Optional.ofNullable(blogDto.getUser()).ifPresent(user -> userEntity = new UserEntity(user));
     }
@@ -58,7 +57,6 @@ public class BlogEntity extends PersistentEntity<Long> {
     public BlogDto asDto() {
         BlogDto blogDto = addPersistentData(new BlogDto());
         blogDto.setCreated(created);
-        blogDto.setEntries(entries.stream().map(bee -> bee.asDto(blogDto)).collect(toSet()));
         blogDto.setTitle(title);
         Optional.ofNullable(userEntity).ifPresent(usr -> blogDto.setUser(usr.asDto()));
 
@@ -70,27 +68,27 @@ public class BlogEntity extends PersistentEntity<Long> {
         entries.add(blogEntryEntity);
     }
 
-    @Override public BlogEntity copy() {
+    public @Override BlogEntity copy() {
         return new BlogEntity(this);
     }
 
-    @Override public void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
+    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
         id = fetchId(sequencer);
         addSequencedIdToDependencies(userEntity, sequencer);
         entries.forEach(blogEntryEntity -> addSequencedIdToDependencies(blogEntryEntity, sequencer));
     }
 
-    @Override public boolean equals(Object o) {
+    public @Override boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
                 Objects.equals(title, ((BlogEntity) o).title) &&
                 Objects.equals(userEntity, ((BlogEntity) o).userEntity);
     }
 
-    @Override public int hashCode() {
+    public @Override int hashCode() {
         return hash(getTitle(), getUser());
     }
 
-    @Override public String toString() {
+    public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .appendSuper(super.toString())
                 .append(created)
@@ -99,8 +97,12 @@ public class BlogEntity extends PersistentEntity<Long> {
                 .toString();
     }
 
-    @Override public Long getId() {
+    public @Override Long getId() {
         return id;
+    }
+
+    protected @Override void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getCreated() {
