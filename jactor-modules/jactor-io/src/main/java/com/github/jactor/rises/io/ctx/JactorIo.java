@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class JactorIo {
 
-    private static final String HTTP_LOCALHOST = "http://localhost:8080/jactor-persistence-orm";
+    private static final String HTTP_LOCALHOST = "http://localhost:1099/jactor-persistence-orm";
 
     @Bean public BlogRestService blogRestService() {
         return new BlogRestService(new RestTemplate(), HTTP_LOCALHOST);
