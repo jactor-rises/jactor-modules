@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("An AddressRepository")
 class AddressRepositoryTest {
 
-    @Autowired private AddressRepository addressRepository;
+    private @Autowired AddressRepository addressRepository;
+    private @Autowired EntityManager entityManager;
 
     @DisplayName("should fetch address entities")
     @Test void shouldFetchAddressEntities() {
@@ -40,6 +42,9 @@ class AddressRepositoryTest {
                 .withCity("Rud")
                 .build()
         );
+
+        entityManager.flush();
+        entityManager.clear();
 
         List<AddressEntity> addressEntities = addressRepository.findByZipCode(1234);
 
@@ -65,6 +70,9 @@ class AddressRepositoryTest {
                 .build();
 
         addressRepository.save(addressEntityToPersist);
+        entityManager.flush();
+        entityManager.clear();
+
         Optional<AddressEntity> addressEntityById = addressRepository.findById(addressEntityToPersist.getId());
 
         assertAll(
@@ -95,6 +103,9 @@ class AddressRepositoryTest {
                 .build();
 
         addressRepository.save(addressEntityToPersist);
+        entityManager.flush();
+        entityManager.clear();
+
         AddressEntity addressEntitySaved = addressRepository.findById(addressEntityToPersist.getId()).orElseThrow(this::addressNotFound);
 
 
@@ -106,6 +117,8 @@ class AddressRepositoryTest {
         addressEntitySaved.setCountry("XX");
 
         addressRepository.save(addressEntitySaved);
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<AddressEntity> addressEntityById = addressRepository.findById(addressEntityToPersist.getId());
 

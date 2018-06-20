@@ -41,9 +41,10 @@ class RepositoriesTest {
                 .build();
 
         userRepository.save(userToPersist);
-        UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
-
         entityManager.flush();
+        entityManager.clear();
+
+        UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
 
         BlogEntity blogEntityToSave = aBlog()
                 .with(userById)
@@ -51,6 +52,8 @@ class RepositoriesTest {
                 .build();
 
         blogRepository.save(blogEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
 
         BlogEntity blogById = blogRepository.findById(blogEntityToSave.getId()).orElseThrow(() -> new AssertionError("Blog not found"));
 
@@ -60,7 +63,7 @@ class RepositoriesTest {
         );
     }
 
-    @DisplayName("should not need to \"reattach\" entites not known to entity manager")
+    @DisplayName("should not need to \"reattach\" entities already saved")
     @Test void shouldNot11NeedToReattachEntities() {
         UserEntity userToPersist = aUser()
                 .with(aPerson())
@@ -69,10 +72,10 @@ class RepositoriesTest {
                 .build();
 
         userRepository.save(userToPersist);
-        UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
-
         entityManager.flush();
         entityManager.clear();
+
+        UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
 
         BlogEntity blogEntityToSave = aBlog()
                 .with(new UserEntity(userById.asDto()))
@@ -80,6 +83,8 @@ class RepositoriesTest {
                 .build();
 
         blogRepository.save(blogEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
 
         BlogEntity blogById = blogRepository.findById(blogEntityToSave.getId()).orElseThrow(() -> new AssertionError("Blog not found"));
 

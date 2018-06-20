@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
@@ -25,10 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A UserRepository")
 class UserRepositoryTest {
 
-    @Autowired private UserRepository userRepository;
+    private @Autowired UserRepository userRepository;
+    private @Autowired EntityManager entityManager;
 
-    @DisplayName("should find default user")
-    @Test void shouldFindDefaultUser() {
+    @DisplayName("should find user with username jactor")
+    @Test void shouldFindJactor() {
         Optional<UserEntity> userByName = userRepository.findByUsername("jactor");
 
         assertAll(
@@ -52,6 +54,9 @@ class UserRepositoryTest {
                 .build();
 
         userRepository.save(userToPersist);
+        entityManager.flush();
+        entityManager.clear();
+
         Optional<UserEntity> userById = userRepository.findById(userToPersist.getId());
 
         assertAll(
@@ -76,11 +81,15 @@ class UserRepositoryTest {
                 .build();
 
         userRepository.save(userToPersist);
+        entityManager.flush();
+        entityManager.clear();
 
         userToPersist.setEmailAddress("luke@force.com");
         userToPersist.setUsername("lukewarm");
 
         userRepository.save(userToPersist);
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<UserEntity> userByName = userRepository.findByUsername("lukewarm");
 

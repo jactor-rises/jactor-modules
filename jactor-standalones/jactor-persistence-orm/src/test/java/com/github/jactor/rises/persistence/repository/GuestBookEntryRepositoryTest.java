@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Properties;
 
 import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
@@ -27,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A GuestBookEntryRepository")
 class GuestBookEntryRepositoryTest {
 
-    @Autowired private GuestBookEntryRepository guestBookEntryRepository;
-    @Autowired private GuestBookRepository guestBookRepository;
+    private @Autowired GuestBookEntryRepository guestBookEntryRepository;
+    private @Autowired GuestBookRepository guestBookRepository;
+    private @Autowired EntityManager entityManager;
 
     @DisplayName("should save then read guest book entry entity")
     @Test void shouldSaveThenReadGuestBookEntryEntity() {
@@ -39,6 +40,9 @@ class GuestBookEntryRepositoryTest {
                 .build();
 
         guestBookEntryRepository.save(guestBookEntryEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         GuestBookEntryEntity entryById = guestBookEntryRepository.findById(guestBookEntryEntityToSave.getId())
                 .orElseThrow(this::entryNotFound);
 
@@ -57,6 +61,9 @@ class GuestBookEntryRepositoryTest {
                 .build();
 
         guestBookEntryRepository.save(guestBookEntryEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         GuestBookEntryEntity entryById = guestBookEntryRepository.findById(guestBookEntryEntityToSave.getId())
                 .orElseThrow(this::entryNotFound);
 
@@ -81,6 +88,8 @@ class GuestBookEntryRepositoryTest {
 
         GuestBookEntity theGuestBook = aGuestBook().build();
         guestBookRepository.save(theGuestBook);
+        entityManager.flush();
+        entityManager.clear();
 
         GuestBookEntryEntity guestBookEntryToSave = aGuestBookEntry()
                 .with(theGuestBook)
@@ -89,6 +98,9 @@ class GuestBookEntryRepositoryTest {
                 .build();
 
         guestBookEntryRepository.save(guestBookEntryToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         List<GuestBookEntryEntity> entriesByGuestBook = guestBookEntryRepository.findByGuestBook(theGuestBook);
 
         assertAll(
@@ -98,6 +110,7 @@ class GuestBookEntryRepositoryTest {
                 () -> assertThat(entriesByGuestBook.get(0).getEntry()).as("entry.entry").isEqualTo("far far away")
         );
     }
+
     private AssertionError entryNotFound() {
         return new AssertionError("guest book entry not found");
     }

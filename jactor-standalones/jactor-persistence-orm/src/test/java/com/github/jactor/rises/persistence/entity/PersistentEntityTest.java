@@ -1,9 +1,16 @@
 package com.github.jactor.rises.persistence.entity;
 
+import com.github.jactor.rises.persistence.entity.address.AddressEntity;
+import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
@@ -12,8 +19,12 @@ import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEnti
 import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @DisplayName("A PersistentEntity")
 @ExtendWith(RequiredFieldsExtension.class)
@@ -162,6 +173,62 @@ class PersistentEntityTest {
                 () -> assertThat(copy.getId()).as("id of copy").isNull(),
                 () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
                 () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        );
+    }
+
+    @DisplayName("should return an empty stream when no dependencies")
+    @Test void shouldReturnEmptyStreamWithoutDependenciesGiven() {
+        persistentEntityToTest = aPerson().build();
+        @SuppressWarnings("ConfusingArgumentToVarargsMethod") Stream<?> none = persistentEntityToTest.streamSequencedDependencies(null);
+
+        //noinspection unchecked
+        assertThat(none).isEmpty();
+    }
+
+    @DisplayName("should stream optional dependencies of an persistent entity")
+    @Test void shouldStreamOptionalDependencies() {
+        BlogEntity blogEntity = aBlog().build();
+        PersonEntity personEntity = aPerson().build();
+
+        persistentEntityToTest = personEntity;
+        List<PersistentEntity<Long>> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toList());
+
+        assertThat(dependencies)
+                .hasSize(2)
+                .contains(blogEntity, personEntity);
+    }
+
+    @DisplayName("should fetch all dependencies of a persistent entity")
+    @Test void shouldFetchAllDependencies() {
+        AddressEntity addressEntity = anAddress().build();
+        PersonEntity personEntity = aPerson().with(addressEntity).build();
+        persistentEntityToTest = aUser().with(personEntity).build();
+
+        List<PersistentEntity<Long>> allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
+
+        assertThat(allSequencedDependencies)
+                .hasSize(2)
+                .contains(addressEntity, personEntity);
+    }
+
+    @DisplayName("should add sequenced id, also on dependencies of a persistent entity")
+    @Test void shouldAddSequencedIdAlsOnDependencies() {
+        AddressEntity addressEntity = anAddress().build();
+        PersonEntity personEntity = aPerson().with(addressEntity).build();
+        persistentEntityToTest = aUser().with(personEntity).build();
+
+        PersistentEntity.Sequencer sequencerMock = mock(PersistentEntity.Sequencer.class);
+        when(sequencerMock.nextVal(any(Class.class))).thenReturn(123L);
+
+        persistentEntityToTest.addSequencedId(sequencerMock);
+
+        assertAll(
+                () -> assertThat(persistentEntityToTest.getId()).as("persistentEntityToTest.id").isEqualTo(123L),
+                () -> assertThat(addressEntity.getId()).as("addressEntity.id").isEqualTo(123L),
+                () -> assertThat(personEntity.getId()).as("personEntity.id").isEqualTo(123L)
         );
     }
 }

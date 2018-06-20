@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static java.util.Objects.hash;
 import static java.util.stream.Collectors.toSet;
@@ -70,15 +71,14 @@ public class GuestBookEntity extends PersistentEntity<Long> {
         return new GuestBookEntity(this);
     }
 
-    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
-        id = fetchId(sequencer);
-        addSequencedIdToDependencies(user, sequencer);
+    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+        return Stream.concat(streamSequencedDependencies(user), entries.stream().map(Optional::of));
     }
 
     public @Override boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(title, ((GuestBookEntity) o).title) &&
-                Objects.equals(user, ((GuestBookEntity) o).user);
+                Objects.equals(getTitle(), ((GuestBookEntity) o).getTitle()) &&
+                Objects.equals(getUser(), ((GuestBookEntity) o).getUser());
     }
 
     public @Override int hashCode() {
@@ -88,8 +88,8 @@ public class GuestBookEntity extends PersistentEntity<Long> {
     public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
                 .appendSuper(super.toString())
-                .append(title)
-                .append(user)
+                .append(getTitle())
+                .append(getUser())
                 .toString();
     }
 
