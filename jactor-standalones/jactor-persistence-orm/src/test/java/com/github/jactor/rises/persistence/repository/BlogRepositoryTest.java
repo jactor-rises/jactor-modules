@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A BlogRepository")
 class BlogRepositoryTest {
 
-    @Autowired private BlogRepository blogRepositoryToTest;
+   private  @Autowired BlogRepository blogRepositoryToTest;
+   private @Autowired EntityManager entityManager;
 
     @DisplayName("should save and then read blog entity")
     @Test void shouldSaveThenReadBlogEntity() {
@@ -39,6 +41,8 @@ class BlogRepositoryTest {
                 .build();
 
         blogRepositoryToTest.save(blogEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<BlogEntity> blogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
 
@@ -60,11 +64,15 @@ class BlogRepositoryTest {
                 .build();
 
         blogRepositoryToTest.save(blogEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
 
         BlogEntity blogEntitySaved = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
         blogEntitySaved.setTitle("Duh");
 
         blogRepositoryToTest.save(blogEntitySaved);
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<BlogEntity> blogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
 
@@ -86,6 +94,8 @@ class BlogRepositoryTest {
                 .build();
 
         blogRepositoryToTest.save(blogEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
 
         List<BlogEntity> blogs = blogRepositoryToTest.findBlogsByTitle("Blah");
 
@@ -107,6 +117,9 @@ class BlogRepositoryTest {
         blogEntityToSave.add(blogEntryToSave);
 
         blogRepositoryToTest.save(blogEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         BlogEntity blogById = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
 
         assertAll(

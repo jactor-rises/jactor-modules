@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Objects.hash;
 
@@ -73,18 +74,15 @@ public class UserEntity extends PersistentEntity<Long> {
         return new UserEntity(this);
     }
 
-    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
-        id = fetchId(sequencer);
-        addSequencedIdToDependencies(personEntity, sequencer);
-        addSequencedIdToDependencies(guestBook, sequencer);
-        blogs.forEach(blogEntity -> addSequencedIdToDependencies(blogEntity, sequencer));
+    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+        return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream().map(Optional::of));
     }
 
     public @Override boolean equals(Object o) {
         return o == this || o != null && getClass() == o.getClass() &&
-                Objects.equals(emailAddress, ((UserEntity) o).emailAddress) &&
-                Objects.equals(personEntity, ((UserEntity) o).personEntity) &&
-                Objects.equals(username, ((UserEntity) o).username);
+                Objects.equals(emailAddress, ((UserEntity) o).getEmailAddress()) &&
+                Objects.equals(personEntity, ((UserEntity) o).getPerson()) &&
+                Objects.equals(username, ((UserEntity) o).getUsername());
     }
 
     public @Override int hashCode() {
@@ -94,11 +92,11 @@ public class UserEntity extends PersistentEntity<Long> {
     public @Override String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
                 .appendSuper(super.toString())
-                .append(username)
-                .append(emailAddress)
+                .append(getUsername())
+                .append(getEmailAddress())
                 .append(blogs)
                 .append("guestbook.id=" + (guestBook != null ? guestBook.getId() : null))
-                .append(personEntity)
+                .append(getPerson())
                 .toString();
     }
 
@@ -106,7 +104,7 @@ public class UserEntity extends PersistentEntity<Long> {
         return id;
     }
 
-    protected  @Override void setId(Long id) {
+    protected @Override void setId(Long id) {
         this.id = id;
     }
 
@@ -126,7 +124,7 @@ public class UserEntity extends PersistentEntity<Long> {
         this.emailAddress = emailAddress;
     }
 
-    public void setGuestBook(GuestBookEntity guestBook) {
+    public @SuppressWarnings("unused") /* used by reflection */ void setGuestBook(GuestBookEntity guestBook) {
         this.guestBook = guestBook;
     }
 

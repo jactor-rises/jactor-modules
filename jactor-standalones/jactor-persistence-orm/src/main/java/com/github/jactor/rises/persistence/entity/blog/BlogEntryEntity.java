@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Objects.hash;
 
@@ -86,9 +87,8 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         return new BlogEntryEntity(this);
     }
 
-    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
-        id = fetchId(sequencer);
-        addSequencedIdToDependencies(blog, sequencer);
+    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+        return streamSequencedDependencies(blog);
     }
 
     public @Override boolean equals(Object o) {
@@ -97,7 +97,7 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
 
     private boolean isEqualTo(BlogEntryEntity o) {
         return Objects.equals(entryEmbeddable, o.entryEmbeddable) &&
-                Objects.equals(blog, o.blog);
+                Objects.equals(blog, o.getBlog());
     }
 
     public @Override int hashCode() {
@@ -105,7 +105,11 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
     }
 
     public @Override String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(blog).append(entryEmbeddable).toString();
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+                .appendSuper(super.toString())
+                .append(getBlog())
+                .append(entryEmbeddable)
+                .toString();
     }
 
     public @Override Long getId() {

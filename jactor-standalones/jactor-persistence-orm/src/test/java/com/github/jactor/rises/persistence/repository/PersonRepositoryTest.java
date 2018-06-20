@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A PersonRepository")
 class PersonRepositoryTest {
 
-    @Autowired private PersonRepository personRepository;
+    private @Autowired PersonRepository personRepository;
+    private @Autowired EntityManager entityManager;
 
     @DisplayName("should find default persons")
     @Test void shouldFindDefaultPersons() {
@@ -43,7 +45,7 @@ class PersonRepositoryTest {
         );
     }
 
-    @DisplayName("should write then read a person entity")
+    @DisplayName("should save then read a person entity")
     @Test void shouldWriteThenReadPersonEntity() {
         PersonEntity personToPersist = aPerson()
                 .with(anAddress())
@@ -54,6 +56,9 @@ class PersonRepositoryTest {
                 .build();
 
         personRepository.save(personToPersist);
+        entityManager.flush();
+        entityManager.clear();
+
         Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
 
         assertAll(
@@ -71,7 +76,7 @@ class PersonRepositoryTest {
         );
     }
 
-    @DisplayName("should write then update and read a person entity")
+    @DisplayName("should save then update and read a person entity")
     @Test void shouldWriteThenUpdateAndReadPersonEntity() {
         PersonEntity personToPersist = aPerson()
                 .with(anAddress())
@@ -82,29 +87,35 @@ class PersonRepositoryTest {
                 .build();
 
         personRepository.save(personToPersist);
+        entityManager.flush();
+        entityManager.clear();
 
-        personToPersist.setDescription("There is no try");
-        personToPersist.setLocale("dk_DK");
-        personToPersist.setFirstName("Dr. A.");
-        personToPersist.setSurname("Cula");
-        personToPersist.setUserEntity(
-                aUser().with(personToPersist).withUsername("sucker").withEmailAddress("bloody@suckers.com").build()
+        PersonEntity personById = personRepository.findById(personToPersist.getId()).orElseThrow(this::notFoundError);
+
+        personById.setDescription("There is no try");
+        personById.setLocale("dk_DK");
+        personById.setFirstName("Dr. A.");
+        personById.setSurname("Cula");
+        personById.setUserEntity(
+                aUser().with(personById).withUsername("sucker").withEmailAddress("bloody@suckers.com").build()
         );
 
-        personRepository.save(personToPersist);
+        personRepository.save(personById);
+        entityManager.flush();
+        entityManager.clear();
 
-        Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
+        Optional<PersonEntity> foundPerson = personRepository.findById(personToPersist.getId());
 
         assertAll(
-                () -> assertThat(personById).isPresent(),
+                () -> assertThat(foundPerson).isPresent(),
                 () -> {
-                    PersonEntity personEntity = personById.orElseThrow(this::notFoundError);
+                    PersonEntity personEntity = foundPerson.orElseThrow(this::notFoundError);
                     assertAll(
                             () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("There is no try"),
                             () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("dk_DK"),
                             () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Dr. A."),
                             () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Cula"),
-                            () -> assertThat(personEntity.getUserEntity()).isEqualTo(personToPersist.getUserEntity())
+                            () -> assertThat(personEntity.getUserEntity()).isEqualTo(personById.getUserEntity())
                     );
                 }
         );
@@ -119,6 +130,8 @@ class PersonRepositoryTest {
                 .build();
 
         personRepository.save(personToPersist);
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
 

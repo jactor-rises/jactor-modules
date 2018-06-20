@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Objects.hash;
 
@@ -64,7 +65,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return asDto(guestBook.asDto());
     }
 
-    GuestBookEntryDto asDto(GuestBookDto guestBook) {
+    private GuestBookEntryDto asDto(GuestBookDto guestBook) {
         GuestBookEntryDto guestBookEntry = addPersistentData(new GuestBookEntryDto());
         guestBookEntry.setCreatorName(entryEmbeddable.getCreatorName());
         guestBookEntry.setEntry(entryEmbeddable.getEntry());
@@ -87,9 +88,8 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return new GuestBookEntryEntity(this);
     }
 
-    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
-        id = fetchId(sequencer);
-        addSequencedIdToDependencies(guestBook, sequencer);
+    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+        return streamSequencedDependencies(guestBook);
     }
 
     public @Override boolean equals(Object o) {
@@ -98,7 +98,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
 
     private boolean isEqualTo(GuestBookEntryEntity o) {
         return Objects.equals(entryEmbeddable, o.entryEmbeddable) &&
-                Objects.equals(guestBook, o.guestBook);
+                Objects.equals(guestBook, o.getGuestBook());
     }
 
     public @Override int hashCode() {
@@ -106,7 +106,11 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
     }
 
     public @Override String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(guestBook).append(entryEmbeddable).toString();
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+                .appendSuper(super.toString())
+                .append(getGuestBook())
+                .append(entryEmbeddable)
+                .toString();
     }
 
     public @Override Long getId() {

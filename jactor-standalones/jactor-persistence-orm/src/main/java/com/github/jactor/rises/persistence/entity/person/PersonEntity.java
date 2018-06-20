@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Objects.hash;
 
@@ -71,19 +72,17 @@ public class PersonEntity extends PersistentEntity<Long> {
         return new PersonEntity(this);
     }
 
-    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
-        id = fetchId(sequencer);
-        addSequencedIdToDependencies(addressEntity, sequencer);
-        addSequencedIdToDependencies(userEntity, sequencer);
+    public @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+        return streamSequencedDependencies(addressEntity, userEntity);
     }
 
     public @Override boolean equals(Object o) {
         return this == o || o != null && getClass() == o.getClass() &&
-                Objects.equals(addressEntity, ((PersonEntity) o).addressEntity) &&
-                Objects.equals(description, ((PersonEntity) o).description) &&
-                Objects.equals(firstName, ((PersonEntity) o).firstName) &&
-                Objects.equals(surname, ((PersonEntity) o).surname) &&
-                Objects.equals(locale, ((PersonEntity) o).locale);
+                Objects.equals(addressEntity, ((PersonEntity) o).getAddressEntity()) &&
+                Objects.equals(description, ((PersonEntity) o).getDescription()) &&
+                Objects.equals(firstName, ((PersonEntity) o).getFirstName()) &&
+                Objects.equals(surname, ((PersonEntity) o).getSurname()) &&
+                Objects.equals(locale, ((PersonEntity) o).getLocale());
     }
 
     public @Override int hashCode() {
@@ -91,10 +90,12 @@ public class PersonEntity extends PersistentEntity<Long> {
     }
 
     public @Override String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .appendSuper(super.toString()).append(firstName).append(surname)
-                .append("userEntity", userEntity)
-                .append("addressEntity", addressEntity)
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+                .appendSuper(super.toString())
+                .append(getFirstName())
+                .append(getSurname())
+                .append(getUserEntity())
+                .append(getAddressEntity())
                 .toString();
     }
 
@@ -130,7 +131,7 @@ public class PersonEntity extends PersistentEntity<Long> {
         return userEntity;
     }
 
-    @SuppressWarnings("WeakerAccess") /* used by reflection */ public void setAddressEntity(AddressEntity addressEntity) {
+    public @SuppressWarnings("WeakerAccess") /* used by reflection */ void setAddressEntity(AddressEntity addressEntity) {
         this.addressEntity = addressEntity;
     }
 

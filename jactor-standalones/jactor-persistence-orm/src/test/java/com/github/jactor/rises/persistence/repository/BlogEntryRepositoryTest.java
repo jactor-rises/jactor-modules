@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A BlogEntryRepository")
 class BlogEntryRepositoryTest {
 
-    @Autowired BlogEntryRepository blogEntryRepository;
-    @Autowired BlogRepository blogRepository;
+    private @Autowired BlogEntryRepository blogEntryRepository;
+    private @Autowired BlogRepository blogRepository;
+    private @Autowired EntityManager entityManager;
 
     @DisplayName("should save then read blog entry")
     @Test void shouldSaveThenReadBlogEntry() {
@@ -42,6 +44,8 @@ class BlogEntryRepositoryTest {
                 .build();
 
         blogEntryRepository.save(blogEntryToSave);
+        entityManager.flush();
+        entityManager.clear();
 
         BlogEntryEntity blogEntryById = blogEntryRepository.findById(blogEntryToSave.getId()).orElseThrow(this::entryNotFound);
 
@@ -61,6 +65,9 @@ class BlogEntryRepositoryTest {
                 .build();
 
         blogEntryRepository.save(blogEntryToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         BlogEntryEntity blogEntryById = blogEntryRepository.findById(blogEntryToSave.getId()).orElseThrow(this::entryNotFound);
 
         blogEntryById.setCreatorName("luke");
@@ -69,6 +76,8 @@ class BlogEntryRepositoryTest {
         blogEntryRepository.save(blogEntryById);
 
         Optional<BlogEntryEntity> updatedEntry = blogEntryRepository.findById(blogEntryToSave.getId());
+        entityManager.flush();
+        entityManager.clear();
 
         assertAll(
                 () -> assertThat(updatedEntry).as("updatedEntry").isPresent(),
@@ -104,6 +113,9 @@ class BlogEntryRepositoryTest {
                 .build();
 
         blogEntryRepository.save(blogEntryToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         List<BlogEntryEntity> entriesByBlog = blogEntryRepository.findByBlog_Id(knownBlog.getId());
 
         assertAll(

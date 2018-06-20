@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A GuestBookRepository")
 class GuestBookRepositoryTest {
 
-    @Autowired private GuestBookRepository guestBookRepository;
+    private @Autowired GuestBookRepository guestBookRepository;
+    private @Autowired EntityManager entityManager;
 
     @DisplayName("should write then read guest book")
     @Test void shouldWriteThenReadGuestBook() {
@@ -33,6 +36,9 @@ class GuestBookRepositoryTest {
                 .build();
 
         guestBookRepository.save(guestBookEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         GuestBookEntity guestBookEntity = guestBookRepository.findById(guestBookEntityToSave.getId()).orElseThrow(this::guestBookNotFound);
 
         assertAll(
@@ -49,11 +55,17 @@ class GuestBookRepositoryTest {
                 .build();
 
         guestBookRepository.save(guestBookEntityToSave);
+        entityManager.flush();
+        entityManager.clear();
+
         GuestBookEntity guestBookEntityToUpdate = guestBookRepository.findById(guestBookEntityToSave.getId()).orElseThrow(this::guestBookNotFound);
 
         guestBookEntityToUpdate.setTitle("5000 thousands miles away from home");
 
         guestBookRepository.save(guestBookEntityToUpdate);
+        entityManager.flush();
+        entityManager.clear();
+
         GuestBookEntity guestBookEntity = guestBookRepository.findById(guestBookEntityToSave.getId()).orElseThrow(this::guestBookNotFound);
 
         assertThat(guestBookEntity.getTitle()).isEqualTo("5000 thousands miles away from home");

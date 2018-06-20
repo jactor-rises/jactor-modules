@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Objects.hash;
 
@@ -71,8 +73,8 @@ public class AddressEntity extends PersistentEntity<Long> {
         return new AddressEntity(this);
     }
 
-    public @Override void addSequencedIdAlsoIncludingDependencies(Sequencer sequencer) {
-        id = fetchId(sequencer);
+    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+        return Stream.empty();
     }
 
     public @Override boolean equals(Object o) {
@@ -100,9 +102,9 @@ public class AddressEntity extends PersistentEntity<Long> {
                 .append(getAddressLine1())
                 .append(getAddressLine2())
                 .append(getAddressLine3())
+                .append(getZipCode())
                 .append(getCity())
                 .append(getCountry())
-                .append(getZipCode())
                 .toString();
     }
 

@@ -1,6 +1,7 @@
 package com.github.jactor.rises.persistence.aop;
 
 import com.github.jactor.rises.persistence.entity.PersistentEntity;
+import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactor.rises.persistence.entity.person.PersonEntity;
 import com.github.jactor.rises.persistence.entity.user.UserEntity;
 import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,42 +50,43 @@ class IdentitySequencerTest {
         );
     }
 
-    @DisplayName("should set id on an address entity, user entity as well as the person entity")
-    @Test void shouldSetIdOnPersonsAddress() {
+    @DisplayName("should set id on an person entity and address entity as well as the user entity")
+    @Test void shouldSetIdOnPersonsAddressAndUser() {
         when(joinPointMock.getArgs()).thenReturn(new Object[]{aPerson().with(aUser()).build()});
 
         PersonEntity person = (PersonEntity) identitySequencer.addIdentity(joinPointMock);
 
         assertAll(
-                () -> assertThat(person.getId()).as("person").isEqualTo(1000000L),
-                () -> assertThat(person.getAddressEntity().getId()).as("address").isEqualTo(1000000L),
-                () -> assertThat(person.getUserEntity().getId()).as("user").isEqualTo(1000000L)
+                () -> assertThat(person.getId()).as("person.id").isEqualTo(1000000L),
+                () -> assertThat(person.getAddressEntity().getId()).as("person.address.id").isEqualTo(1000000L),
+                () -> assertThat(person.getUserEntity().getId()).as("person.user.id").isEqualTo(1000000L)
         );
     }
 
-    @DisplayName("should set id on an address entity as well as the person entity and user entity")
+    @DisplayName("should set id on an user entity as well as person and address")
     @Test void shouldSetIdOnUserPersonAndAddress() {
         when(joinPointMock.getArgs()).thenReturn(new Object[]{aUser().build()});
 
         UserEntity user = (UserEntity) identitySequencer.addIdentity(joinPointMock);
 
         assertAll(
-                () -> assertThat(user.getId()).as("user").isEqualTo(1000000L),
-                () -> assertThat(user.getPerson().getId()).as("user").isEqualTo(1000000L),
-                () -> assertThat(user.getPerson().getAddressEntity().getId()).as("address").isEqualTo(1000000L)
+                () -> assertThat(user.getId()).as("user.id").isEqualTo(1000000L),
+                () -> assertThat(user.getPerson().getId()).as("user.person.id").isEqualTo(1000000L),
+                () -> assertThat(user.getPerson().getAddressEntity().getId()).as("user.person.address.id").isEqualTo(1000000L)
         );
     }
 
-    @DisplayName("should set id on an user entity as well as the person entity")
-    @Test void shouldSetIdOnUserAndPerson() {
-        when(joinPointMock.getArgs()).thenReturn(new Object[]{aUser().build()});
+    @DisplayName("should set id on a guestBook entity, as well as user, person, and address")
+    @Test void shouldSaveGuestBookUserPersonAndAddress() {
+        when(joinPointMock.getArgs()).thenReturn(new Object[]{aGuestBook().build()});
 
-        UserEntity user = (UserEntity) identitySequencer.addIdentity(joinPointMock);
+        GuestBookEntity guestBook = (GuestBookEntity) identitySequencer.addIdentity(joinPointMock);
 
         assertAll(
-                () -> assertThat(user.getId()).as("user").isEqualTo(1000000L),
-                () -> assertThat(user.getPerson().getId()).as("user").isEqualTo(1000000L),
-                () -> assertThat(user.getPerson().getAddressEntity().getId()).as("address").isEqualTo(1000000L)
+                () -> assertThat(guestBook.getId()).as("guestBook.id").isEqualTo(1000000L),
+                () -> assertThat(guestBook.getUser().getId()).as("guestBook.user.id").isEqualTo(1000000L),
+                () -> assertThat(guestBook.getUser().getPerson().getId()).as("guestBook.user.person.id").isEqualTo(1000000L),
+                () -> assertThat(guestBook.getUser().getPerson().getAddressEntity().getId()).as("guestBook.user.person.address.id").isEqualTo(1000000L)
         );
     }
 }
