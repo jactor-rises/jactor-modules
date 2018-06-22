@@ -28,7 +28,7 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
         return this;
     }
 
-    AddressBuilder withAddressLine2(@SuppressWarnings("SameParameterValue") String addressLine2) {
+    public AddressBuilder withAddressLine2(String addressLine2) {
         addressDto.setAddressLine2(addressLine2);
         return this;
     }
