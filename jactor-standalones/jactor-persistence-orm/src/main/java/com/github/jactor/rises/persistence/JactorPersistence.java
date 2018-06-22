@@ -34,8 +34,10 @@ public class JactorPersistence {
             LOGGER.debug("Available beans:");
             springBeanNames.getBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::debug);
 
-            LOGGER.debug("Available spring beans:");
-            springBeanNames.getNamesOfSpringBeans().stream().map(name -> "- " + name).forEach(LOGGER::debug);
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Available spring beans:");
+                springBeanNames.getNamesOfSpringBeans().stream().map(name -> "- " + name).forEach(LOGGER::trace);
+            }
         }
     }
 
