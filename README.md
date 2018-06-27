@@ -10,19 +10,20 @@ Source code for jactor-rises (client, module, persistence, and front end)
 
 ### How do I get set up? ###
 
-* a couple of spring-boot applications are made when you build (build.sh = shell building with maven) this application
+* a couple of spring-boot applications are created when building (`./build.sh` using maven) this application
     * jactor-persistence-orm which is a standalone rest application which handles the persistence
     * jactor-web which is a standalone web application on apache tomcat
-* run these application side by side to get a full working copy (using `mvn spring-boot:run` on each application)
+* run these application side by side to get a full working application (using `mvn spring-boot:run` on each standalone)
 * persistence in jactor-rises is not done with h2
 
-### Some artifacts used in jactor-rises ###
+### Some technologies used on jactor-rises ###
 
-* [spring framwork](https://spring.io/projects/spring-framework)
-* [spring-boot](https://spring.io/projects/spring-boot)
-* [hibernate](http://hibernate.org/orm/)
+* [spring framwork 5.x](https://spring.io/projects/spring-framework)
+* [spring-boot 2.x](https://spring.io/projects/spring-boot)
+* [hibernate 5.x](http://hibernate.org/orm/)
 * [h2](http://h2database.com)
-* [junit](https://junit.org/junit5/)
+* [junit 5.x](https://junit.org/junit5/)
 * [assertj](https://joel-costigliola.github.io/assertj/)
 * [mockito](http://site.mockito.org)
 * [thymeleaf](https://www.thymeleaf.org)
+* [git](https://git-scm.com)

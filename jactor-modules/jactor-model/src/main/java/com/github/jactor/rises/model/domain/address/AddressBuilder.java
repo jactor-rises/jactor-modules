@@ -33,7 +33,7 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
         return this;
     }
 
-    AddressBuilder withAddressLine3(@SuppressWarnings("SameParameterValue") String addressLine3) {
+    public AddressBuilder withAddressLine3(String addressLine3) {
         addressDto.setAddressLine3(addressLine3);
         return this;
     }
