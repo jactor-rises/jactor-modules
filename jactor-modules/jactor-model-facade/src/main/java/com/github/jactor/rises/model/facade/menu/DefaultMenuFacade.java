@@ -1,6 +1,7 @@
 package com.github.jactor.rises.model.facade.menu;
 
 import com.github.jactor.rises.client.datatype.Name;
+import com.github.jactor.rises.model.facade.MenuFacade;
 
 import java.util.HashMap;
 import java.util.List;

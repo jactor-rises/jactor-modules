@@ -1,4 +1,8 @@
-package com.github.jactor.rises.model.facade.menu;
+package com.github.jactor.rises.model.facade;
+
+import com.github.jactor.rises.model.facade.menu.MenuItem;
+import com.github.jactor.rises.model.facade.menu.MenuTarget;
+import com.github.jactor.rises.model.facade.menu.MenuTargetRequest;
 
 import java.util.List;
 
