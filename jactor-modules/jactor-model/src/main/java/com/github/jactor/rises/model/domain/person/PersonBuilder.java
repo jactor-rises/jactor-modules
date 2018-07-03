@@ -29,7 +29,7 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
         return this;
     }
 
-    PersonBuilder withFirstName(String firstName) {
+    public PersonBuilder withFirstName(String firstName) {
         personDto.setFirstName(firstName);
         return this;
     }
