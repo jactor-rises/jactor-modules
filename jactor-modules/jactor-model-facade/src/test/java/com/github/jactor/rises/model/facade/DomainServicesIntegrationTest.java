@@ -50,7 +50,7 @@ class DomainServicesIntegrationTest {
 
     @BeforeEach void assumeJactorPersistenceRunning() throws IOException {
         URL url = new URL("http://localhost:1099/jactor-persistence-orm/actuator/health");
-        assumeTrue(isServerRunning(url), "Integration test can only run when server i 'UP'");
+        assumeTrue(isServerRunning(url), "Integration test can only run when server is 'UP'");
     }
 
     private boolean isServerRunning(URL url) throws IOException {

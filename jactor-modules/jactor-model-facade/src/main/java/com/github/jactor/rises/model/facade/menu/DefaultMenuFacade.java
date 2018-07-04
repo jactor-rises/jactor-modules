@@ -10,7 +10,6 @@ import java.util.Map;
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notEmpty;
 
-/** The implementation of {@link MenuFacade} */
 public class DefaultMenuFacade implements MenuFacade {
     private final Map<Name, Menu> menusByName = new HashMap<>();
 
@@ -23,8 +22,7 @@ public class DefaultMenuFacade implements MenuFacade {
         }
     }
 
-    @Override public List<MenuItem> fetchMenuItem(MenuTargetRequest menuTargetRequest) {
-        Name name = menuTargetRequest.getMenuName();
+    public @Override List<MenuItem> fetchMenuItems(Name name) {
         isTrue(menusByName.containsKey(name), name + " is an unknown menu. Known menus: " + menusByName.keySet());
 
         return menusByName.get(name).getMenuItems();

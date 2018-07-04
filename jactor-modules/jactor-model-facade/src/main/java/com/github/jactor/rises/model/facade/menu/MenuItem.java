@@ -1,7 +1,6 @@
 package com.github.jactor.rises.model.facade.menu;
 
 import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.model.facade.menu.builder.MenuItemBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,26 +15,26 @@ public class MenuItem {
     private final Name itemName;
     private final String description;
     private final List<MenuItem> children = new ArrayList<>();
-    private final MenuItemTarget menuItemTarget;
+    private final String target;
 
-    public MenuItem(Name itemName, String description, MenuItemTarget menuItemTarget) {
+    MenuItem(Name itemName, String description, String target) {
         this.itemName = itemName;
         this.description = description;
-        this.menuItemTarget = menuItemTarget;
+        this.target = target;
     }
 
-    public MenuItem appendChildren(List<MenuItem> children) {
+    MenuItem appendChildren(List<MenuItem> children) {
         this.children.addAll(children);
         return this;
     }
 
-    public boolean isChosen() {
-        return MenuTargetRequest.isRequestFor(menuItemTarget);
+    public boolean isChosen(String target) {
+        return target != null && target.equals(this.target);
     }
 
-    public boolean isChildChosen() {
+    public boolean isChildChosen(String target) {
         for (MenuItem menuItem : children) {
-            if (menuItem.isChosen()) {
+            if (menuItem.isChosen(target)) {
                 return true;
             }
         }
@@ -44,7 +43,7 @@ public class MenuItem {
     }
 
     @Override public int hashCode() {
-        return hash(itemName, getChildren(), getDescription(), getMenuItemTarget());
+        return hash(itemName, getChildren(), getDescription(), getTarget());
     }
 
     @Override public boolean equals(Object o) {
@@ -61,7 +60,7 @@ public class MenuItem {
         return Objects.equals(getItemName(), other.getItemName()) &&
                 Objects.equals(getChildren(), other.getChildren()) &&
                 Objects.equals(getDescription(), other.getDescription()) &&
-                Objects.equals(getMenuItemTarget(), other.getMenuItemTarget());
+                Objects.equals(getTarget(), other.getTarget());
     }
 
     @Override
@@ -70,20 +69,20 @@ public class MenuItem {
                 .append(getItemName())
                 .append(getDescription())
                 .append(getChildren())
-                .append(getMenuItemTarget())
+                .append(getTarget())
                 .toString();
     }
 
-    private List<MenuItem> getChildren() {
+    public List<MenuItem> getChildren() {
         return children;
     }
 
-    private String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    private MenuItemTarget getMenuItemTarget() {
-        return menuItemTarget;
+    public String getTarget() {
+        return target;
     }
 
     public Name getItemName() {

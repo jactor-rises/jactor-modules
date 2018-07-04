@@ -1,8 +1,6 @@
-package com.github.jactor.rises.model.facade.menu.builder;
+package com.github.jactor.rises.model.facade.menu;
 
 import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.model.facade.menu.MenuItem;
-import com.github.jactor.rises.model.facade.menu.MenuItemTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +9,19 @@ import java.util.List;
  * a builder of menu items
  */
 public class MenuItemBuilder {
+
     private final List<MenuItem> children = new ArrayList<>();
 
     private Name itemName;
     private String description;
-    private MenuItemTarget menuItemTarget;
+    private String target;
 
     public MenuItemBuilder add(MenuItemBuilder childBuilder) {
         return add(childBuilder.build());
     }
 
     public MenuItem build() {
-        return new MenuItem(this.itemName, this.description, menuItemTarget).appendChildren(children);
+        return new MenuItem(itemName, description, target).appendChildren(children);
     }
 
     private MenuItemBuilder add(MenuItem child) {
@@ -30,8 +29,8 @@ public class MenuItemBuilder {
         return this;
     }
 
-    public MenuItemBuilder withTarget(String menuItemTarget) {
-        this.menuItemTarget = new MenuItemTarget(menuItemTarget);
+    public MenuItemBuilder withTarget(String target) {
+        this.target = target;
         return this;
     }
 

@@ -1,7 +1,6 @@
 package com.github.jactor.rises.model.facade.menu;
 
 import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.model.facade.menu.builder.MenuBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,7 +13,7 @@ public class Menu {
     private final Name menuName;
     private final List<MenuItem> menuItems = new ArrayList<>();
 
-    public Menu(Name menuName, List<MenuItem> menuItems) {
+    Menu(Name menuName, List<MenuItem> menuItems) {
         this.menuName = menuName;
         this.menuItems.addAll(menuItems);
     }
@@ -31,7 +30,7 @@ public class Menu {
         return menuName;
     }
 
-    public List<MenuItem> getMenuItems() {
+    List<MenuItem> getMenuItems() {
         return menuItems;
     }
 

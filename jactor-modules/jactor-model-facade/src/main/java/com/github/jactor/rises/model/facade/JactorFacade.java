@@ -1,9 +1,11 @@
 package com.github.jactor.rises.model.facade;
 
+import com.github.jactor.rises.client.datatype.Name;
 import com.github.jactor.rises.client.facade.UserFacade;
 import com.github.jactor.rises.io.ctx.JactorIo;
 import com.github.jactor.rises.io.rest.GuestBookRestService;
 import com.github.jactor.rises.io.rest.UserRestService;
+import com.github.jactor.rises.model.facade.impl.UserFacadeImpl;
 import com.github.jactor.rises.model.facade.menu.DefaultMenuFacade;
 import com.github.jactor.rises.model.facade.menu.Menu;
 import com.github.jactor.rises.model.service.GuestBookDomainService;
@@ -19,36 +21,36 @@ import static com.github.jactor.rises.model.facade.menu.MenuItem.aMenuItem;
 @Import(JactorIo.class)
 public class JactorFacade {
 
-    @Bean public UserFacade userFacade(UserRestService userRestService) {
+    public static final Name MENU_USERS = new Name("users");
+
+    public @Bean UserFacade userFacade(UserRestService userRestService) {
         return new UserFacadeImpl(userDomainService(userRestService));
     }
 
-    @Bean public GuestBookDomainService guestBookDomainService(GuestBookRestService guestBookRestService) {
+    public @Bean GuestBookDomainService guestBookDomainService(GuestBookRestService guestBookRestService) {
         return new GuestBookDomainService(guestBookRestService);
     }
 
-    @Bean public UserDomainService userDomainService(UserRestService userRestService) {
+    public @Bean UserDomainService userDomainService(UserRestService userRestService) {
         return new UserDomainService(userRestService);
     }
 
-    @Bean public MenuFacade menuFacade() {
-        return new DefaultMenuFacade(mainMenu(), personMenu());
+    public @Bean MenuFacade menuFacade() {
+        return new DefaultMenuFacade(usersMenu());
     }
 
-    private Menu mainMenu() {
+    private Menu usersMenu() {
         return aMenu()
-                .withName("main")
-                .add(aMenuItem()
-                        .withName("menu.main.home").withDescription("menu.main.home.desc").withTarget("home")
-                        .add(aMenuItem().withName("jactor").withTarget("user?choose=jactor"))
-                        .add(aMenuItem().withName("tip").withTarget("user?choose=tip"))
+                .withName(MENU_USERS)
+                .add(
+                        aMenuItem()
+                                .withName("menu.users.default").withDescription("menu.users.default.desc").withTarget("user")
+                                .add(aMenuItem().withName("jactor").withTarget("user?choose=jactor"))
+                                .add(aMenuItem().withName("tip").withTarget("user?choose=tip"))
+                ).add(
+                        aMenuItem()
+                                .withName("menu.users.choose").withDescription("menu.users.choose.desc").withTarget("user")
+                                .add(aMenuItem().withName("#201").withTarget("user?choose=#201"))
                 ).build();
-    }
-
-    private Menu personMenu() {
-        return aMenu()
-                .withName("person")
-                .add(aMenuItem().withName("menu.person.about").withDescription("menu.person.about.desc").withTarget("about"))
-                .build();
     }
 }
