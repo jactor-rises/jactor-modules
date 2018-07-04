@@ -1,8 +1,6 @@
-package com.github.jactor.rises.model.facade.menu.builder;
+package com.github.jactor.rises.model.facade.menu;
 
-import com.github.jactor.rises.model.facade.menu.MenuItem;
 import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.model.facade.menu.Menu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +19,12 @@ public class MenuBuilder {
         return this;
     }
 
-    public MenuBuilder withName(String name) {
-        nameOfMenu = new Name(name);
+    MenuBuilder withName(String name) {
+        return withName(new Name(name));
+    }
+
+    public MenuBuilder withName(Name name) {
+        nameOfMenu = name;
         return this;
     }
 

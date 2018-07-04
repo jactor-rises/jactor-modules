@@ -11,7 +11,6 @@ import static com.github.jactor.rises.model.facade.menu.MenuItem.aMenuItem;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("A DefaultMenuFacade")
 class DefaultMenuFacadeTest {
@@ -31,22 +30,19 @@ class DefaultMenuFacadeTest {
 
     @DisplayName("should fail if the menu asked for is unknown")
     @Test void willFailWhenMenuIsUnknown() {
-        MenuItemTarget somewhere = new MenuItemTarget("somewhere");
         DefaultMenuFacade defaultMenuFacadeToTest = new DefaultMenuFacade(aMenu().withName("known.menu").add(aMenuItem()).build());
 
-        assertThatThrownBy(() -> defaultMenuFacadeToTest.fetchMenuItem(new MenuTargetRequest(new MenuTarget(somewhere, new Name("unknown.menu")))))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("unknown menu")
-                .hasMessageContaining("known.menu");
+        assertThatIllegalArgumentException().isThrownBy(() -> defaultMenuFacadeToTest.fetchMenuItems(new Name("unknown.menu")))
+                .withMessageContaining("unknown menu")
+                .withMessageContaining("known.menu");
     }
 
-    @DisplayName("should find menu items for known MenuTarget")
+    @DisplayName("should find menu items for known Menu")
     @Test void willFindKnownMenuItems() {
-        MenuItemTarget somewhere = new MenuItemTarget("somewhere");
         MenuItem menuItem = aMenuItem().build();
         DefaultMenuFacade defaultMenuFacadeToTest = new DefaultMenuFacade(aMenu().withName("known.menu").add(menuItem).build());
 
-        List<MenuItem> menuItems = defaultMenuFacadeToTest.fetchMenuItem(new MenuTargetRequest(new MenuTarget(somewhere, new Name("known.menu"))));
+        List<MenuItem> menuItems = defaultMenuFacadeToTest.fetchMenuItems(new Name("known.menu"));
 
         assertThat(menuItems).contains(menuItem);
     }

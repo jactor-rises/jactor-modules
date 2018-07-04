@@ -1,7 +1,5 @@
 package com.github.jactor.rises.model.facade.menu;
 
-import com.github.jactor.rises.client.datatype.Name;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A MenuItem")
 class MenuItemTest {
 
-    @BeforeEach void requestMenuItemTargetDeadCenter() {
-        new MenuTargetRequest(new MenuTarget(new MenuItemTarget("hit?dead=center"), new Name("some.menu")));
-    }
+    private String target = "hit?dead=center";
 
     @DisplayName("should have an implementation of the hash code method")
     @Test void willHaveCorrectImplementedHashCode() {
@@ -51,13 +47,13 @@ class MenuItemTest {
     @DisplayName("should not be chosen when the target is unknown")
     @Test void shouldNotBeChosenWhenTheTargetIsUnknown() {
         MenuItem testMenuItem = aMenuItem().withTarget("miss").build();
-        assertThat(testMenuItem.isChosen()).isEqualTo(false);
+        assertThat(testMenuItem.isChosen(target)).isEqualTo(false);
     }
 
     @DisplayName("should be chosen when the target is known")
     @Test void shouldBeChosenWhenTheTargetIsKnown() {
         MenuItem testMenuItem = aMenuItem().withTarget("hit?dead=center").build();
-        assertThat(testMenuItem.isChosen()).isEqualTo(true);
+        assertThat(testMenuItem.isChosen(target)).isEqualTo(true);
     }
 
     @DisplayName("should not have chosen child when the target is unknown")
@@ -66,7 +62,7 @@ class MenuItemTest {
                 .add(aMenuItem().withTarget("miss"))
                 .build();
 
-        assertThat(testMenuItem.isChildChosen()).isEqualTo(false);
+        assertThat(testMenuItem.isChildChosen(target)).isEqualTo(false);
     }
 
     @DisplayName("should have chosen child when the target is known")
@@ -75,6 +71,6 @@ class MenuItemTest {
                 .add(aMenuItem().withTarget("hit?dead=center"))
                 .build();
 
-        assertThat(testMenuItem.isChildChosen()).isEqualTo(true);
+        assertThat(testMenuItem.isChildChosen(target)).isEqualTo(true);
     }
 }

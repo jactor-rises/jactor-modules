@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.facade;
+package com.github.jactor.rises.model.facade.impl;
 
 import com.github.jactor.rises.client.datatype.Username;
 import com.github.jactor.rises.client.domain.User;
@@ -11,7 +11,7 @@ public class UserFacadeImpl implements UserFacade {
 
     private final UserDomainService userDomainService;
 
-    UserFacadeImpl(UserDomainService userDomainService) {
+    public UserFacadeImpl(UserDomainService userDomainService) {
         this.userDomainService = userDomainService;
     }
 
