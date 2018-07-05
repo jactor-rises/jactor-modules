@@ -9,7 +9,7 @@ if [ $STATUS -gt 0 ]; then
   exit ${STATUS}
 fi
 
-cd jactor-standalones
+cd jactor-applications
 mvn clean install
 STATUS=$?
 

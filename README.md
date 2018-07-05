@@ -1,6 +1,6 @@
 # README #
 
-Source code for jactor-rises (client, module, persistence, and front end)
+Source code for jactor-rises (client, model, back-end, and front-end)
 
 ### What is this repository for? ###
 
@@ -10,11 +10,11 @@ Source code for jactor-rises (client, module, persistence, and front end)
 
 ### How do I get set up? ###
 
-* a couple of spring-boot applications are created when building (`./build.sh` using maven) this application
+* a couple of spring-boot applications are created when building (`./build.sh` using maven) these modules
     * jactor-persistence-orm which is a standalone rest application which handles the persistence
-    * jactor-web which is a standalone web application on apache tomcat
-* run these application side by side to get a full working application (using `mvn spring-boot:run` on each standalone)
-* persistence in jactor-rises is not done with h2
+    * jactor-web which is a web application on apache tomcat running via spring-boot
+* run these application side by side to get a full working application (using `mvn spring-boot:run` on each application)
+* persistence in jactor-rises is done using h2 (in-memory database), and is not finite
 
 ### Some technologies used on jactor-rises ###
 
