@@ -14,7 +14,7 @@
     <groupId>com.github.jactor-rises.jactor-standalones</groupId>
     <artifactId>jactor-persistence-orm</artifactId>
 
-    <name>jactor-rises::jactor-standalones::jactor-persistence-orm</name>
+    <name>jactor-standalones::jactor-persistence-orm</name>
     <description>The persistence layer of jactor-rises</description>
 
     <version>1.0-SNAPSHOT</version>
