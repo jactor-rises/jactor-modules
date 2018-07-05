@@ -4,7 +4,6 @@ import com.github.jactor.rises.client.datatype.Name;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +13,7 @@ public class MenuItem {
 
     private final Name itemName;
     private final String description;
-    private final List<MenuItem> children = new ArrayList<>();
+    private final MenuItems children = new MenuItems();
     private final String target;
 
     MenuItem(Name itemName, String description, String target) {
@@ -33,17 +32,23 @@ public class MenuItem {
     }
 
     public boolean isChildChosen(String target) {
-        for (MenuItem menuItem : children) {
-            if (menuItem.isChosen(target)) {
-                return true;
-            }
-        }
+        return children.hasTarget(target);
+    }
 
-        return false;
+    public List<MenuItem> fetchChildren() {
+        return children.fetchAll();
+    }
+
+    public boolean hasChildren() {
+        return children.isNotEmpty();
+    }
+
+    public boolean isNamed(String name) {
+        return itemName.asString().equals(name);
     }
 
     @Override public int hashCode() {
-        return hash(itemName, getChildren(), getDescription(), getTarget());
+        return hash(itemName, fetchChildren(), getDescription(), getTarget());
     }
 
     @Override public boolean equals(Object o) {
@@ -58,7 +63,7 @@ public class MenuItem {
         MenuItem other = (MenuItem) o;
 
         return Objects.equals(getItemName(), other.getItemName()) &&
-                Objects.equals(getChildren(), other.getChildren()) &&
+                Objects.equals(fetchChildren(), other.fetchChildren()) &&
                 Objects.equals(getDescription(), other.getDescription()) &&
                 Objects.equals(getTarget(), other.getTarget());
     }
@@ -68,13 +73,9 @@ public class MenuItem {
         return new ToStringBuilder(this, ToStringStyle.NO_FIELD_NAMES_STYLE)
                 .append(getItemName())
                 .append(getDescription())
-                .append(getChildren())
+                .append(fetchChildren())
                 .append(getTarget())
                 .toString();
-    }
-
-    public List<MenuItem> getChildren() {
-        return children;
     }
 
     public String getDescription() {
