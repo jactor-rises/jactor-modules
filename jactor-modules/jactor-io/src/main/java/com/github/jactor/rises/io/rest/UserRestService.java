@@ -7,7 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.Arrays.asList;
 
 public class UserRestService extends AbstractRestService {
 
@@ -34,5 +37,10 @@ public class UserRestService extends AbstractRestService {
         ResponseEntity<UserDto> responseEntity = getForEntity(fullUrl("/user/find/" + username.asString()), UserDto.class);
 
         return Optional.ofNullable(bodyOf(responseEntity));
+    }
+
+    public List<String> findAllUsernames() {
+        ResponseEntity<String[]> responseEntity = getForEntity(fullUrl("/user/all/usernames"), String[].class);
+        return asList(responseEntity.getBody());
     }
 }

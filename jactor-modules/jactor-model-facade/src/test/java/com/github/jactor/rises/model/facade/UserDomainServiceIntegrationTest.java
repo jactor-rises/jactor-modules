@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
@@ -69,6 +70,13 @@ class UserDomainServiceIntegrationTest {
                     assertThat(user.getPerson().getFirstName()).as("user.person.firstName").isEqualTo(new Name("Suthatip"));
                 }
         );
+    }
+
+    @DisplayName("should find usernames on active users")
+    @Test void shouldFindUsernames() {
+        List<String> usernames = userDomainService.findAllUsernames();
+
+        assertThat(usernames).contains("jactor", "tip");
     }
 
     @DisplayName("should save user domain")

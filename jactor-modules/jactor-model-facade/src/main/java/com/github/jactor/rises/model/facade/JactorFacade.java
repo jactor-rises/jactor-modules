@@ -43,10 +43,8 @@ public class JactorFacade {
         return aMenu()
                 .withName(MENU_USERS)
                 .add(aMenuItem().withName("menu.users.default")
-                        .add(aMenuItem().withName("jactor").withTarget("user?choose=jactor"))
-                        .add(aMenuItem().withName("tip").withTarget("user?choose=tip"))
-                ).add(aMenuItem().withName("menu.users.choose")
-                        .add(aMenuItem().withName("#201").withTarget("user?choose=#201"))
+                       .add(aMenuItem().withName("jactor").withTarget("user?choose=jactor").withDescription("menu.users.jactor.desc"))
+                        .add(aMenuItem().withName("tip").withTarget("user?choose=tip").withDescription("menu.users.tip.desc"))
                 ).build();
     }
 }
