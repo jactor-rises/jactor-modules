@@ -6,6 +6,7 @@ import com.github.jactor.rises.io.rest.UserRestService;
 import com.github.jactor.rises.model.domain.user.UserDomain;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,5 +27,9 @@ public class UserDomainService {
 
     @SuppressWarnings("unchecked") public <T extends User> Optional<T> find(Username username) {
         return userRestService.find(username).map(UserDomain::new).map(userDomain -> (T) userDomain);
+    }
+
+    public List<String> findAllUsernames() {
+        return userRestService.findAllUsernames();
     }
 }

@@ -43,4 +43,19 @@ public class MenuItemBuilder {
         itemName = new Name(name);
         return this;
     }
+
+    public MenuItemBuilder addAsChildren(List<String> usernames) {
+        usernames.stream()
+                .map(this::usernameAsMenuItem)
+                .forEach(this::add);
+
+        return this;
+    }
+
+    private MenuItem usernameAsMenuItem(String username) {
+        return new MenuItemBuilder()
+                .withName(username)
+                .withTarget("user?choose=" + username)
+                .build();
+    }
 }

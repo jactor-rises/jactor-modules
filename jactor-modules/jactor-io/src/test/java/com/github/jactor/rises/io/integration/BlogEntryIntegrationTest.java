@@ -5,6 +5,7 @@ import com.github.jactor.rises.client.dto.UserDto;
 import com.github.jactor.rises.io.ctx.JactorIo;
 import com.github.jactor.rises.io.rest.BlogRestService;
 import com.github.jactor.rises.io.rest.UserRestService;
+import com.github.jactor.rises.test.util.SpringBootActuatorUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,22 +39,10 @@ class BlogEntryIntegrationTest {
     private @Autowired UserRestService userRestService;
 
     @BeforeEach void assumeJactorPersistenceRunning() throws IOException {
-        URL url = new URL("http://localhost:1099/jactor-persistence-orm/actuator/health");
-        assumeTrue(isServerRunning(url), "Integration test can only run when server i 'UP'");
-    }
-
-    private boolean isServerRunning(URL url) throws IOException {
-        boolean serverRunning = false;
-
-        try {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
-                serverRunning = reader.lines().anyMatch(line -> line.contains("\"status\":\"UP\""));
-            }
-        } catch (ConnectException e) {
-            // server is not running...
-        }
-
-        return serverRunning;
+        assumeTrue(
+                SpringBootActuatorUtil.isServerRunning("http://localhost:1099/jactor-persistence-orm/"),
+                "Integration test can only run when server is 'UP'"
+        );
     }
 
     @DisplayName("should save blog entry")

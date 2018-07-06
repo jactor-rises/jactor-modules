@@ -5,6 +5,7 @@ import com.github.jactor.rises.client.domain.User;
 import com.github.jactor.rises.client.facade.UserFacade;
 import com.github.jactor.rises.model.service.UserDomainService;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserFacadeImpl implements UserFacade {
@@ -15,11 +16,15 @@ public class UserFacadeImpl implements UserFacade {
         this.userDomainService = userDomainService;
     }
 
-    @Override public Optional<User> fetch(Long id) {
+    public @Override Optional<User> fetch(Long id) {
         return userDomainService.ferch(id);
     }
 
-    @Override public Optional<User> find(Username username) {
+    public @Override Optional<User> find(Username username) {
         return userDomainService.find(username);
+    }
+
+    public @Override List<String> findAllUsernames() {
+        return userDomainService.findAllUsernames();
     }
 }
