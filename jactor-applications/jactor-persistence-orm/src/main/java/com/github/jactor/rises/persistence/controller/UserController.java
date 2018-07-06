@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserController extends AbstractController {
@@ -47,5 +49,10 @@ public class UserController extends AbstractController {
         }
 
         return new ResponseEntity<>(saved, HttpStatus.OK);
+    }
+
+    @GetMapping("/all/usernames")
+    public ResponseEntity<List<String>> findAllUsernames() {
+        return new ResponseEntity<>(userServicey.findUsernamesOnActiveUsers(), HttpStatus.OK);
     }
 }

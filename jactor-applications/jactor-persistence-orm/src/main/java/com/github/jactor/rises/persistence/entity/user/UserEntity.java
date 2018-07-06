@@ -37,6 +37,7 @@ public class UserEntity extends PersistentEntity<Long> {
     private @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.MERGE) PersonEntity personEntity;
     private @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) GuestBookEntity guestBook;
     private @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) Set<BlogEntity> blogs = new HashSet<>();
+    private @Column(name = "INACTIVE") boolean inactive;
 
     UserEntity() {
         // used by builder
@@ -136,7 +137,15 @@ public class UserEntity extends PersistentEntity<Long> {
         this.personEntity = personEntity;
     }
 
+    void setInactive(boolean inactive) {
+        this.inactive = inactive;
+    }
+
     public static UserEntityBuilder aUser() {
         return new UserEntityBuilder();
+    }
+
+    public boolean getInactive() {
+        return inactive;
     }
 }

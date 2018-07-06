@@ -12,10 +12,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -76,29 +78,30 @@ class UserRepositoryTest {
     @Test void shouldWriteThenUpdateAndReadUserEntity() {
         UserEntity userToPersist = aUser()
                 .with(aPerson())
-                .withUsername("smuggler")
-                .withEmailAddress("smuggle.fast@tantooine.com")
+                .withUsername("causual")
+                .withEmailAddress("casuel@tantooine.com")
                 .build();
 
         userRepository.save(userToPersist);
         entityManager.flush();
         entityManager.clear();
 
+        String lukewarm = "lukewarm";
+        userToPersist.setUsername(lukewarm);
         userToPersist.setEmailAddress("luke@force.com");
-        userToPersist.setUsername("lukewarm");
 
         userRepository.save(userToPersist);
         entityManager.flush();
         entityManager.clear();
 
-        Optional<UserEntity> userByName = userRepository.findByUsername("lukewarm");
+        Optional<UserEntity> userByName = userRepository.findByUsername(lukewarm);
 
         assertAll(
                 () -> assertThat(userByName).isPresent(),
                 () -> {
                     UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
                     assertAll(
-                            () -> assertThat(userEntity.getUsername()).as("username").isEqualTo("lukewarm"),
+                            () -> assertThat(userEntity.getUsername()).as("username").isEqualTo(lukewarm),
                             () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("luke@force.com")
                     );
                 }
@@ -107,5 +110,19 @@ class UserRepositoryTest {
 
     private AssertionError userNotFound() {
         return new AssertionError("no user found");
+    }
+
+    @DisplayName("should find all active users")
+    @Test void shouldFindAllActiveUsers() {
+        userRepository.save(aUser().withUsername("spiderman").build());
+        userRepository.save(aUser().withUsername("ironman").isInactive().build());
+        entityManager.flush();
+        entityManager.clear();
+
+        List<String> usernames = userRepository.findByInactiveOrderByUsername(false).stream()
+                .map(UserRepository.UsernameProjection::getUsername)
+                .collect(toList());
+
+        assertThat(usernames).containsExactly("jactor", "spiderman", "tip");
     }
 }

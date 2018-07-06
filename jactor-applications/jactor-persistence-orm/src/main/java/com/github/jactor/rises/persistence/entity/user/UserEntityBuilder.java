@@ -11,6 +11,7 @@ public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
     private String emailAddress;
     private PersonEntity person;
     private String username;
+    private boolean inactive;
 
     UserEntityBuilder() {
         super(UserEntityBuilder::validate);
@@ -35,11 +36,17 @@ public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
         return this;
     }
 
+    public UserEntityBuilder isInactive() {
+        inactive = true;
+        return this;
+    }
+
     @Override public UserEntity buildBean() {
         UserEntity useruserEntity = new UserEntity();
         useruserEntity.setEmailAddress(emailAddress);
         useruserEntity.setPersonEntity(person);
         useruserEntity.setUsername(username);
+        useruserEntity.setInactive(inactive);
 
         return useruserEntity;
     }

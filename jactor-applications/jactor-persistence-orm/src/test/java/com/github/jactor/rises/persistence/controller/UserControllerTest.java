@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,5 +98,17 @@ class UserControllerTest {
         )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(equalTo(1))));
+    }
+
+    @DisplayName("should find all usernames on active users")
+    @Test void shouldFindAllUsernames() throws Exception {
+        when(userServiceMock.findUsernamesOnActiveUsers())
+                .thenReturn(asList("bart", "lisa"));
+
+        mockMvc.perform(get("/user/all/usernames")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("[0]", is(equalTo("bart"))))
+                .andExpect(jsonPath("[1]", is(equalTo("lisa"))));
     }
 }
