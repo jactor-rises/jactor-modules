@@ -25,9 +25,11 @@
         <junit-vintage.version>${junit.version}.3</junit-vintage.version>
 
         <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
+        <maven-jdeps.version>3.1.1</maven-jdeps.version>
         <maven-site-plugin.version>3.6</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+
         <mockito.version>2.19.0</mockito.version>
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
 
@@ -208,6 +210,22 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+
+                <plugin>
+                    <artifactId>maven-jdeps-plugin</artifactId>
+                    <version>${maven-jdeps.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>jdkinternals</goal> <!-- verify main classes -->
+                                <goal>test-jdkinternals</goal> <!-- verify test classes -->
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                    </configuration>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
