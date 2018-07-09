@@ -117,6 +117,7 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>${javax-xml-bind.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

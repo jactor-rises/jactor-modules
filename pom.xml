@@ -18,13 +18,13 @@
     <properties>
         <apache.commons.lang3.version>3.7</apache.commons.lang3.version>
         <assertj.version>3.10.0</assertj.version>
-        <java.version>1.8</java.version>
+        <java.version>9</java.version>
         <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.3</junit-jupiter.version>
         <junit-platform.version>1.0.3</junit-platform.version>
         <junit-vintage.version>${junit.version}.3</junit-vintage.version>
 
-        <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-jdeps.version>3.1.1</maven-jdeps.version>
         <maven-site-plugin.version>3.6</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
