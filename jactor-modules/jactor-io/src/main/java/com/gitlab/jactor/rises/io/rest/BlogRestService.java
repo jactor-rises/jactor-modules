@@ -1,7 +1,7 @@
-package com.github.jactor.rises.io.rest;
+package com.gitlab.jactor.rises.io.rest;
 
-import com.github.jactor.rises.client.dto.BlogDto;
-import com.github.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.client.dto.BlogDto;
+import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;

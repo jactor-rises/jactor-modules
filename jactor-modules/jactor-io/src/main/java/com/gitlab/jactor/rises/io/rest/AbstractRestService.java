@@ -1,4 +1,4 @@
-package com.github.jactor.rises.io.rest;
+package com.gitlab.jactor.rises.io.rest;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;

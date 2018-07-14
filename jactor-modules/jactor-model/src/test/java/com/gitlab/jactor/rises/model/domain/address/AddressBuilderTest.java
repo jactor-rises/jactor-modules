@@ -1,10 +1,10 @@
-package com.github.jactor.rises.model.domain.address;
+package com.gitlab.jactor.rises.model.domain.address;
 
-import com.github.jactor.rises.client.datatype.Country;
+import com.gitlab.jactor.rises.client.datatype.Country;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
+import static com.gitlab.jactor.rises.model.domain.address.AddressDomain.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertAll;

@@ -1,9 +1,9 @@
-package com.github.jactor.rises.model.domain.blog;
+package com.gitlab.jactor.rises.model.domain.blog;
 
-import com.github.jactor.rises.client.dto.BlogDto;
-import com.github.jactor.rises.client.dto.BlogEntryDto;
-import com.github.jactor.rises.commons.builder.AbstractBuilder;
-import com.github.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.rises.client.dto.BlogDto;
+import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
+import com.gitlab.jactor.rises.commons.builder.MissingFields;
 
 import java.util.Optional;
 

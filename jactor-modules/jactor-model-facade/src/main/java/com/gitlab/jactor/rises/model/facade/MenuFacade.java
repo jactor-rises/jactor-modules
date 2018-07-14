@@ -1,7 +1,7 @@
-package com.github.jactor.rises.model.facade;
+package com.gitlab.jactor.rises.model.facade;
 
-import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.model.facade.menu.MenuItem;
+import com.gitlab.jactor.rises.client.datatype.Name;
+import com.gitlab.jactor.rises.model.facade.menu.MenuItem;
 
 import java.util.List;
 

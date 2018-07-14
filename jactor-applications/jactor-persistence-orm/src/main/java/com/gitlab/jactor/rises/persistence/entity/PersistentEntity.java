@@ -1,7 +1,7 @@
-package com.github.jactor.rises.persistence.entity;
+package com.gitlab.jactor.rises.persistence.entity;
 
-import com.github.jactor.rises.client.dto.PersistentDto;
-import com.github.jactor.rises.commons.time.Now;
+import com.gitlab.jactor.rises.client.dto.PersistentDto;
+import com.gitlab.jactor.rises.commons.time.Now;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

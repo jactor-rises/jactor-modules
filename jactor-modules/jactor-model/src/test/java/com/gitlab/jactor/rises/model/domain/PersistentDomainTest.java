@@ -1,8 +1,8 @@
-package com.github.jactor.rises.model.domain;
+package com.gitlab.jactor.rises.model.domain;
 
-import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.client.dto.PersistentDto;
-import com.github.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.client.datatype.Name;
+import com.gitlab.jactor.rises.client.dto.PersistentDto;
+import com.gitlab.jactor.rises.client.dto.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

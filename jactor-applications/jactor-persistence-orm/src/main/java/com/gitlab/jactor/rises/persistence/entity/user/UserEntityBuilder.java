@@ -1,9 +1,9 @@
-package com.github.jactor.rises.persistence.entity.user;
+package com.gitlab.jactor.rises.persistence.entity.user;
 
-import com.github.jactor.rises.commons.builder.AbstractBuilder;
-import com.github.jactor.rises.commons.builder.MissingFields;
-import com.github.jactor.rises.persistence.entity.person.PersonEntity;
-import com.github.jactor.rises.persistence.entity.person.PersonEntityBuilder;
+import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
+import com.gitlab.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.rises.persistence.entity.person.PersonEntity;
+import com.gitlab.jactor.rises.persistence.entity.person.PersonEntityBuilder;
 
 import java.util.Optional;
 

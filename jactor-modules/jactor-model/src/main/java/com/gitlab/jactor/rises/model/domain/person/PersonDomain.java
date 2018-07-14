@@ -1,11 +1,11 @@
-package com.github.jactor.rises.model.domain.person;
+package com.gitlab.jactor.rises.model.domain.person;
 
-import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.client.domain.Person;
-import com.github.jactor.rises.client.dto.PersonDto;
-import com.github.jactor.rises.model.domain.PersistentDomain;
-import com.github.jactor.rises.model.domain.address.AddressDomain;
-import com.github.jactor.rises.model.domain.user.UserDomain;
+import com.gitlab.jactor.rises.client.datatype.Name;
+import com.gitlab.jactor.rises.client.domain.Person;
+import com.gitlab.jactor.rises.client.dto.PersonDto;
+import com.gitlab.jactor.rises.model.domain.PersistentDomain;
+import com.gitlab.jactor.rises.model.domain.address.AddressDomain;
+import com.gitlab.jactor.rises.model.domain.user.UserDomain;
 
 import java.util.Locale;
 import java.util.Optional;

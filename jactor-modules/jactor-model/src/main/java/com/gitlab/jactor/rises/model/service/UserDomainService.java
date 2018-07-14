@@ -1,9 +1,9 @@
-package com.github.jactor.rises.model.service;
+package com.gitlab.jactor.rises.model.service;
 
-import com.github.jactor.rises.client.datatype.Username;
-import com.github.jactor.rises.client.domain.User;
-import com.github.jactor.rises.io.rest.UserRestService;
-import com.github.jactor.rises.model.domain.user.UserDomain;
+import com.gitlab.jactor.rises.client.datatype.Username;
+import com.gitlab.jactor.rises.client.domain.User;
+import com.gitlab.jactor.rises.io.rest.UserRestService;
+import com.gitlab.jactor.rises.model.domain.user.UserDomain;
 
 import java.util.List;
 import java.util.Optional;

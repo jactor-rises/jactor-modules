@@ -1,11 +1,11 @@
-package com.github.jactor.rises.persistence.entity.person;
+package com.gitlab.jactor.rises.persistence.entity.person;
 
-import com.github.jactor.rises.commons.builder.AbstractBuilder;
-import com.github.jactor.rises.commons.builder.MissingFields;
-import com.github.jactor.rises.persistence.entity.address.AddressEntity;
-import com.github.jactor.rises.persistence.entity.address.AddressEntityBuilder;
-import com.github.jactor.rises.persistence.entity.user.UserEntity;
-import com.github.jactor.rises.persistence.entity.user.UserEntityBuilder;
+import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
+import com.gitlab.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.rises.persistence.entity.address.AddressEntity;
+import com.gitlab.jactor.rises.persistence.entity.address.AddressEntityBuilder;
+import com.gitlab.jactor.rises.persistence.entity.user.UserEntity;
+import com.gitlab.jactor.rises.persistence.entity.user.UserEntityBuilder;
 
 import java.util.Optional;
 

@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.jactor-rises</groupId>
+        <groupId>com.gitlab.jactor-rises</groupId>
         <artifactId>jactor-rises</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.github.jactor-rises.jactor-modules</groupId>
+    <groupId>com.gitlab.jactor-rises.jactor-modules</groupId>
     <name>jactor-rises::jactor-modules</name>
     <artifactId>jactor-modules</artifactId>
     <packaging>pom</packaging>

@@ -1,6 +1,6 @@
-package com.github.jactor.rises.persistence.aop;
+package com.gitlab.jactor.rises.persistence.aop;
 
-import com.github.jactor.rises.persistence.entity.PersistentEntity;
+import com.gitlab.jactor.rises.persistence.entity.PersistentEntity;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,7 +16,7 @@ public class IdentitySequencer {
     private static final Long START_SEQUENCE = 999999L; // + 1 (computed before value retrieved)
     private final Map<Class<?>, Long> idSequenceMap = new HashMap<>();
 
-    @SuppressWarnings("unchecked") @Before("execution(* com.github.jactor.rises.persistence.repository.*Repository.save(..))")
+    @SuppressWarnings("unchecked") @Before("execution(* com.gitlab.jactor.rises.persistence.repository.*Repository.save(..))")
     public Object addIdentity(JoinPoint joinPoint) {
         return Arrays.stream(joinPoint.getArgs())
                 .filter(obj -> obj instanceof PersistentEntity)

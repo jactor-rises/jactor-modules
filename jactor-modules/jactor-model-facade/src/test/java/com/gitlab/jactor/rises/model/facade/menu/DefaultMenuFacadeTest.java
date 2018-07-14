@@ -1,13 +1,13 @@
-package com.github.jactor.rises.model.facade.menu;
+package com.gitlab.jactor.rises.model.facade.menu;
 
-import com.github.jactor.rises.client.datatype.Name;
+import com.gitlab.jactor.rises.client.datatype.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.github.jactor.rises.model.facade.menu.Menu.aMenu;
-import static com.github.jactor.rises.model.facade.menu.MenuItem.aMenuItem;
+import static com.gitlab.jactor.rises.model.facade.menu.Menu.aMenu;
+import static com.gitlab.jactor.rises.model.facade.menu.MenuItem.aMenuItem;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;

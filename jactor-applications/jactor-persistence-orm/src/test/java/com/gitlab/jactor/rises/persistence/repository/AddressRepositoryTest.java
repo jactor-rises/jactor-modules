@@ -1,7 +1,7 @@
-package com.github.jactor.rises.persistence.repository;
+package com.gitlab.jactor.rises.persistence.repository;
 
-import com.github.jactor.rises.persistence.JactorPersistence;
-import com.github.jactor.rises.persistence.entity.address.AddressEntity;
+import com.gitlab.jactor.rises.persistence.JactorPersistence;
+import com.gitlab.jactor.rises.persistence.entity.address.AddressEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
+import static com.gitlab.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

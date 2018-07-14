@@ -1,21 +1,21 @@
-package com.github.jactor.rises.model.facade;
+package com.gitlab.jactor.rises.model.facade;
 
-import com.github.jactor.rises.client.datatype.Name;
-import com.github.jactor.rises.client.facade.UserFacade;
-import com.github.jactor.rises.io.ctx.JactorIo;
-import com.github.jactor.rises.io.rest.GuestBookRestService;
-import com.github.jactor.rises.io.rest.UserRestService;
-import com.github.jactor.rises.model.facade.impl.UserFacadeImpl;
-import com.github.jactor.rises.model.facade.menu.DefaultMenuFacade;
-import com.github.jactor.rises.model.facade.menu.Menu;
-import com.github.jactor.rises.model.service.GuestBookDomainService;
-import com.github.jactor.rises.model.service.UserDomainService;
+import com.gitlab.jactor.rises.client.datatype.Name;
+import com.gitlab.jactor.rises.client.facade.UserFacade;
+import com.gitlab.jactor.rises.io.ctx.JactorIo;
+import com.gitlab.jactor.rises.io.rest.GuestBookRestService;
+import com.gitlab.jactor.rises.io.rest.UserRestService;
+import com.gitlab.jactor.rises.model.facade.impl.UserFacadeImpl;
+import com.gitlab.jactor.rises.model.facade.menu.DefaultMenuFacade;
+import com.gitlab.jactor.rises.model.facade.menu.Menu;
+import com.gitlab.jactor.rises.model.service.GuestBookDomainService;
+import com.gitlab.jactor.rises.model.service.UserDomainService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import static com.github.jactor.rises.model.facade.menu.Menu.aMenu;
-import static com.github.jactor.rises.model.facade.menu.MenuItem.aMenuItem;
+import static com.gitlab.jactor.rises.model.facade.menu.Menu.aMenu;
+import static com.gitlab.jactor.rises.model.facade.menu.MenuItem.aMenuItem;
 
 @Configuration
 @Import(JactorIo.class)

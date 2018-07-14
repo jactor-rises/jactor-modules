@@ -1,8 +1,8 @@
-package com.github.jactor.rises.persistence.controller;
+package com.gitlab.jactor.rises.persistence.controller;
 
-import com.github.jactor.rises.client.dto.GuestBookDto;
-import com.github.jactor.rises.client.dto.GuestBookEntryDto;
-import com.github.jactor.rises.persistence.service.GuestBookService;
+import com.gitlab.jactor.rises.client.dto.GuestBookDto;
+import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.persistence.service.GuestBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -1,4 +1,4 @@
-package com.github.jactor.rises.persistence.entity;
+package com.gitlab.jactor.rises.persistence.entity;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

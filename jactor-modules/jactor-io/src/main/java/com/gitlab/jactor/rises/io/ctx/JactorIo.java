@@ -1,8 +1,8 @@
-package com.github.jactor.rises.io.ctx;
+package com.gitlab.jactor.rises.io.ctx;
 
-import com.github.jactor.rises.io.rest.BlogRestService;
-import com.github.jactor.rises.io.rest.GuestBookRestService;
-import com.github.jactor.rises.io.rest.UserRestService;
+import com.gitlab.jactor.rises.io.rest.BlogRestService;
+import com.gitlab.jactor.rises.io.rest.GuestBookRestService;
+import com.gitlab.jactor.rises.io.rest.UserRestService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;

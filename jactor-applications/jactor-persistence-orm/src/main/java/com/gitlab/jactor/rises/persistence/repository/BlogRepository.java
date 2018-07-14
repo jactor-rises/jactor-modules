@@ -1,6 +1,6 @@
-package com.github.jactor.rises.persistence.repository;
+package com.gitlab.jactor.rises.persistence.repository;
 
-import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

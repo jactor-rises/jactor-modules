@@ -1,11 +1,11 @@
-package com.github.jactor.rises.persistence.service;
+package com.gitlab.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.GuestBookDto;
-import com.github.jactor.rises.client.dto.GuestBookEntryDto;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.github.jactor.rises.persistence.repository.GuestBookEntryRepository;
-import com.github.jactor.rises.persistence.repository.GuestBookRepository;
+import com.gitlab.jactor.rises.client.dto.GuestBookDto;
+import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.gitlab.jactor.rises.persistence.repository.GuestBookEntryRepository;
+import com.gitlab.jactor.rises.persistence.repository.GuestBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,13 +1,13 @@
-package com.github.jactor.rises.persistence.service;
+package com.gitlab.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.BlogDto;
-import com.github.jactor.rises.client.dto.BlogEntryDto;
-import com.github.jactor.rises.client.dto.UserDto;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
-import com.github.jactor.rises.persistence.repository.BlogEntryRepository;
-import com.github.jactor.rises.persistence.repository.BlogRepository;
+import com.gitlab.jactor.rises.client.dto.BlogDto;
+import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity;
+import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.persistence.repository.BlogEntryRepository;
+import com.gitlab.jactor.rises.persistence.repository.BlogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

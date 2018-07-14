@@ -1,14 +1,14 @@
-package com.github.jactor.rises.model.domain.person;
+package com.gitlab.jactor.rises.model.domain.person;
 
-import com.github.jactor.rises.model.domain.address.AddressDomain;
-import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
+import com.gitlab.jactor.rises.model.domain.address.AddressDomain;
+import com.gitlab.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.github.jactor.rises.model.domain.address.AddressDomain.anAddress;
-import static com.github.jactor.rises.model.domain.person.PersonDomain.aPerson;
+import static com.gitlab.jactor.rises.model.domain.address.AddressDomain.anAddress;
+import static com.gitlab.jactor.rises.model.domain.person.PersonDomain.aPerson;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 

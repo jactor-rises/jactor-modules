@@ -1,10 +1,10 @@
-package com.github.jactor.rises.persistence.controller;
+package com.gitlab.jactor.rises.persistence.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jactor.rises.client.dto.BlogDto;
-import com.github.jactor.rises.client.dto.BlogEntryDto;
-import com.github.jactor.rises.persistence.JactorPersistence;
-import com.github.jactor.rises.persistence.service.BlogService;
+import com.gitlab.jactor.rises.client.dto.BlogDto;
+import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.persistence.JactorPersistence;
+import com.gitlab.jactor.rises.persistence.service.BlogService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

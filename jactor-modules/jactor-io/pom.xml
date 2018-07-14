@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.github.jactor-rises.jactor-modules</groupId>
+        <groupId>com.gitlab.jactor-rises.jactor-modules</groupId>
         <artifactId>jactor-modules</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <groupId>com.gitlab.jactor-rises.jactor-commons</groupId>
             <artifactId>jactor-client</artifactId>
         </dependency>
 
@@ -30,7 +30,7 @@
 
         <!-- Test scope -->
         <dependency>
-            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <groupId>com.gitlab.jactor-rises.jactor-commons</groupId>
             <artifactId>jactor-test</artifactId>
             <scope>test</scope>
         </dependency>

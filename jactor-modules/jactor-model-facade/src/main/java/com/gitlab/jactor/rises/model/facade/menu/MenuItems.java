@@ -1,4 +1,4 @@
-package com.github.jactor.rises.model.facade.menu;
+package com.gitlab.jactor.rises.model.facade.menu;
 
 import java.util.HashMap;
 import java.util.List;

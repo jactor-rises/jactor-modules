@@ -1,9 +1,9 @@
-package com.github.jactor.rises.model.facade.impl;
+package com.gitlab.jactor.rises.model.facade.impl;
 
-import com.github.jactor.rises.client.datatype.Username;
-import com.github.jactor.rises.client.domain.User;
-import com.github.jactor.rises.client.facade.UserFacade;
-import com.github.jactor.rises.model.service.UserDomainService;
+import com.gitlab.jactor.rises.client.datatype.Username;
+import com.gitlab.jactor.rises.client.domain.User;
+import com.gitlab.jactor.rises.client.facade.UserFacade;
+import com.gitlab.jactor.rises.model.service.UserDomainService;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,10 +1,10 @@
-package com.github.jactor.rises.persistence.aop;
+package com.gitlab.jactor.rises.persistence.aop;
 
-import com.github.jactor.rises.persistence.entity.PersistentEntity;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.rises.persistence.entity.person.PersonEntity;
-import com.github.jactor.rises.persistence.entity.user.UserEntity;
-import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.persistence.entity.PersistentEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.rises.persistence.entity.person.PersonEntity;
+import com.gitlab.jactor.rises.persistence.entity.user.UserEntity;
+import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
 import org.aspectj.lang.JoinPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
+import static com.gitlab.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.gitlab.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
+import static com.gitlab.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;

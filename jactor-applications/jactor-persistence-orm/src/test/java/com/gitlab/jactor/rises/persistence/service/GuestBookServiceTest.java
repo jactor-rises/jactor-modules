@@ -1,13 +1,13 @@
-package com.github.jactor.rises.persistence.service;
+package com.gitlab.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.GuestBookDto;
-import com.github.jactor.rises.client.dto.GuestBookEntryDto;
-import com.github.jactor.rises.client.dto.UserDto;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
-import com.github.jactor.rises.persistence.repository.GuestBookEntryRepository;
-import com.github.jactor.rises.persistence.repository.GuestBookRepository;
+import com.gitlab.jactor.rises.client.dto.GuestBookDto;
+import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.persistence.repository.GuestBookEntryRepository;
+import com.gitlab.jactor.rises.persistence.repository.GuestBookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +22,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

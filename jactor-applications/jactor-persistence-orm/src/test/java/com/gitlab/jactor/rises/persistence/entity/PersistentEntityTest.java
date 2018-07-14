@@ -1,9 +1,9 @@
-package com.github.jactor.rises.persistence.entity;
+package com.gitlab.jactor.rises.persistence.entity;
 
-import com.github.jactor.rises.persistence.entity.address.AddressEntity;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
-import com.github.jactor.rises.persistence.entity.person.PersonEntity;
-import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.persistence.entity.address.AddressEntity;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.gitlab.jactor.rises.persistence.entity.person.PersonEntity;
+import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
-import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
+import static com.gitlab.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
+import static com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.gitlab.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
+import static com.gitlab.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

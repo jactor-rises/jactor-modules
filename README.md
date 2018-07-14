@@ -5,7 +5,7 @@ Source code for jactor-rises (client, model, back-end, and front-end)
 ### What is this repository for? ###
 
 * Src code and issues regarding jactor-rises
-* Code will be released on [GitHub](https://github.com/jactor-rises)
+* Code will be released on [gitlab](https://gitlab.com/rises)
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###

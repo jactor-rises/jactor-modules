@@ -1,9 +1,9 @@
-package com.github.jactor.rises.persistence.repository;
+package com.gitlab.jactor.rises.persistence.repository;
 
-import com.github.jactor.rises.persistence.JactorPersistence;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.github.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.persistence.JactorPersistence;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

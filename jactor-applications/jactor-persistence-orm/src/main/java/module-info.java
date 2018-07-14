@@ -1,5 +1,5 @@
-module com.github.jactor.rises.persistence.orm {
-    requires com.github.jactor.rises.client;
+module com.gitlab.jactor.rises.persistence.orm {
+    requires com.gitlab.jactor.rises.client;
 
     requires aspectjweaver;
     requires java.persistence;

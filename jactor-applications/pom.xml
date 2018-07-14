@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.jactor-rises.jactor-applications</groupId>
+    <groupId>com.gitlab.jactor-rises.jactor-applications</groupId>
     <artifactId>jactor-applications</artifactId>
     <version>1.0-SNAPSHOT</version>
 

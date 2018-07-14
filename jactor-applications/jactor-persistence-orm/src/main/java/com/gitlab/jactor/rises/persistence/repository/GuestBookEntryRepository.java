@@ -1,7 +1,7 @@
-package com.github.jactor.rises.persistence.repository;
+package com.gitlab.jactor.rises.persistence.repository;
 
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

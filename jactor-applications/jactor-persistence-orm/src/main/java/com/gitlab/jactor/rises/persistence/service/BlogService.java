@@ -1,11 +1,11 @@
-package com.github.jactor.rises.persistence.service;
+package com.gitlab.jactor.rises.persistence.service;
 
-import com.github.jactor.rises.client.dto.BlogDto;
-import com.github.jactor.rises.client.dto.BlogEntryDto;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactor.rises.persistence.repository.BlogEntryRepository;
-import com.github.jactor.rises.persistence.repository.BlogRepository;
+import com.gitlab.jactor.rises.client.dto.BlogDto;
+import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity;
+import com.gitlab.jactor.rises.persistence.repository.BlogEntryRepository;
+import com.gitlab.jactor.rises.persistence.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

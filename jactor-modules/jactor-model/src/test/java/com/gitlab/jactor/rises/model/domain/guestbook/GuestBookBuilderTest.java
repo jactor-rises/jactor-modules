@@ -1,6 +1,6 @@
-package com.github.jactor.rises.model.domain.guestbook;
+package com.gitlab.jactor.rises.model.domain.guestbook;
 
-import com.github.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.client.dto.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

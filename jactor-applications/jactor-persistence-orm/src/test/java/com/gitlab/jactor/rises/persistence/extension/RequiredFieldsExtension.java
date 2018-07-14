@@ -1,22 +1,22 @@
-package com.github.jactor.rises.persistence.extension;
+package com.gitlab.jactor.rises.persistence.extension;
 
-import com.github.jactor.rises.persistence.entity.address.AddressEntity;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntity;
-import com.github.jactor.rises.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.github.jactor.rises.persistence.entity.person.PersonEntity;
-import com.github.jactor.rises.persistence.entity.user.UserEntity;
-import com.github.jactor.rises.test.extension.validate.fields.AbstractRequiredFieldsExtension;
-import com.github.jactor.rises.test.extension.validate.fields.ClassFieldValue;
+import com.gitlab.jactor.rises.persistence.entity.address.AddressEntity;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.gitlab.jactor.rises.persistence.entity.person.PersonEntity;
+import com.gitlab.jactor.rises.persistence.entity.user.UserEntity;
+import com.gitlab.jactor.rises.test.extension.validate.fields.AbstractRequiredFieldsExtension;
+import com.gitlab.jactor.rises.test.extension.validate.fields.ClassFieldValue;
 
 import java.time.LocalDateTime;
 
-import static com.github.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.rises.persistence.entity.user.UserEntity.aUser;
+import static com.gitlab.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
+import static com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
+import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.gitlab.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
+import static com.gitlab.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static java.util.Arrays.asList;
 
 public class RequiredFieldsExtension extends AbstractRequiredFieldsExtension {

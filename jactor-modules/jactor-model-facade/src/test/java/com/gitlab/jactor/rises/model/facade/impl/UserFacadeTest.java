@@ -1,9 +1,9 @@
-package com.github.jactor.rises.model.facade.impl;
+package com.gitlab.jactor.rises.model.facade.impl;
 
-import com.github.jactor.rises.client.datatype.Username;
-import com.github.jactor.rises.client.domain.User;
-import com.github.jactor.rises.model.service.UserDomainService;
-import com.github.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
+import com.gitlab.jactor.rises.client.datatype.Username;
+import com.gitlab.jactor.rises.client.domain.User;
+import com.gitlab.jactor.rises.model.service.UserDomainService;
+import com.gitlab.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static com.github.jactor.rises.model.domain.user.UserDomain.aUser;
+import static com.gitlab.jactor.rises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 

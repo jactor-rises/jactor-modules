@@ -1,10 +1,10 @@
-package com.github.jactor.rises.model.domain.blog;
+package com.gitlab.jactor.rises.model.domain.blog;
 
-import com.github.jactor.rises.client.dto.BlogDto;
+import com.gitlab.jactor.rises.client.dto.BlogDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.github.jactor.rises.model.domain.blog.BlogEntryDomain.aBlogEntry;
+import static com.gitlab.jactor.rises.model.domain.blog.BlogEntryDomain.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
