@@ -5,12 +5,12 @@ Source code for jactor-rises (client, model, back-end, and front-end)
 ### What is this repository for? ###
 
 * Src code and issues regarding jactor-rises
-* Code will be released on [gitlab](https://gitlab.com/rises)
+* Code can be found on [gitlab](https://gitlab.com/jactor/rises)
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###
 
-* a couple of spring-boot applications are created when building (`./build.sh` using maven) these modules
+* a couple of spring-boot applications are created when building (`mvn install`) these modules
     * jactor-persistence-orm which is a standalone rest application which handles the persistence
     * jactor-web which is a web application on apache tomcat running via spring-boot
 * run these application side by side to get a full working application (using `mvn spring-boot:run` on each application)

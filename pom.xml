@@ -39,6 +39,7 @@
     <modules>
         <module>jactor-commons</module>
         <module>jactor-modules</module>
+        <module>jactor-applications</module>
     </modules>
 
     <dependencies>

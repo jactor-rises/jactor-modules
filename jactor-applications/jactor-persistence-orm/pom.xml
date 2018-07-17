@@ -14,7 +14,7 @@
     <groupId>com.gitlab.rises.jactor-applications</groupId>
     <artifactId>jactor-persistence-orm</artifactId>
 
-    <name>jactor-applications::jactor-persistence-orm</name>
+    <name>rises::jactor-applications::jactor-persistence-orm</name>
     <description>The persistence layer of rises</description>
 
     <version>1.0-SNAPSHOT</version>

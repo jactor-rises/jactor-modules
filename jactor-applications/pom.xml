@@ -8,7 +8,7 @@
     <artifactId>jactor-applications</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>jactor-applications</name>
+    <name>rises::jactor-applications</name>
     <packaging>pom</packaging>
 
     <modules>
