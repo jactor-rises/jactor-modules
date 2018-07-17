@@ -11,11 +11,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.jactor-rises.jactor-applications</groupId>
+    <groupId>com.gitlab.rises.jactor-applications</groupId>
     <artifactId>jactor-persistence-orm</artifactId>
 
-    <name>jactor-applications::jactor-persistence-orm</name>
-    <description>The persistence layer of jactor-rises</description>
+    <name>rises::jactor-applications::jactor-persistence-orm</name>
+    <description>The persistence layer of rises</description>
 
     <version>1.0-SNAPSHOT</version>
 
@@ -29,12 +29,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <groupId>com.gitlab.rises.jactor-commons</groupId>
             <artifactId>jactor-client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.jactor-rises.jactor-commons</groupId>
+            <groupId>com.gitlab.rises.jactor-commons</groupId>
             <artifactId>jactor-test</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
