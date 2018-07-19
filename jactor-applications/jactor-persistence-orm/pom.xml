@@ -16,8 +16,7 @@
 
     <name>rises::jactor-applications::jactor-persistence-orm</name>
     <description>The persistence layer of rises</description>
-
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <java.version>9</java.version>
@@ -36,7 +35,7 @@
         <dependency>
             <groupId>com.gitlab.rises.jactor-commons</groupId>
             <artifactId>jactor-test</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
         <!-- third party -->
