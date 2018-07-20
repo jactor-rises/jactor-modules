@@ -6,15 +6,16 @@ Source code for jactor-rises (client, model, back-end, and front-end)
 
 * Src code and issues regarding jactor-rises
 * Code can be found on [gitlab](https://gitlab.com/jactor/rises)
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* [GitLab Flavoured Markdown](https://gitlab.com/help/user/markdown)
 
 ### How do I get set up? ###
 
-* a couple of spring-boot applications are created when building (`mvn install`) these modules
-    * jactor-persistence-orm which is a standalone rest application which handles the persistence
+* some spring-boot applications are created when building (`mvn install`)
+    * jactor-persistence-orm which is a standalone rest application which handles the persistence in an object relational model
     * jactor-web which is a web application on apache tomcat running via spring-boot
-* run these application side by side to get a full working application (using `mvn spring-boot:run` on each application)
-* persistence in jactor-rises is done using h2 (in-memory database), and is not finite
+       * it is necessary to run this application to have a user interface in which to interact with
+* these applications can run side by side to get a full working application (using `mvn spring-boot:run` on each application)
+* persistence-orm is using h2 (in-memory database), and is not finite
 
 ### Some technologies used on jactor-rises ###
 
