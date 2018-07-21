@@ -18,7 +18,7 @@
     <properties>
         <apache.commons.lang3.version>3.7</apache.commons.lang3.version>
         <assertj.version>3.10.0</assertj.version>
-        <java.version>9</java.version>
+        <java.version>10</java.version>
         <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.3</junit-jupiter.version>
         <junit-platform.version>1.0.3</junit-platform.version>
@@ -164,6 +164,13 @@
                         <meminitial>1024m</meminitial>
                         <maxmem>2024m</maxmem>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.ow2.asm</groupId>
+                            <artifactId>asm</artifactId>
+                            <version>6.2</version> <!-- Use newer version of ASM -->
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
