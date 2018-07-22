@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.io.rest;
 
-import com.gitlab.jactor.rises.client.datatype.Username;
-import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.io.datatype.Username;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;

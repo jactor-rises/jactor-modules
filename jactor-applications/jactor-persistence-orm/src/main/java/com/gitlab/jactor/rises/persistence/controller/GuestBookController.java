@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.persistence.controller;
 
-import com.gitlab.jactor.rises.client.dto.GuestBookDto;
-import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookEntryDto;
 import com.gitlab.jactor.rises.persistence.service.GuestBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

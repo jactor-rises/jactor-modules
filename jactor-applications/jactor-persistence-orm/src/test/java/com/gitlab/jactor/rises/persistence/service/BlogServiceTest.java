@@ -1,8 +1,8 @@
 package com.gitlab.jactor.rises.persistence.service;
 
-import com.gitlab.jactor.rises.client.dto.BlogDto;
-import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
-import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.commons.dto.BlogDto;
+import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity;
 import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;

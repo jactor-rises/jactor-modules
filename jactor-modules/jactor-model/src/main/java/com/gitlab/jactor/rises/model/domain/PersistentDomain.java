@@ -1,8 +1,7 @@
 package com.gitlab.jactor.rises.model.domain;
 
-import com.gitlab.jactor.rises.client.datatype.Name;
-import com.gitlab.jactor.rises.client.domain.Persistent;
-import com.gitlab.jactor.rises.client.dto.PersistentDto;
+import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.commons.dto.PersistentDto;
 import org.apache.commons.lang3.Validate;
 
 import java.io.Serializable;

@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.io.rest;
 
-import com.gitlab.jactor.rises.client.dto.BlogDto;
-import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.commons.dto.BlogDto;
+import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

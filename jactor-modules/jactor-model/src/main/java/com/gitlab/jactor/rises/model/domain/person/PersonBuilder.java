@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.domain.person;
 
-import com.gitlab.jactor.rises.client.dto.PersonDto;
+import com.gitlab.jactor.rises.commons.dto.PersonDto;
 import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
 import com.gitlab.jactor.rises.commons.builder.MissingFields;
 import com.gitlab.jactor.rises.model.domain.address.AddressBuilder;

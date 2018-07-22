@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.persistence.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.persistence.JactorPersistence;
 import com.gitlab.jactor.rises.persistence.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;

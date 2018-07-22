@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.model.facade.impl;
 
-import com.gitlab.jactor.rises.client.datatype.Username;
-import com.gitlab.jactor.rises.client.domain.User;
+import com.gitlab.jactor.rises.model.datatype.Username;
+import com.gitlab.jactor.rises.model.domain.User;
 import com.gitlab.jactor.rises.model.service.UserDomainService;
 import com.gitlab.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;

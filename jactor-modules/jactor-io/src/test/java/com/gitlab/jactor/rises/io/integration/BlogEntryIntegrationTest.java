@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.io.integration;
 
-import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
-import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.io.ctx.JactorIo;
 import com.gitlab.jactor.rises.io.rest.BlogRestService;
 import com.gitlab.jactor.rises.io.rest.UserRestService;
@@ -14,18 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.URL;
 import java.time.LocalDateTime;
 
-import static com.gitlab.jactor.rises.client.dto.AddressDto.anAddress;
-import static com.gitlab.jactor.rises.client.dto.BlogDto.aBlog;
-import static com.gitlab.jactor.rises.client.dto.BlogEntryDto.aBlogEntry;
-import static com.gitlab.jactor.rises.client.dto.PersonDto.aPerson;
-import static com.gitlab.jactor.rises.client.dto.UserDto.aUser;
+import static com.gitlab.jactor.rises.commons.dto.AddressDto.anAddress;
+import static com.gitlab.jactor.rises.commons.dto.BlogDto.aBlog;
+import static com.gitlab.jactor.rises.commons.dto.BlogEntryDto.aBlogEntry;
+import static com.gitlab.jactor.rises.commons.dto.PersonDto.aPerson;
+import static com.gitlab.jactor.rises.commons.dto.UserDto.aUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;

@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.io.rest;
 
-import com.gitlab.jactor.rises.client.datatype.Username;
-import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.io.datatype.Username;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

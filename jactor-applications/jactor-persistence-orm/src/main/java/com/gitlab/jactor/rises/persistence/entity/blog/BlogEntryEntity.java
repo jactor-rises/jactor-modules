@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.persistence.entity.blog;
 
-import com.gitlab.jactor.rises.client.dto.BlogDto;
-import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.commons.dto.BlogDto;
+import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
 import com.gitlab.jactor.rises.commons.time.Now;
 import com.gitlab.jactor.rises.persistence.entity.EntryEmbeddable;
 import com.gitlab.jactor.rises.persistence.entity.PersistentEntity;

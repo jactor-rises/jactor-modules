@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.persistence.controller;
 
-import com.gitlab.jactor.rises.client.dto.PersistentDto;
+import com.gitlab.jactor.rises.commons.dto.PersistentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

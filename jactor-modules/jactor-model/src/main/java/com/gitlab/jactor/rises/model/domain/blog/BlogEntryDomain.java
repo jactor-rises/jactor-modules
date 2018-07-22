@@ -1,8 +1,8 @@
 package com.gitlab.jactor.rises.model.domain.blog;
 
-import com.gitlab.jactor.rises.client.datatype.Name;
-import com.gitlab.jactor.rises.client.domain.BlogEntry;
-import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.model.domain.BlogEntry;
+import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
 import com.gitlab.jactor.rises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;

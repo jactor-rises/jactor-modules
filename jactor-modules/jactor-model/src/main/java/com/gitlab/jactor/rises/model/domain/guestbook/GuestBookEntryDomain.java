@@ -1,8 +1,8 @@
 package com.gitlab.jactor.rises.model.domain.guestbook;
 
-import com.gitlab.jactor.rises.client.datatype.Name;
-import com.gitlab.jactor.rises.client.domain.GuestBookEntry;
-import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.model.domain.GuestBookEntry;
+import com.gitlab.jactor.rises.commons.dto.GuestBookEntryDto;
 import com.gitlab.jactor.rises.model.domain.PersistentDomain;
 
 import java.time.LocalDateTime;

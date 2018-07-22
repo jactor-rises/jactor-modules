@@ -1,8 +1,8 @@
 package com.gitlab.jactor.rises.persistence.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gitlab.jactor.rises.client.dto.BlogDto;
-import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.commons.dto.BlogDto;
+import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
 import com.gitlab.jactor.rises.persistence.JactorPersistence;
 import com.gitlab.jactor.rises.persistence.service.BlogService;
 import org.junit.jupiter.api.BeforeEach;

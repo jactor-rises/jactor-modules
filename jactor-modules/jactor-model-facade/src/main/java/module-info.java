@@ -1,5 +1,5 @@
 module com.gitlab.jactor.rises.model.facade {
-    requires com.gitlab.jactor.rises.client;
+    requires com.gitlab.jactor.rises.commons;
     requires com.gitlab.jactor.rises.io;
     requires com.gitlab.jactor.rises.model;
 

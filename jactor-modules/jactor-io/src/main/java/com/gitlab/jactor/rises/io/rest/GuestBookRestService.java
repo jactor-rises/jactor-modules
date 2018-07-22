@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.io.rest;
 
-import com.gitlab.jactor.rises.client.dto.GuestBookDto;
-import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookEntryDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;

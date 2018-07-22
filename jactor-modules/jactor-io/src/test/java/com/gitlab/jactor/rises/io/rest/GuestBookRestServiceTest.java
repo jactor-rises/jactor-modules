@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.io.rest;
 
-import com.gitlab.jactor.rises.client.dto.GuestBookDto;
-import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookEntryDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

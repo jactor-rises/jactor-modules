@@ -1,5 +1,5 @@
 module com.gitlab.jactor.rises.model {
-    requires com.gitlab.jactor.rises.client;
+    requires com.gitlab.jactor.rises.commons;
     requires com.gitlab.jactor.rises.io;
     requires org.apache.commons.lang3;
 

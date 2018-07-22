@@ -1,9 +1,9 @@
 package com.gitlab.jactor.rises.model.facade;
 
-import com.gitlab.jactor.rises.client.datatype.EmailAddress;
-import com.gitlab.jactor.rises.client.datatype.Name;
-import com.gitlab.jactor.rises.client.datatype.Username;
-import com.gitlab.jactor.rises.client.domain.User;
+import com.gitlab.jactor.rises.model.datatype.EmailAddress;
+import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.model.datatype.Username;
+import com.gitlab.jactor.rises.model.domain.User;
 import com.gitlab.jactor.rises.io.ctx.JactorIo;
 import com.gitlab.jactor.rises.model.domain.user.UserDomain;
 import com.gitlab.jactor.rises.model.service.UserDomainService;

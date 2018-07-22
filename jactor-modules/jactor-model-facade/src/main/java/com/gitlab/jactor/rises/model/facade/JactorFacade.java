@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.model.facade;
 
-import com.gitlab.jactor.rises.client.datatype.Name;
-import com.gitlab.jactor.rises.client.facade.UserFacade;
+import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.io.facade.UserFacade;
 import com.gitlab.jactor.rises.io.ctx.JactorIo;
 import com.gitlab.jactor.rises.io.rest.GuestBookRestService;
 import com.gitlab.jactor.rises.io.rest.UserRestService;

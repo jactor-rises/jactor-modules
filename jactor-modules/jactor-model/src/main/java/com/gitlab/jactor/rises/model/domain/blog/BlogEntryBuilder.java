@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.model.domain.blog;
 
-import com.gitlab.jactor.rises.client.dto.BlogDto;
-import com.gitlab.jactor.rises.client.dto.BlogEntryDto;
+import com.gitlab.jactor.rises.commons.dto.BlogDto;
+import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
 import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
 import com.gitlab.jactor.rises.commons.builder.MissingFields;
 

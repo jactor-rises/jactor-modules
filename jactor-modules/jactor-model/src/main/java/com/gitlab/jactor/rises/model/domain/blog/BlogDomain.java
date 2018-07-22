@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.model.domain.blog;
 
-import com.gitlab.jactor.rises.client.domain.Blog;
-import com.gitlab.jactor.rises.client.dto.BlogDto;
+import com.gitlab.jactor.rises.model.domain.Blog;
+import com.gitlab.jactor.rises.commons.dto.BlogDto;
 import com.gitlab.jactor.rises.model.domain.PersistentDomain;
 import com.gitlab.jactor.rises.model.domain.user.UserDomain;
 

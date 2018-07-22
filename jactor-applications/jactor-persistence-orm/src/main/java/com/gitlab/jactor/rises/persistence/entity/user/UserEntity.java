@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.persistence.entity.user;
 
-import com.gitlab.jactor.rises.client.dto.UserDto;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.persistence.entity.PersistentEntity;
 import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
