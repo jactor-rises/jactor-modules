@@ -38,6 +38,7 @@
 
     <modules>
         <module>jactor-commons</module>
+        <module>jactor-test</module>
         <module>jactor-modules</module>
         <module>jactor-applications</module>
     </modules>
@@ -74,8 +75,8 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.gitlab.rises.jactor-commons</groupId>
-                <artifactId>jactor-client</artifactId>
+                <groupId>com.gitlab.rises</groupId>
+                <artifactId>jactor-commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

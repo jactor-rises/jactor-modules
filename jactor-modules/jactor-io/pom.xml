@@ -14,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.gitlab.rises.jactor-commons</groupId>
-            <artifactId>jactor-client</artifactId>
+            <groupId>com.gitlab.rises</groupId>
+            <artifactId>jactor-commons</artifactId>
         </dependency>
 
         <!-- third party -->
@@ -30,12 +30,10 @@
 
         <!-- Test scope -->
         <dependency>
-            <groupId>com.gitlab.rises.jactor-commons</groupId>
+            <groupId>com.gitlab.rises</groupId>
             <artifactId>jactor-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- third party -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
