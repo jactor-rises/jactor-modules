@@ -1,7 +1,6 @@
 package com.gitlab.jactor.rises.model.facade;
 
-import com.gitlab.jactor.rises.model.datatype.Name;
-import com.gitlab.jactor.rises.io.facade.UserFacade;
+import com.gitlab.jactor.rises.commons.datatype.Name;
 import com.gitlab.jactor.rises.io.ctx.JactorIo;
 import com.gitlab.jactor.rises.io.rest.GuestBookRestService;
 import com.gitlab.jactor.rises.io.rest.UserRestService;
@@ -43,7 +42,7 @@ public class JactorFacade {
         return aMenu()
                 .withName(MENU_USERS)
                 .add(aMenuItem().withName("menu.users.default")
-                       .add(aMenuItem().withName("jactor").withTarget("user?choose=jactor").withDescription("menu.users.jactor.desc"))
+                        .add(aMenuItem().withName("jactor").withTarget("user?choose=jactor").withDescription("menu.users.jactor.desc"))
                         .add(aMenuItem().withName("tip").withTarget("user?choose=tip").withDescription("menu.users.tip.desc"))
                 ).build();
     }

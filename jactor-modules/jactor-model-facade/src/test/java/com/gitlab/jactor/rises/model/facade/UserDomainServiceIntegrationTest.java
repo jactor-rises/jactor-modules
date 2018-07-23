@@ -1,9 +1,7 @@
 package com.gitlab.jactor.rises.model.facade;
 
-import com.gitlab.jactor.rises.model.datatype.EmailAddress;
-import com.gitlab.jactor.rises.model.datatype.Name;
-import com.gitlab.jactor.rises.model.datatype.Username;
-import com.gitlab.jactor.rises.model.domain.User;
+import com.gitlab.jactor.rises.commons.datatype.Username;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.io.ctx.JactorIo;
 import com.gitlab.jactor.rises.model.domain.user.UserDomain;
 import com.gitlab.jactor.rises.model.service.UserDomainService;
@@ -22,9 +20,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gitlab.jactor.rises.commons.dto.UserDto.aUser;
 import static com.gitlab.jactor.rises.model.domain.address.AddressDomain.anAddress;
 import static com.gitlab.jactor.rises.model.domain.person.PersonDomain.aPerson;
-import static com.gitlab.jactor.rises.model.domain.user.UserDomain.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -46,28 +44,28 @@ class UserDomainServiceIntegrationTest {
 
     @DisplayName("should find user with username jactor")
     @Test void shouldFindJactor() {
-        Optional<User> possibleUser = userDomainService.find(new Username("jactor"));
+        Optional<UserDto> possibleUser = userDomainService.find(new Username("jactor"));
 
         assertAll(
                 () -> assertThat(possibleUser).as("possibleUser").isPresent(),
                 () -> {
-                    User user = possibleUser.orElse(aUser().build());
+                    UserDto user = possibleUser.orElse(aUser().build());
 
-                    assertThat(user.getPerson().getFirstName()).as("user.person.firstName").isEqualTo(new Name("Tor Egil"));
+                    assertThat(user.getPerson().getFirstName()).as("user.person.firstName").isEqualTo("Tor Egil");
                 }
         );
     }
 
     @DisplayName("should find user with username tip")
     @Test void shouldFindTip() {
-        Optional<User> possibleUser = userDomainService.find(new Username("tip"));
+        Optional<UserDto> possibleUser = userDomainService.find(new Username("tip"));
 
         assertAll(
                 () -> assertThat(possibleUser).as("possibleUser").isPresent(),
                 () -> {
-                    User user = possibleUser.orElse(aUser().build());
+                    UserDto user = possibleUser.orElse(aUser().build());
 
-                    assertThat(user.getPerson().getFirstName()).as("user.person.firstName").isEqualTo(new Name("Suthatip"));
+                    assertThat(user.getPerson().getFirstName()).as("user.person.firstName").isEqualTo("Suthatip");
                 }
         );
     }
@@ -82,7 +80,7 @@ class UserDomainServiceIntegrationTest {
     @DisplayName("should save user domain")
     @Test void shouldSaveUserDomain() {
         Username username = userDomainService.saveOrUpdate(
-                aUser()
+                UserDomain.aUser()
                         .withUsername(createUniqueUsername())
                         .withEmailAddress("jactor@rises")
                         .with(aPerson()
@@ -97,16 +95,16 @@ class UserDomainServiceIntegrationTest {
                         ).build()
         ).getUsername();
 
-        Optional<UserDomain> possibleUser = userDomainService.find(username);
+        Optional<UserDto> possibleUser = userDomainService.find(username);
 
         assertAll(
                 () -> assertThat(possibleUser).as("possibleUser").isPresent(),
                 () -> {
-                    UserDomain userDomain = possibleUser.orElse(aUser().build());
+                    UserDto userdto = possibleUser.orElse(aUser().build());
 
                     assertAll(
-                            () -> assertThat(userDomain.getEmailAddress()).as("user.emailAddress").isEqualTo(new EmailAddress("jactor", "rises")),
-                            () -> assertThat(userDomain.getPerson().getDescription()).as("user.description").isEqualTo("description")
+                            () -> assertThat(userdto.getEmailAddress()).as("user.emailAddress").isEqualTo("jactor@rises"),
+                            () -> assertThat(userdto.getPerson().getDescription()).as("user.description").isEqualTo("description")
                     );
                 }
         );

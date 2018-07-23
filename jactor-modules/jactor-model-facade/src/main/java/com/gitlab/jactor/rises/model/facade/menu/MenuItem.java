@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.facade.menu;
 
-import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.commons.datatype.Name;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

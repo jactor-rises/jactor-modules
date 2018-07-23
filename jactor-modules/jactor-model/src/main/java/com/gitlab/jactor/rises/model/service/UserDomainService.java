@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.model.service;
 
 import com.gitlab.jactor.rises.commons.datatype.Username;
-import com.gitlab.jactor.rises.model.domain.User;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.io.rest.UserRestService;
 import com.gitlab.jactor.rises.model.domain.user.UserDomain;
 
@@ -19,14 +19,12 @@ public class UserDomainService {
         return new UserDomain(userRestService.saveOrUpdate(userDomain.getDto()));
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends User> Optional<T> ferch(Long id) {
-        return userRestService.fetch(id).map(UserDomain::new).map(userDomain -> (T) userDomain);
+    public Optional<UserDto> fetch(Long id) {
+        return userRestService.fetch(id);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends User> Optional<T> find(Username username) {
-        return userRestService.find(username).map(UserDomain::new).map(userDomain -> (T) userDomain);
+    public Optional<UserDto> find(Username username) {
+        return userRestService.find(username);
     }
 
     public List<String> findAllUsernames() {

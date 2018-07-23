@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.facade.menu;
 
-import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.commons.datatype.Name;
 
 import java.util.ArrayList;
 import java.util.List;

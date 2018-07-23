@@ -1,8 +1,8 @@
 package com.gitlab.jactor.rises.model.facade.impl;
 
-import com.gitlab.jactor.rises.model.datatype.Username;
-import com.gitlab.jactor.rises.model.domain.User;
-import com.gitlab.jactor.rises.io.facade.UserFacade;
+import com.gitlab.jactor.rises.commons.datatype.Username;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
+import com.gitlab.jactor.rises.model.facade.UserFacade;
 import com.gitlab.jactor.rises.model.service.UserDomainService;
 
 import java.util.List;
@@ -16,11 +16,11 @@ public class UserFacadeImpl implements UserFacade {
         this.userDomainService = userDomainService;
     }
 
-    public @Override Optional<User> fetch(Long id) {
-        return userDomainService.ferch(id);
+    public @Override Optional<UserDto> fetch(Long id) {
+        return userDomainService.fetch(id);
     }
 
-    public @Override Optional<User> find(Username username) {
+    public @Override Optional<UserDto> find(Username username) {
         return userDomainService.find(username);
     }
 

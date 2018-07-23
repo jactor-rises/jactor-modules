@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.facade;
 
-import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.commons.datatype.Name;
 import com.gitlab.jactor.rises.io.ctx.JactorIo;
 import com.gitlab.jactor.rises.model.domain.address.AddressBuilder;
 import com.gitlab.jactor.rises.model.domain.guestbook.GuestBookDomain;

@@ -3,6 +3,7 @@ module com.gitlab.jactor.rises.model.facade {
     requires com.gitlab.jactor.rises.io;
     requires com.gitlab.jactor.rises.model;
 
+    requires org.apache.commons.lang3;
     requires spring.context;
 
     exports com.gitlab.jactor.rises.model.facade;
