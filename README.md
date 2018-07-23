@@ -10,12 +10,12 @@ The only hard dependencies between jactor modules are:
 
 ```mermaid
 graph TD;
-    jactor-commons-->jactor-io;
-    jactor-commons-->jactor-module;
-    jactor-commons-->jactor-facade;
-    jactor-commons-->jactor-web;
-    jactor-io-->jactor-model;
-    jactor-model->jactor-facade;
+    jactor.rises.commons-->jactor.rises.io;
+    jactor.rises.commons-->jactor.rises.module;
+    jactor.rises.commons-->jactor.rises.facade;
+    jactor.rises.commons-->jactor.rises.web;
+    jactor.rises.io-->jactor.rises.model;
+    jactor.rises.model->jactor.rises.facade;
 ```
 
 ### Set up ###

@@ -1,11 +1,10 @@
-module com.gitlab.jactor.rises.model.facade {
-    requires com.gitlab.jactor.rises.commons;
-    requires com.gitlab.jactor.rises.io;
-    requires com.gitlab.jactor.rises.model;
+module jactor.rises.facade {
+    requires jactor.rises.commons;
+    requires jactor.rises.io;
+    requires jactor.rises.model;
 
     requires org.apache.commons.lang3;
     requires spring.context;
 
     exports com.gitlab.jactor.rises.model.facade;
-    exports com.gitlab.jactor.rises.model.facade.menu to com.gitlab.jactor.rises.web;
 }
