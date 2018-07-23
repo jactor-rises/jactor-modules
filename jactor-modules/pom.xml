@@ -18,6 +18,5 @@
     <modules>
         <module>jactor-io</module>
         <module>jactor-model</module>
-        <module>jactor-model-facade</module>
     </modules>
 </project>

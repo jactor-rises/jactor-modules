@@ -1,9 +1,8 @@
-package com.gitlab.jactor.rises.model.facade.impl;
+package com.gitlab.jactor.rises.model.service;
 
 import com.gitlab.jactor.rises.commons.datatype.Username;
 import com.gitlab.jactor.rises.commons.dto.UserDto;
-import com.gitlab.jactor.rises.model.domain.User;
-import com.gitlab.jactor.rises.model.service.UserDomainService;
+import com.gitlab.jactor.rises.io.rest.UserRestService;
 import com.gitlab.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +18,11 @@ import static com.gitlab.jactor.rises.commons.dto.UserDto.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@DisplayName("A UserFacade")
-class UserFacadeTest {
+@DisplayName("The UserDomainService")
+class UserDomainServiceTest {
 
-    private @InjectMocks UserFacadeImpl testUserFacadeImpl;
-
-    private @Mock UserDomainService userDomainServiceMock;
+    private @InjectMocks UserDomainService testUserDomainService;
+    private @Mock UserRestService userRestServiceMock;
 
     @BeforeEach void initMocking() {
         MockitoAnnotations.initMocks(this);
@@ -32,15 +30,15 @@ class UserFacadeTest {
 
     @DisplayName("should return an empty Optional when the UserRestService cannot find a dto for the given user name")
     @Test void shouldNotFindUnknownUser() {
-        Optional<UserDto> user = testUserFacadeImpl.find(new Username("someone"));
+        Optional<UserDto> user = testUserDomainService.find(new Username("someone"));
         assertThat(user.isPresent()).isEqualTo(false);
     }
 
     @DisplayName("should find a user when the user name only differs in case")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void shouldFindUser() {
-        when(userDomainServiceMock.find(new Username("jactor"))).thenReturn(Optional.of(aUser().build()));
-        Optional<UserDto> optionalUser = testUserFacadeImpl.find(new Username("JACTOR"));
+        when(userRestServiceMock.find(new Username("jactor"))).thenReturn(Optional.of(aUser().build()));
+        Optional<UserDto> optionalUser = testUserDomainService.find(new Username("JACTOR"));
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);
     }
@@ -48,8 +46,8 @@ class UserFacadeTest {
     @DisplayName("should fetch user by id")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void shouldFetchUserById() {
-        when(userDomainServiceMock.fetch(1L)).thenReturn(Optional.of(aUser().build()));
-        Optional<UserDto> optionalUser = testUserFacadeImpl.fetch(1L);
+        when(userRestServiceMock.fetch(1L)).thenReturn(Optional.of(aUser().build()));
+        Optional<UserDto> optionalUser = testUserDomainService.fetch(1L);
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);
     }
