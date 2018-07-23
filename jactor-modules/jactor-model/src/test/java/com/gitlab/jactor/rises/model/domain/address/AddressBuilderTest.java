@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.domain.address;
 
-import com.gitlab.jactor.rises.model.datatype.Country;
+import com.gitlab.jactor.rises.commons.datatype.Country;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

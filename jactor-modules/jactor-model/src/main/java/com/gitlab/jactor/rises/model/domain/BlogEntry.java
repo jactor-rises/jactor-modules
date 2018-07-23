@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.domain;
 
-import com.gitlab.jactor.rises.io.datatype.Name;
+import com.gitlab.jactor.rises.commons.datatype.Name;
 
 import java.time.LocalDateTime;
 

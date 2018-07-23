@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.domain;
 
-import com.gitlab.jactor.rises.model.datatype.Country;
+import com.gitlab.jactor.rises.commons.datatype.Country;
 
 public interface Address extends Persistent {
 

@@ -5,18 +5,20 @@
 * Src code and issues regarding jactor-rises
 * [GitLab Flavoured Markdown](https://gitlab.com/help/user/markdown)
 
-The only hard dependencies:
+This project is created as microsevices and not as a monolithic client/server application.
+The only hard dependencies between jactor modules are:
 
 ```mermaid
 graph TD;
     jactor-commons-->jactor-io;
     jactor-commons-->jactor-module;
+    jactor-commons-->jactor-facade;
     jactor-commons-->jactor-web;
-    jactor-io-->jactor-module;
-    jactor-module->jactor-facade;
+    jactor-io-->jactor-model;
+    jactor-model->jactor-facade;
 ```
 
-### How do I get set up? ###
+### Set up ###
 
 * spring-boot applications are created when building (`mvn install`)
     * jactor-persistence-orm which is a standalone rest application which handles the persistence in an object relational model

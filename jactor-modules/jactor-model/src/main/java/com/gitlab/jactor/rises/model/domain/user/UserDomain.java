@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.model.domain.user;
 
-import com.gitlab.jactor.rises.model.datatype.EmailAddress;
-import com.gitlab.jactor.rises.model.datatype.Username;
+import com.gitlab.jactor.rises.commons.datatype.EmailAddress;
+import com.gitlab.jactor.rises.commons.datatype.Username;
 import com.gitlab.jactor.rises.model.domain.User;
 import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.model.domain.PersistentDomain;

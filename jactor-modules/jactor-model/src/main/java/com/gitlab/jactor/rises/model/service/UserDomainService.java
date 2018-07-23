@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.service;
 
-import com.gitlab.jactor.rises.model.datatype.Username;
+import com.gitlab.jactor.rises.commons.datatype.Username;
 import com.gitlab.jactor.rises.model.domain.User;
 import com.gitlab.jactor.rises.io.rest.UserRestService;
 import com.gitlab.jactor.rises.model.domain.user.UserDomain;

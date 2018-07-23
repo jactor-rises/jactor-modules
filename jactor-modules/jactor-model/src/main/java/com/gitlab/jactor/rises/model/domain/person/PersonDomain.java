@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.model.domain.person;
 
-import com.gitlab.jactor.rises.model.datatype.Name;
+import com.gitlab.jactor.rises.commons.datatype.Name;
 import com.gitlab.jactor.rises.model.domain.Person;
 import com.gitlab.jactor.rises.commons.dto.PersonDto;
 import com.gitlab.jactor.rises.model.domain.PersistentDomain;
