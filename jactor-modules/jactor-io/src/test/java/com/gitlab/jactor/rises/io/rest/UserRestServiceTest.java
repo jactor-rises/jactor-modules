@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.io.rest;
 
-import com.gitlab.jactor.rises.io.datatype.Username;
+import com.gitlab.jactor.rises.commons.datatype.Username;
 import com.gitlab.jactor.rises.commons.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -64,4 +67,13 @@ class UserRestServiceTest {
         );
     }
 
+    @DisplayName("should find all usernames")
+    @Test void shouldFindAllUsernames() {
+        when(restTemplateMock.getForEntity("/user/all/usernames", String[].class))
+                .thenReturn(new ResponseEntity<>(new String[]{"turbo", "netti", "titten"}, HttpStatus.OK));
+
+        List<String> allUsernames = userRestService.findAllUsernames();
+
+        assertThat(allUsernames).containsExactly("turbo", "netti", "titten");
+    }
 }

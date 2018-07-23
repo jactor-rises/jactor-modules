@@ -60,7 +60,6 @@
             <version>5.0.4.RELEASE</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 </project>

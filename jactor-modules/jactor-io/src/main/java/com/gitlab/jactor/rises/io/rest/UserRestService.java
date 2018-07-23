@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.io.rest;
 
-import com.gitlab.jactor.rises.io.datatype.Username;
+import com.gitlab.jactor.rises.commons.datatype.Username;
 import com.gitlab.jactor.rises.commons.dto.UserDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +10,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
-
 public class UserRestService extends AbstractRestService {
 
     public UserRestService(RestTemplate restTemplate, String baseUrl) {
         super(restTemplate, baseUrl);
     }
-
 
     public UserDto saveOrUpdate(UserDto userDto) {
         ResponseEntity<UserDto> responseEntity = exchangePost(
@@ -41,6 +38,6 @@ public class UserRestService extends AbstractRestService {
 
     public List<String> findAllUsernames() {
         ResponseEntity<String[]> responseEntity = getForEntity(fullUrl("/user/all/usernames"), String[].class);
-        return asList(responseEntity.getBody());
+        return fetchBodyAsList(responseEntity);
     }
 }

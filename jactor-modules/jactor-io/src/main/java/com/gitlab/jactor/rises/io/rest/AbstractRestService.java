@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
 class AbstractRestService {
     private final RestTemplate restTemplate;
     private final String baseUrl;
@@ -47,6 +51,10 @@ class AbstractRestService {
 
     String fullUrl(String url) {
         return baseUrl + url;
+    }
+
+    @SuppressWarnings("ConstantConditions") <T> List<T> fetchBodyAsList(ResponseEntity<T[]> responseEntity) {
+        return asList(responseEntity.getBody());
     }
 
     @FunctionalInterface

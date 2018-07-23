@@ -80,6 +80,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.gitlab.rises</groupId>
+                <artifactId>jactor-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.gitlab.rises.jactor-commons</groupId>
                 <artifactId>jactor-test</artifactId>
                 <version>${project.version}</version>
