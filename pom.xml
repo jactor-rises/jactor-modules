@@ -10,7 +10,9 @@
 
     <name>rises</name>
 
-    <description>Thee build pom for jactor-commons and jactor-modules</description>
+    <description>
+        The build pom for jactor-commons, jactor-test, jactor-model, and jactor-applications (microservices)
+    </description>
 
     <packaging>pom</packaging>
     <url>https://gitlab.com/rises</url>
@@ -39,7 +41,7 @@
     <modules>
         <module>jactor-commons</module>
         <module>jactor-test</module>
-        <module>jactor-modules</module>
+        <module>jactor-model</module>
         <module>jactor-applications</module>
     </modules>
 
