@@ -36,7 +36,7 @@ public class GuestBookEntryDomain extends PersistentDomain implements GuestBookE
         return guestBookEntryDto;
     }
 
-    static GuestBookEntryBuilder aGuestBookEntry() {
+    public static GuestBookEntryBuilder aGuestBookEntry() {
         return new GuestBookEntryBuilder();
     }
 }

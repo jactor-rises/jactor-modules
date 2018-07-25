@@ -34,7 +34,7 @@ public class GuestBookDomain extends PersistentDomain implements GuestBook {
         return guestBookDto;
     }
 
-    static GuestBookBuilder aGuestBook() {
+    public static GuestBookBuilder aGuestBook() {
         return new GuestBookBuilder();
     }
 }

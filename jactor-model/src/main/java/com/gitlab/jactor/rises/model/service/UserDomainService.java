@@ -22,7 +22,7 @@ public class UserDomainService {
         return userRestService.fetch(id);
     }
 
-    Optional<UserDto> find(Username username) {
+    public Optional<UserDto> find(Username username) {
         return userRestService.find(username);
     }
 

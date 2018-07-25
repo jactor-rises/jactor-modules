@@ -15,7 +15,7 @@ public final class GuestBookBuilder extends AbstractBuilder<GuestBookDomain> {
         super(GuestBookBuilder::validateInstance);
     }
 
-    GuestBookBuilder withTitle(String title) {
+    public GuestBookBuilder withTitle(String title) {
         guestBookDto.setTitle(title);
         return this;
     }

@@ -86,27 +86,6 @@
                 <artifactId>jactor-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.jactor-commons</groupId>
-                <artifactId>jactor-test</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.jactor-modules</groupId>
-                <artifactId>jactor-io</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.jactor-modules</groupId>
-                <artifactId>jactor-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.jactor-modules</groupId>
-                <artifactId>jactor-model-facade</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <!-- third party -->
             <dependency>

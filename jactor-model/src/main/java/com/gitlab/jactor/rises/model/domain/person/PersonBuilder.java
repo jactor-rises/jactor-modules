@@ -24,7 +24,7 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
         return with(address.build());
     }
 
-    PersonBuilder withDescription(String description) {
+    public PersonBuilder withDescription(String description) {
         personDto.setDescription(description);
         return this;
     }

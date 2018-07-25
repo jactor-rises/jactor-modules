@@ -13,7 +13,7 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
         super(AddressBuilder::validInstance);
     }
 
-    AddressBuilder withCity(String city) {
+    public AddressBuilder withCity(String city) {
         addressDto.setCity(city);
         return this;
     }

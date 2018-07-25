@@ -15,7 +15,7 @@ public final class UserBuilder extends AbstractBuilder<UserDomain> {
         super(UserBuilder::validateDomain);
     }
 
-    UserBuilder withUsername(String username) {
+    public UserBuilder withUsername(String username) {
         userDto.setUsername(username);
         return this;
     }
