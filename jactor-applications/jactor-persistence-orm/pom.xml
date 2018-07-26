@@ -16,7 +16,7 @@
 
     <name>rises::jactor-applications::jactor-persistence-orm</name>
     <description>The persistence layer of rises</description>
-    <version>1.1</version>
+    <version>1.1.1-SNAPSHOT</version>
 
     <properties>
         <java.version>10</java.version>
