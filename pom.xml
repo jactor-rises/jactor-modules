@@ -24,7 +24,6 @@
         <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.3</junit-jupiter.version>
         <junit-platform.version>1.0.3</junit-platform.version>
-        <junit-vintage.version>${junit.version}.3</junit-vintage.version>
 
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-jdeps.version>3.1.1</maven-jdeps.version>
@@ -32,7 +31,7 @@
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 
-        <mockito.version>2.19.0</mockito.version>
+        <mockito.version>2.20.0</mockito.version>
         <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -182,21 +181,11 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
-                    <configuration>
-                        <includes>
-                            <include>**/*Test.java</include>
-                        </includes>
-                    </configuration>
                     <dependencies>
                         <dependency>
                             <groupId>org.junit.platform</groupId>
                             <artifactId>junit-platform-surefire-provider</artifactId>
                             <version>${junit-platform.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.junit.vintage</groupId>
-                            <artifactId>junit-vintage-engine</artifactId>
-                            <version>${junit-vintage.version}</version>
                         </dependency>
                         <dependency>
                             <groupId>org.junit.jupiter</groupId>
