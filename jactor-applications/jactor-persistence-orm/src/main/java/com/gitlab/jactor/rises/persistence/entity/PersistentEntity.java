@@ -1,6 +1,6 @@
 package com.gitlab.jactor.rises.persistence.entity;
 
-import com.gitlab.jactor.rises.client.dto.PersistentDto;
+import com.gitlab.jactor.rises.commons.dto.PersistentDto;
 import com.gitlab.jactor.rises.commons.time.Now;
 
 import javax.persistence.Column;

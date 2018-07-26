@@ -16,7 +16,7 @@
 
     <name>rises::jactor-applications::jactor-persistence-orm</name>
     <description>The persistence layer of rises</description>
-    <version>1.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <properties>
         <java.version>10</java.version>
@@ -28,14 +28,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.gitlab.rises.jactor-commons</groupId>
-            <artifactId>jactor-client</artifactId>
+            <groupId>com.gitlab.rises</groupId>
+            <artifactId>jactor-commons</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.gitlab.rises.jactor-commons</groupId>
-            <artifactId>jactor-test</artifactId>
-            <version>1.0</version>
         </dependency>
 
         <!-- third party -->
@@ -67,6 +62,12 @@
         </dependency>
 
         <!-- test -->
+        <dependency>
+            <groupId>com.gitlab.rises</groupId>
+            <artifactId>jactor-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>

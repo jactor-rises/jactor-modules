@@ -6,11 +6,13 @@
 
     <groupId>com.gitlab.rises</groupId>
     <artifactId>rises</artifactId>
-    <version>1.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>rises</name>
 
-    <description>Thee build pom for jactor-commons and jactor-modules</description>
+    <description>
+        The build pom for jactor-commons, jactor-test, jactor-model, and jactor-applications (microservices)
+    </description>
 
     <packaging>pom</packaging>
     <url>https://gitlab.com/rises</url>
@@ -38,7 +40,8 @@
 
     <modules>
         <module>jactor-commons</module>
-        <module>jactor-modules</module>
+        <module>jactor-test</module>
+        <module>jactor-model</module>
         <module>jactor-applications</module>
     </modules>
 
@@ -74,29 +77,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.gitlab.rises.jactor-commons</groupId>
-                <artifactId>jactor-client</artifactId>
+                <groupId>com.gitlab.rises</groupId>
+                <artifactId>jactor-commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.gitlab.rises.jactor-commons</groupId>
+                <groupId>com.gitlab.rises</groupId>
                 <artifactId>jactor-test</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.jactor-modules</groupId>
-                <artifactId>jactor-io</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.jactor-modules</groupId>
-                <artifactId>jactor-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.jactor-modules</groupId>
-                <artifactId>jactor-model-facade</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

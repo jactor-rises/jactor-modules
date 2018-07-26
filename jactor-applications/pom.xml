@@ -6,13 +6,14 @@
 
     <groupId>com.gitlab.rises.jactor-applications</groupId>
     <artifactId>jactor-applications</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>rises::jactor-applications</name>
     <packaging>pom</packaging>
 
     <modules>
         <module>jactor-persistence-orm</module>
+        <module>jactor-facade</module>
         <module>jactor-web</module>
     </modules>
 </project>

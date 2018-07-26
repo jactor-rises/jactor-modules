@@ -1,7 +1,7 @@
 package com.gitlab.jactor.rises.persistence.service;
 
-import com.gitlab.jactor.rises.client.dto.GuestBookDto;
-import com.gitlab.jactor.rises.client.dto.GuestBookEntryDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookDto;
+import com.gitlab.jactor.rises.commons.dto.GuestBookEntryDto;
 import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
 import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
 import com.gitlab.jactor.rises.persistence.repository.GuestBookEntryRepository;
