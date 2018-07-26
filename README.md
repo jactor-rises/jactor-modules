@@ -14,7 +14,7 @@ graph TD;
     jactor.rises.commons-->jactor.rises.model;
     jactor.rises.commons-->jactor.rises.persistence.orm;
     jactor.rises.commons-->jactor.rises.web;
-    jactor.rises.model->jactor.rises.facade;
+    jactor.rises.model-->jactor.rises.facade;
 ```
 
 ### Set up ###
