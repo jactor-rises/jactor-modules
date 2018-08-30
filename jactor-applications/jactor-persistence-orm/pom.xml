@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.3.RELEASE</version>
+        <version>2.0.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -16,11 +16,10 @@
 
     <name>rises::jactor-applications::jactor-persistence-orm</name>
     <description>The persistence layer of rises</description>
-    <version>1.1</version>
+    <version>1.1.1-SNAPSHOT</version>
 
     <properties>
         <java.version>10</java.version>
-        <javax-xml-bind.version>2.3.0</javax-xml-bind.version>
         <junit-jupiter.version>5.0.3</junit-jupiter.version>
         <junit-platform.version>1.0.3</junit-platform.version>
         <mvn-surefire.version>2.19.1</mvn-surefire.version>
@@ -116,7 +115,7 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>${javax-xml-bind.version}</version>
+            <version>2.4.0-b180725.0427</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
