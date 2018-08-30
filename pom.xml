@@ -18,10 +18,9 @@
     <url>https://gitlab.com/rises</url>
 
     <properties>
-        <apache.commons.lang3.version>3.7</apache.commons.lang3.version>
-        <assertj.version>3.10.0</assertj.version>
+        <apache.commons.lang3.version>3.8</apache.commons.lang3.version>
+        <assertj.version>3.11.1</assertj.version>
         <java.version>10</java.version>
-        <junit.version>4.12</junit.version>
         <junit-jupiter.version>5.0.3</junit-jupiter.version>
         <junit-platform.version>1.0.3</junit-platform.version>
 
@@ -31,8 +30,8 @@
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
 
-        <mockito.version>2.20.0</mockito.version>
-        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+        <mockito.version>2.21.0</mockito.version>
+        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -62,11 +61,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
@@ -91,11 +85,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${apache.commons.lang3.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.assertj</groupId>
