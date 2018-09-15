@@ -11,10 +11,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.gitlab.rises.jactor-applications</groupId>
+    <groupId>com.gitlab.rises</groupId>
     <artifactId>jactor-persistence-orm</artifactId>
 
-    <name>rises::jactor-applications::jactor-persistence-orm</name>
+    <name>rises::jactor-persistence-orm</name>
     <description>The persistence layer of rises</description>
     <version>1.1.1-SNAPSHOT</version>
 
@@ -67,6 +67,7 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.2.11</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- test -->

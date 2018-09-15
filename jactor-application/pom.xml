@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--suppress PyInterpreter, PyInterpreter -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gitlab.rises</groupId>
-    <artifactId>rises</artifactId>
+    <groupId>com.gitlab.rises.application</groupId>
+    <artifactId>jactor-application</artifactId>
     <version>1.1.1-SNAPSHOT</version>
 
-    <name>rises</name>
-
-    <description>
-        The build pom for jactor-commons, jactor-test, jactor-model, and jactor-applications (microservices)
-    </description>
-
+    <name>rises::application</name>
     <packaging>pom</packaging>
-    <url>https://gitlab.com/rises</url>
 
     <modules>
-        <module>jactor-commons</module>
-        <module>jactor-test</module>
-        <module>jactor-application</module>
-        <module>jactor-persistence-orm</module>
-        <module>jactor-web</module>
+        <module>jactor-facade</module>
+        <module>jactor-model</module>
     </modules>
 
     <properties>
@@ -88,6 +78,11 @@
             <dependency>
                 <groupId>com.gitlab.rises</groupId>
                 <artifactId>jactor-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gitlab.rises.application</groupId>
+                <artifactId>jactor-consumer</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
