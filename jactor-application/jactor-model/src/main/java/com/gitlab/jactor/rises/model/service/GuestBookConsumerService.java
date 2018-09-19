@@ -5,7 +5,7 @@ import com.gitlab.jactor.rises.commons.dto.GuestBookEntryDto;
 
 import java.io.Serializable;
 
-public interface GuestBookRestService {
+public interface GuestBookConsumerService {
     GuestBookDto saveOrUpdate(GuestBookDto guestBookDto);
 
     GuestBookEntryDto saveOrUpdate(GuestBookEntryDto guestBookEntryDto);

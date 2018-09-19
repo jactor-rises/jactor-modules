@@ -8,25 +8,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDomainService {
-    private final UserRestService userRestService;
+    private final UserConsumerService userConsumerService;
 
-    public UserDomainService(UserRestService userRestService) {
-        this.userRestService = userRestService;
+    public UserDomainService(UserConsumerService userConsumerService) {
+        this.userConsumerService = userConsumerService;
     }
 
     public UserDomain saveOrUpdate(UserDomain userDomain) {
-        return new UserDomain(userRestService.saveOrUpdate(userDomain.getDto()));
+        return new UserDomain(userConsumerService.saveOrUpdate(userDomain.getDto()));
     }
 
     Optional<UserDto> fetch(Long id) {
-        return userRestService.fetch(id);
+        return userConsumerService.fetch(id);
     }
 
     public Optional<UserDto> find(Username username) {
-        return userRestService.find(username);
+        return userConsumerService.find(username);
     }
 
     public List<String> findAllUsernames() {
-        return userRestService.findAllUsernames();
+        return userConsumerService.findAllUsernames();
     }
 }

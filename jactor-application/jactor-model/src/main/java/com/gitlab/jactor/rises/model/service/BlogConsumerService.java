@@ -5,7 +5,7 @@ import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
 
 import java.io.Serializable;
 
-public interface BlogRestService {
+public interface BlogConsumerService {
     BlogDto saveOrUpdate(BlogDto blogDto);
 
     BlogEntryDto saveOrUpdate(BlogEntryDto blogEntryDto);

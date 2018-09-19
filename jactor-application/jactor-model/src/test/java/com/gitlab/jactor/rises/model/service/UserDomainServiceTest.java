@@ -21,13 +21,13 @@ import static org.mockito.Mockito.when;
 class UserDomainServiceTest {
 
     private @InjectMocks UserDomainService testUserDomainService;
-    private @Mock UserRestService userRestServiceMock;
+    private @Mock UserConsumerService userConsumerServiceMock;
 
     @BeforeEach void initMocking() {
         MockitoAnnotations.initMocks(this);
     }
 
-    @DisplayName("should return an empty Optional when the UserRestService cannot find a dto for the given user name")
+    @DisplayName("should return an empty Optional when the UserConsumerService cannot find a dto for the given user name")
     @Test void shouldNotFindUnknownUser() {
         Optional<UserDto> user = testUserDomainService.find(new Username("someone"));
         assertThat(user.isPresent()).isEqualTo(false);
@@ -36,7 +36,7 @@ class UserDomainServiceTest {
     @DisplayName("should find a user when the user name only differs in case")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void shouldFindUser() {
-        when(userRestServiceMock.find(new Username("jactor"))).thenReturn(Optional.of(aUser().build()));
+        when(userConsumerServiceMock.find(new Username("jactor"))).thenReturn(Optional.of(aUser().build()));
         Optional<UserDto> optionalUser = testUserDomainService.find(new Username("JACTOR"));
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);
@@ -45,7 +45,7 @@ class UserDomainServiceTest {
     @DisplayName("should fetch user by id")
     @ExtendWith(SuppressValidInstanceExtension.class)
     @Test void shouldFetchUserById() {
-        when(userRestServiceMock.fetch(1L)).thenReturn(Optional.of(aUser().build()));
+        when(userConsumerServiceMock.fetch(1L)).thenReturn(Optional.of(aUser().build()));
         Optional<UserDto> optionalUser = testUserDomainService.fetch(1L);
 
         assertThat(optionalUser.isPresent()).isEqualTo(true);

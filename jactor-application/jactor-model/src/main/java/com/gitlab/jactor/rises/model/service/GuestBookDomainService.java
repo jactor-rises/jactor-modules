@@ -9,28 +9,28 @@ import java.io.Serializable;
 import java.util.Optional;
 
 public class GuestBookDomainService {
-    private final GuestBookRestService guestBookRestService;
+    private final GuestBookConsumerService guestBookConsumerService;
 
-    public GuestBookDomainService(GuestBookRestService guestBookRestService) {
-        this.guestBookRestService = guestBookRestService;
+    public GuestBookDomainService(GuestBookConsumerService guestBookConsumerService) {
+        this.guestBookConsumerService = guestBookConsumerService;
     }
 
     public GuestBookDomain saveOrUpdate(GuestBookDomain guestBookDomain) {
-        return new GuestBookDomain(guestBookRestService.saveOrUpdate(guestBookDomain.getDto()));
+        return new GuestBookDomain(guestBookConsumerService.saveOrUpdate(guestBookDomain.getDto()));
     }
 
     public GuestBookEntryDomain saveOrUpdateEntry(GuestBookEntryDomain guestBookEntryDomain) {
-        return new GuestBookEntryDomain(guestBookRestService.saveOrUpdate(guestBookEntryDomain.getDto()));
+        return new GuestBookEntryDomain(guestBookConsumerService.saveOrUpdate(guestBookEntryDomain.getDto()));
     }
 
     public Optional<GuestBookDomain> find(Serializable id) {
-        GuestBookDto guestBookDto = guestBookRestService.fetch(id);
+        GuestBookDto guestBookDto = guestBookConsumerService.fetch(id);
 
         return Optional.ofNullable(guestBookDto).map(GuestBookDomain::new);
     }
 
     public Optional<GuestBookEntryDomain> findEntry(Serializable id) {
-        GuestBookEntryDto guestBookEntryDto = guestBookRestService.fetchEntry(id);
+        GuestBookEntryDto guestBookEntryDto = guestBookConsumerService.fetchEntry(id);
 
         return Optional.ofNullable(guestBookEntryDto).map(GuestBookEntryDomain::new);
     }
