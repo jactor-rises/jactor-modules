@@ -17,10 +17,6 @@
             <groupId>com.gitlab.rises</groupId>
             <artifactId>jactor-commons</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.gitlab.rises.application</groupId>
-            <artifactId>jactor-consumer</artifactId>
-        </dependency>
 
         <!-- Test scope -->
         <dependency>

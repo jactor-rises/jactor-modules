@@ -80,11 +80,6 @@
                 <artifactId>jactor-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.gitlab.rises.application</groupId>
-                <artifactId>jactor-consumer</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
             <!-- third party dependency mmanaged by spring boot -->
             <dependency>
