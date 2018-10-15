@@ -1,8 +1,8 @@
 package com.gitlab.jactor.rises.model.domain.address;
 
-import com.gitlab.jactor.rises.commons.dto.AddressDto;
 import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
 import com.gitlab.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.rises.commons.dto.AddressDto;
 
 import java.util.Optional;
 
@@ -48,9 +48,9 @@ public final class AddressBuilder extends AbstractBuilder<AddressDomain> {
     }
 
     private static Optional<MissingFields> validInstance(AddressDomain addressDomain, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("addressLine1", addressDomain.getAddressLine1());
-        missingFields.addInvalidFieldWhenNoValue("country", addressDomain.getCountry());
-        missingFields.addInvalidFieldWhenNoValue("zipCode", addressDomain.getZipCode());
+        missingFields.addInvalidFieldWhenNoValue(AddressDomain.class.getSimpleName(), "addressLine1", addressDomain.getAddressLine1());
+        missingFields.addInvalidFieldWhenNoValue(AddressDomain.class.getSimpleName(), "country", addressDomain.getCountry());
+        missingFields.addInvalidFieldWhenNoValue(AddressDomain.class.getSimpleName(), "zipCode", addressDomain.getZipCode());
 
         return missingFields.presentWhenFieldsAreMissing();
     }
