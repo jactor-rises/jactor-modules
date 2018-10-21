@@ -17,7 +17,7 @@
     </modules>
 
     <properties>
-        <apache.commons.lang3.version>3.8</apache.commons.lang3.version>
+        <apache-commons-lang3.version>3.8.1</apache-commons-lang3.version>
         <assertj.version>3.11.1</assertj.version>
         <java.version>10</java.version>
         <junit-jupiter.version>5.3.1</junit-jupiter.version>
@@ -26,10 +26,10 @@
         <maven-jdeps.version>3.1.1</maven-jdeps.version>
         <maven-site-plugin.version>3.6</maven-site-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
 
-        <mockito.version>2.21.0</mockito.version>
-        <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
+        <mockito.version>2.23.0</mockito.version>
+        <spring-boot.version>2.0.6.RELEASE</spring-boot.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -95,7 +95,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>${apache.commons.lang3.version}</version>
+                <version>${apache-commons-lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.assertj</groupId>
