@@ -52,8 +52,8 @@ public class UserEntityBuilder extends AbstractBuilder<UserEntity> {
     }
 
     private static Optional<MissingFields> validate(UserEntity userEntity, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("username", userEntity.getUsername());
-        missingFields.addInvalidFieldWhenNoValue("personEntity", userEntity.getPerson());
+        missingFields.addInvalidFieldWhenNoValue(UserEntity.class.getSimpleName(), "username", userEntity.getUsername());
+        missingFields.addInvalidFieldWhenNoValue(UserEntity.class.getSimpleName(), "personEntity", userEntity.getPerson());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

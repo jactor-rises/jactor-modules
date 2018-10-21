@@ -43,9 +43,9 @@ public class BlogEntryEntityBuilder extends AbstractBuilder<BlogEntryEntity> {
     }
 
     private static Optional<MissingFields> validate(BlogEntryEntity blogEntryEntity, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("entry", blogEntryEntity.getEntry());
-        missingFields.addInvalidFieldWhenBlank("name", blogEntryEntity.getCreatorName());
-        missingFields.addInvalidFieldWhenNoValue("blog", blogEntryEntity.getBlog());
+        missingFields.addInvalidFieldWhenNoValue(BlogEntryEntity.class.getSimpleName(), "entry", blogEntryEntity.getEntry());
+        missingFields.addInvalidFieldWhenNoValue(BlogEntryEntity.class.getSimpleName(), "name", blogEntryEntity.getCreatorName());
+        missingFields.addInvalidFieldWhenNoValue(BlogEntryEntity.class.getSimpleName(), "blog", blogEntryEntity.getBlog());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

@@ -3,41 +3,69 @@ package com.gitlab.jactor.rises.persistence.service;
 import com.gitlab.jactor.rises.commons.dto.BlogDto;
 import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
 import com.gitlab.jactor.rises.commons.dto.UserDto;
+import com.gitlab.jactor.rises.persistence.entity.address.AddressEntity;
 import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
 import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity;
-import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.persistence.entity.person.PersonEntity;
+import com.gitlab.jactor.rises.persistence.entity.user.UserEntity;
 import com.gitlab.jactor.rises.persistence.repository.BlogEntryRepository;
 import com.gitlab.jactor.rises.persistence.repository.BlogRepository;
+import com.gitlab.jactor.rises.test.extension.validate.fields.FieldValue;
+import com.gitlab.jactor.rises.test.extension.validate.fields.RequiredFieldsExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static com.gitlab.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity.aBlog;
 import static com.gitlab.jactor.rises.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.gitlab.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
+import static com.gitlab.jactor.rises.persistence.entity.user.UserEntity.aUser;
 import static java.time.LocalDate.now;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @DisplayName("A BlogService")
-@ExtendWith(RequiredFieldsExtension.class)
 class BlogServiceTest {
+
+    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
+            BlogEntity.class, asList(
+                    new FieldValue("userEntity", () -> aUser().build()),
+                    new FieldValue("title", "my blog")
+            ), BlogEntryEntity.class, Collections.singletonList(
+                    new FieldValue("blog", () -> aBlog().build())
+            ), UserEntity.class, asList(
+                    new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
+                    new FieldValue("personEntity", () -> aPerson().build())
+            ), PersonEntity.class, asList(
+                    new FieldValue("addressEntity", () -> anAddress().build()),
+                    new FieldValue("surname", "sure, man")
+            ), AddressEntity.class, asList(
+                    new FieldValue("addressLine1", "Test Boulevard 1"),
+                    new FieldValue("zipCode", 1001),
+                    new FieldValue("city", "Testing")
+            )
+    ));
 
     private @InjectMocks BlogService blogServiceToTest;
     private @Mock BlogRepository blogRepositoryMock;
     private @Mock BlogEntryRepository blogEntryRepositoryMock;
-    private @Mock @SuppressWarnings("unused") /* used by mockito */ UserService userServiceMock;
+    private @Mock UserService userServiceMock;
 
     @BeforeEach void initMocking() {
         MockitoAnnotations.initMocks(this);
