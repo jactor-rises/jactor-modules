@@ -61,9 +61,9 @@ public class AddressEntityBuilder extends AbstractBuilder<AddressEntity> {
     }
 
     private static Optional<MissingFields> validate(AddressEntity addressEntity, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("addressLine1", addressEntity.getAddressLine1());
-        missingFields.addInvalidFieldWhenBlank("city", addressEntity.getCity());
-        missingFields.addInvalidFieldWhenNoValue("zipCode", addressEntity.getZipCode());
+        missingFields.addInvalidFieldWhenNoValue(AddressEntity.class.getSimpleName(), "addressLine1", addressEntity.getAddressLine1());
+        missingFields.addInvalidFieldWhenNoValue(AddressEntity.class.getSimpleName(), "city", addressEntity.getCity());
+        missingFields.addInvalidFieldWhenNoValue(AddressEntity.class.getSimpleName(), "zipCode", addressEntity.getZipCode());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

@@ -1,9 +1,9 @@
 package com.gitlab.jactor.rises.model.domain.blog;
 
-import com.gitlab.jactor.rises.commons.dto.BlogDto;
-import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
 import com.gitlab.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.rises.commons.dto.BlogDto;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.model.domain.user.UserBuilder;
 
 import java.util.Optional;
@@ -34,8 +34,8 @@ public final class BlogBuilder extends AbstractBuilder<BlogDomain> {
     }
 
     private static Optional<MissingFields> validateInstance(BlogDomain blogDomain, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("title", blogDomain.getTitle());
-        missingFields.addInvalidFieldWhenNoValue("user", blogDomain.getUser());
+        missingFields.addInvalidFieldWhenNoValue(BlogDomain.class.getSimpleName(), "title", blogDomain.getTitle());
+        missingFields.addInvalidFieldWhenNoValue(BlogDomain.class.getSimpleName(), "user", blogDomain.getUser());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

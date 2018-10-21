@@ -72,8 +72,8 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     }
 
     private static Optional<MissingFields> validate(PersonEntity personEntity, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenNoValue("addressEntity", personEntity.getAddressEntity());
-        missingFields.addInvalidFieldWhenBlank("surname", personEntity.getSurname());
+        missingFields.addInvalidFieldWhenNoValue(PersonEntity.class.getSimpleName(), "addressEntity", personEntity.getAddressEntity());
+        missingFields.addInvalidFieldWhenNoValue(PersonEntity.class.getSimpleName(), "surname", personEntity.getSurname());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

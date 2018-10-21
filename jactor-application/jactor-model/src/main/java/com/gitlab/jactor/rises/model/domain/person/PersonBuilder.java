@@ -1,8 +1,8 @@
 package com.gitlab.jactor.rises.model.domain.person;
 
-import com.gitlab.jactor.rises.commons.dto.PersonDto;
 import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
 import com.gitlab.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.rises.commons.dto.PersonDto;
 import com.gitlab.jactor.rises.model.domain.address.AddressBuilder;
 import com.gitlab.jactor.rises.model.domain.address.AddressDomain;
 
@@ -49,8 +49,8 @@ public final class PersonBuilder extends AbstractBuilder<PersonDomain> {
     }
 
     private static Optional<MissingFields> validateInstance(PersonDomain personDomain, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenNoValue("address", personDomain.getAddress());
-        missingFields.addInvalidFieldWhenNoValue("surname", personDomain.getSurname());
+        missingFields.addInvalidFieldWhenNoValue(PersonDomain.class.getSimpleName(), "address", personDomain.getAddress());
+        missingFields.addInvalidFieldWhenNoValue(PersonDomain.class.getSimpleName(), "surname", personDomain.getSurname());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

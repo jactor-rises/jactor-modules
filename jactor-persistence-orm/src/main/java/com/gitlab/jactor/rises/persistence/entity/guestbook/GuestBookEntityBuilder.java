@@ -39,8 +39,8 @@ public class GuestBookEntityBuilder extends AbstractBuilder<GuestBookEntity> {
     }
 
     private static Optional<MissingFields> validate(GuestBookEntity guestBookEntity, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("title", guestBookEntity.getTitle());
-        missingFields.addInvalidFieldWhenNoValue("user", guestBookEntity.getUser());
+        missingFields.addInvalidFieldWhenNoValue(GuestBookEntity.class.getSimpleName(), "title", guestBookEntity.getTitle());
+        missingFields.addInvalidFieldWhenNoValue(GuestBookEntity.class.getSimpleName(), "user", guestBookEntity.getUser());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

@@ -1,9 +1,9 @@
 package com.gitlab.jactor.rises.model.domain.guestbook;
 
-import com.gitlab.jactor.rises.commons.dto.GuestBookDto;
-import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
 import com.gitlab.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.rises.commons.dto.GuestBookDto;
+import com.gitlab.jactor.rises.commons.dto.UserDto;
 import com.gitlab.jactor.rises.model.domain.user.UserDomain;
 
 import java.util.Optional;
@@ -35,8 +35,8 @@ public final class GuestBookBuilder extends AbstractBuilder<GuestBookDomain> {
     }
 
     private static Optional<MissingFields> validateInstance(GuestBookDomain guestBookDomain, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("title", guestBookDomain.getTitle());
-        missingFields.addInvalidFieldWhenNoValue("user", guestBookDomain.getUser());
+        missingFields.addInvalidFieldWhenNoValue(GuestBookDomain.class.getSimpleName(), "title", guestBookDomain.getTitle());
+        missingFields.addInvalidFieldWhenNoValue(GuestBookDomain.class.getSimpleName(), "user", guestBookDomain.getUser());
 
         return missingFields.presentWhenFieldsAreMissing();
     }

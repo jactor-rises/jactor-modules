@@ -1,37 +1,61 @@
 package com.gitlab.jactor.rises.persistence.aop;
 
 import com.gitlab.jactor.rises.persistence.entity.PersistentEntity;
+import com.gitlab.jactor.rises.persistence.entity.address.AddressEntity;
 import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity;
 import com.gitlab.jactor.rises.persistence.entity.person.PersonEntity;
 import com.gitlab.jactor.rises.persistence.entity.user.UserEntity;
-import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.test.extension.validate.fields.FieldValue;
+import com.gitlab.jactor.rises.test.extension.validate.fields.RequiredFieldsExtension;
 import org.aspectj.lang.JoinPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Map;
 
 import static com.gitlab.jactor.rises.persistence.entity.address.AddressEntity.anAddress;
 import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.gitlab.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.rises.persistence.entity.user.UserEntity.aUser;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 @DisplayName("An IdentitySequencer")
-@ExtendWith(RequiredFieldsExtension.class)
 class IdentitySequencerTest {
 
     private IdentitySequencer identitySequencer = new IdentitySequencer();
 
-    @Mock
-    private JoinPoint joinPointMock;
+    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
+            AddressEntity.class, asList(
+                    new FieldValue("addressLine1", "Test Boulevard 1"),
+                    new FieldValue("zipCode", 1001),
+                    new FieldValue("city", "Testing")
+            ), GuestBookEntryEntity.class, asList(
+                    new FieldValue("entry", "jibberish"),
+                    new FieldValue("name", "McTest"),
+                    new FieldValue("guestBook", () -> aGuestBook().build())
+            ), GuestBookEntity.class, asList(
+                    new FieldValue("title", "my guestbook"),
+                    new FieldValue("user", () -> aUser().build())
+            ), UserEntity.class, asList(
+                    new FieldValue("username", "supreme"),
+                    new FieldValue("personEntity", () -> aPerson().build())
+            ), PersonEntity.class, asList(
+                    new FieldValue("addressEntity", () -> anAddress().build()),
+                    new FieldValue("surname", "sure, man")
+            )
+    ));
 
-    @BeforeEach
-    void setUpMocks() {
+    @Mock private JoinPoint joinPointMock;
+
+    @BeforeEach void setUpMocks() {
         MockitoAnnotations.initMocks(this);
     }
 

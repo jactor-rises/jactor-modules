@@ -38,8 +38,8 @@ public class BlogEntityBuilder extends AbstractBuilder<BlogEntity> {
     }
 
     private static Optional<MissingFields> validate(BlogEntity blogEntity, MissingFields missingFields) {
-        missingFields.addInvalidFieldWhenBlank("title", blogEntity.getTitle());
-        missingFields.addInvalidFieldWhenNoValue("userEntity", blogEntity.getUser());
+        missingFields.addInvalidFieldWhenNoValue(BlogEntity.class.getSimpleName(), "title", blogEntity.getTitle());
+        missingFields.addInvalidFieldWhenNoValue(BlogEntity.class.getSimpleName(), "userEntity", blogEntity.getUser());
         return missingFields.presentWhenFieldsAreMissing();
     }
 }

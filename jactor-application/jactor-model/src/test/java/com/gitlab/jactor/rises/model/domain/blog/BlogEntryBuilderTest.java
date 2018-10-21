@@ -14,25 +14,25 @@ class BlogEntryBuilderTest {
     @DisplayName("should not build a blog entry without the entry")
     @Test void willNotBuildBlogEntryWithoutTheEntry() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry(null).withCreatorName("aCreator").with(new BlogDto()).build())
-                .withMessageContaining("entry").withMessageContaining("has no value");
+                .withMessageContaining("entry");
     }
 
     @DisplayName("should not build a blog entry with an empty entry")
     @Test void willNotBuildBlogEntryWithAnEmptyEntry() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("").withCreatorName("aCreator").with(new BlogDto()).build())
-                .withMessageContaining("entry").withMessageContaining("has no value");
+                .withMessageContaining("entry");
     }
 
     @DisplayName("should not build a blog entry without a blog")
     @Test void willNotBuildBlogEntryWithoutTheBlog() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("some entry").withCreatorName("aCreator").build())
-                .withMessageContaining("blog").withMessageContaining("has no value");
+                .withMessageContaining("blog");
     }
 
     @DisplayName("should not build a blog entry without the creator")
     @Test void willNotBuildBlogEntryWithoutTheCreator() {
         assertThatIllegalStateException().isThrownBy(() -> aBlogEntry().withEntry("some entry").withCreatorName(null).with(new BlogDto()).build())
-                .withMessageContaining("creatorName").withMessageContaining("has no value");
+                .withMessageContaining("creatorName");
     }
 
     @DisplayName("should build a blog entry when all required fields are set")

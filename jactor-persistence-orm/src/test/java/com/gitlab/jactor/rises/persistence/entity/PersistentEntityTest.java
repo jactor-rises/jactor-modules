@@ -2,13 +2,17 @@ package com.gitlab.jactor.rises.persistence.entity;
 
 import com.gitlab.jactor.rises.persistence.entity.address.AddressEntity;
 import com.gitlab.jactor.rises.persistence.entity.blog.BlogEntity;
+import com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntity;
 import com.gitlab.jactor.rises.persistence.entity.person.PersonEntity;
-import com.gitlab.jactor.rises.persistence.extension.RequiredFieldsExtension;
+import com.gitlab.jactor.rises.persistence.entity.user.UserEntity;
+import com.gitlab.jactor.rises.test.extension.validate.fields.FieldValue;
+import com.gitlab.jactor.rises.test.extension.validate.fields.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -19,6 +23,7 @@ import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEnti
 import static com.gitlab.jactor.rises.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static com.gitlab.jactor.rises.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.rises.persistence.entity.user.UserEntity.aUser;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,10 +32,29 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @DisplayName("A PersistentEntity")
-@ExtendWith(RequiredFieldsExtension.class)
 class PersistentEntityTest {
 
     private PersistentEntity<?> persistentEntityToTest;
+
+    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
+            BlogEntity.class, asList(
+                    new FieldValue("title", "my blog"),
+                    new FieldValue("userEntity", () -> aUser().build())
+            ), UserEntity.class, asList(
+                    new FieldValue("username", "me"),
+                    new FieldValue("personEntity", () -> aPerson().build())
+            ), PersonEntity.class, asList(
+                    new FieldValue("addressEntity", () -> anAddress().build()),
+                    new FieldValue("surname", "black")
+            ), AddressEntity.class, asList(
+                    new FieldValue("addressLine1", "some street #1"),
+                    new FieldValue("city", "some city"),
+                    new FieldValue("zipCode", 1234)
+            ), GuestBookEntity.class, asList(
+                    new FieldValue("title", "my guest book"),
+                    new FieldValue("user", () -> aUser().build())
+            )
+    ));
 
     @DisplayName("should be able to copy an address without the id")
     @Test void shouldCopyAddress() {
