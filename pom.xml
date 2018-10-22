@@ -20,8 +20,8 @@
 
     <modules>
         <module>jactor-commons</module>
+        <module>jactor-facade</module>
         <module>jactor-test</module>
-        <module>jactor-application</module>
         <module>jactor-persistence-orm</module>
         <module>jactor-web</module>
     </modules>
