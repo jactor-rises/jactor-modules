@@ -33,7 +33,7 @@ These applications are not 100% finished, but created for my own learning. That 
 
 * `Blog`s are only persisted in `jactor-persistence-orm` and only have an integration test of the rest api that verifies actual interactions.
 * `GuestBook`s have interactions from `jactor-model` and are tested with an integration test, but lack interactions from `jactor-web`.
-* `User` (with `Person` and `Address`) is fully integrated with communications from `jactor-web`, which use `jactor-model` and `jactor-persistence-orm` (through `jactor-facade`).
+* `User` (with `Person` and `Address`) is fully integrated with communications from `jactor-web`, which use `jactor-fcade` and `jactor-persistence-orm`.
   * Note! Not all services for a `User` on `jactor-persistence-orm` is used.
 
 Persistence in `jactor-persistence-orm` is not satisfactory dealing with identifications. There is therefore [an issue](https://github.com/jactor-rises/jactor-rises/issues/1) (help wanted) created for solving a potential "buggy" solution.
