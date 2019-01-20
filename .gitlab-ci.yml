@@ -18,4 +18,4 @@ cache:
 build-jdk10:
    script:
     - 'mvn $MAVEN_CLI_OPTS clean install'
-   image: maven:3.5.4-jdk-10
+   image: maven:3.6.0-jdk-11-slim
