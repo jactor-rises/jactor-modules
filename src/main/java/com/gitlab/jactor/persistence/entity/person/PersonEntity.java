@@ -1,6 +1,6 @@
 package com.gitlab.jactor.persistence.entity.person;
 
-import com.gitlab.jactor.rises.commons.dto.PersonDto;
+import com.gitlab.jactor.persistence.dto.PersonDto;
 import com.gitlab.jactor.persistence.entity.PersistentEntity;
 import com.gitlab.jactor.persistence.entity.address.AddressEntity;
 import com.gitlab.jactor.persistence.entity.user.UserEntity;

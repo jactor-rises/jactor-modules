@@ -1,6 +1,6 @@
 package com.gitlab.jactor.persistence.entity.blog;
 
-import com.gitlab.jactor.rises.commons.dto.BlogDto;
+import com.gitlab.jactor.persistence.dto.BlogDto;
 import com.gitlab.jactor.persistence.entity.PersistentEntity;
 import com.gitlab.jactor.persistence.entity.user.UserEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;

@@ -1,7 +1,7 @@
 package com.gitlab.jactor.persistence.service;
 
-import com.gitlab.jactor.rises.commons.dto.BlogDto;
-import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
+import com.gitlab.jactor.persistence.dto.BlogDto;
+import com.gitlab.jactor.persistence.dto.BlogEntryDto;
 import com.gitlab.jactor.persistence.entity.blog.BlogEntity;
 import com.gitlab.jactor.persistence.entity.blog.BlogEntryEntity;
 import com.gitlab.jactor.persistence.repository.BlogEntryRepository;

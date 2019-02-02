@@ -1,6 +1,6 @@
 package com.gitlab.jactor.persistence.entity.address;
 
-import com.gitlab.jactor.rises.commons.dto.AddressDto;
+import com.gitlab.jactor.persistence.dto.AddressDto;
 import com.gitlab.jactor.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

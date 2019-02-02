@@ -1,7 +1,7 @@
 package com.gitlab.jactor.persistence.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gitlab.jactor.rises.commons.dto.UserDto;
+import com.gitlab.jactor.persistence.dto.UserDto;
 import com.gitlab.jactor.persistence.JactorPersistence;
 import com.gitlab.jactor.persistence.service.UserService;
 import org.junit.jupiter.api.BeforeEach;

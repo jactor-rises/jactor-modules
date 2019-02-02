@@ -1,6 +1,6 @@
 package com.gitlab.jactor.persistence.controller;
 
-import com.gitlab.jactor.rises.commons.dto.UserDto;
+import com.gitlab.jactor.persistence.dto.UserDto;
 import com.gitlab.jactor.persistence.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

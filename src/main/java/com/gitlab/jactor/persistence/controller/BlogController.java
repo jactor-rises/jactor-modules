@@ -1,7 +1,7 @@
 package com.gitlab.jactor.persistence.controller;
 
-import com.gitlab.jactor.rises.commons.dto.BlogDto;
-import com.gitlab.jactor.rises.commons.dto.BlogEntryDto;
+import com.gitlab.jactor.persistence.dto.BlogDto;
+import com.gitlab.jactor.persistence.dto.BlogEntryDto;
 import com.gitlab.jactor.persistence.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
