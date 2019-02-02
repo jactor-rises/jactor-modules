@@ -16,13 +16,13 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.gitlab.jactor.persistence.entity.address.AddressEntity.anAddress;
 import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
@@ -33,21 +33,21 @@ class IdentitySequencerTest {
     private IdentitySequencer identitySequencer = new IdentitySequencer();
 
     @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            AddressEntity.class, asList(
+            AddressEntity.class, List.of(
                     new FieldValue("addressLine1", "Test Boulevard 1"),
                     new FieldValue("zipCode", 1001),
                     new FieldValue("city", "Testing")
-            ), GuestBookEntryEntity.class, asList(
+            ), GuestBookEntryEntity.class, List.of(
                     new FieldValue("entry", "jibberish"),
                     new FieldValue("name", "McTest"),
                     new FieldValue("guestBook", () -> aGuestBook().build())
-            ), GuestBookEntity.class, asList(
+            ), GuestBookEntity.class, List.of(
                     new FieldValue("title", "my guestbook"),
                     new FieldValue("user", () -> aUser().build())
-            ), UserEntity.class, asList(
+            ), UserEntity.class,  List.of(
                     new FieldValue("username", "supreme"),
                     new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, asList(
+            ), PersonEntity.class, List.of(
                     new FieldValue("addressEntity", () -> anAddress().build()),
                     new FieldValue("surname", "sure, man")
             )

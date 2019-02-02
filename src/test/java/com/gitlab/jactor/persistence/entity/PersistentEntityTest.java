@@ -23,7 +23,6 @@ import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity.aGu
 import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -34,23 +33,23 @@ import static org.mockito.Mockito.when;
 @DisplayName("A PersistentEntity")
 class PersistentEntityTest {
 
-    private PersistentEntity<?> persistentEntityToTest;
+    private PersistentEntity persistentEntityToTest;
 
     @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            BlogEntity.class, asList(
+            BlogEntity.class, List.of(
                     new FieldValue("title", "my blog"),
                     new FieldValue("userEntity", () -> aUser().build())
-            ), UserEntity.class, asList(
+            ), UserEntity.class, List.of(
                     new FieldValue("username", "me"),
                     new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, asList(
+            ), PersonEntity.class, List.of(
                     new FieldValue("addressEntity", () -> anAddress().build()),
                     new FieldValue("surname", "black")
-            ), AddressEntity.class, asList(
+            ), AddressEntity.class, List.of(
                     new FieldValue("addressLine1", "some street #1"),
                     new FieldValue("city", "some city"),
                     new FieldValue("zipCode", 1234)
-            ), GuestBookEntity.class, asList(
+            ), GuestBookEntity.class, List.of(
                     new FieldValue("title", "my guest book"),
                     new FieldValue("user", () -> aUser().build())
             )
@@ -67,7 +66,7 @@ class PersistentEntityTest {
                 .withZipCode(1001)
                 .build().addSequencedId(aClass -> 1L);
 
-        PersistentEntity<?> copy = persistentEntityToTest.copy();
+        PersistentEntity copy = persistentEntityToTest.copy();
 
         assertAll(
                 () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -90,7 +89,7 @@ class PersistentEntityTest {
                 .withLocale("us_US")
                 .build().addSequencedId(aClass -> 1L);
 
-        PersistentEntity<?> copy = persistentEntityToTest.copy();
+        PersistentEntity copy = persistentEntityToTest.copy();
 
         assertAll(
                 () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -110,7 +109,7 @@ class PersistentEntityTest {
                 .withUsername("jactor")
                 .build().addSequencedId(aClass -> 1L);
 
-        PersistentEntity<?> copy = persistentEntityToTest.copy();
+        PersistentEntity copy = persistentEntityToTest.copy();
 
         assertAll(
                 () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -129,7 +128,7 @@ class PersistentEntityTest {
                 .withTitle("general ignorance")
                 .build().addSequencedId(aClass -> 1L);
 
-        PersistentEntity<?> copy = persistentEntityToTest.copy();
+        PersistentEntity copy = persistentEntityToTest.copy();
 
         assertAll(
                 () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -149,7 +148,7 @@ class PersistentEntityTest {
                 .withEntry("the one")
                 .build().addSequencedId(aClass -> 1L);
 
-        PersistentEntity<?> copy = persistentEntityToTest.copy();
+        PersistentEntity copy = persistentEntityToTest.copy();
 
         assertAll(
                 () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -168,7 +167,7 @@ class PersistentEntityTest {
                 .withTitle("enter when applied")
                 .build().addSequencedId(aClass -> 1L);
 
-        PersistentEntity<?> copy = persistentEntityToTest.copy();
+        PersistentEntity copy = persistentEntityToTest.copy();
 
         assertAll(
                 () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -188,7 +187,7 @@ class PersistentEntityTest {
                 .withEntry("the one")
                 .build().addSequencedId(aClass -> 1L);
 
-        PersistentEntity<?> copy = persistentEntityToTest.copy();
+        PersistentEntity copy = persistentEntityToTest.copy();
 
         assertAll(
                 () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -203,9 +202,8 @@ class PersistentEntityTest {
     @DisplayName("should return an empty stream when no dependencies")
     @Test void shouldReturnEmptyStreamWithoutDependenciesGiven() {
         persistentEntityToTest = aPerson().build();
-        @SuppressWarnings("ConfusingArgumentToVarargsMethod") Stream<?> none = persistentEntityToTest.streamSequencedDependencies(null);
+        Stream none = persistentEntityToTest.streamSequencedDependencies();
 
-        //noinspection unchecked
         assertThat(none).isEmpty();
     }
 
@@ -215,7 +213,7 @@ class PersistentEntityTest {
         PersonEntity personEntity = aPerson().build();
 
         persistentEntityToTest = personEntity;
-        List<PersistentEntity<Long>> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
+        List<PersistentEntity> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
@@ -231,7 +229,7 @@ class PersistentEntityTest {
         PersonEntity personEntity = aPerson().with(addressEntity).build();
         persistentEntityToTest = aUser().with(personEntity).build();
 
-        List<PersistentEntity<Long>> allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
+        List<PersistentEntity> allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
 
         assertThat(allSequencedDependencies)
                 .hasSize(2)

@@ -1,6 +1,5 @@
 package com.gitlab.jactor.persistence.controller;
 
-import com.gitlab.jactor.persistence.dto.PersistentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -9,7 +8,7 @@ import java.net.URISyntaxException;
 
 class AbstractController {
 
-    <T extends PersistentDto> ResponseEntity<T> aCreatedResponseEntity(T saved, String path) {
+    <T> ResponseEntity<T> aCreatedResponseEntity(T saved, String path) {
         try {
             return ResponseEntity.created(new URI(null, null, path, null)).body(saved);
         } catch (URISyntaxException e) {

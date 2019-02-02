@@ -18,7 +18,9 @@ class UserDtoTest {
         userDto.setPerson(new PersonDto());
         userDto.setUsername("me");
 
-        UserDto copied = new UserDto(userDto);
+        UserDto copied = new UserDto(
+                userDto.asPersistentDto(), userDto.getPerson(), userDto.getEmailAddress(), userDto.getUsername()
+        );
 
         assertAll(
                 () -> assertThat(copied.getEmailAddress()).as("email address").isEqualTo(userDto.getEmailAddress()),
@@ -29,21 +31,23 @@ class UserDtoTest {
 
     @DisplayName("should give values to PersistentDto")
     @Test void shouldGiveValuesToPersistentDto() {
-        UserDto persistentDto = new UserDto();
-        persistentDto.setCreatedBy("jactor");
-        persistentDto.setCreationTime(LocalDateTime.now());
-        persistentDto.setId(1L);
-        persistentDto.setUpdatedBy("tip");
-        persistentDto.setUpdatedTime(LocalDateTime.now());
+        UserDto userDto = new UserDto();
+        userDto.setCreatedBy("jactor");
+        userDto.setCreationTime(LocalDateTime.now());
+        userDto.setId(1L);
+        userDto.setUpdatedBy("tip");
+        userDto.setUpdatedTime(LocalDateTime.now());
 
-        PersistentDto copied = new UserDto(persistentDto).asPersistentDto();
+        PersistentDto copied = new UserDto(
+                userDto.asPersistentDto(), null, null, null
+        ).asPersistentDto();
 
         assertAll(
-                () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
-                () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
-                () -> assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
-                () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
-                () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
+                () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(userDto.getCreatedBy()),
+                () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(userDto.getCreationTime()),
+                () -> assertThat(copied.getId()).as("id").isEqualTo(userDto.getId()),
+                () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(userDto.getUpdatedBy()),
+                () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(userDto.getUpdatedTime())
         );
     }
 

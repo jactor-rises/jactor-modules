@@ -14,10 +14,12 @@ data class BlogEntryDto(
 ) : AsPersistentDto {
     constructor(
             persistent: PersistentDto,
-            blogEntry: BlogEntryDto
+            blog: BlogDto?,
+            creatorName: String?,
+            entry: String?
     ) : this(
             persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
-            blogEntry.blog, blogEntry.creatorName, blogEntry.entry
+            blog, creatorName, entry
     )
 
     override fun asPersistentDto(): PersistentDto {

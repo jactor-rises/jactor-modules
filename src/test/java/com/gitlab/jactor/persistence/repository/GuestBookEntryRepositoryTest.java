@@ -27,7 +27,6 @@ import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity.aGu
 import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -38,16 +37,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class GuestBookEntryRepositoryTest {
 
     @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            GuestBookEntity.class, asList(
+            GuestBookEntity.class, List.of(
                     new FieldValue("title", "my guest book"),
                     new FieldValue("user", () -> aUser().build())
-            ), UserEntity.class, asList(
+            ), UserEntity.class, List.of(
                     new FieldValue("username", () -> "uniqueName@" + LocalDateTime.now()),
                     new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, asList(
+            ), PersonEntity.class, List.of(
                     new FieldValue("addressEntity", () -> anAddress().build()),
                     new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, asList(
+            ), AddressEntity.class, List.of(
                     new FieldValue("addressLine1", "Test Boulevard 1"),
                     new FieldValue("zipCode", 1001),
                     new FieldValue("city", "Testing")

@@ -17,15 +17,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static com.gitlab.jactor.persistence.entity.address.AddressEntity.anAddress;
 import static com.gitlab.jactor.persistence.entity.blog.BlogEntity.aBlog;
 import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -36,10 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class RepositoriesTest {
 
     @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            PersonEntity.class, asList(
+            PersonEntity.class, List.of(
                     new FieldValue("addressEntity", () -> anAddress().build()),
                     new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, asList(
+            ), AddressEntity.class, List.of(
                     new FieldValue("addressLine1", "Test Boulevard 1"),
                     new FieldValue("zipCode", 1001),
                     new FieldValue("city", "Testing")

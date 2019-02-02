@@ -16,11 +16,11 @@ public class IdentitySequencer {
     private static final Long START_SEQUENCE = 999999L; // + 1 (computed before value retrieved)
     private final Map<Class<?>, Long> idSequenceMap = new HashMap<>();
 
-    @SuppressWarnings("unchecked") @Before("execution(* com.gitlab.jactor.persistence.repository.*Repository.save(..))")
+    @Before("execution(* com.gitlab.jactor.persistence.repository.*Repository.save(..))")
     public Object addIdentity(JoinPoint joinPoint) {
         return Arrays.stream(joinPoint.getArgs())
                 .filter(obj -> obj instanceof PersistentEntity)
-                .map(obj -> (PersistentEntity<Long>) obj)
+                .map(obj -> (PersistentEntity) obj)
                 .map(persistentEntity -> persistentEntity.addSequencedId(this::fetchNextValFor))
                 .findAny().orElse(null);
     }

@@ -15,9 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -102,7 +102,7 @@ class UserControllerTest {
     @DisplayName("should find all usernames on active users")
     @Test void shouldFindAllUsernames() throws Exception {
         when(userServiceMock.findUsernamesOnActiveUsers())
-                .thenReturn(asList("bart", "lisa"));
+                .thenReturn(List.of("bart", "lisa"));
 
         mockMvc.perform(get("/user/all/usernames")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

@@ -19,7 +19,9 @@ class GuestBookEntryDtoTest {
         guestBookEntryDto.setGuestBook(new GuestBookDto());
         guestBookEntryDto.setEntry("entry");
 
-        GuestBookEntryDto copied = new GuestBookEntryDto(guestBookEntryDto);
+        GuestBookEntryDto copied = new GuestBookEntryDto(
+                guestBookEntryDto.asPersistentDto(), guestBookEntryDto.getGuestBook(), guestBookEntryDto.getCreatorName(), guestBookEntryDto.getEntry()
+        );
 
         assertAll(
                 () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(guestBookEntryDto.getCreationTime()),
@@ -31,21 +33,23 @@ class GuestBookEntryDtoTest {
 
     @DisplayName("should give values to PersistentDto")
     @Test void shouldGiveValuesToPersistentDto() {
-        GuestBookEntryDto persistentDto = new GuestBookEntryDto();
-        persistentDto.setCreatedBy("jactor");
-        persistentDto.setCreationTime(LocalDateTime.now());
-        persistentDto.setId(1L);
-        persistentDto.setUpdatedBy("tip");
-        persistentDto.setUpdatedTime(LocalDateTime.now());
+        GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
+        guestBookEntryDto.setCreatedBy("jactor");
+        guestBookEntryDto.setCreationTime(LocalDateTime.now());
+        guestBookEntryDto.setId(1L);
+        guestBookEntryDto.setUpdatedBy("tip");
+        guestBookEntryDto.setUpdatedTime(LocalDateTime.now());
 
-        PersistentDto copied = new GuestBookEntryDto(persistentDto).asPersistentDto();
+        PersistentDto copied = new GuestBookEntryDto(
+                guestBookEntryDto.asPersistentDto(), null, null, null
+        ).asPersistentDto();
 
         assertAll(
-                () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
-                () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
-                () -> assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
-                () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
-                () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
+                () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(guestBookEntryDto.getCreatedBy()),
+                () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(guestBookEntryDto.getCreationTime()),
+                () -> assertThat(copied.getId()).as("id").isEqualTo(guestBookEntryDto.getId()),
+                () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(guestBookEntryDto.getUpdatedBy()),
+                () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(guestBookEntryDto.getUpdatedTime())
         );
     }
 }

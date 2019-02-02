@@ -23,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -32,7 +33,6 @@ import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity.aGu
 import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
 import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -45,16 +45,16 @@ class GuestBookServiceTest {
     @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
             GuestBookEntryEntity.class, singletonList(
                     new FieldValue("guestBook", () -> aGuestBook().build())
-            ), GuestBookEntity.class, asList(
+            ), GuestBookEntity.class, List.of(
                     new FieldValue("title", "my book"),
                     new FieldValue("user", () -> aUser().build())
-            ), UserEntity.class, asList(
+            ), UserEntity.class, List.of(
                     new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
                     new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, asList(
+            ), PersonEntity.class, List.of(
                     new FieldValue("addressEntity", () -> anAddress().build()),
                     new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, asList(
+            ), AddressEntity.class, List.of(
                     new FieldValue("addressLine1", "Test Boulevard 1"),
                     new FieldValue("zipCode", 1001),
                     new FieldValue("city", "Testing")

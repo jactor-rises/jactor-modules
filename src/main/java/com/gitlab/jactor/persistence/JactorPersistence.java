@@ -1,6 +1,5 @@
 package com.gitlab.jactor.persistence;
 
-import com.gitlab.jactor.rises.commons.framework.SpringBeanNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

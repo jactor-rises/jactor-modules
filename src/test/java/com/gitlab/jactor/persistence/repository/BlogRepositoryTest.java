@@ -29,7 +29,6 @@ import static com.gitlab.jactor.persistence.entity.blog.BlogEntity.aBlog;
 import static com.gitlab.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
 import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -40,13 +39,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class BlogRepositoryTest {
 
     @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            UserEntity.class, asList(
+            UserEntity.class, List.of(
                     new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
                     new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, asList(
+            ), PersonEntity.class, List.of(
                     new FieldValue("addressEntity", () -> anAddress().build()),
                     new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, asList(
+            ), AddressEntity.class, List.of(
                     new FieldValue("addressLine1", "Test Boulevard 1"),
                     new FieldValue("zipCode", 1001),
                     new FieldValue("city", "Testing")

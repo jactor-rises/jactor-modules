@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>com.gitlab.jactor</groupId>
-    <artifactId>jactor-persistence-orm</artifactId>
+    <artifactId>jactor-persistence</artifactId>
     <version>1.3-SNAPSHOT</version>
 
-    <name>jactor::persistence-orm</name>
+    <name>jactor::persistence</name>
     <description>A spring-data-jpa microservice using in-memory database</description>
 
     <properties>
