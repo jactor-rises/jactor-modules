@@ -2,7 +2,7 @@ package com.gitlab.jactor.persistence.entity.guestbook;
 
 import com.gitlab.jactor.persistence.dto.GuestBookDto;
 import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
-import com.gitlab.jactor.rises.commons.time.Now;
+import com.gitlab.jactor.persistence.time.Now;
 import com.gitlab.jactor.persistence.entity.EntryEmbeddable;
 import com.gitlab.jactor.persistence.entity.PersistentEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
