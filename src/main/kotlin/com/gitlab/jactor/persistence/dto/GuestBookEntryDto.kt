@@ -13,10 +13,11 @@ data class GuestBookEntryDto(
         var entry: String? = null
 ) : AsPersistentDto {
     constructor(
-            guestBookEntry: GuestBookEntryDto
+            persistent: PersistentDto,
+            guestBook: GuestBookDto?, creatorName: String?, entry: String?
     ) : this(
-            guestBookEntry.id, guestBookEntry.createdBy, guestBookEntry.creationTime, guestBookEntry.updatedBy, guestBookEntry.updatedTime,
-            guestBookEntry.guestBook, guestBookEntry.creatorName, guestBookEntry.entry
+            persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
+            guestBook, creatorName, entry
     )
 
     override fun asPersistentDto(): PersistentDto {

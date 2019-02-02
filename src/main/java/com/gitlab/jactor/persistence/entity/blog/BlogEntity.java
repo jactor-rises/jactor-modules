@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -27,7 +28,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(name = "T_BLOG")
-public class BlogEntity extends PersistentEntity<Long> {
+public class BlogEntity extends PersistentEntity {
 
     private @Id Long id;
 
@@ -48,20 +49,18 @@ public class BlogEntity extends PersistentEntity<Long> {
         Optional.ofNullable(blogEntity.getUser()).ifPresent(user -> userEntity = user.copy());
     }
 
-    public BlogEntity(BlogDto blogDto) {
-        super(blogDto);
+    public BlogEntity(@NotNull BlogDto blogDto) {
+        super(blogDto.asPersistentDto());
         created = blogDto.getCreated();
         title = blogDto.getTitle();
         Optional.ofNullable(blogDto.getUser()).ifPresent(user -> userEntity = new UserEntity(user));
     }
 
     public BlogDto asDto() {
-        BlogDto blogDto = addPersistentData(new BlogDto());
-        blogDto.setCreated(created);
-        blogDto.setTitle(title);
-        Optional.ofNullable(userEntity).ifPresent(usr -> blogDto.setUser(usr.asDto()));
-
-        return blogDto;
+        return new BlogDto(
+                initPersistentDto(),
+                created, title, Optional.ofNullable(userEntity).map(UserEntity::asDto).orElse(null)
+        );
     }
 
     public void add(BlogEntryEntity blogEntryEntity) {
@@ -73,7 +72,7 @@ public class BlogEntity extends PersistentEntity<Long> {
         return new BlogEntity(this);
     }
 
-    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
         return Stream.concat(streamSequencedDependencies(userEntity), entries.stream().map(Optional::ofNullable));
     }
 
@@ -124,7 +123,7 @@ public class BlogEntity extends PersistentEntity<Long> {
         this.title = title;
     }
 
-    @SuppressWarnings("WeakerAccess") /* used by reflection */ public void setUserEntity(UserEntity userEntity) {
+    public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
 

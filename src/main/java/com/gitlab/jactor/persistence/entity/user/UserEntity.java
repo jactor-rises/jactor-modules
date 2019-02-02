@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,7 +29,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_USER")
-public class UserEntity extends PersistentEntity<Long> {
+public class UserEntity extends PersistentEntity {
 
     private @Id Long id;
 
@@ -55,27 +56,24 @@ public class UserEntity extends PersistentEntity<Long> {
         username = user.username;
     }
 
-    public UserEntity(UserDto user) {
-        super(user);
+    public UserEntity(@NotNull UserDto user) {
+        super(user.asPersistentDto());
         emailAddress = user.getEmailAddress();
         Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
         username = user.getUsername();
     }
 
     public UserDto asDto() {
-        UserDto userDto = addPersistentData(new UserDto());
-        userDto.setEmailAddress(emailAddress);
-        Optional.ofNullable(personEntity).ifPresent(pen -> userDto.setPerson(pen.asDto()));
-        userDto.setUsername(username);
-
-        return userDto;
+        return new UserDto(initPersistentDto(),
+                Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null), emailAddress, username
+        );
     }
 
     public @Override UserEntity copy() {
         return new UserEntity(this);
     }
 
-    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
         return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream().map(Optional::of));
     }
 
@@ -143,9 +141,5 @@ public class UserEntity extends PersistentEntity<Long> {
 
     public static UserEntityBuilder aUser() {
         return new UserEntityBuilder();
-    }
-
-    public boolean getInactive() {
-        return inactive;
     }
 }

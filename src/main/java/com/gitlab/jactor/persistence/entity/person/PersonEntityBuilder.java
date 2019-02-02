@@ -1,7 +1,7 @@
 package com.gitlab.jactor.persistence.entity.person;
 
-import com.gitlab.jactor.rises.commons.builder.AbstractBuilder;
-import com.gitlab.jactor.rises.commons.builder.MissingFields;
+import com.gitlab.jactor.persistence.builder.AbstractBuilder;
+import com.gitlab.jactor.persistence.builder.MissingFields;
 import com.gitlab.jactor.persistence.entity.address.AddressEntity;
 import com.gitlab.jactor.persistence.entity.address.AddressEntityBuilder;
 import com.gitlab.jactor.persistence.entity.user.UserEntity;

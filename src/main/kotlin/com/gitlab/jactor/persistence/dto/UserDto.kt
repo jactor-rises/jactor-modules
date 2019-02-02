@@ -13,10 +13,11 @@ data class UserDto(
         var username: String? = null
 ) : AsPersistentDto {
     constructor(
-            user: UserDto
+            persistent: PersistentDto,
+            person: PersonDto?, emailAddress: String?, username: String?
     ) : this(
-            user.id, user.createdBy, user.creationTime, user.updatedBy, user.updatedTime,
-            user.person, user.emailAddress, user.username
+            persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
+            person, emailAddress, username
     )
 
     override fun asPersistentDto(): PersistentDto {

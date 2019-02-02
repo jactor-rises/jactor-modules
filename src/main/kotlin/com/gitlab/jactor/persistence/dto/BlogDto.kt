@@ -14,10 +14,10 @@ data class BlogDto(
         var user: UserDto? = null
 ) : AsPersistentDto {
     constructor(
-            blog: BlogDto
+            persistent: PersistentDto, created: LocalDate?, title: String?, user: UserDto?
     ) : this(
-            blog.id, blog.createdBy, blog.creationTime, blog.updatedBy, blog.updatedTime,
-            blog.created, blog.title, blog.user
+            persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
+            created, title, user
     )
 
     override fun asPersistentDto(): PersistentDto {

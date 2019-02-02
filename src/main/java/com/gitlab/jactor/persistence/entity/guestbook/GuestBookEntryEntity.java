@@ -2,9 +2,9 @@ package com.gitlab.jactor.persistence.entity.guestbook;
 
 import com.gitlab.jactor.persistence.dto.GuestBookDto;
 import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
-import com.gitlab.jactor.persistence.time.Now;
 import com.gitlab.jactor.persistence.entity.EntryEmbeddable;
 import com.gitlab.jactor.persistence.entity.PersistentEntity;
+import com.gitlab.jactor.persistence.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,7 +27,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryEntity extends PersistentEntity<Long> {
+public class GuestBookEntryEntity extends PersistentEntity {
 
     private @Id Long id;
 
@@ -47,8 +48,8 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable = guestBookEntry.copyEntry();
     }
 
-    public GuestBookEntryEntity(GuestBookEntryDto guestBookEntry) {
-        super(guestBookEntry);
+    public GuestBookEntryEntity(@NotNull GuestBookEntryDto guestBookEntry) {
+        super(guestBookEntry.asPersistentDto());
         Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).ifPresent(guestBookEntity -> guestBook = guestBookEntity);
         entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     }
@@ -66,12 +67,12 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
     }
 
     private GuestBookEntryDto asDto(GuestBookDto guestBook) {
-        GuestBookEntryDto guestBookEntry = addPersistentData(new GuestBookEntryDto());
-        guestBookEntry.setCreatorName(entryEmbeddable.getCreatorName());
-        guestBookEntry.setEntry(entryEmbeddable.getEntry());
-        guestBookEntry.setGuestBook(guestBook);
-
-        return guestBookEntry;
+        return new GuestBookEntryDto(
+                initPersistentDto(),
+                guestBook,
+                entryEmbeddable.getCreatorName(),
+                entryEmbeddable.getEntry()
+        );
     }
 
     public void create(String entry) {
@@ -88,7 +89,7 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return new GuestBookEntryEntity(this);
     }
 
-    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
         return streamSequencedDependencies(guestBook);
     }
 
@@ -121,9 +122,9 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         this.id = id;
     }
 
-    @SuppressWarnings("WeakerAccess") public GuestBookEntity getGuestBook() {
+    public GuestBookEntity getGuestBook() {
         return guestBook;
-    } // used by reflection
+    }
 
     public String getEntry() {
         return entryEmbeddable.getEntry();
@@ -133,9 +134,9 @@ public class GuestBookEntryEntity extends PersistentEntity<Long> {
         return entryEmbeddable.getCreatorName();
     }
 
-    @SuppressWarnings("WeakerAccess") public void setGuestBook(GuestBookEntity guestBookEntity) {
+    public void setGuestBook(GuestBookEntity guestBookEntity) {
         this.guestBook = guestBookEntity;
-    } // user by reflection
+    }
 
     public void setCreatorName(String creatorName) {
         entryEmbeddable.setCreatorName(creatorName);

@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -23,7 +24,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonEntity extends PersistentEntity<Long> {
+public class PersonEntity extends PersistentEntity {
 
     private @Id Long id;
 
@@ -47,8 +48,8 @@ public class PersonEntity extends PersistentEntity<Long> {
         locale = person.locale;
     }
 
-    public PersonEntity(PersonDto person) {
-        super(person);
+    public PersonEntity(@NotNull PersonDto person) {
+        super(person.asPersistentDto());
         Optional.ofNullable(person.getAddress()).ifPresent(adto -> addressEntity = new AddressEntity(adto));
         description = person.getDescription();
         firstName = person.getFirstName();
@@ -58,21 +59,14 @@ public class PersonEntity extends PersistentEntity<Long> {
     }
 
     public PersonDto asDto() {
-        PersonDto personDto = addPersistentData(new PersonDto());
-        personDto.setAddress(addressEntity.asDto());
-        personDto.setDescription(description);
-        personDto.setFirstName(firstName);
-        personDto.setSurname(surname);
-        personDto.setLocale(locale);
-
-        return personDto;
+        return new PersonDto(initPersistentDto(), addressEntity.asDto(), locale, firstName, surname, description);
     }
 
     public @Override PersonEntity copy() {
         return new PersonEntity(this);
     }
 
-    public @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+    public @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
         return streamSequencedDependencies(addressEntity, userEntity);
     }
 
@@ -131,7 +125,7 @@ public class PersonEntity extends PersistentEntity<Long> {
         return userEntity;
     }
 
-    public @SuppressWarnings("WeakerAccess") /* used by reflection */ void setAddressEntity(AddressEntity addressEntity) {
+    public void setAddressEntity(AddressEntity addressEntity) {
         this.addressEntity = addressEntity;
     }
 

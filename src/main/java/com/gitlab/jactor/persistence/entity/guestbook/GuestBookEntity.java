@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +27,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Entity
 @Table(name = "T_GUEST_BOOK")
-public class GuestBookEntity extends PersistentEntity<Long> {
+public class GuestBookEntity extends PersistentEntity {
 
     private @Id Long id;
 
@@ -48,8 +49,8 @@ public class GuestBookEntity extends PersistentEntity<Long> {
         entries = guestBook.entries.stream().map(GuestBookEntryEntity::copy).collect(toSet());
     }
 
-    public GuestBookEntity(GuestBookDto guestBook) {
-        super(guestBook);
+    public GuestBookEntity(@NotNull GuestBookDto guestBook) {
+        super(guestBook.asPersistentDto());
         title = guestBook.getTitle();
         Optional.ofNullable(guestBook.getUser()).map(UserEntity::new).ifPresent(userEntity -> user = userEntity);
         entries = guestBook.getEntries().stream().map(GuestBookEntryEntity::new).collect(toSet());
@@ -60,18 +61,18 @@ public class GuestBookEntity extends PersistentEntity<Long> {
     }
 
     public GuestBookDto asDto() {
-        GuestBookDto guestBook = addPersistentData(new GuestBookDto());
-        guestBook.setTitle(title);
-        Optional.ofNullable(user).map(UserEntity::asDto).ifPresent(guestBook::setUser);
-
-        return guestBook;
+        return new GuestBookDto(
+                initPersistentDto(),
+                entries.stream().map(GuestBookEntryEntity::asDto).collect(toSet()), title,
+                Optional.ofNullable(user).map(UserEntity::asDto).orElse(null)
+        );
     }
 
     public @Override GuestBookEntity copy() {
         return new GuestBookEntity(this);
     }
 
-    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
         return Stream.concat(streamSequencedDependencies(user), entries.stream().map(Optional::of));
     }
 

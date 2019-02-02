@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -17,7 +18,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_ADDRESS")
-public class AddressEntity extends PersistentEntity<Long> {
+public class AddressEntity extends PersistentEntity {
 
     private @Id Long id;
 
@@ -46,8 +47,8 @@ public class AddressEntity extends PersistentEntity<Long> {
         zipCode = address.getZipCode();
     }
 
-    public AddressEntity(AddressDto addressDto) {
-        super(addressDto);
+    public AddressEntity(@NotNull AddressDto addressDto) {
+        super(addressDto.asPersistentDto());
 
         addressLine1 = addressDto.getAddressLine1();
         addressLine2 = addressDto.getAddressLine2();
@@ -58,22 +59,17 @@ public class AddressEntity extends PersistentEntity<Long> {
     }
 
     public AddressDto asDto() {
-        AddressDto addressDto = addPersistentData(new AddressDto());
-        addressDto.setAddressLine1(addressLine1);
-        addressDto.setAddressLine2(addressLine2);
-        addressDto.setAddressLine3(addressLine3);
-        addressDto.setCity(city);
-        addressDto.setCountry(country);
-        addressDto.setZipCode(zipCode);
-
-        return addressDto;
+        return new AddressDto(
+                initPersistentDto(),
+                zipCode, addressLine1, addressLine2, addressLine3, city, country
+        );
     }
 
     public @Override AddressEntity copy() {
         return new AddressEntity(this);
     }
 
-    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
         return Stream.empty();
     }
 

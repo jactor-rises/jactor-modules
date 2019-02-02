@@ -2,9 +2,9 @@ package com.gitlab.jactor.persistence.entity.blog;
 
 import com.gitlab.jactor.persistence.dto.BlogDto;
 import com.gitlab.jactor.persistence.dto.BlogEntryDto;
-import com.gitlab.jactor.persistence.time.Now;
 import com.gitlab.jactor.persistence.entity.EntryEmbeddable;
 import com.gitlab.jactor.persistence.entity.PersistentEntity;
+import com.gitlab.jactor.persistence.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,7 +27,7 @@ import static java.util.Objects.hash;
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
-public class BlogEntryEntity extends PersistentEntity<Long> {
+public class BlogEntryEntity extends PersistentEntity {
 
     private @Id Long id;
 
@@ -46,8 +47,8 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         entryEmbeddable = blogEntryEntity.copyEntry();
     }
 
-    public BlogEntryEntity(BlogEntryDto blogEntryDto) {
-        super(blogEntryDto);
+    public BlogEntryEntity(@NotNull BlogEntryDto blogEntryDto) {
+        super(blogEntryDto.asPersistentDto());
         Optional.ofNullable(blogEntryDto.getBlog()).ifPresent(blogDto -> blog = new BlogEntity(blogDto));
         entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     }
@@ -87,7 +88,7 @@ public class BlogEntryEntity extends PersistentEntity<Long> {
         return new BlogEntryEntity(this);
     }
 
-    protected @Override Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies() {
+    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
         return streamSequencedDependencies(blog);
     }
 

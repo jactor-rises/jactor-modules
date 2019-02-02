@@ -15,10 +15,11 @@ data class PersonDto(
         var description: String? = null
 ) : AsPersistentDto {
     constructor(
-            person: PersonDto
+            persistent: PersistentDto,
+            address: AddressDto?, locale: String?, firstName: String?, surname: String?, description: String?
     ) : this(
-            person.id, person.createdBy, person.creationTime, person.updatedBy, person.updatedTime,
-            person.address, person.locale, person.firstName, person.surname, person.description
+            persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
+            address, locale, firstName, surname, description
     )
 
     override fun asPersistentDto(): PersistentDto {

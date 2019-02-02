@@ -16,10 +16,12 @@ data class AddressDto(
         var country: String? = null
 ) : AsPersistentDto {
     constructor(
-            address: AddressDto
+            persistent: PersistentDto,
+            zipCode: Int?, addressLine1: String?, addressLine2: String?, addressLine3: String?,
+            city: String?, country: String?
     ) : this(
-            address.id, address.createdBy, address.creationTime, address.updatedBy, address.updatedTime,
-            address.zipCode, address.addressLine1, address.addressLine2, address.addressLine3, address.city, address.country
+            persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
+            zipCode, addressLine1, addressLine2, addressLine3, city, country
     )
 
     override fun asPersistentDto(): PersistentDto {

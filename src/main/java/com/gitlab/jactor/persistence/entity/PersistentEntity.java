@@ -5,7 +5,6 @@ import com.gitlab.jactor.persistence.time.Now;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 @MappedSuperclass
-public abstract class PersistentEntity<I extends Serializable> {
+public abstract class PersistentEntity {
 
     private @Column(name = "CREATION_TIME") LocalDateTime creationTime;
     private @Column(name = "CREATED_BY") String createdBy;
@@ -24,20 +23,20 @@ public abstract class PersistentEntity<I extends Serializable> {
     private @Column(name = "UPDATED_BY") String updatedBy;
 
     protected PersistentEntity() {
-        createdBy = "todo #156";
+        createdBy = "todo #3";
         creationTime = Now.asDateTime();
-        updatedBy = "todo #156";
+        updatedBy = "todo #3";
         updatedTime = Now.asDateTime();
     }
 
-    protected PersistentEntity(PersistentEntity<I> persistentEntity) {
+    protected PersistentEntity(PersistentEntity persistentEntity) {
         createdBy = persistentEntity.createdBy;
         creationTime = persistentEntity.creationTime;
         updatedBy = persistentEntity.updatedBy;
         updatedTime = persistentEntity.updatedTime;
     }
 
-    protected PersistentEntity(PersistentDto<I> persistentDto) {
+    protected PersistentEntity(PersistentDto persistentDto) {
         setId(persistentDto.getId());
         createdBy = persistentDto.getCreatedBy();
         creationTime = persistentDto.getCreationTime();
@@ -45,36 +44,28 @@ public abstract class PersistentEntity<I extends Serializable> {
         updatedTime = persistentDto.getUpdatedTime();
     }
 
-    protected <T extends PersistentDto<I>> T addPersistentData(T persistentDto) {
-        persistentDto.setId(getId());
-        persistentDto.setCreatedBy(createdBy);
-        persistentDto.setCreationTime(creationTime);
-        persistentDto.setUpdatedBy(updatedBy);
-        persistentDto.setUpdatedTime(updatedTime);
-
-        return persistentDto;
+    protected PersistentDto initPersistentDto() {
+        return new PersistentDto(getId(), createdBy, creationTime, updatedBy, updatedTime);
     }
 
-    public PersistentEntity<Long> addSequencedId(Sequencer sequencer) {
-        @SuppressWarnings("unchecked") PersistentEntity<Long> persistentEntity = (PersistentEntity<Long>) this; // already type checked when invoked by aspect
-
-        if (persistentEntity.getId() == null) {
-            persistentEntity.addSequencedId(persistentEntity, sequencer);
+    public PersistentEntity addSequencedId(Sequencer sequencer) {
+        if (getId() == null) {
+            addSequencedId(this, sequencer);
         }
 
-        persistentEntity.fetchAllSequencedDependencies().stream()
+        fetchAllSequencedDependencies().stream()
                 .filter(dependency -> dependency.getId() == null)
                 .forEach(depencency -> addSequencedId(depencency, sequencer));
 
-        return persistentEntity;
+        return this;
     }
 
-    private void addSequencedId(PersistentEntity<Long> entity, Sequencer sequencer) {
+    private void addSequencedId(PersistentEntity entity, Sequencer sequencer) {
         Long id = sequencer.nextVal(entity.getClass());
         entity.setId(id);
     }
 
-    protected Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies(PersistentEntity<Long>... persistentEntities) {
+    protected Stream<Optional<PersistentEntity>> streamSequencedDependencies(PersistentEntity... persistentEntities) {
         if (persistentEntities == null) {
             return Stream.empty();
         }
@@ -83,20 +74,20 @@ public abstract class PersistentEntity<I extends Serializable> {
                 .map(Optional::ofNullable);
     }
 
-    List<PersistentEntity<Long>> fetchAllSequencedDependencies() {
-        List<PersistentEntity<Long>> sequencedDependencies = fetchSequencedDependencies(this);
-        List<PersistentEntity<Long>> allSequencedDependencies = new ArrayList<>();
+    List<PersistentEntity> fetchAllSequencedDependencies() {
+        List<PersistentEntity> sequencedDependencies = fetchSequencedDependencies(this);
+        List<PersistentEntity> allSequencedDependencies = new ArrayList<>();
 
-        for (PersistentEntity<Long> persistentEntity : sequencedDependencies) {
+        for (PersistentEntity persistentEntity : sequencedDependencies) {
             addAllSequencedDependencis(persistentEntity, allSequencedDependencies);
         }
 
         return allSequencedDependencies;
     }
 
-    private void addAllSequencedDependencis(PersistentEntity<Long> persistentEntity, List<PersistentEntity<Long>> allSequencedDependencies) {
+    private void addAllSequencedDependencis(PersistentEntity persistentEntity, List<PersistentEntity> allSequencedDependencies) {
         allSequencedDependencies.add(persistentEntity);
-        List<PersistentEntity<Long>> otherSequencedDependencies = fetchSequencedDependencies(persistentEntity);
+        List<PersistentEntity> otherSequencedDependencies = fetchSequencedDependencies(persistentEntity);
 
         otherSequencedDependencies.forEach(dependency -> {
             if (!allSequencedDependencies.contains(dependency)) {
@@ -105,7 +96,7 @@ public abstract class PersistentEntity<I extends Serializable> {
         });
     }
 
-    private List<PersistentEntity<Long>> fetchSequencedDependencies(PersistentEntity<?> persistentEntity) {
+    private List<PersistentEntity> fetchSequencedDependencies(PersistentEntity persistentEntity) {
         return persistentEntity.streamSequencedDependencies()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -122,13 +113,13 @@ public abstract class PersistentEntity<I extends Serializable> {
         return simpleName.substring(0, simpleName.indexOf("Entity"));
     }
 
-    public abstract PersistentEntity<I> copy();
+    public abstract PersistentEntity copy();
 
-    protected abstract Stream<Optional<PersistentEntity<Long>>> streamSequencedDependencies();
+    protected abstract Stream<Optional<PersistentEntity>> streamSequencedDependencies();
 
-    public abstract I getId();
+    public abstract Long getId();
 
-    protected abstract void setId(I id);
+    protected abstract void setId(Long id);
 
     public LocalDateTime getCreationTime() {
         return creationTime;

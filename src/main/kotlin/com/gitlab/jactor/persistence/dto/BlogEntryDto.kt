@@ -13,9 +13,10 @@ data class BlogEntryDto(
         var entry: String? = null
 ) : AsPersistentDto {
     constructor(
+            persistent: PersistentDto,
             blogEntry: BlogEntryDto
     ) : this(
-            blogEntry.id, blogEntry.createdBy, blogEntry.creationTime, blogEntry.updatedBy, blogEntry.updatedTime,
+            persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
             blogEntry.blog, blogEntry.creatorName, blogEntry.entry
     )
 
