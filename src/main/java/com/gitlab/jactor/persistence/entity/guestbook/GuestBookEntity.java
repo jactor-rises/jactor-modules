@@ -50,7 +50,7 @@ public class GuestBookEntity extends PersistentEntity {
     }
 
     public GuestBookEntity(@NotNull GuestBookDto guestBook) {
-        super(guestBook.asPersistentDto());
+        super(guestBook.fetchPersistentDto());
         title = guestBook.getTitle();
         Optional.ofNullable(guestBook.getUser()).map(UserEntity::new).ifPresent(userEntity -> user = userEntity);
         entries = guestBook.getEntries().stream().map(GuestBookEntryEntity::new).collect(toSet());

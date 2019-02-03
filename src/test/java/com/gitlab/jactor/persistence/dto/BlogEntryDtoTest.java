@@ -15,17 +15,13 @@ class BlogEntryDtoTest {
     @Test void shouldHaveCopyConstructor() {
         BlogEntryDto blogEntryDto = new BlogEntryDto();
         blogEntryDto.setBlog(new BlogDto());
-        blogEntryDto.setCreationTime(LocalDateTime.now());
         blogEntryDto.setCreatorName("someone");
         blogEntryDto.setEntry("entry");
 
-        BlogEntryDto copied = new BlogEntryDto(
-                blogEntryDto.asPersistentDto(), blogEntryDto.getBlog(), blogEntryDto.getCreatorName(), blogEntryDto.getEntry()
-        );
+        BlogEntryDto copied = new BlogEntryDto(blogEntryDto.fetchPersistentDto(), blogEntryDto);
 
         assertAll(
                 () -> assertThat(copied.getBlog()).as("blog").isEqualTo(blogEntryDto.getBlog()),
-                () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(blogEntryDto.getCreationTime()),
                 () -> assertThat(copied.getCreatorName()).as("creator name").isEqualTo(blogEntryDto.getCreatorName()),
                 () -> assertThat(copied.getEntry()).as("entry").isEqualTo(blogEntryDto.getEntry())
         );
@@ -33,23 +29,21 @@ class BlogEntryDtoTest {
 
     @DisplayName("should give values to PersistentDto")
     @Test void shouldGiveValuesToPersistentDto() {
-        BlogEntryDto blogEntryDto = new BlogEntryDto();
-        blogEntryDto.setCreatedBy("jactor");
-        blogEntryDto.setCreationTime(LocalDateTime.now());
-        blogEntryDto.setId(1L);
-        blogEntryDto.setUpdatedBy("tip");
-        blogEntryDto.setUpdatedTime(LocalDateTime.now());
+        PersistentDto persistentDto = new PersistentDto();
+        persistentDto.setCreatedBy("jactor");
+        persistentDto.setCreationTime(LocalDateTime.now());
+        persistentDto.setId(1L);
+        persistentDto.setUpdatedBy("tip");
+        persistentDto.setUpdatedTime(LocalDateTime.now());
 
-        PersistentDto copied = new BlogEntryDto(
-                blogEntryDto.asPersistentDto(), null, null, null
-        ).asPersistentDto();
+        PersistentDto copied = new BlogEntryDto(persistentDto, new BlogEntryDto()).fetchPersistentDto();
 
         assertAll(
-                () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(blogEntryDto.getCreatedBy()),
-                () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(blogEntryDto.getCreationTime()),
-                () -> assertThat(copied.getId()).as("id").isEqualTo(blogEntryDto.getId()),
-                () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(blogEntryDto.getUpdatedBy()),
-                () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(blogEntryDto.getUpdatedTime())
+                () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
+                () -> assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
+                () -> assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
+                () -> assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
+                () -> assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
         );
     }
 }

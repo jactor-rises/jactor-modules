@@ -10,6 +10,8 @@ data class PersistentDto(
         var updatedTime: LocalDateTime? = null
 )
 
-interface AsPersistentDto {
-    fun asPersistentDto(): PersistentDto
+interface Persistent {
+    fun fetchPersistentDto(): PersistentDto
+    fun getId(): Long?
+    fun setId(id: Long)
 }

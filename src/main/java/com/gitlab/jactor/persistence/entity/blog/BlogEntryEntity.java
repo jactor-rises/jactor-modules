@@ -48,7 +48,7 @@ public class BlogEntryEntity extends PersistentEntity {
     }
 
     public BlogEntryEntity(@NotNull BlogEntryDto blogEntryDto) {
-        super(blogEntryDto.asPersistentDto());
+        super(blogEntryDto.fetchPersistentDto());
         Optional.ofNullable(blogEntryDto.getBlog()).ifPresent(blogDto -> blog = new BlogEntity(blogDto));
         entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     }

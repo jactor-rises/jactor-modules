@@ -22,15 +22,7 @@ class AddressDtoTest {
         addressDto.setCountry("NO");
         addressDto.setZipCode(1234);
 
-        AddressDto copied = new AddressDto(
-                addressDto.asPersistentDto(),
-                addressDto.getZipCode(),
-                addressDto.getAddressLine1(),
-                addressDto.getAddressLine2(),
-                addressDto.getAddressLine3(),
-                addressDto.getCity(),
-                addressDto.getCountry()
-        );
+        AddressDto copied = new AddressDto(addressDto.fetchPersistentDto(), addressDto);
 
         assertAll(
                 () -> assertThat(copied.getAddressLine1()).as("address line one").isEqualTo(addressDto.getAddressLine1()),
@@ -44,23 +36,21 @@ class AddressDtoTest {
 
     @DisplayName("should give values to PersistentDto")
     @Test void shouldGiveValuesToPersistentDto() {
-        AddressDto addressDto = new AddressDto();
-        addressDto.setCreatedBy("jactor");
-        addressDto.setCreationTime(LocalDateTime.now());
-        addressDto.setId(1L);
-        addressDto.setUpdatedBy("tip");
-        addressDto.setUpdatedTime(LocalDateTime.now());
+        PersistentDto persistentDto = new PersistentDto();
+        persistentDto.setCreatedBy("jactor");
+        persistentDto.setCreationTime(LocalDateTime.now());
+        persistentDto.setId(1L);
+        persistentDto.setUpdatedBy("tip");
+        persistentDto.setUpdatedTime(LocalDateTime.now());
 
-        PersistentDto copied = new AddressDto(
-                addressDto.asPersistentDto(), null, null, null, null, null, null
-        ).asPersistentDto();
+        PersistentDto copied = new AddressDto(persistentDto, new AddressDto()).fetchPersistentDto();
 
         assertAll(
-                () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(addressDto.getCreatedBy()),
-                () -> Assertions.assertThat(copied.getCreationTime()).as("creation time").isEqualTo(addressDto.getCreationTime()),
-                () -> Assertions.assertThat(copied.getId()).as("id").isEqualTo(addressDto.getId()),
-                () -> Assertions.assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(addressDto.getUpdatedBy()),
-                () -> Assertions.assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(addressDto.getUpdatedTime())
+                () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
+                () -> Assertions.assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
+                () -> Assertions.assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
+                () -> Assertions.assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
+                () -> Assertions.assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
         );
     }
 }

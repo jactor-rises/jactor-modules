@@ -1,26 +1,35 @@
 package com.gitlab.jactor.persistence.dto
 
-import java.time.LocalDateTime
-
 data class GuestBookEntryDto(
-        var id: Long? = null,
-        var createdBy: String? = null,
-        var creationTime: LocalDateTime? = null,
-        var updatedBy: String? = null,
-        var updatedTime: LocalDateTime? = null,
+        var persistentDto: PersistentDto? = null,
         var guestBook: GuestBookDto? = null,
         var creatorName: String? = null,
         var entry: String? = null
-) : AsPersistentDto {
+) : Persistent {
     constructor(
             persistent: PersistentDto,
-            guestBook: GuestBookDto?, creatorName: String?, entry: String?
+            guestBookEntry: GuestBookEntryDto
     ) : this(
-            persistent.id, persistent.createdBy, persistent.creationTime, persistent.updatedBy, persistent.updatedTime,
-            guestBook, creatorName, entry
+            persistent, guestBookEntry.guestBook, guestBookEntry.creatorName, guestBookEntry.entry
     )
 
-    override fun asPersistentDto(): PersistentDto {
-        return PersistentDto(id, createdBy, creationTime, updatedBy, updatedTime)
+    override fun fetchPersistentDto(): PersistentDto {
+        if (persistentDto != null) {
+            return persistentDto as PersistentDto
+        }
+
+        return PersistentDto()
+    }
+
+    override fun getId(): Long? {
+        return persistentDto?.id
+    }
+
+    override fun setId(id: Long) {
+        if (persistentDto == null) {
+            persistentDto = PersistentDto()
+        }
+
+        persistentDto!!.id = id
     }
 }

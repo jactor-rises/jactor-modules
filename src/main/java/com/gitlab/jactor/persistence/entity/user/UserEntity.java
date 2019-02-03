@@ -57,7 +57,7 @@ public class UserEntity extends PersistentEntity {
     }
 
     public UserEntity(@NotNull UserDto user) {
-        super(user.asPersistentDto());
+        super(user.fetchPersistentDto());
         emailAddress = user.getEmailAddress();
         Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
         username = user.getUsername();

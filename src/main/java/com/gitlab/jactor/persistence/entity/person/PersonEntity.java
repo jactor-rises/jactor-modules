@@ -49,7 +49,7 @@ public class PersonEntity extends PersistentEntity {
     }
 
     public PersonEntity(@NotNull PersonDto person) {
-        super(person.asPersistentDto());
+        super(person.fetchPersistentDto());
         Optional.ofNullable(person.getAddress()).ifPresent(adto -> addressEntity = new AddressEntity(adto));
         description = person.getDescription();
         firstName = person.getFirstName();

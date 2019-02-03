@@ -20,9 +20,7 @@ class BlogDtoTest {
         blogDto.setTitle("title");
         blogDto.setUser(new UserDto());
 
-        BlogDto copied = new BlogDto(
-                blogDto.asPersistentDto(), blogDto.getCreated(), blogDto.getTitle(), blogDto.getUser()
-        );
+        BlogDto copied = new BlogDto(blogDto.fetchPersistentDto(), blogDto);
 
         assertAll(
                 () -> assertThat(copied.getCreated()).as("created").isEqualTo(blogDto.getCreated()),
@@ -33,21 +31,21 @@ class BlogDtoTest {
 
     @DisplayName("should give values to PersistentDto")
     @Test void shouldGiveValuesToPersistentDto() {
-        BlogDto blogDto = new BlogDto();
-        blogDto.setCreatedBy("jactor");
-        blogDto.setCreationTime(LocalDateTime.now());
-        blogDto.setId(1L);
-        blogDto.setUpdatedBy("tip");
-        blogDto.setUpdatedTime(LocalDateTime.now());
+        PersistentDto persistentDto = new PersistentDto();
+        persistentDto.setCreatedBy("jactor");
+        persistentDto.setCreationTime(LocalDateTime.now());
+        persistentDto.setId(1L);
+        persistentDto.setUpdatedBy("tip");
+        persistentDto.setUpdatedTime(LocalDateTime.now());
 
-        PersistentDto copied = new BlogDto(blogDto.asPersistentDto(), null, null, null).asPersistentDto();
+        PersistentDto copied = new BlogDto(persistentDto, new BlogDto()).fetchPersistentDto();
 
         assertAll(
-                () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(blogDto.getCreatedBy()),
-                () -> Assertions.assertThat(copied.getCreationTime()).as("creation time").isEqualTo(blogDto.getCreationTime()),
-                () -> Assertions.assertThat(copied.getId()).as("id").isEqualTo(blogDto.getId()),
-                () -> Assertions.assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(blogDto.getUpdatedBy()),
-                () -> Assertions.assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(blogDto.getUpdatedTime())
+                () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
+                () -> Assertions.assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
+                () -> Assertions.assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
+                () -> Assertions.assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
+                () -> Assertions.assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
         );
     }
 }

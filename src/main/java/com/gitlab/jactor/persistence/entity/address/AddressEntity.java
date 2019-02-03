@@ -48,7 +48,7 @@ public class AddressEntity extends PersistentEntity {
     }
 
     public AddressEntity(@NotNull AddressDto addressDto) {
-        super(addressDto.asPersistentDto());
+        super(addressDto.fetchPersistentDto());
 
         addressLine1 = addressDto.getAddressLine1();
         addressLine2 = addressDto.getAddressLine2();

@@ -50,7 +50,7 @@ public class BlogEntity extends PersistentEntity {
     }
 
     public BlogEntity(@NotNull BlogDto blogDto) {
-        super(blogDto.asPersistentDto());
+        super(blogDto.fetchPersistentDto());
         created = blogDto.getCreated();
         title = blogDto.getTitle();
         Optional.ofNullable(blogDto.getUser()).ifPresent(user -> userEntity = new UserEntity(user));

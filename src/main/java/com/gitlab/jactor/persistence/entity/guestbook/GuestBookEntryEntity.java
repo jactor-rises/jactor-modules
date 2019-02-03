@@ -49,7 +49,7 @@ public class GuestBookEntryEntity extends PersistentEntity {
     }
 
     public GuestBookEntryEntity(@NotNull GuestBookEntryDto guestBookEntry) {
-        super(guestBookEntry.asPersistentDto());
+        super(guestBookEntry.fetchPersistentDto());
         Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).ifPresent(guestBookEntity -> guestBook = guestBookEntity);
         entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     }
