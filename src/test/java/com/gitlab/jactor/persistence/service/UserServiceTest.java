@@ -1,9 +1,9 @@
 package com.gitlab.jactor.persistence.service;
 
+import com.gitlab.jactor.persistence.builder.SuppressValidInstanceExtension;
 import com.gitlab.jactor.persistence.dto.UserDto;
 import com.gitlab.jactor.persistence.entity.user.UserEntity;
 import com.gitlab.jactor.persistence.repository.UserRepository;
-import com.gitlab.jactor.rises.test.extension.validate.SuppressValidInstanceExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

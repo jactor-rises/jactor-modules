@@ -1,8 +1,8 @@
-package com.gitlab.jactor.rises.test.extension.validate.fields;
+package com.gitlab.jactor.persistence.fields;
 
-import com.gitlab.jactor.rises.commons.builder.FieldValidation;
-import com.gitlab.jactor.rises.commons.builder.MissingFields;
-import com.gitlab.jactor.rises.commons.builder.ValidInstance;
+import com.gitlab.jactor.persistence.builder.FieldValidation;
+import com.gitlab.jactor.persistence.builder.MissingFields;
+import com.gitlab.jactor.persistence.builder.ValidInstance;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
