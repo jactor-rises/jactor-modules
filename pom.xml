@@ -20,9 +20,6 @@
 
     <properties>
 
-        <!-- dependencies not from spring-boot -->
-        <apache-commons-lang3.version>3.8.1</apache-commons-lang3.version>
-
         <!-- languages -->
         <java.version>11</java.version>
         <kotlin.version>1.3.21</kotlin.version>
@@ -118,16 +115,6 @@
             </exclusions>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${apache-commons-lang3.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
