@@ -1,161 +1,247 @@
 package com.gitlab.jactor.persistence.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.gitlab.jactor.persistence.JactorPersistence;
 import com.gitlab.jactor.persistence.dto.BlogDto;
 import com.gitlab.jactor.persistence.dto.BlogEntryDto;
-import com.gitlab.jactor.persistence.JactorPersistence;
 import com.gitlab.jactor.persistence.service.BlogService;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Collections;
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {JactorPersistence.class})
+@SpringBootTest(classes = {JactorPersistence.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
 @DisplayName("A BlogController")
 class BlogControllerTest {
 
-    private MockMvc mockMvc;
-    private @MockBean BlogService blogServiceMock;
-    private @Autowired ObjectMapper objectMapper;
+  @LocalServerPort
+  private int port;
+  @Value("${server.servlet.context-path}")
+  private String contextPath;
 
-    @BeforeEach void mockMvc() {
-        mockMvc = standaloneSetup(new BlogController(blogServiceMock)).build();
-    }
+  @MockBean
+  private BlogService blogServiceMock;
+  @Autowired
+  private TestRestTemplate testRestTemplate;
 
-    @DisplayName("should find a blog")
-    @Test void shouldFindBlog() throws Exception {
-        when(blogServiceMock.find(1L)).thenReturn(Optional.of(new BlogDto()));
+  @Test
+  @DisplayName("should build full path")
+  void shouldBuildFullPath() {
+    assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:" + port + "/jactor-persistence-orm/somewhere");
+  }
 
-        mockMvc.perform(get("/blog/get/1")).andExpect(status().isOk());
-    }
+  @Test
+  @DisplayName("should find a blog")
+  void shouldFindBlog() {
+    when(blogServiceMock.find(1L)).thenReturn(Optional.of(new BlogDto()));
 
-    @DisplayName("should not find a blog")
-    @Test void shouldNotFindBlog() throws Exception {
-        when(blogServiceMock.find(1L)).thenReturn(Optional.empty());
+    var blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto.class);
 
-        mockMvc.perform(get("/blog/get/1")).andExpect(status().isNoContent());
-    }
+    assertAll(
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getBody).as("blog").isNotNull()
+    );
+  }
 
-    @DisplayName("should find a blog entry")
-    @Test void shouldFindBlogEntry() throws Exception {
-        when(blogServiceMock.findEntryBy(1L)).thenReturn(Optional.of(new BlogEntryDto()));
+  @Test
+  @DisplayName("should not find a blog")
+  void shouldNotFindBlog() {
+    when(blogServiceMock.find(1L)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/blog/entry/get/1")).andExpect(status().isOk());
-    }
+    var blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto.class);
 
-    @DisplayName("should not find a blog entry")
-    @Test void shouldNotFindBlogEntry() throws Exception {
-        when(blogServiceMock.findEntryBy(1L)).thenReturn(Optional.empty());
+    assertAll(
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getBody).as("blog").isNull()
+    );
+  }
 
-        mockMvc.perform(get("/blog/entry/get/1")).andExpect(status().isNoContent());
-    }
+  @Test
+  @DisplayName("should find a blog entry")
+  void shouldFindBlogEntry() {
+    when(blogServiceMock.findEntryBy(1L)).thenReturn(Optional.of(new BlogEntryDto()));
 
-    @DisplayName("should not find blogs by title")
-    @Test void shouldNotFindBlogs() throws Exception {
-        when(blogServiceMock.findBlogsBy("Anything")).thenReturn(Collections.emptyList());
+    var blogEntryResponse = testRestTemplate.getForEntity(buildFullPath("/blog/entry/1"), BlogEntryDto.class);
 
-        mockMvc.perform(get("/blog/find/Anything")).andExpect(status().isNoContent());
-    }
+    assertAll(
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getBody).as("blog entry").isNotNull()
+    );
+  }
 
-    @DisplayName("should find blogs by title")
-    @Test void shouldFindBlogs() throws Exception {
-        when(blogServiceMock.findBlogsBy("Anything")).thenReturn(Collections.singletonList(new BlogDto()));
+  @Test
+  @DisplayName("should not find a blog entry")
+  void shouldNotFindBlogEntry() {
+    when(blogServiceMock.findEntryBy(1L)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/blog/find/Anything")).andExpect(status().isOk());
-    }
+    var blogEntryResponse = testRestTemplate.getForEntity(buildFullPath("/blog/entry/1"), BlogEntryDto.class);
 
-    @DisplayName("should not find blog entries by blog id")
-    @Test void shouldNotFindBlogEntries() throws Exception {
-        when(blogServiceMock.findEntriesForBlog(1L)).thenReturn(Collections.emptyList());
+    assertAll(
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getBody).as("blog entry").isNull()
+    );
+  }
 
-        mockMvc.perform(get("/blog/1/entries/find")).andExpect(status().isNoContent());
-    }
+  @Test
+  @DisplayName("should not find blogs by title")
+  void shouldNotFindBlogs() {
+    when(blogServiceMock.findBlogsBy("Anything")).thenReturn(Collections.emptyList());
 
-    @DisplayName("should find blog entries by blog id")
-    @Test void shouldFindBlogEntries() throws Exception {
-        when(blogServiceMock.findEntriesForBlog(1L)).thenReturn(Collections.singletonList(new BlogEntryDto()));
+    var blogResponse = testRestTemplate.exchange(buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs());
 
-        mockMvc.perform(get("/blog/1/entries/find")).andExpect(status().isOk());
-    }
+    assertAll(
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getBody).as("blogs").isNull()
+    );
+  }
 
-    @DisplayName("should persist changes to existing blog")
-    @Test void shouldPersistChangesToExistingBlog() throws Exception {
-        BlogDto blogDto = new BlogDto();
-        blogDto.setId(1L);
+  @Test
+  @DisplayName("should find blogs by title")
+  void shouldFindBlogs() {
+    when(blogServiceMock.findBlogsBy("Anything")).thenReturn(Collections.singletonList(new BlogDto()));
 
-        mockMvc.perform(post("/blog/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(blogDto))
-        ).andExpect(status().isOk());
+    var blogResponse = testRestTemplate.exchange(buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs());
 
-        verify(blogServiceMock).saveOrUpdate(any(BlogDto.class));
-    }
+    assertAll(
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
+        () -> assertThat(blogResponse.getBody()).as("blogs").isNotEmpty()
+    );
+  }
 
-    @DisplayName("should create a blog")
-    @Test void shouldCreateBlog() throws Exception {
-        BlogDto blogDto = new BlogDto();
-        BlogDto createdDto = new BlogDto();
-        createdDto.setId(1L);
+  private ParameterizedTypeReference<List<BlogDto>> typeIsListOfBlogs() {
+    return new ParameterizedTypeReference<>() {
+    };
+  }
 
-        when(blogServiceMock.saveOrUpdate(any(BlogDto.class))).thenReturn(createdDto);
+  @Test
+  @DisplayName("should not find blog entries by blog id")
+  void shouldNotFindBlogEntries() {
+    when(blogServiceMock.findEntriesForBlog(1L)).thenReturn(Collections.emptyList());
 
-        mockMvc.perform(post("/blog/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(blogDto))
-        )
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(equalTo(1))));
-    }
+    var blogEntriesResponse = testRestTemplate.exchange(buildFullPath("/blog/1/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries());
 
-    @DisplayName("should persist changes to existing blog entry")
-    @Test void shouldPersistChangesToExistingBlogEntry() throws Exception {
-        BlogEntryDto blogEntryDto = new BlogEntryDto();
-        blogEntryDto.setId(1L);
+    assertAll(
+        () -> assertThat(blogEntriesResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
+        () -> assertThat(blogEntriesResponse).extracting(ResponseEntity::getBody).as("blogs").isNull()
+    );
+  }
 
-        mockMvc.perform(post("/blog/entry/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(blogEntryDto))
-        ).andExpect(status().isOk());
+  @Test
+  @DisplayName("should find blog entries by blog id")
+  void shouldFindBlogEntries() {
+    when(blogServiceMock.findEntriesForBlog(1L)).thenReturn(Collections.singletonList(new BlogEntryDto()));
 
-        verify(blogServiceMock).saveOrUpdate(any(BlogEntryDto.class));
-    }
+    var blogEntriesResponse = testRestTemplate.exchange(buildFullPath("/blog/1/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries());
 
-    @DisplayName("should create blog entry")
-    @Test void shouldCreateBlogEntry() throws Exception {
-        BlogEntryDto blogEntryDto = new BlogEntryDto();
-        BlogEntryDto createdDto = new BlogEntryDto();
-        createdDto.setId(1L);
+    assertAll(
+        () -> assertThat(blogEntriesResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
+        () -> assertThat(blogEntriesResponse.getBody()).as("blogs").isNotEmpty()
+    );
+  }
 
-        when(blogServiceMock.saveOrUpdate(any(BlogEntryDto.class))).thenReturn(createdDto);
+  private ParameterizedTypeReference<List<BlogEntryDto>> typeIsListOfBlogEntries() {
+    return new ParameterizedTypeReference<>() {
+    };
+  }
 
-        mockMvc.perform(post("/blog/entry/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(blogEntryDto))
-        )
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(equalTo(1))));
+  @Test
+  @DisplayName("should persist changes to existing blog")
+  void shouldPersistChangesToExistingBlog() {
+    BlogDto blogDto = new BlogDto();
+    blogDto.setId(1L);
 
-        verify(blogServiceMock).saveOrUpdate(any(BlogEntryDto.class));
-    }
+    when(blogServiceMock.saveOrUpdate(any(BlogDto.class))).thenReturn(blogDto);
+
+    var blogResponse = testRestTemplate.exchange(buildFullPath("/blog/1"), HttpMethod.PUT, new HttpEntity<>(blogDto), BlogDto.class);
+
+    assertAll(
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getBody).as("updated blog").isNotNull(),
+        () -> verify(blogServiceMock).saveOrUpdate(any(BlogDto.class))
+    );
+  }
+
+  @Test
+  @DisplayName("should create a blog")
+  void shouldCreateBlog() {
+    BlogDto blogDto = new BlogDto();
+    BlogDto createdDto = new BlogDto();
+    createdDto.setId(1L);
+
+    when(blogServiceMock.saveOrUpdate(any(BlogDto.class))).thenReturn(createdDto);
+
+    var blogResponse = testRestTemplate.exchange(buildFullPath("/blog"), HttpMethod.POST, new HttpEntity<>(blogDto), BlogDto.class);
+
+    assertAll(
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.CREATED),
+        () -> assertThat(blogResponse).extracting(ResponseEntity::getBody).as("created blog").isNotNull(),
+        () -> assertThat(blogResponse.getBody()).extracting(BlogDto::getId).as("blog id").isEqualTo(1L),
+        () -> verify(blogServiceMock).saveOrUpdate(any(BlogDto.class))
+    );
+  }
+
+  @Test
+  @DisplayName("should persist changes to existing blog entry")
+  void shouldPersistChangesToExistingBlogEntry() {
+    BlogEntryDto blogEntryDto = new BlogEntryDto();
+    blogEntryDto.setId(1L);
+
+    when(blogServiceMock.saveOrUpdate(any(BlogEntryDto.class))).thenReturn(blogEntryDto);
+
+    var blogEntryResponse = testRestTemplate.exchange(
+        buildFullPath("/blog/entry/1"), HttpMethod.PUT, new HttpEntity<>(blogEntryDto), BlogEntryDto.class
+    );
+
+    assertAll(
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getBody).as("updated entry").isNotNull(),
+        () -> verify(blogServiceMock).saveOrUpdate(any(BlogEntryDto.class))
+    );
+  }
+
+  @Test
+  @DisplayName("should create blog entry")
+  void shouldCreateBlogEntry() {
+    BlogEntryDto blogEntryDto = new BlogEntryDto();
+    BlogEntryDto createdDto = new BlogEntryDto();
+    createdDto.setId(1L);
+
+    when(blogServiceMock.saveOrUpdate(any(BlogEntryDto.class))).thenReturn(createdDto);
+
+    var blogEntryResponse = testRestTemplate.exchange(
+        buildFullPath("/blog/entry"), HttpMethod.POST, new HttpEntity<>(blogEntryDto), BlogEntryDto.class
+    );
+
+    assertAll(
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.CREATED),
+        () -> assertThat(blogEntryResponse).extracting(ResponseEntity::getBody).as("created entry").isNotNull(),
+        () -> assertThat(blogEntryResponse.getBody()).extracting(BlogEntryDto::getId).as("blog entry id").isEqualTo(1L),
+        () -> verify(blogServiceMock).saveOrUpdate(any(BlogEntryDto.class))
+    );
+  }
+
+  private String buildFullPath(String url) {
+    return "http://localhost:" + port + contextPath + url;
+  }
 }
