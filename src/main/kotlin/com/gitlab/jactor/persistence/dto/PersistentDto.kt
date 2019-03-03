@@ -13,5 +13,15 @@ data class PersistentDto(
 interface Persistent {
     fun fetchPersistentDto(): PersistentDto
     fun getId(): Long?
-    fun setId(id: Long)
+    fun setId(id: Long?)
+
+    fun setPersistentId(id: Long?) : PersistentDto {
+        val persistentDto = PersistentDto()
+
+        if (id != null && id > 0) {
+            persistentDto.id = id
+        }
+
+        return persistentDto
+    }
 }

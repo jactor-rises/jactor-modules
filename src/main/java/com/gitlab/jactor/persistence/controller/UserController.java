@@ -40,8 +40,12 @@ public class UserController {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
   }
 
-  @PostMapping()
+  @PostMapping
   public ResponseEntity<UserDto> post(@RequestBody UserDto userDto) {
+    if (userDto.getId() != null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     UserDto saved = userServicey.saveOrUpdate(userDto);
 
     return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -49,7 +53,7 @@ public class UserController {
 
   @PutMapping("/{userId}")
   public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
-    if (userDto == null || userDto.getId() == null || !userDto.getId().equals(userId)) {
+    if (userDto.getId() == null || !userDto.getId().equals(userId)) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

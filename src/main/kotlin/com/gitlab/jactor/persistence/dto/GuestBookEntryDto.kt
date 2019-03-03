@@ -14,22 +14,14 @@ data class GuestBookEntryDto(
     )
 
     override fun fetchPersistentDto(): PersistentDto {
-        if (persistentDto != null) {
-            return persistentDto as PersistentDto
-        }
-
-        return PersistentDto()
+        return if (persistentDto != null) persistentDto as PersistentDto else PersistentDto()
     }
 
     override fun getId(): Long? {
         return persistentDto?.id
     }
 
-    override fun setId(id: Long) {
-        if (persistentDto == null) {
-            persistentDto = PersistentDto()
-        }
-
-        persistentDto!!.id = id
+    override fun setId(id: Long?) {
+        persistentDto = setPersistentId(id)
     }
 }

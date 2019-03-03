@@ -69,8 +69,12 @@ public class BlogController {
     return new ResponseEntity<>(saved, HttpStatus.ACCEPTED);
   }
 
-  @PostMapping("")
+  @PostMapping
   public ResponseEntity<BlogDto> post(@RequestBody BlogDto blogDto) {
+    if (blogDto.getId() != null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     BlogDto saved = blogService.saveOrUpdate(blogDto);
 
     return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -89,6 +93,10 @@ public class BlogController {
 
   @PostMapping("/entry")
   public ResponseEntity<BlogEntryDto> postEntry(@RequestBody BlogEntryDto blogEntryDto) {
+    if (blogEntryDto.getId() != null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     BlogEntryDto saved = blogService.saveOrUpdate(blogEntryDto);
 
     return new ResponseEntity<>(saved, HttpStatus.CREATED);
