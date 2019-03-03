@@ -1,33 +1,5 @@
 package com.gitlab.jactor.persistence.service;
 
-import com.gitlab.jactor.persistence.dto.GuestBookDto;
-import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
-import com.gitlab.jactor.persistence.dto.UserDto;
-import com.gitlab.jactor.persistence.entity.address.AddressEntity;
-import com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.gitlab.jactor.persistence.entity.person.PersonEntity;
-import com.gitlab.jactor.persistence.entity.user.UserEntity;
-import com.gitlab.jactor.persistence.repository.GuestBookEntryRepository;
-import com.gitlab.jactor.persistence.repository.GuestBookRepository;
-import com.gitlab.jactor.persistence.fields.FieldValue;
-import com.gitlab.jactor.persistence.fields.RequiredFieldsExtension;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import static com.gitlab.jactor.persistence.entity.address.AddressEntity.anAddress;
 import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
 import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
@@ -39,101 +11,139 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gitlab.jactor.persistence.dto.GuestBookDto;
+import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
+import com.gitlab.jactor.persistence.dto.UserDto;
+import com.gitlab.jactor.persistence.entity.address.AddressEntity;
+import com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity;
+import com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.gitlab.jactor.persistence.entity.person.PersonEntity;
+import com.gitlab.jactor.persistence.entity.user.UserEntity;
+import com.gitlab.jactor.persistence.fields.FieldValue;
+import com.gitlab.jactor.persistence.fields.RequiredFieldsExtension;
+import com.gitlab.jactor.persistence.repository.GuestBookEntryRepository;
+import com.gitlab.jactor.persistence.repository.GuestBookRepository;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Supplier;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 @DisplayName("A GuestBookService")
 class GuestBookServiceTest {
 
-    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            GuestBookEntryEntity.class, singletonList(
-                    new FieldValue("guestBook", () -> aGuestBook().build())
-            ), GuestBookEntity.class, List.of(
-                    new FieldValue("title", "my book"),
-                    new FieldValue("user", () -> aUser().build())
-            ), UserEntity.class, List.of(
-                    new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
-                    new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, List.of(
-                    new FieldValue("addressEntity", () -> anAddress().build()),
-                    new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, List.of(
-                    new FieldValue("addressLine1", "Test Boulevard 1"),
-                    new FieldValue("zipCode", 1001),
-                    new FieldValue("city", "Testing")
-            )
-    ));
+  @RegisterExtension
+  RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
+      GuestBookEntryEntity.class, singletonList(
+          new FieldValue("guestBook", () -> aGuestBook().build())
+      ), GuestBookEntity.class, List.of(
+          new FieldValue("title", "my book"),
+          new FieldValue("user", () -> aUser().build())
+      ), UserEntity.class, List.of(
+          new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
+          new FieldValue("personEntity", () -> aPerson().build())
+      ), PersonEntity.class, List.of(
+          new FieldValue("addressEntity", () -> anAddress().build()),
+          new FieldValue("surname", "sure, man")
+      ), AddressEntity.class, List.of(
+          new FieldValue("addressLine1", "Test Boulevard 1"),
+          new FieldValue("zipCode", 1001),
+          new FieldValue("city", "Testing")
+      )
+  ));
 
-    private @InjectMocks GuestBookService guestBookServiceToTest;
-    private @Mock GuestBookRepository guestBookRepositoryMock;
-    private @Mock GuestBookEntryRepository guestBookEntryRepositoryMock;
+  @InjectMocks
+  private GuestBookService guestBookServiceToTest;
+  @Mock
+  private GuestBookRepository guestBookRepositoryMock;
+  @Mock
+  private GuestBookEntryRepository guestBookEntryRepositoryMock;
 
-    @BeforeEach void initMocking() {
-        MockitoAnnotations.initMocks(this);
-    }
+  @BeforeEach
+  void initMocking() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-    @DisplayName("should map guest book to a dto")
-    @Test void shouldMapBlogToDto() {
-        Optional<GuestBookEntity> guestBookEntity = Optional.of(aGuestBook().withTitle("@home").build());
-        when(guestBookRepositoryMock.findById(1001L)).thenReturn(guestBookEntity);
+  @Test
+  @DisplayName("should map guest book to a dto")
+  void shouldMapBlogToDto() {
+    Optional<GuestBookEntity> guestBookEntity = Optional.of(aGuestBook().withTitle("@home").build());
+    when(guestBookRepositoryMock.findById(1001L)).thenReturn(guestBookEntity);
 
-        GuestBookDto guestBookDto = guestBookServiceToTest.find(1001L).orElseThrow(mockError());
+    GuestBookDto guestBookDto = guestBookServiceToTest.find(1001L).orElseThrow(mockError());
 
-        assertThat(guestBookDto.getTitle()).as("title").isEqualTo("@home");
-    }
+    assertThat(guestBookDto.getTitle()).as("title").isEqualTo("@home");
+  }
 
-    @DisplayName("should map guest book entry to a dto")
-    @Test void shouldMapFoundBlogToDto() {
-        Optional<GuestBookEntryEntity> anEntry = Optional.of(aGuestBookEntry().withCreatorName("me").withEntry("too").build());
-        when(guestBookEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
+  @Test
+  @DisplayName("should map guest book entry to a dto")
+  void shouldMapFoundBlogToDto() {
+    Optional<GuestBookEntryEntity> anEntry = Optional.of(aGuestBookEntry().withCreatorName("me").withEntry("too").build());
+    when(guestBookEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
 
-        GuestBookEntryDto guestBookEntryDto = guestBookServiceToTest.findEntry(1001L).orElseThrow(mockError());
+    GuestBookEntryDto guestBookEntryDto = guestBookServiceToTest.findEntry(1001L).orElseThrow(mockError());
 
-        assertAll(
-                () -> assertThat(guestBookEntryDto.getCreatorName()).as("creator name").isEqualTo("me"),
-                () -> assertThat(guestBookEntryDto.getEntry()).as("entry").isEqualTo("too")
-        );
-    }
+    assertAll(
+        () -> assertThat(guestBookEntryDto.getCreatorName()).as("creator name").isEqualTo("me"),
+        () -> assertThat(guestBookEntryDto.getEntry()).as("entry").isEqualTo("too")
+    );
+  }
 
-    private Supplier<AssertionError> mockError() {
-        return () -> new AssertionError("missed mocking?");
-    }
+  private Supplier<AssertionError> mockError() {
+    return () -> new AssertionError("missed mocking?");
+  }
 
-    @DisplayName("should save GuestBookDto as GuestBookEntity")
-    @Test void shouldSaveGuestBookDtoAsGuestBookEntity() {
-        GuestBookDto guestBookDto = new GuestBookDto();
-        guestBookDto.setEntries(new HashSet<>(singletonList(new GuestBookEntryDto())));
-        guestBookDto.setTitle("home sweet home");
-        guestBookDto.setUser(new UserDto());
+  @Test
+  @DisplayName("should save GuestBookDto as GuestBookEntity")
+  void shouldSaveGuestBookDtoAsGuestBookEntity() {
+    GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
+    guestBookEntryDto.setGuestBook(new GuestBookDto());
+    GuestBookDto guestBookDto = new GuestBookDto();
+    guestBookDto.setEntries(Set.of(guestBookEntryDto));
+    guestBookDto.setTitle("home sweet home");
+    guestBookDto.setUser(new UserDto());
 
-        guestBookServiceToTest.saveOrUpdate(guestBookDto);
+    guestBookServiceToTest.saveOrUpdate(guestBookDto);
 
-        ArgumentCaptor<GuestBookEntity> argCaptor = ArgumentCaptor.forClass(GuestBookEntity.class);
-        verify(guestBookRepositoryMock).save(argCaptor.capture());
-        GuestBookEntity guestBookEntity = argCaptor.getValue();
+    ArgumentCaptor<GuestBookEntity> argCaptor = ArgumentCaptor.forClass(GuestBookEntity.class);
+    verify(guestBookRepositoryMock).save(argCaptor.capture());
+    GuestBookEntity guestBookEntity = argCaptor.getValue();
 
-        assertAll(
-                () -> assertThat(guestBookEntity.getEntries()).as("entries").hasSize(1),
-                () -> assertThat(guestBookEntity.getTitle()).as("title").isEqualTo("home sweet home"),
-                () -> assertThat(guestBookEntity.getUser()).as("user").isNotNull()
-        );
-    }
+    assertAll(
+        () -> assertThat(guestBookEntity.getEntries()).as("entries").hasSize(1),
+        () -> assertThat(guestBookEntity.getTitle()).as("title").isEqualTo("home sweet home"),
+        () -> assertThat(guestBookEntity.getUser()).as("user").isNotNull()
+    );
+  }
 
-    @DisplayName("should save GuestBookEntryDto as GuestBookEntryEntity")
-    @Test void shouldSaveBlogEntryDtoAsBlogEntryEntity() {
-        GuestBookEntryDto blogEntryDto = new GuestBookEntryDto();
-        blogEntryDto.setGuestBook(new GuestBookDto());
-        blogEntryDto.setCreatorName("me");
-        blogEntryDto.setEntry("if i where a rich man...");
+  @Test
+  @DisplayName("should save GuestBookEntryDto as GuestBookEntryEntity")
+  void shouldSaveBlogEntryDtoAsBlogEntryEntity() {
+    GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
+    guestBookEntryDto.setGuestBook(new GuestBookDto());
+    guestBookEntryDto.setCreatorName("me");
+    guestBookEntryDto.setEntry("if i where a rich man...");
 
-        guestBookServiceToTest.saveOrUpdate(blogEntryDto);
+    guestBookServiceToTest.saveOrUpdate(guestBookEntryDto);
 
-        ArgumentCaptor<GuestBookEntryEntity> argCaptor = ArgumentCaptor.forClass(GuestBookEntryEntity.class);
-        verify(guestBookEntryRepositoryMock).save(argCaptor.capture());
-        GuestBookEntryEntity guestBookEntryEntity = argCaptor.getValue();
+    ArgumentCaptor<GuestBookEntryEntity> argCaptor = ArgumentCaptor.forClass(GuestBookEntryEntity.class);
+    verify(guestBookEntryRepositoryMock).save(argCaptor.capture());
+    GuestBookEntryEntity guestBookEntryEntity = argCaptor.getValue();
 
-
-        assertAll(
-                () -> assertThat(guestBookEntryEntity.getGuestBook()).as("guest book").isNotNull(),
-                () -> assertThat(guestBookEntryEntity.getCreatorName()).as("creator name").isEqualTo("me"),
-                () -> assertThat(guestBookEntryEntity.getEntry()).as("entry").isEqualTo("if i where a rich man...")
-        );
-    }
+    assertAll(
+        () -> assertThat(guestBookEntryEntity.getGuestBook()).as("guest book").isNotNull(),
+        () -> assertThat(guestBookEntryEntity.getCreatorName()).as("creator name").isEqualTo("me"),
+        () -> assertThat(guestBookEntryEntity.getEntry()).as("entry").isEqualTo("if i where a rich man...")
+    );
+  }
 }
