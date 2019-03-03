@@ -1,130 +1,184 @@
 package com.gitlab.jactor.persistence.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.gitlab.jactor.persistence.JactorPersistence;
 import com.gitlab.jactor.persistence.dto.GuestBookDto;
 import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
-import com.gitlab.jactor.persistence.JactorPersistence;
 import com.gitlab.jactor.persistence.service.GuestBookService;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {JactorPersistence.class})
+@SpringBootTest(classes = {JactorPersistence.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
 @DisplayName("A GuestBookController")
 class GuestBookControllerTest {
 
-    private MockMvc mockMvc;
-    private @MockBean GuestBookService guestBookServiceMock;
-    private @Autowired ObjectMapper objectMapper;
+  @LocalServerPort
+  private int port;
+  @Value("${server.servlet.context-path}")
+  private String contextPath;
 
-    @BeforeEach void mockMvc() {
-        mockMvc = standaloneSetup(new GuestBookController(guestBookServiceMock)).build();
-    }
+  @MockBean
+  private GuestBookService guestBookServiceMock;
+  @Autowired
+  private TestRestTemplate testRestTemplate;
 
-    @DisplayName("should not find a guest book")
-    @Test void shouldNotFindGuestBook() throws Exception {
-        when(guestBookServiceMock.find(1L)).thenReturn(Optional.empty());
+  @Test
+  @DisplayName("should build full path")
+  void shouldBuildFullPath() {
+    assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:" + port + "/jactor-persistence-orm/somewhere");
+  }
 
-        mockMvc.perform(get("/guestBook/get/1")).andExpect(status().isNoContent());
-    }
+  @Test
+  @DisplayName("should not get a guest book")
+  void shouldNotGetGuestBook() {
+    when(guestBookServiceMock.find(1L)).thenReturn(Optional.empty());
 
-    @DisplayName("should find a guest book")
-    @Test void shouldFindGuestBook() throws Exception {
-        when(guestBookServiceMock.find(1L)).thenReturn(Optional.of(new GuestBookDto()));
+    var guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto.class);
 
-        mockMvc.perform(get("/guestBook/get/1")).andExpect(status().isOk());
-    }
+    assertAll(
+        () -> assertThat(guestBookRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
+        () -> assertThat(guestBookRespnse).extracting(ResponseEntity::getBody).as("guest book").isNull()
+    );
+  }
 
-    @DisplayName("should not find a guest book entry")
-    @Test void shouldNotFindGuestBookEntry() throws Exception {
-        when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.empty());
+  @Test
+  @DisplayName("should get a guest book")
+  void shouldGetGuestBook() {
+    when(guestBookServiceMock.find(1L)).thenReturn(Optional.of(new GuestBookDto()));
 
-        mockMvc.perform(get("/guestBook/entry/get/1")).andExpect(status().isNoContent());
-    }
+    var guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto.class);
 
-    @DisplayName("should find a guest book entry")
-    @Test void shouldFindGuestBookEntry() throws Exception {
-        when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.of(new GuestBookEntryDto()));
+    assertAll(
+        () -> assertThat(guestBookRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
+        () -> assertThat(guestBookRespnse).extracting(ResponseEntity::getBody).as("guest book").isNotNull()
+    );
+  }
 
-        mockMvc.perform(get("/guestBook/entry/get/1")).andExpect(status().isOk());
-    }
+  @Test
+  @DisplayName("should not get a guest book entry")
+  void shouldNotGetGuestBookEntry() {
+    when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.empty());
 
-    @DisplayName("should persist changes to existing guest book")
-    @Test void shouldPersistChangesToExistingGuestBook() throws Exception {
-        GuestBookDto guestBookDto = new GuestBookDto();
-        guestBookDto.setId(1L);
+    var guestBookEntryRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/entry/1"), GuestBookDto.class);
 
-        mockMvc.perform(post("/guestBook/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(guestBookDto))
-        ).andExpect(status().isOk());
+    assertAll(
+        () -> assertThat(guestBookEntryRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
+        () -> assertThat(guestBookEntryRespnse).extracting(ResponseEntity::getBody).as("guest book entry").isNull()
+    );
+  }
 
-        verify(guestBookServiceMock).saveOrUpdate(any(GuestBookDto.class));
-    }
+  @Test
+  @DisplayName("should get a guest book entry")
+  void shouldGetGuestBookEntry() {
+    when(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.of(new GuestBookEntryDto()));
 
-    @DisplayName("should create a guest book")
-    @Test void shouldCreateGuestBook() throws Exception {
-        GuestBookDto guestBookDto = new GuestBookDto();
-        GuestBookDto createdDto = new GuestBookDto();
-        createdDto.setId(1L);
+    var guestBookEntryRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/entry/1"), GuestBookDto.class);
 
-        when(guestBookServiceMock.saveOrUpdate(any(GuestBookDto.class))).thenReturn(createdDto);
+    assertAll(
+        () -> assertThat(guestBookEntryRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
+        () -> assertThat(guestBookEntryRespnse).extracting(ResponseEntity::getBody).as("guest book entry").isNotNull()
+    );
+  }
 
-        mockMvc.perform(post("/guestBook/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(guestBookDto))
-        )
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(equalTo(1))));
-    }
+  @Test
+  @DisplayName("should modify existing guest book")
+  void shouldModifyExistingGuestBook() {
+    GuestBookDto guestBookDto = new GuestBookDto();
+    guestBookDto.setId(1L);
 
-    @DisplayName("should persist changes to existing guest book entry")
-    @Test void shouldPersistChangesToExistingGuestBookEntry() throws Exception {
-        GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
-        guestBookEntryDto.setId(1L);
+    when(guestBookServiceMock.saveOrUpdate(any(GuestBookDto.class))).thenReturn(guestBookDto);
 
-        mockMvc.perform(post("/guestBook/entry/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(guestBookEntryDto))
-        ).andExpect(status().isOk());
+    var guestbookResponse = testRestTemplate.exchange(
+        buildFullPath("/guestBook/1"), HttpMethod.PUT, new HttpEntity<>(guestBookDto), GuestBookDto.class
+    );
 
-        verify(guestBookServiceMock).saveOrUpdate(any(GuestBookEntryDto.class));
-    }
+    assertAll(
+        () -> assertThat(guestbookResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
+        () -> assertThat(guestbookResponse).extracting(ResponseEntity::getBody).as("guest book").isNotNull(),
+        () -> assertThat(guestbookResponse.getBody()).extracting(GuestBookDto::getId).as("guest book id").isEqualTo(1L),
+        () -> verify(guestBookServiceMock).saveOrUpdate(any(GuestBookDto.class))
+    );
+  }
 
-    @DisplayName("should create a guest book entry")
-    @Test void shouldCreateGuestBookEntry() throws Exception {
-        GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
-        GuestBookEntryDto createdDto = new GuestBookEntryDto();
-        createdDto.setId(1L);
+  @Test
+  @DisplayName("should create a guest book")
+  void shouldCreateGuestBook() {
+    GuestBookDto guestBookDto = new GuestBookDto();
+    GuestBookDto createdDto = new GuestBookDto();
+    createdDto.setId(1L);
 
-        when(guestBookServiceMock.saveOrUpdate(any(GuestBookEntryDto.class))).thenReturn(createdDto);
+    when(guestBookServiceMock.saveOrUpdate(any(GuestBookDto.class))).thenReturn(createdDto);
 
-        mockMvc.perform(post("/guestBook/entry/persist")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsBytes(guestBookEntryDto))
-        )
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(equalTo(1))));
-    }
+    var guestbookResponse = testRestTemplate.postForEntity(buildFullPath("/guestBook"), guestBookDto, GuestBookDto.class);
+
+    assertAll(
+        () -> assertThat(guestbookResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.CREATED),
+        () -> assertThat(guestbookResponse).extracting(ResponseEntity::getBody).as("guest book").isNotNull(),
+        () -> assertThat(guestbookResponse.getBody()).extracting(GuestBookDto::getId).as("guest book id").isEqualTo(1L),
+        () -> verify(guestBookServiceMock).saveOrUpdate(any(GuestBookDto.class))
+    );
+  }
+
+  @Test
+  @DisplayName("should modify existing guest book entry")
+  void shouldModifyExistingGuestBookEntry() {
+    GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
+    guestBookEntryDto.setId(1L);
+
+    when(guestBookServiceMock.saveOrUpdate(any(GuestBookEntryDto.class))).thenReturn(guestBookEntryDto);
+
+    var guestbookEntryResponse = testRestTemplate.exchange(
+        buildFullPath("/guestBook/entry/1"), HttpMethod.PUT, new HttpEntity<>(guestBookEntryDto), GuestBookEntryDto.class
+    );
+
+    assertAll(
+        () -> assertThat(guestbookEntryResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
+        () -> assertThat(guestbookEntryResponse).extracting(ResponseEntity::getBody).as("guest book entry").isNotNull(),
+        () -> assertThat(guestbookEntryResponse.getBody()).extracting(GuestBookEntryDto::getId).as("guest book entry id").isEqualTo(1L),
+        () -> verify(guestBookServiceMock).saveOrUpdate(any(GuestBookEntryDto.class))
+    );
+  }
+
+  @Test
+  @DisplayName("should create a guest book entry")
+  void shouldCreateGuestBookEntry() {
+    GuestBookEntryDto guestBookEntryDto = new GuestBookEntryDto();
+    GuestBookEntryDto createdDto = new GuestBookEntryDto();
+    createdDto.setId(1L);
+
+    when(guestBookServiceMock.saveOrUpdate(any(GuestBookEntryDto.class))).thenReturn(createdDto);
+
+    var guestbookEntryResponse = testRestTemplate.postForEntity(buildFullPath("/guestBook/entry"), guestBookEntryDto, GuestBookEntryDto.class);
+
+    assertAll(
+        () -> assertThat(guestbookEntryResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.CREATED),
+        () -> assertThat(guestbookEntryResponse).extracting(ResponseEntity::getBody).as("guest book entry").isNotNull(),
+        () -> assertThat(guestbookEntryResponse.getBody()).extracting(GuestBookEntryDto::getId).as("guest book entry id").isEqualTo(1L),
+        () -> verify(guestBookServiceMock).saveOrUpdate(any(GuestBookEntryDto.class))
+    );
+  }
+
+  private String buildFullPath(String url) {
+    return "http://localhost:" + port + contextPath + url;
+  }
 }
