@@ -1,5 +1,5 @@
 .idea/
-/**/target/
+target/
 .java-version
 *.iml
 /**/.DS_Store
