@@ -17,7 +17,11 @@ data class AddressDto(
     )
 
     override fun fetchPersistentDto(): PersistentDto {
-        return if (persistentDto != null) persistentDto as PersistentDto else PersistentDto()
+        if (persistentDto == null) {
+            persistentDto = PersistentDto()
+        }
+
+        return persistentDto as PersistentDto
     }
 
     override fun getId(): Long? {
