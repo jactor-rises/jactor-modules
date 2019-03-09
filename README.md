@@ -2,7 +2,7 @@
 
 ### What is this repository for? ###
 
-* Src code and issues regarding jactor-persistence-orm
+* Src code and issues regarding jactor-persistence
 
 This project is a microservice dealing with persistence to an ear database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
