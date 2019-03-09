@@ -152,4 +152,8 @@ public class PersonEntity extends PersistentEntity {
     public static PersonEntityBuilder aPerson() {
         return new PersonEntityBuilder();
     }
+
+    public static PersonEntity aPerson(PersonDto personDto) {
+        return new PersonEntity(personDto);
+    }
 }

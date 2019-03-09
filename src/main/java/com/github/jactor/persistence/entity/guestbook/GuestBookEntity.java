@@ -125,4 +125,8 @@ public class GuestBookEntity extends PersistentEntity {
     public static GuestBookEntityBuilder aGuestBook() {
         return new GuestBookEntityBuilder();
     }
+
+    public static GuestBookEntity aGuestBook(GuestBookDto guestBookDto) {
+        return new GuestBookEntity(guestBookDto);
+    }
 }

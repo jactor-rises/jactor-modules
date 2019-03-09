@@ -142,4 +142,8 @@ public class UserEntity extends PersistentEntity {
     public static UserEntityBuilder aUser() {
         return new UserEntityBuilder();
     }
+
+    public static UserEntity aUser(UserDto userDto) {
+        return new UserEntity(userDto);
+    }
 }
