@@ -4,9 +4,9 @@
 
 * Src code and issues regarding jactor-persistence
 
-This project is a microservice dealing with persistence to an ear database using
+This project is a microservice dealing with persistence to an database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
-the namespace of jactor (formerly as part of the project `jactor-rises`)
+`com.github.jactor-rises` (formerly as part of the project `jactor-rises`)
 
 ### Set up ###
 
