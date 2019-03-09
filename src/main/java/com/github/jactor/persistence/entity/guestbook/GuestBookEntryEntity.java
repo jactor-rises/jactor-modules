@@ -1,15 +1,16 @@
 package com.github.jactor.persistence.entity.guestbook;
 
+import static java.util.Objects.hash;
+
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.entity.EntryEmbeddable;
 import com.github.jactor.persistence.entity.PersistentEntity;
 import com.github.jactor.persistence.time.Now;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -19,130 +20,138 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static java.util.Objects.hash;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
 public class GuestBookEntryEntity extends PersistentEntity {
 
-    private @Id Long id;
+  @Id
+  private Long id;
 
-    private @ManyToOne(cascade = CascadeType.MERGE) @JoinColumn(name = "GUEST_BOOK_ID") GuestBookEntity guestBook;
-    private @Embedded @AttributeOverrides({
-            @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME")),
-            @AttributeOverride(name = "creatorName", column = @Column(name = "GUEST_NAME")),
-            @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
-    }) EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
+  @ManyToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "GUEST_BOOK_ID")
+  private GuestBookEntity guestBook;
 
-    GuestBookEntryEntity() {
-        // used by builder
-    }
+  @Embedded
+  @AttributeOverride(name = "createdTime", column = @Column(name = "CREATED_TIME"))
+  @AttributeOverride(name = "creatorName", column = @Column(name = "GUEST_NAME"))
+  @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
+  private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
-    private GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
-        super(guestBookEntry);
-        guestBook = guestBookEntry.copyGuestBook();
-        entryEmbeddable = guestBookEntry.copyEntry();
-    }
+  GuestBookEntryEntity() {
+    // used by builder
+  }
 
-    public GuestBookEntryEntity(@NotNull GuestBookEntryDto guestBookEntry) {
-        super(guestBookEntry.fetchPersistentDto());
-        Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).ifPresent(guestBookEntity -> guestBook = guestBookEntity);
-        entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
-    }
+  private GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
+    super(guestBookEntry);
+    guestBook = guestBookEntry.copyGuestBook();
+    entryEmbeddable = guestBookEntry.copyEntry();
+  }
 
-    private GuestBookEntity copyGuestBook() {
-        return guestBook.copy();
-    }
+  public GuestBookEntryEntity(@NotNull GuestBookEntryDto guestBookEntry) {
+    super(guestBookEntry.fetchPersistentDto());
+    Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).ifPresent(guestBookEntity -> guestBook = guestBookEntity);
+    entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
+  }
 
-    private EntryEmbeddable copyEntry() {
-        return entryEmbeddable.copy();
-    }
+  private GuestBookEntity copyGuestBook() {
+    return guestBook.copy();
+  }
 
-    public GuestBookEntryDto asDto() {
-        return asDto(guestBook.asDto());
-    }
+  private EntryEmbeddable copyEntry() {
+    return entryEmbeddable.copy();
+  }
 
-    private GuestBookEntryDto asDto(GuestBookDto guestBook) {
-        return new GuestBookEntryDto(
-                initPersistentDto(),
-                guestBook,
-                entryEmbeddable.getCreatorName(),
-                entryEmbeddable.getEntry()
-        );
-    }
+  public GuestBookEntryDto asDto() {
+    return asDto(guestBook.asDto());
+  }
 
-    public void create(String entry) {
-        setCreationTime(Now.asDateTime());
-        entryEmbeddable.setEntry(entry);
-    }
+  private GuestBookEntryDto asDto(GuestBookDto guestBook) {
+    return new GuestBookEntryDto(
+        initPersistentDto(),
+        guestBook,
+        entryEmbeddable.getCreatorName(),
+        entryEmbeddable.getEntry()
+    );
+  }
 
-    public void update(String entry) {
-        setUpdatedTime(Now.asDateTime());
-        entryEmbeddable.setEntry(entry);
-    }
+  public void create(String entry) {
+    setCreationTime(Now.asDateTime());
+    entryEmbeddable.setEntry(entry);
+  }
 
-    public @Override GuestBookEntryEntity copy() {
-        return new GuestBookEntryEntity(this);
-    }
+  public void update(String entry) {
+    setUpdatedTime(Now.asDateTime());
+    entryEmbeddable.setEntry(entry);
+  }
 
-    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
-        return streamSequencedDependencies(guestBook);
-    }
+  @Override
+  public GuestBookEntryEntity copy() {
+    return new GuestBookEntryEntity(this);
+  }
 
-    public @Override boolean equals(Object o) {
-        return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryEntity) o);
-    }
+  @Override
+  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+    return streamSequencedDependencies(guestBook);
+  }
 
-    private boolean isEqualTo(GuestBookEntryEntity o) {
-        return Objects.equals(entryEmbeddable, o.entryEmbeddable) &&
-                Objects.equals(guestBook, o.getGuestBook());
-    }
+  @Override
+  public boolean equals(Object o) {
+    return this == o || o != null && getClass() == o.getClass() && isEqualTo((GuestBookEntryEntity) o);
+  }
 
-    public @Override int hashCode() {
-        return hash(guestBook, entryEmbeddable);
-    }
+  private boolean isEqualTo(GuestBookEntryEntity o) {
+    return Objects.equals(entryEmbeddable, o.entryEmbeddable) &&
+        Objects.equals(guestBook, o.getGuestBook());
+  }
 
-    public @Override String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-                .appendSuper(super.toString())
-                .append(getGuestBook())
-                .append(entryEmbeddable)
-                .toString();
-    }
+  @Override
+  public int hashCode() {
+    return hash(guestBook, entryEmbeddable);
+  }
 
-    public @Override Long getId() {
-        return id;
-    }
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+        .appendSuper(super.toString())
+        .append(getGuestBook())
+        .append(entryEmbeddable)
+        .toString();
+  }
 
-    protected @Override void setId(Long id) {
-        this.id = id;
-    }
+  @Override
+  public Long getId() {
+    return id;
+  }
 
-    public GuestBookEntity getGuestBook() {
-        return guestBook;
-    }
+  @Override
+  protected void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getEntry() {
-        return entryEmbeddable.getEntry();
-    }
+  public GuestBookEntity getGuestBook() {
+    return guestBook;
+  }
 
-    public String getCreatorName() {
-        return entryEmbeddable.getCreatorName();
-    }
+  public String getEntry() {
+    return entryEmbeddable.getEntry();
+  }
 
-    public void setGuestBook(GuestBookEntity guestBookEntity) {
-        this.guestBook = guestBookEntity;
-    }
+  public String getCreatorName() {
+    return entryEmbeddable.getCreatorName();
+  }
 
-    public void setCreatorName(String creatorName) {
-        entryEmbeddable.setCreatorName(creatorName);
-    }
+  public void setGuestBook(GuestBookEntity guestBookEntity) {
+    this.guestBook = guestBookEntity;
+  }
 
-    public static GuestBookEntryEntityBuilder aGuestBookEntry() {
-        return new GuestBookEntryEntityBuilder();
-    }
+  public void setCreatorName(String creatorName) {
+    entryEmbeddable.setCreatorName(creatorName);
+  }
+
+  public static GuestBookEntryEntityBuilder aGuestBookEntry() {
+    return new GuestBookEntryEntityBuilder();
+  }
 }
