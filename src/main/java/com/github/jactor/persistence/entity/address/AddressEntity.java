@@ -163,4 +163,8 @@ public class AddressEntity extends PersistentEntity {
     public static AddressEntityBuilder anAddress() {
         return new AddressEntityBuilder();
     }
+
+    public static AddressEntity anAddress(AddressDto addressDto) {
+        return new AddressEntity(addressDto);
+    }
 }
