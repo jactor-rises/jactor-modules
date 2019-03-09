@@ -1,10 +1,10 @@
-package com.gitlab.jactor.persistence.entity.guestbook;
+package com.github.jactor.persistence.entity.guestbook;
 
-import com.gitlab.jactor.persistence.dto.GuestBookDto;
-import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
-import com.gitlab.jactor.persistence.entity.EntryEmbeddable;
-import com.gitlab.jactor.persistence.entity.PersistentEntity;
-import com.gitlab.jactor.persistence.time.Now;
+import com.github.jactor.persistence.dto.GuestBookDto;
+import com.github.jactor.persistence.dto.GuestBookEntryDto;
+import com.github.jactor.persistence.entity.EntryEmbeddable;
+import com.github.jactor.persistence.entity.PersistentEntity;
+import com.github.jactor.persistence.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

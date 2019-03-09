@@ -1,6 +1,6 @@
-package com.gitlab.jactor.persistence.repository;
+package com.github.jactor.persistence.repository;
 
-import com.gitlab.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.entity.user.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 

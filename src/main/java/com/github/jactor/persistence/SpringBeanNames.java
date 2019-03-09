@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence;
+package com.github.jactor.persistence;
 
 import java.util.ArrayList;
 import java.util.List;

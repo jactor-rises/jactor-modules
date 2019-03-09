@@ -1,7 +1,7 @@
-package com.gitlab.jactor.persistence.controller;
+package com.github.jactor.persistence.controller;
 
-import com.gitlab.jactor.persistence.dto.UserDto;
-import com.gitlab.jactor.persistence.service.UserService;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.service.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

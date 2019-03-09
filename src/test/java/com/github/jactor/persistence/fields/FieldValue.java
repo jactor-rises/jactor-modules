@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.fields;
+package com.github.jactor.persistence.fields;
 
 public class FieldValue {
 

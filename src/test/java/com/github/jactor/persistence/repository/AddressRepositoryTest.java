@@ -1,7 +1,7 @@
-package com.gitlab.jactor.persistence.repository;
+package com.github.jactor.persistence.repository;
 
-import com.gitlab.jactor.persistence.JactorPersistence;
-import com.gitlab.jactor.persistence.entity.address.AddressEntity;
+import com.github.jactor.persistence.JactorPersistence;
+import com.github.jactor.persistence.entity.address.AddressEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static com.gitlab.jactor.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -107,7 +107,6 @@ class AddressRepositoryTest {
         entityManager.clear();
 
         AddressEntity addressEntitySaved = addressRepository.findById(addressEntityToPersist.getId()).orElseThrow(this::addressNotFound);
-
 
         addressEntitySaved.setAddressLine1("the truth is out there");
         addressEntitySaved.setAddressLine2("among the stars");

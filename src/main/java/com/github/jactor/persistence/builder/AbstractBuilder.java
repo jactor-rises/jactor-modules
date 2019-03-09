@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.builder;
+package com.github.jactor.persistence.builder;
 
 /**
  * A builder which validates fields on a bean before returning the instance validated with a {@link ValidInstance}

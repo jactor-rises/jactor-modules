@@ -1,13 +1,13 @@
-package com.gitlab.jactor.persistence.aop;
+package com.github.jactor.persistence.aop;
 
-import com.gitlab.jactor.persistence.entity.PersistentEntity;
-import com.gitlab.jactor.persistence.entity.address.AddressEntity;
-import com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.gitlab.jactor.persistence.entity.person.PersonEntity;
-import com.gitlab.jactor.persistence.entity.user.UserEntity;
-import com.gitlab.jactor.persistence.fields.FieldValue;
-import com.gitlab.jactor.persistence.fields.RequiredFieldsExtension;
+import com.github.jactor.persistence.entity.PersistentEntity;
+import com.github.jactor.persistence.entity.address.AddressEntity;
+import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactor.persistence.entity.person.PersonEntity;
+import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.fields.FieldValue;
+import com.github.jactor.persistence.fields.RequiredFieldsExtension;
 import org.aspectj.lang.JoinPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,10 +19,10 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Map;
 
-import static com.gitlab.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
+import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;

@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.builder;
+package com.github.jactor.persistence.builder;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

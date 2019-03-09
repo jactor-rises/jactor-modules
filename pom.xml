@@ -11,7 +11,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.gitlab.jactor</groupId>
+    <groupId>com.github.jactor-rises</groupId>
     <artifactId>jactor-persistence</artifactId>
     <version>1.0-SNAPSHOT</version>
 

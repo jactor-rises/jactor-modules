@@ -1,9 +1,9 @@
-package com.gitlab.jactor.persistence.entity.user;
+package com.github.jactor.persistence.entity.user;
 
-import com.gitlab.jactor.persistence.builder.AbstractBuilder;
-import com.gitlab.jactor.persistence.builder.MissingFields;
-import com.gitlab.jactor.persistence.entity.person.PersonEntity;
-import com.gitlab.jactor.persistence.entity.person.PersonEntityBuilder;
+import com.github.jactor.persistence.builder.AbstractBuilder;
+import com.github.jactor.persistence.builder.MissingFields;
+import com.github.jactor.persistence.entity.person.PersonEntity;
+import com.github.jactor.persistence.entity.person.PersonEntityBuilder;
 
 import java.util.Optional;
 

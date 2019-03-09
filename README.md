@@ -6,8 +6,7 @@
 
 This project is a microservice dealing with persistence to an ear database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
-the namespace of jactor (formerly as part of the project `rises`) This information is
-written with [GitLab Flavoured Markdown](https://gitlab.com/help/user/markdown)
+the namespace of jactor (formerly as part of the project `jactor-rises`)
 
 ### Set up ###
 

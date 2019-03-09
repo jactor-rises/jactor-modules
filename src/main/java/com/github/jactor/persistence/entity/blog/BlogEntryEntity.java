@@ -1,10 +1,10 @@
-package com.gitlab.jactor.persistence.entity.blog;
+package com.github.jactor.persistence.entity.blog;
 
-import com.gitlab.jactor.persistence.dto.BlogDto;
-import com.gitlab.jactor.persistence.dto.BlogEntryDto;
-import com.gitlab.jactor.persistence.entity.EntryEmbeddable;
-import com.gitlab.jactor.persistence.entity.PersistentEntity;
-import com.gitlab.jactor.persistence.time.Now;
+import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.entity.EntryEmbeddable;
+import com.github.jactor.persistence.entity.PersistentEntity;
+import com.github.jactor.persistence.time.Now;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

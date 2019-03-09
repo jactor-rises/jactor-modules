@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.builder;
+package com.github.jactor.persistence.builder;
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;

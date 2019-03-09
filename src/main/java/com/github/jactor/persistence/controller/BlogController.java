@@ -1,8 +1,8 @@
-package com.gitlab.jactor.persistence.controller;
+package com.github.jactor.persistence.controller;
 
-import com.gitlab.jactor.persistence.dto.BlogDto;
-import com.gitlab.jactor.persistence.dto.BlogEntryDto;
-import com.gitlab.jactor.persistence.service.BlogService;
+import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.service.BlogService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
