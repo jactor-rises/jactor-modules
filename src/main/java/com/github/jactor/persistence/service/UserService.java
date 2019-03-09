@@ -1,8 +1,8 @@
-package com.gitlab.jactor.persistence.service;
+package com.github.jactor.persistence.service;
 
-import com.gitlab.jactor.persistence.dto.UserDto;
-import com.gitlab.jactor.persistence.entity.user.UserEntity;
-import com.gitlab.jactor.persistence.repository.UserRepository;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

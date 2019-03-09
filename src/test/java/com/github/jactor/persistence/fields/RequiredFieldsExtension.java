@@ -1,8 +1,8 @@
-package com.gitlab.jactor.persistence.fields;
+package com.github.jactor.persistence.fields;
 
-import com.gitlab.jactor.persistence.builder.FieldValidation;
-import com.gitlab.jactor.persistence.builder.MissingFields;
-import com.gitlab.jactor.persistence.builder.ValidInstance;
+import com.github.jactor.persistence.builder.FieldValidation;
+import com.github.jactor.persistence.builder.MissingFields;
+import com.github.jactor.persistence.builder.ValidInstance;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

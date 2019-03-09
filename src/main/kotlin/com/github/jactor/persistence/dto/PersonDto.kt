@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.dto
+package com.github.jactor.persistence.dto
 
 data class PersonDto(
         var persistentDto: PersistentDto? = null,

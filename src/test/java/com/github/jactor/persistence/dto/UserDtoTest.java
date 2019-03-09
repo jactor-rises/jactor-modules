@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.dto;
+package com.github.jactor.persistence.dto;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

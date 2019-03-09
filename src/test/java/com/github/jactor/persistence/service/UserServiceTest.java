@@ -1,9 +1,9 @@
-package com.gitlab.jactor.persistence.service;
+package com.github.jactor.persistence.service;
 
-import com.gitlab.jactor.persistence.builder.SuppressValidInstanceExtension;
-import com.gitlab.jactor.persistence.dto.UserDto;
-import com.gitlab.jactor.persistence.entity.user.UserEntity;
-import com.gitlab.jactor.persistence.repository.UserRepository;
+import com.github.jactor.persistence.builder.SuppressValidInstanceExtension;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;

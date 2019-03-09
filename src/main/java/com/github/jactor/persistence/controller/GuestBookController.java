@@ -1,8 +1,8 @@
-package com.gitlab.jactor.persistence.controller;
+package com.github.jactor.persistence.controller;
 
-import com.gitlab.jactor.persistence.dto.GuestBookDto;
-import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
-import com.gitlab.jactor.persistence.service.GuestBookService;
+import com.github.jactor.persistence.dto.GuestBookDto;
+import com.github.jactor.persistence.dto.GuestBookEntryDto;
+import com.github.jactor.persistence.service.GuestBookService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

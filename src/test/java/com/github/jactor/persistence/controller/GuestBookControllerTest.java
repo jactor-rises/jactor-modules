@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.controller;
+package com.github.jactor.persistence.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -6,10 +6,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.gitlab.jactor.persistence.JactorPersistence;
-import com.gitlab.jactor.persistence.dto.GuestBookDto;
-import com.gitlab.jactor.persistence.dto.GuestBookEntryDto;
-import com.gitlab.jactor.persistence.service.GuestBookService;
+import com.github.jactor.persistence.JactorPersistence;
+import com.github.jactor.persistence.dto.GuestBookDto;
+import com.github.jactor.persistence.dto.GuestBookEntryDto;
+import com.github.jactor.persistence.service.GuestBookService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,17 +1,17 @@
-package com.gitlab.jactor.persistence.service;
+package com.github.jactor.persistence.service;
 
-import com.gitlab.jactor.persistence.dto.BlogDto;
-import com.gitlab.jactor.persistence.dto.BlogEntryDto;
-import com.gitlab.jactor.persistence.dto.UserDto;
-import com.gitlab.jactor.persistence.entity.address.AddressEntity;
-import com.gitlab.jactor.persistence.entity.blog.BlogEntity;
-import com.gitlab.jactor.persistence.entity.blog.BlogEntryEntity;
-import com.gitlab.jactor.persistence.entity.person.PersonEntity;
-import com.gitlab.jactor.persistence.entity.user.UserEntity;
-import com.gitlab.jactor.persistence.repository.BlogEntryRepository;
-import com.gitlab.jactor.persistence.repository.BlogRepository;
-import com.gitlab.jactor.persistence.fields.FieldValue;
-import com.gitlab.jactor.persistence.fields.RequiredFieldsExtension;
+import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.address.AddressEntity;
+import com.github.jactor.persistence.entity.blog.BlogEntity;
+import com.github.jactor.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactor.persistence.entity.person.PersonEntity;
+import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.repository.BlogEntryRepository;
+import com.github.jactor.persistence.repository.BlogRepository;
+import com.github.jactor.persistence.fields.FieldValue;
+import com.github.jactor.persistence.fields.RequiredFieldsExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,11 +28,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.gitlab.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.gitlab.jactor.persistence.entity.blog.BlogEntity.aBlog;
-import static com.gitlab.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
-import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -134,7 +134,6 @@ class BlogServiceTest {
         verify(blogRepositoryMock).save(argCaptor.capture());
         BlogEntity blogEntity = argCaptor.getValue();
 
-
         assertAll(
                 () -> assertThat(blogEntity.getCreated()).as("created").isEqualTo(now()),
                 () -> assertThat(blogEntity.getTitle()).as("title").isEqualTo("some blog"),
@@ -154,7 +153,6 @@ class BlogServiceTest {
         ArgumentCaptor<BlogEntryEntity> argCaptor = ArgumentCaptor.forClass(BlogEntryEntity.class);
         verify(blogEntryRepositoryMock).save(argCaptor.capture());
         BlogEntryEntity blogEntryEntity = argCaptor.getValue();
-
 
         assertAll(
                 () -> assertThat(blogEntryEntity.getBlog()).as("blog").isNotNull(),

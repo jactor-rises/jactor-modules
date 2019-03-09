@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.builder;
+package com.github.jactor.persistence.builder;
 
 import java.util.Optional;
 
@@ -10,7 +10,6 @@ public final class FieldValidation {
     private FieldValidation(FieldValidator fieldValidator) {
         this.fieldValidator = fieldValidator;
     }
-
 
     public static <T> Optional<MissingFields> performWithStandardValidation(ValidInstance<T> validInstance, T bean) {
         return new FieldValidatorForBuild().validate(validInstance, bean);

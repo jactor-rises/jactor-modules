@@ -1,10 +1,10 @@
-package com.gitlab.jactor.persistence.entity.user;
+package com.github.jactor.persistence.entity.user;
 
-import com.gitlab.jactor.persistence.dto.UserDto;
-import com.gitlab.jactor.persistence.entity.PersistentEntity;
-import com.gitlab.jactor.persistence.entity.blog.BlogEntity;
-import com.gitlab.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.gitlab.jactor.persistence.entity.person.PersonEntity;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.PersistentEntity;
+import com.github.jactor.persistence.entity.blog.BlogEntity;
+import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
+import com.github.jactor.persistence.entity.person.PersonEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

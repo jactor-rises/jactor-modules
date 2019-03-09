@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.time;
+package com.github.jactor.persistence.time;
 
 import java.time.LocalDateTime;
 

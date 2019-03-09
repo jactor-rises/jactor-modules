@@ -1,4 +1,4 @@
-package com.gitlab.jactor.persistence.builder;
+package com.github.jactor.persistence.builder;
 
 import org.apache.commons.lang3.StringUtils;
 

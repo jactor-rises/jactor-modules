@@ -1,12 +1,12 @@
-package com.gitlab.jactor.persistence.repository;
+package com.github.jactor.persistence.repository;
 
-import com.gitlab.jactor.persistence.JactorPersistence;
-import com.gitlab.jactor.persistence.entity.address.AddressEntity;
-import com.gitlab.jactor.persistence.entity.blog.BlogEntity;
-import com.gitlab.jactor.persistence.entity.person.PersonEntity;
-import com.gitlab.jactor.persistence.entity.user.UserEntity;
-import com.gitlab.jactor.persistence.fields.FieldValue;
-import com.gitlab.jactor.persistence.fields.RequiredFieldsExtension;
+import com.github.jactor.persistence.JactorPersistence;
+import com.github.jactor.persistence.entity.address.AddressEntity;
+import com.github.jactor.persistence.entity.blog.BlogEntity;
+import com.github.jactor.persistence.entity.person.PersonEntity;
+import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.fields.FieldValue;
+import com.github.jactor.persistence.fields.RequiredFieldsExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +20,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
-import static com.gitlab.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.gitlab.jactor.persistence.entity.blog.BlogEntity.aBlog;
-import static com.gitlab.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.gitlab.jactor.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
+import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
