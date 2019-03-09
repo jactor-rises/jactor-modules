@@ -12,7 +12,7 @@ written with [GitLab Flavoured Markdown](https://gitlab.com/help/user/markdown)
 ### Set up ###
 
 * spring-boot applications are created when building (`mvn install`)
-** is using h2 (in-memory database), and is not finite
+* is using h2 (in-memory database)
 
 ### Some technologies used ###
 
