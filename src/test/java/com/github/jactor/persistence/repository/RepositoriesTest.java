@@ -1,31 +1,26 @@
 package com.github.jactor.persistence.repository;
 
+import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
+import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.entity.address.AddressEntity;
+import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.blog.BlogEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
 import com.github.jactor.persistence.entity.user.UserEntity;
-import com.github.jactor.persistence.fields.FieldValue;
-import com.github.jactor.persistence.fields.RequiredFieldsExtension;
+import java.time.LocalDate;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Map;
-
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {JactorPersistence.class})
@@ -33,80 +28,37 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("The RepositoriesTest")
 class RepositoriesTest {
 
-    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            PersonEntity.class, List.of(
-                    new FieldValue("addressEntity", () -> anAddress().build()),
-                    new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, List.of(
-                    new FieldValue("addressLine1", "Test Boulevard 1"),
-                    new FieldValue("zipCode", 1001),
-                    new FieldValue("city", "Testing")
-            )
-    ));
+  @Autowired
+  private BlogRepository blogRepository;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private EntityManager entityManager;
 
-    private @Autowired BlogRepository blogRepository;
-    private @Autowired UserRepository userRepository;
-    private @Autowired EntityManager entityManager;
+  @Test
+  @DisplayName("should use a BlogRepository to save a blog with a user that was saved with a UserRepository earlier")
+  void shouldSaveBlogWithSavedUser() {
+    AddressDto address = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testoplis", null);
+    PersonDto personDto = new PersonDto(null, address, "no_NO", null, "Skywalker", null);
+    UserEntity userToPersist = aUser(new UserDto(null, personDto, "brains@rebels.com", "r2d2"));
 
-    @DisplayName("should use a BlogRepository to save a blog with a user that was saved with a UserRepository earlier")
-    @Test void shouldSaveBlogWithSavedUser() {
-        UserEntity userToPersist = aUser()
-                .with(aPerson())
-                .withUsername("r2d2")
-                .withEmailAddress("brains@rebels.com")
-                .build();
+    userRepository.save(userToPersist);
+    entityManager.flush();
+    entityManager.clear();
 
-        userRepository.save(userToPersist);
-        entityManager.flush();
-        entityManager.clear();
+    UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
 
-        UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
+    BlogEntity blogEntityToSave = aBlog(new BlogDto(null, LocalDate.now(), "Far, far, away...", userById.asDto()));
 
-        BlogEntity blogEntityToSave = aBlog()
-                .with(userById)
-                .withTitle("Far, far away...")
-                .build();
+    blogRepository.save(blogEntityToSave);
+    entityManager.flush();
+    entityManager.clear();
 
-        blogRepository.save(blogEntityToSave);
-        entityManager.flush();
-        entityManager.clear();
+    BlogEntity blogById = blogRepository.findById(blogEntityToSave.getId()).orElseThrow(() -> new AssertionError("Blog not found"));
 
-        BlogEntity blogById = blogRepository.findById(blogEntityToSave.getId()).orElseThrow(() -> new AssertionError("Blog not found"));
-
-        assertAll(
-                () -> assertThat(blogById.getTitle()).as("blog.title").isEqualTo("Far, far away..."),
-                () -> assertThat(blogById.getUser()).as("blog.user").isEqualTo(userById)
-        );
-    }
-
-    @DisplayName("should not need to \"reattach\" entities already saved")
-    @Test void shouldNot11NeedToReattachEntities() {
-        UserEntity userToPersist = aUser()
-                .with(aPerson())
-                .withUsername("c3po")
-                .withEmailAddress("language@rebels.com")
-                .build();
-
-        userRepository.save(userToPersist);
-        entityManager.flush();
-        entityManager.clear();
-
-        UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
-
-        BlogEntity blogEntityToSave = aBlog()
-                .with(new UserEntity(userById.asDto()))
-                .withTitle("Say you, say me")
-                .build();
-
-        blogRepository.save(blogEntityToSave);
-        entityManager.flush();
-        entityManager.clear();
-
-        BlogEntity blogById = blogRepository.findById(blogEntityToSave.getId()).orElseThrow(() -> new AssertionError("Blog not found"));
-
-        assertAll(
-                () -> assertThat(blogById.getTitle()).as("blog.title").isEqualTo("Say you, say me"),
-                () -> assertThat(blogById.getUser()).as("blog.user").isEqualTo(userById)
-        );
-    }
+    assertAll(
+        () -> assertThat(blogById.getTitle()).as("blog.title").isEqualTo("Far, far, away..."),
+        () -> assertThat(blogById.getUser()).as("blog.user").isEqualTo(userById)
+    );
+  }
 }
