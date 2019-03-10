@@ -1,13 +1,18 @@
 package com.github.jactor.persistence.entity.user;
 
+import static java.util.Objects.hash;
+
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.PersistentEntity;
 import com.github.jactor.persistence.entity.blog.BlogEntity;
 import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactor.persistence.entity.person.PersonEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,132 +23,146 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.Objects.hash;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_USER")
 public class UserEntity extends PersistentEntity {
 
-    private @Id Long id;
+  @Id
+  private Long id;
 
-    private @Column(name = "EMAIL") String emailAddress;
-    private @Column(name = "USER_NAME", nullable = false) String username;
-    private @JoinColumn(name = "PERSON_ID") @OneToOne(cascade = CascadeType.MERGE) PersonEntity personEntity;
-    private @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) GuestBookEntity guestBook;
-    private @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY) Set<BlogEntity> blogs = new HashSet<>();
-    private @Column(name = "INACTIVE") boolean inactive;
+  @Column(name = "EMAIL")
+  private String emailAddress;
+  @Column(name = "USER_NAME", nullable = false)
+  private String username;
+  @JoinColumn(name = "PERSON_ID")
+  @OneToOne(cascade = CascadeType.MERGE)
+  private PersonEntity personEntity;
+  @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  private GuestBookEntity guestBook;
+  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  private Set<BlogEntity> blogs = new HashSet<>();
+  @Column(name = "INACTIVE")
+  private boolean inactive;
 
-    UserEntity() {
-        // used by builder
-    }
+  UserEntity() {
+    // used by builder
+  }
 
-    /**
-     * @param user is used to create an entity
-     */
-    private UserEntity(UserEntity user) {
-        super(user);
-        blogs = user.blogs.stream().map(BlogEntity::copy).collect(Collectors.toSet());
-        Optional.ofNullable(user.guestBook).ifPresent(gb -> guestBook = gb.copy());
-        emailAddress = user.emailAddress;
-        Optional.ofNullable(user.personEntity).ifPresent(pen -> personEntity = pen.copy());
-        username = user.username;
-    }
+  /**
+   * @param user is used to create an entity
+   */
+  private UserEntity(UserEntity user) {
+    super(user);
+    blogs = user.blogs.stream().map(BlogEntity::copy).collect(Collectors.toSet());
+    Optional.ofNullable(user.guestBook).ifPresent(gb -> guestBook = gb.copy());
+    emailAddress = user.emailAddress;
+    Optional.ofNullable(user.personEntity).ifPresent(pen -> personEntity = pen.copy());
+    username = user.username;
+  }
 
-    public UserEntity(@NotNull UserDto user) {
-        super(user.fetchPersistentDto());
-        emailAddress = user.getEmailAddress();
-        Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
-        username = user.getUsername();
-    }
+  public UserEntity(@NotNull UserDto user) {
+    super(user.fetchPersistentDto());
+    emailAddress = user.getEmailAddress();
+    Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
+    username = user.getUsername();
+  }
 
-    public UserDto asDto() {
-        return new UserDto(initPersistentDto(),
-                Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null), emailAddress, username
-        );
-    }
+  public UserDto asDto() {
+    return new UserDto(initPersistentDto(),
+        Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null), emailAddress, username
+    );
+  }
 
-    public @Override UserEntity copy() {
-        return new UserEntity(this);
-    }
+  public PersonEntity fetchPerson() {
+    personEntity.setUserEntity(this);
+    return personEntity;
+  }
 
-    protected @Override Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
-        return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream().map(Optional::of));
-    }
+  @Override
+  public UserEntity copy() {
+    return new UserEntity(this);
+  }
 
-    public @Override boolean equals(Object o) {
-        return o == this || o != null && getClass() == o.getClass() &&
-                Objects.equals(emailAddress, ((UserEntity) o).getEmailAddress()) &&
-                Objects.equals(personEntity, ((UserEntity) o).getPerson()) &&
-                Objects.equals(username, ((UserEntity) o).getUsername());
-    }
+  @Override
+  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+    return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream().map(Optional::of));
+  }
 
-    public @Override int hashCode() {
-        return hash(username, personEntity, emailAddress);
-    }
+  @Override
+  public boolean equals(Object o) {
+    return o == this || o != null && getClass() == o.getClass() &&
+        Objects.equals(emailAddress, ((UserEntity) o).getEmailAddress()) &&
+        Objects.equals(personEntity, ((UserEntity) o).getPerson()) &&
+        Objects.equals(username, ((UserEntity) o).getUsername());
+  }
 
-    public @Override String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-                .appendSuper(super.toString())
-                .append(getUsername())
-                .append(getEmailAddress())
-                .append(blogs)
-                .append("guestbook.id=" + (guestBook != null ? guestBook.getId() : null))
-                .append(getPerson())
-                .toString();
-    }
+  @Override
+  public int hashCode() {
+    return hash(username, personEntity, emailAddress);
+  }
 
-    public @Override Long getId() {
-        return id;
-    }
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+        .appendSuper(super.toString())
+        .append(getUsername())
+        .append(getEmailAddress())
+        .append(blogs)
+        .append("guestbook.id=" + (guestBook != null ? guestBook.getId() : null))
+        .append(getPerson())
+        .toString();
+  }
 
-    protected @Override void setId(Long id) {
-        this.id = id;
-    }
+  @Override
+  public Long getId() {
+    return id;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  @Override
+  protected void setId(Long id) {
+    this.id = id;
+  }
 
-    public PersonEntity getPerson() {
-        return personEntity;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
+  public PersonEntity getPerson() {
+    return personEntity;
+  }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
+  public String getEmailAddress() {
+    return emailAddress;
+  }
 
-    public @SuppressWarnings("unused") /* used by reflection */ void setGuestBook(GuestBookEntity guestBook) {
-        this.guestBook = guestBook;
-    }
+  public void setEmailAddress(String emailAddress) {
+    this.emailAddress = emailAddress;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public @SuppressWarnings("unused") /* used by reflection */ void setGuestBook(GuestBookEntity guestBook) {
+    this.guestBook = guestBook;
+  }
 
-    public void setPersonEntity(PersonEntity personEntity) {
-        this.personEntity = personEntity;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    void setInactive(boolean inactive) {
-        this.inactive = inactive;
-    }
+  public void setPersonEntity(PersonEntity personEntity) {
+    this.personEntity = personEntity;
+  }
 
-    public static UserEntityBuilder aUser() {
-        return new UserEntityBuilder();
-    }
+  void setInactive(boolean inactive) {
+    this.inactive = inactive;
+  }
 
-    public static UserEntity aUser(UserDto userDto) {
-        return new UserEntity(userDto);
-    }
+  public static UserEntityBuilder aUser() {
+    return new UserEntityBuilder();
+  }
+
+  public static UserEntity aUser(UserDto userDto) {
+    return new UserEntity(userDto);
+  }
 }
