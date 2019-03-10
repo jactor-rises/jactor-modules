@@ -1,163 +1,147 @@
 package com.github.jactor.persistence.service;
 
-import com.github.jactor.persistence.dto.BlogDto;
-import com.github.jactor.persistence.dto.BlogEntryDto;
-import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.address.AddressEntity;
-import com.github.jactor.persistence.entity.blog.BlogEntity;
-import com.github.jactor.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
-import com.github.jactor.persistence.repository.BlogEntryRepository;
-import com.github.jactor.persistence.repository.BlogRepository;
-import com.github.jactor.persistence.fields.FieldValue;
-import com.github.jactor.persistence.fields.RequiredFieldsExtension;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
 import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
 import static com.github.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
-import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.blog.BlogEntity;
+import com.github.jactor.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactor.persistence.repository.BlogEntryRepository;
+import com.github.jactor.persistence.repository.BlogRepository;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 @DisplayName("A BlogService")
 class BlogServiceTest {
 
-    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            BlogEntity.class, List.of(
-                    new FieldValue("userEntity", () -> aUser().build()),
-                    new FieldValue("title", "my blog")
-            ), BlogEntryEntity.class, Collections.singletonList(
-                    new FieldValue("blog", () -> aBlog().build())
-            ), UserEntity.class, List.of(
-                    new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
-                    new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, List.of(
-                    new FieldValue("addressEntity", () -> anAddress().build()),
-                    new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, List.of(
-                    new FieldValue("addressLine1", "Test Boulevard 1"),
-                    new FieldValue("zipCode", 1001),
-                    new FieldValue("city", "Testing")
-            )
-    ));
+  @InjectMocks
+  private BlogService blogServiceToTest;
+  @Mock
+  private BlogRepository blogRepositoryMock;
+  @Mock
+  private BlogEntryRepository blogEntryRepositoryMock;
+  @Mock
+  private UserService userServiceMock;
 
-    private @InjectMocks BlogService blogServiceToTest;
-    private @Mock BlogRepository blogRepositoryMock;
-    private @Mock BlogEntryRepository blogEntryRepositoryMock;
-    private @Mock UserService userServiceMock;
+  @BeforeEach
+  void initMocking() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-    @BeforeEach void initMocking() {
-        MockitoAnnotations.initMocks(this);
-    }
+  @Test
+  @DisplayName("should map blog to dto")
+  void shouldMapBlogToDto() {
+    Optional<BlogEntity> blogEntity = Optional.of(aBlog(new BlogDto(null, null, "full speed ahead", null)));
+    when(blogRepositoryMock.findById(1001L)).thenReturn(blogEntity);
 
-    @DisplayName("should map blog to dto")
-    @Test void shouldMapBlogToDto() {
-        Optional<BlogEntity> blogEntity = Optional.of(aBlog().withTitle("full speed ahead").build());
-        when(blogRepositoryMock.findById(1001L)).thenReturn(blogEntity);
+    BlogDto blog = blogServiceToTest.find(1001L).orElseThrow(mockError());
 
-        BlogDto blog = blogServiceToTest.find(1001L).orElseThrow(mockError());
+    assertThat(blog.getTitle()).as("title").isEqualTo("full speed ahead");
+  }
 
-        assertThat(blog.getTitle()).as("title").isEqualTo("full speed ahead");
-    }
+  @Test
+  @DisplayName("should map blog entry to dto")
+  void shouldMapFoundBlogToDto() {
+    BlogEntryDto blogEntryDto = new BlogEntryDto(null, new BlogDto(), "me", "too");
+    Optional<BlogEntryEntity> anEntry = Optional.of(aBlogEntry(blogEntryDto));
+    when(blogEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
 
-    @DisplayName("should map blog entry to dto")
-    @Test void shouldMapFoundBlogToDto() {
-        Optional<BlogEntryEntity> anEntry = Optional.of(aBlogEntry().withCreatorName("me").withEntry("too").build());
-        when(blogEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
+    BlogEntryDto blogEntry = blogServiceToTest.findEntryBy(1001L).orElseThrow(mockError());
 
-        BlogEntryDto blogEntry = blogServiceToTest.findEntryBy(1001L).orElseThrow(mockError());
+    assertAll(
+        () -> assertThat(blogEntry.getCreatorName()).as("creator name").isEqualTo("me"),
+        () -> assertThat(blogEntry.getEntry()).as("entry").isEqualTo("too")
+    );
+  }
 
-        assertAll(
-                () -> assertThat(blogEntry.getCreatorName()).as("creator name").isEqualTo("me"),
-                () -> assertThat(blogEntry.getEntry()).as("entry").isEqualTo("too")
-        );
-    }
+  private Supplier<AssertionError> mockError() {
+    return () -> new AssertionError("missed mocking?");
+  }
 
-    private Supplier<AssertionError> mockError() {
-        return () -> new AssertionError("missed mocking?");
-    }
+  @Test
+  @DisplayName("should find blogs for title")
+  void shouldFindBlogsForTitle() {
+    List<BlogEntity> blogsToFind = Collections.singletonList(aBlog(new BlogDto(null, null, "Star Wars", null)));
+    when(blogRepositoryMock.findBlogsByTitle("Star Wars")).thenReturn(blogsToFind);
 
-    @DisplayName("should find blogs for title")
-    @Test void shouldFindBlogsForTitle() {
-        List<BlogEntity> blogsToFind = Collections.singletonList(aBlog().withTitle("Star Wars").build());
-        when(blogRepositoryMock.findBlogsByTitle("Star Wars")).thenReturn(blogsToFind);
+    List<BlogDto> blogForTitle = blogServiceToTest.findBlogsBy("Star Wars");
 
-        List<BlogDto> blogForTitle = blogServiceToTest.findBlogsBy("Star Wars");
+    assertThat(blogForTitle).hasSize(1);
+  }
 
-        assertThat(blogForTitle).hasSize(1);
-    }
+  @Test
+  @DisplayName("should map blog entries to a list of dto")
+  void shouldMapBlogEntriesToListOfDto() {
+    List<BlogEntryEntity> blogEntryEntities = Collections.singletonList(
+        aBlogEntry(new BlogEntryDto(null, new BlogDto(), "you", "too"))
+    );
 
-    @DisplayName("should map blog entries to a list of dto")
-    @Test void shouldMapBlogEntriesToListOfDto() {
-        List<BlogEntryEntity> blogEntryEntities = Collections.singletonList(aBlogEntry().withCreatorName("you").withEntry("too").build());
-        when(blogEntryRepositoryMock.findByBlog_Id(1001L)).thenReturn(blogEntryEntities);
+    when(blogEntryRepositoryMock.findByBlog_Id(1001L)).thenReturn(blogEntryEntities);
 
-        List<BlogEntryDto> blogEntries = blogServiceToTest.findEntriesForBlog(1001L);
+    List<BlogEntryDto> blogEntries = blogServiceToTest.findEntriesForBlog(1001L);
 
-        assertAll(
-                () -> assertThat(blogEntries).as("entries").hasSize(1),
-                () -> assertThat(blogEntries.get(0).getCreatorName()).as("creator name").isEqualTo("you"),
-                () -> assertThat(blogEntries.get(0).getEntry()).as("entry").isEqualTo("too")
-        );
-    }
+    assertAll(
+        () -> assertThat(blogEntries).as("entries").hasSize(1),
+        () -> assertThat(blogEntries.get(0).getCreatorName()).as("creator name").isEqualTo("you"),
+        () -> assertThat(blogEntries.get(0).getEntry()).as("entry").isEqualTo("too")
+    );
+  }
 
-    @DisplayName("should save BlogDto as BlogEntity")
-    @Test void shouldSaveBlogDtoAsBlogEntity() {
-        BlogDto blogDto = new BlogDto();
-        blogDto.setCreated(now());
-        blogDto.setTitle("some blog");
-        blogDto.setUser(new UserDto());
+  @Test
+  @DisplayName("should save BlogDto as BlogEntity")
+  void shouldSaveBlogDtoAsBlogEntity() {
+    BlogDto blogDto = new BlogDto();
+    blogDto.setCreated(now());
+    blogDto.setTitle("some blog");
+    blogDto.setUser(new UserDto());
 
-        blogServiceToTest.saveOrUpdate(blogDto);
+    blogServiceToTest.saveOrUpdate(blogDto);
 
-        ArgumentCaptor<BlogEntity> argCaptor = ArgumentCaptor.forClass(BlogEntity.class);
-        verify(blogRepositoryMock).save(argCaptor.capture());
-        BlogEntity blogEntity = argCaptor.getValue();
+    ArgumentCaptor<BlogEntity> argCaptor = ArgumentCaptor.forClass(BlogEntity.class);
+    verify(blogRepositoryMock).save(argCaptor.capture());
+    BlogEntity blogEntity = argCaptor.getValue();
 
-        assertAll(
-                () -> assertThat(blogEntity.getCreated()).as("created").isEqualTo(now()),
-                () -> assertThat(blogEntity.getTitle()).as("title").isEqualTo("some blog"),
-                () -> assertThat(blogEntity.getUser()).as("user").isNotNull()
-        );
-    }
+    assertAll(
+        () -> assertThat(blogEntity.getCreated()).as("created").isEqualTo(now()),
+        () -> assertThat(blogEntity.getTitle()).as("title").isEqualTo("some blog"),
+        () -> assertThat(blogEntity.getUser()).as("user").isNotNull()
+    );
+  }
 
-    @DisplayName("should save BlogEntryDto as BlogEntryEntity")
-    @Test void shouldSaveBlogEntryDtoAsBlogEntryEntity() {
-        BlogEntryDto blogEntryDto = new BlogEntryDto();
-        blogEntryDto.setBlog(new BlogDto());
-        blogEntryDto.setCreatorName("me");
-        blogEntryDto.setEntry("if i where a rich man...");
+  @Test
+  @DisplayName("should save BlogEntryDto as BlogEntryEntity")
+  void shouldSaveBlogEntryDtoAsBlogEntryEntity() {
+    BlogEntryDto blogEntryDto = new BlogEntryDto();
+    blogEntryDto.setBlog(new BlogDto());
+    blogEntryDto.setCreatorName("me");
+    blogEntryDto.setEntry("if i where a rich man...");
 
-        blogServiceToTest.saveOrUpdate(blogEntryDto);
+    blogServiceToTest.saveOrUpdate(blogEntryDto);
 
-        ArgumentCaptor<BlogEntryEntity> argCaptor = ArgumentCaptor.forClass(BlogEntryEntity.class);
-        verify(blogEntryRepositoryMock).save(argCaptor.capture());
-        BlogEntryEntity blogEntryEntity = argCaptor.getValue();
+    ArgumentCaptor<BlogEntryEntity> argCaptor = ArgumentCaptor.forClass(BlogEntryEntity.class);
+    verify(blogEntryRepositoryMock).save(argCaptor.capture());
+    BlogEntryEntity blogEntryEntity = argCaptor.getValue();
 
-        assertAll(
-                () -> assertThat(blogEntryEntity.getBlog()).as("blog").isNotNull(),
-                () -> assertThat(blogEntryEntity.getCreatorName()).as("creator name").isEqualTo("me"),
-                () -> assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("if i where a rich man...")
-        );
-    }
+    assertAll(
+        () -> assertThat(blogEntryEntity.getBlog()).as("blog").isNotNull(),
+        () -> assertThat(blogEntryEntity.getCreatorName()).as("creator name").isEqualTo("me"),
+        () -> assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("if i where a rich man...")
+    );
+  }
 }
