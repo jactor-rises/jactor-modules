@@ -4,10 +4,10 @@ import java.time.LocalDateTime
 
 data class PersistentDto(
         var id: Long? = null,
-        var createdBy: String? = null,
-        var creationTime: LocalDateTime? = null,
-        var updatedBy: String? = null,
-        var updatedTime: LocalDateTime? = null
+        var createdBy: String = "todo: #3",
+        var creationTime: LocalDateTime = LocalDateTime.now(),
+        var updatedBy: String = "todo: #3",
+        var updatedTime: LocalDateTime = LocalDateTime.now()
 )
 
 interface Persistent {
@@ -15,7 +15,7 @@ interface Persistent {
     fun getId(): Long?
     fun setId(id: Long?)
 
-    fun setPersistentId(id: Long?) : PersistentDto {
+    fun setPersistentId(id: Long?): PersistentDto {
         val persistentDto = PersistentDto()
 
         if (id != null && id > 0) {
