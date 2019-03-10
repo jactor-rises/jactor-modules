@@ -14,49 +14,27 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.github.jactor.persistence.entity.address.AddressEntity;
-import com.github.jactor.persistence.entity.blog.BlogEntity;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
-import com.github.jactor.persistence.fields.FieldValue;
-import com.github.jactor.persistence.fields.RequiredFieldsExtension;
+import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.dto.GuestBookDto;
+import com.github.jactor.persistence.dto.GuestBookEntryDto;
+import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.UserDto;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
 @DisplayName("A PersistentEntity")
 class PersistentEntityTest {
 
   private PersistentEntity persistentEntityToTest;
 
-  @RegisterExtension
-  RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-      BlogEntity.class, List.of(
-          new FieldValue("title", "my blog"),
-          new FieldValue("userEntity", () -> aUser().build())
-      ), UserEntity.class, List.of(
-          new FieldValue("username", "me"),
-          new FieldValue("personEntity", () -> aPerson().build())
-      ), PersonEntity.class, List.of(
-          new FieldValue("addressEntity", () -> anAddress().build()),
-          new FieldValue("surname", "black")
-      ), AddressEntity.class, List.of(
-          new FieldValue("addressLine1", "some street #1"),
-          new FieldValue("city", "some city"),
-          new FieldValue("zipCode", 1234)
-      ), GuestBookEntity.class, List.of(
-          new FieldValue("title", "my guest book"),
-          new FieldValue("user", () -> aUser().build())
-      )
-  ));
-
-  @DisplayName("should be able to copy an address without the id")
   @Test
+  @DisplayName("should be able to copy an address without the id")
   void shouldCopyAddress() {
     persistentEntityToTest = anAddress()
         .withAddressLine1("somewhere")
@@ -79,17 +57,12 @@ class PersistentEntityTest {
     );
   }
 
+  @Test
   @DisplayName("should be able to copy a person without the id")
-  @Test
   void shouldCopyPerson() {
-    persistentEntityToTest = aPerson()
-        .with(anAddress())
-        .with(aUser())
-        .withDescription("here i am")
-        .withFirstName("Bill")
-        .withSurname("Smith")
-        .withLocale("us_US")
-        .build().addSequencedId(aClass -> 1L);
+    persistentEntityToTest = aPerson(
+        new PersonDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
+    ).addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = persistentEntityToTest.copy();
 
@@ -103,14 +76,11 @@ class PersistentEntityTest {
     );
   }
 
+  @Test
   @DisplayName("should be able to copy a user without the id")
-  @Test
   void shouldCopyUser() {
-    persistentEntityToTest = aUser()
-        .with(aPerson())
-        .withEmailAddress("i.am@home")
-        .withUsername("jactor")
-        .build().addSequencedId(aClass -> 1L);
+    persistentEntityToTest = aUser(new UserDto(null, null, "i.am@home", "jactor"))
+        .addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = persistentEntityToTest.copy();
 
@@ -124,13 +94,11 @@ class PersistentEntityTest {
     );
   }
 
+  @Test
   @DisplayName("should be able to copy a blog without the id")
-  @Test
   void shouldCopyBlog() {
-    persistentEntityToTest = aBlog()
-        .with(aUser())
-        .withTitle("general ignorance")
-        .build().addSequencedId(aClass -> 1L);
+    persistentEntityToTest = aBlog(new BlogDto(null, null, "general ignorance", new UserDto()))
+        .addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = persistentEntityToTest.copy();
 
@@ -144,14 +112,11 @@ class PersistentEntityTest {
     );
   }
 
+  @Test
   @DisplayName("should be able to copy a blog entry without the id")
-  @Test
   void shouldCopyBlogEntry() {
-    persistentEntityToTest = aBlogEntry()
-        .with(aBlog())
-        .withCreatorName("jactor")
-        .withEntry("the one")
-        .build().addSequencedId(aClass -> 1L);
+    BlogEntryDto blogEntryDto = new BlogEntryDto(null, new BlogDto(), "jactor", "the one");
+    persistentEntityToTest = aBlogEntry(blogEntryDto).addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = persistentEntityToTest.copy();
 
@@ -165,13 +130,11 @@ class PersistentEntityTest {
     );
   }
 
+  @Test
   @DisplayName("should be able to copy a guest book without the id")
-  @Test
   void shouldCopyGuestBook() {
-    persistentEntityToTest = aGuestBook()
-        .with(aUser())
-        .withTitle("enter when applied")
-        .build().addSequencedId(aClass -> 1L);
+    persistentEntityToTest = aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()))
+        .addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = persistentEntityToTest.copy();
 
@@ -185,14 +148,12 @@ class PersistentEntityTest {
     );
   }
 
+  @Test
   @DisplayName("should be able to copy a guest book entry without the id")
-  @Test
   void shouldCopyGuestBookEntry() {
-    persistentEntityToTest = aGuestBookEntry()
-        .with(aGuestBook())
-        .withCreatorName("jactor")
-        .withEntry("the one")
-        .build().addSequencedId(aClass -> 1L);
+    persistentEntityToTest = aGuestBookEntry(
+        new GuestBookEntryDto(null, new GuestBookDto(), "jactor", "the one")
+    ).addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = persistentEntityToTest.copy();
 
@@ -206,20 +167,20 @@ class PersistentEntityTest {
     );
   }
 
-  @DisplayName("should return an empty stream when no dependencies")
   @Test
+  @DisplayName("should return an empty stream when no dependencies")
   void shouldReturnEmptyStreamWithoutDependenciesGiven() {
-    persistentEntityToTest = anAddress().build();
+    persistentEntityToTest = anAddress(new AddressDto());
     Stream none = persistentEntityToTest.streamSequencedDependencies();
 
     assertThat(none).isEmpty();
   }
 
-  @DisplayName("should stream optional dependencies of an persistent entity")
   @Test
+  @DisplayName("should stream optional dependencies of an persistent entity")
   void shouldStreamOptionalDependencies() {
-    BlogEntity blogEntity = aBlog().build();
-    PersonEntity personEntity = aPerson().build();
+    var blogEntity = aBlog(new BlogDto());
+    var personEntity = aPerson(new PersonDto());
 
     persistentEntityToTest = personEntity;
     List<PersistentEntity> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
@@ -232,26 +193,29 @@ class PersistentEntityTest {
         .contains(blogEntity, personEntity);
   }
 
-  @DisplayName("should fetch all dependencies of a persistent entity")
   @Test
+  @DisplayName("should fetch all dependencies of a persistent entity")
   void shouldFetchAllDependencies() {
-    AddressEntity addressEntity = anAddress().build();
-    PersonEntity personEntity = aPerson().with(addressEntity).build();
-    persistentEntityToTest = aUser().with(personEntity).build();
+    var addressDto = new AddressDto();
+    var personDto = new PersonDto(null, addressDto, null, null, null, null);
+    persistentEntityToTest = aUser(new UserDto(null, personDto, null, null));
 
-    List<PersistentEntity> allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
+    var allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
 
     assertThat(allSequencedDependencies)
         .hasSize(2)
-        .contains(addressEntity, personEntity);
+        .contains(anAddress(addressDto), aPerson(personDto));
   }
 
-  @DisplayName("should add sequenced id, also on dependencies of a persistent entity")
   @Test
+  @DisplayName("should add sequenced id, also on dependencies of a persistent entity")
   void shouldAddSequencedIdAlsOnDependencies() {
-    AddressEntity addressEntity = anAddress().build();
-    PersonEntity personEntity = aPerson().with(addressEntity).build();
-    persistentEntityToTest = aUser().with(personEntity).build();
+    var addressDto = new AddressDto();
+    var personDto = new PersonDto(null, addressDto, null, null, null, null);
+    var userEntity = aUser(new UserDto(null, personDto, null, null));
+    var personEntity = userEntity.getPerson();
+    var addressEntity = personEntity.getAddressEntity();
+    persistentEntityToTest = userEntity;
 
     PersistentEntity.Sequencer sequencerMock = mock(PersistentEntity.Sequencer.class);
     when(sequencerMock.nextVal(any(Class.class))).thenReturn(123L);

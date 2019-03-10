@@ -130,4 +130,8 @@ public class BlogEntity extends PersistentEntity {
     public static BlogEntityBuilder aBlog() {
         return new BlogEntityBuilder();
     }
+
+    public static BlogEntity aBlog(BlogDto blogDto) {
+        return new BlogEntity(blogDto);
+    }
 }
