@@ -7,6 +7,7 @@ import com.github.jactor.persistence.entity.PersistentEntity;
 import com.github.jactor.persistence.entity.blog.BlogEntity;
 import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
 import com.github.jactor.persistence.entity.person.PersonEntity;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +17,8 @@ import java.util.stream.Stream;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -44,8 +47,9 @@ public class UserEntity extends PersistentEntity {
   private GuestBookEntity guestBook;
   @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
   private Set<BlogEntity> blogs = new HashSet<>();
-  @Column(name = "INACTIVE")
-  private boolean inactive;
+  @Column(name = "USER_TYPE")
+  @Enumerated(EnumType.STRING)
+  private UserType userType;
 
   UserEntity() {
     // used by builder
@@ -57,22 +61,30 @@ public class UserEntity extends PersistentEntity {
   private UserEntity(UserEntity user) {
     super(user);
     blogs = user.blogs.stream().map(BlogEntity::copy).collect(Collectors.toSet());
-    Optional.ofNullable(user.guestBook).ifPresent(gb -> guestBook = gb.copy());
     emailAddress = user.emailAddress;
-    Optional.ofNullable(user.personEntity).ifPresent(pen -> personEntity = pen.copy());
+    guestBook = Optional.ofNullable(user.guestBook).map(GuestBookEntity::copy).orElse(null);
+    userType = user.userType;
+    personEntity = Optional.ofNullable(user.personEntity).map(PersonEntity::copy).orElse(null);
     username = user.username;
   }
 
   public UserEntity(@NotNull UserDto user) {
     super(user.fetchPersistentDto());
     emailAddress = user.getEmailAddress();
-    Optional.ofNullable(user.getPerson()).ifPresent(personDto -> personEntity = new PersonEntity(personDto));
+    personEntity = Optional.ofNullable(user.getPerson()).map(PersonEntity::new).orElse(null);
     username = user.getUsername();
+    userType = Arrays.stream(UserType.values())
+        .filter(aUserType -> aUserType.name().equals(user.getUserType().name()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUserType().name()));
   }
 
   public UserDto asDto() {
-    return new UserDto(initPersistentDto(),
-        Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null), emailAddress, username
+    return new UserDto(
+        initPersistentDto(),
+        Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null),
+        emailAddress,
+        username
     );
   }
 
@@ -154,8 +166,8 @@ public class UserEntity extends PersistentEntity {
     this.personEntity = personEntity;
   }
 
-  void setInactive(boolean inactive) {
-    this.inactive = inactive;
+  void setUserType(UserType userType) {
+    this.userType = userType;
   }
 
   public static UserEntityBuilder aUser() {
@@ -164,5 +176,9 @@ public class UserEntity extends PersistentEntity {
 
   public static UserEntity aUser(UserDto userDto) {
     return new UserEntity(userDto);
+  }
+
+  public enum UserType {
+    ADMIN, ACTIVE, INACTIVE
   }
 }

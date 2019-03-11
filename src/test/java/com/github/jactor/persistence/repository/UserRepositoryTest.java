@@ -1,31 +1,26 @@
 package com.github.jactor.persistence.repository;
 
-import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.entity.address.AddressEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
-import com.github.jactor.persistence.fields.FieldValue;
-import com.github.jactor.persistence.fields.RequiredFieldsExtension;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.RegisterExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
 import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+
+import com.github.jactor.persistence.JactorPersistence;
+import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.entity.user.UserEntity.UserType;
+import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {JactorPersistence.class})
@@ -33,114 +28,116 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A UserRepository")
 class UserRepositoryTest {
 
-    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            UserEntity.class, List.of(
-                    new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, List.of(
-                    new FieldValue("addressEntity", () -> anAddress().build()),
-                    new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, List.of(
-                    new FieldValue("addressLine1", "Test Boulevard 1"),
-                    new FieldValue("zipCode", 1001),
-                    new FieldValue("city", "Testing")
-            )
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private EntityManager entityManager;
+
+  @Test
+  @DisplayName("should find user with username jactor")
+  void shouldFindJactor() {
+    Optional<UserEntity> userByName = userRepository.findByUsername("jactor");
+
+    assertAll(
+        () -> assertThat(userByName).as("default user").isPresent(),
+        () -> {
+          UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
+          assertAll(
+              () -> assertThat(userEntity.getEmailAddress()).as("user email").isEqualTo("tor.egil.jacobsen@gmail.com"),
+              () -> assertThat(userEntity.getPerson().getFirstName()).as("user first name").isEqualTo("Tor Egil")
+          );
+        }
+    );
+  }
+
+  @Test
+  @DisplayName("should write then read a user entity")
+  void shouldWriteThenReadUserEntity() {
+    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    PersonDto personDto = new PersonDto(null, addressDto, null, null, "Solo", null);
+    UserEntity userToPersist = aUser(new UserDto(
+        null, personDto, "smuggle.fast@tantooine.com", "smuggler"
     ));
 
-    private @Autowired UserRepository userRepository;
-    private @Autowired EntityManager entityManager;
+    userRepository.save(userToPersist);
+    entityManager.flush();
+    entityManager.clear();
 
-    @DisplayName("should find user with username jactor")
-    @Test void shouldFindJactor() {
-        Optional<UserEntity> userByName = userRepository.findByUsername("jactor");
+    Optional<UserEntity> userById = userRepository.findById(userToPersist.getId());
 
-        assertAll(
-                () -> assertThat(userByName).as("default user").isPresent(),
-                () -> {
-                    UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
-                    assertAll(
-                            () -> assertThat(userEntity.getEmailAddress()).as("user email").isEqualTo("tor.egil.jacobsen@gmail.com"),
-                            () -> assertThat(userEntity.getPerson().getFirstName()).as("user first name").isEqualTo("Tor Egil")
-                    );
-                }
-        );
-    }
+    assertAll(
+        () -> assertThat(userById).isPresent(),
+        () -> {
+          UserEntity userEntity = userById.orElseThrow(this::userNotFound);
+          assertAll(
+              () -> assertThat(userEntity.getPerson()).as("person").isEqualTo(userToPersist.getPerson()),
+              () -> assertThat(userEntity.getUsername()).as("username").isEqualTo("smuggler"),
+              () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("smuggle.fast@tantooine.com")
+          );
+        }
+    );
+  }
 
-    @DisplayName("should write then read a user entity")
-    @Test void shouldWriteThenReadUserEntity() {
-        UserEntity userToPersist = aUser()
-                .with(aPerson())
-                .withUsername("smuggler")
-                .withEmailAddress("smuggle.fast@tantooine.com")
-                .build();
+  @Test
+  @DisplayName("should write then update and read a user entity")
+  void shouldWriteThenUpdateAndReadUserEntity() {
+    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    PersonDto personDto = new PersonDto(null, addressDto, null, null, "AA", null);
+    UserEntity userToPersist = aUser(new UserDto(
+        null, personDto, "casuel@tantooine.com", "causual"
+    ));
 
-        userRepository.save(userToPersist);
-        entityManager.flush();
-        entityManager.clear();
+    userRepository.save(userToPersist);
+    entityManager.flush();
+    entityManager.clear();
 
-        Optional<UserEntity> userById = userRepository.findById(userToPersist.getId());
+    String lukewarm = "lukewarm";
+    userToPersist.setUsername(lukewarm);
+    userToPersist.setEmailAddress("luke@force.com");
 
-        assertAll(
-                () -> assertThat(userById).isPresent(),
-                () -> {
-                    UserEntity userEntity = userById.orElseThrow(this::userNotFound);
-                    assertAll(
-                            () -> assertThat(userEntity.getPerson()).as("person").isEqualTo(userToPersist.getPerson()),
-                            () -> assertThat(userEntity.getUsername()).as("username").isEqualTo("smuggler"),
-                            () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("smuggle.fast@tantooine.com")
-                    );
-                }
-        );
-    }
+    userRepository.save(userToPersist);
+    entityManager.flush();
+    entityManager.clear();
 
-    @DisplayName("should write then update and read a user entity")
-    @Test void shouldWriteThenUpdateAndReadUserEntity() {
-        UserEntity userToPersist = aUser()
-                .with(aPerson())
-                .withUsername("causual")
-                .withEmailAddress("casuel@tantooine.com")
-                .build();
+    Optional<UserEntity> userByName = userRepository.findByUsername(lukewarm);
 
-        userRepository.save(userToPersist);
-        entityManager.flush();
-        entityManager.clear();
+    assertAll(
+        () -> assertThat(userByName).isPresent(),
+        () -> {
+          UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
+          assertAll(
+              () -> assertThat(userEntity.getUsername()).as("username").isEqualTo(lukewarm),
+              () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("luke@force.com")
+          );
+        }
+    );
+  }
 
-        String lukewarm = "lukewarm";
-        userToPersist.setUsername(lukewarm);
-        userToPersist.setEmailAddress("luke@force.com");
+  private AssertionError userNotFound() {
+    return new AssertionError("no user found");
+  }
 
-        userRepository.save(userToPersist);
-        entityManager.flush();
-        entityManager.clear();
+  @Test
+  @DisplayName("should find all active users")
+  void shouldFindAllActiveUsers() {
+    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    PersonDto spidyPersonDto = new PersonDto(null, addressDto, null, null, "Parker", null);
+    PersonDto superPersonDto = new PersonDto(null, addressDto, null, null, "Kent", null);
+    userRepository.save(aUser(new UserDto(null, spidyPersonDto, null, "spiderman")));
+    userRepository.save(aUser(new UserDto(null, superPersonDto, null, "superman", com.github.jactor.persistence.dto.UserType.INACTIVE)));
+    entityManager.flush();
+    entityManager.clear();
 
-        Optional<UserEntity> userByName = userRepository.findByUsername(lukewarm);
+    List<String> usernames = userRepository.findByUserType(UserType.ACTIVE).stream()
+        .map(UserEntity::getUsername)
+        .collect(toList());
 
-        assertAll(
-                () -> assertThat(userByName).isPresent(),
-                () -> {
-                    UserEntity userEntity = userByName.orElseThrow(this::userNotFound);
-                    assertAll(
-                            () -> assertThat(userEntity.getUsername()).as("username").isEqualTo(lukewarm),
-                            () -> assertThat(userEntity.getEmailAddress()).as("emailAddress").isEqualTo("luke@force.com")
-                    );
-                }
-        );
-    }
+    assertThat(usernames).containsExactly("tip", "spiderman");
 
-    private AssertionError userNotFound() {
-        return new AssertionError("no user found");
-    }
+    usernames = userRepository.findByUserType(UserType.ADMIN).stream()
+        .map(UserEntity::getUsername)
+        .collect(toList());
 
-    @DisplayName("should find all active users")
-    @Test void shouldFindAllActiveUsers() {
-        userRepository.save(aUser().withUsername("spiderman").build());
-        userRepository.save(aUser().withUsername("ironman").isInactive().build());
-        entityManager.flush();
-        entityManager.clear();
-
-        List<String> usernames = userRepository.findByInactiveOrderByUsername(false).stream()
-                .map(UserRepository.UsernameProjection::getUsername)
-                .collect(toList());
-
-        assertThat(usernames).containsExactly("jactor", "spiderman", "tip");
-    }
+    assertThat(usernames).containsExactly("jactor");
+  }
 }

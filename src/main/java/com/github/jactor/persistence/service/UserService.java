@@ -36,8 +36,8 @@ public class UserService {
     }
 
     public List<String> findUsernamesOnActiveUsers() {
-        return userRepository.findByInactiveOrderByUsername(false).stream()
-                .map(UserRepository.UsernameProjection::getUsername)
+        return userRepository.findByUserType(UserEntity.UserType.ACTIVE).stream()
+                .map(UserEntity::getUsername)
                 .collect(Collectors.toList());
     }
 }
