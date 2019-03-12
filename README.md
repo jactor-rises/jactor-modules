@@ -12,7 +12,7 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
 
 * a spring-boot 2 application is created when building (`mvn install`)
   * is using h2 (in-memory database)
-  * run it with mvn `spring-boot:run`
+  * run it with `mvn spring-boot:run`
 
 ### Some technologies used ###
 
