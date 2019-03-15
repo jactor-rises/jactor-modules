@@ -96,7 +96,7 @@ class GuestBookEntryRepositoryTest {
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
 
-    UserEntity savedUser = userRepository.save(new UserEntity(userDto));
+    var savedUser = userRepository.save(new UserEntity(userDto));
     var guestbookDto = new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto());
 
     guestBookEntryRepository.save(aGuestBookEntry(
@@ -109,11 +109,9 @@ class GuestBookEntryRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var guestBookEntryToSave = aGuestBookEntry()
-        .with(guestBookToSave)
-        .withCreatorName("shrek")
-        .withEntry("far far away")
-        .build();
+    var guestBookEntryToSave = aGuestBookEntry(
+        new GuestBookEntryDto(new PersistentDto(), guestBookToSave.asDto(), "shrek", "far far away")
+    );
 
     guestBookEntryRepository.save(guestBookEntryToSave);
     entityManager.flush();
