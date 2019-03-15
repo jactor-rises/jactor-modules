@@ -3,7 +3,6 @@ package com.github.jactor.persistence.entity.person;
 import com.github.jactor.persistence.builder.AbstractBuilder;
 import com.github.jactor.persistence.builder.MissingFields;
 import com.github.jactor.persistence.entity.address.AddressEntity;
-import com.github.jactor.persistence.entity.address.AddressEntityBuilder;
 import com.github.jactor.persistence.entity.user.UserEntity;
 import com.github.jactor.persistence.entity.user.UserEntityBuilder;
 
@@ -25,10 +24,6 @@ public class PersonEntityBuilder extends AbstractBuilder<PersonEntity> {
     public PersonEntityBuilder with(AddressEntity entity) {
         addressEntity = entity;
         return this;
-    }
-
-    public PersonEntityBuilder with(AddressEntityBuilder addressEntityBuilder) {
-        return with(addressEntityBuilder.build());
     }
 
     public PersonEntityBuilder with(UserEntityBuilder userEntityBuilder) {

@@ -36,14 +36,9 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy an address without the id")
   void shouldCopyAddress() {
-    persistentEntityToTest = anAddress()
-        .withAddressLine1("somewhere")
-        .withAddressLine2("out")
-        .withAddressLine3("there")
-        .withCity("svg")
-        .withCountryCode("NO")
-        .withZipCode(1001)
-        .build().addSequencedId(aClass -> 1L);
+    persistentEntityToTest = anAddress(
+        new AddressDto(null, 1001, "somewhere", "out", "there", "svg", "NO")
+    ).addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = persistentEntityToTest.copy();
 
