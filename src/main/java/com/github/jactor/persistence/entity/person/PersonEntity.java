@@ -163,10 +163,6 @@ public class PersonEntity extends PersistentEntity {
     this.userEntity = userEntity;
   }
 
-  public static PersonEntityBuilder aPerson() {
-    return new PersonEntityBuilder();
-  }
-
   public static PersonEntity aPerson(PersonDto personDto) {
     return new PersonEntity(personDto);
   }
