@@ -150,10 +150,6 @@ public class BlogEntryEntity extends PersistentEntity {
     return entryEmbeddable.getEntry();
   }
 
-  public static BlogEntryEntityBuilder aBlogEntry() {
-    return new BlogEntryEntityBuilder();
-  }
-
   public static BlogEntryEntity aBlogEntry(BlogEntryDto blogEntryDto) {
     return new BlogEntryEntity(blogEntryDto);
   }

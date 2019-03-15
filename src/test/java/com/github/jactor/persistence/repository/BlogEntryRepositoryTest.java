@@ -1,6 +1,5 @@
 package com.github.jactor.persistence.repository;
 
-import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
 import static com.github.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -123,16 +122,12 @@ class BlogEntryRepositoryTest {
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
     var userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "black");
+    var savedUser = userRepository.save(new UserEntity(userDto));
+    var blogDto = new BlogDto(new PersistentDto(), LocalDate.now(), "see you later alligator", savedUser.asDto());
 
-    UserEntity savedUser = userRepository.save(new UserEntity(userDto));
-
-    blogEntryRepository.save(
-        aBlogEntry()
-            .with(aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "see you later alligator", savedUser.asDto())))
-            .withCreatorName("someone")
-            .withEntry("jadda")
-            .build()
-    );
+    blogEntryRepository.save(aBlogEntry(new BlogEntryDto(
+        new PersistentDto(), blogDto, "someone", "jadda"
+    )));
 
     var knownBlog = new BlogEntity(new BlogDto(new PersistentDto(), LocalDate.now(), "out there", savedUser.asDto()));
 
