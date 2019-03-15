@@ -1,14 +1,13 @@
 package com.github.jactor.persistence.repository;
 
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
+import static com.github.jactor.persistence.entity.AddressEntity.anAddress;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.entity.address.AddressEntity;
-import java.util.Optional;
+import com.github.jactor.persistence.entity.AddressEntity;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,9 @@
-package com.github.jactor.persistence.entity.blog;
+package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
-import com.github.jactor.persistence.entity.EntryEmbeddable;
-import com.github.jactor.persistence.entity.PersistentEntity;
 import com.github.jactor.persistence.time.Now;
 import java.util.Objects;
 import java.util.Optional;

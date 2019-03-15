@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.service;
 
-import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactor.persistence.entity.BlogEntity.aBlog;
+import static com.github.jactor.persistence.entity.BlogEntryEntity.aBlogEntry;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -11,8 +11,8 @@ import static org.mockito.Mockito.when;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.blog.BlogEntity;
-import com.github.jactor.persistence.entity.blog.BlogEntryEntity;
+import com.github.jactor.persistence.entity.BlogEntity;
+import com.github.jactor.persistence.entity.BlogEntryEntity;
 import com.github.jactor.persistence.repository.BlogEntryRepository;
 import com.github.jactor.persistence.repository.BlogRepository;
 import java.util.Collections;

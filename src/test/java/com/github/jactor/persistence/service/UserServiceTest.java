@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.service;
 
-import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactor.persistence.entity.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
@@ -11,7 +11,7 @@ import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.dto.UserType;
-import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
