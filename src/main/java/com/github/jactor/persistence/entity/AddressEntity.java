@@ -1,9 +1,8 @@
-package com.github.jactor.persistence.entity.address;
+package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.AddressDto;
-import com.github.jactor.persistence.entity.PersistentEntity;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;

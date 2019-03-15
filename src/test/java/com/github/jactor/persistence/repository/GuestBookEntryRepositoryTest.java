@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.repository;
 
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactor.persistence.entity.GuestBookEntity.aGuestBook;
+import static com.github.jactor.persistence.entity.GuestBookEntryEntity.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -12,7 +12,7 @@ import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;

@@ -1,12 +1,8 @@
-package com.github.jactor.persistence.entity.user;
+package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.PersistentEntity;
-import com.github.jactor.persistence.entity.blog.BlogEntity;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;

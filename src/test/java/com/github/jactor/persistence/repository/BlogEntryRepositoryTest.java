@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.repository;
 
-import static com.github.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
+import static com.github.jactor.persistence.entity.BlogEntryEntity.aBlogEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -11,9 +11,9 @@ import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.blog.BlogEntity;
-import com.github.jactor.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.entity.BlogEntity;
+import com.github.jactor.persistence.entity.BlogEntryEntity;
+import com.github.jactor.persistence.entity.UserEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,11 +1,8 @@
-package com.github.jactor.persistence.entity.person;
+package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.entity.PersistentEntity;
-import com.github.jactor.persistence.entity.address.AddressEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -42,8 +39,9 @@ public class PersonEntity extends PersistentEntity {
   @OneToOne(mappedBy = "personEntity", cascade = CascadeType.MERGE)
   private UserEntity userEntity;
 
+  @SuppressWarnings("unused")
   PersonEntity() {
-    // used by builder
+    // used by entity manager
   }
 
   private PersonEntity(PersonEntity person) {
@@ -65,9 +63,9 @@ public class PersonEntity extends PersistentEntity {
     surname = person.getSurname();
   }
 
-    public PersonDto asDto() {
-        return new PersonDto(initPersistentDto(), addressEntity.asDto(), locale, firstName, surname, description);
-    }
+  public PersonDto asDto() {
+    return new PersonDto(initPersistentDto(), addressEntity.asDto(), locale, firstName, surname, description);
+  }
 
   @Override
   public PersonEntity copy() {

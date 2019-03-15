@@ -1,9 +1,9 @@
 package com.github.jactor.persistence.aop;
 
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactor.persistence.entity.AddressEntity.anAddress;
+import static com.github.jactor.persistence.entity.GuestBookEntity.aGuestBook;
+import static com.github.jactor.persistence.entity.PersonEntity.aPerson;
+import static com.github.jactor.persistence.entity.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
@@ -12,10 +12,10 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.GuestBookEntity;
 import com.github.jactor.persistence.entity.PersistentEntity;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
+import com.github.jactor.persistence.entity.PersonEntity;
+import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
 import org.aspectj.lang.JoinPoint;
 import org.junit.jupiter.api.BeforeEach;

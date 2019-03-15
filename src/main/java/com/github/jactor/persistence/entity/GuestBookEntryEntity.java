@@ -1,11 +1,9 @@
-package com.github.jactor.persistence.entity.guestbook;
+package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
-import com.github.jactor.persistence.entity.EntryEmbeddable;
-import com.github.jactor.persistence.entity.PersistentEntity;
 import com.github.jactor.persistence.time.Now;
 import java.util.Objects;
 import java.util.Optional;

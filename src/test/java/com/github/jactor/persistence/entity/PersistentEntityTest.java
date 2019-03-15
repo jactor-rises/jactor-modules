@@ -1,12 +1,12 @@
 package com.github.jactor.persistence.entity;
 
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
-import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
+import static com.github.jactor.persistence.entity.AddressEntity.anAddress;
+import static com.github.jactor.persistence.entity.BlogEntity.aBlog;
+import static com.github.jactor.persistence.entity.BlogEntryEntity.aBlogEntry;
+import static com.github.jactor.persistence.entity.GuestBookEntity.aGuestBook;
+import static com.github.jactor.persistence.entity.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactor.persistence.entity.PersonEntity.aPerson;
+import static com.github.jactor.persistence.entity.UserEntity.aUser;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

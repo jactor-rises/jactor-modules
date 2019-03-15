@@ -2,8 +2,8 @@ package com.github.jactor.persistence.service;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactor.persistence.entity.GuestBookEntity;
+import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.repository.GuestBookEntryRepository;
 import com.github.jactor.persistence.repository.GuestBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;

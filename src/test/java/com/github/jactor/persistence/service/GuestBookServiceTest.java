@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.service;
 
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
+import static com.github.jactor.persistence.entity.GuestBookEntity.aGuestBook;
+import static com.github.jactor.persistence.entity.GuestBookEntryEntity.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity;
+import com.github.jactor.persistence.entity.GuestBookEntity;
+import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.repository.GuestBookEntryRepository;
 import com.github.jactor.persistence.repository.GuestBookRepository;
 import java.util.HashSet;
