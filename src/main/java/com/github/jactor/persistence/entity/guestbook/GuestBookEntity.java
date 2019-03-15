@@ -122,10 +122,6 @@ public class GuestBookEntity extends PersistentEntity {
         this.user = user;
     }
 
-    public static GuestBookEntityBuilder aGuestBook() {
-        return new GuestBookEntityBuilder();
-    }
-
     public static GuestBookEntity aGuestBook(GuestBookDto guestBookDto) {
         return new GuestBookEntity(guestBookDto);
     }

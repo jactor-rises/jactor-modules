@@ -151,10 +151,6 @@ public class GuestBookEntryEntity extends PersistentEntity {
     entryEmbeddable.setCreatorName(creatorName);
   }
 
-  public static GuestBookEntryEntityBuilder aGuestBookEntry() {
-    return new GuestBookEntryEntityBuilder();
-  }
-
   public static GuestBookEntryEntity aGuestBookEntry(GuestBookEntryDto guestBookEntryDto) {
     return new GuestBookEntryEntity(guestBookEntryDto);
   }
