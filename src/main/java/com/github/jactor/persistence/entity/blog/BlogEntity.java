@@ -127,10 +127,6 @@ public class BlogEntity extends PersistentEntity {
         this.userEntity = userEntity;
     }
 
-    public static BlogEntityBuilder aBlog() {
-        return new BlogEntityBuilder();
-    }
-
     public static BlogEntity aBlog(BlogDto blogDto) {
         return new BlogEntity(blogDto);
     }
