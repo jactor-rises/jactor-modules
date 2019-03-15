@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.repository;
 
-import com.github.jactor.persistence.entity.address.AddressEntity;
+import com.github.jactor.persistence.entity.AddressEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

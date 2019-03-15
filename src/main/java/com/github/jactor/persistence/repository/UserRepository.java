@@ -1,19 +1,14 @@
 package com.github.jactor.persistence.repository;
 
-import com.github.jactor.persistence.entity.user.UserEntity;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.CrudRepository;
-
+import com.github.jactor.persistence.entity.UserEntity;
+import com.github.jactor.persistence.entity.UserEntity.UserType;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
-    Optional<UserEntity> findByUsername(String username);
 
-    List<UsernameProjection> findByInactiveOrderByUsername(boolean inactive);
+  Optional<UserEntity> findByUsername(String username);
 
-    interface UsernameProjection {
-        @Value("#{target.username}")
-        String getUsername();
-    }
+  List<UserEntity> findByUserType(UserType userType);
 }

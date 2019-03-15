@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.repository;
 
-import com.github.jactor.persistence.entity.blog.BlogEntity;
+import com.github.jactor.persistence.entity.BlogEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

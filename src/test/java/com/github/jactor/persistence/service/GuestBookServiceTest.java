@@ -1,11 +1,7 @@
 package com.github.jactor.persistence.service;
 
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntity.aGuestBook;
-import static com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity.aGuestBookEntry;
-import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
-import static java.util.Collections.singletonList;
+import static com.github.jactor.persistence.entity.GuestBookEntity.aGuestBook;
+import static com.github.jactor.persistence.entity.GuestBookEntryEntity.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.verify;
@@ -14,25 +10,17 @@ import static org.mockito.Mockito.when;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.address.AddressEntity;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntity;
-import com.github.jactor.persistence.entity.guestbook.GuestBookEntryEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
-import com.github.jactor.persistence.fields.FieldValue;
-import com.github.jactor.persistence.fields.RequiredFieldsExtension;
+import com.github.jactor.persistence.entity.GuestBookEntity;
+import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.repository.GuestBookEntryRepository;
 import com.github.jactor.persistence.repository.GuestBookRepository;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -40,26 +28,6 @@ import org.mockito.MockitoAnnotations;
 
 @DisplayName("A GuestBookService")
 class GuestBookServiceTest {
-
-  @RegisterExtension
-  RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-      GuestBookEntryEntity.class, singletonList(
-          new FieldValue("guestBook", () -> aGuestBook().build())
-      ), GuestBookEntity.class, List.of(
-          new FieldValue("title", "my book"),
-          new FieldValue("user", () -> aUser().build())
-      ), UserEntity.class, List.of(
-          new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
-          new FieldValue("personEntity", () -> aPerson().build())
-      ), PersonEntity.class, List.of(
-          new FieldValue("addressEntity", () -> anAddress().build()),
-          new FieldValue("surname", "sure, man")
-      ), AddressEntity.class, List.of(
-          new FieldValue("addressLine1", "Test Boulevard 1"),
-          new FieldValue("zipCode", 1001),
-          new FieldValue("city", "Testing")
-      )
-  ));
 
   @InjectMocks
   private GuestBookService guestBookServiceToTest;
@@ -76,7 +44,7 @@ class GuestBookServiceTest {
   @Test
   @DisplayName("should map guest book to a dto")
   void shouldMapBlogToDto() {
-    Optional<GuestBookEntity> guestBookEntity = Optional.of(aGuestBook().withTitle("@home").build());
+    Optional<GuestBookEntity> guestBookEntity = Optional.of(aGuestBook(new GuestBookDto(null, new HashSet<>(), "@home", null)));
     when(guestBookRepositoryMock.findById(1001L)).thenReturn(guestBookEntity);
 
     GuestBookDto guestBookDto = guestBookServiceToTest.find(1001L).orElseThrow(mockError());
@@ -87,7 +55,10 @@ class GuestBookServiceTest {
   @Test
   @DisplayName("should map guest book entry to a dto")
   void shouldMapFoundBlogToDto() {
-    Optional<GuestBookEntryEntity> anEntry = Optional.of(aGuestBookEntry().withCreatorName("me").withEntry("too").build());
+    Optional<GuestBookEntryEntity> anEntry = Optional.of(aGuestBookEntry(
+        new GuestBookEntryDto(null, new GuestBookDto(), "me", "too")
+    ));
+
     when(guestBookEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
 
     GuestBookEntryDto guestBookEntryDto = guestBookServiceToTest.findEntry(1001L).orElseThrow(mockError());
