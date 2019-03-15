@@ -1,36 +1,26 @@
 package com.github.jactor.persistence.repository;
 
+import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.entity.address.AddressEntity;
-import com.github.jactor.persistence.entity.blog.BlogEntity;
+import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.dto.PersistentDto;
+import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.blog.BlogEntryEntity;
-import com.github.jactor.persistence.entity.person.PersonEntity;
-import com.github.jactor.persistence.entity.user.UserEntity;
-import com.github.jactor.persistence.fields.FieldValue;
-import com.github.jactor.persistence.fields.RequiredFieldsExtension;
+import java.time.LocalDate;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static com.github.jactor.persistence.entity.address.AddressEntity.anAddress;
-import static com.github.jactor.persistence.entity.blog.BlogEntity.aBlog;
-import static com.github.jactor.persistence.entity.blog.BlogEntryEntity.aBlogEntry;
-import static com.github.jactor.persistence.entity.person.PersonEntity.aPerson;
-import static com.github.jactor.persistence.entity.user.UserEntity.aUser;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {JactorPersistence.class})
@@ -38,123 +28,130 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("A BlogRepository")
 class BlogRepositoryTest {
 
-    @RegisterExtension RequiredFieldsExtension requiredFieldsExtension = new RequiredFieldsExtension(Map.of(
-            UserEntity.class, List.of(
-                    new FieldValue("username", () -> "unique@" + LocalDateTime.now()),
-                    new FieldValue("personEntity", () -> aPerson().build())
-            ), PersonEntity.class, List.of(
-                    new FieldValue("addressEntity", () -> anAddress().build()),
-                    new FieldValue("surname", "sure, man")
-            ), AddressEntity.class, List.of(
-                    new FieldValue("addressLine1", "Test Boulevard 1"),
-                    new FieldValue("zipCode", 1001),
-                    new FieldValue("city", "Testing")
-            )
+  @Autowired
+  private BlogRepository blogRepositoryToTest;
+  @Autowired
+  private EntityManager entityManager;
+
+  @Test
+  @DisplayName("should save and then read blog entity")
+  void shouldSaveThenReadBlogEntity() {
+    var addressDto = new AddressDto(
+        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+    );
+
+    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "black");
+    var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
+
+    blogRepositoryToTest.save(blogEntityToSave);
+    entityManager.flush();
+    entityManager.clear();
+
+    var possibleBlogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
+
+    assertAll(
+        () -> assertThat(possibleBlogById).as("blog").isPresent(),
+        () -> {
+          var blogEntity = possibleBlogById.orElseThrow(this::blogNotFound);
+          assertThat(blogEntity.getCreated()).as("created").isEqualTo(LocalDate.now());
+          assertThat(blogEntity.getTitle()).as("title").isEqualTo("Blah");
+        }
+    );
+  }
+
+  @Test
+  @DisplayName("should save then update and read blog entity")
+  void shouldSaveThenUpdateAndReadBlogEntity() {
+    var addressDto = new AddressDto(
+        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+    );
+
+    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "black");
+    var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
+
+    blogRepositoryToTest.save(blogEntityToSave);
+    entityManager.flush();
+    entityManager.clear();
+
+    var blogEntitySaved = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
+    blogEntitySaved.setTitle("Duh");
+
+    blogRepositoryToTest.save(blogEntitySaved);
+    entityManager.flush();
+    entityManager.clear();
+
+    var possibleBlogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
+
+    assertAll(
+        () -> assertThat(possibleBlogById).as("blog").isPresent(),
+        () -> {
+          var blogEntity = possibleBlogById.orElseThrow(this::blogNotFound);
+          assertThat(blogEntity.getCreated()).as("created").isEqualTo(LocalDate.now());
+          assertThat(blogEntity.getTitle()).as("title").isEqualTo("Duh");
+        }
+    );
+  }
+
+  @Test
+  @DisplayName("should find blog by title")
+  void shouldFindBlogByTitle() {
+    var addressDto = new AddressDto(
+        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+    );
+
+    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "black");
+    var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
+
+    blogRepositoryToTest.save(blogEntityToSave);
+    entityManager.flush();
+    entityManager.clear();
+
+    var blogs = blogRepositoryToTest.findBlogsByTitle("Blah");
+
+    assertAll(
+        () -> assertThat(blogs).as("blogs").hasSize(1),
+        () -> assertThat(blogs.get(0)).as("blog").isNotNull(),
+        () -> assertThat(blogs.get(0).getCreated()).as("blog.created").isEqualTo(LocalDate.now())
+    );
+  }
+
+  @Test
+  @DisplayName("should be able to relate a blog entry")
+  void shouldRelateBlogEntry() {
+    var addressDto = new AddressDto(
+        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+    );
+
+    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "black");
+    var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
+
+    var blogEntryToSave = new BlogEntryEntity(new BlogEntryDto(
+        new PersistentDto(), blogEntityToSave.asDto(), "arnold", "i'll be back"
     ));
 
-    private @Autowired BlogRepository blogRepositoryToTest;
-    private @Autowired EntityManager entityManager;
+    blogEntityToSave.add(blogEntryToSave);
 
-    @DisplayName("should save and then read blog entity")
-    @Test void shouldSaveThenReadBlogEntity() {
-        BlogEntity blogEntityToSave = aBlog()
-                .with(aUser())
-                .withTitle("Blah")
-                .build();
+    blogRepositoryToTest.save(blogEntityToSave);
+    entityManager.flush();
+    entityManager.clear();
 
-        blogRepositoryToTest.save(blogEntityToSave);
-        entityManager.flush();
-        entityManager.clear();
+    var blogById = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
 
-        Optional<BlogEntity> blogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
+    assertAll(
+        () -> assertThat(blogById.getEntries()).as("entries").hasSize(1),
+        () -> {
+          BlogEntryEntity blogEntryEntity = blogById.getEntries().iterator().next();
+          assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("i'll be back");
+          assertThat(blogEntryEntity.getCreatorName()).as("creatorName").isEqualTo("arnold");
+        }
+    );
+  }
 
-        assertAll(
-                () -> assertThat(blogById).as("blog").isPresent(),
-                () -> {
-                    BlogEntity blogEntity = blogById.orElseThrow(this::blogNotFound);
-                    assertThat(blogEntity.getCreated()).as("created").isEqualTo(LocalDate.now());
-                    assertThat(blogEntity.getTitle()).as("title").isEqualTo("Blah");
-                }
-        );
-    }
-
-    @DisplayName("should save then update and read blog entity")
-    @Test void shouldSaveThenUpdateAndReadBlogEntity() {
-        BlogEntity blogEntityToSave = aBlog()
-                .with(aUser())
-                .withTitle("Blah")
-                .build();
-
-        blogRepositoryToTest.save(blogEntityToSave);
-        entityManager.flush();
-        entityManager.clear();
-
-        BlogEntity blogEntitySaved = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
-        blogEntitySaved.setTitle("Duh");
-
-        blogRepositoryToTest.save(blogEntitySaved);
-        entityManager.flush();
-        entityManager.clear();
-
-        Optional<BlogEntity> blogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
-
-        assertAll(
-                () -> assertThat(blogById).as("blog").isPresent(),
-                () -> {
-                    BlogEntity blogEntity = blogById.orElseThrow(this::blogNotFound);
-                    assertThat(blogEntity.getCreated()).as("created").isEqualTo(LocalDate.now());
-                    assertThat(blogEntity.getTitle()).as("title").isEqualTo("Duh");
-                }
-        );
-    }
-
-    @DisplayName("should find blog by title")
-    @Test void shouldFindBlogByTitle() {
-        BlogEntity blogEntityToSave = aBlog()
-                .with(aUser())
-                .withTitle("Blah")
-                .build();
-
-        blogRepositoryToTest.save(blogEntityToSave);
-        entityManager.flush();
-        entityManager.clear();
-
-        List<BlogEntity> blogs = blogRepositoryToTest.findBlogsByTitle("Blah");
-
-        assertAll(
-                () -> assertThat(blogs).as("blogs").hasSize(1),
-                () -> assertThat(blogs.get(0)).as("blog").isNotNull(),
-                () -> assertThat(blogs.get(0).getCreated()).as("blog.created").isEqualTo(LocalDate.now())
-        );
-    }
-
-    @DisplayName("should be able to relate a blog entry")
-    @Test void shouldRelateBlogEntry() {
-        BlogEntity blogEntityToSave = aBlog()
-                .with(aUser())
-                .withTitle("Blah")
-                .build();
-
-        BlogEntryEntity blogEntryToSave = aBlogEntry().withCreatorName("arnold").withEntry("i'll be back").with(blogEntityToSave).build();
-        blogEntityToSave.add(blogEntryToSave);
-
-        blogRepositoryToTest.save(blogEntityToSave);
-        entityManager.flush();
-        entityManager.clear();
-
-        BlogEntity blogById = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
-
-        assertAll(
-                () -> assertThat(blogById.getEntries()).as("entries").hasSize(1),
-                () -> {
-                    BlogEntryEntity blogEntryEntity = blogById.getEntries().iterator().next();
-                    assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("i'll be back");
-                    assertThat(blogEntryEntity.getCreatorName()).as("creatorName").isEqualTo("arnold");
-                }
-        );
-    }
-
-    private AssertionError blogNotFound() {
-        return new AssertionError("Blog not found");
-    }
+  private AssertionError blogNotFound() {
+    return new AssertionError("Blog not found");
+  }
 }
