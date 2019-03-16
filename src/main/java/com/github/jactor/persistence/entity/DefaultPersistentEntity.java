@@ -12,7 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class DefaultPersistentEntity implements PersistentData {
+public abstract class DefaultPersistentEntity implements PersistentEntity {
 
   @Column(name = "CREATION_TIME")
   private LocalDateTime creationTime;
@@ -45,50 +45,50 @@ public abstract class DefaultPersistentEntity implements PersistentData {
     updatedTime = persistentDto.getUpdatedTime();
   }
 
-  public PersistentData addSequencedId(Sequencer sequencer) {
+  public DefaultPersistentEntity addSequencedId(Sequencer sequencer) {
     if (getId() == null) {
       addSequencedId(this, sequencer);
     }
 
-    fetchAllSequencedDependencies().stream()
+    fetchAllPersistentEntities().stream()
         .filter(dependency -> dependency.getId() == null)
         .forEach(depencency -> addSequencedId(depencency, sequencer));
 
     return this;
   }
 
-  private void addSequencedId(PersistentData<?> persistentData, Sequencer sequencer) {
-    Long id = sequencer.nextVal(persistentData.getClass());
-    persistentData.setId(id);
+  private void addSequencedId(PersistentEntity<?> persistentEntity, Sequencer sequencer) {
+    Long id = sequencer.nextVal(persistentEntity.getClass());
+    persistentEntity.setId(id);
   }
 
-  public Stream<PersistentData> streamSequencedDependencies(PersistentData... persistentData) {
-    if (persistentData == null) {
+  public Stream<PersistentEntity> streamSequencedDependencies(PersistentEntity... persistentEntities) {
+    if (persistentEntities == null) {
       return Stream.empty();
     }
 
-    return Arrays.stream(persistentData)
+    return Arrays.stream(persistentEntities)
         .filter(Objects::nonNull);
   }
 
-  List<PersistentData> fetchAllSequencedDependencies() {
-    List<PersistentData> allSequencedDependencies = new ArrayList<>();
+  List<PersistentEntity> fetchAllPersistentEntities() {
+    List<PersistentEntity> allSequencedDependencies = new ArrayList<>();
     streamSequencedDependencies(this)
         .forEach(persistentData -> addAllSequencedDependencis(persistentData, allSequencedDependencies));
 
     return allSequencedDependencies;
   }
 
-  private void addAllSequencedDependencis(PersistentData dependency, List<PersistentData> allSequencedDependencies) {
-    allSequencedDependencies.add(dependency);
-    fetchSequencedDependencies(dependency)
-        .filter(persistentData -> !allSequencedDependencies.contains(persistentData)) // if not added by other dependency
-        .forEach(persistentData -> addAllSequencedDependencis(persistentData, allSequencedDependencies));
+  private void addAllSequencedDependencis(PersistentEntity persistentEntity, List<PersistentEntity> allSequencedEntities) {
+    allSequencedEntities.add(persistentEntity);
+    fetchSequencedDependencies(persistentEntity)
+        .filter(entityToSequence -> !allSequencedEntities.contains(entityToSequence)) // if not added by other dependency
+        .forEach(entityToSequence -> addAllSequencedDependencis(entityToSequence, allSequencedEntities));
   }
 
   @SuppressWarnings("unchecked")
-  private Stream<PersistentData> fetchSequencedDependencies(PersistentData persistentData) {
-    return persistentData.streamSequencedDependencies()
+  private Stream<PersistentEntity> fetchSequencedDependencies(PersistentEntity persistentEntity) {
+    return persistentEntity.streamSequencedDependencies()
         .filter(Objects::nonNull);
   }
 

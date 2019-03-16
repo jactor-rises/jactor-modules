@@ -28,7 +28,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_USER")
-public class UserEntity extends PersistentEntity {
+public class UserEntity extends DefaultPersistentEntity {
 
   @Id
   private Long id;

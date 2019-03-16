@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryEntity extends PersistentEntity {
+public class GuestBookEntryEntity extends DefaultPersistentEntity {
 
   @Id
   private Long id;
@@ -98,7 +98,7 @@ public class GuestBookEntryEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<PersistentData> streamSequencedDependencies() {
+  public Stream<PersistentEntity> streamSequencedDependencies() {
     return streamSequencedDependencies(guestBook);
   }
 

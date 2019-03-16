@@ -21,7 +21,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonEntity extends PersistentEntity {
+public class PersonEntity extends DefaultPersistentEntity {
 
   @Id
   private Long id;
@@ -79,7 +79,7 @@ public class PersonEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<PersistentData> streamSequencedDependencies() {
+  public Stream<PersistentEntity> streamSequencedDependencies() {
     return streamSequencedDependencies(addressEntity, userEntity);
   }
 

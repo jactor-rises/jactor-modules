@@ -12,8 +12,8 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.DefaultPersistentEntity;
 import com.github.jactor.persistence.entity.GuestBookEntity;
-import com.github.jactor.persistence.entity.PersistentEntity;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
@@ -45,9 +45,9 @@ class IdentitySequencerTest {
         new Object[]{anAddress(addressDto)}, new Object[]{anAddress(addressDto)}, new Object[]{anAddress(addressDto)}
     );
 
-    PersistentEntity first = (PersistentEntity) identitySequencer.addIdentity(joinPointMock);
-    PersistentEntity second = (PersistentEntity) identitySequencer.addIdentity(joinPointMock);
-    PersistentEntity third = (PersistentEntity) identitySequencer.addIdentity(joinPointMock);
+    DefaultPersistentEntity first = (DefaultPersistentEntity) identitySequencer.addIdentity(joinPointMock);
+    DefaultPersistentEntity second = (DefaultPersistentEntity) identitySequencer.addIdentity(joinPointMock);
+    DefaultPersistentEntity third = (DefaultPersistentEntity) identitySequencer.addIdentity(joinPointMock);
 
     assertAll(
         () -> assertThat(first.getId()).as("first").isEqualTo(1000000L),
