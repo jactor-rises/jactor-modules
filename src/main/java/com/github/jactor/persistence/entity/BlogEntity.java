@@ -26,7 +26,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_BLOG")
-public class BlogEntity extends PersistentEntity {
+public class BlogEntity extends DefaultPersistentEntity {
 
   @Id
   private Long id;

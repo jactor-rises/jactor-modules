@@ -27,82 +27,82 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("A PersistentEntity")
+@DisplayName("A DefaultPersistentEntity")
 class PersistentEntityTest {
 
-  private PersistentEntity persistentEntityToTest;
+  private DefaultPersistentEntity defaultPersistentEntityToTest;
 
   @Test
   @DisplayName("should be able to copy an address without the id")
   void shouldCopyAddress() {
-    persistentEntityToTest = (PersistentEntity) anAddress(
+    defaultPersistentEntityToTest = anAddress(
         new AddressDto(null, 1001, "somewhere", "out", "there", "svg", "NO")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
+    DefaultPersistentEntity copy = (DefaultPersistentEntity) defaultPersistentEntityToTest.copy();
 
     assertAll(
-        () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
-        () -> assertThat(persistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity").isNotNull(),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
         () -> assertThat(copy).as("copy").isNotNull(),
         () -> assertThat(copy.getId()).as("id of copy").isNull(),
-        () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
-        () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
 
   @Test
   @DisplayName("should be able to copy a person without the id")
   void shouldCopyPerson() {
-    persistentEntityToTest = (PersistentEntity) aPerson(
+    defaultPersistentEntityToTest = aPerson(
         new PersonDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
+    DefaultPersistentEntity copy = (DefaultPersistentEntity) defaultPersistentEntityToTest.copy();
 
     assertAll(
-        () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
-        () -> assertThat(persistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity").isNotNull(),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
         () -> assertThat(copy).as("copy").isNotNull(),
         () -> assertThat(copy.getId()).as("id of copy").isNull(),
-        () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
-        () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
 
   @Test
   @DisplayName("should be able to copy a user without the id")
   void shouldCopyUser() {
-    persistentEntityToTest = (PersistentEntity) aUser(new UserDto(null, null, "i.am@home", "jactor"))
+    defaultPersistentEntityToTest = aUser(new UserDto(null, null, "i.am@home", "jactor"))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
+    DefaultPersistentEntity copy = (DefaultPersistentEntity) defaultPersistentEntityToTest.copy();
 
     assertAll(
-        () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
-        () -> assertThat(persistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity").isNotNull(),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
         () -> assertThat(copy).as("copy").isNotNull(),
         () -> assertThat(copy.getId()).as("id of copy").isNull(),
-        () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
-        () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
 
   @Test
   @DisplayName("should be able to copy a blog without the id")
   void shouldCopyBlog() {
-    persistentEntityToTest = (PersistentEntity) aBlog(new BlogDto(null, null, "general ignorance", new UserDto()))
+    defaultPersistentEntityToTest = aBlog(new BlogDto(null, null, "general ignorance", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
+    DefaultPersistentEntity copy = (DefaultPersistentEntity) defaultPersistentEntityToTest.copy();
 
     assertAll(
-        () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
-        () -> assertThat(persistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity").isNotNull(),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
         () -> assertThat(copy).as("copy").isNotNull(),
         () -> assertThat(copy.getId()).as("id of copy").isNull(),
-        () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
-        () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
 
@@ -110,62 +110,62 @@ class PersistentEntityTest {
   @DisplayName("should be able to copy a blog entry without the id")
   void shouldCopyBlogEntry() {
     BlogEntryDto blogEntryDto = new BlogEntryDto(null, new BlogDto(), "jactor", "the one");
-    persistentEntityToTest = (PersistentEntity) aBlogEntry(blogEntryDto).addSequencedId(aClass -> 1L);
+    defaultPersistentEntityToTest = aBlogEntry(blogEntryDto).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
+    DefaultPersistentEntity copy = (DefaultPersistentEntity) defaultPersistentEntityToTest.copy();
 
     assertAll(
-        () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
-        () -> assertThat(persistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity").isNotNull(),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
         () -> assertThat(copy).as("copy").isNotNull(),
         () -> assertThat(copy.getId()).as("id of copy").isNull(),
-        () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
-        () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
 
   @Test
   @DisplayName("should be able to copy a guest book without the id")
   void shouldCopyGuestBook() {
-    persistentEntityToTest = (PersistentEntity) aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()))
+    defaultPersistentEntityToTest = aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
+    DefaultPersistentEntity copy = (DefaultPersistentEntity) defaultPersistentEntityToTest.copy();
 
     assertAll(
-        () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
-        () -> assertThat(persistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity").isNotNull(),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
         () -> assertThat(copy).as("copy").isNotNull(),
         () -> assertThat(copy.getId()).as("id of copy").isNull(),
-        () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
-        () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
 
   @Test
   @DisplayName("should be able to copy a guest book entry without the id")
   void shouldCopyGuestBookEntry() {
-    persistentEntityToTest = (PersistentEntity) aGuestBookEntry(
+    defaultPersistentEntityToTest = aGuestBookEntry(
         new GuestBookEntryDto(null, new GuestBookDto(), "jactor", "the one")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
+    DefaultPersistentEntity copy = (DefaultPersistentEntity) defaultPersistentEntityToTest.copy();
 
     assertAll(
-        () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
-        () -> assertThat(persistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity").isNotNull(),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("id of persistent entity").isEqualTo(1L),
         () -> assertThat(copy).as("copy").isNotNull(),
         () -> assertThat(copy.getId()).as("id of copy").isNull(),
-        () -> assertThat(persistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
-        () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity equals copy").isEqualTo(copy),
+        () -> assertThat(defaultPersistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
 
   @Test
   @DisplayName("should return an empty stream when no dependencies")
   void shouldReturnEmptyStreamWithoutDependenciesGiven() {
-    persistentEntityToTest = anAddress(new AddressDto());
-    Stream none = persistentEntityToTest.streamSequencedDependencies();
+    defaultPersistentEntityToTest = anAddress(new AddressDto());
+    Stream none = defaultPersistentEntityToTest.streamSequencedDependencies();
 
     assertThat(none).isEmpty();
   }
@@ -176,8 +176,8 @@ class PersistentEntityTest {
     var blogEntity = aBlog(new BlogDto());
     var personEntity = aPerson(new PersonDto());
 
-    persistentEntityToTest = personEntity;
-    List<PersistentData> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
+    defaultPersistentEntityToTest = personEntity;
+    List<PersistentData> dependencies = defaultPersistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
         .collect(toList());
 
     assertThat(dependencies)
@@ -190,13 +190,13 @@ class PersistentEntityTest {
   void shouldFetchAllDependencies() {
     var addressDto = new AddressDto();
     var personDto = new PersonDto(null, addressDto, null, null, null, null);
-    persistentEntityToTest = aUser(new UserDto(null, personDto, null, null));
+    defaultPersistentEntityToTest = aUser(new UserDto(null, personDto, null, null));
 
-    var allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
+    var allSequencedDependencies = defaultPersistentEntityToTest.fetchAllPersistentEntities();
 
     assertThat(allSequencedDependencies)
         .hasSize(3)
-        .contains(persistentEntityToTest, anAddress(addressDto), aPerson(personDto));
+        .contains(defaultPersistentEntityToTest, anAddress(addressDto), aPerson(personDto));
   }
 
   @Test
@@ -207,15 +207,15 @@ class PersistentEntityTest {
     var userEntity = aUser(new UserDto(null, personDto, null, null));
     var personEntity = userEntity.getPerson();
     var addressEntity = personEntity.getAddressEntity();
-    persistentEntityToTest = userEntity;
+    defaultPersistentEntityToTest = userEntity;
 
-    PersistentEntity.Sequencer sequencerMock = mock(PersistentEntity.Sequencer.class);
+    DefaultPersistentEntity.Sequencer sequencerMock = mock(DefaultPersistentEntity.Sequencer.class);
     when(sequencerMock.nextVal(any(Class.class))).thenReturn(123L);
 
-    persistentEntityToTest.addSequencedId(sequencerMock);
+    defaultPersistentEntityToTest.addSequencedId(sequencerMock);
 
     assertAll(
-        () -> assertThat(persistentEntityToTest.getId()).as("persistentEntityToTest.id").isEqualTo(123L),
+        () -> assertThat(defaultPersistentEntityToTest.getId()).as("defaultPersistentEntityToTest.id").isEqualTo(123L),
         () -> assertThat(addressEntity.getId()).as("addressEntity.id").isEqualTo(123L),
         () -> assertThat(personEntity.getId()).as("personEntity.id").isEqualTo(123L)
     );
