@@ -97,7 +97,7 @@ public class BlogEntryEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public Stream<PersistentData> streamSequencedDependencies() {
     return streamSequencedDependencies(blog);
   }
 

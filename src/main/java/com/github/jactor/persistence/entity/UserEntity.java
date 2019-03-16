@@ -102,8 +102,8 @@ public class UserEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
-    return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream().map(Optional::of));
+  public Stream<PersistentData> streamSequencedDependencies() {
+    return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream());
   }
 
   @Override

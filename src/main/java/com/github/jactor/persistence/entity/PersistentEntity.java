@@ -1,20 +1,18 @@
 package com.github.jactor.persistence.entity;
 
-import static java.util.stream.Collectors.toList;
-
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.time.Now;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Stream;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class PersistentEntity implements BaseEntity {
+public abstract class PersistentEntity implements PersistentData {
 
   @Column(name = "CREATION_TIME")
   private LocalDateTime creationTime;
@@ -47,7 +45,7 @@ public abstract class PersistentEntity implements BaseEntity {
     updatedTime = persistentDto.getUpdatedTime();
   }
 
-  public PersistentEntity addSequencedId(Sequencer sequencer) {
+  public PersistentData addSequencedId(Sequencer sequencer) {
     if (getId() == null) {
       addSequencedId(this, sequencer);
     }
@@ -59,58 +57,39 @@ public abstract class PersistentEntity implements BaseEntity {
     return this;
   }
 
-  private void addSequencedId(PersistentEntity entity, Sequencer sequencer) {
-    Long id = sequencer.nextVal(entity.getClass());
-    entity.setId(id);
+  private void addSequencedId(PersistentData<?> persistentData, Sequencer sequencer) {
+    Long id = sequencer.nextVal(persistentData.getClass());
+    persistentData.setId(id);
   }
 
-  public Stream<Optional<PersistentEntity>> streamSequencedDependencies(PersistentEntity... persistentEntities) {
-    if (persistentEntities == null) {
+  public Stream<PersistentData> streamSequencedDependencies(PersistentData... persistentData) {
+    if (persistentData == null) {
       return Stream.empty();
     }
 
-    return Arrays.stream(persistentEntities)
-        .map(Optional::ofNullable);
+    return Arrays.stream(persistentData)
+        .filter(Objects::nonNull);
   }
 
-  List<PersistentEntity> fetchAllSequencedDependencies() {
-    List<PersistentEntity> sequencedDependencies = fetchSequencedDependencies(this);
-    List<PersistentEntity> allSequencedDependencies = new ArrayList<>();
-
-    for (PersistentEntity persistentEntity : sequencedDependencies) {
-      addAllSequencedDependencis(persistentEntity, allSequencedDependencies);
-    }
+  List<PersistentData> fetchAllSequencedDependencies() {
+    List<PersistentData> allSequencedDependencies = new ArrayList<>();
+    streamSequencedDependencies(this)
+        .forEach(persistentData -> addAllSequencedDependencis(persistentData, allSequencedDependencies));
 
     return allSequencedDependencies;
   }
 
-  private void addAllSequencedDependencis(PersistentEntity persistentEntity, List<PersistentEntity> allSequencedDependencies) {
-    allSequencedDependencies.add(persistentEntity);
-    List<PersistentEntity> otherSequencedDependencies = fetchSequencedDependencies(persistentEntity);
-
-    otherSequencedDependencies.forEach(dependency -> {
-      if (!allSequencedDependencies.contains(dependency)) {
-        addAllSequencedDependencis(dependency, allSequencedDependencies);
-      }
-    });
+  private void addAllSequencedDependencis(PersistentData dependency, List<PersistentData> allSequencedDependencies) {
+    allSequencedDependencies.add(dependency);
+    fetchSequencedDependencies(dependency)
+        .filter(persistentData -> !allSequencedDependencies.contains(persistentData)) // if not added by other dependency
+        .forEach(persistentData -> addAllSequencedDependencis(persistentData, allSequencedDependencies));
   }
 
-  private List<PersistentEntity> fetchSequencedDependencies(PersistentEntity persistentEntity) {
-    return persistentEntity.streamSequencedDependencies()
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(toList());
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%s.id<%s>", fetchEntityShortName(), getId());
-  }
-
-  private String fetchEntityShortName() {
-    String simpleName = getClass().getSimpleName();
-
-    return simpleName.substring(0, simpleName.indexOf("Entity"));
+  @SuppressWarnings("unchecked")
+  private Stream<PersistentData> fetchSequencedDependencies(PersistentData persistentData) {
+    return persistentData.streamSequencedDependencies()
+        .filter(Objects::nonNull);
   }
 
   @Override

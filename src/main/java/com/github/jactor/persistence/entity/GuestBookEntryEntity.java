@@ -98,7 +98,7 @@ public class GuestBookEntryEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public Stream<PersistentData> streamSequencedDependencies() {
     return streamSequencedDependencies(guestBook);
   }
 

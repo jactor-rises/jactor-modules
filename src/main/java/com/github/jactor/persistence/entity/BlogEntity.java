@@ -84,8 +84,8 @@ public class BlogEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
-    return Stream.concat(streamSequencedDependencies(userEntity), entries.stream().map(Optional::ofNullable));
+  public Stream<PersistentData> streamSequencedDependencies() {
+    return Stream.concat(streamSequencedDependencies(userEntity), entries.stream());
   }
 
   @Override

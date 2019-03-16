@@ -79,7 +79,7 @@ public class PersonEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public Stream<PersistentData> streamSequencedDependencies() {
     return streamSequencedDependencies(addressEntity, userEntity);
   }
 
