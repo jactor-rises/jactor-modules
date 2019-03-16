@@ -15,7 +15,7 @@ public class Now {
         return instance.nowAsDateTime();
     }
 
-    protected static void reset(Now instance) {
+    static void reset(Now instance) {
         synchronized (SYNC) {
             Now.instance = instance;
         }

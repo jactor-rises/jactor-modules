@@ -4,6 +4,7 @@ import static java.util.Objects.hash;
 import static java.util.stream.Collectors.toSet;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -77,7 +78,12 @@ public class GuestBookEntity extends PersistentEntity {
   }
 
   @Override
-  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+  }
+
+  @Override
+  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
     return Stream.concat(streamSequencedDependencies(user), entries.stream().map(Optional::of));
   }
 
@@ -108,7 +114,7 @@ public class GuestBookEntity extends PersistentEntity {
   }
 
   @Override
-  protected void setId(Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

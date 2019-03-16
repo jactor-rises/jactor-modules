@@ -40,7 +40,7 @@ class PersistentEntityTest {
         new AddressDto(null, 1001, "somewhere", "out", "there", "svg", "NO")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -59,7 +59,7 @@ class PersistentEntityTest {
         new PersonDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -77,7 +77,7 @@ class PersistentEntityTest {
     persistentEntityToTest = aUser(new UserDto(null, null, "i.am@home", "jactor"))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -95,7 +95,7 @@ class PersistentEntityTest {
     persistentEntityToTest = aBlog(new BlogDto(null, null, "general ignorance", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -113,7 +113,7 @@ class PersistentEntityTest {
     BlogEntryDto blogEntryDto = new BlogEntryDto(null, new BlogDto(), "jactor", "the one");
     persistentEntityToTest = aBlogEntry(blogEntryDto).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -131,7 +131,7 @@ class PersistentEntityTest {
     persistentEntityToTest = aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -150,7 +150,7 @@ class PersistentEntityTest {
         new GuestBookEntryDto(null, new GuestBookDto(), "jactor", "the one")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),

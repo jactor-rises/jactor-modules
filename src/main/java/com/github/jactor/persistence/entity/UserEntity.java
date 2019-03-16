@@ -2,6 +2,7 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
+import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,8 +48,9 @@ public class UserEntity extends PersistentEntity {
   @Enumerated(EnumType.STRING)
   private UserType userType;
 
+  @SuppressWarnings("unused")
   UserEntity() {
-    // used by builder
+    // used by entity manager
   }
 
   /**
@@ -95,7 +97,12 @@ public class UserEntity extends PersistentEntity {
   }
 
   @Override
-  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+  }
+
+  @Override
+  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
     return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream().map(Optional::of));
   }
 
@@ -130,7 +137,7 @@ public class UserEntity extends PersistentEntity {
   }
 
   @Override
-  protected void setId(Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -150,20 +157,8 @@ public class UserEntity extends PersistentEntity {
     this.emailAddress = emailAddress;
   }
 
-  public @SuppressWarnings("unused") /* used by reflection */ void setGuestBook(GuestBookEntity guestBook) {
-    this.guestBook = guestBook;
-  }
-
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  public void setPersonEntity(PersonEntity personEntity) {
-    this.personEntity = personEntity;
-  }
-
-  void setUserType(UserType userType) {
-    this.userType = userType;
   }
 
   public static UserEntity aUser(UserDto userDto) {
