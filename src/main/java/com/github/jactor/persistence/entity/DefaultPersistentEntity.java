@@ -12,7 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class PersistentEntity implements PersistentData {
+public abstract class DefaultPersistentEntity implements PersistentData {
 
   @Column(name = "CREATION_TIME")
   private LocalDateTime creationTime;
@@ -23,21 +23,21 @@ public abstract class PersistentEntity implements PersistentData {
   @Column(name = "UPDATED_BY")
   private String updatedBy;
 
-  protected PersistentEntity() {
+  protected DefaultPersistentEntity() {
     createdBy = "todo #3";
     creationTime = Now.asDateTime();
     updatedBy = "todo #3";
     updatedTime = Now.asDateTime();
   }
 
-  protected PersistentEntity(PersistentEntity persistentEntity) {
+  protected DefaultPersistentEntity(DefaultPersistentEntity persistentEntity) {
     createdBy = persistentEntity.createdBy;
     creationTime = persistentEntity.creationTime;
     updatedBy = persistentEntity.updatedBy;
     updatedTime = persistentEntity.updatedTime;
   }
 
-  protected PersistentEntity(PersistentDto persistentDto) {
+  protected DefaultPersistentEntity(PersistentDto persistentDto) {
     setId(persistentDto.getId());
     createdBy = persistentDto.getCreatedBy();
     creationTime = persistentDto.getCreationTime();
