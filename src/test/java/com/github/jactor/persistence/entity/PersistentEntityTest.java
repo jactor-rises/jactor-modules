@@ -23,7 +23,6 @@ import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy an address without the id")
   void shouldCopyAddress() {
-    persistentEntityToTest = anAddress(
+    persistentEntityToTest = (PersistentEntity) anAddress(
         new AddressDto(null, 1001, "somewhere", "out", "there", "svg", "NO")
     ).addSequencedId(aClass -> 1L);
 
@@ -55,7 +54,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a person without the id")
   void shouldCopyPerson() {
-    persistentEntityToTest = aPerson(
+    persistentEntityToTest = (PersistentEntity) aPerson(
         new PersonDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
     ).addSequencedId(aClass -> 1L);
 
@@ -74,7 +73,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a user without the id")
   void shouldCopyUser() {
-    persistentEntityToTest = aUser(new UserDto(null, null, "i.am@home", "jactor"))
+    persistentEntityToTest = (PersistentEntity) aUser(new UserDto(null, null, "i.am@home", "jactor"))
         .addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
@@ -92,7 +91,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a blog without the id")
   void shouldCopyBlog() {
-    persistentEntityToTest = aBlog(new BlogDto(null, null, "general ignorance", new UserDto()))
+    persistentEntityToTest = (PersistentEntity) aBlog(new BlogDto(null, null, "general ignorance", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
@@ -111,7 +110,7 @@ class PersistentEntityTest {
   @DisplayName("should be able to copy a blog entry without the id")
   void shouldCopyBlogEntry() {
     BlogEntryDto blogEntryDto = new BlogEntryDto(null, new BlogDto(), "jactor", "the one");
-    persistentEntityToTest = aBlogEntry(blogEntryDto).addSequencedId(aClass -> 1L);
+    persistentEntityToTest = (PersistentEntity) aBlogEntry(blogEntryDto).addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
 
@@ -128,7 +127,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a guest book without the id")
   void shouldCopyGuestBook() {
-    persistentEntityToTest = aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()))
+    persistentEntityToTest = (PersistentEntity) aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
     PersistentEntity copy = (PersistentEntity) persistentEntityToTest.copy();
@@ -146,7 +145,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a guest book entry without the id")
   void shouldCopyGuestBookEntry() {
-    persistentEntityToTest = aGuestBookEntry(
+    persistentEntityToTest = (PersistentEntity) aGuestBookEntry(
         new GuestBookEntryDto(null, new GuestBookDto(), "jactor", "the one")
     ).addSequencedId(aClass -> 1L);
 
@@ -178,9 +177,7 @@ class PersistentEntityTest {
     var personEntity = aPerson(new PersonDto());
 
     persistentEntityToTest = personEntity;
-    List<PersistentEntity> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+    List<PersistentData> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
         .collect(toList());
 
     assertThat(dependencies)
@@ -198,8 +195,8 @@ class PersistentEntityTest {
     var allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
 
     assertThat(allSequencedDependencies)
-        .hasSize(2)
-        .contains(anAddress(addressDto), aPerson(personDto));
+        .hasSize(3)
+        .contains(persistentEntityToTest, anAddress(addressDto), aPerson(personDto));
   }
 
   @Test

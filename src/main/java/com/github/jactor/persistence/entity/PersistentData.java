@@ -2,16 +2,15 @@ package com.github.jactor.persistence.entity;
 
 import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.stream.Stream;
 
-public interface BaseEntity {
+public interface PersistentData<T> {
 
-  BaseEntity copy();
+  T copy();
 
   PersistentDto initPersistentDto();
 
-  Stream<Optional<PersistentEntity>> streamSequencedDependencies();
+  Stream<PersistentData> streamSequencedDependencies();
 
   String getCreatedBy();
 

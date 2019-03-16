@@ -83,8 +83,8 @@ public class GuestBookEntity extends PersistentEntity {
   }
 
   @Override
-  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
-    return Stream.concat(streamSequencedDependencies(user), entries.stream().map(Optional::of));
+  public Stream<PersistentData> streamSequencedDependencies() {
+    return Stream.concat(streamSequencedDependencies(user), entries.stream());
   }
 
   @Override
