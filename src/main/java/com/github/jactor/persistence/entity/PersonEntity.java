@@ -2,6 +2,7 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
+import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,7 +55,7 @@ public class PersonEntity extends PersistentEntity {
     userEntity = person.userEntity;
   }
 
-  public PersonEntity(@NotNull PersonDto person) {
+  PersonEntity(@NotNull PersonDto person) {
     super(person.fetchPersistentDto());
     addressEntity = Optional.ofNullable(person.getAddress()).map(AddressEntity::new).orElse(null);
     description = person.getDescription();
@@ -73,9 +74,15 @@ public class PersonEntity extends PersistentEntity {
   }
 
   @Override
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+  }
+
+  @Override
   public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
     return streamSequencedDependencies(addressEntity, userEntity);
   }
+
 
   @Override
   public boolean equals(Object o) {
@@ -109,7 +116,7 @@ public class PersonEntity extends PersistentEntity {
   }
 
   @Override
-  protected void setId(Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -135,10 +142,6 @@ public class PersonEntity extends PersistentEntity {
 
   public UserEntity getUserEntity() {
     return userEntity;
-  }
-
-  public void setAddressEntity(AddressEntity addressEntity) {
-    this.addressEntity = addressEntity;
   }
 
   public void setDescription(String description) {

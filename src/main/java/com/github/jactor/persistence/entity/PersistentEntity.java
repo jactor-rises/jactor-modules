@@ -1,143 +1,146 @@
 package com.github.jactor.persistence.entity;
 
+import static java.util.stream.Collectors.toList;
+
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.time.Now;
-
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class PersistentEntity {
+public abstract class PersistentEntity implements BaseEntity {
 
-    private @Column(name = "CREATION_TIME") LocalDateTime creationTime;
-    private @Column(name = "CREATED_BY") String createdBy;
-    private @Column(name = "UPDATED_TIME") LocalDateTime updatedTime;
-    private @Column(name = "UPDATED_BY") String updatedBy;
+  @Column(name = "CREATION_TIME")
+  private LocalDateTime creationTime;
+  @Column(name = "CREATED_BY")
+  private String createdBy;
+  @Column(name = "UPDATED_TIME")
+  private LocalDateTime updatedTime;
+  @Column(name = "UPDATED_BY")
+  private String updatedBy;
 
-    protected PersistentEntity() {
-        createdBy = "todo #3";
-        creationTime = Now.asDateTime();
-        updatedBy = "todo #3";
-        updatedTime = Now.asDateTime();
+  protected PersistentEntity() {
+    createdBy = "todo #3";
+    creationTime = Now.asDateTime();
+    updatedBy = "todo #3";
+    updatedTime = Now.asDateTime();
+  }
+
+  protected PersistentEntity(PersistentEntity persistentEntity) {
+    createdBy = persistentEntity.createdBy;
+    creationTime = persistentEntity.creationTime;
+    updatedBy = persistentEntity.updatedBy;
+    updatedTime = persistentEntity.updatedTime;
+  }
+
+  protected PersistentEntity(PersistentDto persistentDto) {
+    setId(persistentDto.getId());
+    createdBy = persistentDto.getCreatedBy();
+    creationTime = persistentDto.getCreationTime();
+    updatedBy = persistentDto.getUpdatedBy();
+    updatedTime = persistentDto.getUpdatedTime();
+  }
+
+  public PersistentEntity addSequencedId(Sequencer sequencer) {
+    if (getId() == null) {
+      addSequencedId(this, sequencer);
     }
 
-    protected PersistentEntity(PersistentEntity persistentEntity) {
-        createdBy = persistentEntity.createdBy;
-        creationTime = persistentEntity.creationTime;
-        updatedBy = persistentEntity.updatedBy;
-        updatedTime = persistentEntity.updatedTime;
+    fetchAllSequencedDependencies().stream()
+        .filter(dependency -> dependency.getId() == null)
+        .forEach(depencency -> addSequencedId(depencency, sequencer));
+
+    return this;
+  }
+
+  private void addSequencedId(PersistentEntity entity, Sequencer sequencer) {
+    Long id = sequencer.nextVal(entity.getClass());
+    entity.setId(id);
+  }
+
+  public Stream<Optional<PersistentEntity>> streamSequencedDependencies(PersistentEntity... persistentEntities) {
+    if (persistentEntities == null) {
+      return Stream.empty();
     }
 
-    protected PersistentEntity(PersistentDto persistentDto) {
-        setId(persistentDto.getId());
-        createdBy = persistentDto.getCreatedBy();
-        creationTime = persistentDto.getCreationTime();
-        updatedBy = persistentDto.getUpdatedBy();
-        updatedTime = persistentDto.getUpdatedTime();
+    return Arrays.stream(persistentEntities)
+        .map(Optional::ofNullable);
+  }
+
+  List<PersistentEntity> fetchAllSequencedDependencies() {
+    List<PersistentEntity> sequencedDependencies = fetchSequencedDependencies(this);
+    List<PersistentEntity> allSequencedDependencies = new ArrayList<>();
+
+    for (PersistentEntity persistentEntity : sequencedDependencies) {
+      addAllSequencedDependencis(persistentEntity, allSequencedDependencies);
     }
 
-    protected PersistentDto initPersistentDto() {
-        return new PersistentDto(getId(), createdBy, creationTime, updatedBy, updatedTime);
-    }
+    return allSequencedDependencies;
+  }
 
-    public PersistentEntity addSequencedId(Sequencer sequencer) {
-        if (getId() == null) {
-            addSequencedId(this, sequencer);
-        }
+  private void addAllSequencedDependencis(PersistentEntity persistentEntity, List<PersistentEntity> allSequencedDependencies) {
+    allSequencedDependencies.add(persistentEntity);
+    List<PersistentEntity> otherSequencedDependencies = fetchSequencedDependencies(persistentEntity);
 
-        fetchAllSequencedDependencies().stream()
-                .filter(dependency -> dependency.getId() == null)
-                .forEach(depencency -> addSequencedId(depencency, sequencer));
+    otherSequencedDependencies.forEach(dependency -> {
+      if (!allSequencedDependencies.contains(dependency)) {
+        addAllSequencedDependencis(dependency, allSequencedDependencies);
+      }
+    });
+  }
 
-        return this;
-    }
+  private List<PersistentEntity> fetchSequencedDependencies(PersistentEntity persistentEntity) {
+    return persistentEntity.streamSequencedDependencies()
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(toList());
+  }
 
-    private void addSequencedId(PersistentEntity entity, Sequencer sequencer) {
-        Long id = sequencer.nextVal(entity.getClass());
-        entity.setId(id);
-    }
+  @Override
+  public String toString() {
+    return String.format("%s.id<%s>", fetchEntityShortName(), getId());
+  }
 
-    protected Stream<Optional<PersistentEntity>> streamSequencedDependencies(PersistentEntity... persistentEntities) {
-        if (persistentEntities == null) {
-            return Stream.empty();
-        }
+  private String fetchEntityShortName() {
+    String simpleName = getClass().getSimpleName();
 
-        return Arrays.stream(persistentEntities)
-                .map(Optional::ofNullable);
-    }
+    return simpleName.substring(0, simpleName.indexOf("Entity"));
+  }
 
-    List<PersistentEntity> fetchAllSequencedDependencies() {
-        List<PersistentEntity> sequencedDependencies = fetchSequencedDependencies(this);
-        List<PersistentEntity> allSequencedDependencies = new ArrayList<>();
+  @Override
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-        for (PersistentEntity persistentEntity : sequencedDependencies) {
-            addAllSequencedDependencis(persistentEntity, allSequencedDependencies);
-        }
+  public LocalDateTime getCreationTime() {
+    return creationTime;
+  }
 
-        return allSequencedDependencies;
-    }
+  @Override
+  public String getUpdatedBy() {
+    return updatedBy;
+  }
 
-    private void addAllSequencedDependencis(PersistentEntity persistentEntity, List<PersistentEntity> allSequencedDependencies) {
-        allSequencedDependencies.add(persistentEntity);
-        List<PersistentEntity> otherSequencedDependencies = fetchSequencedDependencies(persistentEntity);
+  public LocalDateTime getUpdatedTime() {
+    return updatedTime;
+  }
 
-        otherSequencedDependencies.forEach(dependency -> {
-            if (!allSequencedDependencies.contains(dependency)) {
-                addAllSequencedDependencis(dependency, allSequencedDependencies);
-            }
-        });
-    }
+  protected void setCreationTime(LocalDateTime creationTime) {
+    this.creationTime = creationTime;
+  }
 
-    private List<PersistentEntity> fetchSequencedDependencies(PersistentEntity persistentEntity) {
-        return persistentEntity.streamSequencedDependencies()
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toList());
-    }
+  protected void setUpdatedTime(LocalDateTime updatedTime) {
+    this.updatedTime = updatedTime;
+  }
 
-    public @Override String toString() {
-        return String.format("%s.id<%s>", fetchEntityShortName(), getId());
-    }
+  public interface Sequencer {
 
-    private String fetchEntityShortName() {
-        String simpleName = getClass().getSimpleName();
-
-        return simpleName.substring(0, simpleName.indexOf("Entity"));
-    }
-
-    public abstract PersistentEntity copy();
-
-    protected abstract Stream<Optional<PersistentEntity>> streamSequencedDependencies();
-
-    public abstract Long getId();
-
-    protected abstract void setId(Long id);
-
-    public LocalDateTime getCreationTime() {
-        return creationTime;
-    }
-
-    public LocalDateTime getUpdatedTime() {
-        return updatedTime;
-    }
-
-    protected void setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime;
-    }
-
-    protected void setUpdatedTime(LocalDateTime updatedTime) {
-        this.updatedTime = updatedTime;
-    }
-
-    public interface Sequencer {
-        Long nextVal(Class<?> entityClass);
-    }
+    Long nextVal(Class<?> entityClass);
+  }
 }

@@ -3,6 +3,7 @@ package com.github.jactor.persistence.entity;
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -53,7 +54,7 @@ public class AddressEntity extends PersistentEntity {
     zipCode = address.getZipCode();
   }
 
-  public AddressEntity(@NotNull AddressDto addressDto) {
+  AddressEntity(@NotNull AddressDto addressDto) {
     super(addressDto.fetchPersistentDto());
 
     addressLine1 = addressDto.getAddressLine1();
@@ -71,18 +72,23 @@ public class AddressEntity extends PersistentEntity {
     );
   }
 
-  public @Override
-  AddressEntity copy() {
+  @Override
+  public AddressEntity copy() {
     return new AddressEntity(this);
   }
 
-  protected @Override
-  Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  @Override
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+  }
+
+  @Override
+  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
     return Stream.empty();
   }
 
-  public @Override
-  boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
@@ -97,13 +103,13 @@ public class AddressEntity extends PersistentEntity {
         Objects.equals(zipCode, addressEntity.zipCode);
   }
 
-  public @Override
-  int hashCode() {
+  @Override
+  public int hashCode() {
     return hash(addressLine1, addressLine2, addressLine3, city, country, zipCode);
   }
 
-  public @Override
-  String toString() {
+  @Override
+  public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
         .appendSuper(super.toString())
         .append(getAddressLine1())
@@ -115,13 +121,13 @@ public class AddressEntity extends PersistentEntity {
         .toString();
   }
 
-  public @Override
-  Long getId() {
+  @Override
+  public Long getId() {
     return id;
   }
 
-  protected @Override
-  void setId(Long id) {
+  @Override
+  public void setId(Long id) {
     this.id = id;
   }
 

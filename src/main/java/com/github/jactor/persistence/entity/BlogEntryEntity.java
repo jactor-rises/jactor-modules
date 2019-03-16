@@ -4,6 +4,7 @@ import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.time.Now;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,8 +38,9 @@ public class BlogEntryEntity extends PersistentEntity {
   @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
   private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
+  @SuppressWarnings("unused")
   BlogEntryEntity() {
-    // used by builder
+    // used by entity manager
   }
 
   private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
@@ -90,7 +92,12 @@ public class BlogEntryEntity extends PersistentEntity {
   }
 
   @Override
-  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+  }
+
+  @Override
+  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
     return streamSequencedDependencies(blog);
   }
 
@@ -124,7 +131,7 @@ public class BlogEntryEntity extends PersistentEntity {
   }
 
   @Override
-  protected void setId(Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

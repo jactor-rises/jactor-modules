@@ -4,6 +4,7 @@ import static java.util.Objects.hash;
 import static java.util.stream.Collectors.toSet;
 
 import com.github.jactor.persistence.dto.BlogDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -78,7 +79,12 @@ public class BlogEntity extends PersistentEntity {
   }
 
   @Override
-  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+  }
+
+  @Override
+  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
     return Stream.concat(streamSequencedDependencies(userEntity), entries.stream().map(Optional::ofNullable));
   }
 
@@ -110,7 +116,7 @@ public class BlogEntity extends PersistentEntity {
   }
 
   @Override
-  protected void setId(Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -132,10 +138,6 @@ public class BlogEntity extends PersistentEntity {
 
   public void setTitle(String title) {
     this.title = title;
-  }
-
-  public void setUserEntity(UserEntity userEntity) {
-    this.userEntity = userEntity;
   }
 
   public static BlogEntity aBlog(BlogDto blogDto) {

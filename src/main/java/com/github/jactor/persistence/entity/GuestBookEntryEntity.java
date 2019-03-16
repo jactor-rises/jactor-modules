@@ -4,6 +4,7 @@ import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.time.Now;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,8 +39,9 @@ public class GuestBookEntryEntity extends PersistentEntity {
   @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
   private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
+  @SuppressWarnings("unused")
   GuestBookEntryEntity() {
-    // used by builder
+    // used by entity manager
   }
 
   private GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
@@ -91,7 +93,12 @@ public class GuestBookEntryEntity extends PersistentEntity {
   }
 
   @Override
-  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+  }
+
+  @Override
+  public Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
     return streamSequencedDependencies(guestBook);
   }
 
@@ -125,7 +132,7 @@ public class GuestBookEntryEntity extends PersistentEntity {
   }
 
   @Override
-  protected void setId(Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -139,10 +146,6 @@ public class GuestBookEntryEntity extends PersistentEntity {
 
   public String getCreatorName() {
     return entryEmbeddable.getCreatorName();
-  }
-
-  public void setGuestBook(GuestBookEntity guestBookEntity) {
-    this.guestBook = guestBookEntity;
   }
 
   public void setCreatorName(String creatorName) {

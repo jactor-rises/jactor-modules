@@ -68,7 +68,7 @@ public class EntryEmbeddable {
     return creatorName;
   }
 
-  public void setCreatorName(String creatorName) {
+  void setCreatorName(String creatorName) {
     this.creatorName = creatorName;
   }
 
