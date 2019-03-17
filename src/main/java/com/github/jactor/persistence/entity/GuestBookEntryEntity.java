@@ -5,7 +5,7 @@ import static java.util.Objects.hash;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.time.Now;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -24,10 +24,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-public class GuestBookEntryEntity extends DefaultPersistentEntity {
+public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEntity> {
 
   @Id
   private Long id;
+
+  @Embedded
+  @AttributeOverride(name = "createdBy", column = @Column(name = "CREATED_BY"))
+  @AttributeOverride(name = "timeOfCreation", column = @Column(name = "CREATION_TIME"))
+  @AttributeOverride(name = "modifiedBy", column = @Column(name = "UPDATED_BY"))
+  @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
+  private PersistentDataEmbeddable persistentDataEmbeddable;
 
   @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "GUEST_BOOK_ID")
@@ -45,19 +52,21 @@ public class GuestBookEntryEntity extends DefaultPersistentEntity {
   }
 
   private GuestBookEntryEntity(GuestBookEntryEntity guestBookEntry) {
-    super(guestBookEntry);
-    guestBook = guestBookEntry.copyGuestBook();
     entryEmbeddable = guestBookEntry.copyEntry();
+    guestBook = guestBookEntry.copyGuestBookWithoutId();
+    id = guestBookEntry.id;
+    persistentDataEmbeddable = new PersistentDataEmbeddable();
   }
 
   public GuestBookEntryEntity(@NotNull GuestBookEntryDto guestBookEntry) {
-    super(guestBookEntry.fetchPersistentDto());
-    Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).ifPresent(guestBookEntity -> guestBook = guestBookEntity);
     entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
+    guestBook = Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).orElse(null);
+    id = guestBookEntry.getId();
+    persistentDataEmbeddable = new PersistentDataEmbeddable(guestBookEntry.fetchPersistentDto());
   }
 
-  private GuestBookEntity copyGuestBook() {
-    return guestBook.copy();
+  private GuestBookEntity copyGuestBookWithoutId() {
+    return guestBook.copyWithoutId();
   }
 
   private EntryEmbeddable copyEntry() {
@@ -77,24 +86,22 @@ public class GuestBookEntryEntity extends DefaultPersistentEntity {
     );
   }
 
-  public void create(String entry) {
-    setCreationTime(Now.asDateTime());
-    entryEmbeddable.setEntry(entry);
-  }
-
-  public void update(String entry) {
-    setUpdatedTime(Now.asDateTime());
-    entryEmbeddable.setEntry(entry);
+  public void modify(String modifiedBy, String entry) {
+    entryEmbeddable.modify(modifiedBy, entry);
+    persistentDataEmbeddable.modify();
   }
 
   @Override
-  public GuestBookEntryEntity copy() {
-    return new GuestBookEntryEntity(this);
+  public GuestBookEntryEntity copyWithoutId() {
+    GuestBookEntryEntity guestBookEntryEntity = new GuestBookEntryEntity(this);
+    guestBookEntryEntity.setId(null);
+
+    return guestBookEntryEntity;
   }
 
   @Override
   public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override
@@ -127,6 +134,26 @@ public class GuestBookEntryEntity extends DefaultPersistentEntity {
   }
 
   @Override
+  public String getCreatedBy() {
+    return persistentDataEmbeddable.getCreatedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfCreation() {
+    return persistentDataEmbeddable.getTimeOfCreation();
+  }
+
+  @Override
+  public String getModifiedBy() {
+    return persistentDataEmbeddable.getModifiedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfModification() {
+    return persistentDataEmbeddable.getTimeOfModification();
+  }
+
+  @Override
   public Long getId() {
     return id;
   }
@@ -146,10 +173,6 @@ public class GuestBookEntryEntity extends DefaultPersistentEntity {
 
   public String getCreatorName() {
     return entryEmbeddable.getCreatorName();
-  }
-
-  public void setCreatorName(String creatorName) {
-    entryEmbeddable.setCreatorName(creatorName);
   }
 
   public static GuestBookEntryEntity aGuestBookEntry(GuestBookEntryDto guestBookEntryDto) {

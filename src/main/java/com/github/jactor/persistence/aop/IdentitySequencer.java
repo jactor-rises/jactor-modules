@@ -1,14 +1,13 @@
 package com.github.jactor.persistence.aop;
 
-import com.github.jactor.persistence.entity.DefaultPersistentEntity;
+import com.github.jactor.persistence.entity.PersistentEntity;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @Aspect
 @Component
@@ -19,8 +18,8 @@ public class IdentitySequencer {
     @Before("execution(* com.github.jactor.persistence.repository.*Repository.save(..))")
     public Object addIdentity(JoinPoint joinPoint) {
         return Arrays.stream(joinPoint.getArgs())
-                .filter(obj -> obj instanceof DefaultPersistentEntity)
-                .map(obj -> (DefaultPersistentEntity) obj)
+                .filter(obj -> obj instanceof PersistentEntity)
+                .map(obj -> (PersistentEntity) obj)
                 .map(persistentEntity -> persistentEntity.addSequencedId(this::fetchNextValFor))
                 .findAny().orElse(null);
     }

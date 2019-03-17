@@ -4,11 +4,14 @@ import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -21,10 +24,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_PERSON")
-public class PersonEntity extends DefaultPersistentEntity {
+public class PersonEntity implements PersistentEntity<PersonEntity> {
 
   @Id
   private Long id;
+
+  @Embedded
+  @AttributeOverride(name = "createdBy", column = @Column(name = "CREATED_BY"))
+  @AttributeOverride(name = "timeOfCreation", column = @Column(name = "CREATION_TIME"))
+  @AttributeOverride(name = "modifiedBy", column = @Column(name = "UPDATED_BY"))
+  @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
+  private PersistentDataEmbeddable persistentDataEmbeddable;
 
   @Column(name = "DESCRIPTION")
   private String description;
@@ -46,21 +56,23 @@ public class PersonEntity extends DefaultPersistentEntity {
   }
 
   private PersonEntity(PersonEntity person) {
-    super(person);
     addressEntity = person.addressEntity;
     description = person.description;
     firstName = person.firstName;
     locale = person.locale;
+    id = person.id;
+    persistentDataEmbeddable = new PersistentDataEmbeddable();
     surname = person.surname;
     userEntity = person.userEntity;
   }
 
   PersonEntity(@NotNull PersonDto person) {
-    super(person.fetchPersistentDto());
     addressEntity = Optional.ofNullable(person.getAddress()).map(AddressEntity::new).orElse(null);
     description = person.getDescription();
     firstName = person.getFirstName();
     locale = person.getLocale();
+    id = person.getId();
+    persistentDataEmbeddable = new PersistentDataEmbeddable(person.fetchPersistentDto());
     surname = person.getSurname();
   }
 
@@ -69,13 +81,16 @@ public class PersonEntity extends DefaultPersistentEntity {
   }
 
   @Override
-  public PersonEntity copy() {
-    return new PersonEntity(this);
+  public PersonEntity copyWithoutId() {
+    PersonEntity personEntity = new PersonEntity(this);
+    personEntity.setId(null);
+
+    return personEntity;
   }
 
   @Override
   public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override
@@ -108,6 +123,26 @@ public class PersonEntity extends DefaultPersistentEntity {
         .append(getUserEntity())
         .append(getAddressEntity())
         .toString();
+  }
+
+  @Override
+  public String getCreatedBy() {
+    return persistentDataEmbeddable.getCreatedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfCreation() {
+    return persistentDataEmbeddable.getTimeOfCreation();
+  }
+
+  @Override
+  public String getModifiedBy() {
+    return persistentDataEmbeddable.getModifiedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfModification() {
+    return persistentDataEmbeddable.getTimeOfModification();
   }
 
   @Override

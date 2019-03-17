@@ -5,13 +5,16 @@ import static java.util.stream.Collectors.toSet;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.PersistentDto;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -25,10 +28,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_GUEST_BOOK")
-public class GuestBookEntity extends DefaultPersistentEntity {
+public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
 
   @Id
   private Long id;
+
+  @Embedded
+  @AttributeOverride(name = "createdBy", column = @Column(name = "CREATED_BY"))
+  @AttributeOverride(name = "timeOfCreation", column = @Column(name = "CREATION_TIME"))
+  @AttributeOverride(name = "modifiedBy", column = @Column(name = "UPDATED_BY"))
+  @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
+  private PersistentDataEmbeddable persistentDataEmbeddable;
 
   @Column(name = "TITLE")
   private String title;
@@ -44,46 +54,52 @@ public class GuestBookEntity extends DefaultPersistentEntity {
   }
 
   /**
-   * @param guestBook to copy...
+   * @param guestBook to copyWithoutId...
    */
   private GuestBookEntity(GuestBookEntity guestBook) {
-    super(guestBook);
+    entries = guestBook.entries.stream().map(GuestBookEntryEntity::copyWithoutId).collect(toSet());
+    id = guestBook.id;
+    persistentDataEmbeddable = new PersistentDataEmbeddable();
     title = guestBook.title;
-    user = guestBook.copyUser();
-    entries = guestBook.entries.stream().map(GuestBookEntryEntity::copy).collect(toSet());
+    user = guestBook.copyUserWithoutId();
   }
 
   public GuestBookEntity(@NotNull GuestBookDto guestBook) {
-    super(guestBook.fetchPersistentDto());
-    title = guestBook.getTitle();
-    Optional.ofNullable(guestBook.getUser()).map(UserEntity::new).ifPresent(userEntity -> user = userEntity);
     entries = guestBook.getEntries().stream().map(GuestBookEntryEntity::new).collect(toSet());
+    id = guestBook.getId();
+    persistentDataEmbeddable = new PersistentDataEmbeddable(guestBook.fetchPersistentDto());
+    title = guestBook.getTitle();
+    user = Optional.ofNullable(guestBook.getUser()).map(UserEntity::new).orElse(null);
   }
 
-  private UserEntity copyUser() {
-    return Optional.ofNullable(user).map(UserEntity::copy).orElse(null);
+  private UserEntity copyUserWithoutId() {
+    return Optional.ofNullable(user).map(UserEntity::copyWithoutId).orElse(null);
   }
 
   public GuestBookDto asDto() {
     return new GuestBookDto(
         initPersistentDto(),
-        entries.stream().map(GuestBookEntryEntity::asDto).collect(toSet()), title,
+        entries.stream().map(GuestBookEntryEntity::asDto).collect(toSet()),
+        title,
         Optional.ofNullable(user).map(UserEntity::asDto).orElse(null)
     );
   }
 
   @Override
-  public GuestBookEntity copy() {
-    return new GuestBookEntity(this);
+  public GuestBookEntity copyWithoutId() {
+    GuestBookEntity guestBookEntity = new GuestBookEntity(this);
+    guestBookEntity.setId(null);
+
+    return guestBookEntity;
   }
 
   @Override
   public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override
-  public Stream<PersistentData> streamSequencedDependencies() {
+  public Stream<PersistentEntity> streamSequencedDependencies() {
     return Stream.concat(streamSequencedDependencies(user), entries.stream());
   }
 
@@ -106,6 +122,26 @@ public class GuestBookEntity extends DefaultPersistentEntity {
         .append(getTitle())
         .append(getUser())
         .toString();
+  }
+
+  @Override
+  public String getCreatedBy() {
+    return persistentDataEmbeddable.getCreatedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfCreation() {
+    return persistentDataEmbeddable.getTimeOfCreation();
+  }
+
+  @Override
+  public String getModifiedBy() {
+    return persistentDataEmbeddable.getModifiedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfModification() {
+    return persistentDataEmbeddable.getTimeOfModification();
   }
 
   @Override

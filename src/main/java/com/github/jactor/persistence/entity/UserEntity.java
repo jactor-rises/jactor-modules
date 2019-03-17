@@ -4,6 +4,7 @@ import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserDto;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,8 +12,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -28,10 +31,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_USER")
-public class UserEntity extends DefaultPersistentEntity {
+public class UserEntity implements PersistentEntity<UserEntity> {
 
   @Id
   private Long id;
+
+  @Embedded
+  @AttributeOverride(name = "createdBy", column = @Column(name = "CREATED_BY"))
+  @AttributeOverride(name = "timeOfCreation", column = @Column(name = "CREATION_TIME"))
+  @AttributeOverride(name = "modifiedBy", column = @Column(name = "UPDATED_BY"))
+  @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
+  private PersistentDataEmbeddable persistentDataEmbeddable;
 
   @Column(name = "EMAIL")
   private String emailAddress;
@@ -57,24 +67,25 @@ public class UserEntity extends DefaultPersistentEntity {
    * @param user is used to create an entity
    */
   private UserEntity(UserEntity user) {
-    super(user);
-    blogs = user.blogs.stream().map(BlogEntity::copy).collect(Collectors.toSet());
+    blogs = user.blogs.stream().map(BlogEntity::copyWithoutId).collect(Collectors.toSet());
     emailAddress = user.emailAddress;
-    guestBook = Optional.ofNullable(user.guestBook).map(GuestBookEntity::copy).orElse(null);
-    userType = user.userType;
-    personEntity = Optional.ofNullable(user.personEntity).map(PersonEntity::copy).orElse(null);
+    guestBook = Optional.ofNullable(user.guestBook).map(GuestBookEntity::copyWithoutId).orElse(null);
+    id = user.id;
+    persistentDataEmbeddable = new PersistentDataEmbeddable();
+    personEntity = Optional.ofNullable(user.personEntity).map(PersonEntity::copyWithoutId).orElse(null);
     username = user.username;
+    userType = user.userType;
   }
 
   public UserEntity(@NotNull UserDto user) {
-    super(user.fetchPersistentDto());
     emailAddress = user.getEmailAddress();
     personEntity = Optional.ofNullable(user.getPerson()).map(PersonEntity::new).orElse(null);
+    id = user.getId();
     username = user.getUsername();
     userType = Arrays.stream(UserType.values())
         .filter(aUserType -> aUserType.name().equals(user.getUserType().name()))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUserType().name()));
+        .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUserType()));
   }
 
   public UserDto asDto() {
@@ -92,17 +103,20 @@ public class UserEntity extends DefaultPersistentEntity {
   }
 
   @Override
-  public UserEntity copy() {
-    return new UserEntity(this);
+  public UserEntity copyWithoutId() {
+    UserEntity userEntity = new UserEntity(this);
+    userEntity.setId(null);
+
+    return userEntity;
   }
 
   @Override
   public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getCreationTime(), getUpdatedBy(), getUpdatedTime());
+    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override
-  public Stream<PersistentData> streamSequencedDependencies() {
+  public Stream<PersistentEntity> streamSequencedDependencies() {
     return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream());
   }
 
@@ -129,6 +143,26 @@ public class UserEntity extends DefaultPersistentEntity {
         .append("guestbook.id=" + (guestBook != null ? guestBook.getId() : null))
         .append(getPerson())
         .toString();
+  }
+
+  @Override
+  public String getCreatedBy() {
+    return persistentDataEmbeddable.getCreatedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfCreation() {
+    return persistentDataEmbeddable.getTimeOfCreation();
+  }
+
+  @Override
+  public String getModifiedBy() {
+    return persistentDataEmbeddable.getModifiedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfModification() {
+    return persistentDataEmbeddable.getTimeOfModification();
   }
 
   @Override
