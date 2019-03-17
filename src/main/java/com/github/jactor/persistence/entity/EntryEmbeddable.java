@@ -20,7 +20,7 @@ public class EntryEmbeddable {
   }
 
   /**
-   * @param entryEmbeddable is the entry to create a copy of
+   * @param entryEmbeddable is the entry to create a copyWithoutId of
    */
   private EntryEmbeddable(EntryEmbeddable entryEmbeddable) {
     creatorName = entryEmbeddable.getCreatorName();
@@ -34,6 +34,11 @@ public class EntryEmbeddable {
 
   public EntryEmbeddable copy() {
     return new EntryEmbeddable(this);
+  }
+
+  void modify(String modifiedCreator, String modifiedEntry) {
+    creatorName = modifiedCreator;
+    entry = modifiedEntry;
   }
 
   @Override
@@ -68,15 +73,7 @@ public class EntryEmbeddable {
     return creatorName;
   }
 
-  public void setCreatorName(String creatorName) {
-    this.creatorName = creatorName;
-  }
-
   public String getEntry() {
     return entry;
-  }
-
-  public void setEntry(String entry) {
-    this.entry = entry;
   }
 }

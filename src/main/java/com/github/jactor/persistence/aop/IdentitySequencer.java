@@ -1,14 +1,13 @@
 package com.github.jactor.persistence.aop;
 
 import com.github.jactor.persistence.entity.PersistentEntity;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @Aspect
 @Component

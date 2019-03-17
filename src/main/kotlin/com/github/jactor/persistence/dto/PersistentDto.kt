@@ -5,9 +5,9 @@ import java.time.LocalDateTime
 data class PersistentDto(
         var id: Long? = null,
         var createdBy: String = "todo: #3",
-        var creationTime: LocalDateTime = LocalDateTime.now(),
-        var updatedBy: String = "todo: #3",
-        var updatedTime: LocalDateTime = LocalDateTime.now()
+        var timeOfCreation: LocalDateTime = LocalDateTime.now(),
+        var modifiedBy: String = "todo: #3",
+        var timeOfModification: LocalDateTime = LocalDateTime.now()
 )
 
 interface Persistent {

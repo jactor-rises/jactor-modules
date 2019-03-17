@@ -4,7 +4,8 @@ import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
-import com.github.jactor.persistence.time.Now;
+import com.github.jactor.persistence.dto.PersistentDto;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -23,10 +24,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
-public class BlogEntryEntity extends PersistentEntity {
+public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
 
   @Id
   private Long id;
+
+  @Embedded
+  @AttributeOverride(name = "createdBy", column = @Column(name = "CREATED_BY"))
+  @AttributeOverride(name = "timeOfCreation", column = @Column(name = "CREATION_TIME"))
+  @AttributeOverride(name = "modifiedBy", column = @Column(name = "UPDATED_BY"))
+  @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
+  private PersistentDataEmbeddable persistentDataEmbeddable;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "BLOG_ID")
@@ -37,24 +45,27 @@ public class BlogEntryEntity extends PersistentEntity {
   @AttributeOverride(name = "entry", column = @Column(name = "ENTRY"))
   private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
+  @SuppressWarnings("unused")
   BlogEntryEntity() {
-    // used by builder
+    // used by entity manager
   }
 
   private BlogEntryEntity(BlogEntryEntity blogEntryEntity) {
-    super(blogEntryEntity);
     blog = blogEntryEntity.copyBlog();
     entryEmbeddable = blogEntryEntity.copyEntry();
+    id = blogEntryEntity.id;
+    persistentDataEmbeddable = new PersistentDataEmbeddable();
   }
 
   public BlogEntryEntity(@NotNull BlogEntryDto blogEntryDto) {
-    super(blogEntryDto.fetchPersistentDto());
-    Optional.ofNullable(blogEntryDto.getBlog()).ifPresent(blogDto -> blog = new BlogEntity(blogDto));
+    blog = Optional.ofNullable(blogEntryDto.getBlog()).map(BlogEntity::new).orElse(null);
     entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
+    id = blogEntryDto.getId();
+    persistentDataEmbeddable = new PersistentDataEmbeddable(blogEntryDto.fetchPersistentDto());
   }
 
   private BlogEntity copyBlog() {
-    return blog.copy();
+    return blog.copyWithoutId();
   }
 
   private EntryEmbeddable copyEntry() {
@@ -74,23 +85,26 @@ public class BlogEntryEntity extends PersistentEntity {
     return blogEntryDto;
   }
 
-  public void create(String entry) {
-    setCreationTime(Now.asDateTime());
-    entryEmbeddable.setEntry(entry);
-  }
-
-  public void update(String entry) {
-    setUpdatedTime(Now.asDateTime());
-    entryEmbeddable.setEntry(entry);
+  public void modify(String entry, String modifiedCreator) {
+    entryEmbeddable.modify(modifiedCreator, entry);
+    persistentDataEmbeddable.modify();
   }
 
   @Override
-  public BlogEntryEntity copy() {
-    return new BlogEntryEntity(this);
+  public BlogEntryEntity copyWithoutId() {
+    BlogEntryEntity blogEntryEntity = new BlogEntryEntity(this);
+    blogEntryEntity.setId(null);
+
+    return blogEntryEntity;
   }
 
   @Override
-  protected Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
+  }
+
+  @Override
+  public Stream<PersistentEntity> streamSequencedDependencies() {
     return streamSequencedDependencies(blog);
   }
 
@@ -119,12 +133,32 @@ public class BlogEntryEntity extends PersistentEntity {
   }
 
   @Override
+  public String getCreatedBy() {
+    return persistentDataEmbeddable.getCreatedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfCreation() {
+    return persistentDataEmbeddable.getTimeOfCreation();
+  }
+
+  @Override
+  public String getModifiedBy() {
+    return persistentDataEmbeddable.getModifiedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfModification() {
+    return persistentDataEmbeddable.getTimeOfModification();
+  }
+
+  @Override
   public Long getId() {
     return id;
   }
 
   @Override
-  protected void setId(Long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -138,10 +172,6 @@ public class BlogEntryEntity extends PersistentEntity {
 
   public String getCreatorName() {
     return entryEmbeddable.getCreatorName();
-  }
-
-  public void setCreatorName(String creator) {
-    entryEmbeddable.setCreatorName(creator);
   }
 
   public String getEntry() {

@@ -63,7 +63,7 @@ class BlogEntryRepositoryTest {
 
     assertAll(
         () -> assertThat(blogEntryById.getCreatorName()).as("entry.creatorName").isEqualTo("smith"),
-        () -> assertThat(blogEntryById.getCreationTime()).as("entry.creationTime")
+        () -> assertThat(blogEntryById.getTimeOfCreation()).as("entry.creationTime")
             .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now()),
         () -> assertThat(blogEntryById.getEntry()).as("entry.entry").isEqualTo("once upon a time")
     );
@@ -89,8 +89,7 @@ class BlogEntryRepositoryTest {
 
     var blogEntryById = blogEntryRepository.findById(blogEntryToSave.getId()).orElseThrow(this::entryNotFound);
 
-    blogEntryById.setCreatorName("luke");
-    blogEntryById.update("happily ever after");
+    blogEntryById.modify("happily ever after", "luke");
 
     blogEntryRepository.save(blogEntryById);
 
@@ -105,7 +104,7 @@ class BlogEntryRepositoryTest {
 
           assertAll(
               () -> assertThat(blogEntryEntity.getCreatorName()).as("entry.creatorName").isEqualTo("luke"),
-              () -> assertThat(blogEntryEntity.getUpdatedTime()).as("entry.updatedTime")
+              () -> assertThat(blogEntryEntity.getTimeOfModification()).as("entry.timeOfModification")
                   .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now()),
               () -> assertThat(blogEntryEntity.getEntry()).as("entry.entry").isEqualTo("happily ever after")
           );
