@@ -6,7 +6,7 @@
 
 This project is a microservice dealing with persistence to an database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
-`com.github.jactor-rises` (formerly as part of the project `jactor-rises`)
+`com.github.jactor-rises` (formerly as part of the archived project `jactor-rises`)
 
 ### Set up ###
 
