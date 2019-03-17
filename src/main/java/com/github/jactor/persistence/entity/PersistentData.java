@@ -6,9 +6,9 @@ public interface PersistentData {
 
   String getCreatedBy();
 
-  LocalDateTime getCreationTime();
+  LocalDateTime getTimeOfCreation();
 
-  String getUpdatedBy();
+  String getModifiedBy();
 
-  LocalDateTime getUpdatedTime();
+  LocalDateTime getTimeOfModification();
 }

@@ -1,51 +1,25 @@
 package com.github.jactor.persistence.entity;
 
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.time.Now;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 
-@MappedSuperclass
-public abstract class DefaultPersistentEntity implements PersistentEntity {
+public interface PersistentEntity<T> extends PersistentData {
 
-  @Column(name = "CREATION_TIME")
-  private LocalDateTime creationTime;
-  @Column(name = "CREATED_BY")
-  private String createdBy;
-  @Column(name = "UPDATED_TIME")
-  private LocalDateTime updatedTime;
-  @Column(name = "UPDATED_BY")
-  private String updatedBy;
+  T copyWithoutId();
 
-  protected DefaultPersistentEntity() {
-    createdBy = "todo #3";
-    creationTime = Now.asDateTime();
-    updatedBy = "todo #3";
-    updatedTime = Now.asDateTime();
-  }
+  PersistentDto initPersistentDto();
 
-  protected DefaultPersistentEntity(DefaultPersistentEntity persistentEntity) {
-    createdBy = persistentEntity.createdBy;
-    creationTime = persistentEntity.creationTime;
-    updatedBy = persistentEntity.updatedBy;
-    updatedTime = persistentEntity.updatedTime;
-  }
+  Stream<PersistentEntity> streamSequencedDependencies();
 
-  protected DefaultPersistentEntity(PersistentDto persistentDto) {
-    setId(persistentDto.getId());
-    createdBy = persistentDto.getCreatedBy();
-    creationTime = persistentDto.getCreationTime();
-    updatedBy = persistentDto.getUpdatedBy();
-    updatedTime = persistentDto.getUpdatedTime();
-  }
+  Long getId();
 
-  public DefaultPersistentEntity addSequencedId(Sequencer sequencer) {
+  void setId(Long id);
+
+  default PersistentEntity addSequencedId(Sequencer sequencer) {
     if (getId() == null) {
       addSequencedId(this, sequencer);
     }
@@ -57,12 +31,12 @@ public abstract class DefaultPersistentEntity implements PersistentEntity {
     return this;
   }
 
-  private void addSequencedId(PersistentEntity<?> persistentEntity, Sequencer sequencer) {
+  private void addSequencedId(PersistentEntity persistentEntity, Sequencer sequencer) {
     Long id = sequencer.nextVal(persistentEntity.getClass());
     persistentEntity.setId(id);
   }
 
-  public Stream<PersistentEntity> streamSequencedDependencies(PersistentEntity... persistentEntities) {
+  default Stream<PersistentEntity> streamSequencedDependencies(PersistentEntity... persistentEntities) {
     if (persistentEntities == null) {
       return Stream.empty();
     }
@@ -71,7 +45,7 @@ public abstract class DefaultPersistentEntity implements PersistentEntity {
         .filter(Objects::nonNull);
   }
 
-  List<PersistentEntity> fetchAllPersistentEntities() {
+  default List<PersistentEntity> fetchAllPersistentEntities() {
     List<PersistentEntity> allSequencedDependencies = new ArrayList<>();
     streamSequencedDependencies(this)
         .forEach(persistentData -> addAllSequencedDependencis(persistentData, allSequencedDependencies));
@@ -92,33 +66,8 @@ public abstract class DefaultPersistentEntity implements PersistentEntity {
         .filter(Objects::nonNull);
   }
 
-  @Override
-  public String getCreatedBy() {
-    return createdBy;
-  }
-
-  public LocalDateTime getCreationTime() {
-    return creationTime;
-  }
-
-  @Override
-  public String getUpdatedBy() {
-    return updatedBy;
-  }
-
-  public LocalDateTime getUpdatedTime() {
-    return updatedTime;
-  }
-
-  protected void setCreationTime(LocalDateTime creationTime) {
-    this.creationTime = creationTime;
-  }
-
-  protected void setUpdatedTime(LocalDateTime updatedTime) {
-    this.updatedTime = updatedTime;
-  }
-
-  public interface Sequencer {
+  @FunctionalInterface
+  interface Sequencer {
 
     Long nextVal(Class<?> entityClass);
   }
