@@ -12,9 +12,6 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.PersistentEntity;
-import com.github.jactor.persistence.entity.GuestBookEntity;
-import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
 import org.aspectj.lang.JoinPoint;
@@ -41,13 +38,15 @@ class IdentitySequencerTest {
   @DisplayName("should increment the sequence of an entity, and the first number should be 1,000,000")
   void shouldIncrementSequenceOfAddressEntity() {
     var addressDto = new AddressDto(null, 1001, "addressLine1", null, null, "Rud", null);
-    when(joinPointMock.getArgs()).thenReturn(
-        new Object[]{anAddress(addressDto)}, new Object[]{anAddress(addressDto)}, new Object[]{anAddress(addressDto)}
-    );
+    var first = anAddress(addressDto);
+    var second = anAddress(addressDto);
+    var third = anAddress(addressDto);
 
-    PersistentEntity first = (PersistentEntity) identitySequencer.addIdentity(joinPointMock);
-    PersistentEntity second = (PersistentEntity) identitySequencer.addIdentity(joinPointMock);
-    PersistentEntity third = (PersistentEntity) identitySequencer.addIdentity(joinPointMock);
+    when(joinPointMock.getArgs()).thenReturn(new Object[]{first, second, third});
+
+    identitySequencer.addIdentity(joinPointMock);
+    identitySequencer.addIdentity(joinPointMock);
+    identitySequencer.addIdentity(joinPointMock);
 
     assertAll(
         () -> assertThat(first.getId()).as("first").isEqualTo(1000000L),
@@ -65,11 +64,11 @@ class IdentitySequencerTest {
 
     when(joinPointMock.getArgs()).thenReturn(new Object[]{personEntity});
 
-    PersonEntity person = (PersonEntity) identitySequencer.addIdentity(joinPointMock);
+    identitySequencer.addIdentity(joinPointMock);
 
     assertAll(
-        () -> assertThat(person.getId()).as("person.id").isEqualTo(1000000L),
-        () -> assertThat(person.getAddressEntity().getId()).as("person.address.id").isEqualTo(1000000L)
+        () -> assertThat(personEntity.getId()).as("person.id").isEqualTo(1000000L),
+        () -> assertThat(personEntity.getAddressEntity().getId()).as("person.address.id").isEqualTo(1000000L)
     );
   }
 
@@ -77,10 +76,10 @@ class IdentitySequencerTest {
   @DisplayName("should set id on an user entity as well as person and address")
   void shouldSetIdOnUserPersonAndAddress() {
     var personDto = new PersonDto(null, new AddressDto(), null, null, null, null);
-    var userDto = new UserDto(null, personDto, null, null);
-    when(joinPointMock.getArgs()).thenReturn(new Object[]{aUser(userDto)});
+    var user = aUser(new UserDto(null, personDto, null, null));
+    when(joinPointMock.getArgs()).thenReturn(new Object[]{user});
 
-    UserEntity user = (UserEntity) identitySequencer.addIdentity(joinPointMock);
+    identitySequencer.addIdentity(joinPointMock);
 
     assertAll(
         () -> assertThat(user.getId()).as("user.id").isEqualTo(1000000L),
@@ -94,10 +93,10 @@ class IdentitySequencerTest {
   void shouldSaveGuestBookUserPersonAndAddress() {
     var personDto = new PersonDto(null, new AddressDto(), null, null, null, null);
     var userDto = new UserDto(null, personDto, null, null);
-    var guestbookDto = new GuestBookDto(null, new HashSet<>(), "title", userDto);
-    when(joinPointMock.getArgs()).thenReturn(new Object[]{aGuestBook(guestbookDto)});
+    var guestBook = aGuestBook(new GuestBookDto(null, new HashSet<>(), "title", userDto));
+    when(joinPointMock.getArgs()).thenReturn(new Object[]{guestBook});
 
-    GuestBookEntity guestBook = (GuestBookEntity) identitySequencer.addIdentity(joinPointMock);
+    identitySequencer.addIdentity(joinPointMock);
 
     assertAll(
         () -> assertThat(guestBook.getId()).as("guestBook.id").isEqualTo(1000000L),

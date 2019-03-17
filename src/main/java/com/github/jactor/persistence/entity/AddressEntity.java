@@ -92,6 +92,11 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
   }
 
   @Override
+  public void modify() {
+    persistentDataEmbeddable.modify();
+  }
+
+  @Override
   public Stream<PersistentEntity> streamSequencedDependencies() {
     return Stream.empty();
   }
