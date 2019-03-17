@@ -23,7 +23,6 @@ import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ import org.junit.jupiter.api.Test;
 @DisplayName("A PersistentEntity")
 class PersistentEntityTest {
 
-  private PersistentEntity persistentEntityToTest;
+  private PersistentEntity<?> persistentEntityToTest;
 
   @Test
   @DisplayName("should be able to copy an address without the id")
@@ -40,7 +39,7 @@ class PersistentEntityTest {
         new AddressDto(null, 1001, "somewhere", "out", "there", "svg", "NO")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity<?> copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -59,7 +58,7 @@ class PersistentEntityTest {
         new PersonDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -77,7 +76,7 @@ class PersistentEntityTest {
     persistentEntityToTest = aUser(new UserDto(null, null, "i.am@home", "jactor"))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -95,7 +94,7 @@ class PersistentEntityTest {
     persistentEntityToTest = aBlog(new BlogDto(null, null, "general ignorance", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -113,7 +112,7 @@ class PersistentEntityTest {
     BlogEntryDto blogEntryDto = new BlogEntryDto(null, new BlogDto(), "jactor", "the one");
     persistentEntityToTest = aBlogEntry(blogEntryDto).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -131,7 +130,7 @@ class PersistentEntityTest {
     persistentEntityToTest = aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()))
         .addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -150,7 +149,7 @@ class PersistentEntityTest {
         new GuestBookEntryDto(null, new GuestBookDto(), "jactor", "the one")
     ).addSequencedId(aClass -> 1L);
 
-    PersistentEntity copy = persistentEntityToTest.copy();
+    PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
 
     assertAll(
         () -> assertThat(persistentEntityToTest).as("persistent entity").isNotNull(),
@@ -178,9 +177,7 @@ class PersistentEntityTest {
     var personEntity = aPerson(new PersonDto());
 
     persistentEntityToTest = personEntity;
-    List<PersistentEntity> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+    List<PersistentData> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
         .collect(toList());
 
     assertThat(dependencies)
@@ -195,11 +192,11 @@ class PersistentEntityTest {
     var personDto = new PersonDto(null, addressDto, null, null, null, null);
     persistentEntityToTest = aUser(new UserDto(null, personDto, null, null));
 
-    var allSequencedDependencies = persistentEntityToTest.fetchAllSequencedDependencies();
+    var allSequencedDependencies = persistentEntityToTest.fetchAllPersistentEntities();
 
     assertThat(allSequencedDependencies)
-        .hasSize(2)
-        .contains(anAddress(addressDto), aPerson(personDto));
+        .hasSize(3)
+        .contains(persistentEntityToTest, anAddress(addressDto), aPerson(personDto));
   }
 
   @Test
@@ -218,7 +215,7 @@ class PersistentEntityTest {
     persistentEntityToTest.addSequencedId(sequencerMock);
 
     assertAll(
-        () -> assertThat(persistentEntityToTest.getId()).as("persistentEntityToTest.id").isEqualTo(123L),
+        () -> assertThat(persistentEntityToTest.getId()).as("PersistentEntityToTest.id").isEqualTo(123L),
         () -> assertThat(addressEntity.getId()).as("addressEntity.id").isEqualTo(123L),
         () -> assertThat(personEntity.getId()).as("personEntity.id").isEqualTo(123L)
     );

@@ -38,19 +38,19 @@ class AddressDtoTest {
     @Test void shouldGiveValuesToPersistentDto() {
         PersistentDto persistentDto = new PersistentDto();
         persistentDto.setCreatedBy("jactor");
-        persistentDto.setCreationTime(LocalDateTime.now());
+        persistentDto.setTimeOfCreation(LocalDateTime.now());
         persistentDto.setId(1L);
-        persistentDto.setUpdatedBy("tip");
-        persistentDto.setUpdatedTime(LocalDateTime.now());
+        persistentDto.setModifiedBy("tip");
+        persistentDto.setTimeOfModification(LocalDateTime.now());
 
         PersistentDto copied = new AddressDto(persistentDto, new AddressDto()).fetchPersistentDto();
 
         assertAll(
                 () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
-                () -> Assertions.assertThat(copied.getCreationTime()).as("creation time").isEqualTo(persistentDto.getCreationTime()),
+                () -> Assertions.assertThat(copied.getTimeOfCreation()).as("creation time").isEqualTo(persistentDto.getTimeOfCreation()),
                 () -> Assertions.assertThat(copied.getId()).as("id").isEqualTo(persistentDto.getId()),
-                () -> Assertions.assertThat(copied.getUpdatedBy()).as("updated by").isEqualTo(persistentDto.getUpdatedBy()),
-                () -> Assertions.assertThat(copied.getUpdatedTime()).as("updated time").isEqualTo(persistentDto.getUpdatedTime())
+                () -> Assertions.assertThat(copied.getModifiedBy()).as("updated by").isEqualTo(persistentDto.getModifiedBy()),
+                () -> Assertions.assertThat(copied.getTimeOfModification()).as("updated time").isEqualTo(persistentDto.getTimeOfModification())
         );
     }
 }

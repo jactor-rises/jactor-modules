@@ -3,10 +3,13 @@ package com.github.jactor.persistence.entity;
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.PersistentDto;
+import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -16,10 +19,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "T_ADDRESS")
-public class AddressEntity extends PersistentEntity {
+public class AddressEntity implements PersistentEntity<AddressEntity> {
 
   @Id
   private Long id;
+
+  @Embedded
+  @AttributeOverride(name = "createdBy", column = @Column(name = "CREATED_BY"))
+  @AttributeOverride(name = "timeOfCreation", column = @Column(name = "CREATION_TIME"))
+  @AttributeOverride(name = "modifiedBy", column = @Column(name = "UPDATED_BY"))
+  @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
+  private PersistentDataEmbeddable persistentDataEmbeddable;
 
   @Column(name = "ADDRESS_LINE_1", nullable = false)
   private String addressLine1;
@@ -40,49 +50,54 @@ public class AddressEntity extends PersistentEntity {
   }
 
   /**
-   * @param address to copy
+   * @param address to copyWithoutId
    */
   private AddressEntity(AddressEntity address) {
-    super(address);
-
+    persistentDataEmbeddable = new PersistentDataEmbeddable();
     addressLine1 = address.getAddressLine1();
     addressLine2 = address.getAddressLine2();
     addressLine3 = address.getAddressLine3();
     city = address.getCity();
     country = address.getCountry();
+    id = address.getId();
     zipCode = address.getZipCode();
   }
 
-  public AddressEntity(@NotNull AddressDto addressDto) {
-    super(addressDto.fetchPersistentDto());
-
+  AddressEntity(@NotNull AddressDto addressDto) {
+    persistentDataEmbeddable = new PersistentDataEmbeddable(addressDto.fetchPersistentDto());
     addressLine1 = addressDto.getAddressLine1();
     addressLine2 = addressDto.getAddressLine2();
     addressLine3 = addressDto.getAddressLine3();
     city = addressDto.getCity();
     country = addressDto.getCountry();
+    id = addressDto.getId();
     zipCode = addressDto.getZipCode();
   }
 
   public AddressDto asDto() {
-    return new AddressDto(
-        initPersistentDto(),
-        zipCode, addressLine1, addressLine2, addressLine3, city, country
-    );
+    return new AddressDto(initPersistentDto(), zipCode, addressLine1, addressLine2, addressLine3, city, country);
   }
 
-  public @Override
-  AddressEntity copy() {
-    return new AddressEntity(this);
+  @Override
+  public AddressEntity copyWithoutId() {
+    AddressEntity addressEntity = new AddressEntity(this);
+    addressEntity.setId(null);
+
+    return addressEntity;
   }
 
-  protected @Override
-  Stream<Optional<PersistentEntity>> streamSequencedDependencies() {
+  @Override
+  public PersistentDto initPersistentDto() {
+    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
+  }
+
+  @Override
+  public Stream<PersistentEntity> streamSequencedDependencies() {
     return Stream.empty();
   }
 
-  public @Override
-  boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
@@ -97,13 +112,13 @@ public class AddressEntity extends PersistentEntity {
         Objects.equals(zipCode, addressEntity.zipCode);
   }
 
-  public @Override
-  int hashCode() {
+  @Override
+  public int hashCode() {
     return hash(addressLine1, addressLine2, addressLine3, city, country, zipCode);
   }
 
-  public @Override
-  String toString() {
+  @Override
+  public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
         .appendSuper(super.toString())
         .append(getAddressLine1())
@@ -115,13 +130,33 @@ public class AddressEntity extends PersistentEntity {
         .toString();
   }
 
-  public @Override
-  Long getId() {
+  @Override
+  public String getCreatedBy() {
+    return persistentDataEmbeddable.getCreatedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfCreation() {
+    return persistentDataEmbeddable.getTimeOfCreation();
+  }
+
+  @Override
+  public String getModifiedBy() {
+    return persistentDataEmbeddable.getModifiedBy();
+  }
+
+  @Override
+  public LocalDateTime getTimeOfModification() {
+    return persistentDataEmbeddable.getTimeOfModification();
+  }
+
+  @Override
+  public Long getId() {
     return id;
   }
 
-  protected @Override
-  void setId(Long id) {
+  @Override
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -172,7 +207,6 @@ public class AddressEntity extends PersistentEntity {
   public void setCity(String city) {
     this.city = city;
   }
-
 
   public static AddressEntity anAddress(AddressDto addressDto) {
     return new AddressEntity(addressDto);

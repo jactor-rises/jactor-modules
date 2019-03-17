@@ -80,8 +80,7 @@ class GuestBookEntryRepositoryTest {
     var entryById = guestBookEntryRepository.findById(guestBookEntryEntityToSave.getId())
         .orElseThrow(this::entryNotFound);
 
-    entryById.setCreatorName("Willie");
-    entryById.update("On the road again");
+    entryById.modify("Willie", "On the road again");
 
     assertAll(
         () -> assertThat(entryById.getCreatorName()).as("creator name").isEqualTo("Willie"),
