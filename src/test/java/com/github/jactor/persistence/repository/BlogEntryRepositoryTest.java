@@ -89,7 +89,7 @@ class BlogEntryRepositoryTest {
 
     var blogEntryById = blogEntryRepository.findById(blogEntryToSave.getId()).orElseThrow(this::entryNotFound);
 
-    blogEntryById.modify("luke", "happily ever after");
+    blogEntryById.modify("happily ever after", "luke");
 
     blogEntryRepository.save(blogEntryById);
 
