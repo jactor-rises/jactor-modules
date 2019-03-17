@@ -117,6 +117,11 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   }
 
   @Override
+  public void modify() {
+    persistentDataEmbeddable.modify();
+  }
+
+  @Override
   public Stream<PersistentEntity> streamSequencedDependencies() {
     return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream());
   }

@@ -105,6 +105,11 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
   }
 
   @Override
+  public void modify() {
+    persistentDataEmbeddable.modify();
+  }
+
+  @Override
   public Stream<PersistentEntity> streamSequencedDependencies() {
     return streamSequencedDependencies(guestBook);
   }
