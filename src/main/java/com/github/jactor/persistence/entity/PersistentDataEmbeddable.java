@@ -14,9 +14,9 @@ public class PersistentDataEmbeddable implements PersistentData {
   private LocalDateTime timeOfModification;
 
   PersistentDataEmbeddable() {
-    createdBy = "todo #3";
+    createdBy = "todo";
     timeOfCreation = Now.asDateTime();
-    modifiedBy = "todo #3";
+    modifiedBy = "todo";
     timeOfModification = Now.asDateTime();
   }
 
@@ -28,7 +28,6 @@ public class PersistentDataEmbeddable implements PersistentData {
   }
 
   void modify() {
-    modifiedBy = "todo #3, mocification";
     timeOfModification = Now.asDateTime();
   }
 

@@ -94,6 +94,11 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   }
 
   @Override
+  public void modify() {
+    persistentDataEmbeddable.modify();
+  }
+
+  @Override
   public Stream<PersistentEntity> streamSequencedDependencies() {
     return streamSequencedDependencies(addressEntity, userEntity);
   }

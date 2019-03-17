@@ -99,6 +99,11 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
   }
 
   @Override
+  public void modify() {
+    persistentDataEmbeddable.modify();
+  }
+
+  @Override
   public Stream<PersistentEntity> streamSequencedDependencies() {
     return Stream.concat(streamSequencedDependencies(user), entries.stream());
   }
