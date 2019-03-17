@@ -12,21 +12,22 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class IdentitySequencer {
-    private static final Long START_SEQUENCE = 999999L; // + 1 (computed before value retrieved)
+    private static final Long START_SEQUENCE = 1000000L;
     private final Map<Class<?>, Long> idSequenceMap = new HashMap<>();
 
     @Before("execution(* com.github.jactor.persistence.repository.*Repository.save(..))")
     public Object addIdentity(JoinPoint joinPoint) {
-        return Arrays.stream(joinPoint.getArgs())
+        Arrays.stream(joinPoint.getArgs())
                 .filter(obj -> obj instanceof PersistentEntity)
                 .map(obj -> (PersistentEntity) obj)
-                .map(persistentEntity -> persistentEntity.addSequencedId(this::fetchNextValFor))
-                .findAny().orElse(null);
+                .forEach(persistentEntity -> persistentEntity.addSequencedId(this::fetchNextValFor));
+
+        return null;
     }
 
     private Long fetchNextValFor(Class<?> aClass) {
-        idSequenceMap.putIfAbsent(aClass, START_SEQUENCE);
         idSequenceMap.computeIfPresent(aClass, (k, v) -> ++v);
+        idSequenceMap.putIfAbsent(aClass, START_SEQUENCE);
 
         return idSequenceMap.get(aClass);
     }
