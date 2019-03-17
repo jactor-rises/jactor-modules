@@ -16,9 +16,8 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
 
 ### Some technologies used ###
 
-* [spring framwork 5.x](https://spring.io/projects/spring-framework)
-* [spring-boot 2.x](https://spring.io/projects/spring-boot)
-* [hibernate 5.x](http://hibernate.org/orm/)
+* [spring-boot 2.1.x](https://spring.io/projects/spring-boot)
+  * with spring-data-jpa
 * [h2](http://h2database.com)
 * [junit 5.x](https://junit.org/junit5/)
 * [assertj](https://joel-costigliola.github.io/assertj/)
