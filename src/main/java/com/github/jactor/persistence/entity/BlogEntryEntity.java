@@ -104,6 +104,11 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
   }
 
   @Override
+  public void modify() {
+    persistentDataEmbeddable.modify();
+  }
+
+  @Override
   public Stream<PersistentEntity> streamSequencedDependencies() {
     return streamSequencedDependencies(blog);
   }
