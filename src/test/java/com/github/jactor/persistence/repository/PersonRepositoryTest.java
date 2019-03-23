@@ -13,7 +13,6 @@ import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -64,7 +63,7 @@ class PersonRepositoryTest {
     var people = personRepository.findAll();
 
     assertAll(
-        () -> assertThat(people).isNotEmpty(),
+        () -> assertThat(people).hasSize(3), // two users already present...
         () -> {
           PersonEntity personEntity = people.iterator().next();
           assertAll(
@@ -97,7 +96,7 @@ class PersonRepositoryTest {
 
     var people = personRepository.findAll();
 
-    assertThat(people).isNotEmpty();
+    assertThat(people).hasSize(3); // two users already present...
     var person = people.iterator().next();
 
     person.setDescription("There is no try");
@@ -112,7 +111,7 @@ class PersonRepositoryTest {
     var foundPeople = personRepository.findAll();
 
     assertAll(
-        () -> assertThat(foundPeople).isNotEmpty(),
+        () -> assertThat(foundPeople).hasSize(3), // two users already present...
         () -> {
           PersonEntity personEntity = foundPeople.iterator().next();
 
@@ -147,7 +146,7 @@ class PersonRepositoryTest {
     var people = personRepository.findAll();
 
     assertAll(
-        () -> assertThat(people).isNotEmpty(),
+        () -> assertThat(people).hasSize(3), // two users already present...
         () -> {
           PersonEntity personEntity = people.iterator().next();
           assertAll(
