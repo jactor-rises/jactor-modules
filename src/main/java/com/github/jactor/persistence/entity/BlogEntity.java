@@ -18,10 +18,13 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,6 +35,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class BlogEntity implements PersistentEntity<BlogEntity> {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blogSeq")
+  @SequenceGenerator(name = "blogSeq", sequenceName = "T_BLOG_SEQ", allocationSize = 1)
   private Long id;
 
   @Embedded
@@ -46,7 +51,7 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
   @Column(name = "TITLE")
   private String title;
   @JoinColumn(name = "USER_ID")
-  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private UserEntity userEntity;
   @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   private Set<BlogEntryEntity> entries = new HashSet<>();
