@@ -59,13 +59,20 @@ class BlogEntryRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var blogEntryById = blogEntryRepository.findById(blogEntryToSave.getId()).orElseThrow(this::entryNotFound);
+    var blogEntries = blogEntryRepository.findAll();
 
     assertAll(
-        () -> assertThat(blogEntryById.getCreatorName()).as("entry.creatorName").isEqualTo("smith"),
-        () -> assertThat(blogEntryById.getTimeOfCreation()).as("entry.creationTime")
-            .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now()),
-        () -> assertThat(blogEntryById.getEntry()).as("entry.entry").isEqualTo("once upon a time")
+        () -> assertThat(blogEntries).hasSize(1),
+        () -> {
+          var blogEntry = blogEntries.iterator().next();
+
+          assertAll(
+              () -> assertThat(blogEntry.getCreatorName()).as("entry.creatorName").isEqualTo("smith"),
+              () -> assertThat(blogEntry.getTimeOfCreation()).as("entry.creationTime")
+                  .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now()),
+              () -> assertThat(blogEntry.getEntry()).as("entry.entry").isEqualTo("once upon a time")
+          );
+        }
     );
   }
 
@@ -87,28 +94,29 @@ class BlogEntryRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var blogEntryById = blogEntryRepository.findById(blogEntryToSave.getId()).orElseThrow(this::entryNotFound);
+    var blogEntries = blogEntryRepository.findAll();
 
-    blogEntryById.modify("happily ever after", "luke");
+    assertThat(blogEntries).hasSize(1);
 
-    blogEntryRepository.save(blogEntryById);
+    var blogEntry = blogEntries.iterator().next();
 
-    var possibleUpdatedEntry = blogEntryRepository.findById(blogEntryToSave.getId());
+    blogEntry.modify("happily ever after", "luke");
+
+    blogEntryRepository.save(blogEntry);
     entityManager.flush();
     entityManager.clear();
 
-    assertAll(
-        () -> assertThat(possibleUpdatedEntry).as("possibleUpdatedEntry").isPresent(),
-        () -> {
-          BlogEntryEntity blogEntryEntity = possibleUpdatedEntry.orElseThrow(this::entryNotFound);
+    var modifiedEntries = blogEntryRepository.findAll();
 
-          assertAll(
-              () -> assertThat(blogEntryEntity.getCreatorName()).as("entry.creatorName").isEqualTo("luke"),
-              () -> assertThat(blogEntryEntity.getTimeOfModification()).as("entry.timeOfModification")
-                  .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now()),
-              () -> assertThat(blogEntryEntity.getEntry()).as("entry.entry").isEqualTo("happily ever after")
-          );
-        }
+    assertThat(modifiedEntries).hasSize(1);
+
+    var modifiedEntry = modifiedEntries.iterator().next();
+
+    assertAll(
+        () -> assertThat(modifiedEntry.getCreatorName()).as("entry.creatorName").isEqualTo("luke"),
+        () -> assertThat(modifiedEntry.getTimeOfModification()).as("entry.timeOfModification")
+            .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now()),
+        () -> assertThat(modifiedEntry.getEntry()).as("entry.entry").isEqualTo("happily ever after")
     );
   }
 
@@ -148,9 +156,5 @@ class BlogEntryRepositoryTest {
         () -> assertThat(entriesByBlog.get(0).getCreatorName()).as("entry.creatorName").isEqualTo("shrek"),
         () -> assertThat(entriesByBlog.get(0).getEntry()).as("entry.entry").isEqualTo("far far away")
     );
-  }
-
-  private AssertionError entryNotFound() {
-    return new AssertionError("Blog Entry not found");
   }
 }
