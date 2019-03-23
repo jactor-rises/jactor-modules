@@ -30,6 +30,7 @@ public interface PersistentEntity<T> extends PersistentData {
         .filter(dependency -> dependency.getId() == null)
         .filter(dependency -> !(dependency instanceof AddressEntity))
         .filter(dependency -> !(dependency instanceof GuestBookEntryEntity))
+        .filter(dependency -> !(dependency instanceof PersonEntity))
         .forEach(depencency -> addSequencedId(depencency, sequencer));
 
     return this;

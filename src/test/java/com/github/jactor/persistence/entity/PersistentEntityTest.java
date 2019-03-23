@@ -203,18 +203,13 @@ class PersistentEntityTest {
   @DisplayName("should add sequenced id, also on dependencies of a persistent entity")
   void shouldAddSequencedIdAlsOnDependencies() {
     var personDto = new PersonDto(null, new AddressDto(), null, null, null, null);
-    var userEntity = aUser(new UserDto(null, personDto, null, null));
-    var personEntity = userEntity.getPerson();
-    persistentEntityToTest = userEntity;
+    persistentEntityToTest = aUser(new UserDto(null, personDto, null, null));
 
     PersistentEntity.Sequencer sequencerMock = mock(PersistentEntity.Sequencer.class);
     when(sequencerMock.nextVal(any(Class.class))).thenReturn(123L);
 
     persistentEntityToTest.addSequencedId(sequencerMock);
 
-    assertAll(
-        () -> assertThat(persistentEntityToTest.getId()).as("PersistentEntityToTest.id").isEqualTo(123L),
-        () -> assertThat(personEntity.getId()).as("personEntity.id").isEqualTo(123L)
-    );
+    assertThat(persistentEntityToTest.getId()).as("PersistentEntityToTest.id").isEqualTo(123L);
   }
 }
