@@ -20,10 +20,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,6 +37,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class UserEntity implements PersistentEntity<UserEntity> {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
+  @SequenceGenerator(name = "userSeq", sequenceName = "T_USER_SEQ", allocationSize = 1)
   private Long id;
 
   @Embedded

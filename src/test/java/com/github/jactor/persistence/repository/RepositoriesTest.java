@@ -46,7 +46,7 @@ class RepositoriesTest {
     entityManager.flush();
     entityManager.clear();
 
-    UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
+    UserEntity userById = userRepository.findByUsername("r2d2").orElseThrow(() -> new AssertionError("User not found!"));
 
     BlogEntity blogEntityToSave = aBlog(new BlogDto(null, LocalDate.now(), "Far, far, away...", userById.asDto()));
 
