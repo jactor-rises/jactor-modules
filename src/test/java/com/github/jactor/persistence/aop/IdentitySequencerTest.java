@@ -62,9 +62,6 @@ class IdentitySequencerTest {
 
     identitySequencer.addIdentity(joinPointMock);
 
-    assertAll(
-        () -> assertThat(guestBook.getId()).as("guestBook.id").isEqualTo(1000000L),
-        () -> assertThat(guestBook.getUser().getId()).as("guestBook.user.id").isEqualTo(1000000L)
-    );
+    assertThat(guestBook.getId()).as("guestBook.id").isEqualTo(1000000L);
   }
 }

@@ -63,7 +63,7 @@ class UserRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    Optional<UserEntity> userById = userRepository.findById(userToPersist.getId());
+    Optional<UserEntity> userById = userRepository.findByUsername("smuggler");
 
     assertAll(
         () -> assertThat(userById).isPresent(),
@@ -132,7 +132,7 @@ class UserRepositoryTest {
         .map(UserEntity::getUsername)
         .collect(toList());
 
-    assertThat(usernames).containsExactly("tip", "spiderman");
+    assertThat(usernames).contains("tip", "spiderman");
 
     usernames = userRepository.findByUserType(UserType.ADMIN).stream()
         .map(UserEntity::getUsername)
