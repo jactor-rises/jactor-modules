@@ -12,6 +12,7 @@ import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
 import javax.persistence.EntityManager;
@@ -44,21 +45,27 @@ class GuestBookEntryRepositoryTest {
     var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
-    var guestbookDto = new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", userDto);
+
+    var savedUser = userRepository.save(new UserEntity(userDto));
+    var guestBook = aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()));
+
+    guestBookRepository.save(guestBook);
+
     var guestBookEntryEntityToSave = aGuestBookEntry(
-        new GuestBookEntryDto(new PersistentDto(), guestbookDto, "Harry", "Draco Dormiens Nunquam Tittilandus")
+        new GuestBookEntryDto(new PersistentDto(), guestBook.asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus")
     );
 
     guestBookEntryRepository.save(guestBookEntryEntityToSave);
     entityManager.flush();
     entityManager.clear();
 
-    var entryById = guestBookEntryRepository.findById(guestBookEntryEntityToSave.getId())
-        .orElseThrow(this::entryNotFound);
+    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(guestBook);
 
     assertAll(
-        () -> assertThat(entryById.getCreatorName()).as("creator name").isEqualTo("Harry"),
-        () -> assertThat(entryById.getEntry()).as("entry").isEqualTo("Draco Dormiens Nunquam Tittilandus")
+        () -> assertThat(entriesByGuestBook).hasSize(1),
+        () -> assertThat(entriesByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getCreatorName).as("creator name").isEqualTo("Harry"),
+        () -> assertThat(entriesByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getEntry).as("entry")
+            .isEqualTo("Draco Dormiens Nunquam Tittilandus")
     );
   }
 
@@ -68,29 +75,44 @@ class GuestBookEntryRepositoryTest {
     var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
-    var guestbookDto = new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", userDto);
+
+    var savedUser = userRepository.save(new UserEntity(userDto));
+    var guestBook = aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()));
+
+    guestBookRepository.save(guestBook);
+
     var guestBookEntryEntityToSave = aGuestBookEntry(
-        new GuestBookEntryDto(new PersistentDto(), guestbookDto, "Harry", "Draco Dormiens Nunquam Tittilandus")
+        new GuestBookEntryDto(new PersistentDto(), guestBook.asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus")
     );
 
     guestBookEntryRepository.save(guestBookEntryEntityToSave);
     entityManager.flush();
     entityManager.clear();
 
-    var entryById = guestBookEntryRepository.findById(guestBookEntryEntityToSave.getId())
-        .orElseThrow(this::entryNotFound);
+    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(guestBook);
 
-    entryById.modify("Willie", "On the road again");
+    assertThat(entriesByGuestBook).hasSize(1);
+
+    entriesByGuestBook.iterator().next().modify("Willie", "On the road again");
+
+    guestBookEntryRepository.save(entriesByGuestBook.iterator().next());
+    entityManager.flush();
+    entityManager.clear();
+
+    var modifiedEntryByGuestBook = guestBookEntryRepository.findByGuestBook(guestBook);
 
     assertAll(
-        () -> assertThat(entryById.getCreatorName()).as("creator name").isEqualTo("Willie"),
-        () -> assertThat(entryById.getEntry()).as("entry").isEqualTo("On the road again")
+        () -> assertThat(modifiedEntryByGuestBook).as("entries").hasSize(1),
+        () -> assertThat(modifiedEntryByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getCreatorName).as("creator name")
+            .isEqualTo("Willie"),
+        () -> assertThat(modifiedEntryByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getEntry).as("entry")
+            .isEqualTo("On the road again")
     );
   }
 
   @Test
-  @DisplayName("should write two entries and on two blogs then find entry on blog")
-  void shouldWriteTwoEntriesOnTwoBlogsThenFindEntryOnBlog() {
+  @DisplayName("should write two entries to two different guest books and then find one entry")
+  void shouldWriteTwoEntriesToTwoGuestBooksAndThenFindEntry() {
     var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
@@ -126,7 +148,7 @@ class GuestBookEntryRepositoryTest {
     );
   }
 
-  private AssertionError entryNotFound() {
-    return new AssertionError("guest book entry not found");
+  private AssertionError entryNotFound(GuestBookEntryEntity guestBookEntryEntity) {
+    return new AssertionError(String.format("guest book entry with id=%s not found", guestBookEntryEntity.getId()));
   }
 }
