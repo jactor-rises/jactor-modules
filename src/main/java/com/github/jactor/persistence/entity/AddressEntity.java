@@ -11,7 +11,10 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,6 +25,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class AddressEntity implements PersistentEntity<AddressEntity> {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addressSeq")
+  @SequenceGenerator(name = "addressSeq", sequenceName = "T_ADDRESS_SEQ", allocationSize = 1)
   private Long id;
 
   @Embedded
