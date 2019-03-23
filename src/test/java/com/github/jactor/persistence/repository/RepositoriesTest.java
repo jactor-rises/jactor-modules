@@ -54,11 +54,15 @@ class RepositoriesTest {
     entityManager.flush();
     entityManager.clear();
 
-    BlogEntity blogById = blogRepository.findById(blogEntityToSave.getId()).orElseThrow(() -> new AssertionError("Blog not found"));
+    var blogsByTitle = blogRepository.findBlogsByTitle("Far, far, away...");
+
+    assertThat(blogsByTitle).hasSize(1);
+
+    var blogEntity = blogsByTitle.iterator().next();
 
     assertAll(
-        () -> assertThat(blogById.getTitle()).as("blog.title").isEqualTo("Far, far, away..."),
-        () -> assertThat(blogById.getUser()).as("blog.user").isEqualTo(userById)
+        () -> assertThat(blogEntity.getTitle()).as("blog.title").isEqualTo("Far, far, away..."),
+        () -> assertThat(blogEntity.getUser()).as("blog.user").isEqualTo(userById)
     );
   }
 }

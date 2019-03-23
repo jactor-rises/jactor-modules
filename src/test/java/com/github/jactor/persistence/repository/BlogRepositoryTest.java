@@ -48,12 +48,12 @@ class BlogRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var possibleBlogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
+    var blogs = blogRepositoryToTest.findAll();
 
     assertAll(
-        () -> assertThat(possibleBlogById).as("blog").isPresent(),
+        () -> assertThat(blogs).as("blogs").hasSize(1),
         () -> {
-          var blogEntity = possibleBlogById.orElseThrow(this::blogNotFound);
+          var blogEntity = blogs.iterator().next();
           assertThat(blogEntity.getCreated()).as("created").isEqualTo(LocalDate.now());
           assertThat(blogEntity.getTitle()).as("title").isEqualTo("Blah");
         }
@@ -75,19 +75,24 @@ class BlogRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var blogEntitySaved = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
+    var blogs = blogRepositoryToTest.findBlogsByTitle("Blah");
+
+    assertThat(blogs).hasSize(1);
+
+    var blogEntitySaved = blogs.iterator().next();
+
     blogEntitySaved.setTitle("Duh");
 
     blogRepositoryToTest.save(blogEntitySaved);
     entityManager.flush();
     entityManager.clear();
 
-    var possibleBlogById = blogRepositoryToTest.findById(blogEntityToSave.getId());
+    var modifiedBlogs = blogRepositoryToTest.findBlogsByTitle("Duh");
 
     assertAll(
-        () -> assertThat(possibleBlogById).as("blog").isPresent(),
+        () -> assertThat(modifiedBlogs).as("modified blogs").hasSize(1),
         () -> {
-          var blogEntity = possibleBlogById.orElseThrow(this::blogNotFound);
+          var blogEntity = modifiedBlogs.iterator().next();
           assertThat(blogEntity.getCreated()).as("created").isEqualTo(LocalDate.now());
           assertThat(blogEntity.getTitle()).as("title").isEqualTo("Duh");
         }
@@ -139,12 +144,15 @@ class BlogRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var blogById = blogRepositoryToTest.findById(blogEntityToSave.getId()).orElseThrow(this::blogNotFound);
+    var blogs = blogRepositoryToTest.findBlogsByTitle("Blah");
 
     assertAll(
-        () -> assertThat(blogById.getEntries()).as("entries").hasSize(1),
+        () -> assertThat(blogs).hasSize(1),
         () -> {
-          BlogEntryEntity blogEntryEntity = blogById.getEntries().iterator().next();
+          var blogEntity = blogs.iterator().next();
+          assertThat(blogEntity.getEntries()).hasSize(1);
+
+          var blogEntryEntity = blogEntity.getEntries().iterator().next();
           assertThat(blogEntryEntity.getEntry()).as("entry").isEqualTo("i'll be back");
           assertThat(blogEntryEntity.getCreatorName()).as("creatorName").isEqualTo("arnold");
         }
