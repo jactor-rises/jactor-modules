@@ -14,9 +14,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,6 +30,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEntity> {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "guestBookEntrySeq")
+  @SequenceGenerator(name = "guestBookEntrySeq", sequenceName = "T_GUEST_BOOK_ENTRY_SEQ", allocationSize = 1)
   private Long id;
 
   @Embedded
@@ -36,7 +41,7 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
   @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
   private PersistentDataEmbeddable persistentDataEmbeddable;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "GUEST_BOOK_ID")
   private GuestBookEntity guestBook;
 
