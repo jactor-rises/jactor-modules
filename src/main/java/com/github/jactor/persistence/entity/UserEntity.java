@@ -6,12 +6,12 @@ import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,10 +20,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,6 +37,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class UserEntity implements PersistentEntity<UserEntity> {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
+  @SequenceGenerator(name = "userSeq", sequenceName = "T_USER_SEQ", allocationSize = 1)
   private Long id;
 
   @Embedded
@@ -48,11 +53,11 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   @Column(name = "USER_NAME", nullable = false)
   private String username;
   @JoinColumn(name = "PERSON_ID")
-  @OneToOne(cascade = CascadeType.MERGE)
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private PersonEntity personEntity;
-  @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private GuestBookEntity guestBook;
-  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "userEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private Set<BlogEntity> blogs = new HashSet<>();
   @Column(name = "USER_TYPE")
   @Enumerated(EnumType.STRING)
@@ -121,9 +126,9 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     persistentDataEmbeddable.modify();
   }
 
-  @Override
-  public Stream<PersistentEntity> streamSequencedDependencies() {
-    return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream());
+  public void add(BlogEntity blogEntity) {
+    blogs.add(blogEntity);
+    blogEntity.setUser(this);
   }
 
   @Override
@@ -179,6 +184,19 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   @Override
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Set<BlogEntity> getBlogs() {
+    return Collections.unmodifiableSet(blogs);
+  }
+
+  public GuestBookEntity getGuestBook() {
+    return guestBook;
+  }
+
+  public void setGuestBook(GuestBookEntity guestBook) {
+    this.guestBook = guestBook;
+    guestBook.setUser(this);
   }
 
   public String getUsername() {
