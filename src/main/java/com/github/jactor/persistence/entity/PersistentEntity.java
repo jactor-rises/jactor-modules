@@ -13,8 +13,6 @@ public interface PersistentEntity<T> extends PersistentData {
 
   void modify();
 
-  Stream<PersistentEntity> streamSequencedDependencies();
-
   Long getId();
 
   void setId(Long id);

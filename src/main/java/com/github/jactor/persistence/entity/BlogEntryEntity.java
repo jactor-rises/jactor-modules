@@ -8,7 +8,6 @@ import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -111,11 +110,6 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
   @Override
   public void modify() {
     persistentDataEmbeddable.modify();
-  }
-
-  @Override
-  public Stream<PersistentEntity> streamSequencedDependencies() {
-    return streamSequencedDependencies(blog);
   }
 
   @Override

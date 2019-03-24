@@ -7,7 +7,6 @@ import com.github.jactor.persistence.dto.PersonDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -102,12 +101,6 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   public void modify() {
     persistentDataEmbeddable.modify();
   }
-
-  @Override
-  public Stream<PersistentEntity> streamSequencedDependencies() {
-    return streamSequencedDependencies(addressEntity, userEntity);
-  }
-
 
   @Override
   public boolean equals(Object o) {

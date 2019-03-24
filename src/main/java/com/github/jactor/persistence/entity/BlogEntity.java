@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -106,11 +105,6 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
   @Override
   public void modify() {
     persistentDataEmbeddable.modify();
-  }
-
-  @Override
-  public Stream<PersistentEntity> streamSequencedDependencies() {
-    return Stream.concat(streamSequencedDependencies(userEntity), entries.stream());
   }
 
   @Override
