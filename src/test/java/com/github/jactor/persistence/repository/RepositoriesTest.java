@@ -10,7 +10,6 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.entity.BlogEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.time.LocalDate;
 import javax.persistence.EntityManager;
@@ -46,19 +45,22 @@ class RepositoriesTest {
     entityManager.flush();
     entityManager.clear();
 
-    UserEntity userById = userRepository.findById(userToPersist.getId()).orElseThrow(() -> new AssertionError("User not found!"));
+    UserEntity userByUsername = userRepository.findByUsername("r2d2").orElseThrow(() -> new AssertionError("User not found!"));
+    userByUsername.add(aBlog(new BlogDto(null, LocalDate.now(), "Far, far, away...", userByUsername.asDto())));
 
-    BlogEntity blogEntityToSave = aBlog(new BlogDto(null, LocalDate.now(), "Far, far, away...", userById.asDto()));
-
-    blogRepository.save(blogEntityToSave);
+    userByUsername.getBlogs().forEach(blogEntityToSave -> blogRepository.save(blogEntityToSave));
     entityManager.flush();
     entityManager.clear();
 
-    BlogEntity blogById = blogRepository.findById(blogEntityToSave.getId()).orElseThrow(() -> new AssertionError("Blog not found"));
+    var blogsByTitle = blogRepository.findBlogsByTitle("Far, far, away...");
+
+    assertThat(blogsByTitle).hasSize(1);
+
+    var blogEntity = blogsByTitle.iterator().next();
 
     assertAll(
-        () -> assertThat(blogById.getTitle()).as("blog.title").isEqualTo("Far, far, away..."),
-        () -> assertThat(blogById.getUser()).as("blog.user").isEqualTo(userById)
+        () -> assertThat(blogEntity.getTitle()).as("blog.title").isEqualTo("Far, far, away..."),
+        () -> assertThat(blogEntity.getUser()).as("blog.user").isEqualTo(userByUsername)
     );
   }
 }

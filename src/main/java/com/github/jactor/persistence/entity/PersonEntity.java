@@ -7,16 +7,18 @@ import com.github.jactor.persistence.dto.PersonDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,6 +29,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class PersonEntity implements PersistentEntity<PersonEntity> {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personSeq")
+  @SequenceGenerator(name = "personSeq", sequenceName = "T_PERSON_SEQ", allocationSize = 1)
   private Long id;
 
   @Embedded
@@ -45,9 +49,9 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   @Column(name = "SURNAME", nullable = false)
   private String surname;
   @JoinColumn(name = "ADDRESS_ID")
-  @ManyToOne(cascade = CascadeType.MERGE, optional = false)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
   private AddressEntity addressEntity;
-  @OneToOne(mappedBy = "personEntity", cascade = CascadeType.MERGE)
+  @OneToOne(mappedBy = "personEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private UserEntity userEntity;
 
   @SuppressWarnings("unused")
@@ -97,12 +101,6 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   public void modify() {
     persistentDataEmbeddable.modify();
   }
-
-  @Override
-  public Stream<PersistentEntity> streamSequencedDependencies() {
-    return streamSequencedDependencies(addressEntity, userEntity);
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -200,7 +198,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     this.locale = locale;
   }
 
-  public void setUserEntity(UserEntity userEntity) {
+  void setUserEntity(UserEntity userEntity) {
     this.userEntity = userEntity;
   }
 

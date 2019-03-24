@@ -13,7 +13,6 @@ import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -61,12 +60,12 @@ class PersonRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
+    var people = personRepository.findAll();
 
     assertAll(
-        () -> assertThat(personById).isPresent(),
+        () -> assertThat(people).hasSize(3), // two users already present...
         () -> {
-          PersonEntity personEntity = personById.orElseThrow(this::notFoundError);
+          PersonEntity personEntity = people.iterator().next();
           assertAll(
               () -> assertThat(personEntity.getAddressEntity()).as("address").isEqualTo(personToPersist.getAddressEntity()),
               () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("Me, myself, and I"),
@@ -95,29 +94,33 @@ class PersonRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    PersonEntity personById = personRepository.findById(personToPersist.getId()).orElseThrow(this::notFoundError);
+    var people = personRepository.findAll();
 
-    personById.setDescription("There is no try");
-    personById.setLocale("dk_DK");
-    personById.setFirstName("Dr. A.");
-    personById.setSurname("Cula");
+    assertThat(people).hasSize(3); // two users already present...
+    var person = people.iterator().next();
 
-    personRepository.save(personById);
+    person.setDescription("There is no try");
+    person.setLocale("dk_DK");
+    person.setFirstName("Dr. A.");
+    person.setSurname("Cula");
+
+    personRepository.save(person);
     entityManager.flush();
     entityManager.clear();
 
-    Optional<PersonEntity> foundPerson = personRepository.findById(personToPersist.getId());
+    var foundPeople = personRepository.findAll();
 
     assertAll(
-        () -> assertThat(foundPerson).isPresent(),
+        () -> assertThat(foundPeople).hasSize(3), // two users already present...
         () -> {
-          PersonEntity personEntity = foundPerson.orElseThrow(this::notFoundError);
+          PersonEntity personEntity = foundPeople.iterator().next();
+
           assertAll(
               () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("There is no try"),
               () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("dk_DK"),
               () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Dr. A."),
               () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Cula"),
-              () -> assertThat(personEntity.getUserEntity()).isEqualTo(personById.getUserEntity())
+              () -> assertThat(personEntity.getUserEntity()).isEqualTo(person.getUserEntity())
           );
         }
     );
@@ -140,12 +143,12 @@ class PersonRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    Optional<PersonEntity> personById = personRepository.findById(personToPersist.getId());
+    var people = personRepository.findAll();
 
     assertAll(
-        () -> assertThat(personById).isPresent(),
+        () -> assertThat(people).hasSize(3), // two users already present...
         () -> {
-          PersonEntity personEntity = personById.orElseThrow(this::notFoundError);
+          PersonEntity personEntity = people.iterator().next();
           assertAll(
               () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Adder"),
               () -> assertThat(personEntity.getUserEntity()).as("user").isNotNull(),
@@ -154,9 +157,5 @@ class PersonRepositoryTest {
           );
         }
     );
-  }
-
-  private AssertionError notFoundError() {
-    return new AssertionError("person not found");
   }
 }
