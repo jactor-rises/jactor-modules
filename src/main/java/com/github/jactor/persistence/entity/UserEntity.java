@@ -6,6 +6,7 @@ import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -125,6 +126,11 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     persistentDataEmbeddable.modify();
   }
 
+  public void add(BlogEntity blogEntity) {
+    blogs.add(blogEntity);
+    blogEntity.setUser(this);
+  }
+
   @Override
   public boolean equals(Object o) {
     return o == this || o != null && getClass() == o.getClass() &&
@@ -202,6 +208,10 @@ public class UserEntity implements PersistentEntity<UserEntity> {
 
   public static UserEntity aUser(UserDto userDto) {
     return new UserEntity(userDto);
+  }
+
+  public Set<BlogEntity> getBlogs() {
+    return Collections.unmodifiableSet(blogs);
   }
 
   public enum UserType {
