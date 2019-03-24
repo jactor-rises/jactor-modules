@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -124,11 +123,6 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   @Override
   public void modify() {
     persistentDataEmbeddable.modify();
-  }
-
-  @Override
-  public Stream<PersistentEntity> streamSequencedDependencies() {
-    return Stream.concat(streamSequencedDependencies(personEntity, guestBook), blogs.stream());
   }
 
   @Override

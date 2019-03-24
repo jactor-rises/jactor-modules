@@ -160,13 +160,4 @@ class PersistentEntityTest {
         () -> assertThat(persistentEntityToTest).as("persistent entity is not same instance as copy").isNotSameAs(copy)
     );
   }
-
-  @Test
-  @DisplayName("should return an empty stream when no dependencies")
-  void shouldReturnEmptyStreamWithoutDependenciesGiven() {
-    persistentEntityToTest = anAddress(new AddressDto());
-    Stream none = persistentEntityToTest.streamSequencedDependencies();
-
-    assertThat(none).isEmpty();
-  }
 }

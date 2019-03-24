@@ -6,7 +6,6 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.stream.Stream;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -99,11 +98,6 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
   @Override
   public void modify() {
     persistentDataEmbeddable.modify();
-  }
-
-  @Override
-  public Stream<PersistentEntity> streamSequencedDependencies() {
-    return Stream.empty();
   }
 
   @Override
