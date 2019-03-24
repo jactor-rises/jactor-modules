@@ -49,9 +49,9 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   @Column(name = "SURNAME", nullable = false)
   private String surname;
   @JoinColumn(name = "ADDRESS_ID")
-  @ManyToOne(cascade = CascadeType.MERGE, optional = false)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
   private AddressEntity addressEntity;
-  @OneToOne(mappedBy = "personEntity", cascade = CascadeType.MERGE)
+  @OneToOne(mappedBy = "personEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private UserEntity userEntity;
 
   @SuppressWarnings("unused")
