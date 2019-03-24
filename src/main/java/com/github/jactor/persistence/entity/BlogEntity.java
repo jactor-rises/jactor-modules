@@ -175,6 +175,10 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
     return userEntity;
   }
 
+  public void setUser(UserEntity userEntity) {
+    this.userEntity = userEntity;
+  }
+
   public void setTitle(String title) {
     this.title = title;
   }
