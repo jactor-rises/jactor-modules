@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.aop;
 
 import com.github.jactor.persistence.entity.AddressEntity;
+import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.entity.PersistentEntity;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class IdentitySequencer {
     Arrays.stream(joinPoint.getArgs())
         .filter(obj -> obj instanceof PersistentEntity)
         .filter(obj -> !(obj instanceof AddressEntity))
+        .filter(obj -> !(obj instanceof GuestBookEntryEntity))
         .map(obj -> (PersistentEntity) obj)
         .forEach(persistentEntity -> persistentEntity.addSequencedId(this::fetchNextValFor));
 
