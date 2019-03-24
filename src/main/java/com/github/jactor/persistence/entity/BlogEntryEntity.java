@@ -40,7 +40,7 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
   @AttributeOverride(name = "timeOfModification", column = @Column(name = "UPDATED_TIME"))
   private PersistentDataEmbeddable persistentDataEmbeddable;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "BLOG_ID")
   private BlogEntity blog;
 

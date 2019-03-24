@@ -52,7 +52,7 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
   @JoinColumn(name = "USER_ID")
   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private UserEntity userEntity;
-  @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @OneToMany(mappedBy = "blog", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private Set<BlogEntryEntity> entries = new HashSet<>();
 
   @SuppressWarnings("unused")

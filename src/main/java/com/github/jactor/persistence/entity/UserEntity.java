@@ -52,11 +52,11 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   @Column(name = "USER_NAME", nullable = false)
   private String username;
   @JoinColumn(name = "PERSON_ID")
-  @OneToOne(cascade = CascadeType.MERGE)
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private PersonEntity personEntity;
-  @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private GuestBookEntity guestBook;
-  @OneToMany(mappedBy = "userEntity", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "userEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private Set<BlogEntity> blogs = new HashSet<>();
   @Column(name = "USER_TYPE")
   @Enumerated(EnumType.STRING)
