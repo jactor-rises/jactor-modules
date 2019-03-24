@@ -16,7 +16,6 @@ import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
 import javax.persistence.EntityManager;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(classes = {JactorPersistence.class})
 @Transactional
 @DisplayName("A GuestBookEntryRepository")
-@Disabled("??? after removing manual id on GuestBookEntity")
 class GuestBookEntryRepositoryTest {
 
   @Autowired
@@ -49,19 +47,20 @@ class GuestBookEntryRepositoryTest {
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
-    var guestBook = aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()));
-
-    guestBookRepository.save(guestBook);
-
-    var guestBookEntryEntityToSave = aGuestBookEntry(
-        new GuestBookEntryDto(new PersistentDto(), guestBook.asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus")
+    savedUser.setGuestBook(
+        aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()))
     );
 
-    guestBookEntryRepository.save(guestBookEntryEntityToSave);
+    var savedGuestBook = guestBookRepository.save(savedUser.getGuestBook());
+    savedGuestBook.add(
+        aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), savedUser.getGuestBook().asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus"))
+    );
+
+    savedGuestBook.getEntries().forEach(guestBookEntryEntityToSave -> guestBookEntryRepository.save(guestBookEntryEntityToSave));
     entityManager.flush();
     entityManager.clear();
 
-    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(guestBook);
+    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.getGuestBook());
 
     assertAll(
         () -> assertThat(entriesByGuestBook).hasSize(1),
@@ -72,26 +71,27 @@ class GuestBookEntryRepositoryTest {
   }
 
   @Test
-  @DisplayName("should save then update and read guest book entry entity")
-  void shouldSaveThenUpdateAndReadGuestBookEntryEntity() {
+  @DisplayName("should save then modify and read guest book entry entity")
+  void shouldSaveThenModifyAndReadGuestBookEntryEntity() {
     var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
-    var guestBook = aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()));
-
-    guestBookRepository.save(guestBook);
-
-    var guestBookEntryEntityToSave = aGuestBookEntry(
-        new GuestBookEntryDto(new PersistentDto(), guestBook.asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus")
+    savedUser.setGuestBook(
+        aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()))
     );
 
-    guestBookEntryRepository.save(guestBookEntryEntityToSave);
+    var savedGuestBook = guestBookRepository.save(savedUser.getGuestBook());
+    savedGuestBook.add(
+        aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), savedUser.getGuestBook().asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus"))
+    );
+
+    savedGuestBook.getEntries().forEach(guestBookEntryEntityToSave -> guestBookEntryRepository.save(guestBookEntryEntityToSave));
     entityManager.flush();
     entityManager.clear();
 
-    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(guestBook);
+    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.getGuestBook());
 
     assertThat(entriesByGuestBook).hasSize(1);
 
@@ -101,13 +101,13 @@ class GuestBookEntryRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var modifiedEntryByGuestBook = guestBookEntryRepository.findByGuestBook(guestBook);
+    var modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.getGuestBook());
 
     assertAll(
-        () -> assertThat(modifiedEntryByGuestBook).as("entries").hasSize(1),
-        () -> assertThat(modifiedEntryByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getCreatorName).as("creator name")
+        () -> assertThat(modifiedEntriesByGuestBook).as("entries").hasSize(1),
+        () -> assertThat(modifiedEntriesByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getCreatorName).as("creator name")
             .isEqualTo("Willie"),
-        () -> assertThat(modifiedEntryByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getEntry).as("entry")
+        () -> assertThat(modifiedEntriesByGuestBook.iterator().next()).extracting(GuestBookEntryEntity::getEntry).as("entry")
             .isEqualTo("On the road again")
     );
   }
@@ -120,27 +120,33 @@ class GuestBookEntryRepositoryTest {
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
-    var guestbookDto = new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto());
-
-    guestBookEntryRepository.save(aGuestBookEntry(
-        new GuestBookEntryDto(new PersistentDto(), guestbookDto, "somone", "jadda"))
+    savedUser.setGuestBook(
+        aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()))
     );
 
-    var guestBookToSave = aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()));
+    var savedGuestBook = guestBookRepository.save(savedUser.getGuestBook());
+    savedGuestBook.add(
+        aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), savedGuestBook.asDto(), "somone", "jadda"))
+    );
 
-    guestBookRepository.save(guestBookToSave);
+    savedGuestBook.getEntries().forEach(guestBookEntryEntityToSave -> guestBookEntryRepository.save(guestBookEntryEntityToSave));
+
+    var anotherUserDto = new UserDto(null, personDto, "hidden@tantooine.com", "hidden");
+    var anotherSavedUser = userRepository.save(new UserEntity(anotherUserDto));
+    anotherSavedUser.setGuestBook(
+        aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()))
+    );
+
+    var anotherSavedGuestBook = guestBookRepository.save(anotherSavedUser.getGuestBook());
+    anotherSavedGuestBook.add(
+        aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), anotherSavedGuestBook.asDto(), "shrek", "far far away"))
+    );
+
+    anotherSavedGuestBook.getEntries().forEach(guestBookEntryToSave -> guestBookEntryRepository.save(guestBookEntryToSave));
     entityManager.flush();
     entityManager.clear();
 
-    var guestBookEntryToSave = aGuestBookEntry(
-        new GuestBookEntryDto(new PersistentDto(), guestBookToSave.asDto(), "shrek", "far far away")
-    );
-
-    guestBookEntryRepository.save(guestBookEntryToSave);
-    entityManager.flush();
-    entityManager.clear();
-
-    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(guestBookToSave);
+    var entriesByGuestBook = guestBookEntryRepository.findByGuestBook(anotherSavedGuestBook);
 
     assertAll(
         () -> assertThat(guestBookEntryRepository.findAll()).as("all entries").hasSize(2),
@@ -148,9 +154,5 @@ class GuestBookEntryRepositoryTest {
         () -> assertThat(entriesByGuestBook.get(0).getCreatorName()).as("entry.creatorName").isEqualTo("shrek"),
         () -> assertThat(entriesByGuestBook.get(0).getEntry()).as("entry.entry").isEqualTo("far far away")
     );
-  }
-
-  private AssertionError entryNotFound(GuestBookEntryEntity guestBookEntryEntity) {
-    return new AssertionError(String.format("guest book entry with id=%s not found", guestBookEntryEntity.getId()));
   }
 }
