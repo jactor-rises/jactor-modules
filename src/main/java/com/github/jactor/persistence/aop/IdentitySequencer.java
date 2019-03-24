@@ -4,6 +4,7 @@ import com.github.jactor.persistence.entity.AddressEntity;
 import com.github.jactor.persistence.entity.BlogEntryEntity;
 import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.entity.PersistentEntity;
+import com.github.jactor.persistence.entity.PersonEntity;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class IdentitySequencer {
         .filter(obj -> !(obj instanceof AddressEntity))
         .filter(obj -> !(obj instanceof GuestBookEntryEntity))
         .filter(obj -> !(obj instanceof BlogEntryEntity))
+        .filter(obj -> !(obj instanceof PersonEntity))
         .map(obj -> (PersistentEntity) obj)
         .forEach(persistentEntity -> persistentEntity.addSequencedId(this::fetchNextValFor));
 
