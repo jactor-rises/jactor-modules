@@ -171,6 +171,10 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
     return guestBook;
   }
 
+  void setGuestBook(GuestBookEntity guestBook) {
+    this.guestBook = guestBook;
+  }
+
   public String getEntry() {
     return entryEmbeddable.getEntry();
   }

@@ -107,6 +107,11 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
     persistentDataEmbeddable.modify();
   }
 
+  public void add(GuestBookEntryEntity guestBookEntry) {
+    entries.add(guestBookEntry);
+    guestBookEntry.setGuestBook(this);
+  }
+
   @Override
   public boolean equals(Object o) {
     return this == o || o != null && getClass() == o.getClass() &&
