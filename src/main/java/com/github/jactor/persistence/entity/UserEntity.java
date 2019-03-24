@@ -186,6 +186,19 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     this.id = id;
   }
 
+  public Set<BlogEntity> getBlogs() {
+    return Collections.unmodifiableSet(blogs);
+  }
+
+  public GuestBookEntity getGuestBook() {
+    return guestBook;
+  }
+
+  public void setGuestBook(GuestBookEntity guestBook) {
+    this.guestBook = guestBook;
+    guestBook.setUser(this);
+  }
+
   public String getUsername() {
     return username;
   }
@@ -208,10 +221,6 @@ public class UserEntity implements PersistentEntity<UserEntity> {
 
   public static UserEntity aUser(UserDto userDto) {
     return new UserEntity(userDto);
-  }
-
-  public Set<BlogEntity> getBlogs() {
-    return Collections.unmodifiableSet(blogs);
   }
 
   public enum UserType {

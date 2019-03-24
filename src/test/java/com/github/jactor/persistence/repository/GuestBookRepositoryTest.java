@@ -41,9 +41,11 @@ class GuestBookRepositoryTest {
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
-    var guestBookEntityToSave = aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", userEntity.asDto()));
 
-    guestBookRepository.save(guestBookEntityToSave);
+    userEntity.setGuestBook(
+        aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", userEntity.asDto()))
+    );
+
     entityManager.flush();
     entityManager.clear();
 
@@ -62,9 +64,12 @@ class GuestBookRepositoryTest {
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
-    var guestBookEntityToSave = aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", userEntity.asDto()));
 
-    guestBookRepository.save(guestBookEntityToSave);
+    userEntity.setGuestBook(
+        aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", userEntity.asDto()))
+    );
+
+    guestBookRepository.save(userEntity.getGuestBook());
     entityManager.flush();
     entityManager.clear();
 
