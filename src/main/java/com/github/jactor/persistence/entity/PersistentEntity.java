@@ -1,9 +1,7 @@
 package com.github.jactor.persistence.entity;
 
 import com.github.jactor.persistence.dto.PersistentDto;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -26,17 +24,6 @@ public interface PersistentEntity<T> extends PersistentData {
       addSequencedId(this, sequencer);
     }
 
-    fetchAllPersistentEntities().stream()
-        .filter(dependency -> dependency.getId() == null)
-        .filter(dependency -> !(dependency instanceof AddressEntity))
-        .filter(dependency -> !(dependency instanceof GuestBookEntryEntity))
-        .filter(dependency -> !(dependency instanceof PersonEntity))
-        .filter(dependency -> !(dependency instanceof BlogEntryEntity))
-        .filter(dependency -> !(dependency instanceof UserEntity))
-        .filter(dependency -> !(dependency instanceof BlogEntity))
-        .filter(dependency -> !(dependency instanceof GuestBookEntity))
-        .forEach(depencency -> addSequencedId(depencency, sequencer));
-
     return this;
   }
 
@@ -51,27 +38,6 @@ public interface PersistentEntity<T> extends PersistentData {
     }
 
     return Arrays.stream(persistentEntities)
-        .filter(Objects::nonNull);
-  }
-
-  default List<PersistentEntity> fetchAllPersistentEntities() {
-    List<PersistentEntity> allSequencedDependencies = new ArrayList<>();
-    streamSequencedDependencies(this)
-        .forEach(persistentData -> addAllSequencedDependencis(persistentData, allSequencedDependencies));
-
-    return allSequencedDependencies;
-  }
-
-  private void addAllSequencedDependencis(PersistentEntity persistentEntity, List<PersistentEntity> allSequencedEntities) {
-    allSequencedEntities.add(persistentEntity);
-    fetchSequencedDependencies(persistentEntity)
-        .filter(entityToSequence -> !allSequencedEntities.contains(entityToSequence)) // if not added by other dependency
-        .forEach(entityToSequence -> addAllSequencedDependencis(entityToSequence, allSequencedEntities));
-  }
-
-  @SuppressWarnings("unchecked")
-  private Stream<PersistentEntity> fetchSequencedDependencies(PersistentEntity persistentEntity) {
-    return persistentEntity.streamSequencedDependencies()
         .filter(Objects::nonNull);
   }
 

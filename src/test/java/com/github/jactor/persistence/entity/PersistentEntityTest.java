@@ -169,47 +169,4 @@ class PersistentEntityTest {
 
     assertThat(none).isEmpty();
   }
-
-  @Test
-  @DisplayName("should stream optional dependencies of an persistent entity")
-  void shouldStreamOptionalDependencies() {
-    var blogEntity = aBlog(new BlogDto());
-    var personEntity = aPerson(new PersonDto());
-
-    persistentEntityToTest = personEntity;
-    List<PersistentData> dependencies = persistentEntityToTest.streamSequencedDependencies(blogEntity, personEntity, null, null)
-        .collect(toList());
-
-    assertThat(dependencies)
-        .hasSize(2)
-        .contains(blogEntity, personEntity);
-  }
-
-  @Test
-  @DisplayName("should fetch all dependencies of a persistent entity")
-  void shouldFetchAllDependencies() {
-    var addressDto = new AddressDto();
-    var personDto = new PersonDto(null, addressDto, null, null, null, null);
-    persistentEntityToTest = aUser(new UserDto(null, personDto, null, null));
-
-    var allSequencedDependencies = persistentEntityToTest.fetchAllPersistentEntities();
-
-    assertThat(allSequencedDependencies)
-        .hasSize(3)
-        .contains(persistentEntityToTest, anAddress(addressDto), aPerson(personDto));
-  }
-
-  @Test
-  @DisplayName("should add sequenced id, also on dependencies of a persistent entity")
-  void shouldAddSequencedIdAlsOnDependencies() {
-    var personDto = new PersonDto(null, new AddressDto(), null, null, null, null);
-    persistentEntityToTest = aUser(new UserDto(null, personDto, null, null));
-
-    PersistentEntity.Sequencer sequencerMock = mock(PersistentEntity.Sequencer.class);
-    when(sequencerMock.nextVal(any(Class.class))).thenReturn(123L);
-
-    persistentEntityToTest.addSequencedId(sequencerMock);
-
-    assertThat(persistentEntityToTest.getId()).as("PersistentEntityToTest.id").isEqualTo(123L);
-  }
 }
