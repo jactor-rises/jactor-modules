@@ -45,7 +45,7 @@ class GuestBookControllerTest {
   @Test
   @DisplayName("should build full path")
   void shouldBuildFullPath() {
-    assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:" + port + "/jactor-persistence-orm/somewhere");
+    assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:" + port + "/jactor-persistence/somewhere");
   }
 
   @Test
