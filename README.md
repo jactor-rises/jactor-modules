@@ -16,12 +16,13 @@ another mocroservice in order to persist its data through a REST api.
 ### Disclaimer ###
 
 This application are my playground and is made to demonstrate the
-working of jactor-persistence` and to gain expertise in mocroservices
+working of `jactor-persistence` and to gain expertise in mocroservices
 and kotlin programming language. It is therefore simple and not complete.
 And I just want to say that I am not a front-end programmer.
 
 * `Blog`s and `GuestBook`s are only persisted in `jactor-persistence` and though integration tests.
-* `User` (with `Person` and `Address`) is fully integrated with communications from `jactor-web`.
+* `User` (with `Person` and `Address`) is integrated with communications from `jactor-web`.
+    * The web only do a "read only" access of the persistence, and do not do other CRUD operations. 
 
 ### Some technologies used on jactor-web ###
 
