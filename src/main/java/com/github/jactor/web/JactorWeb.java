@@ -31,15 +31,10 @@ public class JactorWeb implements WebMvcConfigurer {
       SpringBeanNames springBeanNames = new SpringBeanNames();
       stream(applicationContext.getBeanDefinitionNames()).sorted().forEach(springBeanNames::add);
 
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("Available beans:");
-        springBeanNames.listBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::debug);
-      }
+      LOGGER.debug("Available beans (only simple names):");
+      springBeanNames.listBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::debug);
 
-      if (LOGGER.isTraceEnabled()) {
-        LOGGER.trace("Available spring beans:");
-        springBeanNames.listSpringBeans().stream().map(name -> "- " + name).forEach(LOGGER::trace);
-      }
+      LOGGER.debug("Ready for service...");
     }
   }
 

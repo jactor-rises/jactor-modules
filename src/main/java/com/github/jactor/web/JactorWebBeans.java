@@ -10,6 +10,7 @@ import org.springframework.boot.web.client.RootUriTemplateHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -31,10 +32,16 @@ public class JactorWebBeans {
   }
 
   @Bean
-  public UserConsumer userRestService(@Value("${jactor-persistence.url.root}") String rootUrlPersistence) {
+  public UserConsumer userConsumer(RestTemplate restTemplate) {
+    return new UserConsumer(restTemplate);
+  }
+
+  @Bean
+  @Scope("prototype")
+  public RestTemplate restTemplate(@Value("${jactor-persistence.url.root}") String rootUrlPersistence) {
     RestTemplate restTemplate = new RestTemplate();
     restTemplate.setUriTemplateHandler(new RootUriTemplateHandler(rootUrlPersistence));
 
-    return new UserConsumer(restTemplate);
+    return restTemplate;
   }
 }
