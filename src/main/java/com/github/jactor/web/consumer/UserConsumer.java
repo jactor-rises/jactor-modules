@@ -17,14 +17,14 @@ public class UserConsumer {
   }
 
   public Optional<UserDto> find(String username) {
-    ResponseEntity<UserDto> responseEntity = restTemplate.getForEntity("/find/" + username, UserDto.class);
+    ResponseEntity<UserDto> responseEntity = restTemplate.getForEntity("/user/name/" + username, UserDto.class);
 
     return Optional.ofNullable(bodyOf(responseEntity));
   }
 
   public List<String> findAllUsernames() {
     ResponseEntity<String[]> responseEntity = restTemplate.getForEntity(
-        "/all/usernames", String[].class
+        "/user/active/usernames", String[].class
     );
 
     return List.of(Objects.requireNonNull(responseEntity.getBody()));

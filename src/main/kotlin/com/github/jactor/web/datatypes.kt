@@ -1,5 +1,7 @@
 package com.github.jactor.web
 
+import java.util.*
+
 const val ENGLISH = "English"
 const val NORWEGIAN = "Norwegian"
 const val THAI = "Thai"
@@ -11,23 +13,30 @@ data class Technology(
         val url: String
 )
 
-data class SpringBeanNames(
-        private val beans: MutableList<String> = ArrayList(),
-        private val springBeans: MutableList<String> = ArrayList()
+class SpringBeanNames(
+        private val beanNames: MutableList<String> = ArrayList(),
+        private val tenNames: MutableList<String> = ArrayList()
 ) {
     fun add(name: String) {
-        if (name.contains(".spring")) {
-            springBeans.add(name)
+        if (name.contains(".")) {
+            tenNames.add(name.substring(name.lastIndexOf('.') + 1))
         } else {
-            beans.add(name)
+            tenNames.add(name)
+        }
+
+        if (tenNames.size == 10) {
+            beanNames.add(tenNames.joinToString(", "))
+            tenNames.clear()
         }
     }
 
-    fun listBeanNames(): List<String> {
-        return beans
+    private fun mergeBeanNamesWithFiveNames(): List<String> {
+        beanNames.addAll(tenNames)
+        tenNames.clear()
+        return beanNames
     }
 
-    fun listSpringBeans(): List<String> {
-        return springBeans
+    fun listBeanNames(): List<String> {
+        return mergeBeanNamesWithFiveNames()
     }
 }
