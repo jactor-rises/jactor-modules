@@ -1,39 +1,37 @@
 package com.github.jactor.persistence;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.unmodifiableList;
-
 class SpringBeanNames {
-    private final List<String> beanNames = new ArrayList<>();
-    private final List<String> namesOfSpringBeans = new ArrayList<>();
-    private List<String> fiveNames = new ArrayList<>();
 
-    public void add(String name) {
-        if (name.contains(".springframework.")) {
-            namesOfSpringBeans.add(name);
-        } else {
-            fiveNames.add(name);
-        }
+  private final List<String> beanNames = new ArrayList<>();
+  private final List<String> tenNames = new ArrayList<>();
 
-        if (fiveNames.size() == 5) {
-            beanNames.add(String.join(", ", fiveNames));
-            fiveNames = new ArrayList<>();
-        }
+  public void add(String name) {
+    if (name.contains(".")) {
+      int index = name.lastIndexOf('.');
+      tenNames.add(name.substring(index + 1));
+    } else {
+      tenNames.add(name);
     }
 
-    private List<String> mergeBeanNamesWithFiveNames() {
-        beanNames.addAll(fiveNames);
-        fiveNames = new ArrayList<>();
-        return beanNames;
+    if (tenNames.size() == 10) {
+      beanNames.add(String.join(", ", tenNames));
+      tenNames.clear();
     }
+  }
 
-    List<String> getBeanNames() {
-        return unmodifiableList(mergeBeanNamesWithFiveNames());
-    }
+  private List<String> mergeBeanNamesWithFiveNames() {
+    beanNames.add(String.join(", ", tenNames));
+    tenNames.clear();
 
-    List<String> getNamesOfSpringBeans() {
-        return unmodifiableList(namesOfSpringBeans);
-    }
+    return beanNames;
+  }
+
+  List<String> getBeanNames() {
+    return unmodifiableList(mergeBeanNamesWithFiveNames());
+  }
 }
