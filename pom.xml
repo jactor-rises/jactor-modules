@@ -13,7 +13,7 @@
 
   <groupId>com.github.jactor-rises</groupId>
   <artifactId>jactor-persistence</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
 
   <name>jactor::persistence</name>
   <description>A spring-data-jpa microservice using in-memory database</description>
