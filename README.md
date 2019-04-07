@@ -2,7 +2,7 @@
 
 ### What is this repository for? ###
 
-* Src code and issues regarding jactor-persistence
+The main purpose is to learn about programming microservices and spring jpa.
 
 This project is a microservice dealing with persistence to an database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
@@ -26,3 +26,4 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
 * [assertj](https://joel-costigliola.github.io/assertj/)
 * [mockito](http://site.mockito.org)
 * [kotlin](https://kotlinlang.org)
+* [swagger-ui](https://swagger.io/tools/swagger-ui/)
