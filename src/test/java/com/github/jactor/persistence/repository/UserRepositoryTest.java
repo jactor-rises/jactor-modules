@@ -128,16 +128,10 @@ class UserRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    List<String> usernames = userRepository.findByUserType(UserType.ACTIVE).stream()
+    List<String> usernames = userRepository.findByUserTypeIsNot(UserType.INACTIVE).stream()
         .map(UserEntity::getUsername)
         .collect(toList());
 
-    assertThat(usernames).contains("tip", "spiderman");
-
-    usernames = userRepository.findByUserType(UserType.ADMIN).stream()
-        .map(UserEntity::getUsername)
-        .collect(toList());
-
-    assertThat(usernames).containsExactly("jactor");
+    assertThat(usernames).contains("tip", "spiderman", "jactor");
   }
 }
