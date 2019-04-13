@@ -7,26 +7,10 @@ data class PersonDto(
         var firstName: String? = null,
         var surname: String? = null,
         var description: String? = null
-) : Persistent {
+) : PersistentData(persistentDto) {
     constructor(
             persistent: PersistentDto, person: PersonDto
     ) : this(
             persistent, person.address, person.locale, person.firstName, person.surname, person.description
     )
-
-    override fun fetchPersistentDto(): PersistentDto {
-        if (persistentDto == null) {
-            persistentDto = PersistentDto()
-        }
-
-        return persistentDto as PersistentDto
-    }
-
-    override fun getId(): Long? {
-        return persistentDto?.id
-    }
-
-     override fun setId(id: Long?) {
-        persistentDto = setPersistentId(id)
-    }
 }

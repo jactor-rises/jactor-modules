@@ -8,27 +8,10 @@ data class AddressDto(
         var addressLine3: String? = null,
         var city: String? = null,
         var country: String? = null
-) : Persistent {
+) : PersistentData(persistentDto) {
     constructor(
             persistent: PersistentDto, address: AddressDto
     ) : this(
-            persistent,
-            address.zipCode, address.addressLine1, address.addressLine2, address.addressLine3, address.city, address.country
+            persistent, address.zipCode, address.addressLine1, address.addressLine2, address.addressLine3, address.city, address.country
     )
-
-    override fun fetchPersistentDto(): PersistentDto {
-        if (persistentDto == null) {
-            persistentDto = PersistentDto()
-        }
-
-        return persistentDto as PersistentDto
-    }
-
-    override fun getId(): Long? {
-        return persistentDto?.id
-    }
-
-    override fun setId(id: Long?) {
-        persistentDto = setPersistentId(id)
-    }
 }
