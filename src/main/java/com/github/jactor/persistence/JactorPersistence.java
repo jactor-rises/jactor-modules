@@ -31,7 +31,7 @@ public class JactorPersistence {
       stream(applicationContext.getBeanDefinitionNames()).sorted().forEach(springBeanNames::add);
 
       LOGGER.debug("Available beans (only simple names):");
-      springBeanNames.getBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::debug);
+      springBeanNames.listBeanNames().stream().map(name -> "- " + name).forEach(LOGGER::debug);
 
       LOGGER.debug("Ready for service...");
     }
