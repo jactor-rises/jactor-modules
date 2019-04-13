@@ -6,7 +6,7 @@ data class UserDto(
         var emailAddress: String? = null,
         var username: String? = null,
         var userType: UserType = UserType.ACTIVE
-) : Persistent {
+) : PersistentData(persistentDto) {
     constructor(
             persistent: PersistentDto, user: UserDto
     ) : this(
@@ -18,22 +18,6 @@ data class UserDto(
     ) : this(
             persistentDto, person, emailAddress, username, UserType.ACTIVE
     )
-
-    override fun fetchPersistentDto(): PersistentDto {
-        if (persistentDto == null) {
-            persistentDto = PersistentDto()
-        }
-
-        return persistentDto as PersistentDto
-    }
-
-    override fun getId(): Long? {
-        return persistentDto?.id
-    }
-
-    override fun setId(id: Long?) {
-        persistentDto = setPersistentId(id)
-    }
 }
 
 enum class UserType {

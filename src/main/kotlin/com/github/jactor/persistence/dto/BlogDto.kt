@@ -7,26 +7,10 @@ data class BlogDto(
         var created: LocalDate? = null,
         var title: String? = null,
         var user: UserDto? = null
-) : Persistent {
+) : PersistentData(persistentDto) {
     constructor(
             persistent: PersistentDto, blog: BlogDto
     ) : this(
             persistent, blog.created, blog.title, blog.user
     )
-
-    override fun fetchPersistentDto(): PersistentDto {
-        if (persistentDto == null) {
-            persistentDto = PersistentDto()
-        }
-
-        return persistentDto as PersistentDto
-    }
-
-    override fun getId(): Long? {
-        return persistentDto?.id
-    }
-
-    override fun setId(id: Long?) {
-        persistentDto = setPersistentId(id)
-    }
 }
