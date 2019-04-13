@@ -45,7 +45,7 @@ class UserConsumerIntegrationTest {
     ResponseEntity<String> response = null;
 
     try {
-      response = testRestTemplate.getForEntity("http://localhost:1099/jactor-persistence/actuator/health", String.class);
+      response = testRestTemplate.getForEntity(EXPECTED_BASE_URL + "/actuator/health", String.class);
     } catch (RestClientException e) {
       Assumptions.assumeTrue(false, "Failure with rest api: " + e.getMessage());
     }
