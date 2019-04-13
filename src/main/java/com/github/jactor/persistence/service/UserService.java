@@ -2,6 +2,7 @@ package com.github.jactor.persistence.service;
 
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.UserEntity;
+import com.github.jactor.persistence.entity.UserEntity.UserType;
 import com.github.jactor.persistence.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class UserService {
   }
 
   public List<String> findUsernamesOnActiveUsers() {
-    return userRepository.findByUserType(UserEntity.UserType.ACTIVE).stream()
+    return userRepository.findByUserTypeIsNot(UserType.INACTIVE).stream()
         .map(UserEntity::getUsername)
         .collect(Collectors.toList());
   }

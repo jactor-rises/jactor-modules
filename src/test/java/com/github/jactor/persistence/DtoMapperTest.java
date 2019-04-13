@@ -27,8 +27,6 @@ class DtoMapperTest {
     userDto.setUsername("mine");
     userDto.setUserType(UserType.ACTIVE);
 
-    System.out.println("in junit test: " + userDto);
-
     assertAll(
         () -> assertThat(objectMapper.writeValueAsString(userDto)).as("id").contains("\"id\":1"),
         () -> assertThat(objectMapper.writeValueAsString(userDto)).as("email address").contains("\"emailAddress\":\"some@where\""),
