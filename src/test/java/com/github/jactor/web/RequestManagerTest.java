@@ -1,4 +1,4 @@
-package com.github.jactor.web.model;
+package com.github.jactor.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
-@DisplayName("A RequestManager")
+@DisplayName("RequestManager")
 class RequestManagerTest {
 
   @MockBean
