@@ -1,4 +1,4 @@
-# README #
+# jactor-web #
 
 ### What is this repository for? ###
 
@@ -10,8 +10,9 @@ another mocroservice in order to persist its data through a REST api.
 ### Set up ###
 
 * a spring-boot application is created when building (`mvn install`)
-    * `jactor-web` which is a web application on apache tomcat and which is dependent on `jactor-persistence` to handle persistence 
-* after started `jactor-web`, point a browser to http://localhost:8080/jactor-web/
+    * `jactor-web` which is a web application on apache tomcat and which is dependent on `jactor-persistence` to handle persistence
+    * also start `jactor-persistence` in order to have a working persistence layer for the application. 
+* after started `jactor-web`, point a browser to <http://localhost:8080/jactor-web/>
 
 ### Disclaimer ###
 
@@ -20,8 +21,8 @@ working of `jactor-persistence` and to gain expertise in mocroservices
 and kotlin programming language. It is therefore simple and not complete.
 And I just want to say that I am not a front-end programmer.
 
-* This microservice is tested using `jactor-persistence`, version 1.0.3
-* `Blog`s and `GuestBook`s is only persisted and present in `jactor-persistence` and though integration tests.
+* This microservice is tested using `jactor-persistence`, version 1.0.4
+* `Blog`s and `GuestBook`s is only persisted and present in `jactor-persistence` and tested though integration tests there.
 * `User` (with `Person` and `Address`) is integrated with communications from `jactor-web`.
     * The web only do a "read only" access of the persistence, and do not do other CRUD operations. 
 

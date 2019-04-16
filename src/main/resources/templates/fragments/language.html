@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/jactor-rises.css" th:href="@{/css/jactor-rises.css}"/>
+  <title>language</title>
+</head>
+<body>
+<div th:fragment="language" class="language">
+  <table>
+    <tr>
+      <td class="alignLeft">
+        <a th:if="not ${english}" th:href="@{${currentUrl}(lang=en)}" title="English">
+          <img src="../../static/images/icons/flag.eng.choose.gif"
+               th:src="@{/images/icons/flag.eng.choose.gif}"/>
+        </a>
+        <img th:if="${english}" src="../../static/images/icons/flag.eng.chosen.gif"
+             title="English is chosen" th:src="@{/images/icons/flag.eng.chosen.gif}"/>
+      </td>
+      <td>
+        <a th:if="not ${norwegian}" th:href="@{${currentUrl}(lang=no)}" title="Norsk">
+          <img src="../../static/images/icons/flag.nor.choose.gif"
+               th:src="@{/images/icons/flag.nor.choose.gif}"/>
+        </a>
+        <img th:if="${norwegian}" src="../../static/images/icons/flag.nor.chosen.gif"
+             title="Norsk er valgt" th:src="@{/images/icons/flag.nor.chosen.gif}"/>
+      </td>
+      <td>
+        <a th:if="not ${thai}" th:href="@{${currentUrl}(lang=th)}" title="ไทย">
+          <img src="../../static/images/icons/flag.thai.choose.gif"
+               th:src="@{/images/icons/flag.thai.choose.gif}"/>
+        </a>
+        <img th:if="${thai}" src="../../static/images/icons/flag.thai.chosen.gif"
+             title="ภาษาคือภาษาไทย" th:src="@{/images/icons/flag.thai.chosen.gif}"/>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
+

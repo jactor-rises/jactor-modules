@@ -16,12 +16,12 @@
         <table th:each="menuItem : ${usersMenu}">
           <tr>
             <td>
-              <div th:text="#{${menuItem.itemName.asString()}}">a menu item</div>
+              <div th:text="#{${menuItem.itemName}}">a menu item</div>
               <div th:if="${menuItem.hasChildren()}">
                 <ul th:with="choose=#{page.user.menu.choose}">
-                  <li th:each="child : ${menuItem.fetchChildren()}">
+                  <li th:each="child : ${menuItem.children}">
                     <a th:href="${child.target}" th:title="${choose}">
-                      <span th:text="${child.itemName.asString()}">a child menu item</span>
+                      <span th:text="${child.itemName}">a child menu item</span>
                     </a>
                   </li>
                 </ul>
@@ -34,7 +34,7 @@
         <div class="container" th:with="user=${user}">
           <table th:if="${user} != null">
             <tr>
-              <td th:text="#{page.user.username}">Usrname</td>
+              <td th:text="#{page.user.username}">Username</td>
               <td th:text="${user.fetchUsername()}">jactor.rises</td>
             </tr>
             <tr>

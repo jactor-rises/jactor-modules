@@ -1,28 +1,27 @@
 package com.github.jactor.web.interceptor;
 
-import static com.github.jactor.web.DatatypesKt.ENGLISH;
-import static com.github.jactor.web.DatatypesKt.LANG;
-import static com.github.jactor.web.DatatypesKt.NORWEGIAN;
-import static com.github.jactor.web.DatatypesKt.THAI;
+import static com.github.jactor.web.interceptor.RequestInterceptor.CHOSEN_LANGUAGE;
 import static com.github.jactor.web.interceptor.RequestInterceptor.CURRENT_URL;
+import static com.github.jactor.web.interceptor.RequestInterceptor.LANGUAGE_ENGLISH;
+import static com.github.jactor.web.interceptor.RequestInterceptor.LANGUAGE_NORSK;
+import static com.github.jactor.web.interceptor.RequestInterceptor.LANGUAGE_THAI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
+import com.github.jactor.web.model.Language;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.servlet.ModelAndView;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @DisplayName("A RequestInterceptor")
 class RequestInterceptorTest {
@@ -32,10 +31,15 @@ class RequestInterceptorTest {
   @MockBean
   private HttpServletRequest httpServletRequestMock;
 
+  @BeforeEach
+  void mockRequest() {
+    when(httpServletRequestMock.getRequestURI()).thenReturn("/page");
+    when(httpServletRequestMock.getQueryString()).thenReturn("choice=extra");
+  }
+
   @Test
-  @DisplayName("should add information to the model")
-  void shouldAddInformationToTheModel() {
-    LocaleContextHolder.setLocale(new Locale("no"));
+  @DisplayName("should add current url without language to the model")
+  void shouldAddCurrentUrlWithoutLangugaeToTheModel() {
     ModelAndView modelAndView = new ModelAndView();
 
     when(httpServletRequestMock.getRequestURI()).thenReturn("/somewhere");
@@ -45,12 +49,141 @@ class RequestInterceptorTest {
 
     Map<String, Object> model = modelAndView.getModel();
 
+    assertThat(model.get(CURRENT_URL)).as("current url without language parameter").isEqualTo("/somewhere?out=there&another=param");
+  }
+
+  @Test
+  @DisplayName("should add Norwegian language to model")
+  void shouldAddNorwegianLanguageToModel() {
+    LocaleContextHolder.setLocale(new Locale("no"));
+    ModelAndView modelAndView = new ModelAndView();
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
     assertAll(
-        () -> assertThat(model.get(CURRENT_URL)).as(CURRENT_URL).isEqualTo("/somewhere?out=there&another=param"),
-        () -> assertThat(model.get(ENGLISH)).as(ENGLISH).isEqualTo(false),
-        () -> assertThat(model.get(NORWEGIAN)).as(NORWEGIAN).isEqualTo(true),
-        () -> assertThat(model.get(THAI)).as(THAI).isEqualTo(false),
-        () -> assertThat(model.get(LANG)).isEqualTo("no")
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_NORSK),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("no"))
+    );
+  }
+
+  @Test
+  @DisplayName("should add English language to model")
+  void shouldAddEnglishLanguageToModel() {
+    LocaleContextHolder.setLocale(new Locale("en"));
+    ModelAndView modelAndView = new ModelAndView();
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
+    assertAll(
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
+    );
+  }
+
+  @Test
+  @DisplayName("should add Thai language to model")
+  void shouldAddThaiLanguageToModel() {
+    LocaleContextHolder.setLocale(new Locale("th"));
+    ModelAndView modelAndView = new ModelAndView();
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
+    assertAll(
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_THAI),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("th"))
+    );
+  }
+
+  @Test
+  @DisplayName("should add English language to model when locale is not supported")
+  void shouldAddEnglishLanguageToModelWhenLocaleIsUnsupported() {
+    ModelAndView modelAndView = new ModelAndView();
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
+    assertAll(
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
+    );
+  }
+
+  @Test
+  @DisplayName("should add Thai language to model from language parameters")
+  void shouldAddThaiLanguageToModelFromParameters() {
+    LocaleContextHolder.setLocale(new Locale("no"));
+    ModelAndView modelAndView = new ModelAndView();
+
+    when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=th");
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
+    assertAll(
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_THAI),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("th"))
+    );
+  }
+
+  @Test
+  @DisplayName("should add English language to model from language parameters")
+  void shouldAddEnglishLanguageToModelFromParameters() {
+    LocaleContextHolder.setLocale(new Locale("no"));
+    ModelAndView modelAndView = new ModelAndView();
+
+    when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=en");
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
+    assertAll(
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
+    );
+  }
+
+  @Test
+  @DisplayName("should add Norwegian language to model from language parameters")
+  void shouldAddNorwegianLanguageToModelFromParameters() {
+    LocaleContextHolder.setLocale(new Locale("en"));
+    ModelAndView modelAndView = new ModelAndView();
+
+    when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=no");
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
+    assertAll(
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_NORSK),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("no"))
+    );
+  }
+
+  @Test
+  @DisplayName("should add Englisjh language to model when unknown language parameter")
+  void shouldAddEnglishLanguageToModelWhenUnknownLanguageParameter() {
+    LocaleContextHolder.setLocale(new Locale("th"));
+    ModelAndView modelAndView = new ModelAndView();
+
+    when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=fi");
+
+    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+
+    assertAll(
+        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
     );
   }
 }

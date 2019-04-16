@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/jactor-rises.css" th:href="@{/css/jactor-rises.css}"/>
+  <title>title</title>
+</head>
+<body>
+<div th:fragment="title" class="title">
+  <table>
+    <tr>
+      <td>
+        <div class="alignLeft">
+          <div class="dropdown">
+            <button class="dropbtn">
+              <span th:text="${currentUrl}">currentUrl</span>
+            </button>
+            <div class="dropdown-content">
+              <a href="home" th:text="#{page.home.title}">home sweet home</a>
+              <a href="user" th:text="#{page.user.title}">users page</a>
+              <a href="about" th:text="#{page.about.title}">about page</a>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
