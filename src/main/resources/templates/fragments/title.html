@@ -7,14 +7,14 @@
   <title>title</title>
 </head>
 <body>
-<div th:fragment="title" class="title">
+<div th:fragment="title" class="container">
   <table>
     <tr>
       <td>
         <div class="alignLeft">
           <div class="dropdown">
             <button class="dropbtn">
-              <span th:text="${currentUrl}">currentUrl</span>
+              <span th:text="${chosenView}">currentUrl</span>
             </button>
             <div class="dropdown-content">
               <a href="home" th:text="#{page.home.title}">home sweet home</a>

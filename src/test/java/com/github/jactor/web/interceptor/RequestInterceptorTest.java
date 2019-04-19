@@ -2,14 +2,12 @@ package com.github.jactor.web.interceptor;
 
 import static com.github.jactor.web.interceptor.RequestInterceptor.CHOSEN_LANGUAGE;
 import static com.github.jactor.web.interceptor.RequestInterceptor.CURRENT_URL;
-import static com.github.jactor.web.interceptor.RequestInterceptor.LANGUAGE_ENGLISH;
-import static com.github.jactor.web.interceptor.RequestInterceptor.LANGUAGE_NORSK;
-import static com.github.jactor.web.interceptor.RequestInterceptor.LANGUAGE_THAI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
-import com.github.jactor.web.model.Language;
+import com.github.jactor.web.Language;
+import com.github.jactor.web.LanguageKt;
 import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -60,10 +58,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_NORSK),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.NORSK),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("no"))
     );
   }
@@ -76,10 +74,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.ENGLISH),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
     );
   }
@@ -92,10 +90,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_THAI),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.THAI),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("th"))
     );
   }
@@ -107,10 +105,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.ENGLISH),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
     );
   }
@@ -125,10 +123,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_THAI),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.THAI),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("th"))
     );
   }
@@ -143,10 +141,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.ENGLISH),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
     );
   }
@@ -161,10 +159,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_NORSK),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.NORSK),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("no"))
     );
   }
@@ -179,10 +177,10 @@ class RequestInterceptorTest {
 
     requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
 
-    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada")));
+    Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
     assertAll(
-        () -> assertThat(language.getName()).as("name").isEqualTo(LANGUAGE_ENGLISH),
+        () -> assertThat(language.getName()).as("name").isEqualTo(LanguageKt.ENGLISH),
         () -> assertThat(language.getLocale()).isEqualTo(new Locale("en"))
     );
   }

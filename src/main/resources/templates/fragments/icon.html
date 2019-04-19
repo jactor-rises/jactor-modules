@@ -7,22 +7,22 @@
   <title>icon</title>
 </head>
 <body>
-<div th:fragment="icon" class="icon">
+<div th:fragment="icon" class="container">
   <table>
     <tr>
       <td>
-        <div class="alignRight">
-          <div th:if="${norwegian}">
+        <div class="alignRight" th:with="chosen=${chosenLanguage}">
+          <div th:if="${chosen.isNorwegian()}">
             <a href="home" th:title="#{page.home.title}">
               <img src="../../static/images/icons/opera.gif" th:src="@{/images/icons/opera.gif}" alt=""/>
             </a>
           </div>
-          <div th:if="${thai}">
+          <div th:if="${chosen.isThai()}">
             <a href="home" th:title="#{page.home.title}">
               <img src="../../static/images/icons/wat.gif" th:src="@{/images/icons/wat.gif}" alt=""/>
             </a>
           </div>
-          <div th:if="${english}">
+          <div th:if="${chosen.isEnglish()}">
             <a href="home" th:title="#{page.home.title}">
               <img src="../../static/images/icons/bigben.gif" th:src="@{/images/icons/bigben.gif}"/>
             </a>

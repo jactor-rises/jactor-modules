@@ -1,7 +1,7 @@
 package com.github.jactor.web.interceptor;
 
-import com.github.jactor.web.model.Language;
-import com.github.jactor.web.model.RequestManager;
+import com.github.jactor.web.Language;
+import com.github.jactor.web.RequestManager;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class RequestInterceptor implements HandlerInterceptor {
 
   private static final String CHOSEN_VIEW = "chosenView";
+  private static final String LANGUAGE_ENGLISH = "English";
+  private static final String LANGUAGE_NORSK = "Norsk";
+  private static final String LANGUAGE_THAI = "ไทย";
   static final String CHOSEN_LANGUAGE = "chosenLanguage";
   static final String CURRENT_URL = "currentUrl";
-  static final String LANGUAGE_ENGLISH = "English";
-  static final String LANGUAGE_NORSK = "Norsk";
-  static final String LANGUAGE_THAI = "ไทย";
 
   private static final Language LANGUAGE_DEFAULT_IS_ENGLISH = new Language(new Locale("en"), LANGUAGE_ENGLISH);
   private static final List<Language> SUPPORTED_LANGUAGES = List.of(
@@ -46,20 +46,19 @@ public class RequestInterceptor implements HandlerInterceptor {
       Object handler,
       ModelAndView modelAndView
   ) {
-    if (modelAndView != null) {
-      RequestManager requestManager = new RequestManager(contextPath, request);
-      modelAndView.addObject(CHOSEN_VIEW, requestManager.fetchChosenView());
-      modelAndView.addObject(CURRENT_URL, requestManager.fetchCurrentUrl());
+    RequestManager requestManager = new RequestManager(contextPath, request);
+    Language chosenLanguage = fetchChosenLangugae(requestManager);
 
-      Language chosenLanguage;
+    modelAndView.getModelMap().addAttribute(CHOSEN_LANGUAGE, chosenLanguage);
+    modelAndView.getModelMap().addAttribute(CHOSEN_VIEW, requestManager.fetchChosenView());
+    modelAndView.getModelMap().addAttribute(CURRENT_URL, requestManager.fetchCurrentUrl());
+  }
 
-      if (requestManager.noLanguageParameters()) {
-        chosenLanguage = requestManager.fetchFrom(SUPPORTED_LANGUAGES, LocaleContextHolder.getLocale(), LANGUAGE_DEFAULT_IS_ENGLISH);
-      } else {
-        chosenLanguage = requestManager.fetchFromParameters(SUPPORTED_LANGUAGES, LANGUAGE_DEFAULT_IS_ENGLISH);
-      }
-
-      modelAndView.addObject(CHOSEN_LANGUAGE, chosenLanguage);
+  private Language fetchChosenLangugae(RequestManager requestManager) {
+    if (requestManager.noLanguageParameters()) {
+      return requestManager.fetchFrom(SUPPORTED_LANGUAGES, LocaleContextHolder.getLocale(), LANGUAGE_DEFAULT_IS_ENGLISH);
     }
+
+    return requestManager.fetchFromParameters(SUPPORTED_LANGUAGES, LANGUAGE_DEFAULT_IS_ENGLISH);
   }
 }
