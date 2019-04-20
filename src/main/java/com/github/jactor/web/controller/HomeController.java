@@ -26,23 +26,15 @@ public class HomeController {
     return new ModelAndView(HOME_VIEW)
         .addObject("homepage", new HomePageModel(
                 List.of(
-                    myMessages.fetchMessage("page.home.paragraph.a"),
-                    myMessages.fetchMessage("page.home.paragraph.b"),
-                    myMessages.fetchMessage("page.home.paragraph.c")
-                ),
-                List.of(
-                    new Technology("Maven", "http://maven.apache.org", myMessages.fetchMessage("page.home.tech.maven")),
-                    new Technology("Kotlin", "https://kotlinlang.org", myMessages.fetchMessage("page.home.tech.kotlin")),
-                    new Technology(
-                        "Spring Boot", "https://spring.io/projects/spring-boot", myMessages.fetchMessage("page.home.tech.springboot")
-                    ),
-                    new Technology("Thymeleaf", "https://www.thymeleaf.org", myMessages.fetchMessage("page.home.tech.thymeleaf")),
-                    new Technology("Junit", "https://junit.org/junit5/", myMessages.fetchMessage("page.home.tech.junit")),
-                    new Technology("Mockito", "http://site.mockito.org", myMessages.fetchMessage("page.home.tech.mockito")),
-                    new Technology(
-                        "AssertJ", "https://joel-costigliola.github.io/assertj/", myMessages.fetchMessage("page.home.tech.assertj")
-                    ),
-                    new Technology("Git", "https://git-scm.com", myMessages.fetchMessage("page.home.tech.git"))
+                    new Technology(myMessages.fetchMessage("page.home.tech.maven"), "Maven", "http://maven.apache.org"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.kotlin"), "Kotlin", "https://kotlinlang.org"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.springboot"), "Spring Boot", "https://spring.io/projects/spring-boot"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.thymeleaf"), "Thymeleaf", "https://www.thymeleaf.org"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.h2"), "H2 database", "http://h2database.com"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.junit"), "Junit", "https://junit.org/junit5/"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.mockito"), "Mockito", "http://site.mockito.org"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.assertj"), "AssertJ", "https://joel-costigliola.github.io/assertj/"),
+                    new Technology(myMessages.fetchMessage("page.home.tech.git"), "Git", "https://git-scm.com")
                 )
             )
         );

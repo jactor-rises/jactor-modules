@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/jactor-rises.css" th:href="@{/css/jactor-rises.css}"/>
+  <title>icon</title>
+</head>
+<body>
+<div th:fragment="icon" class="container">
+  <table>
+    <tr>
+      <td>
+        <div class="alignRight" th:with="chosen=${chosenLanguage}">
+          <div th:if="${chosen.isNorwegian()}">
+            <a href="home" th:title="#{page.home.title}">
+              <img src="../../static/images/icons/opera.gif" th:src="@{/images/icons/opera.gif}" alt=""/>
+            </a>
+          </div>
+          <div th:if="${chosen.isThai()}">
+            <a href="home" th:title="#{page.home.title}">
+              <img src="../../static/images/icons/wat.gif" th:src="@{/images/icons/wat.gif}" alt=""/>
+            </a>
+          </div>
+          <div th:if="${chosen.isEnglish()}">
+            <a href="home" th:title="#{page.home.title}">
+              <img src="../../static/images/icons/bigben.gif" th:src="@{/images/icons/bigben.gif}"/>
+            </a>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

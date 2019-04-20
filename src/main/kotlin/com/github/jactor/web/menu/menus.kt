@@ -83,6 +83,6 @@ data class MenuItem(
     }
 
     fun isChildChosen(target: String): Boolean {
-        return children.stream().filter({ it.isChosen(target) }).findAny().isPresent
+        return children.stream().filter { it.isChosen(target) }.findAny().isPresent
     }
 }

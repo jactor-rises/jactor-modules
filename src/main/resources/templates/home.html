@@ -9,12 +9,13 @@
 <body>
 <div th:replace="fragments/header :: header">header</div>
 <div class="container">
+  <h2 th:text="#{page.home.welcome}">jactor-rises</h2>
+  <p th:text="#{page.home.paragraph.a}">$a</p>
+  <p th:text="#{page.home.paragraph.b}">$b</p>
+  <p th:text="#{page.home.paragraph.c}">$c</p>
+  <p th:text="#{page.home.techs}">tech used:</p>
+
   <div class="container" th:with="homepage=${homepage}">
-    <h2 th:text="#{page.home.welcome}">jactor-rises</h2>
-    <div th:each="paragraph : ${homepage.paragraphs}">
-      <p th:text="${paragraph}">This is my sandbox</p>
-    </div>
-    <div th:text="#{page.home.techs}">tech used:</div>
     <table th:each="technology : ${homepage.technologies}">
       <tr>
         <td>
@@ -22,9 +23,7 @@
             <div th:text="${technology.tech}">tech</div>
           </a>
         </td>
-      </tr>
-      <tr>
-        <td th:text="${technology.message}">tech description</td>
+        <td th:text="${technology.getMessage()}">tech description</td>
       </tr>
     </table>
   </div>

@@ -44,8 +44,8 @@ class HomeControllerTest {
         .build();
   }
 
-  @DisplayName("should create a homepage dto with my messages")
   @Test
+  @DisplayName("should create a homepage dto with my messages")
   void shouldCreateHomepageDtoWithMyMessages() throws Exception {
     ModelAndView modelAndView = mockMvc.perform(
         get("/home")).andExpect(status().isOk()
@@ -61,8 +61,7 @@ class HomeControllerTest {
           HomePageModel homePageModel = (HomePageModel) model.get("homepage");
 
           assertAll(
-              () -> assertThat(homePageModel.getParagraphs()).as("paragraphs").hasSize(3),
-              () -> assertThat(homePageModel.getTechnologies()).as("technologies").hasSize(8)
+              () -> assertThat(homePageModel.getTechnologies()).as("technologies").hasSize(9)
           );
         }
     );

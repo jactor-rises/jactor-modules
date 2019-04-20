@@ -16,6 +16,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafView;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
@@ -46,7 +47,8 @@ public class JactorWebMvcConfiguration implements WebMvcConfigurer {
     templateResolver.setPrefix(prefix);
     templateResolver.setSuffix(suffix);
 
-    templateResolver.setTemplateMode("HTML");
+    templateResolver.setTemplateMode(TemplateMode.HTML);
+    templateResolver.setOrder(0);
 
     return templateResolver;
   }

@@ -12,7 +12,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 import com.github.jactor.web.consumer.UserConsumer;
 import com.github.jactor.web.dto.UserDto;
 import com.github.jactor.web.menu.MenuFacade;
+import com.github.jactor.web.menu.MenuItem;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +42,8 @@ class UserControllerTest {
   private UserConsumer userRestServiceMock;
   @Autowired
   private MenuFacade menuFacade;
+  @Value("${server.servlet.context-path}")
+  private String contextPath;
   @Value("${spring.mvc.view.prefix}")
   private String prefix;
   @Value("${spring.mvc.view.suffix}")
@@ -50,7 +55,7 @@ class UserControllerTest {
     internalResourceViewResolver.setPrefix(prefix);
     internalResourceViewResolver.setSuffix(suffix);
 
-    mockMvc = standaloneSetup(new UserController(userRestServiceMock, menuFacade))
+    mockMvc = standaloneSetup(new UserController(userRestServiceMock, menuFacade, contextPath))
         .setViewResolvers(internalResourceViewResolver)
         .build();
   }
@@ -97,5 +102,24 @@ class UserControllerTest {
     ).andExpect(status().isOk()).andReturn().getModelAndView();
 
     assertThat(Objects.requireNonNull(modelAndView).getModel().get("unknownUser")).isEqualTo("someone");
+  }
+
+  @Test
+  @DisplayName("should add context path to target of the user names")
+  void shouldAddContextPathToTheMenuItemsInTheUsersMenu() throws Exception {
+    when(userRestServiceMock.findAllUsernames()).thenReturn(List.of("jactor"));
+
+    ModelAndView modelAndView = mockMvc.perform(get(USER_ENDPOINT))
+        .andExpect(status().isOk()).andReturn().getModelAndView();
+
+    Map<String, Object> model = Objects.requireNonNull(modelAndView).getModel();
+    assertThat(model).as("model").isNotNull();
+    Object menuItem = model.get("usersMenu");
+
+    assertThat(menuItem).as("users menu among: " + model.keySet()).isEqualTo(List.of(
+        new MenuItem("menu.users.choose", List.of(
+            new MenuItem("jactor", contextPath + "/user?choose=jactor", "user.choose.desc")
+        ))
+    ));
   }
 }

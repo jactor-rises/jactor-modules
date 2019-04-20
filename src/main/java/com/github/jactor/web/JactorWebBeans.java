@@ -20,19 +20,20 @@ public class JactorWebBeans {
   public static final String USERS_MENU_NAME = "user";
 
   @Bean
-  public MenuFacade menuFacade() {
-    return new MenuFacade(List.of(usersMenu()));
+  public MenuFacade menuFacade(@Value("${server.servlet.context-path}") String contextPath) {
+    return new MenuFacade(List.of(usersMenu(contextPath)));
   }
 
-  private Menu usersMenu() {
+  private Menu usersMenu(String contextPath) {
     return new Menu(USERS_MENU_NAME)
         .addItem(new MenuItem("menu.users.default"))
-        .addItem(new MenuItem("jactor", "user?choose=jactor", "menu.users.jactor.desc"))
-        .addItem(new MenuItem("tip", "user?choose=tip", "menu.users.tip.desc"));
+        .addItem(new MenuItem("jactor", contextPath + "/user?choose=jactor", "menu.users.jactor.desc"))
+        .addItem(new MenuItem("tip", contextPath + "/user?choose=tip", "menu.users.tip.desc"));
   }
 
   @Bean
-  public UserConsumer userConsumer(RestTemplate restTemplate) {
+  public UserConsumer userConsumer(RestTemplate restTemplate, @Value("${jactor-persistence.url.root}") String rootUrlPersistence) {
+    restTemplate.setUriTemplateHandler(new RootUriTemplateHandler(rootUrlPersistence));
     return new UserConsumer(restTemplate);
   }
 

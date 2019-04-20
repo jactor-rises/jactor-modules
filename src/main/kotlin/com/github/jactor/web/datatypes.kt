@@ -2,11 +2,6 @@ package com.github.jactor.web
 
 import java.util.*
 
-const val ENGLISH = "English"
-const val NORWEGIAN = "Norwegian"
-const val THAI = "Thai"
-const val LANG = "lang"
-
 data class Technology(
         val message: String,
         val tech: String,
@@ -30,13 +25,13 @@ class SpringBeanNames(
         }
     }
 
-    private fun mergeBeanNamesWithFiveNames(): List<String> {
-        beanNames.addAll(tenNames)
+    private fun mergeBeanNamesWithTenNames(): List<String> {
+        beanNames.add(tenNames.joinToString( ", "))
         tenNames.clear()
         return beanNames
     }
 
     fun listBeanNames(): List<String> {
-        return mergeBeanNamesWithFiveNames()
+        return mergeBeanNamesWithTenNames()
     }
 }

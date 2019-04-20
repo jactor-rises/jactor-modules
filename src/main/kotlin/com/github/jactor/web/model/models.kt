@@ -4,12 +4,8 @@ import com.github.jactor.web.Technology
 import com.github.jactor.web.dto.AddressDto
 import com.github.jactor.web.dto.PersonDto
 import com.github.jactor.web.dto.UserDto
-import java.util.Arrays.stream
-import java.util.stream.Collectors
-import javax.servlet.http.HttpServletRequest
 
 data class HomePageModel(
-        val paragraphs: List<String> = ArrayList(),
         val technologies: List<Technology> = ArrayList()
 )
 
@@ -82,38 +78,5 @@ data class UserModel(private val user: UserDto) {
 
     fun fetchDescriptionCode(): String? {
         return person.description
-    }
-}
-
-data class CurrentUrlManager(
-        val contextPath: String,
-        val httpServletRequest: HttpServletRequest
-) {
-    fun fetchChosenView(): String {
-        val requestURI = fetchWithoutContextPath()
-        return if (requestURI[0] == '/') requestURI.substring(1) else requestURI
-    }
-
-    fun fetch(): String {
-        val requestURI = fetchWithoutContextPath()
-        val queryString = httpServletRequest.queryString
-
-        if (queryString == null || queryString.isBlank()) {
-            return requestURI
-        }
-
-        val parametersWithoutLanguage = stream<String>(queryString.split("&".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
-                .filter { param -> !param.startsWith("lang=") }
-                .collect(Collectors.toList<String>())
-
-        if (parametersWithoutLanguage.isEmpty()) {
-            return requestURI
-        }
-
-        return "$requestURI?" + parametersWithoutLanguage.joinToString("&")
-    }
-
-    private fun fetchWithoutContextPath(): String {
-        return httpServletRequest.getRequestURI().replace(contextPath.toRegex(), "")
     }
 }
