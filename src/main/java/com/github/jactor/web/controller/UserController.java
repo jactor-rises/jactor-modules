@@ -10,6 +10,7 @@ import com.github.jactor.web.menu.MenuItem;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +21,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
   private final MenuFacade menuFacade;
+  private final String contextPath;
   private final UserConsumer userConsumer;
 
   @Autowired
-  public UserController(UserConsumer userConsumer, MenuFacade menuFacade) {
+  public UserController(UserConsumer userConsumer, MenuFacade menuFacade, @Value("${server.servlet.context-path}") String contextPath) {
     this.userConsumer = userConsumer;
     this.menuFacade = menuFacade;
+    this.contextPath = contextPath;
   }
 
   @GetMapping(value = "/user")
@@ -64,7 +67,7 @@ public class UserController {
   }
 
   private MenuItem chooseUserItem(String username) {
-    return new MenuItem(username, String.format("/user?choose=%s", username), "user.choose.desc");
+    return new MenuItem(username, String.format("%s/user?choose=%s", contextPath, username), "user.choose.desc");
   }
 
   private void populateDefaultUsers(ModelAndView modelAndView) {
