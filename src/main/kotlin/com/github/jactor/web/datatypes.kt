@@ -35,3 +35,5 @@ class SpringBeanNames(
         return mergeBeanNamesWithTenNames()
     }
 }
+
+data class Request(val currentUrl: String, val chosenView: String)
