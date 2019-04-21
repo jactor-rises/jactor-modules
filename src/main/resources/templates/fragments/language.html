@@ -10,7 +10,7 @@
 <body>
 <div th:fragment="language" class="container">
   <table th:with="chosen=${chosenLanguage}">
-    <tr>
+    <tr th:with="currentUrl=${currentRequest.getCurrentUrl()}">
       <td class="alignLeft">
         <div th:if="${chosen.isEnglish()}">
           <img src="../../static/images/icons/flag.eng.chosen.gif" th:src="@{/images/icons/flag.eng.chosen.gif}" th:title="${chosen.getName()}"/>

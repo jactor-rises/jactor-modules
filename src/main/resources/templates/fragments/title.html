@@ -8,13 +8,13 @@
 </head>
 <body>
 <div th:fragment="title" class="container">
-  <table>
+  <table th:with="chosenView=${currentRequest.getChosenView()}">
     <tr>
       <td>
         <div class="alignLeft">
           <div class="dropdown">
             <button class="dropbtn">
-              <span th:text="${chosenView}">currentUrl</span>
+              <span th:text="${chosenView}">chosenView</span>
             </button>
             <div class="dropdown-content">
               <a href="home" th:text="#{page.home.title}">home sweet home</a>
