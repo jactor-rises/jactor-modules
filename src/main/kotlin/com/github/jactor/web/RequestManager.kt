@@ -17,6 +17,9 @@ data class RequestManager(
 
     fun fetchChosenView(): String {
         val requestURI = fetchWithoutContextPath()
+
+        if (requestURI.length == 1 || requestURI.isEmpty()) return "home"
+
         return if (requestURI[0] == '/') requestURI.substring(1) else requestURI
     }
 
@@ -43,7 +46,7 @@ data class RequestManager(
 
     fun noLanguageParameters(): Boolean {
         if (queryString == null) {
-            return false
+            return true
         }
 
         languageParameter = Stream.of(*queryString!!.split("&".toRegex())

@@ -43,12 +43,14 @@ public class RequestInterceptor implements HandlerInterceptor {
       Object handler,
       ModelAndView modelAndView
   ) {
-    RequestManager requestManager = new RequestManager(contextPath, servletRequest);
-    Request request = new Request(requestManager.fetchCurrentUrl(), requestManager.fetchChosenView());
-    Language chosenLanguage = fetchChosenLangugae(requestManager);
+    if (modelAndView != null) {
+      RequestManager requestManager = new RequestManager(contextPath, servletRequest);
+      Request request = new Request(requestManager.fetchCurrentUrl(), requestManager.fetchChosenView());
+      Language chosenLanguage = fetchChosenLangugae(requestManager);
 
-    modelAndView.getModelMap().addAttribute(CHOSEN_LANGUAGE, chosenLanguage);
-    modelAndView.getModelMap().addAttribute(CURRENT_REQUEST, request);
+      modelAndView.getModelMap().addAttribute(CHOSEN_LANGUAGE, chosenLanguage);
+      modelAndView.getModelMap().addAttribute(CURRENT_REQUEST, request);
+    }
   }
 
   private Language fetchChosenLangugae(RequestManager requestManager) {
