@@ -1,7 +1,5 @@
 package com.github.jactor.web
 
-import java.util.*
-
 data class Technology(
         val message: String,
         val tech: String,
@@ -26,7 +24,7 @@ class SpringBeanNames(
     }
 
     private fun mergeBeanNamesWithTenNames(): List<String> {
-        beanNames.add(tenNames.joinToString( ", "))
+        beanNames.add(tenNames.joinToString(", "))
         tenNames.clear()
         return beanNames
     }
