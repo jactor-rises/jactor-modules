@@ -2,7 +2,7 @@ package com.github.jactor.persistence.dto
 
 data class AddressDto(
         var persistentDto: PersistentDto? = null,
-        var zipCode: Int? = null,
+        var zipCode: String? = null,
         var addressLine1: String? = null,
         var addressLine2: String? = null,
         var addressLine3: String? = null,

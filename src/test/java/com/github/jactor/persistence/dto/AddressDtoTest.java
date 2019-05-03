@@ -20,7 +20,7 @@ class AddressDtoTest {
         addressDto.setAddressLine3("address line three");
         addressDto.setCity("oslo");
         addressDto.setCountry("NO");
-        addressDto.setZipCode(1234);
+        addressDto.setZipCode("1234");
 
         AddressDto copied = new AddressDto(addressDto.fetchPersistentDto(), addressDto);
 

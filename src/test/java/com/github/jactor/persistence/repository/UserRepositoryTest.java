@@ -53,7 +53,7 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should write then read a user entity")
   void shouldWriteThenReadUserEntity() {
-    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonDto personDto = new PersonDto(null, addressDto, null, null, "Solo", null);
     UserEntity userToPersist = aUser(new UserDto(
         null, personDto, "smuggle.fast@tantooine.com", "smuggler"
@@ -81,7 +81,7 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should write then update and read a user entity")
   void shouldWriteThenUpdateAndReadUserEntity() {
-    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonDto personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     UserEntity userToPersist = aUser(new UserDto(
         null, personDto, "casuel@tantooine.com", "causual"
@@ -120,7 +120,7 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should find all active users")
   void shouldFindAllActiveUsers() {
-    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonDto spidyPersonDto = new PersonDto(null, addressDto, null, null, "Parker", null);
     PersonDto superPersonDto = new PersonDto(null, addressDto, null, null, "Kent", null);
     userRepository.save(aUser(new UserDto(null, spidyPersonDto, null, "spiderman")));

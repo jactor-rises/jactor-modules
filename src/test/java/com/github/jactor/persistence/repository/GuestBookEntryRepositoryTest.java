@@ -42,7 +42,7 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then read guest book entry entity")
   void shouldSaveThenReadGuestBookEntryEntity() {
-    var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
 
@@ -73,7 +73,7 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then modify and read guest book entry entity")
   void shouldSaveThenModifyAndReadGuestBookEntryEntity() {
-    var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
 
@@ -115,7 +115,7 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should write two entries to two different guest books and then find one entry")
   void shouldWriteTwoEntriesToTwoGuestBooksAndThenFindEntry() {
-    var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
 
