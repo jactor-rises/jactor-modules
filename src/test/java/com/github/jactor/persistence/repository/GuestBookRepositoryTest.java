@@ -37,7 +37,7 @@ class GuestBookRepositoryTest {
   @Test
   @DisplayName("should write then read guest book")
   void shouldWriteThenReadGuestBook() {
-    var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
@@ -60,7 +60,7 @@ class GuestBookRepositoryTest {
   @Test
   @DisplayName("should write then update and read guest book")
   void shouldWriteThenUpdateAndReadGuestBook() {
-    var addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));

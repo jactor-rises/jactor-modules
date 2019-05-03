@@ -46,7 +46,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
   @Column(name = "COUNTRY")
   private String country;
   @Column(name = "ZIP_CODE", nullable = false)
-  private Integer zipCode;
+  private String zipCode;
 
   @SuppressWarnings("unused")
   AddressEntity() {
@@ -164,7 +164,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
     this.id = id;
   }
 
-  public Integer getZipCode() {
+  public String getZipCode() {
     return zipCode;
   }
 
@@ -192,7 +192,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
     this.country = country;
   }
 
-  public void setZipCode(Integer zipCode) {
+  public void setZipCode(String zipCode) {
     this.zipCode = zipCode;
   }
 

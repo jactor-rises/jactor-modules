@@ -51,7 +51,7 @@ class PersonRepositoryTest {
   @Test
   @DisplayName("should save then read a person entity")
   void shouldWriteThenReadPersonEntity() {
-    AddressDto address = new AddressDto(null, 1001, "Test Boulevar 1", null, null, "Testington", null);
+    AddressDto address = new AddressDto(null, "1001", "Test Boulevar 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonDto(
         null, address, "no_NO", "Turbo", "Jacobsen", "Me, myself, and I"
     ));
@@ -80,7 +80,7 @@ class PersonRepositoryTest {
   @Test
   @DisplayName("should save then update and read a person entity")
   void shouldWriteThenUpdateAndReadPersonEntity() {
-    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonDto(
         null,
         addressDto,
@@ -130,7 +130,7 @@ class PersonRepositoryTest {
   @DisplayName("should be able to relate a user")
   void shouldRelateUser() {
     AddressDto addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     PersonDto personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
