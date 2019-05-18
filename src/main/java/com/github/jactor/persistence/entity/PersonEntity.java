@@ -5,19 +5,22 @@ import static java.util.Objects.hash;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -49,10 +52,10 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   @Column(name = "SURNAME", nullable = false)
   private String surname;
   @JoinColumn(name = "ADDRESS_ID")
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private AddressEntity addressEntity;
-  @OneToOne(mappedBy = "personEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  private UserEntity userEntity;
+  @OneToMany(mappedBy = "personEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+  private Set<UserEntity> users = new HashSet<>();
 
   @SuppressWarnings("unused")
   PersonEntity() {
@@ -67,7 +70,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     id = person.id;
     persistentDataEmbeddable = new PersistentDataEmbeddable();
     surname = person.surname;
-    userEntity = person.userEntity;
+    users = person.users;
   }
 
   PersonEntity(@NotNull PersonDto person) {
@@ -123,7 +126,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
         .appendSuper(super.toString())
         .append(getFirstName())
         .append(getSurname())
-        .append(getUserEntity())
+        .append(getUsers())
         .append(getAddressEntity())
         .toString();
   }
@@ -178,8 +181,8 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     return surname;
   }
 
-  public UserEntity getUserEntity() {
-    return userEntity;
+  public Set<UserEntity> getUsers() {
+    return users;
   }
 
   public void setDescription(String description) {
@@ -198,8 +201,8 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     this.locale = locale;
   }
 
-  void setUserEntity(UserEntity userEntity) {
-    this.userEntity = userEntity;
+  void addUser(UserEntity user) {
+    users.add(user);
   }
 
   public static PersonEntity aPerson(PersonDto personDto) {

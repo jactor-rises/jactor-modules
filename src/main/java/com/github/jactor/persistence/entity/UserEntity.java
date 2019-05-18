@@ -24,6 +24,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -53,7 +54,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   @Column(name = "USER_NAME", nullable = false)
   private String username;
   @JoinColumn(name = "PERSON_ID")
-  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private PersonEntity personEntity;
   @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private GuestBookEntity guestBook;
@@ -104,7 +105,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   }
 
   public PersonEntity fetchPerson() {
-    personEntity.setUserEntity(this);
+    personEntity.addUser(this);
     return personEntity;
   }
 
