@@ -120,7 +120,7 @@ class PersonRepositoryTest {
               () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("dk_DK"),
               () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Dr. A."),
               () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Cula"),
-              () -> assertThat(personEntity.getUserEntity()).isEqualTo(person.getUserEntity())
+              () -> assertThat(personEntity.getUsers()).isEqualTo(person.getUsers())
           );
         }
     );
@@ -151,9 +151,17 @@ class PersonRepositoryTest {
           PersonEntity personEntity = people.iterator().next();
           assertAll(
               () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Adder"),
-              () -> assertThat(personEntity.getUserEntity()).as("user").isNotNull(),
-              () -> assertThat(personEntity.getUserEntity().getEmailAddress()).as("user email").isEqualTo("public@services.com"),
-              () -> assertThat(personEntity.getUserEntity().getUsername()).as("user name").isEqualTo("black")
+              () -> assertThat(personEntity.getUsers()).as("user").isNotNull(),
+              () -> {
+                assertThat(personEntity.getUsers()).as("users").hasSize(1);
+
+                UserEntity persistedUser = personEntity.getUsers().iterator().next();
+
+                assertAll(
+                    () -> assertThat(persistedUser.getEmailAddress()).as("user email").isEqualTo("public@services.com"),
+                    () -> assertThat(persistedUser.getUsername()).as("user name").isEqualTo("black")
+                );
+              }
           );
         }
     );
