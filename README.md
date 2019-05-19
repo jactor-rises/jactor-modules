@@ -2,7 +2,7 @@
 
 ### What is this repository for? ###
 
-The main purpose is to learn about programming microservices and spring jpa.
+The main purpose is to learn about programming microservices with focus on REST and spring jpa.
 
 This project is a microservice dealing with persistence to an database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
