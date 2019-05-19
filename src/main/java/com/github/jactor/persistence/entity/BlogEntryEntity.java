@@ -4,7 +4,6 @@ import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
-import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -100,11 +99,6 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
     blogEntryEntity.setId(null);
 
     return blogEntryEntity;
-  }
-
-  @Override
-  public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override
