@@ -120,25 +120,6 @@ class UserControllerTest {
   }
 
   @Test
-  @DisplayName("should create a user")
-  void shouldCreateGuestUser() {
-    UserDto userDto = new UserDto();
-    UserDto createdDto = new UserDto();
-    createdDto.setId(1L);
-
-    when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(createdDto);
-
-    var userRespnse = testRestTemplate.exchange(buildFullPath("/user"), HttpMethod.POST, new HttpEntity<>(userDto), UserDto.class);
-
-    assertAll(
-        () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.CREATED),
-        () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user").isNotNull(),
-        () -> assertThat(userRespnse.getBody()).extracting(UserDto::getId).as("user id").isEqualTo(1L),
-        () -> verify(userServiceMock).saveOrUpdate(any(UserDto.class))
-    );
-  }
-
-  @Test
   @DisplayName("should find all usernames on active users")
   void shouldFindAllUsernames() {
     when(userServiceMock.findUsernamesOnActiveUsers())
