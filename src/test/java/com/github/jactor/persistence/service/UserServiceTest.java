@@ -14,26 +14,21 @@ import com.github.jactor.persistence.dto.UserType;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.repository.UserRepository;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DisplayName("A UserService")
+@SpringBootTest
 class UserServiceTest {
 
-  private @InjectMocks
-  UserService userServiceToTest;
-  private @Mock
-  UserRepository userRepositoryMock;
-
-  @BeforeEach
-  void initMocking() {
-    MockitoAnnotations.initMocks(this);
-  }
+  @Autowired
+  private UserService userServiceToTest;
+  @MockBean
+  private UserRepository userRepositoryMock;
 
   @Test
   @DisplayName("should map a user entity to a dto")
