@@ -3,15 +3,20 @@ package com.github.jactor.persistence.service;
 import static com.github.jactor.persistence.entity.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.dto.UserType;
+import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
+import com.github.jactor.persistence.repository.PersonRepository;
 import com.github.jactor.persistence.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +32,8 @@ class UserServiceTest {
 
   @Autowired
   private UserService userServiceToTest;
+  @MockBean
+  private PersonRepository personRepository;
   @MockBean
   private UserRepository userRepositoryMock;
 
@@ -94,5 +101,32 @@ class UserServiceTest {
     var userEntity = argCaptor.getValue();
 
     assertThat(userEntity.getUsername()).as("username").isEqualTo("marley");
+  }
+
+  @Test
+  @DisplayName("should create and save person for the user")
+  void shouldCreateAndSavePersonForTheUser() {
+    var createUserCommand = new CreateUserCommand("jactor", "Jacobsen");
+    var userEntityMock = mockUserEntityWithId101();
+
+    when(userRepositoryMock.save(any())).thenReturn(userEntityMock);
+
+    var userId = userServiceToTest.create(createUserCommand);
+
+    ArgumentCaptor<PersonEntity> personCaptor = ArgumentCaptor.forClass(PersonEntity.class);
+    verify(personRepository).save(personCaptor.capture());
+
+    assertAll(
+        () -> assertThat(personCaptor.getValue()).as("person to save").isNotNull(),
+        () -> assertThat(userId).as("user id").isEqualTo(101)
+    );
+  }
+
+  private UserEntity mockUserEntityWithId101() {
+    UserEntity userEntityMock = mock(UserEntity.class);
+
+    when(userEntityMock.getId()).thenReturn(101L);
+
+    return userEntityMock;
   }
 }

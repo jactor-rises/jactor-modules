@@ -73,7 +73,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     users = person.users;
   }
 
-  PersonEntity(@NotNull PersonDto person) {
+  public PersonEntity(@NotNull PersonDto person) {
     addressEntity = Optional.ofNullable(person.getAddress()).map(AddressEntity::new).orElse(null);
     description = person.getDescription();
     firstName = person.getFirstName();
