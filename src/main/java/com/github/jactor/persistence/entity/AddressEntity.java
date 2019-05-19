@@ -3,7 +3,6 @@ package com.github.jactor.persistence.entity;
 import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.AddressDto;
-import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.AttributeOverride;
@@ -79,7 +78,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
   }
 
   public AddressDto asDto() {
-    return new AddressDto(initPersistentDto(), zipCode, addressLine1, addressLine2, addressLine3, city, country);
+    return new AddressDto(persistentDataEmbeddable.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country);
   }
 
   @Override
@@ -88,11 +87,6 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
     addressEntity.setId(null);
 
     return addressEntity;
-  }
-
-  @Override
-  public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override

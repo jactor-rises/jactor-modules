@@ -2,7 +2,6 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
-import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -97,7 +96,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
 
   public UserDto asDto() {
     return new UserDto(
-        initPersistentDto(),
+        persistentDataEmbeddable.asPersistentDto(id),
         Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null),
         emailAddress,
         username
@@ -115,11 +114,6 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     userEntity.setId(null);
 
     return userEntity;
-  }
-
-  @Override
-  public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override
