@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DisplayName("An itegrated UserController")
+@Transactional
 class UserControllerIntegrationTest {
 
   @Autowired
