@@ -110,6 +110,7 @@ class UserServiceTest {
     var userEntityMock = mockUserEntityWithId101();
 
     when(userRepositoryMock.save(any())).thenReturn(userEntityMock);
+    when(personRepository.save(any())).thenReturn(new PersonEntity(new PersonDto()));
 
     var userId = userServiceToTest.create(createUserCommand);
 

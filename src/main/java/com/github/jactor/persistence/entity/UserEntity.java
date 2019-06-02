@@ -214,6 +214,10 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     this.username = username;
   }
 
+  public void setPersonEntity(PersonEntity personEntity) {
+    this.personEntity = personEntity;
+  }
+
   public static UserEntity aUser(UserDto userDto) {
     return new UserEntity(userDto);
   }

@@ -16,7 +16,7 @@ public class PersonService {
 
   public PersonEntity create(PersonDto person) {
     PersonEntity personEntity = new PersonEntity(person);
-    personRepository.save(personEntity);
+    personEntity = personRepository.save(personEntity);
     return personEntity;
   }
 }

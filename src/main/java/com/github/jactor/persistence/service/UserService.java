@@ -46,11 +46,13 @@ public class UserService {
   }
 
   private UserEntity createNewFrom(CreateUserCommand createUserCommand) {
-    var personDto = createUserCommand.fetchPersonWithAddress();
+    var personDto = createUserCommand.fetchPersonDto();
     var personEntity = personService.create(personDto);
-    var userDto = createUserCommand.fetchUserDto(personEntity.asDto());
+    var userEntity = new UserEntity(createUserCommand.fetchUserDto());
 
-    return new UserEntity(userDto);
+    userEntity.setPersonEntity(personEntity);
+
+    return userEntity;
   }
 
   public List<String> findUsernamesOnActiveUsers() {
