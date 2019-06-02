@@ -20,9 +20,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+@DisplayName("A PersonRepository")
 @SpringBootTest(classes = {JactorPersistence.class})
 @Transactional
-@DisplayName("A PersonRepository")
 class PersonRepositoryTest {
 
   @Autowired
@@ -76,8 +76,6 @@ class PersonRepositoryTest {
   @Test
   @DisplayName("should save then update and read a person entity")
   void shouldWriteThenUpdateAndReadPersonEntity() {
-    int allreadyPresentPeople = numberOf(personRepository.findAll());
-
     AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonDto(
         null,

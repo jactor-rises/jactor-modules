@@ -47,7 +47,7 @@ public class UserService {
 
   private UserEntity createNewFrom(CreateUserCommand createUserCommand) {
     var personDto = createUserCommand.fetchPersonDto();
-    var personEntity = personService.create(personDto);
+    var personEntity = personService.createWhenNotExists(personDto);
     var userEntity = new UserEntity(createUserCommand.fetchUserDto());
 
     userEntity.setPersonEntity(personEntity);
