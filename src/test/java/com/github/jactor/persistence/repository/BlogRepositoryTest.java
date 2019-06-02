@@ -37,7 +37,7 @@ class BlogRepositoryTest {
   @DisplayName("should save and then read blog entity")
   void shouldSaveThenReadBlogEntity() {
     var addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
@@ -64,7 +64,7 @@ class BlogRepositoryTest {
   @DisplayName("should save then update and read blog entity")
   void shouldSaveThenUpdateAndReadBlogEntity() {
     var addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
@@ -103,7 +103,7 @@ class BlogRepositoryTest {
   @DisplayName("should find blog by title")
   void shouldFindBlogByTitle() {
     var addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
@@ -127,7 +127,7 @@ class BlogRepositoryTest {
   @DisplayName("should be able to relate a blog entry")
   void shouldRelateBlogEntry() {
     var addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);

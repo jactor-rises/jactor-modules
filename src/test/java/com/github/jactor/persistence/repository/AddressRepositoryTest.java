@@ -32,17 +32,17 @@ class AddressRepositoryTest {
   @DisplayName("should fetch address entities")
   void shouldFetchAddressEntities() {
     addressRepository.save(anAddress(
-        new AddressDto(new PersistentDto(), 1234, "somewhere out there", null, null, "Rud", null)
+        new AddressDto(new PersistentDto(), "1234", "somewhere out there", null, null, "Rud", null)
     ));
 
     addressRepository.save(anAddress(
-        new AddressDto(new PersistentDto(), 1234, "somewhere in there", null, null, "Rud", null)
+        new AddressDto(new PersistentDto(), "1234", "somewhere in there", null, null, "Rud", null)
     ));
 
     entityManager.flush();
     entityManager.clear();
 
-    var addressEntities = addressRepository.findByZipCode(1234);
+    var addressEntities = addressRepository.findByZipCode("1234");
 
     assertAll(
         () -> assertThat(addressEntities).hasSize(2),
@@ -60,7 +60,7 @@ class AddressRepositoryTest {
     var addressEntityToPersist = anAddress(
         new AddressDto(
             new PersistentDto(),
-            1234,
+            "1234",
             "somewhere out there",
             "where the streets have no name",
             "in the middle of it",
@@ -83,7 +83,7 @@ class AddressRepositoryTest {
               () -> assertThat(addressEntity.getAddressLine1()).as("address line 1").isEqualTo("somewhere out there"),
               () -> assertThat(addressEntity.getAddressLine2()).as("address line 2").isEqualTo("where the streets have no name"),
               () -> assertThat(addressEntity.getAddressLine3()).as("address line 3").isEqualTo("in the middle of it"),
-              () -> assertThat(addressEntity.getZipCode()).as("zip code").isEqualTo(1234),
+              () -> assertThat(addressEntity.getZipCode()).as("zip code").isEqualTo("1234"),
               () -> assertThat(addressEntity.getCountry()).as("country").isEqualTo("NO"),
               () -> assertThat(addressEntity.getCity()).as("city").isEqualTo("Rud")
           );
@@ -97,7 +97,7 @@ class AddressRepositoryTest {
     var addressEntityToPersist = anAddress(
         new AddressDto(
             new PersistentDto(),
-            1234,
+            "1234",
             "somewhere out there",
             "where the streets have no name",
             "in the middle of it",
@@ -115,7 +115,7 @@ class AddressRepositoryTest {
     addressEntitySaved.setAddressLine1("the truth is out there");
     addressEntitySaved.setAddressLine2("among the stars");
     addressEntitySaved.setAddressLine3("there will be life");
-    addressEntitySaved.setZipCode(666);
+    addressEntitySaved.setZipCode("666");
     addressEntitySaved.setCity("Cloud city");
     addressEntitySaved.setCountry("XX");
 
@@ -133,7 +133,7 @@ class AddressRepositoryTest {
               () -> assertThat(addressEntity.getAddressLine1()).as("address line 1").isEqualTo("the truth is out there"),
               () -> assertThat(addressEntity.getAddressLine2()).as("address line 2").isEqualTo("among the stars"),
               () -> assertThat(addressEntity.getAddressLine3()).as("address line 3").isEqualTo("there will be life"),
-              () -> assertThat(addressEntity.getZipCode()).as("zip code").isEqualTo(666),
+              () -> assertThat(addressEntity.getZipCode()).as("zip code").isEqualTo("666"),
               () -> assertThat(addressEntity.getCountry()).as("country").isEqualTo("XX"),
               () -> assertThat(addressEntity.getCity()).as("city").isEqualTo("Cloud city")
           );

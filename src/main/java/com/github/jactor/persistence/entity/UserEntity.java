@@ -2,7 +2,6 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
-import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -24,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -53,7 +53,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   @Column(name = "USER_NAME", nullable = false)
   private String username;
   @JoinColumn(name = "PERSON_ID")
-  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private PersonEntity personEntity;
   @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
   private GuestBookEntity guestBook;
@@ -96,7 +96,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
 
   public UserDto asDto() {
     return new UserDto(
-        initPersistentDto(),
+        persistentDataEmbeddable.asPersistentDto(id),
         Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null),
         emailAddress,
         username
@@ -104,7 +104,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   }
 
   public PersonEntity fetchPerson() {
-    personEntity.setUserEntity(this);
+    personEntity.addUser(this);
     return personEntity;
   }
 
@@ -114,11 +114,6 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     userEntity.setId(null);
 
     return userEntity;
-  }
-
-  @Override
-  public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override
@@ -217,6 +212,10 @@ public class UserEntity implements PersistentEntity<UserEntity> {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public void setPersonEntity(PersonEntity personEntity) {
+    this.personEntity = personEntity;
   }
 
   public static UserEntity aUser(UserDto userDto) {

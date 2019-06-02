@@ -4,7 +4,6 @@ import static java.util.Objects.hash;
 import static java.util.stream.Collectors.toSet;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
-import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -82,7 +81,7 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
 
   public GuestBookDto asDto() {
     return new GuestBookDto(
-        initPersistentDto(),
+        persistentDataEmbeddable.asPersistentDto(id),
         entries.stream().map(GuestBookEntryEntity::asDto).collect(toSet()),
         title,
         Optional.ofNullable(user).map(UserEntity::asDto).orElse(null)
@@ -95,11 +94,6 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
     guestBookEntity.setId(null);
 
     return guestBookEntity;
-  }
-
-  @Override
-  public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override

@@ -12,17 +12,14 @@ import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
-import java.util.List;
+import java.util.HashSet;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {JactorPersistence.class})
 @Transactional
 @DisplayName("A PersonRepository")
@@ -36,24 +33,24 @@ class PersonRepositoryTest {
   @Test
   @DisplayName("should find default persons")
   void shouldFindDefaultPersons() {
-    List<PersonEntity> personEntities = personRepository.findBySurname("Jacobsen");
+    var personEntities = personRepository.findBySurname("Jacobsen");
+    var firstNames = new HashSet<String>();
 
-    assertAll(
-        () -> assertThat(personEntities).hasSize(2),
-        () -> {
-          for (PersonEntity personEntity : personEntities) {
-            assertThat(personEntity.getFirstName()).as("first name").isIn("Tor Egil", "Suthatip");
-          }
-        }
-    );
+    for (PersonEntity personEntity : personEntities) {
+      firstNames.add(personEntity.getFirstName());
+    }
+
+    assertThat(firstNames).as("first names").contains("Tor Egil", "Suthatip");
   }
 
   @Test
   @DisplayName("should save then read a person entity")
   void shouldWriteThenReadPersonEntity() {
-    AddressDto address = new AddressDto(null, 1001, "Test Boulevar 1", null, null, "Testington", null);
+    int allreadyPresentPeople = numberOf(personRepository.findAll());
+
+    AddressDto address = new AddressDto(null, "1001", "Test Boulevar 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonDto(
-        null, address, "no_NO", "Turbo", "Jacobsen", "Me, myself, and I"
+        null, address, "no_NO", "Born", "Sometime", "Me, myself, and I"
     ));
 
     personRepository.save(personToPersist);
@@ -63,15 +60,14 @@ class PersonRepositoryTest {
     var people = personRepository.findAll();
 
     assertAll(
-        () -> assertThat(people).hasSize(3), // two users already present...
+        () -> assertThat(people).hasSize(allreadyPresentPeople + 1),
         () -> {
-          PersonEntity personEntity = people.iterator().next();
+          PersonEntity personEntity = personRepository.findBySurname("Sometime").iterator().next();
           assertAll(
               () -> assertThat(personEntity.getAddressEntity()).as("address").isEqualTo(personToPersist.getAddressEntity()),
               () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("Me, myself, and I"),
               () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("no_NO"),
-              () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Turbo"),
-              () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Jacobsen")
+              () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Born")
           );
         }
     );
@@ -80,24 +76,24 @@ class PersonRepositoryTest {
   @Test
   @DisplayName("should save then update and read a person entity")
   void shouldWriteThenUpdateAndReadPersonEntity() {
-    AddressDto addressDto = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testington", null);
+    int allreadyPresentPeople = numberOf(personRepository.findAll());
+
+    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonDto(
         null,
         addressDto,
         "no_NO",
-        "Dr. A",
-        "Culn",
-        "There is no try"
+        "B",
+        "Mine",
+        "Just me..."
     ));
 
     personRepository.save(personToPersist);
     entityManager.flush();
     entityManager.clear();
 
-    var people = personRepository.findAll();
-
-    assertThat(people).hasSize(3); // two users already present...
-    var person = people.iterator().next();
+    var mine = personRepository.findBySurname("Mine");
+    var person = mine.iterator().next();
 
     person.setDescription("There is no try");
     person.setLocale("dk_DK");
@@ -108,29 +104,24 @@ class PersonRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var foundPeople = personRepository.findAll();
+    var foundCula = personRepository.findBySurname("Cula");
+    var personEntity = foundCula.iterator().next();
 
     assertAll(
-        () -> assertThat(foundPeople).hasSize(3), // two users already present...
-        () -> {
-          PersonEntity personEntity = foundPeople.iterator().next();
-
-          assertAll(
-              () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("There is no try"),
-              () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("dk_DK"),
-              () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Dr. A."),
-              () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Cula"),
-              () -> assertThat(personEntity.getUserEntity()).isEqualTo(person.getUserEntity())
-          );
-        }
+        () -> assertThat(personEntity.getDescription()).as("description").isEqualTo("There is no try"),
+        () -> assertThat(personEntity.getLocale()).as("locale").isEqualTo("dk_DK"),
+        () -> assertThat(personEntity.getFirstName()).as("first name").isEqualTo("Dr. A."),
+        () -> assertThat(personEntity.getUsers()).isEqualTo(person.getUsers())
     );
   }
 
   @Test
   @DisplayName("should be able to relate a user")
   void shouldRelateUser() {
+    int allreadyPresentPeople = numberOf(personRepository.findAll());
+
     AddressDto addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     PersonDto personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
@@ -143,19 +134,37 @@ class PersonRepositoryTest {
     entityManager.flush();
     entityManager.clear();
 
-    var people = personRepository.findAll();
-
     assertAll(
-        () -> assertThat(people).hasSize(3), // two users already present...
         () -> {
-          PersonEntity personEntity = people.iterator().next();
+          var people = personRepository.findAll();
+          assertThat(people).hasSize(allreadyPresentPeople + 1);
+        }, () -> {
+          PersonEntity personEntity = personRepository.findBySurname("Adder").iterator().next();
           assertAll(
-              () -> assertThat(personEntity.getSurname()).as("surname").isEqualTo("Adder"),
-              () -> assertThat(personEntity.getUserEntity()).as("user").isNotNull(),
-              () -> assertThat(personEntity.getUserEntity().getEmailAddress()).as("user email").isEqualTo("public@services.com"),
-              () -> assertThat(personEntity.getUserEntity().getUsername()).as("user name").isEqualTo("black")
+              () -> assertThat(personEntity.getUsers()).as("user").isNotNull(),
+              () -> {
+                assertThat(personEntity.getUsers()).as("users").hasSize(1);
+
+                UserEntity persistedUser = personEntity.getUsers().iterator().next();
+
+                assertAll(
+                    () -> assertThat(persistedUser.getEmailAddress()).as("user email").isEqualTo("public@services.com"),
+                    () -> assertThat(persistedUser.getUsername()).as("user name").isEqualTo("black")
+                );
+              }
           );
         }
     );
+  }
+
+  private int numberOf(Iterable<PersonEntity> people) {
+    int counter = 0;
+    var peopleIterator = people.iterator();
+
+    for (; peopleIterator.hasNext(); counter++) {
+      peopleIterator.next();
+    }
+
+    return counter;
   }
 }

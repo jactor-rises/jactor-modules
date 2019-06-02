@@ -31,17 +31,13 @@ class BlogEntryRepositoryTest {
   @Autowired
   private BlogEntryRepository blogEntryRepository;
   @Autowired
-  private BlogRepository blogRepository;
-  @Autowired
   private EntityManager entityManager;
-  @Autowired
-  private UserRepository userRepository;
 
   @Test
   @DisplayName("should save then read blog entry")
   void shouldSaveThenReadBlogEntry() {
     var addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
@@ -76,7 +72,7 @@ class BlogEntryRepositoryTest {
   @DisplayName("should write then update and read a blog entry")
   void shouldWriteThenUpdateAndReadBlogEntry() {
     var addressDto = new AddressDto(
-        new PersistentDto(), 1001, "Test Boulevard 1", null, null, "Testing", null
+        new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);

@@ -4,7 +4,6 @@ import static java.util.Objects.hash;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
-import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -83,7 +82,7 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
 
   private GuestBookEntryDto asDto(GuestBookDto guestBook) {
     return new GuestBookEntryDto(
-        initPersistentDto(),
+        persistentDataEmbeddable.asPersistentDto(id),
         guestBook,
         entryEmbeddable.getCreatorName(),
         entryEmbeddable.getEntry()
@@ -101,11 +100,6 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
     guestBookEntryEntity.setId(null);
 
     return guestBookEntryEntity;
-  }
-
-  @Override
-  public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override

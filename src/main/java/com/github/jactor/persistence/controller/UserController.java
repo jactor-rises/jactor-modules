@@ -1,10 +1,12 @@
 package com.github.jactor.persistence.controller;
 
+import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.service.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(UserController.USER)
+@RequestMapping(path = UserController.USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UserController {
 
   static final String USER = "/user";
@@ -40,15 +42,11 @@ public class UserController {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
   }
 
-  @PostMapping
-  public ResponseEntity<UserDto> post(@RequestBody UserDto userDto) {
-    if (userDto.getId() != null) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
+  @PostMapping("/create")
+  public ResponseEntity<Long> post(@RequestBody CreateUserCommand createUserCommand) {
+    Long primaryKey = userServicey.create(createUserCommand);
 
-    UserDto saved = userServicey.saveOrUpdate(userDto);
-
-    return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    return new ResponseEntity<>(primaryKey, HttpStatus.CREATED);
   }
 
   @PutMapping("/{userId}")

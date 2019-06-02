@@ -4,7 +4,6 @@ import static java.util.Objects.hash;
 import static java.util.stream.Collectors.toSet;
 
 import com.github.jactor.persistence.dto.BlogDto;
-import com.github.jactor.persistence.dto.PersistentDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -79,7 +78,7 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
 
   public BlogDto asDto() {
     return new BlogDto(
-        initPersistentDto(),
+        persistentDataEmbeddable.asPersistentDto(id),
         created, title, Optional.ofNullable(userEntity).map(UserEntity::asDto).orElse(null)
     );
   }
@@ -95,11 +94,6 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
     blogEntity.setId(null);
 
     return blogEntity;
-  }
-
-  @Override
-  public PersistentDto initPersistentDto() {
-    return new PersistentDto(getId(), getCreatedBy(), getTimeOfCreation(), getModifiedBy(), getTimeOfModification());
   }
 
   @Override

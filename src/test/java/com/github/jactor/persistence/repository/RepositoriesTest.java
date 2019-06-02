@@ -37,7 +37,7 @@ class RepositoriesTest {
   @Test
   @DisplayName("should use a BlogRepository to save a blog with a user that was saved with a UserRepository earlier")
   void shouldSaveBlogWithSavedUser() {
-    AddressDto address = new AddressDto(null, 1001, "Test Boulevard 1", null, null, "Testoplis", null);
+    AddressDto address = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testoplis", null);
     PersonDto personDto = new PersonDto(null, address, "no_NO", null, "Skywalker", null);
     UserEntity userToPersist = aUser(new UserDto(null, personDto, "brains@rebels.com", "r2d2"));
 
