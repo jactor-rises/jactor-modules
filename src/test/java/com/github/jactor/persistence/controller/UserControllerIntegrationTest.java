@@ -29,7 +29,7 @@ class UserControllerIntegrationTest {
   @Test
   @DisplayName("should create a new  user")
   void shouldCreateNewUser() {
-    var createUserCommand = new CreateUserCommand("turbo", "Jacobsen");
+    var createUserCommand = new CreateUserCommand("turbo", "Someone");
     var createdUserRespnse = Optional.ofNullable(testRestTemplate.postForEntity(url(
         "user/create"), new HttpEntity<>(createUserCommand), Long.class)
     );
