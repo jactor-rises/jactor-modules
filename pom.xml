@@ -95,6 +95,12 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- kotlin -->
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
+    </dependency>
+
     <!-- test -->
     <dependency>
       <groupId>org.assertj</groupId>

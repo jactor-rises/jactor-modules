@@ -5,8 +5,8 @@ import com.github.jactor.persistence.dto.PersonDto
 import com.github.jactor.persistence.dto.UserDto
 
 data class CreateUserCommand(
-        var username: String,
-        var surname: String,
+        var username: String = "",
+        var surname: String = "",
         var emailAddress: String? = null,
         var description: String? = null,
         var firstName: String? = null,
@@ -23,9 +23,9 @@ data class CreateUserCommand(
             null, null, null, null, null, null, null, null, null
     )
 
-    fun fetchPersonWithAddress(): PersonDto {
+    fun fetchPersonDto(): PersonDto {
         return PersonDto(null,
-                AddressDto(null, zipCode, addressLine1, addressLine2, addressLine3, city, coutnry),
+                fetchAddressDto(),
                 language,
                 firstName,
                 surname,
@@ -33,7 +33,11 @@ data class CreateUserCommand(
         )
     }
 
-    fun fetchUserDto(person: PersonDto): UserDto {
-        return UserDto(null, person, emailAddress, username)
+    private fun fetchAddressDto(): AddressDto? {
+        return if (zipCode == null) null else AddressDto(null, zipCode, addressLine1, addressLine2, addressLine3, city, coutnry)
+    }
+
+    fun fetchUserDto(): UserDto {
+        return UserDto(null, null, emailAddress, username)
     }
 }
