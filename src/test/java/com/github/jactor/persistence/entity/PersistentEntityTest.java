@@ -30,7 +30,7 @@ class PersistentEntityTest {
   @DisplayName("should be able to copy an address without the id")
   void shouldCopyAddress() {
     persistentEntityToTest = anAddress(
-        new AddressDto(null, 1001, "somewhere", "out", "there", "svg", "NO")
+        new AddressDto(null, "1001", "somewhere", "out", "there", "svg", "NO")
     );
     persistentEntityToTest.setId(1L);
 

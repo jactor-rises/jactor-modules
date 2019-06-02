@@ -31,6 +31,10 @@ public class PersistentDataEmbeddable implements PersistentData {
     timeOfModification = Now.asDateTime();
   }
 
+  PersistentDto asPersistentDto(Long id) {
+    return new PersistentDto(id, createdBy, timeOfCreation, modifiedBy, timeOfModification);
+  }
+
   @Override
   public String getCreatedBy() {
     return createdBy;

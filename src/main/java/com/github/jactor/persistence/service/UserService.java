@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.service;
 
+import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+  private final PersonService personService;
   private final UserRepository userRepository;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
+  public UserService(PersonService personService, UserRepository userRepository) {
+    this.personService = personService;
     this.userRepository = userRepository;
   }
 
@@ -33,6 +36,23 @@ public class UserService {
     userRepository.save(userEntity);
 
     return userEntity.asDto();
+  }
+
+  public Long create(CreateUserCommand createUserCommand) {
+    UserEntity userEntity = createNewFrom(createUserCommand);
+    userEntity = userRepository.save(userEntity);
+
+    return userEntity.getId();
+  }
+
+  private UserEntity createNewFrom(CreateUserCommand createUserCommand) {
+    var personDto = createUserCommand.fetchPersonDto();
+    var personEntity = personService.create(personDto);
+    var userEntity = new UserEntity(createUserCommand.fetchUserDto());
+
+    userEntity.setPersonEntity(personEntity);
+
+    return userEntity;
   }
 
   public List<String> findUsernamesOnActiveUsers() {
