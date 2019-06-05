@@ -141,7 +141,7 @@
       </exclusions>
     </dependency>
 
-    <!-- artifaxts that for some reson needs to be overridden from transient dependencies -->
+    <!-- artifaxts that for some reason needs to be overridden from transient dependencies -->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
