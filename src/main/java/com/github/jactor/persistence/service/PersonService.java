@@ -27,10 +27,7 @@ public class PersonService {
   }
 
   private Optional<PersonEntity> findExisting(PersonDto person) {
-    var possibleExisting = Optional.ofNullable(person.getId())
-        .map(personRepository::findById)
-        .orElse(Optional.empty());
-
-    return possibleExisting;
+    return Optional.ofNullable(person.getId())
+        .flatMap(personRepository::findById);
   }
 }
