@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.1.5.RELEASE</version>
+    <version>2.1.6.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -26,7 +26,6 @@
 
     <!-- dependencies -->
     <guava.version>28.0-jre</guava.version>
-    <jackson-databind.version>2.9.9</jackson-databind.version>
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
     <!-- build -->
@@ -146,11 +145,6 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>${guava.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson-databind.version}</version>
     </dependency>
   </dependencies>
 
