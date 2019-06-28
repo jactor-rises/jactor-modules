@@ -18,7 +18,7 @@
 
   <properties>
     <!-- dependencies -->
-    <webjars-bootstrap.version>4.0.0</webjars-bootstrap.version>
+    <webjars-bootstrap.version>4.3.1</webjars-bootstrap.version>
     <webjars-jquery.version>3.3.1</webjars-jquery.version>
 
     <!-- language -->
