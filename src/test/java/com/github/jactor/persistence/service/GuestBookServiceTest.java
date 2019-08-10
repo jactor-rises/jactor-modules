@@ -18,14 +18,15 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayName("A GuestBookService")
 class GuestBookServiceTest {
 
@@ -35,11 +36,6 @@ class GuestBookServiceTest {
   private GuestBookRepository guestBookRepositoryMock;
   @Mock
   private GuestBookEntryRepository guestBookEntryRepositoryMock;
-
-  @BeforeEach
-  void initMocking() {
-    MockitoAnnotations.initMocks(this);
-  }
 
   @Test
   @DisplayName("should map guest book to a dto")
