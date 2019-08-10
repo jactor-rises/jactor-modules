@@ -18,6 +18,7 @@
 
   <properties>
     <!-- dependencies -->
+    <mockito.version>3.0.0</mockito.version>
     <webjars-bootstrap.version>4.3.1</webjars-bootstrap.version>
     <webjars-jquery.version>3.3.1</webjars-jquery.version>
 
@@ -107,6 +108,11 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
     </dependency>
 
     <!-- artifaxcs that for some reason needs to be overridden from transient dependencies -->
