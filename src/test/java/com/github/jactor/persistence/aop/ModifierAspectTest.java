@@ -20,12 +20,13 @@ import com.github.jactor.persistence.dto.PersonDto;
 import com.github.jactor.persistence.dto.UserDto;
 import java.time.LocalDateTime;
 import org.aspectj.lang.JoinPoint;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayName("ModifierAspect")
 class ModifierAspectTest {
 
@@ -36,10 +37,6 @@ class ModifierAspectTest {
   @Mock
   private JoinPoint joinPointMock;
 
-  @BeforeEach
-  void setUpMocks() {
-    MockitoAnnotations.initMocks(this);
-  }
 
   @Test
   @DisplayName("should modify timestamp on address when used")
