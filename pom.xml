@@ -25,12 +25,12 @@
     <kotlin.version>1.3.41</kotlin.version>
 
     <!-- dependencies -->
+    <mockito.version>3.0.0</mockito.version>
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
     <!-- vulnerable dependencies overridden -->
     <guava.version>28.0-jre</guava.version>
     <jackson.databind.version>2.9.9.3</jackson.databind.version>
-    <mockito.version>3.0.0</mockito.version>
 
     <!-- build -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -147,6 +147,11 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
       <version>${mockito.version}</version>
     </dependency>
     <dependency>

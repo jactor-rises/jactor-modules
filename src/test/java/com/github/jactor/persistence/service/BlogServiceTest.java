@@ -19,14 +19,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayName("A BlogService")
 class BlogServiceTest {
 
@@ -38,11 +39,6 @@ class BlogServiceTest {
   private BlogEntryRepository blogEntryRepositoryMock;
   @Mock
   private UserService userServiceMock;
-
-  @BeforeEach
-  void initMocking() {
-    MockitoAnnotations.initMocks(this);
-  }
 
   @Test
   @DisplayName("should map blog to dto")
