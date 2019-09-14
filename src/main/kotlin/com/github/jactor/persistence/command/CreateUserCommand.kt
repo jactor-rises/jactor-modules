@@ -41,3 +41,7 @@ data class CreateUserCommand(
         return UserDto(null, null, emailAddress, username)
     }
 }
+
+data class CreateUserCommandResponse (
+        var userId: Long = -1
+)
