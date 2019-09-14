@@ -80,7 +80,7 @@ class UserControllerTest {
   void shouldNotGetById() {
     when(userServiceMock.find(1L)).thenReturn(Optional.empty());
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
@@ -93,7 +93,7 @@ class UserControllerTest {
   void shouldFindById() {
     when(userServiceMock.find(1L)).thenReturn(Optional.of(new UserDto()));
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
@@ -109,7 +109,7 @@ class UserControllerTest {
 
     when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(userDto);
 
-    var userRespnse = testRestTemplate.exchange(buildFullPath("/user/1"), HttpMethod.PUT, new HttpEntity<>(userDto), UserDto.class);
+    var userRespnse = testRestTemplate.exchange(buildFullPath("/user/id/1"), HttpMethod.PUT, new HttpEntity<>(userDto), UserDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
