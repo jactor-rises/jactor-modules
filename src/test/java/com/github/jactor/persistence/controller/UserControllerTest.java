@@ -83,7 +83,7 @@ class UserControllerTest {
     var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserDto.class);
 
     assertAll(
-        () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
+        () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NOT_FOUND),
         () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user").isNull()
     );
   }
@@ -133,6 +133,24 @@ class UserControllerTest {
     );
   }
 
+  @Test
+  @DisplayName("should add user id from url to payload when updating user")
+  void shouldAddUserIdFromPathWhenUpdatingUser() {
+    when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(new UserDto());
+
+    var userResponse = testRestTemplate.exchange(buildFullPath("/user/id/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
+
+    assertAll(
+        () -> assertThat(userResponse.getStatusCode()).as("status code").isEqualTo(HttpStatus.ACCEPTED),
+        () -> {
+          var userDto = new UserDto();
+          userDto.setId(101L);
+
+          verify(userServiceMock).saveOrUpdate(userDto);
+        }
+    );
+  }
+
   private String buildFullPath(String url) {
     return "http://localhost:" + port + contextPath + url;
   }
@@ -141,5 +159,4 @@ class UserControllerTest {
     return new ParameterizedTypeReference<>() {
     };
   }
-
 }
