@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.controller;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
+import com.github.jactor.persistence.command.CreateUserCommandResponse;
 import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.service.UserService;
 import java.util.List;
@@ -43,10 +44,10 @@ public class UserController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<Long> post(@RequestBody CreateUserCommand createUserCommand) {
+  public ResponseEntity<CreateUserCommandResponse> post(@RequestBody CreateUserCommand createUserCommand) {
     Long primaryKey = userServicey.create(createUserCommand);
 
-    return new ResponseEntity<>(primaryKey, HttpStatus.CREATED);
+    return new ResponseEntity<>(new CreateUserCommandResponse(primaryKey), HttpStatus.CREATED);
   }
 
   @PutMapping("/id/{userId}")

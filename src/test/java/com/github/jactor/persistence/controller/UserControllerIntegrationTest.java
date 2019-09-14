@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
+import com.github.jactor.persistence.command.CreateUserCommandResponse;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@DisplayName("An itegrated UserController")
+@DisplayName("An integrated UserController")
 @Transactional
 class UserControllerIntegrationTest {
 
@@ -30,17 +31,17 @@ class UserControllerIntegrationTest {
   @DisplayName("should create a new  user")
   void shouldCreateNewUser() {
     var createUserCommand = new CreateUserCommand("turbo", "Someone");
-    var createdUserRespnse = Optional.ofNullable(testRestTemplate.postForEntity(url(
-        "user/create"), new HttpEntity<>(createUserCommand), Long.class)
+    var createdUserResponse = Optional.ofNullable(testRestTemplate.postForEntity(
+        contextPath() + "/user/create", new HttpEntity<>(createUserCommand), CreateUserCommandResponse.class)
     );
 
-    assertThat(createdUserRespnse).hasValueSatisfying(response -> assertAll(
+    assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
         () -> assertThat(response.getStatusCode()).as("status").isEqualTo(HttpStatus.CREATED),
-        () -> assertThat(response.getBody()).as("primary key").isNotNull()
+        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUserId).as("primary key").isNotNull()
     ));
   }
 
-  private String url(String relativePath) {
-    return "http://localhost:" + port + "/jactor-persistence/" + relativePath;
+  private String contextPath() {
+    return "http://localhost:" + port + "/jactor-persistence";
   }
 }
