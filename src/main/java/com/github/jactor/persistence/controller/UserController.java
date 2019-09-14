@@ -35,7 +35,7 @@ public class UserController {
         .orElseGet(() -> ResponseEntity.noContent().build());
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/id/{id}")
   public ResponseEntity<UserDto> get(@PathVariable("id") Long id) {
     return userServicey.find(id)
         .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
@@ -49,7 +49,7 @@ public class UserController {
     return new ResponseEntity<>(primaryKey, HttpStatus.CREATED);
   }
 
-  @PutMapping("/{userId}")
+  @PutMapping("/id/{userId}")
   public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
     if (userDto.getId() == null || !userDto.getId().equals(userId)) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
