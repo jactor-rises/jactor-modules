@@ -28,7 +28,7 @@ public class SwaggerConfig {
   }
 
   private ApiKey apiKey() {
-    return new ApiKey("jactor-swagger", "Authorization", "header");
+    return new ApiKey("Bearer-token", "Authorization", "header");
   }
 
   private SecurityContext securityContext() {
