@@ -15,8 +15,8 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
     * run it with `mvn spring-boot:run` or run
      `com.github.jactor.persistence.JactorPersistence` as any other java-application
 * this application is documented with swagger. After startup, use links:
-    * http://localhost:1099/jactor-persistence/v2/api-docsto (json documentation)
-    * http://localhost:1099/jactor-persistence/swagger-ui.html (swagger ui)
+    * <http://localhost:1099/jactor-persistence/v2/api-docsto> (json documentation)
+    * <http://localhost:1099/jactor-persistence/swagger-ui.html> (swagger ui)
 
 ### Some technologies used ###
 
