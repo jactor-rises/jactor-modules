@@ -107,7 +107,7 @@ class UserControllerTest {
     UserDto userDto = new UserDto();
     userDto.setId(1L);
 
-    when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(userDto);
+    when(userServiceMock.update(any(UserDto.class))).thenReturn(userDto);
 
     var userRespnse = testRestTemplate.exchange(buildFullPath("/user/id/1"), HttpMethod.PUT, new HttpEntity<>(userDto), UserDto.class);
 
@@ -115,7 +115,7 @@ class UserControllerTest {
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
         () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user").isNotNull(),
         () -> assertThat(userRespnse.getBody()).extracting(UserDto::getId).as("user id").isEqualTo(1L),
-        () -> verify(userServiceMock).saveOrUpdate(any(UserDto.class))
+        () -> verify(userServiceMock).update(any(UserDto.class))
     );
   }
 
@@ -136,7 +136,7 @@ class UserControllerTest {
   @Test
   @DisplayName("should add user id from url to payload when updating user")
   void shouldAddUserIdFromPathWhenUpdatingUser() {
-    when(userServiceMock.saveOrUpdate(any(UserDto.class))).thenReturn(new UserDto());
+    when(userServiceMock.update(any(UserDto.class))).thenReturn(new UserDto());
 
     var userResponse = testRestTemplate.exchange(buildFullPath("/user/id/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
 
@@ -146,7 +146,7 @@ class UserControllerTest {
           var userDto = new UserDto();
           userDto.setId(101L);
 
-          verify(userServiceMock).saveOrUpdate(userDto);
+          verify(userServiceMock).update(userDto);
         }
     );
   }
