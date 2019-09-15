@@ -76,7 +76,7 @@ public class UserController {
   public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
     userDto.setId(userId);
 
-    var saved = userServicey.saveOrUpdate(userDto);
+    var saved = userServicey.update(userDto);
 
     return new ResponseEntity<>(saved, HttpStatus.ACCEPTED);
   }

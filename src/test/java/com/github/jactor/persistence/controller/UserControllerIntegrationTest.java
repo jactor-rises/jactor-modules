@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.command.CreateUserCommandResponse;
+import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.entity.UniqueUsername;
+import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,16 +32,35 @@ class UserControllerIntegrationTest {
   private int port;
 
   @Test
-  @DisplayName("should create a new  user")
+  @DisplayName("should create a new user")
   void shouldCreateNewUser() {
-    var createUserCommand = new CreateUserCommand("turbo", "Someone");
+    var createUserCommand = new CreateUserCommand(UniqueUsername.generate("turbo"), "Someone");
     var createdUserResponse = Optional.ofNullable(testRestTemplate.postForEntity(
         contextPath() + "/user/create", new HttpEntity<>(createUserCommand), CreateUserCommandResponse.class)
     );
 
     assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
         () -> assertThat(response.getStatusCode()).as("status").isEqualTo(HttpStatus.CREATED),
-        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUserId).as("primary key").isNotNull()
+        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUser).as("response.user").isNotNull(),
+        () -> assertThat(Objects.requireNonNull(response.getBody()).getUser()).extracting(UserDto::getId).as("userDto.id").isNotNull()
+    ));
+  }
+
+  @Test
+  @DisplayName("should create a new user with an email address")
+  void shouldCreateNewUserWithAnEmailAddress() {
+    var createUserCommand = new CreateUserCommand(UniqueUsername.generate("turbo"), "Someone");
+    createUserCommand.setEmailAddress("somewhere@somehow.com");
+
+    var createdUserResponse = Optional.ofNullable(testRestTemplate.postForEntity(
+        contextPath() + "/user/create", new HttpEntity<>(createUserCommand), CreateUserCommandResponse.class)
+    );
+
+    assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
+        () -> assertThat(response.getStatusCode()).as("status").isEqualTo(HttpStatus.CREATED),
+        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUser).as("response.user").isNotNull(),
+        () -> assertThat(Objects.requireNonNull(response.getBody()).getUser()).extracting(UserDto::getEmailAddress)
+            .as("userDto.emailAddress").isEqualTo("somewhere@somehow.com")
     ));
   }
 
