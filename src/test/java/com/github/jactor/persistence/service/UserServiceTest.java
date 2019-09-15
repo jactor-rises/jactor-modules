@@ -88,13 +88,14 @@ class UserServiceTest {
   }
 
   @Test
-  @DisplayName("should save UserDto as UserEntity")
+  @DisplayName("should update a UserDto with an UserEntity")
   void shouldSavedUserDtoAsUserEntity() {
     var userDto = new UserDto();
+    userDto.setId(1L);
     userDto.setUsername("marley");
     userDto.setPersistentDto(new PersistentDto());
 
-    userServiceToTest.saveOrUpdate(userDto);
+    userServiceToTest.update(userDto);
 
     var argCaptor = ArgumentCaptor.forClass(UserEntity.class);
     verify(userRepositoryMock).save(argCaptor.capture());
@@ -107,26 +108,29 @@ class UserServiceTest {
   @DisplayName("should create and save person for the user")
   void shouldCreateAndSavePersonForTheUser() {
     var createUserCommand = new CreateUserCommand("jactor", "Jacobsen");
-    var userEntityMock = mockUserEntityWithId101();
+    var userDto = new UserDto();
+    var userEntityMock = mockUserEntityWith(userDto);
 
     when(userRepositoryMock.save(any())).thenReturn(userEntityMock);
     when(personRepository.save(any())).thenReturn(new PersonEntity(new PersonDto()));
 
-    var userId = userServiceToTest.create(createUserCommand);
-
-    ArgumentCaptor<PersonEntity> personCaptor = ArgumentCaptor.forClass(PersonEntity.class);
-    verify(personRepository).save(personCaptor.capture());
+    var user = userServiceToTest.create(createUserCommand);
 
     assertAll(
-        () -> assertThat(personCaptor.getValue()).as("person to save").isNotNull(),
-        () -> assertThat(userId).as("user id").isEqualTo(101)
+        () -> assertThat(user).as("user").isEqualTo(userDto),
+        () -> {
+          var personCaptor = ArgumentCaptor.forClass(PersonEntity.class);
+          verify(personRepository).save(personCaptor.capture());
+
+          assertThat(personCaptor.getValue()).as("person to save").isNotNull();
+        }
     );
   }
 
-  private UserEntity mockUserEntityWithId101() {
-    UserEntity userEntityMock = mock(UserEntity.class);
+  private UserEntity mockUserEntityWith(UserDto userDto) {
+    var userEntityMock = mock(UserEntity.class);
 
-    when(userEntityMock.getId()).thenReturn(101L);
+    when(userEntityMock.asDto()).thenReturn(userDto);
 
     return userEntityMock;
   }

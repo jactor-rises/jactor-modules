@@ -173,7 +173,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     return firstName;
   }
 
-  public String getSurname() {
+  private String getSurname() {
     return surname;
   }
 
