@@ -6,6 +6,7 @@ import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
 import com.github.jactor.persistence.repository.UserRepository;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +32,20 @@ public class UserService {
     return userRepository.findById(id).map(UserEntity::asDto);
   }
 
-  public UserDto saveOrUpdate(UserDto userDto) {
+  public UserDto update(UserDto userDto) {
+    Objects.requireNonNull(userDto.getId());
+
     UserEntity userEntity = new UserEntity(userDto);
     userRepository.save(userEntity);
 
     return userEntity.asDto();
   }
 
-  public Long create(CreateUserCommand createUserCommand) {
+  public UserDto create(CreateUserCommand createUserCommand) {
     UserEntity userEntity = createNewFrom(createUserCommand);
     userEntity = userRepository.save(userEntity);
 
-    return userEntity.getId();
+    return userEntity.asDto();
   }
 
   private UserEntity createNewFrom(CreateUserCommand createUserCommand) {

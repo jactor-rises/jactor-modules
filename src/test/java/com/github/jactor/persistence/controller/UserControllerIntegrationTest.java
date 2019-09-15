@@ -41,7 +41,8 @@ class UserControllerIntegrationTest {
 
     assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
         () -> assertThat(response.getStatusCode()).as("status").isEqualTo(HttpStatus.CREATED),
-        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUserId).as("primary key").isNotNull()
+        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUser).as("response.user").isNotNull(),
+        () -> assertThat(Objects.requireNonNull(response.getBody()).getUser()).extracting(UserDto::getId).as("userDto.id").isNotNull()
     ));
   }
 
@@ -57,13 +58,9 @@ class UserControllerIntegrationTest {
 
     assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
         () -> assertThat(response.getStatusCode()).as("status").isEqualTo(HttpStatus.CREATED),
-        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUserId).as("primary key").isNotNull(),
-        () -> {
-          var userId = Objects.requireNonNull(response.getBody()).getUserId();
-          var userDtoEntity = testRestTemplate.exchange(contextPath() + "/user/id/" + userId, HttpMethod.GET, null, UserDto.class);
-
-          assertThat(userDtoEntity.getBody()).extracting(UserDto::getEmailAddress).as("userDto.emailAddress").isEqualTo("somewhere@somehow.com");
-        }
+        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUser).as("response.user").isNotNull(),
+        () -> assertThat(Objects.requireNonNull(response.getBody()).getUser()).extracting(UserDto::getEmailAddress)
+            .as("userDto.emailAddress").isEqualTo("somewhere@somehow.com")
     ));
   }
 
