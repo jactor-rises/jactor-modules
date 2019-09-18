@@ -29,7 +29,8 @@
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
     <!-- vulnerable dependencies overridden -->
-    <guava.version>28.0-jre</guava.version>
+    <jackson.version>2.10.0.pr3</jackson.version>
+    <guava.version>28.1-jre</guava.version>
 
     <!-- build -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -56,22 +57,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-aop</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
