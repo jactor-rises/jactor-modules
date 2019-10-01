@@ -17,7 +17,7 @@ on:
       - master
 
 jobs:
-  ci:
+  ci-maven:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,4 +27,4 @@ jobs:
       - name: init
         uses: actions/checkout@v1
       - name: build & test with maven
-        uses: ./github/actions/ci.yaml
+        uses: ./github/actions/ci-maven.yaml
