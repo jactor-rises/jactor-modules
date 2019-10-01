@@ -1,0 +1,33 @@
+name: Java CI
+
+on: [push]
+
+jobs:
+  on:
+    push:
+      branches:
+        - '*'
+    pull-request:
+      branches:
+        - master
+
+  ci:
+    name: continious integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: init
+        uses: actions/checkout@v1
+        run: echo ${env}
+      - name: build & test with maven
+        uses: docker://maven:3.6.2-jdk-12
+        run: docker run -it -rm --name jactor-persistence -v $"{GITHUB_WORKSPACE}/jactor-persistence":/usr/src/maven maven:3.6.2-jdk-12 mvn package
+
+#
+#  integration:
+#    name: integration tests
+#    needs: ci
+#    runs-on: ubuntu-latest
+#    on:
+#      schedule:
+#        - cron: '* 5 * * *'
