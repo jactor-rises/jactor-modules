@@ -28,5 +28,5 @@ jobs:
       - name: build & test with maven
         uses: ./github/actions/
         with:
-          workpath=${{ GITHUB_WORKSPACE }}/jactor-persistence
+          workpath=${GITHUB_WORKSPACE}/jactor-persistence
           artifact=jactor-persistence
