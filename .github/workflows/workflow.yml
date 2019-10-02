@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: debug
-        run: echo ${{ env }}
+        run: env
       - name: init
         uses: actions/checkout@v1
       - name: build & test with maven
