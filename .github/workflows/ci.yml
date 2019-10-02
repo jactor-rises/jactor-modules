@@ -1,0 +1,32 @@
+#  TODO: scheduled integration test workflow
+#  integration:
+#    name: integration tests
+#    needs: ci
+#    runs-on: ubuntu-latest
+#    on:
+#      schedule:
+#        - cron: '* 5 * * *'
+
+name: continious integration
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  ci-maven:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: debug
+        run: env
+      - name: init
+        uses: actions/checkout@v1
+      - name: build & test with maven
+        uses: ./github/actions/
+        with:
+          workpath: '${GITHUB_WORKSPACE}/jactor-persistence'
+          artifact: 'jactor-persistence'
