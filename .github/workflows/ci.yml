@@ -26,7 +26,7 @@ jobs:
       - name: init
         uses: actions/checkout@v1
       - name: build & test with maven
-        uses: ./github/actions/ci
+        uses: ./github/actions/ci-maven
         with:
           workpath: '${GITHUB_WORKSPACE}/jactor-persistence'
           artifact: 'jactor-persistence'
