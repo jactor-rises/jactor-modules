@@ -24,7 +24,7 @@ jobs:
       - name: init
         uses: actions/checkout@v1
       - name: debug
-        runs: env
+        run: env
       - name: build & test with maven
         env:
           ARTIFACT: 'jactor-persistence'
