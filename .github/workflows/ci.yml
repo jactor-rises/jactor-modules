@@ -11,7 +11,7 @@ name: continious integration
 on:
   push:
     branches:
-      - '*'
+      - '!master'
   pull_request:
     branches:
       - master
@@ -21,12 +21,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: debug
-        run: env
       - name: init
         uses: actions/checkout@v1
+      - name: debug
+        run: env
       - name: build & test with maven
-        uses: ./github/actions/
-        with:
-          workpath: '${GITHUB_WORKSPACE}/jactor-persistence'
-          artifact: 'jactor-persistence'
+        env:
+          ARTIFACT: 'jactor-persistence'
+          IMAGE: 'maven:3.6.2-jdk-12'
+        run: |
+          docker run --rm --name "$ARTIFACT" -v "$PWD":/usr/src/maven -w /usr/src/maven "$IMAGE" mvn -B package
