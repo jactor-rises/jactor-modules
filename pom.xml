@@ -25,7 +25,7 @@
     <kotlin.version>1.3.50</kotlin.version>
 
     <!-- dependencies -->
-    <mockito.version>3.0.0</mockito.version>
+    <mockito.version>3.1.0</mockito.version>
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
     <!-- vulnerable dependencies overridden -->
