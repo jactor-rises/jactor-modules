@@ -28,6 +28,6 @@ jobs:
       - name: build & test with maven
         env:
           ARTIFACT: 'jactor-persistence'
-          IMAGE: 'maven:3.6.2-jdk-12'
+          IMAGE: 'maven:3.6.2-jdk-13'
         run: |
           docker run --rm --name "$ARTIFACT" -v "$PWD":/usr/src/maven -w /usr/src/maven "$IMAGE" mvn -B package
