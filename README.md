@@ -21,7 +21,7 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
 
 ### Some technologies used ###
 
-* [spring-boot 2.1.x](https://spring.io/projects/spring-boot)
+* [spring-boot 2.2.x](https://spring.io/projects/spring-boot)
     * with spring-data-jpa
 * [h2](http://h2database.com)
 * [junit 5.x](https://junit.org/junit5/)
