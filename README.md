@@ -11,14 +11,39 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
 
 ### Set up ###
 
-* a spring-boot 2 application is created when building (`mvn install`)
-    * is using h2 (in-memory database)
-    * run it with `mvn spring-boot:run` or run
-     `com.github.jactor.persistence.JactorPersistence` as any other java-application
+* a spring-boot 2 application
+    * build with [maven](https://maven.apache.org).
+    * is using [h2](http://h2database.com) (in-memory database)
+    * run it with spring-boot or as any other java-application
 * this application is documented with swagger. After startup, use links:
     * <http://localhost:1099/jactor-persistence/v2/api-docsto> (json documentation)
     * <http://localhost:1099/jactor-persistence/swagger-ui.html> (swagger ui)
 
+### Build ###
+
+This is application is build with with [maven](https://maven.apache.org).
+
+From the root of the source code:
+```
+mvn clean install
+```
+### Run ###
+All commands are being executed from the root of the source code.
+
+Run it with [maven](https://maven.apache.org):
+```
+mvn spring-boot:run
+```
+
+After a valid build one can execute the generated jar file as plain java:
+```
+java -jar target/jactor-persistence-<version>-SNAPSHOT-app.jar
+```
+or build and run an image with [docker](https://www.docker.com):
+```
+docker build -t jactor-persistence .
+docker run -p 1099:1099 jactor-persistence
+```
 ### Some technologies used ###
 
 * [spring-boot 2.2.x](https://spring.io/projects/spring-boot)
