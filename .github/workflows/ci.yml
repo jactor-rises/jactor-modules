@@ -11,7 +11,7 @@ name: continious integration
 on:
   push:
     branches:
-      - '!master'
+      - '**'
   pull_request:
     branches:
       - master
@@ -25,9 +25,19 @@ jobs:
         uses: actions/checkout@v1
       - name: debug
         run: env
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: build & test with maven
         env:
           ARTIFACT: 'jactor-web'
           IMAGE: 'maven:3.6.2-jdk-13'
+          M2_REPO: '.m2/repository'
         run: |
-          docker run --rm --name "$ARTIFACT" -v "$PWD":/usr/src/maven -w /usr/src/maven "$IMAGE" mvn -B package
+          docker run --rm --name "$ARTIFACT" \
+            -v "$HOME/$M2_REPO":/root/.m2 \
+            -v "$PWD":/usr/src/maven \
+            -w /usr/src/maven "$IMAGE" mvn -B install
