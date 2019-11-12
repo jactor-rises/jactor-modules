@@ -11,7 +11,7 @@ name: continious integration
 on:
   push:
     branches:
-      - '!master'
+      - '**'
   pull_request:
     branches:
       - master
