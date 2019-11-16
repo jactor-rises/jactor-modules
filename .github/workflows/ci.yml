@@ -82,7 +82,7 @@ jobs:
       - name: commit new version
         uses: EndBug/add-and-commit@v2.1.0
         with:
-          author_name: ${{GITHUB_ACTOR}}
+          author_name: jactor-rises
           author_email: tor.egil.jacobsen@gmail.com
           message: "Bumped version after release by ${GITHUB_ACTOR}"
           path: "."
