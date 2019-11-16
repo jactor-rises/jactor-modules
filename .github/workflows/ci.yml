@@ -74,13 +74,13 @@ jobs:
               -v "$HOME/.m2":/root/.m2 \
               -v "$PWD":/usr/src/maven \
               -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
-            ${{BUMPED_VERSION}}="$(cat pom.xml | grep version | grep -e SNAPSHOT | sed 's:version::g' | sed 's:[< />]::g')"
+            echo "$(cat pom.xml | grep version | grep -e SNAPSHOT | sed 's:version::g' | sed 's:[< />]::g')"
       - name: commit new version
         uses: EndBug/add-and-commit@v2.1.0
         with:
           author_name: "${{GITHUB_ACTOR}}"
           author_email: no.reply@github.navikt.com
-          message: "Bumped version (${{BUMPED_VERSION}}) after release by ${{GITHUB_ACTOR}}"
+          message: "Bumped version after release by ${{GITHUB_ACTOR}}"
           path: "."
           pattern: "pom.xml"
           force: false
