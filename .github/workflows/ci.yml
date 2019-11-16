@@ -71,14 +71,14 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-#      - name: bump patch version on source code
-#          run: |
-#            docker run --rm --name "$ARTIFACT-bump-version" \
-#              -v "$HOME/.m2":/root/.m2 \
-#              -v "$PWD":/usr/src/maven \
-#              -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
-#            cat pom.xml | grep version | grep SNAPSHOT | \
-#              sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
+      - name: bump patch version on source
+        run: |
+          docker run --rm --name "$ARTIFACT-bump" \
+            -v "$HOME/.m2":/root/.m2 \
+            -v "$PWD":/usr/src/maven \
+            -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
+            cat pom.xml | grep version | grep SNAPSHOT | \
+              sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
 #      - name: commit new version
 #        uses: EndBug/add-and-commit@v2.1.0
 #        with:
