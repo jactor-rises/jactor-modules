@@ -54,7 +54,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
-    #if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bump patch version') == false
+#    if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
     if: startsWith(github.event.commits[0].message, 'Bumped version after release') == false
 
     env:
@@ -82,7 +82,7 @@ jobs:
       - name: commit new version
         uses: EndBug/add-and-commit@v2.1.0
         with:
-          author_name: jactor-rises
+          author_name: Tor Egil Jacobsen
           author_email: tor.egil.jacobsen@gmail.com
           message: "Bumped version after release"
           path: "."
