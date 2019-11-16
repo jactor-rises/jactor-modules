@@ -79,14 +79,14 @@ jobs:
             -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
             cat pom.xml | grep version | grep SNAPSHOT | \
               sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
-#      - name: commit new version
-#        uses: EndBug/add-and-commit@v2.1.0
-#        with:
-#          author_name: "${{GITHUB_ACTOR}}"
-#          author_email: no.reply@github.navikt.com
-#          message: "Bumped version after release by ${{GITHUB_ACTOR}}"
-#          path: "."
-#          pattern: "pom.xml"
-#          force: false
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: commit new version
+        uses: EndBug/add-and-commit@v2.1.0
+        with:
+          author_name: "${{GITHUB_ACTOR}}"
+          author_email: no.reply@github.navikt.com
+          message: "Bumped version after release by ${{GITHUB_ACTOR}}"
+          path: "."
+          pattern: "pom.xml"
+          force: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
