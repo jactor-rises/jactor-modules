@@ -37,10 +37,10 @@ jobs:
             -v "$HOME/.m2":/root/.m2 \
             -v "$PWD":/usr/src/maven \
             -w /usr/src/maven "$IMAGE" mvn -B install | tee dependency.tree
-          export NUM_OF_SNAPSHOT_DEPENDENCIES="$(cat dependency.tree | grep - | grep -v :test | grep -v $ARTIFACT | grep -c SNAPSHOT)"
-          if [ ! $NUM_OF_SNAPSHOT_DEPENDENCIES==0 ]
+          export COUNT="$(cat dependency.tree | grep - | grep -v :test | grep -v $ARTIFACT | grep -c SNAPSHOT)"
+          if [ ! $COUNT==0 ]
             then
-              >&2 echo "[ERROR] Found $NUM_OF_SNAPSHOT_DEPENDENCIES in $ARTFIFACT"
+              >&2 echo "[ERROR] Found $COUNT SNAPSHOT dependencies in $ARTFIFACT"
               exit 1;
           fi
       - name: build & test with maven
@@ -49,44 +49,44 @@ jobs:
             -v "$HOME/.m2":/root/.m2 \
             -v "$PWD":/usr/src/maven \
             -w /usr/src/maven "$IMAGE" mvn -B install
-
-  bump:
-    runs-on: ubuntu-latest
-    needs: build
-
-    #if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bump patch version') == false
-    if: startsWith(github.event.commits[0].message, 'Bump patch version') == false
-
-    env:
-      ARTIFACT: 'jactor-persistence'
-      IMAGE: 'maven:3.6.2-jdk-12'
-      M2_REPO: '.m2/repository'
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: cache maven dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: bump patch version on source code
-          run: |
-            docker run --rm --name "$ARTIFACT-bump-version" \
-              -v "$HOME/.m2":/root/.m2 \
-              -v "$PWD":/usr/src/maven \
-              -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
-            cat pom.xml | grep version | grep SNAPSHOT | \
-              sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
-      - name: commit new version
-        uses: EndBug/add-and-commit@v2.1.0
-        with:
-          author_name: "${{GITHUB_ACTOR}}"
-          author_email: no.reply@github.navikt.com
-          message: "Bumped version after release by ${{GITHUB_ACTOR}}"
-          path: "."
-          pattern: "pom.xml"
-          force: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#  bump:
+#    needs: build
+#    runs-on: ubuntu-latest
+#
+#    #if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bump patch version') == false
+#    if: startsWith(github.event.commits[0].message, 'Bumped version after release') == false
+#
+#    env:
+#      ARTIFACT: 'jactor-persistence'
+#      IMAGE: 'maven:3.6.2-jdk-12'
+#      M2_REPO: '.m2/repository'
+#
+#    steps:
+#      - uses: actions/checkout@v1
+#      - name: cache maven dependencies
+#        uses: actions/cache@v1
+#        with:
+#          path: ~/.m2/repository
+#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+#          restore-keys: |
+#            ${{ runner.os }}-maven-
+#      - name: bump patch version on source code
+#          run: |
+#            docker run --rm --name "$ARTIFACT-bump-version" \
+#              -v "$HOME/.m2":/root/.m2 \
+#              -v "$PWD":/usr/src/maven \
+#              -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
+#            cat pom.xml | grep version | grep SNAPSHOT | \
+#              sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
+#      - name: commit new version
+#        uses: EndBug/add-and-commit@v2.1.0
+#        with:
+#          author_name: "${{GITHUB_ACTOR}}"
+#          author_email: no.reply@github.navikt.com
+#          message: "Bumped version after release by ${{GITHUB_ACTOR}}"
+#          path: "."
+#          pattern: "pom.xml"
+#          force: false
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
