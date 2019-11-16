@@ -49,29 +49,9 @@ jobs:
             -v "$HOME/.m2":/root/.m2 \
             -v "$PWD":/usr/src/maven \
             -w /usr/src/maven "$IMAGE" mvn -B install
-
-  bump:
-    needs: build
-    runs-on: ubuntu-latest
-
-#    if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
-    if: startsWith(github.event.commits[0].message, 'Bumped version after release') == false
-
-    env:
-      ARTIFACT: 'jactor-persistence'
-      IMAGE: 'maven:3.6.2-jdk-13'
-      M2_REPO: '.m2/repository'
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: cache maven dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
       - name: bump patch version on source
+#        if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
+        if: startsWith(github.event.commits[0].message, 'Bumped version after release') == false
         run: |
           docker run --rm --name "$ARTIFACT-bump" \
             -v "$HOME/.m2":/root/.m2 \
@@ -80,6 +60,8 @@ jobs:
             cat pom.xml | grep version | grep SNAPSHOT | \
               sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
       - name: commit new version
+#        if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
+        if:  startsWith(github.event.commits[0].message, 'Bumped version after release') == false
         uses: EndBug/add-and-commit@v2.1.0
         with:
           author_name: Tor Egil Jacobsen
