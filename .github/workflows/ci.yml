@@ -84,7 +84,7 @@ jobs:
         with:
           author_name: jactor-rises
           author_email: tor.egil.jacobsen@gmail.com
-          message: "Bumped version after release by ${GITHUB_ACTOR}"
+          message: "Bumped version after release"
           path: "."
           pattern: "pom.xml"
           force: false
