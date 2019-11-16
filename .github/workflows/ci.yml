@@ -1,43 +1,69 @@
-#  TODO: scheduled integration test workflow
-#  integration:
-#    name: integration tests
-#    needs: ci
-#    runs-on: ubuntu-latest
-#    on:
-#      schedule:
-#        - cron: '* 5 * * *'
-
 name: continious integration
 on:
   push:
     branches:
       - '**'
-  pull_request:
-    branches:
-      - master
 
 jobs:
-  ci-maven:
+
+  build:
     runs-on: ubuntu-latest
+
+    env:
+      ARTIFACT: 'jactor-persistence'
+      IMAGE: 'maven:3.6.2-jdk-13'
+      M2_REPO: '.m2/repository'
 
     steps:
       - name: init
         uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       - name: debug
         run: env
-      - uses: actions/cache@v1
+      - name: cache maven dependencies
+        uses: actions/cache@v1
         with:
-          path: ~/.m2/repository
+          path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: build & test with maven
-        env:
-          ARTIFACT: 'jactor-persistence'
-          IMAGE: 'maven:3.6.2-jdk-13'
-          M2_REPO: '.m2/repository'
+      - name: verify that no dependencies is of type SNAPSHOT
         run: |
-          docker run --rm --name "$ARTIFACT" \
-            -v "$HOME/$M2_REPO":/root/.m2 \
+          docker run --rm --name "$ARTIFACT-dependencies" \
+            -v "$HOME/.m2":/root/.m2 \
+            -v "$PWD":/usr/src/maven \
+            -w /usr/src/maven "$IMAGE" mvn -B dependency:tree | tee dependency.tree
+          export COUNT="$(cat dependency.tree | grep - | grep -v :test | grep -v $ARTIFACT | grep -c SNAPSHOT)"
+          if [ ! $COUNT==0 ]
+            then
+              >&2 echo "[ERROR] Found $COUNT SNAPSHOT dependencies in $ARTFIFACT"
+              exit 1;
+          fi
+      - name: build & test with maven
+        run: |
+          docker run --rm --name "$ARTIFACT-build" \
+            -v "$HOME/.m2":/root/.m2 \
             -v "$PWD":/usr/src/maven \
             -w /usr/src/maven "$IMAGE" mvn -B install
+      - name: bump patch version on source
+        if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
+        run: |
+          docker run --rm --name "$ARTIFACT-bump" \
+            -v "$HOME/.m2":/root/.m2 \
+            -v "$PWD":/usr/src/maven \
+            -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
+            cat pom.xml | grep version | grep SNAPSHOT | \
+              sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
+      - name: commit new version
+        if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
+        uses: EndBug/add-and-commit@v2.1.0
+        with:
+          author_name: Tor Egil Jacobsen
+          author_email: tor.egil.jacobsen@gmail.com
+          message: "Bumped version after release"
+          path: "."
+          pattern: "pom.xml"
+          force: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
