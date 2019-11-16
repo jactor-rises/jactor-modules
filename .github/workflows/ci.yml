@@ -77,7 +77,8 @@ jobs:
               -v "$HOME/.m2":/root/.m2 \
               -v "$PWD":/usr/src/maven \
               -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
-            echo "$(cat pom.xml | grep version | grep -e SNAPSHOT | sed 's:version::g' | sed 's:[< />]::g')"
+            cat pom.xml | grep version | grep SNAPSHOT | \
+              sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
       - name: commit new version
         uses: EndBug/add-and-commit@v2.1.0
         with:
