@@ -1,0 +1,32 @@
+name: check pull request
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ARTIFACT: 'jactor-persistence'
+      IMAGE: 'maven:3.6.2-jdk-13'
+      M2_REPO: '.m2/repository'
+
+    steps:
+      - name: init
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: debug
+        run: env
+      - name: cache maven dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: build & test with maven
+        run: |
+          docker run --rm --name "$ARTIFACT-build" \
+            -v "$HOME/.m2":/root/.m2 \
+            -v "$PWD":/usr/src/maven \
+            -w /usr/src/maven "$IMAGE" mvn -B install
