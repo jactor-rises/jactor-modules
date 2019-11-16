@@ -27,7 +27,7 @@ jobs:
       - name: cache maven dependencies
         uses: actions/cache@v1
         with:
-          path: ~/.m2/repository
+          path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
@@ -63,15 +63,14 @@ jobs:
       M2_REPO: '.m2/repository'
 
     steps:
-      - run: echo 'bumping high and low'
-#      - uses: actions/checkout@v1
-#      - name: cache maven dependencies
-#        uses: actions/cache@v1
-#        with:
-#          path: ~/.m2/repository
-#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: |
-#            ${{ runner.os }}-maven-
+      - uses: actions/checkout@v1
+      - name: cache maven dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 #      - name: bump patch version on source code
 #          run: |
 #            docker run --rm --name "$ARTIFACT-bump-version" \
