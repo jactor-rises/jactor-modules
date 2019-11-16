@@ -14,7 +14,7 @@ jobs:
 
     env:
       ARTIFACT: 'jactor-persistence'
-      IMAGE: 'maven:3.6.2-jdk-12'
+      IMAGE: 'maven:3.6.2-jdk-13'
       M2_REPO: '.m2/repository'
 
     steps:
@@ -59,7 +59,7 @@ jobs:
 #
 #    env:
 #      ARTIFACT: 'jactor-persistence'
-#      IMAGE: 'maven:3.6.2-jdk-12'
+#      IMAGE: 'maven:3.6.2-jdk-13'
 #      M2_REPO: '.m2/repository'
 #
 #    steps:
