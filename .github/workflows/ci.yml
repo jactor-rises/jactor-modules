@@ -36,7 +36,7 @@ jobs:
           docker run --rm --name "$ARTIFACT-dependencies" \
             -v "$HOME/.m2":/root/.m2 \
             -v "$PWD":/usr/src/maven \
-            -w /usr/src/maven "$IMAGE" mvn -B install | tee dependency.tree
+            -w /usr/src/maven "$IMAGE" mvn -B dependency:tree | tee dependency.tree
           export COUNT="$(cat dependency.tree | grep - | grep -v :test | grep -v $ARTIFACT | grep -c SNAPSHOT)"
           if [ ! $COUNT==0 ]
             then
