@@ -1,12 +1,3 @@
-#  TODO: scheduled integration test workflow
-#  integration:
-#    name: integration tests
-#    needs: ci
-#    runs-on: ubuntu-latest
-#    on:
-#      schedule:
-#        - cron: '* 5 * * *'
-
 name: continious integration
 on:
   push:
@@ -15,29 +6,83 @@ on:
   pull_request:
     branches:
       - master
+  with:
+    ARTIFACT: 'jactor-persistence'
+    IMAGE: 'maven:3.6.2-jdk-12'
+    M2_REPO: '.m2/repository'
 
 jobs:
-  ci-maven:
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: init
         uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
       - name: debug
         run: env
-      - uses: actions/cache@v1
+      - name: cache maven dependencies
+        uses: actions/cache@v1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: build & test with maven
-        env:
-          ARTIFACT: 'jactor-persistence'
-          IMAGE: 'maven:3.6.2-jdk-13'
-          M2_REPO: '.m2/repository'
+      - name: verify that no dependencies is of type SNAPSHOT
         run: |
-          docker run --rm --name "$ARTIFACT" \
-            -v "$HOME/$M2_REPO":/root/.m2 \
+          docker run --rm --name "$ARTIFACT-dependencies" \
+            -v "$HOME/.m2":/root/.m2 \
+            -v "$PWD":/usr/src/maven \
+            -w /usr/src/maven "$IMAGE" mvn -B install | tee dependency.tree
+          export NUM_OF_SNAPSHOT_DEPENDENCIES="$(cat dependency.tree | grep - | grep -v :test | grep -v $ARTIFACT | grep -c SNAPSHOT)"
+          if [ ! $NUM_OF_SNAPSHOT_DEPENDENCIES==0 ]
+            then
+              >&2 echo "[ERROR] Found $NUM_OF_SNAPSHOT_DEPENDENCIES in $ARTFIFACT"
+              exit 1;
+          fi
+      - name: build & test with maven
+        run: |
+          docker run --rm --name "$ARTIFACT-build" \
+            -v "$HOME/.m2":/root/.m2 \
             -v "$PWD":/usr/src/maven \
             -w /usr/src/maven "$IMAGE" mvn -B install
+
+  bump:
+    runs-on: ubuntu-latest
+    needs: build
+
+    #if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bump patch version') == false
+    if: startsWith(github.event.commits[0].message, 'Bump patch version') == false
+
+    env:
+      BUMPED_VERSION: "to be applied"
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: cache maven dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: bump patch version on source code
+          run: |
+            docker run --rm --name "$ARTIFACT-bump-version" \
+              -v "$HOME/.m2":/root/.m2 \
+              -v "$PWD":/usr/src/maven \
+              -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
+            ${{BUMPED_VERSION}}="$(cat pom.xml | grep version | grep -e SNAPSHOT | sed 's:version::g' | sed 's:[< />]::g')"
+      - name: commit new version
+        uses: EndBug/add-and-commit@v2.1.0
+        with:
+          author_name: "${{GITHUB_ACTOR}}"
+          author_email: no.reply@github.navikt.com
+          message: "Bumped version (${{BUMPED_VERSION}}) after release by ${{GITHUB_ACTOR}}"
+          path: "."
+          pattern: "pom.xml"
+          force: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
