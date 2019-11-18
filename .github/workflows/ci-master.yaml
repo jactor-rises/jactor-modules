@@ -1,24 +1,22 @@
-name: continious integration
+name: continious integration on master
 on:
   push:
     branches:
-      - '**'
+      - master
 
 jobs:
 
   build:
     runs-on: ubuntu-latest
 
-    env:
-      ARTIFACT: 'jactor-persistence'
-      IMAGE: 'maven:3.6.2-jdk-13'
-      M2_REPO: '.m2/repository'
-
     steps:
       - name: init
         uses: actions/checkout@v1
         with:
           fetch-depth: 1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12'
       - name: debug
         run: env
       - name: cache maven dependencies
@@ -30,10 +28,7 @@ jobs:
             ${{ runner.os }}-maven-
       - name: verify that no dependencies is of type SNAPSHOT
         run: |
-          docker run --rm --name "$ARTIFACT-dependencies" \
-            -v "$HOME/.m2":/root/.m2 \
-            -v "$PWD":/usr/src/maven \
-            -w /usr/src/maven "$IMAGE" mvn -B dependency:tree | tee dependency.tree
+          mvn -B dependency:tree | tee dependency.tree
           export COUNT="$(cat dependency.tree | grep -e '|' -e '+' | grep -c SNAPSHOT)"
           if [ $COUNT -eq 1 ]
             then
@@ -46,26 +41,19 @@ jobs:
           fi
       - name: build & test with maven
         run: |
-          docker run --rm --name "$ARTIFACT-build" \
-            -v "$HOME/.m2":/root/.m2 \
-            -v "$PWD":/usr/src/maven \
-            -w /usr/src/maven "$IMAGE" mvn -B install
+          mvn -B install
       - name: bump patch version on source
-        if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
         run: |
-          docker run --rm --name "$ARTIFACT-bump" \
-            -v "$HOME/.m2":/root/.m2 \
-            -v "$PWD":/usr/src/maven \
-            -w /usr/src/maven "$IMAGE" mvn -B release:update-versions
-            cat pom.xml | grep version | grep SNAPSHOT | \
-              sed 's:version::g' | sed 's:  :Bunped to new version :' | sed 's:[</>]::g'
+          mvn -B release:update-versions
+          cat pom.xml | grep version | grep SNAPSHOT | \
+            sed 's:version::g' | sed 's\  \Bunped to new version: \' | sed 's:[</>]::g' > commit-message
+          cat commit-message
       - name: commit new version
-        if: github.ref == 'refs/heads/master' && startsWith(github.event.commits[0].message, 'Bumped version after release') == false
         uses: EndBug/add-and-commit@v2.1.0
         with:
           author_name: Tor Egil Jacobsen
           author_email: tor.egil.jacobsen@gmail.com
-          message: "Bumped version after release"
+          message: "Bumped to new version"
           path: "."
           pattern: "pom.xml"
           force: false
