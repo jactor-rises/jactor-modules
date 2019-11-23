@@ -28,7 +28,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: verify that no dependencies is of type SNAPSHOT
-        uses: jactor-rises/actions/verify-dependencies@feature-no.snaps
+        uses: jactor-rises/actions/verify-dependencies@master
       - name: build & test with maven
         run: |
           mvn -B install
