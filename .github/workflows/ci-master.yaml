@@ -31,12 +31,8 @@ jobs:
       - name: build & test with maven
         run: |
           mvn -B install
-      - name: bump patch version on source
-        run: |
-          mvn -B release:update-versions
-          cat pom.xml | grep version | grep SNAPSHOT | \
-            sed 's:version::g' | sed 's\  \Bunped to new version: \' | sed 's:[</>]::g' > commit-message
-          cat commit-message
+      - name: prepare maven artifact for release
+        uses: jactor-rises/actions/prepare-mvn-release@master
       - name: commit new version
         uses: EndBug/add-and-commit@v2.1.0
         with:
