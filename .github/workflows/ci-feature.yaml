@@ -32,3 +32,5 @@ jobs:
       - name: build & test with maven
         run: |
           mvn -B install
+      - name: prepare maven artifact for releas
+        uses: jactor-rises/actions/prepare-mvn-release@feature-prepare-release
