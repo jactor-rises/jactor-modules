@@ -31,7 +31,3 @@ jobs:
         uses: jactor-rises/actions/verify-mvn-dependencies@master
       - name: build & test with maven
         run: mvn -B install
-      - name: prepare maven artifact for release
-        uses: jactor-rises/actions/prepare-mvn-release@feature-release-input
-        env:
-          TAG_FILE_NAME: .tag-artifact
