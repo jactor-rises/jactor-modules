@@ -29,8 +29,7 @@ jobs:
       - name: verify that maven artifact has no dependencies which is of type SNAPSHOT
         uses: jactor-rises/actions/verify-mvn-dependencies@master
       - name: build & test with maven
-        run: |
-          mvn -B install
+        run: mvn -B install
       - name: prepare maven artifact for release
         uses: jactor-rises/actions/prepare-mvn-release@master
       - name: commit new version
