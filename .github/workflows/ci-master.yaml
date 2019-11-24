@@ -29,10 +29,11 @@ jobs:
       - name: verify that maven artifact has no dependencies which is of type SNAPSHOT
         uses: jactor-rises/actions/verify-mvn-dependencies@master
       - name: build & test with maven
-        run: |
-          mvn -B install
+        run: mvn -B install
       - name: prepare maven artifact for release
         uses: jactor-rises/actions/prepare-mvn-release@master
+        env:
+          TAG_FILE_NAME: .tag-artifact
       - name: commit new version
         uses: EndBug/add-and-commit@v2.1.0
         with:
