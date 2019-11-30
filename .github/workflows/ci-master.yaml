@@ -26,7 +26,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: verify that maven artifact has no dependencies which is of type SNAPSHOT
+      - name: verify that maven artifact has no dependencies of type SNAPSHOT
         uses: jactor-rises/actions/verify-mvn-dependencies@master
       - name: build & test with maven
         run: mvn -B install
