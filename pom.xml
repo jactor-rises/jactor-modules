@@ -25,7 +25,6 @@
     <kotlin.version>1.3.60</kotlin.version>
 
     <!-- dependencies -->
-    <mockito.version>3.1.0</mockito.version>
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
     <!-- vulnerable dependencies overridden -->
@@ -133,12 +132,10 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>${mockito.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
