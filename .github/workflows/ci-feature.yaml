@@ -30,7 +30,7 @@ jobs:
       - name: verify that maven artifact has no dependencies of type SNAPSHOT
         uses: jactor-rises/actions/verify-mvn-dependencies@feature-io
       - name: prepare maven artifact for release
-        uses: jactor-rises/actions/release-prepare-with-maven@feature-io
+        uses: jactor-rises/actions/release-prepare-with-mvn@feature-io
         env:
           TAG_FILE_NAME: .tag-artifact
       - name: build & test with maven
