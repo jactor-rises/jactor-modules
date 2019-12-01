@@ -29,5 +29,13 @@ jobs:
             ${{ runner.os }}-maven-
       - name: verify that maven artifact has no dependencies of type SNAPSHOT
         uses: jactor-rises/actions/verify-mvn-dependencies@master
+      - name: prepare maven artifact for release
+        uses: jactor-rises/actions/release-prepare-with-mvn@feature-tag
+        env:
+          TAG_FILE_NAME: .tag-artifact
+      - name: tag artifact for release
+        uses: jactor-rises/actions/release-git-tag@feature-tag
+        env:
+          TAG_FILE_NAME: .tag-artifact
       - name: build & test with maven
         run: mvn -B install
