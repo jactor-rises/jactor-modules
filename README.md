@@ -1,15 +1,15 @@
-# jactor-persistence #
-
-### What is this repository for? ###
+# jactor-persistence  ![](https://github.com/jactor-rises/jactor-persistence/workflows/continious%20integration%20on%20master/badge.svg)
+ 
+### What is this repository for?
 
 The main purpose is to learn about programming microservices (with REST and spring jpa).
 I also use github to get a deeper understanding of ci (github actions) and docker
 
 This project is a microservice dealing with persistence to an database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
-`com.github.jactor-rises` (formerly as part of the archived project `jactor-rises`)
+`com.github.jactor.percistence` (formerly as part of the archived project `jactor-rises`)
 
-### Set up ###
+### Set up
 
 * a spring-boot 2 application
     * build with [maven](https://maven.apache.org).
@@ -19,7 +19,7 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
     * <http://localhost:1099/jactor-persistence/v2/api-docsto> (json documentation)
     * <http://localhost:1099/jactor-persistence/swagger-ui.html> (swagger ui)
 
-### Build ###
+### Build
 
 This is application is build with with [maven](https://maven.apache.org).
 
@@ -27,7 +27,7 @@ From the root of the source code:
 ```
 mvn clean install
 ```
-### Run ###
+### Run
 All commands are being executed from the root of the source code.
 
 Run it with [maven](https://maven.apache.org):
@@ -44,7 +44,7 @@ or build and run an image with [docker](https://www.docker.com):
 docker build -t jactor-persistence .
 docker run -p 1099:1099 jactor-persistence
 ```
-### Some technologies used ###
+### Some technologies used
 
 * [spring-boot 2.2.x](https://spring.io/projects/spring-boot)
     * with spring-data-jpa
