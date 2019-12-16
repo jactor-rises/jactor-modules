@@ -1,4 +1,4 @@
-name: continious integration on master
+name: continious integration
 on:
   push:
     branches:
