@@ -11,12 +11,10 @@ jobs:
 
     steps:
       - name: init
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+        uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: '13'
+          java-version: 13
       - name: debug
         run: env
       - name: cache maven dependencies
@@ -31,17 +29,16 @@ jobs:
       - name: build & test with maven
         run: mvn -B install
       - name: prepare maven artifact for release
+        if: github.ref == 'refs/heads/master'
         uses: jactor-rises/actions/release-prepare-mvn-artifact@master
         env:
           TAG_FILE_NAME: .tag-artifact
       - name: commit new version
-        uses: EndBug/add-and-commit@v2.1.0
+        if: github.ref == 'refs/heads/master'
+        uses: EndBug/add-and-commit@v2.3.0
         with:
-          author_name: Tor Egil Jacobsen
-          author_email: tor.egil.jacobsen@gmail.com
           message: "Bumped to new version"
           path: "."
           pattern: "pom.xml"
-          force: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
