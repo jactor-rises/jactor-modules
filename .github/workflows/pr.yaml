@@ -1,8 +1,8 @@
-name: check pull request
+name: verify pull request
 on: [pull_request]
 
 jobs:
-  build-pull-request:
+  verify-pull-request:
     runs-on: ubuntu-latest
 
     steps:
