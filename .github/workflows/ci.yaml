@@ -28,7 +28,7 @@ jobs:
         run: mvn -B install
       - name: prepare maven artifact for release
         if: github.ref == 'refs/heads/master'
-        uses: jactor-rises/bidrag-actions/release-prepare-mvn-artifact@v2.0.1
+        uses: jactor-rises/bidrag-actions/release-prepare-mvn-pkg@v2.0.1
         env:
           TAG_FILE_NAME: .tag-artifact
       - name: commit new version
