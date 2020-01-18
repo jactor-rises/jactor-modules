@@ -27,9 +27,6 @@
     <!-- dependencies -->
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
-    <!-- vulnerable dependencies overridden -->
-    <guava.version>28.1-jre</guava.version>
-
     <!-- build -->
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
@@ -153,7 +150,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
+      <version>28.1-jre</version>
     </dependency>
   </dependencies>
 
