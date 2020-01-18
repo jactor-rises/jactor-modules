@@ -11,6 +11,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    name: Build and test with maven and publish created docker image
 
     steps:
       - uses: actions/checkout@v2
@@ -40,6 +41,7 @@ jobs:
   git:
     needs: build
     if: github.ref == 'refs/heads/master'
+    name: Modify git history
     runs-on: ubuntu-latest
 
     steps:
