@@ -20,10 +20,13 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-          ${{ runner.os }}-maven-
-      - run: env
-      - uses: jactor-rises/bidrag-actions/verify-mvn-dependencies@v2.0.1
-      - run: mvn -B install
+            ${{ runner.os }}-maven-
+      - name: Debug
+        run: env
+      - name: Verify that maven artifact has no dependencies of type SNAPSHOT
+        uses: jactor-rises/bidrag-actions/verify-mvn-dependencies@v2.0.1
+      - name: build & test with maven
+        run: mvn -B install
 
   git:
     needs: build
