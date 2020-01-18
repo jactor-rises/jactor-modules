@@ -26,14 +26,9 @@ jobs:
         uses: jactor-rises/bidrag-actions/verify-mvn-dependencies@v2.0.1
       - name: build & test with maven
         run: mvn -B install
-      - name: prepare maven artifact for release
+      - name: bump snapshot version
 #        if: github.ref == 'refs/heads/master'
-        uses: jactor-rises/bidrag-actions/release-prepare-mvn-pkg@v2.0.1
-        with:
-          release_version_file_name: .release-version
-          new_snapshot_version_file_name: .new-snapshot-version
-        env:
-          TAG_FILE_NAME: .tag-artifact
+        runs: mvn -B release:update-versions
       - name: commit new version
 #        if: github.ref == 'refs/heads/master'
         uses: jactor-rises/bidrag-actions/tag-and-commit@v2.0.1
