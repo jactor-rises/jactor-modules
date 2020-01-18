@@ -14,7 +14,7 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
 * a spring-boot 2 application
     * build with [maven](https://maven.apache.org).
     * is using [h2](http://h2database.com) (in-memory database)
-    * run it with spring-boot or as any other java-application
+    * run it with docker, spring-boot, or as any other java-application
 * this application is documented with swagger. After startup, use links:
     * <http://localhost:1099/jactor-persistence/v2/api-docsto> (json documentation)
     * <http://localhost:1099/jactor-persistence/swagger-ui.html> (swagger ui)
