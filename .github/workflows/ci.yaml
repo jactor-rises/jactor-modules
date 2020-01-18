@@ -4,6 +4,9 @@ on:
     branches:
       - '**'
 
+env:
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/bidrag-dokument:${{ github.sha }}
+
 jobs:
 
   build:
@@ -26,6 +29,20 @@ jobs:
         uses: jactor-rises/bidrag-actions/verify-mvn-dependencies@v2.0.1
       - name: build & test with maven
         run: mvn -B install
+      - name: Build and publish Docker image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          docker build --tag ${IMAGE} .
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker push ${IMAGE}
+
+  git:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
       - name: bump snapshot version
         if: github.ref == 'refs/heads/master'
         run: mvn -B release:update-versions
