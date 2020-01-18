@@ -28,7 +28,7 @@ jobs:
         run: mvn -B install
       - name: bump snapshot version
 #        if: github.ref == 'refs/heads/master'
-        runs: mvn -B release:update-versions
+        run: mvn -B release:update-versions
       - name: commit new version
 #        if: github.ref == 'refs/heads/master'
         uses: jactor-rises/bidrag-actions/tag-and-commit@v2.0.1
