@@ -1,18 +1,18 @@
-name: check pull request
+name: verify pull request
 on: [pull_request]
 
 jobs:
-  build-pull-request:
+  verify-pull-request:
     runs-on: ubuntu-latest
 
     steps:
       - name: init
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
         with:
-          fetch-depth: 1
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-java@v1
         with:
-          java-version: '13'
+          java-version: 13
       - name: debug
         run: env
       - name: cache maven dependencies
@@ -23,5 +23,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: build & test with maven
-        run: |
-          mvn -B install
+        run: mvn -B install
