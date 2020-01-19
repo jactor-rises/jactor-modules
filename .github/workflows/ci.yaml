@@ -36,10 +36,9 @@ jobs:
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
           IMAGE_WITH_SHORT_SHA=$(echo $IMAGE | sed "s/REPLACE_WITH_SHORT_SHA/$SHORT_SHA/")
-          echo "docker image: $IMAGE_WITH_SHORT_SHA"
-          docker build --tag "$IMAGE_WITH_SHORT_SHA" .
-          docker login docker.pkg.github.com -u "$GITHUB_REPOSITORY -p "$GITHUB_TOKEN"
-          docker push "$IMAGE_WITH_SHORT_SHA"
+          docker build --tag ${IMAGE_WITH_SHORT_SHA} .
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker push ${IMAGE_WITH_SHORT_SHA}
 
   git:
     needs: build
