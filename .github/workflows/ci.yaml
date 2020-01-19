@@ -5,7 +5,7 @@ on:
       - '**'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/bidrag-dokument:REPLACE_WITH_SHORT_SHA}
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/bidrag-dokument:REPLACE_WITH_SHORT_SHA
 
 jobs:
 
@@ -34,12 +34,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo $GITHUB_EVENT_PATH
           SHORT_SHA=$(git rev-parse --short HEAD)
-          IMAGE=$(echo $IMAGE | sed 's/$REPLACE_WITH_SHORT_SHA/$SHORT_SHA/')
-          docker build --tag ${IMAGE} .
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-          docker push ${IMAGE}
+          IMAGE_WITH_SHORT_SHA=$(echo $IMAGE | sed 's/REPLACE_WITH_SHORT_SHA/$SHORT_SHA/')
+          echo "docker image: $IMAGE_WITH_SHORT_SHA"
+          docker build --tag "$IMAGE_WITH_SHORT_SHA" .
+          docker login docker.pkg.github.com -u "$GITHUB_REPOSITORY -p "$GITHUB_TOKEN"
+          docker push "$IMAGE_WITH_SHORT_SHA"
 
   git:
     needs: build
