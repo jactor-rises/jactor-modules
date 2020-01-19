@@ -5,13 +5,13 @@ on:
       - '**'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/bidrag-dokument:${{ github.sha }}
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/bidrag-dokument:REPLACE_WITH_SHORT_SHA}
 
 jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: Build and test with maven and publish created docker image
+    name: Build and test with maven, then publish created docker image
 
     steps:
       - uses: actions/checkout@v2
@@ -34,6 +34,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo $GITHUB_EVENT_PATH
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          IMAGE=$(echo $IMAGE | sed 's/$REPLACE_WITH_SHORT_SHA/$SHORT_SHA/')
           docker build --tag ${IMAGE} .
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE}
