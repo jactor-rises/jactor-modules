@@ -5,7 +5,7 @@ on:
       - '**'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/bidrag-dokument:REPLACE_WITH_SHORT_SHA
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/jactor-persistence:REPLACE_WITH_SHORT_SHA
 
 jobs:
 
