@@ -53,7 +53,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - run: mvn -B release:update-versions
-      - run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed 's/-SNAPSHOT//' > .new-version
+      - run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout > .new-version
       - uses: jactor-rises/actions/git-commit@v4.0.3
         with:
           commit_message: "Bumped to new version: {}"
