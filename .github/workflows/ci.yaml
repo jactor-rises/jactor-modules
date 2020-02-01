@@ -60,4 +60,4 @@ jobs:
           commit_message_file: .new-version
           pattern: pom.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITH..UB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
