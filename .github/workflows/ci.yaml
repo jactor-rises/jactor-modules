@@ -42,12 +42,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: bump snapshot version
-        run: mvn -B release:update-versions
-      - name: commit new version
-        uses: jactor-rises/bidrag-actions/tag-and-commit@v2.0.1
+      - run: mvn -B release:update-versions
+      - run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout > .new-version
+      - uses: jactor-rises/actions/git-commit@v4.0.3
         with:
-          commit_message: "Bumped to new version"
-          pattern: "pom.xml"
+          commit_message: "Bumped to new version: {}"
+          commit_message_file: .new-version
+          pattern: pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
