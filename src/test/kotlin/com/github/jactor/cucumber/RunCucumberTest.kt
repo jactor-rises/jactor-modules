@@ -8,6 +8,5 @@ import org.junit.runner.RunWith
  * Runner class which looks for features files to test
  */
 @RunWith(Cucumber::class)
-@CucumberOptions(plugin = ["pretty"])
-class RunCucumberTest {
-}
+@CucumberOptions(plugin = ["pretty", "json:target/cucumber-report/cucumber.json"])
+class RunCucumberTest
