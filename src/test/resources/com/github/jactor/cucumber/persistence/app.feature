@@ -6,5 +6,5 @@ Egenskap: applikasjonen jactor-persistence
 
   Scenario: applikasjon skal være dokumentert av swagger
     Gitt kompletterende url '/swagger-ui.html#/'
-    Når jeg kaller en get operasjon
-    Så skal http kode være '200'
+    Når jeg ber om en response kode på en get request
+    Så skal statuskoden være '200'

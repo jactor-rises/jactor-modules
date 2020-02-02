@@ -1,13 +1,14 @@
 package com.github.jactor.cucumber.persistence
 
-import io.cucumber.java.PendingException
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
+import org.assertj.core.api.Assertions.assertThat
 
 class AppEgenskap {
     companion object {
         private lateinit var application: Application
+        private var status: Int? = null
     }
 
     @Gitt("http url {string}")
@@ -20,14 +21,14 @@ class AppEgenskap {
         application.completeUrl = url
     }
 
-    @Når("jeg kaller en get operasjon")
-    fun `jeg kaller en get operasjon`() {
-        throw PendingException()
+    @Når("jeg ber om en response kode på en get request")
+    fun `jeg ber om en response kode paa en get request`() {
+        status = application.hentResponseStatusForGet()
     }
 
-    @Så("skal http kode være {string}")
-    fun `skal http kode vaere`(httpCode: String) {
-        throw PendingException()
+    @Så("skal statuskoden være {string}")
+    fun `skal statuskoden vaere`(httpCode: String) {
+        assertThat(status).isEqualTo(httpCode.toInt())
     }
 }
 
