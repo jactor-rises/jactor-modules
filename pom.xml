@@ -11,7 +11,7 @@
 
     <properties>
         <cluecumber.version>2.3.3</cluecumber.version>
-        <cucumber.version>5.1.3</cucumber.version>
+        <cucumber.version>5.2.0</cucumber.version>
         <kotlin.version>1.3.61</kotlin.version>
         <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
 
@@ -51,6 +51,11 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
