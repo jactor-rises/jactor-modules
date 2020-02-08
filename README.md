@@ -48,6 +48,7 @@ docker run -p 1099:1099 jactor-persistence
 
 * [spring-boot 2.2.x](https://spring.io/projects/spring-boot)
     * with spring-data-jpa
+* [docker](https://www.docker.com)
 * [h2](http://h2database.com)
 * [junit 5.x](https://junit.org/junit5/)
 * [assertj](https://joel-costigliola.github.io/assertj/)
