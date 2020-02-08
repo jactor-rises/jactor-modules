@@ -31,4 +31,3 @@ class AppEgenskap {
         assertThat(status).isEqualTo(httpCode.toInt())
     }
 }
-
