@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/blog", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/blog", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BlogController {
 
   private final BlogService blogService;

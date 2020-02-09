@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = UserController.USER, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = UserController.USER, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
   static final String USER = "/user";
