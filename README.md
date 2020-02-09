@@ -3,7 +3,8 @@
 ### What is this repository for?
 
 The main purpose is to learn about programming microservices (with REST and spring jpa).
-I also use github to get a deeper understanding of ci (github actions) and docker
+I also use github to get a deeper understanding of continuous integration/DevOps using
+github actions and docker
 
 This project is a microservice dealing with persistence to an database using
 jpa (java persistence api) via spring-data-jpa and is a microservice to use under
