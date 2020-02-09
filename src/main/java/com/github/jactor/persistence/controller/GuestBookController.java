@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/guestBook", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/guestBook", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GuestBookController {
 
   private final GuestBookService guestBookService;
