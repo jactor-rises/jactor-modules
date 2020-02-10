@@ -5,7 +5,7 @@ data class UserInternalDto(
         var personInternal: PersonInternalDto? = null,
         var emailAddress: String? = null,
         var username: String? = null,
-        var userType: UserType = UserType.ACTIVE
+        var usertype: Usertype = Usertype.ACTIVE
 ) : PersistentData(persistentDto) {
     constructor(
             persistent: PersistentDto, userInternal: UserInternalDto
@@ -16,10 +16,10 @@ data class UserInternalDto(
     constructor(
             persistentDto: PersistentDto?, personInternal: PersonInternalDto?, emailAddress: String?, username: String?
     ) : this(
-            persistentDto, personInternal, emailAddress, username, UserType.ACTIVE
+            persistentDto, personInternal, emailAddress, username, Usertype.ACTIVE
     )
 }
 
-enum class UserType {
+enum class Usertype {
     ADMIN, ACTIVE, INACTIVE
 }

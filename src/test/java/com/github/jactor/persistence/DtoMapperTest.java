@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jactor.persistence.dto.UserInternalDto;
-import com.github.jactor.persistence.dto.UserType;
+import com.github.jactor.persistence.dto.Usertype;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ class DtoMapperTest {
     userInternalDto.setId(1L);
     userInternalDto.setEmailAddress("some@where");
     userInternalDto.setUsername("mine");
-    userInternalDto.setUserType(UserType.ACTIVE);
+    userInternalDto.setUsertype(Usertype.ACTIVE);
 
     assertAll(
         () -> assertThat(objectMapper.writeValueAsString(userInternalDto)).as("id").contains("\"id\":1"),

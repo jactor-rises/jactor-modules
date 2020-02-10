@@ -124,7 +124,7 @@ class UserRepositoryTest {
     PersonInternalDto spidyPersonInternalDto = new PersonInternalDto(null, addressDto, null, null, "Parker", null);
     PersonInternalDto superPersonInternalDto = new PersonInternalDto(null, addressDto, null, null, "Kent", null);
     userRepository.save(aUser(new UserInternalDto(null, spidyPersonInternalDto, null, "spiderman")));
-    userRepository.save(aUser(new UserInternalDto(null, superPersonInternalDto, null, "superman", com.github.jactor.persistence.dto.UserType.INACTIVE)));
+    userRepository.save(aUser(new UserInternalDto(null, superPersonInternalDto, null, "superman", com.github.jactor.persistence.dto.Usertype.INACTIVE)));
     entityManager.flush();
     entityManager.clear();
 
