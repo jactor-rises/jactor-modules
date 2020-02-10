@@ -13,7 +13,7 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
-import com.github.jactor.persistence.dto.UserType;
+import com.github.jactor.persistence.dto.Usertype;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.repository.PersonRepository;
@@ -50,7 +50,7 @@ class UserServiceTest {
     when(userRepositoryMock.findByUsername("jactor"))
         .thenReturn(
             Optional.of(aUser(
-                new UserInternalDto(null, personDto, null, "jactor", UserType.ACTIVE)
+                new UserInternalDto(null, personDto, null, "jactor", Usertype.ACTIVE)
             ))
         );
 
@@ -75,7 +75,7 @@ class UserServiceTest {
     when(userRepositoryMock.findById(69L))
         .thenReturn(
             Optional.of(aUser(
-                new UserInternalDto(null, personDto, null, "jactor", UserType.ACTIVE)
+                new UserInternalDto(null, personDto, null, "jactor", Usertype.ACTIVE)
             ))
         );
 

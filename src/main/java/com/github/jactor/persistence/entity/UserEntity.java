@@ -89,9 +89,9 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     personEntity = Optional.ofNullable(user.getPersonInternal()).map(PersonEntity::new).orElse(null);
     username = user.getUsername();
     userType = Arrays.stream(UserType.values())
-        .filter(aUserType -> aUserType.name().equals(user.getUserType().name()))
+        .filter(aUserType -> aUserType.name().equals(user.getUsertype().name()))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUserType()));
+        .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUsertype()));
   }
 
   public UserInternalDto asDto() {
