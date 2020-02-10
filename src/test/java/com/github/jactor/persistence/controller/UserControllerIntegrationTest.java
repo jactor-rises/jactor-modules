@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.command.CreateUserCommandResponse;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UniqueUsername;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +40,8 @@ class UserControllerIntegrationTest {
 
     assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
         () -> assertThat(response.getStatusCode()).as("status").isEqualTo(HttpStatus.CREATED),
-        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUser).as("response.user").isNotNull(),
-        () -> assertThat(Objects.requireNonNull(response.getBody()).getUser()).extracting(UserDto::getId).as("userDto.id").isNotNull()
+        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUserInternal).as("response.user").isNotNull(),
+        () -> assertThat(Objects.requireNonNull(response.getBody()).getUserInternal()).extracting(UserInternalDto::getId).as("userDto.id").isNotNull()
     ));
   }
 
@@ -58,8 +57,8 @@ class UserControllerIntegrationTest {
 
     assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
         () -> assertThat(response.getStatusCode()).as("status").isEqualTo(HttpStatus.CREATED),
-        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUser).as("response.user").isNotNull(),
-        () -> assertThat(Objects.requireNonNull(response.getBody()).getUser()).extracting(UserDto::getEmailAddress)
+        () -> assertThat(response.getBody()).extracting(CreateUserCommandResponse::getUserInternal).as("response.user").isNotNull(),
+        () -> assertThat(Objects.requireNonNull(response.getBody()).getUserInternal()).extracting(UserInternalDto::getEmailAddress)
             .as("userDto.emailAddress").isEqualTo("somewhere@somehow.com")
     ));
   }

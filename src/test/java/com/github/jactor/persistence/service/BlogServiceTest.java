@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.BlogEntity;
 import com.github.jactor.persistence.entity.BlogEntryEntity;
 import com.github.jactor.persistence.repository.BlogEntryRepository;
@@ -105,7 +105,7 @@ class BlogServiceTest {
     BlogDto blogDto = new BlogDto();
     blogDto.setCreated(now());
     blogDto.setTitle("some blog");
-    blogDto.setUser(new UserDto());
+    blogDto.setUserInternal(new UserInternalDto());
 
     blogServiceToTest.saveOrUpdate(blogDto);
 

@@ -17,14 +17,14 @@ class GuestBookDtoTest {
         GuestBookDto guestBookDto = new GuestBookDto();
         guestBookDto.setEntries(Set.of(new GuestBookEntryDto()));
         guestBookDto.setTitle("title");
-        guestBookDto.setUser(new UserDto());
+        guestBookDto.setUserInternal(new UserInternalDto());
 
         GuestBookDto copied = new GuestBookDto(guestBookDto.fetchPersistentDto(), guestBookDto);
 
         assertAll(
                 () -> assertThat(copied.getEntries()).as("entries").isEqualTo(guestBookDto.getEntries()),
                 () -> assertThat(copied.getTitle()).as("title").isEqualTo(guestBookDto.getTitle()),
-                () -> assertThat(copied.getUser()).as("title").isEqualTo(guestBookDto.getUser())
+                () -> assertThat(copied.getUserInternal()).as("title").isEqualTo(guestBookDto.getUserInternal())
         );
     }
 

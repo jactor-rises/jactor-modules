@@ -8,22 +8,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("A UserDto")
-class UserDtoTest {
+class UserInternalDtoTest {
 
   @DisplayName("should have a copy constructor")
   @Test
   void shouldHaveCopyConstructor() {
-    UserDto userDto = new UserDto();
-    userDto.setEmailAddress("somewhere@time");
-    userDto.setPerson(new PersonDto());
-    userDto.setUsername("me");
+    UserInternalDto userInternalDto = new UserInternalDto();
+    userInternalDto.setEmailAddress("somewhere@time");
+    userInternalDto.setPerson(new PersonDto());
+    userInternalDto.setUsername("me");
 
-    UserDto copied = new UserDto(userDto.fetchPersistentDto(), userDto);
+    UserInternalDto copied = new UserInternalDto(userInternalDto.fetchPersistentDto(), userInternalDto);
 
     assertAll(
-        () -> assertThat(copied.getEmailAddress()).as("email address").isEqualTo(userDto.getEmailAddress()),
-        () -> assertThat(copied.getPerson()).as("person").isEqualTo(userDto.getPerson()),
-        () -> assertThat(copied.getUsername()).as("user name").isEqualTo(userDto.getUsername())
+        () -> assertThat(copied.getEmailAddress()).as("email address").isEqualTo(userInternalDto.getEmailAddress()),
+        () -> assertThat(copied.getPerson()).as("person").isEqualTo(userInternalDto.getPerson()),
+        () -> assertThat(copied.getUsername()).as("user name").isEqualTo(userInternalDto.getUsername())
     );
   }
 
@@ -37,7 +37,7 @@ class UserDtoTest {
     persistentDto.setModifiedBy("tip");
     persistentDto.setTimeOfModification(LocalDateTime.now());
 
-    PersistentDto copied = new UserDto(persistentDto, new UserDto()).fetchPersistentDto();
+    PersistentDto copied = new UserInternalDto(persistentDto, new UserInternalDto()).fetchPersistentDto();
 
     assertAll(
         () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

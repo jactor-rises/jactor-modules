@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.GuestBookEntity;
 import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.repository.GuestBookEntryRepository;
@@ -77,7 +77,7 @@ class GuestBookServiceTest {
     GuestBookDto guestBookDto = new GuestBookDto();
     guestBookDto.setEntries(Set.of(guestBookEntryDto));
     guestBookDto.setTitle("home sweet home");
-    guestBookDto.setUser(new UserDto());
+    guestBookDto.setUserInternal(new UserInternalDto());
 
     guestBookServiceToTest.saveOrUpdate(guestBookDto);
 

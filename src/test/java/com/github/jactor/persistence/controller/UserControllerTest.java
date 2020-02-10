@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.service.UserService;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ class UserControllerTest {
   void shouldNotFindByUsername() {
     when(userServiceMock.find("me")).thenReturn(Optional.empty());
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NO_CONTENT),
@@ -65,9 +65,9 @@ class UserControllerTest {
   @Test
   @DisplayName("should find a user by username")
   void shouldFindByUsername() {
-    when(userServiceMock.find("me")).thenReturn(Optional.of(new UserDto()));
+    when(userServiceMock.find("me")).thenReturn(Optional.of(new UserInternalDto()));
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
@@ -80,7 +80,7 @@ class UserControllerTest {
   void shouldNotGetById() {
     when(userServiceMock.find(1L)).thenReturn(Optional.empty());
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NOT_FOUND),
@@ -91,9 +91,9 @@ class UserControllerTest {
   @Test
   @DisplayName("should find a user by id")
   void shouldFindById() {
-    when(userServiceMock.find(1L)).thenReturn(Optional.of(new UserDto()));
+    when(userServiceMock.find(1L)).thenReturn(Optional.of(new UserInternalDto()));
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
@@ -104,18 +104,18 @@ class UserControllerTest {
   @Test
   @DisplayName("should modify existing user")
   void shouldModifyExistingUser() {
-    UserDto userDto = new UserDto();
-    userDto.setId(1L);
+    UserInternalDto userInternalDto = new UserInternalDto();
+    userInternalDto.setId(1L);
 
-    when(userServiceMock.update(any(UserDto.class))).thenReturn(userDto);
+    when(userServiceMock.update(any(UserInternalDto.class))).thenReturn(userInternalDto);
 
-    var userRespnse = testRestTemplate.exchange(buildFullPath("/user/id/1"), HttpMethod.PUT, new HttpEntity<>(userDto), UserDto.class);
+    var userRespnse = testRestTemplate.exchange(buildFullPath("/user/id/1"), HttpMethod.PUT, new HttpEntity<>(userInternalDto), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
         () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user").isNotNull(),
-        () -> assertThat(userRespnse.getBody()).extracting(UserDto::getId).as("user id").isEqualTo(1L),
-        () -> verify(userServiceMock).update(any(UserDto.class))
+        () -> assertThat(userRespnse.getBody()).extracting(UserInternalDto::getId).as("user id").isEqualTo(1L),
+        () -> verify(userServiceMock).update(any(UserInternalDto.class))
     );
   }
 
@@ -136,14 +136,14 @@ class UserControllerTest {
   @Test
   @DisplayName("should add user id from url to payload when updating user")
   void shouldAddUserIdFromPathWhenUpdatingUser() {
-    when(userServiceMock.update(any(UserDto.class))).thenReturn(new UserDto());
+    when(userServiceMock.update(any(UserInternalDto.class))).thenReturn(new UserInternalDto());
 
-    var userResponse = testRestTemplate.exchange(buildFullPath("/user/id/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
+    var userResponse = testRestTemplate.exchange(buildFullPath("/user/id/101"), HttpMethod.PUT, new HttpEntity<>(new UserInternalDto()), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userResponse.getStatusCode()).as("status code").isEqualTo(HttpStatus.ACCEPTED),
         () -> {
-          var userDto = new UserDto();
+          var userDto = new UserInternalDto();
           userDto.setId(101L);
 
           verify(userServiceMock).update(userDto);

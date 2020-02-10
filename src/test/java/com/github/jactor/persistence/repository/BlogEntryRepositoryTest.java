@@ -10,7 +10,7 @@ import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.EntityManager;
@@ -41,7 +41,7 @@ class BlogEntryRepositoryTest {
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
-    var userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "white");
+    var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "white");
     var blogDto = new BlogDto(new PersistentDto(), LocalDate.now(), "and then some...", userDto);
     var blogEntryToSave = aBlogEntry(new BlogEntryDto(
         new PersistentDto(), blogDto, "smith", "once upon a time"
@@ -76,7 +76,7 @@ class BlogEntryRepositoryTest {
     );
 
     var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
-    var userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "dark");
+    var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "dark");
     var blogDto = new BlogDto(new PersistentDto(), LocalDate.now(), "and then some...", userDto);
     var blogEntryToSave = aBlogEntry(new BlogEntryDto(
         new PersistentDto(), blogDto, "smith", "once upon a time"

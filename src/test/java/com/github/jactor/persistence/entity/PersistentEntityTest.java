@@ -16,7 +16,7 @@ import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import java.util.HashSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,7 +69,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a user without the id")
   void shouldCopyUser() {
-    persistentEntityToTest = aUser(new UserDto(null, null, "i.am@home", "jactor"));
+    persistentEntityToTest = aUser(new UserInternalDto(null, null, "i.am@home", "jactor"));
     persistentEntityToTest.setId(1L);
 
     PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
@@ -87,7 +87,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a blog without the id")
   void shouldCopyBlog() {
-    persistentEntityToTest = aBlog(new BlogDto(null, null, "general ignorance", new UserDto()));
+    persistentEntityToTest = aBlog(new BlogDto(null, null, "general ignorance", new UserInternalDto()));
     persistentEntityToTest.setId(1L);
 
     PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();
@@ -124,7 +124,7 @@ class PersistentEntityTest {
   @Test
   @DisplayName("should be able to copy a guest book without the id")
   void shouldCopyGuestBook() {
-    persistentEntityToTest = aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserDto()));
+    persistentEntityToTest = aGuestBook(new GuestBookDto(null, new HashSet<>(), "enter when applied", new UserInternalDto()));
     persistentEntityToTest.setId(1L);
 
     PersistentEntity copy = (PersistentEntity<?>) persistentEntityToTest.copyWithoutId();

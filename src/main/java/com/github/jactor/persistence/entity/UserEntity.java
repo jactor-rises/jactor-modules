@@ -2,7 +2,7 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,7 +82,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     userType = user.userType;
   }
 
-  public UserEntity(@NotNull UserDto user) {
+  public UserEntity(@NotNull UserInternalDto user) {
     emailAddress = user.getEmailAddress();
     id = user.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(user.fetchPersistentDto());
@@ -94,8 +94,8 @@ public class UserEntity implements PersistentEntity<UserEntity> {
         .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUserType()));
   }
 
-  public UserDto asDto() {
-    return new UserDto(
+  public UserInternalDto asDto() {
+    return new UserInternalDto(
         persistentDataEmbeddable.asPersistentDto(id),
         Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null),
         emailAddress,
@@ -218,8 +218,8 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     this.personEntity = personEntity;
   }
 
-  public static UserEntity aUser(UserDto userDto) {
-    return new UserEntity(userDto);
+  public static UserEntity aUser(UserInternalDto userInternalDto) {
+    return new UserEntity(userInternalDto);
   }
 
   public enum UserType {

@@ -10,7 +10,7 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import java.util.HashSet;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ class GuestBookRepositoryTest {
   void shouldWriteThenReadGuestBook() {
     var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
+    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
 
     userEntity.setGuestBook(
@@ -62,7 +62,7 @@ class GuestBookRepositoryTest {
   void shouldWriteThenUpdateAndReadGuestBook() {
     var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
+    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
 
     userEntity.setGuestBook(
