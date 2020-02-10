@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.repository.PersonRepository;
 import java.time.LocalDateTime;
@@ -33,7 +33,7 @@ class PersonServiceTest {
   @Test
   @DisplayName("should create a new Person")
   void shouldCreateNewUser() {
-    personService.createWhenNotExists(new PersonDto());
+    personService.createWhenNotExists(new PersonInternalDto());
 
     ArgumentCaptor<PersonEntity> personEntityCaptor = ArgumentCaptor.forClass(PersonEntity.class);
     verify(personRepositoryMock).save(personEntityCaptor.capture());
@@ -45,13 +45,13 @@ class PersonServiceTest {
   @DisplayName("should find Person by id")
   void shouldFiedPersonById() {
     // given
-    var personEntity = new PersonEntity(new PersonDto());
+    var personEntity = new PersonEntity(new PersonInternalDto());
 
     when(personRepositoryMock.findById(1L)).thenReturn(Optional.of(personEntity));
 
     // when
     var person = personService.createWhenNotExists(
-        new PersonDto(new PersistentDto(1L, "creator", LocalDateTime.now(), "modifier", LocalDateTime.now()), new PersonDto())
+        new PersonInternalDto(new PersistentDto(1L, "creator", LocalDateTime.now(), "modifier", LocalDateTime.now()), new PersonInternalDto())
     );
 
     // then

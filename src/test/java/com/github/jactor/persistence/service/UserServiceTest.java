@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.dto.UserType;
 import com.github.jactor.persistence.entity.PersonEntity;
@@ -43,7 +43,7 @@ class UserServiceTest {
     var addressDto = new AddressDto();
     addressDto.setPersistentDto(new PersistentDto());
 
-    var personDto = new PersonDto();
+    var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
     personDto.setAddress(addressDto);
 
@@ -68,7 +68,7 @@ class UserServiceTest {
     var addressDto = new AddressDto();
     addressDto.setPersistentDto(new PersistentDto());
 
-    var personDto = new PersonDto();
+    var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
     personDto.setAddress(addressDto);
 
@@ -112,7 +112,7 @@ class UserServiceTest {
     var userEntityMock = mockUserEntityWith(userDto);
 
     when(userRepositoryMock.save(any())).thenReturn(userEntityMock);
-    when(personRepository.save(any())).thenReturn(new PersonEntity(new PersonDto()));
+    when(personRepository.save(any())).thenReturn(new PersonEntity(new PersonInternalDto()));
 
     var user = userServiceToTest.create(createUserCommand);
 

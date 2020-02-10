@@ -9,7 +9,7 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.BlogEntryEntity;
 import java.time.LocalDate;
@@ -40,7 +40,7 @@ class BlogRepositoryTest {
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
-    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "Adder", null);
     var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "black");
     var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
 
@@ -67,7 +67,7 @@ class BlogRepositoryTest {
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
-    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "Adder", null);
     var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "black");
     var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
 
@@ -106,7 +106,7 @@ class BlogRepositoryTest {
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
-    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "Adder", null);
     var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "black");
     var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
 
@@ -130,7 +130,7 @@ class BlogRepositoryTest {
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
-    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "Adder", null);
     var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "black");
     var blogEntityToSave = aBlog(new BlogDto(new PersistentDto(), LocalDate.now(), "Blah", userDto));
 

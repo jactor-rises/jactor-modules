@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.command
 
 import com.github.jactor.persistence.dto.AddressDto
-import com.github.jactor.persistence.dto.PersonDto
+import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
 
 data class CreateUserCommand(
@@ -23,8 +23,8 @@ data class CreateUserCommand(
             null, null, null, null, null, null, null, null, null
     )
 
-    fun fetchPersonDto(): PersonDto {
-        return PersonDto(null,
+    fun fetchPersonDto(): PersonInternalDto {
+        return PersonInternalDto(null,
                 fetchAddressDto(),
                 language,
                 firstName,

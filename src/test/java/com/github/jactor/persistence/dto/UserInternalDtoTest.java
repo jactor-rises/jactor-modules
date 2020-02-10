@@ -15,14 +15,14 @@ class UserInternalDtoTest {
   void shouldHaveCopyConstructor() {
     UserInternalDto userInternalDto = new UserInternalDto();
     userInternalDto.setEmailAddress("somewhere@time");
-    userInternalDto.setPerson(new PersonDto());
+    userInternalDto.setPersonInternal(new PersonInternalDto());
     userInternalDto.setUsername("me");
 
     UserInternalDto copied = new UserInternalDto(userInternalDto.fetchPersistentDto(), userInternalDto);
 
     assertAll(
         () -> assertThat(copied.getEmailAddress()).as("email address").isEqualTo(userInternalDto.getEmailAddress()),
-        () -> assertThat(copied.getPerson()).as("person").isEqualTo(userInternalDto.getPerson()),
+        () -> assertThat(copied.getPersonInternal()).as("person").isEqualTo(userInternalDto.getPersonInternal()),
         () -> assertThat(copied.getUsername()).as("user name").isEqualTo(userInternalDto.getUsername())
     );
   }

@@ -9,7 +9,7 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,7 +40,7 @@ class BlogEntryRepositoryTest {
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
-    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "Adder", null);
     var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "white");
     var blogDto = new BlogDto(new PersistentDto(), LocalDate.now(), "and then some...", userDto);
     var blogEntryToSave = aBlogEntry(new BlogEntryDto(
@@ -75,7 +75,7 @@ class BlogEntryRepositoryTest {
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
-    var personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "Adder", null);
     var userDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "dark");
     var blogDto = new BlogDto(new PersistentDto(), LocalDate.now(), "and then some...", userDto);
     var blogEntryToSave = aBlogEntry(new BlogEntryDto(

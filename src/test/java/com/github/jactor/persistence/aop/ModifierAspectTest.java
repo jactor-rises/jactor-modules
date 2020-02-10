@@ -16,7 +16,7 @@ import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import java.time.LocalDateTime;
 import org.aspectj.lang.JoinPoint;
@@ -111,8 +111,8 @@ class ModifierAspectTest {
   @Test
   @DisplayName("should modify timestamp on person when used")
   void shouldModifyTimestampOnPersonWhenUsed() {
-    var personWithoutId = aPerson(new PersonDto(persistentDto, new PersonDto()));
-    var person = aPerson(new PersonDto(persistentDto, new PersonDto()));
+    var personWithoutId = aPerson(new PersonInternalDto(persistentDto, new PersonInternalDto()));
+    var person = aPerson(new PersonInternalDto(persistentDto, new PersonInternalDto()));
     person.setId(1L);
 
     when(joinPointMock.getArgs()).thenReturn(new Object[]{person, personWithoutId});
