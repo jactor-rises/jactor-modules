@@ -12,7 +12,7 @@ import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.dto.UserType;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
@@ -50,7 +50,7 @@ class UserServiceTest {
     when(userRepositoryMock.findByUsername("jactor"))
         .thenReturn(
             Optional.of(aUser(
-                new UserDto(null, personDto, null, "jactor", UserType.ACTIVE)
+                new UserInternalDto(null, personDto, null, "jactor", UserType.ACTIVE)
             ))
         );
 
@@ -75,7 +75,7 @@ class UserServiceTest {
     when(userRepositoryMock.findById(69L))
         .thenReturn(
             Optional.of(aUser(
-                new UserDto(null, personDto, null, "jactor", UserType.ACTIVE)
+                new UserInternalDto(null, personDto, null, "jactor", UserType.ACTIVE)
             ))
         );
 
@@ -90,7 +90,7 @@ class UserServiceTest {
   @Test
   @DisplayName("should update a UserDto with an UserEntity")
   void shouldSavedUserDtoAsUserEntity() {
-    var userDto = new UserDto();
+    var userDto = new UserInternalDto();
     userDto.setId(1L);
     userDto.setUsername("marley");
     userDto.setPersistentDto(new PersistentDto());
@@ -108,7 +108,7 @@ class UserServiceTest {
   @DisplayName("should create and save person for the user")
   void shouldCreateAndSavePersonForTheUser() {
     var createUserCommand = new CreateUserCommand("jactor", "Jacobsen");
-    var userDto = new UserDto();
+    var userDto = new UserInternalDto();
     var userEntityMock = mockUserEntityWith(userDto);
 
     when(userRepositoryMock.save(any())).thenReturn(userEntityMock);
@@ -127,10 +127,10 @@ class UserServiceTest {
     );
   }
 
-  private UserEntity mockUserEntityWith(UserDto userDto) {
+  private UserEntity mockUserEntityWith(UserInternalDto userInternalDto) {
     var userEntityMock = mock(UserEntity.class);
 
-    when(userEntityMock.asDto()).thenReturn(userDto);
+    when(userEntityMock.asDto()).thenReturn(userInternalDto);
 
     return userEntityMock;
   }

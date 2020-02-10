@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
 import java.util.List;
@@ -55,7 +55,7 @@ class UserRepositoryTest {
   void shouldWriteThenReadUserEntity() {
     AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonDto personDto = new PersonDto(null, addressDto, null, null, "Solo", null);
-    UserEntity userToPersist = aUser(new UserDto(
+    UserEntity userToPersist = aUser(new UserInternalDto(
         null, personDto, "smuggle.fast@tantooine.com", "smuggler"
     ));
 
@@ -83,7 +83,7 @@ class UserRepositoryTest {
   void shouldWriteThenUpdateAndReadUserEntity() {
     AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonDto personDto = new PersonDto(null, addressDto, null, null, "AA", null);
-    UserEntity userToPersist = aUser(new UserDto(
+    UserEntity userToPersist = aUser(new UserInternalDto(
         null, personDto, "casuel@tantooine.com", "causual"
     ));
 
@@ -123,8 +123,8 @@ class UserRepositoryTest {
     AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonDto spidyPersonDto = new PersonDto(null, addressDto, null, null, "Parker", null);
     PersonDto superPersonDto = new PersonDto(null, addressDto, null, null, "Kent", null);
-    userRepository.save(aUser(new UserDto(null, spidyPersonDto, null, "spiderman")));
-    userRepository.save(aUser(new UserDto(null, superPersonDto, null, "superman", com.github.jactor.persistence.dto.UserType.INACTIVE)));
+    userRepository.save(aUser(new UserInternalDto(null, spidyPersonDto, null, "spiderman")));
+    userRepository.save(aUser(new UserInternalDto(null, superPersonDto, null, "superman", com.github.jactor.persistence.dto.UserType.INACTIVE)));
     entityManager.flush();
     entityManager.clear();
 

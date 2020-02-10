@@ -16,14 +16,14 @@ class BlogDtoTest {
         BlogDto blogDto = new BlogDto();
         blogDto.setCreated(LocalDate.now());
         blogDto.setTitle("title");
-        blogDto.setUser(new UserDto());
+        blogDto.setUserInternal(new UserInternalDto());
 
         BlogDto copied = new BlogDto(blogDto.fetchPersistentDto(), blogDto);
 
         assertAll(
                 () -> assertThat(copied.getCreated()).as("created").isEqualTo(blogDto.getCreated()),
                 () -> assertThat(copied.getTitle()).as("title").isEqualTo(blogDto.getTitle()),
-                () -> assertThat(copied.getUser()).as("user").isEqualTo(blogDto.getUser())
+                () -> assertThat(copied.getUserInternal()).as("user").isEqualTo(blogDto.getUserInternal())
         );
     }
 

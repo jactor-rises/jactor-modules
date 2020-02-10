@@ -49,7 +49,7 @@ public class BlogService {
 
     public BlogDto saveOrUpdate(BlogDto blogDto) {
         userService.find(fetchUsername(blogDto))
-                .ifPresent(blogDto::setUser);
+                .ifPresent(blogDto::setUserInternal);
 
         BlogEntity blogEntity = new BlogEntity(blogDto);
         blogRepository.save(blogEntity);
@@ -59,7 +59,7 @@ public class BlogService {
 
     public BlogEntryDto saveOrUpdate(BlogEntryDto blogEntryDto) {
         userService.find(fetchUsername(blogEntryDto.getBlog()))
-                .ifPresent(userDto -> blogEntryDto.getBlog().setUser(userDto));
+                .ifPresent(userDto -> blogEntryDto.getBlog().setUserInternal(userDto));
 
         BlogEntryEntity blogEntryEntity = new BlogEntryEntity(blogEntryDto);
         blogEntryRepository.save(blogEntryEntity);
@@ -68,10 +68,10 @@ public class BlogService {
     }
 
     private String fetchUsername(BlogDto blogDto) {
-        if (blogDto == null || blogDto.getUser() == null) {
+        if (blogDto == null || blogDto.getUserInternal() == null) {
             return null;
         }
 
-        return blogDto.getUser().getUsername();
+        return blogDto.getUserInternal().getUsername();
     }
 }

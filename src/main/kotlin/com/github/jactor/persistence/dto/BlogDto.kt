@@ -6,11 +6,11 @@ data class BlogDto(
         var persistentDto: PersistentDto? = null,
         var created: LocalDate? = null,
         var title: String? = null,
-        var user: UserDto? = null
+        var userInternal: UserInternalDto? = null
 ) : PersistentData(persistentDto) {
     constructor(
             persistent: PersistentDto, blog: BlogDto
     ) : this(
-            persistent, blog.created, blog.title, blog.user
+            persistent, blog.created, blog.title, blog.userInternal
     )
 }

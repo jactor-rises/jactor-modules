@@ -9,7 +9,7 @@ import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
@@ -123,9 +123,9 @@ class PersonRepositoryTest {
     );
 
     PersonDto personDto = new PersonDto(new PersistentDto(), addressDto, null, null, "Adder", null);
-    UserDto userDto = new UserDto(new PersistentDto(), personDto, "public@services.com", "black");
+    UserInternalDto userInternalDto = new UserInternalDto(new PersistentDto(), personDto, "public@services.com", "black");
 
-    UserEntity userEntity = aUser(userDto);
+    UserEntity userEntity = aUser(userInternalDto);
     PersonEntity personToPersist = userEntity.fetchPerson();
 
     personRepository.save(personToPersist);

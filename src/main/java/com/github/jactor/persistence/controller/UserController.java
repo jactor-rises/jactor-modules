@@ -2,8 +2,8 @@ package com.github.jactor.persistence.controller;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.command.CreateUserCommandResponse;
-import com.github.jactor.persistence.dto.UserDto;
 import com.github.jactor.persistence.service.UserService;
+import com.github.jactor.shared.dto.UserDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
