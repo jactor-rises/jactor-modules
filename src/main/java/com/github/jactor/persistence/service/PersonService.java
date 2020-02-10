@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.service;
 
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.repository.PersonRepository;
 import java.util.Optional;
@@ -15,18 +15,18 @@ public class PersonService {
     this.personRepository = personRepository;
   }
 
-  PersonEntity createWhenNotExists(PersonDto person) {
+  PersonEntity createWhenNotExists(PersonInternalDto person) {
     var personFound = findExisting(person);
 
     return personFound
         .orElseGet(() -> create(person));
   }
 
-  private PersonEntity create(PersonDto person) {
+  private PersonEntity create(PersonInternalDto person) {
     return personRepository.save(new PersonEntity(person));
   }
 
-  private Optional<PersonEntity> findExisting(PersonDto person) {
+  private Optional<PersonEntity> findExisting(PersonInternalDto person) {
     return Optional.ofNullable(person.getId())
         .flatMap(personRepository::findById);
   }

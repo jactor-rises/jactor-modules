@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.BlogDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.time.LocalDate;
@@ -38,8 +38,8 @@ class RepositoriesTest {
   @DisplayName("should use a BlogRepository to save a blog with a user that was saved with a UserRepository earlier")
   void shouldSaveBlogWithSavedUser() {
     AddressDto address = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testoplis", null);
-    PersonDto personDto = new PersonDto(null, address, "no_NO", null, "Skywalker", null);
-    UserEntity userToPersist = aUser(new UserInternalDto(null, personDto, "brains@rebels.com", "r2d2"));
+    PersonInternalDto personInternalDto = new PersonInternalDto(null, address, "no_NO", null, "Skywalker", null);
+    UserEntity userToPersist = aUser(new UserInternalDto(null, personInternalDto, "brains@rebels.com", "r2d2"));
 
     userRepository.save(userToPersist);
     entityManager.flush();

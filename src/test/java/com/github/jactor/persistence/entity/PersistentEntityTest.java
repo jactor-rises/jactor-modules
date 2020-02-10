@@ -15,7 +15,7 @@ import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import java.util.HashSet;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +50,7 @@ class PersistentEntityTest {
   @DisplayName("should be able to copy a person without the id")
   void shouldCopyPerson() {
     persistentEntityToTest = aPerson(
-        new PersonDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
+        new PersonInternalDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
     );
     persistentEntityToTest.setId(1L);
 

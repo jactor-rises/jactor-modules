@@ -10,7 +10,7 @@ import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.entity.UserEntity;
@@ -43,7 +43,7 @@ class GuestBookEntryRepositoryTest {
   @DisplayName("should save then read guest book entry entity")
   void shouldSaveThenReadGuestBookEntryEntity() {
     var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
@@ -74,7 +74,7 @@ class GuestBookEntryRepositoryTest {
   @DisplayName("should save then modify and read guest book entry entity")
   void shouldSaveThenModifyAndReadGuestBookEntryEntity() {
     var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
@@ -116,7 +116,7 @@ class GuestBookEntryRepositoryTest {
   @DisplayName("should write two entries to two different guest books and then find one entry")
   void shouldWriteTwoEntriesToTwoGuestBooksAndThenFindEntry() {
     var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));

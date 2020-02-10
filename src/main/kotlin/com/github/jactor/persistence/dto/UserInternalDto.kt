@@ -2,7 +2,7 @@ package com.github.jactor.persistence.dto
 
 data class UserInternalDto(
         var persistentDto: PersistentDto? = null,
-        var person: PersonDto? = null,
+        var personInternal: PersonInternalDto? = null,
         var emailAddress: String? = null,
         var username: String? = null,
         var userType: UserType = UserType.ACTIVE
@@ -10,13 +10,13 @@ data class UserInternalDto(
     constructor(
             persistent: PersistentDto, userInternal: UserInternalDto
     ) : this(
-            persistent, userInternal.person, userInternal.emailAddress, userInternal.username
+            persistent, userInternal.personInternal, userInternal.emailAddress, userInternal.username
     )
 
     constructor(
-            persistentDto: PersistentDto?, person: PersonDto?, emailAddress: String?, username: String?
+            persistentDto: PersistentDto?, personInternal: PersonInternalDto?, emailAddress: String?, username: String?
     ) : this(
-            persistentDto, person, emailAddress, username, UserType.ACTIVE
+            persistentDto, personInternal, emailAddress, username, UserType.ACTIVE
     )
 }
 

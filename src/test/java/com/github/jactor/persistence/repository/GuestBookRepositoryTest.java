@@ -9,7 +9,7 @@ import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.AddressDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import java.util.HashSet;
 import javax.persistence.EntityManager;
@@ -38,7 +38,7 @@ class GuestBookRepositoryTest {
   @DisplayName("should write then read guest book")
   void shouldWriteThenReadGuestBook() {
     var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
 
@@ -61,7 +61,7 @@ class GuestBookRepositoryTest {
   @DisplayName("should write then update and read guest book")
   void shouldWriteThenUpdateAndReadGuestBook() {
     var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
 

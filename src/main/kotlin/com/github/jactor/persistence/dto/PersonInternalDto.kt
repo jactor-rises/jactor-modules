@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.dto
 
-data class PersonDto(
+data class PersonInternalDto(
         var persistentDto: PersistentDto? = null,
         var address: AddressDto? = null,
         var locale: String? = null,
@@ -9,8 +9,8 @@ data class PersonDto(
         var description: String? = null
 ) : PersistentData(persistentDto) {
     constructor(
-            persistent: PersistentDto, person: PersonDto
+            persistent: PersistentDto, personInternal: PersonInternalDto
     ) : this(
-            persistent, person.address, person.locale, person.firstName, person.surname, person.description
+            persistent, personInternal.address, personInternal.locale, personInternal.firstName, personInternal.surname, personInternal.description
     )
 }
