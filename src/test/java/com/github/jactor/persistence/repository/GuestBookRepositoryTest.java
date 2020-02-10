@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonInternalDto;
@@ -37,7 +37,7 @@ class GuestBookRepositoryTest {
   @Test
   @DisplayName("should write then read guest book")
   void shouldWriteThenReadGuestBook() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
@@ -60,7 +60,7 @@ class GuestBookRepositoryTest {
   @Test
   @DisplayName("should write then update and read guest book")
   void shouldWriteThenUpdateAndReadGuestBook() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));

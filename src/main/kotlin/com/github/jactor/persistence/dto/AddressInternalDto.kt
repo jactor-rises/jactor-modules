@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.dto
 
-data class AddressDto(
+data class AddressInternalDto(
         var persistentDto: PersistentDto? = null,
         var zipCode: String? = null,
         var addressLine1: String? = null,
@@ -10,8 +10,8 @@ data class AddressDto(
         var country: String? = null
 ) : PersistentData(persistentDto) {
     constructor(
-            persistent: PersistentDto, address: AddressDto
+            persistent: PersistentDto, addressInternal: AddressInternalDto
     ) : this(
-            persistent, address.zipCode, address.addressLine1, address.addressLine2, address.addressLine3, address.city, address.country
+            persistent, addressInternal.zipCode, addressInternal.addressLine1, addressInternal.addressLine2, addressInternal.addressLine3, addressInternal.city, addressInternal.country
     )
 }

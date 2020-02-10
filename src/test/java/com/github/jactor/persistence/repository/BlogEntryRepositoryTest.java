@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
@@ -36,7 +36,7 @@ class BlogEntryRepositoryTest {
   @Test
   @DisplayName("should save then read blog entry")
   void shouldSaveThenReadBlogEntry() {
-    var addressDto = new AddressDto(
+    var addressDto = new AddressInternalDto(
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
@@ -71,7 +71,7 @@ class BlogEntryRepositoryTest {
   @Test
   @DisplayName("should write then update and read a blog entry")
   void shouldWriteThenUpdateAndReadBlogEntry() {
-    var addressDto = new AddressDto(
+    var addressDto = new AddressInternalDto(
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 

@@ -2,6 +2,7 @@ package com.github.jactor.persistence.controller;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.command.CreateUserCommandResponse;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.service.UserService;
 import com.github.jactor.shared.dto.UserDto;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +41,7 @@ public class UserController {
   @GetMapping("/name/{username}")
   public ResponseEntity<UserDto> find(@PathVariable("username") String username) {
     return userServicey.find(username)
+        .map(UserInternalDto::toUserDto)
         .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
   }

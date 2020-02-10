@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
@@ -37,7 +37,7 @@ class RepositoriesTest {
   @Test
   @DisplayName("should use a BlogRepository to save a blog with a user that was saved with a UserRepository earlier")
   void shouldSaveBlogWithSavedUser() {
-    AddressDto address = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testoplis", null);
+    AddressInternalDto address = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testoplis", null);
     PersonInternalDto personInternalDto = new PersonInternalDto(null, address, "no_NO", null, "Skywalker", null);
     UserEntity userToPersist = aUser(new UserInternalDto(null, personInternalDto, "brains@rebels.com", "r2d2"));
 

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
@@ -36,7 +36,7 @@ class BlogRepositoryTest {
   @Test
   @DisplayName("should save and then read blog entity")
   void shouldSaveThenReadBlogEntity() {
-    var addressDto = new AddressDto(
+    var addressDto = new AddressInternalDto(
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
@@ -63,7 +63,7 @@ class BlogRepositoryTest {
   @Test
   @DisplayName("should save then update and read blog entity")
   void shouldSaveThenUpdateAndReadBlogEntity() {
-    var addressDto = new AddressDto(
+    var addressDto = new AddressInternalDto(
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
@@ -102,7 +102,7 @@ class BlogRepositoryTest {
   @Test
   @DisplayName("should find blog by title")
   void shouldFindBlogByTitle() {
-    var addressDto = new AddressDto(
+    var addressDto = new AddressInternalDto(
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
@@ -126,7 +126,7 @@ class BlogRepositoryTest {
   @Test
   @DisplayName("should be able to relate a blog entry")
   void shouldRelateBlogEntry() {
-    var addressDto = new AddressDto(
+    var addressDto = new AddressInternalDto(
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 

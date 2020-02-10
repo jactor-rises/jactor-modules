@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
@@ -42,7 +42,7 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then read guest book entry entity")
   void shouldSaveThenReadGuestBookEntryEntity() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
@@ -73,7 +73,7 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then modify and read guest book entry entity")
   void shouldSaveThenModifyAndReadGuestBookEntryEntity() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
@@ -115,7 +115,7 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should write two entries to two different guest books and then find one entry")
   void shouldWriteTwoEntriesToTwoGuestBooksAndThenFindEntry() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
     var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 

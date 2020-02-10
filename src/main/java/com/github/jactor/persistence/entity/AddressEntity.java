@@ -2,7 +2,7 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.AttributeOverride;
@@ -66,19 +66,19 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
     zipCode = address.getZipCode();
   }
 
-  AddressEntity(@NotNull AddressDto addressDto) {
-    persistentDataEmbeddable = new PersistentDataEmbeddable(addressDto.fetchPersistentDto());
-    addressLine1 = addressDto.getAddressLine1();
-    addressLine2 = addressDto.getAddressLine2();
-    addressLine3 = addressDto.getAddressLine3();
-    city = addressDto.getCity();
-    country = addressDto.getCountry();
-    id = addressDto.getId();
-    zipCode = addressDto.getZipCode();
+  AddressEntity(@NotNull AddressInternalDto addressInternalDto) {
+    persistentDataEmbeddable = new PersistentDataEmbeddable(addressInternalDto.fetchPersistentDto());
+    addressLine1 = addressInternalDto.getAddressLine1();
+    addressLine2 = addressInternalDto.getAddressLine2();
+    addressLine3 = addressInternalDto.getAddressLine3();
+    city = addressInternalDto.getCity();
+    country = addressInternalDto.getCountry();
+    id = addressInternalDto.getId();
+    zipCode = addressInternalDto.getZipCode();
   }
 
-  public AddressDto asDto() {
-    return new AddressDto(persistentDataEmbeddable.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country);
+  public AddressInternalDto asDto() {
+    return new AddressInternalDto(persistentDataEmbeddable.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country);
   }
 
   @Override
@@ -206,7 +206,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
     this.city = city;
   }
 
-  public static AddressEntity anAddress(AddressDto addressDto) {
-    return new AddressEntity(addressDto);
+  public static AddressEntity anAddress(AddressInternalDto addressInternalDto) {
+    return new AddressEntity(addressInternalDto);
   }
 }
