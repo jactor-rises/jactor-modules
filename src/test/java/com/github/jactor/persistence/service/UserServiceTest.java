@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
@@ -40,12 +40,12 @@ class UserServiceTest {
   @Test
   @DisplayName("should map a user entity to a dto")
   void shouldMapUserToDto() {
-    var addressDto = new AddressDto();
+    var addressDto = new AddressInternalDto();
     addressDto.setPersistentDto(new PersistentDto());
 
     var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
-    personDto.setAddress(addressDto);
+    personDto.setAddressInternal(addressDto);
 
     when(userRepositoryMock.findByUsername("jactor"))
         .thenReturn(
@@ -65,12 +65,12 @@ class UserServiceTest {
   @Test
   @DisplayName("should also map a user entity to a dto when finding by id")
   void shouldMapUserToDtoWhenFindingById() {
-    var addressDto = new AddressDto();
+    var addressDto = new AddressInternalDto();
     addressDto.setPersistentDto(new PersistentDto());
 
     var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
-    personDto.setAddress(addressDto);
+    personDto.setAddressInternal(addressDto);
 
     when(userRepositoryMock.findById(69L))
         .thenReturn(

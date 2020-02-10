@@ -10,7 +10,7 @@ import static com.github.jactor.persistence.entity.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
@@ -41,8 +41,8 @@ class ModifierAspectTest {
   @Test
   @DisplayName("should modify timestamp on address when used")
   void shouldModifyTimestampOnAddressWhenUsed() {
-    var addressWithoutId = anAddress(new AddressDto(persistentDto, new AddressDto()));
-    var address = anAddress(new AddressDto(persistentDto, new AddressDto()));
+    var addressWithoutId = anAddress(new AddressInternalDto(persistentDto, new AddressInternalDto()));
+    var address = anAddress(new AddressInternalDto(persistentDto, new AddressInternalDto()));
     address.setId(1L);
 
     when(joinPointMock.getArgs()).thenReturn(new Object[]{address, addressWithoutId});

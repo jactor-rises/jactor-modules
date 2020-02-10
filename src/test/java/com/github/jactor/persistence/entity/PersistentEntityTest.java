@@ -10,7 +10,7 @@ import static com.github.jactor.persistence.entity.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
@@ -30,7 +30,7 @@ class PersistentEntityTest {
   @DisplayName("should be able to copy an address without the id")
   void shouldCopyAddress() {
     persistentEntityToTest = anAddress(
-        new AddressDto(null, "1001", "somewhere", "out", "there", "svg", "NO")
+        new AddressInternalDto(null, "1001", "somewhere", "out", "there", "svg", "NO")
     );
     persistentEntityToTest.setId(1L);
 
@@ -50,7 +50,7 @@ class PersistentEntityTest {
   @DisplayName("should be able to copy a person without the id")
   void shouldCopyPerson() {
     persistentEntityToTest = aPerson(
-        new PersonInternalDto(null, new AddressDto(), "us_US", "Bill", "Smith", "here i am")
+        new PersonInternalDto(null, new AddressInternalDto(), "us_US", "Bill", "Smith", "here i am")
     );
     persistentEntityToTest.setId(1L);
 

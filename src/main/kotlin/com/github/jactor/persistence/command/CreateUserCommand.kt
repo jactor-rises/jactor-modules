@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.command
 
-import com.github.jactor.persistence.dto.AddressDto
+import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
 
@@ -33,8 +33,8 @@ data class CreateUserCommand(
         )
     }
 
-    private fun fetchAddressDto(): AddressDto? {
-        return if (zipCode == null) null else AddressDto(null, zipCode, addressLine1, addressLine2, addressLine3, city, coutnry)
+    private fun fetchAddressDto(): AddressInternalDto? {
+        return if (zipCode == null) null else AddressInternalDto(null, zipCode, addressLine1, addressLine2, addressLine3, city, coutnry)
     }
 
     fun fetchUserDto(): UserInternalDto {

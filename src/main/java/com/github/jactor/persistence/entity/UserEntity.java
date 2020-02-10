@@ -86,7 +86,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     emailAddress = user.getEmailAddress();
     id = user.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(user.fetchPersistentDto());
-    personEntity = Optional.ofNullable(user.getPersonInternal()).map(PersonEntity::new).orElse(null);
+    personEntity = Optional.ofNullable(user.getPerson()).map(PersonEntity::new).orElse(null);
     username = user.getUsername();
     userType = Arrays.stream(UserType.values())
         .filter(aUserType -> aUserType.name().equals(user.getUsertype().name()))

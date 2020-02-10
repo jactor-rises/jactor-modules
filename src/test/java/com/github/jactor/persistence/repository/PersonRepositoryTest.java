@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
@@ -48,7 +48,7 @@ class PersonRepositoryTest {
   void shouldWriteThenReadPersonEntity() {
     int allreadyPresentPeople = numberOf(personRepository.findAll());
 
-    AddressDto address = new AddressDto(null, "1001", "Test Boulevar 1", null, null, "Testington", null);
+    AddressInternalDto address = new AddressInternalDto(null, "1001", "Test Boulevar 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonInternalDto(
         null, address, "no_NO", "Born", "Sometime", "Me, myself, and I"
     ));
@@ -76,10 +76,10 @@ class PersonRepositoryTest {
   @Test
   @DisplayName("should save then update and read a person entity")
   void shouldWriteThenUpdateAndReadPersonEntity() {
-    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonInternalDto(
         null,
-        addressDto,
+        addressInternalDto,
         "no_NO",
         "B",
         "Mine",
@@ -118,11 +118,11 @@ class PersonRepositoryTest {
   void shouldRelateUser() {
     int allreadyPresentPeople = numberOf(personRepository.findAll());
 
-    AddressDto addressDto = new AddressDto(
+    AddressInternalDto addressInternalDto = new AddressInternalDto(
         new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testing", null
     );
 
-    PersonInternalDto personInternalDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "Adder", null);
+    PersonInternalDto personInternalDto = new PersonInternalDto(new PersistentDto(), addressInternalDto, null, null, "Adder", null);
     UserInternalDto userInternalDto = new UserInternalDto(new PersistentDto(), personInternalDto, "public@services.com", "black");
 
     UserEntity userEntity = aUser(userInternalDto);

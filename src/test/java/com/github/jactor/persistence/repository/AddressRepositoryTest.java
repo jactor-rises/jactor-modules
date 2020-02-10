@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.entity.AddressEntity;
 import javax.persistence.EntityManager;
@@ -32,11 +32,11 @@ class AddressRepositoryTest {
   @DisplayName("should fetch address entities")
   void shouldFetchAddressEntities() {
     addressRepository.save(anAddress(
-        new AddressDto(new PersistentDto(), "1234", "somewhere out there", null, null, "Rud", null)
+        new AddressInternalDto(new PersistentDto(), "1234", "somewhere out there", null, null, "Rud", null)
     ));
 
     addressRepository.save(anAddress(
-        new AddressDto(new PersistentDto(), "1234", "somewhere in there", null, null, "Rud", null)
+        new AddressInternalDto(new PersistentDto(), "1234", "somewhere in there", null, null, "Rud", null)
     ));
 
     entityManager.flush();
@@ -58,7 +58,7 @@ class AddressRepositoryTest {
   @DisplayName("should write then read an address entity")
   void shouldWriteThenReadAnAddressEntity() {
     var addressEntityToPersist = anAddress(
-        new AddressDto(
+        new AddressInternalDto(
             new PersistentDto(),
             "1234",
             "somewhere out there",
@@ -95,7 +95,7 @@ class AddressRepositoryTest {
   @DisplayName("should write then update and read an address entity")
   void shouldWriteThenUpdateAndReadAnAddressEntity() {
     var addressEntityToPersist = anAddress(
-        new AddressDto(
+        new AddressInternalDto(
             new PersistentDto(),
             "1234",
             "somewhere out there",
