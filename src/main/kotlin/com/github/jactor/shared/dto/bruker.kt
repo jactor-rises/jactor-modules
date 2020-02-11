@@ -13,6 +13,12 @@ data class UserDto(
         @ApiModelProperty(value = "Brukerstatus") var userType: UserType = UserType.ACTIVE
 )
 
+@ApiModel(value = "Metadata for ulike brukertyper")
+enum class UserType {
+    @ApiModelProperty(value = "Aktiv bruker") ACTIVE,
+    @ApiModelProperty(value = "Inaktiv bruker") INACTIVE
+}
+
 @ApiModel(value = "Metadata for en person")
 data class PersonDto (
         @ApiModelProperty(value = "Identifikator") var id: Long? = null,
@@ -35,7 +41,3 @@ data class AddressDto (
         @ApiModelProperty(value = "Land") var country: String? = null,
         @ApiModelProperty(value = "Postnnummer") var zipCode: String? = null
 )
-
-enum class UserType {
-    ACTIVE, INACTIVE
-}
