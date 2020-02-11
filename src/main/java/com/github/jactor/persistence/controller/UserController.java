@@ -54,6 +54,7 @@ public class UserController {
   @GetMapping("/id/{id}")
   public ResponseEntity<UserDto> get(@PathVariable("id") Long id) {
     return userServicey.find(id)
+        .map(UserInternalDto::toUserDto)
         .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
@@ -78,9 +79,9 @@ public class UserController {
   public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
     userDto.setId(userId);
 
-    var saved = userServicey.update(userDto);
+    var saved = userServicey.update(new UserInternalDto(userDto));
 
-    return new ResponseEntity<>(saved, HttpStatus.ACCEPTED);
+    return new ResponseEntity<>(saved.toUserDto(), HttpStatus.ACCEPTED);
   }
 
   @GetMapping("/active/usernames")

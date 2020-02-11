@@ -14,7 +14,7 @@ class PersonInternalDtoTest {
     @DisplayName("should have a copy constructor")
     @Test void shouldHaveCopyConstructor() {
         PersonInternalDto personInternalDto = new PersonInternalDto();
-        personInternalDto.setAddressInternal(new AddressInternalDto());
+        personInternalDto.setAddress(new AddressInternalDto());
         personInternalDto.setDescription("description");
         personInternalDto.setFirstName("first name");
         personInternalDto.setLocale("no");
@@ -23,7 +23,7 @@ class PersonInternalDtoTest {
         PersonInternalDto copied = new PersonInternalDto(personInternalDto.fetchPersistentDto(), personInternalDto);
 
         assertAll(
-                () -> assertThat(copied.getAddressInternal()).as("address").isEqualTo(personInternalDto.getAddressInternal()),
+                () -> assertThat(copied.getAddress()).as("address").isEqualTo(personInternalDto.getAddress()),
                 () -> assertThat(copied.getDescription()).as("description").isEqualTo(personInternalDto.getDescription()),
                 () -> assertThat(copied.getFirstName()).as("first name").isEqualTo(personInternalDto.getFirstName()),
                 () -> assertThat(copied.getLocale()).as("locale").isEqualTo(personInternalDto.getLocale()),
