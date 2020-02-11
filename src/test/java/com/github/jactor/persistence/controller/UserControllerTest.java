@@ -8,12 +8,20 @@ import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.UserInternalDto;
+import com.github.jactor.persistence.entity.UserEntity;
+import com.github.jactor.persistence.entity.UserEntity.UserType;
+import com.github.jactor.persistence.repository.PersonRepository;
+import com.github.jactor.persistence.repository.UserRepository;
 import com.github.jactor.persistence.service.UserService;
+import com.github.jactor.shared.dto.PersonDto;
+import com.github.jactor.shared.dto.UserDto;
 import java.util.List;
 import java.util.Optional;
+import org.h2.engine.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,7 +47,7 @@ class UserControllerTest {
   private String contextPath;
 
   @MockBean
-  private UserService userServiceMock;
+  private UserRepository userRepositoryMock;
   @Autowired
   private TestRestTemplate testRestTemplate;
 
@@ -52,7 +60,7 @@ class UserControllerTest {
   @Test
   @DisplayName("should not find a user by username")
   void shouldNotFindByUsername() {
-    when(userServiceMock.find("me")).thenReturn(Optional.empty());
+    when(userRepositoryMock.findByUsername("me")).thenReturn(Optional.empty());
 
     var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserInternalDto.class);
 
@@ -65,7 +73,7 @@ class UserControllerTest {
   @Test
   @DisplayName("should find a user by username")
   void shouldFindByUsername() {
-    when(userServiceMock.find("me")).thenReturn(Optional.of(new UserInternalDto()));
+    when(userRepositoryMock.findByUsername("me")).thenReturn(Optional.of(new UserEntity(new UserInternalDto())));
 
     var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserInternalDto.class);
 
@@ -78,7 +86,7 @@ class UserControllerTest {
   @Test
   @DisplayName("should not get a user by id")
   void shouldNotGetById() {
-    when(userServiceMock.find(1L)).thenReturn(Optional.empty());
+    when(userRepositoryMock.findById(1L)).thenReturn(Optional.empty());
 
     var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserInternalDto.class);
 
@@ -91,7 +99,7 @@ class UserControllerTest {
   @Test
   @DisplayName("should find a user by id")
   void shouldFindById() {
-    when(userServiceMock.find(1L)).thenReturn(Optional.of(new UserInternalDto()));
+    when(userRepositoryMock.findById(1L)).thenReturn(Optional.of(new UserEntity(new UserInternalDto())));
 
     var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserInternalDto.class);
 
@@ -107,23 +115,30 @@ class UserControllerTest {
     UserInternalDto userInternalDto = new UserInternalDto();
     userInternalDto.setId(1L);
 
-    when(userServiceMock.update(any(UserInternalDto.class))).thenReturn(userInternalDto);
+    when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity(userInternalDto));
 
-    var userRespnse = testRestTemplate.exchange(buildFullPath("/user/id/1"), HttpMethod.PUT, new HttpEntity<>(userInternalDto), UserInternalDto.class);
+    var userRespnse = testRestTemplate.exchange(
+        buildFullPath("/user/id/1"), HttpMethod.PUT, new HttpEntity<>(userInternalDto.toUserDto()), UserDto.class
+    );
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
-        () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user").isNotNull(),
-        () -> assertThat(userRespnse.getBody()).extracting(UserInternalDto::getId).as("user id").isEqualTo(1L),
-        () -> verify(userServiceMock).update(any(UserInternalDto.class))
+        () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user")
+            .isNotNull().extracting(UserDto::getId).as("user id").isEqualTo(1L),
+        () -> verify(userRepositoryMock).save(any(UserEntity.class))
     );
   }
 
   @Test
   @DisplayName("should find all usernames on active users")
   void shouldFindAllUsernames() {
-    when(userServiceMock.findUsernamesOnActiveUsers())
-        .thenReturn(List.of("bart", "lisa"));
+    UserDto bartDto = new UserDto(null, null, new PersonDto(), "bart", com.github.jactor.shared.dto.UserType.ACTIVE);
+    UserDto lisaDto = new UserDto(null, null, new PersonDto(), "lisa", com.github.jactor.shared.dto.UserType.ACTIVE);
+    UserEntity bart = new UserEntity(new UserInternalDto(bartDto));
+    UserEntity lisa = new UserEntity(new UserInternalDto(lisaDto));
+
+    when(userRepositoryMock.findByUserTypeIsNot(UserType.INACTIVE))
+        .thenReturn(List.of(bart, lisa));
 
     var userRespnse = testRestTemplate.exchange(buildFullPath("/user/active/usernames"), HttpMethod.GET, null, responsIslistOfStrings());
 
@@ -136,17 +151,19 @@ class UserControllerTest {
   @Test
   @DisplayName("should add user id from url to payload when updating user")
   void shouldAddUserIdFromPathWhenUpdatingUser() {
-    when(userServiceMock.update(any(UserInternalDto.class))).thenReturn(new UserInternalDto());
+    when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity(new UserInternalDto()));
 
-    var userResponse = testRestTemplate.exchange(buildFullPath("/user/id/101"), HttpMethod.PUT, new HttpEntity<>(new UserInternalDto()), UserInternalDto.class);
+    var userResponse = testRestTemplate.exchange(buildFullPath("/user/id/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
 
     assertAll(
         () -> assertThat(userResponse.getStatusCode()).as("status code").isEqualTo(HttpStatus.ACCEPTED),
         () -> {
-          var userDto = new UserInternalDto();
-          userDto.setId(101L);
+          var userArgument = ArgumentCaptor.forClass(UserEntity.class);
 
-          verify(userServiceMock).update(userDto);
+          verify(userRepositoryMock).save(userArgument.capture());
+          var userEntity = userArgument.getValue();
+
+          assertThat(userEntity.getId()).as("id").isEqualTo(101L);
         }
     );
   }

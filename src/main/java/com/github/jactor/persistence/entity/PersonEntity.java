@@ -74,7 +74,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   }
 
   public PersonEntity(@NotNull PersonInternalDto person) {
-    addressEntity = Optional.ofNullable(person.getAddressInternal()).map(AddressEntity::new).orElse(null);
+    addressEntity = Optional.ofNullable(person.getAddress()).map(AddressEntity::new).orElse(null);
     description = person.getDescription();
     firstName = person.getFirstName();
     locale = person.getLocale();

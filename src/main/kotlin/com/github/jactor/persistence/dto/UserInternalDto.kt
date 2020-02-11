@@ -5,7 +5,7 @@ import com.github.jactor.shared.dto.UserType
 
 data class UserInternalDto(
         var persistentDto: PersistentDto? = null,
-        var personInternal: PersonInternalDto? = null,
+        var person: PersonInternalDto? = null,
         var emailAddress: String? = null,
         var username: String? = null,
         var usertype: Usertype = Usertype.ACTIVE
@@ -13,7 +13,7 @@ data class UserInternalDto(
     constructor(
             persistent: PersistentDto, userInternal: UserInternalDto
     ) : this(
-            persistent, userInternal.personInternal, userInternal.emailAddress, userInternal.username
+            persistent, userInternal.person, userInternal.emailAddress, userInternal.username
     )
 
     constructor(
@@ -24,17 +24,18 @@ data class UserInternalDto(
 
     constructor(userDto: UserDto) : this(
             persistentDto = if (userDto.id != null) PersistentDto(id = userDto.id) else null,
-            person = if (userDto.person != null) PersonInternalDto(userDto.person) else null,
+
+            person = if (userDto.person != null) PersonInternalDto(userDto.person!!) else null,
             emailAddress = userDto.emailAddress,
             username = userDto.username,
             usertype = Usertype.valueOf(userDto.userType.name)
-
     )
 
     fun toUserDto() = UserDto(
             id = persistentDto?.id,
+
             emailAddress = emailAddress,
-            person = person?.toUserDto(),
+            person = person?.toPersonDto(),
             username = username,
             userType = if (usertype == Usertype.ADMIN) UserType.ACTIVE else UserType.valueOf(usertype.name)
     )

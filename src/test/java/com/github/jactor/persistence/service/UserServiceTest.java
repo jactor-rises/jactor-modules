@@ -45,7 +45,7 @@ class UserServiceTest {
 
     var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
-    personDto.setAddressInternal(addressDto);
+    personDto.setAddress(addressDto);
 
     when(userRepositoryMock.findByUsername("jactor"))
         .thenReturn(
@@ -70,7 +70,7 @@ class UserServiceTest {
 
     var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
-    personDto.setAddressInternal(addressDto);
+    personDto.setAddress(addressDto);
 
     when(userRepositoryMock.findById(69L))
         .thenReturn(
