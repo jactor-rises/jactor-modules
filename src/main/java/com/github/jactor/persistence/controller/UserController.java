@@ -2,8 +2,9 @@ package com.github.jactor.persistence.controller;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.command.CreateUserCommandResponse;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.service.UserService;
+import com.github.jactor.shared.dto.UserDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -40,6 +41,7 @@ public class UserController {
   @GetMapping("/name/{username}")
   public ResponseEntity<UserDto> find(@PathVariable("username") String username) {
     return userServicey.find(username)
+        .map(UserInternalDto::toUserDto)
         .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
   }
@@ -52,6 +54,7 @@ public class UserController {
   @GetMapping("/id/{id}")
   public ResponseEntity<UserDto> get(@PathVariable("id") Long id) {
     return userServicey.find(id)
+        .map(UserInternalDto::toUserDto)
         .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
@@ -76,9 +79,9 @@ public class UserController {
   public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
     userDto.setId(userId);
 
-    var saved = userServicey.update(userDto);
+    var saved = userServicey.update(new UserInternalDto(userDto));
 
-    return new ResponseEntity<>(saved, HttpStatus.ACCEPTED);
+    return new ResponseEntity<>(saved.toUserDto(), HttpStatus.ACCEPTED);
   }
 
   @GetMapping("/active/usernames")

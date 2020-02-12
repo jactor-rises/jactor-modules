@@ -6,12 +6,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.GuestBookEntryEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import java.util.HashSet;
@@ -42,9 +42,9 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then read guest book entry entity")
   void shouldSaveThenReadGuestBookEntryEntity() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
     savedUser.setGuestBook(
@@ -73,9 +73,9 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then modify and read guest book entry entity")
   void shouldSaveThenModifyAndReadGuestBookEntryEntity() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
     savedUser.setGuestBook(
@@ -115,9 +115,9 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should write two entries to two different guest books and then find one entry")
   void shouldWriteTwoEntriesToTwoGuestBooksAndThenFindEntry() {
-    var addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
     savedUser.setGuestBook(
@@ -131,7 +131,7 @@ class GuestBookEntryRepositoryTest {
 
     savedGuestBook.getEntries().forEach(guestBookEntryEntityToSave -> guestBookEntryRepository.save(guestBookEntryEntityToSave));
 
-    var anotherUserDto = new UserDto(null, personDto, "hidden@tantooine.com", "hidden");
+    var anotherUserDto = new UserInternalDto(null, personDto, "hidden@tantooine.com", "hidden");
     var anotherSavedUser = userRepository.save(new UserEntity(anotherUserDto));
     anotherSavedUser.setGuestBook(
         aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()))

@@ -9,11 +9,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
-import com.github.jactor.persistence.dto.UserType;
+import com.github.jactor.persistence.dto.PersonInternalDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
+import com.github.jactor.persistence.dto.Usertype;
 import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.repository.PersonRepository;
@@ -40,17 +40,17 @@ class UserServiceTest {
   @Test
   @DisplayName("should map a user entity to a dto")
   void shouldMapUserToDto() {
-    var addressDto = new AddressDto();
+    var addressDto = new AddressInternalDto();
     addressDto.setPersistentDto(new PersistentDto());
 
-    var personDto = new PersonDto();
+    var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
     personDto.setAddress(addressDto);
 
     when(userRepositoryMock.findByUsername("jactor"))
         .thenReturn(
             Optional.of(aUser(
-                new UserDto(null, personDto, null, "jactor", UserType.ACTIVE)
+                new UserInternalDto(null, personDto, null, "jactor", Usertype.ACTIVE)
             ))
         );
 
@@ -65,17 +65,17 @@ class UserServiceTest {
   @Test
   @DisplayName("should also map a user entity to a dto when finding by id")
   void shouldMapUserToDtoWhenFindingById() {
-    var addressDto = new AddressDto();
+    var addressDto = new AddressInternalDto();
     addressDto.setPersistentDto(new PersistentDto());
 
-    var personDto = new PersonDto();
+    var personDto = new PersonInternalDto();
     personDto.setPersistentDto(new PersistentDto());
     personDto.setAddress(addressDto);
 
     when(userRepositoryMock.findById(69L))
         .thenReturn(
             Optional.of(aUser(
-                new UserDto(null, personDto, null, "jactor", UserType.ACTIVE)
+                new UserInternalDto(null, personDto, null, "jactor", Usertype.ACTIVE)
             ))
         );
 
@@ -90,7 +90,7 @@ class UserServiceTest {
   @Test
   @DisplayName("should update a UserDto with an UserEntity")
   void shouldSavedUserDtoAsUserEntity() {
-    var userDto = new UserDto();
+    var userDto = new UserInternalDto();
     userDto.setId(1L);
     userDto.setUsername("marley");
     userDto.setPersistentDto(new PersistentDto());
@@ -108,11 +108,11 @@ class UserServiceTest {
   @DisplayName("should create and save person for the user")
   void shouldCreateAndSavePersonForTheUser() {
     var createUserCommand = new CreateUserCommand("jactor", "Jacobsen");
-    var userDto = new UserDto();
+    var userDto = new UserInternalDto();
     var userEntityMock = mockUserEntityWith(userDto);
 
     when(userRepositoryMock.save(any())).thenReturn(userEntityMock);
-    when(personRepository.save(any())).thenReturn(new PersonEntity(new PersonDto()));
+    when(personRepository.save(any())).thenReturn(new PersonEntity(new PersonInternalDto()));
 
     var user = userServiceToTest.create(createUserCommand);
 
@@ -127,10 +127,10 @@ class UserServiceTest {
     );
   }
 
-  private UserEntity mockUserEntityWith(UserDto userDto) {
+  private UserEntity mockUserEntityWith(UserInternalDto userInternalDto) {
     var userEntityMock = mock(UserEntity.class);
 
-    when(userEntityMock.asDto()).thenReturn(userDto);
+    when(userEntityMock.asDto()).thenReturn(userInternalDto);
 
     return userEntityMock;
   }

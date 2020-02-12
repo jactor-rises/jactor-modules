@@ -9,25 +9,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("A PersonDto")
-class PersonDtoTest {
+class PersonInternalDtoTest {
 
     @DisplayName("should have a copy constructor")
     @Test void shouldHaveCopyConstructor() {
-        PersonDto personDto = new PersonDto();
-        personDto.setAddress(new AddressDto());
-        personDto.setDescription("description");
-        personDto.setFirstName("first name");
-        personDto.setLocale("no");
-        personDto.setSurname("surname");
+        PersonInternalDto personInternalDto = new PersonInternalDto();
+        personInternalDto.setAddress(new AddressInternalDto());
+        personInternalDto.setDescription("description");
+        personInternalDto.setFirstName("first name");
+        personInternalDto.setLocale("no");
+        personInternalDto.setSurname("surname");
 
-        PersonDto copied = new PersonDto(personDto.fetchPersistentDto(), personDto);
+        PersonInternalDto copied = new PersonInternalDto(personInternalDto.fetchPersistentDto(), personInternalDto);
 
         assertAll(
-                () -> assertThat(copied.getAddress()).as("address").isEqualTo(personDto.getAddress()),
-                () -> assertThat(copied.getDescription()).as("description").isEqualTo(personDto.getDescription()),
-                () -> assertThat(copied.getFirstName()).as("first name").isEqualTo(personDto.getFirstName()),
-                () -> assertThat(copied.getLocale()).as("locale").isEqualTo(personDto.getLocale()),
-                () -> assertThat(copied.getSurname()).as("surname").isEqualTo(personDto.getSurname())
+                () -> assertThat(copied.getAddress()).as("address").isEqualTo(personInternalDto.getAddress()),
+                () -> assertThat(copied.getDescription()).as("description").isEqualTo(personInternalDto.getDescription()),
+                () -> assertThat(copied.getFirstName()).as("first name").isEqualTo(personInternalDto.getFirstName()),
+                () -> assertThat(copied.getLocale()).as("locale").isEqualTo(personInternalDto.getLocale()),
+                () -> assertThat(copied.getSurname()).as("surname").isEqualTo(personInternalDto.getSurname())
         );
     }
 
@@ -40,7 +40,7 @@ class PersonDtoTest {
         persistentDto.setModifiedBy("tip");
         persistentDto.setTimeOfModification(LocalDateTime.now());
 
-        PersistentDto copied = new PersonDto(persistentDto, new PersonDto()).fetchPersistentDto();
+        PersistentDto copied = new PersonInternalDto(persistentDto, new PersonInternalDto()).fetchPersistentDto();
 
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

@@ -72,7 +72,7 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
     id = guestBook.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(guestBook.fetchPersistentDto());
     title = guestBook.getTitle();
-    user = Optional.ofNullable(guestBook.getUser()).map(UserEntity::new).orElse(null);
+    user = Optional.ofNullable(guestBook.getUserInternal()).map(UserEntity::new).orElse(null);
   }
 
   private UserEntity copyUserWithoutId() {

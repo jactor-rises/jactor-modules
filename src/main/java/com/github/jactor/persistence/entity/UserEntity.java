@@ -2,7 +2,7 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,20 +82,20 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     userType = user.userType;
   }
 
-  public UserEntity(@NotNull UserDto user) {
+  public UserEntity(@NotNull UserInternalDto user) {
     emailAddress = user.getEmailAddress();
     id = user.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(user.fetchPersistentDto());
     personEntity = Optional.ofNullable(user.getPerson()).map(PersonEntity::new).orElse(null);
     username = user.getUsername();
     userType = Arrays.stream(UserType.values())
-        .filter(aUserType -> aUserType.name().equals(user.getUserType().name()))
+        .filter(aUserType -> aUserType.name().equals(user.getUsertype().name()))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUserType()));
+        .orElseThrow(() -> new IllegalArgumentException("Unknown UserType: " + user.getUsertype()));
   }
 
-  public UserDto asDto() {
-    return new UserDto(
+  public UserInternalDto asDto() {
+    return new UserInternalDto(
         persistentDataEmbeddable.asPersistentDto(id),
         Optional.ofNullable(personEntity).map(PersonEntity::asDto).orElse(null),
         emailAddress,
@@ -218,8 +218,8 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     this.personEntity = personEntity;
   }
 
-  public static UserEntity aUser(UserDto userDto) {
-    return new UserEntity(userDto);
+  public static UserEntity aUser(UserInternalDto userInternalDto) {
+    return new UserEntity(userInternalDto);
   }
 
   public enum UserType {
