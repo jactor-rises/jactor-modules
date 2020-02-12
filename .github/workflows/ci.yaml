@@ -26,7 +26,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: jactor-rises/actions/verify-mvn-dependencies@v2.0.1
+      - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0
       - run: mvn -B install
       - name: Build and publish Docker image
         env:
@@ -54,7 +54,7 @@ jobs:
             ${{ runner.os }}-maven-
       - run: mvn -B release:update-versions
       - run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout > .new-version
-      - uses: jactor-rises/actions/git-commit@v4.0.3
+      - uses: jactor-rises/actions/git-commit@v1.0.0
         with:
           commit_message: "Bumped to new version: {}"
           commit_message_file: .new-version
