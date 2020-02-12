@@ -24,9 +24,9 @@ data class PersonDto (
         @ApiModelProperty(value = "Identifikator") var id: Long? = null,
 
         @ApiModelProperty(value = "Adressen til en person") var address: AddressDto? = null,
-        @ApiModelProperty(value = "") var description: String? = null,
-        @ApiModelProperty(value = "") var firstName: String? = null,
-        @ApiModelProperty(value = "") var locale: String? = null,
+        @ApiModelProperty(value = "Beskrivelse") var description: String? = null,
+        @ApiModelProperty(value = "Fornavn") var firstName: String? = null,
+        @ApiModelProperty(value = "Internasjonal id (land $ språk)") var locale: String? = null,
         @ApiModelProperty(value = "Etternavn") var surname: String? = null
 )
 
