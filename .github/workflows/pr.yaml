@@ -20,4 +20,6 @@ jobs:
             ${{ runner.os }}-maven-
       - run: env
       - uses: jactor-rises/actions/setup-maven@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: mvn -B install
