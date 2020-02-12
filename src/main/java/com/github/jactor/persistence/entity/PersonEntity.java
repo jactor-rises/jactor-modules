@@ -2,8 +2,8 @@ package com.github.jactor.persistence.entity;
 
 import static java.util.Objects.hash;
 
-import com.github.jactor.persistence.dto.AddressDto;
-import com.github.jactor.persistence.dto.PersonDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -73,7 +73,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     users = person.users;
   }
 
-  public PersonEntity(@NotNull PersonDto person) {
+  public PersonEntity(@NotNull PersonInternalDto person) {
     addressEntity = Optional.ofNullable(person.getAddress()).map(AddressEntity::new).orElse(null);
     description = person.getDescription();
     firstName = person.getFirstName();
@@ -83,9 +83,9 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     surname = person.getSurname();
   }
 
-  public PersonDto asDto() {
-    AddressDto addressDto = Optional.ofNullable(addressEntity).map(AddressEntity::asDto).orElse(null);
-    return new PersonDto(persistentDataEmbeddable.asPersistentDto(id), addressDto, locale, firstName, surname, description);
+  public PersonInternalDto asDto() {
+    AddressInternalDto addressInternalDto = Optional.ofNullable(addressEntity).map(AddressEntity::asDto).orElse(null);
+    return new PersonInternalDto(persistentDataEmbeddable.asPersistentDto(id), addressInternalDto, locale, firstName, surname, description);
   }
 
   @Override
@@ -201,7 +201,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     users.add(user);
   }
 
-  public static PersonEntity aPerson(PersonDto personDto) {
-    return new PersonEntity(personDto);
+  public static PersonEntity aPerson(PersonInternalDto personInternalDto) {
+    return new PersonEntity(personInternalDto);
   }
 }

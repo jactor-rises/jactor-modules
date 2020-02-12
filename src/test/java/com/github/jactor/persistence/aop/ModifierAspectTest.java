@@ -10,14 +10,14 @@ import static com.github.jactor.persistence.entity.UserEntity.aUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.github.jactor.persistence.dto.AddressDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
 import com.github.jactor.persistence.dto.PersistentDto;
-import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import java.time.LocalDateTime;
 import org.aspectj.lang.JoinPoint;
 import org.junit.jupiter.api.DisplayName;
@@ -41,8 +41,8 @@ class ModifierAspectTest {
   @Test
   @DisplayName("should modify timestamp on address when used")
   void shouldModifyTimestampOnAddressWhenUsed() {
-    var addressWithoutId = anAddress(new AddressDto(persistentDto, new AddressDto()));
-    var address = anAddress(new AddressDto(persistentDto, new AddressDto()));
+    var addressWithoutId = anAddress(new AddressInternalDto(persistentDto, new AddressInternalDto()));
+    var address = anAddress(new AddressInternalDto(persistentDto, new AddressInternalDto()));
     address.setId(1L);
 
     when(joinPointMock.getArgs()).thenReturn(new Object[]{address, addressWithoutId});
@@ -111,8 +111,8 @@ class ModifierAspectTest {
   @Test
   @DisplayName("should modify timestamp on person when used")
   void shouldModifyTimestampOnPersonWhenUsed() {
-    var personWithoutId = aPerson(new PersonDto(persistentDto, new PersonDto()));
-    var person = aPerson(new PersonDto(persistentDto, new PersonDto()));
+    var personWithoutId = aPerson(new PersonInternalDto(persistentDto, new PersonInternalDto()));
+    var person = aPerson(new PersonInternalDto(persistentDto, new PersonInternalDto()));
     person.setId(1L);
 
     when(joinPointMock.getArgs()).thenReturn(new Object[]{person, personWithoutId});
@@ -125,8 +125,8 @@ class ModifierAspectTest {
   @Test
   @DisplayName("should modify timestamp on user when used")
   void shouldModifyTimestampOnUserWhenUsed() {
-    var userWithoutId = aUser(new UserDto(persistentDto, new UserDto()));
-    var user = aUser(new UserDto(persistentDto, new UserDto()));
+    var userWithoutId = aUser(new UserInternalDto(persistentDto, new UserInternalDto()));
+    var user = aUser(new UserInternalDto(persistentDto, new UserInternalDto()));
     user.setId(1L);
 
     when(joinPointMock.getArgs()).thenReturn(new Object[]{user, userWithoutId});

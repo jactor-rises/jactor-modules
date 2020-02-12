@@ -73,7 +73,7 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
     id = blogDto.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(blogDto.fetchPersistentDto());
     title = blogDto.getTitle();
-    userEntity = Optional.ofNullable(blogDto.getUser()).map(UserEntity::new).orElse(null);
+    userEntity = Optional.ofNullable(blogDto.getUserInternal()).map(UserEntity::new).orElse(null);
   }
 
   public BlogDto asDto() {

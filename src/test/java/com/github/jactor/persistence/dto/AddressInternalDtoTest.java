@@ -10,27 +10,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("An AddressDto")
-class AddressDtoTest {
+class AddressInternalDtoTest {
 
     @DisplayName("should have a copy constructor")
     @Test void shouldHaveCopyConstructor() {
-        AddressDto addressDto = new AddressDto();
-        addressDto.setAddressLine1("address line one");
-        addressDto.setAddressLine2("address line two");
-        addressDto.setAddressLine3("address line three");
-        addressDto.setCity("oslo");
-        addressDto.setCountry("NO");
-        addressDto.setZipCode("1234");
+        AddressInternalDto addressInternalDto = new AddressInternalDto();
+        addressInternalDto.setAddressLine1("address line one");
+        addressInternalDto.setAddressLine2("address line two");
+        addressInternalDto.setAddressLine3("address line three");
+        addressInternalDto.setCity("oslo");
+        addressInternalDto.setCountry("NO");
+        addressInternalDto.setZipCode("1234");
 
-        AddressDto copied = new AddressDto(addressDto.fetchPersistentDto(), addressDto);
+        AddressInternalDto copied = new AddressInternalDto(addressInternalDto.fetchPersistentDto(), addressInternalDto);
 
         assertAll(
-                () -> assertThat(copied.getAddressLine1()).as("address line one").isEqualTo(addressDto.getAddressLine1()),
-                () -> assertThat(copied.getAddressLine2()).as("address line two").isEqualTo(addressDto.getAddressLine2()),
-                () -> assertThat(copied.getAddressLine3()).as("address line three").isEqualTo(addressDto.getAddressLine3()),
-                () -> assertThat(copied.getCity()).as("city").isEqualTo(addressDto.getCity()),
-                () -> assertThat(copied.getCountry()).as("country").isEqualTo(addressDto.getCountry()),
-                () -> assertThat(copied.getZipCode()).as("zip code").isEqualTo(addressDto.getZipCode())
+                () -> assertThat(copied.getAddressLine1()).as("address line one").isEqualTo(addressInternalDto.getAddressLine1()),
+                () -> assertThat(copied.getAddressLine2()).as("address line two").isEqualTo(addressInternalDto.getAddressLine2()),
+                () -> assertThat(copied.getAddressLine3()).as("address line three").isEqualTo(addressInternalDto.getAddressLine3()),
+                () -> assertThat(copied.getCity()).as("city").isEqualTo(addressInternalDto.getCity()),
+                () -> assertThat(copied.getCountry()).as("country").isEqualTo(addressInternalDto.getCountry()),
+                () -> assertThat(copied.getZipCode()).as("zip code").isEqualTo(addressInternalDto.getZipCode())
         );
     }
 
@@ -43,7 +43,7 @@ class AddressDtoTest {
         persistentDto.setModifiedBy("tip");
         persistentDto.setTimeOfModification(LocalDateTime.now());
 
-        PersistentDto copied = new AddressDto(persistentDto, new AddressDto()).fetchPersistentDto();
+        PersistentDto copied = new AddressInternalDto(persistentDto, new AddressInternalDto()).fetchPersistentDto();
 
         assertAll(
                 () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

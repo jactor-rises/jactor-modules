@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.service;
 
 import com.github.jactor.persistence.command.CreateUserCommand;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
 import com.github.jactor.persistence.repository.UserRepository;
@@ -24,24 +24,24 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public Optional<UserDto> find(String username) {
+  public Optional<UserInternalDto> find(String username) {
     return userRepository.findByUsername(username).map(UserEntity::asDto);
   }
 
-  public Optional<UserDto> find(Long id) {
+  public Optional<UserInternalDto> find(Long id) {
     return userRepository.findById(id).map(UserEntity::asDto);
   }
 
-  public UserDto update(UserDto userDto) {
-    Objects.requireNonNull(userDto.getId());
+  public UserInternalDto update(UserInternalDto userInternalDto) {
+    Objects.requireNonNull(userInternalDto.getId());
 
-    UserEntity userEntity = new UserEntity(userDto);
+    UserEntity userEntity = new UserEntity(userInternalDto);
     userRepository.save(userEntity);
 
     return userEntity.asDto();
   }
 
-  public UserDto create(CreateUserCommand createUserCommand) {
+  public UserInternalDto create(CreateUserCommand createUserCommand) {
     UserEntity userEntity = createNewFrom(createUserCommand);
     userEntity = userRepository.save(userEntity);
 

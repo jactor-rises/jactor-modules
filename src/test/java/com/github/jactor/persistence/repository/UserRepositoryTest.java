@@ -6,9 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.dto.AddressDto;
-import com.github.jactor.persistence.dto.PersonDto;
-import com.github.jactor.persistence.dto.UserDto;
+import com.github.jactor.persistence.dto.AddressInternalDto;
+import com.github.jactor.persistence.dto.PersonInternalDto;
+import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
 import java.util.List;
@@ -53,10 +53,10 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should write then read a user entity")
   void shouldWriteThenReadUserEntity() {
-    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    PersonDto personDto = new PersonDto(null, addressDto, null, null, "Solo", null);
-    UserEntity userToPersist = aUser(new UserDto(
-        null, personDto, "smuggle.fast@tantooine.com", "smuggler"
+    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    PersonInternalDto personInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Solo", null);
+    UserEntity userToPersist = aUser(new UserInternalDto(
+        null, personInternalDto, "smuggle.fast@tantooine.com", "smuggler"
     ));
 
     userRepository.save(userToPersist);
@@ -81,10 +81,10 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should write then update and read a user entity")
   void shouldWriteThenUpdateAndReadUserEntity() {
-    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    PersonDto personDto = new PersonDto(null, addressDto, null, null, "AA", null);
-    UserEntity userToPersist = aUser(new UserDto(
-        null, personDto, "casuel@tantooine.com", "causual"
+    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    PersonInternalDto personInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "AA", null);
+    UserEntity userToPersist = aUser(new UserInternalDto(
+        null, personInternalDto, "casuel@tantooine.com", "causual"
     ));
 
     userRepository.save(userToPersist);
@@ -120,11 +120,11 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should find all active users")
   void shouldFindAllActiveUsers() {
-    AddressDto addressDto = new AddressDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    PersonDto spidyPersonDto = new PersonDto(null, addressDto, null, null, "Parker", null);
-    PersonDto superPersonDto = new PersonDto(null, addressDto, null, null, "Kent", null);
-    userRepository.save(aUser(new UserDto(null, spidyPersonDto, null, "spiderman")));
-    userRepository.save(aUser(new UserDto(null, superPersonDto, null, "superman", com.github.jactor.persistence.dto.UserType.INACTIVE)));
+    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    PersonInternalDto spidyPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Parker", null);
+    PersonInternalDto superPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Kent", null);
+    userRepository.save(aUser(new UserInternalDto(null, spidyPersonInternalDto, null, "spiderman")));
+    userRepository.save(aUser(new UserInternalDto(null, superPersonInternalDto, null, "superman", com.github.jactor.persistence.dto.Usertype.INACTIVE)));
     entityManager.flush();
     entityManager.clear();
 
