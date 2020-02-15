@@ -29,7 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0-jactor-rises
-      - run: mvn -B install
+      - run: mvn -B install -e
       - name: Build and publish Docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
