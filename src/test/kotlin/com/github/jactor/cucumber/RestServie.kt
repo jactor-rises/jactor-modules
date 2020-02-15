@@ -4,7 +4,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 
-data class RestServie(val baseUrl: String, var endpoint: String = "") {
+data class RestServie(val baseUrl: String, var url: String = "") {
     private lateinit var responseEntity: ResponseEntity<String>
     private var restTemplate: RestTemplate? = null
 
@@ -13,7 +13,7 @@ data class RestServie(val baseUrl: String, var endpoint: String = "") {
             restTemplate = RestTemplate()
         }
 
-        responseEntity = restTemplate!!.exchange(baseUrl + endpoint, HttpMethod.GET, null, String::class.java)
+        responseEntity = restTemplate!!.exchange(baseUrl + url, HttpMethod.GET, null, String::class.java)
     }
 
     fun hentStatusKode() = responseEntity.statusCode
