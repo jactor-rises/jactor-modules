@@ -3,6 +3,7 @@ package com.github.jactor.persistence.controller;
 import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.command.CreateUserCommandResponse;
 import com.github.jactor.persistence.dto.UserInternalDto;
+import com.github.jactor.persistence.entity.UserEntity.UserType;
 import com.github.jactor.persistence.service.UserService;
 import com.github.jactor.shared.dto.UserDto;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -51,7 +53,7 @@ public class UserController {
       @ApiResponse(code = 200, message = "User got"),
       @ApiResponse(code = 404, message = "Did not find user with id")
   })
-  @GetMapping("/id/{id}")
+  @GetMapping("/{id}")
   public ResponseEntity<UserDto> get(@PathVariable("id") Long id) {
     return userServicey.find(id)
         .map(UserInternalDto::toUserDto)
@@ -63,7 +65,7 @@ public class UserController {
   @ApiResponses(value = {
       @ApiResponse(code = 201, message = "User created")
   })
-  @PostMapping("/create")
+  @PostMapping
   public ResponseEntity<CreateUserCommandResponse> post(@RequestBody CreateUserCommand createUserCommand) {
     var primaryKey = userServicey.create(createUserCommand);
 
@@ -75,7 +77,7 @@ public class UserController {
       @ApiResponse(code = 202, message = "User updated"),
       @ApiResponse(code = 400, message = "Did not find user with id")
   })
-  @PutMapping("/id/{userId}")
+  @PutMapping("/{userId}")
   public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
     userDto.setId(userId);
 
@@ -84,8 +86,8 @@ public class UserController {
     return new ResponseEntity<>(saved.toUserDto(), HttpStatus.ACCEPTED);
   }
 
-  @GetMapping("/active/usernames")
-  public ResponseEntity<List<String>> findAllUsernames() {
-    return new ResponseEntity<>(userServicey.findUsernamesOnActiveUsers(), HttpStatus.OK);
+  @GetMapping("/usernames")
+  public ResponseEntity<List<String>> findAllUsernames(@RequestParam(required = false, defaultValue = "ACTIVE") String userType) {
+    return new ResponseEntity<>(userServicey.findUsernames(UserType.valueOf(userType)), HttpStatus.OK);
   }
 }
