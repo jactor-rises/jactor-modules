@@ -25,7 +25,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - run: env
-      - uses: jactor-rises/actions/setup-maven@v1.0.0
+      - uses: jactor-rises/actions/setup-maven@v1.0.0-jactor-rises
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0-jactor-rises
