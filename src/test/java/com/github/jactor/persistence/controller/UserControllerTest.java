@@ -88,7 +88,7 @@ class UserControllerTest {
   void shouldNotGetById() {
     when(userRepositoryMock.findById(1L)).thenReturn(Optional.empty());
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserInternalDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.NOT_FOUND),
@@ -101,7 +101,7 @@ class UserControllerTest {
   void shouldFindById() {
     when(userRepositoryMock.findById(1L)).thenReturn(Optional.of(new UserEntity(new UserInternalDto())));
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/id/1"), UserInternalDto.class);
+    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserInternalDto.class);
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
@@ -118,7 +118,7 @@ class UserControllerTest {
     when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity(userInternalDto));
 
     var userRespnse = testRestTemplate.exchange(
-        buildFullPath("/user/id/1"), HttpMethod.PUT, new HttpEntity<>(userInternalDto.toUserDto()), UserDto.class
+        buildFullPath("/user/1"), HttpMethod.PUT, new HttpEntity<>(userInternalDto.toUserDto()), UserDto.class
     );
 
     assertAll(
@@ -137,10 +137,10 @@ class UserControllerTest {
     UserEntity bart = new UserEntity(new UserInternalDto(bartDto));
     UserEntity lisa = new UserEntity(new UserInternalDto(lisaDto));
 
-    when(userRepositoryMock.findByUserTypeIsNot(UserType.INACTIVE))
+    when(userRepositoryMock.findByUserTypeIn(List.of(UserType.ACTIVE)))
         .thenReturn(List.of(bart, lisa));
 
-    var userRespnse = testRestTemplate.exchange(buildFullPath("/user/active/usernames"), HttpMethod.GET, null, responsIslistOfStrings());
+    var userRespnse = testRestTemplate.exchange(buildFullPath("/user/usernames"), HttpMethod.GET, null, responsIslistOfStrings());
 
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
@@ -153,7 +153,7 @@ class UserControllerTest {
   void shouldAddUserIdFromPathWhenUpdatingUser() {
     when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity(new UserInternalDto()));
 
-    var userResponse = testRestTemplate.exchange(buildFullPath("/user/id/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
+    var userResponse = testRestTemplate.exchange(buildFullPath("/user/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
 
     assertAll(
         () -> assertThat(userResponse.getStatusCode()).as("status code").isEqualTo(HttpStatus.ACCEPTED),
