@@ -9,10 +9,13 @@ import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.AddressInternalDto;
 import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
+import com.github.jactor.persistence.dto.Usertype;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -118,20 +121,20 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("should find all active users")
-  void shouldFindAllActiveUsers() {
+  @DisplayName("should find all active users and admins")
+  void shouldFindAllActiveUsersAndAdmins() {
     AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonInternalDto spidyPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Parker", null);
     PersonInternalDto superPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Kent", null);
     userRepository.save(aUser(new UserInternalDto(null, spidyPersonInternalDto, null, "spiderman")));
-    userRepository.save(aUser(new UserInternalDto(null, superPersonInternalDto, null, "superman", com.github.jactor.persistence.dto.Usertype.INACTIVE)));
+    userRepository.save(aUser(new UserInternalDto(null, superPersonInternalDto, null, "superman", Usertype.INACTIVE)));
     entityManager.flush();
     entityManager.clear();
 
-    List<String> usernames = userRepository.findByUserTypeIsNot(UserType.INACTIVE).stream()
+    List<String> usernames = userRepository.findByUserTypeIn(List.of(UserType.ACTIVE, UserType.ADMIN)).stream()
         .map(UserEntity::getUsername)
         .collect(toList());
 
-    assertThat(usernames).contains("tip", "spiderman", "jactor");
+    assertThat(new HashSet<>(usernames)).isEqualTo(new HashSet<>(List.of("tip", "spiderman", "jactor")));
   }
 }

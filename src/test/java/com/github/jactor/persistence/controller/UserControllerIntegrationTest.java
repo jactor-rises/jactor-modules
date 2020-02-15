@@ -35,7 +35,7 @@ class UserControllerIntegrationTest {
   void shouldCreateNewUser() {
     var createUserCommand = new CreateUserCommand(UniqueUsername.generate("turbo"), "Someone");
     var createdUserResponse = Optional.ofNullable(testRestTemplate.postForEntity(
-        contextPath() + "/user/create", new HttpEntity<>(createUserCommand), CreateUserCommandResponse.class)
+        contextPath() + "/user", new HttpEntity<>(createUserCommand), CreateUserCommandResponse.class)
     );
 
     assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(
@@ -52,7 +52,7 @@ class UserControllerIntegrationTest {
     createUserCommand.setEmailAddress("somewhere@somehow.com");
 
     var createdUserResponse = Optional.ofNullable(testRestTemplate.postForEntity(
-        contextPath() + "/user/create", new HttpEntity<>(createUserCommand), CreateUserCommandResponse.class)
+        contextPath() + "/user", new HttpEntity<>(createUserCommand), CreateUserCommandResponse.class)
     );
 
     assertThat(createdUserResponse).hasValueSatisfying(response -> assertAll(

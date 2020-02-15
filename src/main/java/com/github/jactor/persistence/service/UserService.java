@@ -58,8 +58,8 @@ public class UserService {
     return userEntity;
   }
 
-  public List<String> findUsernamesOnActiveUsers() {
-    return userRepository.findByUserTypeIsNot(UserType.INACTIVE).stream()
+  public List<String> findUsernames(UserType userType) {
+    return userRepository.findByUserTypeIn(List.of(userType)).stream()
         .map(UserEntity::getUsername)
         .collect(Collectors.toList());
   }
