@@ -28,7 +28,7 @@ jobs:
       - uses: jactor-rises/actions/setup-maven@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0
+      - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0-jactor-rises
       - run: mvn -B install
       - name: Build and publish Docker image
         env:
@@ -56,7 +56,7 @@ jobs:
             ${{ runner.os }}-maven-
       - run: mvn -B release:update-versions
       - run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout > .new-version
-      - uses: jactor-rises/actions/git-commit@v1.0.0
+      - uses: jactor-rises/actions/git-commit@v1.0.0-jactor-rises
         with:
           commit_message: "Bumped to new version: {}"
           commit_message_file: .new-version
