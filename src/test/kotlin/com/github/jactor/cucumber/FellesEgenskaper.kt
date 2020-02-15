@@ -18,8 +18,9 @@ class FellesEgenskaper {
     }
 
     @Gitt("endpoint url {string}")
-    fun `endpoint url`(endpoint: String) {
-        restService.endpoint = endpoint
+    @Og("path variable {string}")
+    fun `url`(url: String) {
+        restService.url = url
     }
 
     @Når("en get gjøres på resttjenesten")
