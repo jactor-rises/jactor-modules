@@ -18,13 +18,13 @@ jobs:
       - uses: actions/setup-java@v1.3.0
         with:
           java-version: 13
+      - run: env
       - uses: actions/cache@v1.1.2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - run: env
       - uses: jactor-rises/actions/setup-maven@v1.0.0-jactor-rises
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
         run: |
           docker build --tag ${IMAGE} .
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-          docker push ${IMAGE_WITH_SHORT_SHA}
+          docker push ${IMAGE}
 
   cucumber:
     needs: build
@@ -56,6 +56,7 @@ jobs:
         run: |
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker run --publish 1099:1099 --detach ${IMAGE}
+          echo "sleep in 25 seconds to ensure the image is up when tests are running"
           sleep 25
           cd jactor-cucumber
           mvn test
