@@ -7,25 +7,30 @@ import io.cucumber.java.no.Så
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.http.HttpStatus
 
-class FellesEgenskaper {
+class RestServiceSteps {
     companion object {
-        private lateinit var restService: RestServie
+        private lateinit var restService: RestService
     }
 
     @Gitt("url til resttjeneste: {string}")
     fun `url til resttjeneste`(baseUrl: String) {
-        restService = RestServie(baseUrl)
+        restService = RestService(baseUrl)
     }
 
     @Gitt("endpoint url {string}")
     @Og("path variable {string}")
-    fun `url`(url: String) {
+    fun url(url: String) {
         restService.url = url
     }
 
     @Når("en get gjøres på resttjenesten")
     fun `en get gjores pa resttjenesten`() {
         restService.exchangeGet()
+    }
+
+    @Når("en get gjøres på resttjenesten med parameter {string} = {string}")
+    fun `en get gjores pa resttjenesten med parameter`(navn: String, verdi: String) {
+        restService.exchangeGet(navn, verdi)
     }
 
     @Så("skal statuskoden fra resttjenesten være {string}")
