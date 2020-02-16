@@ -8,6 +8,13 @@ Egenskap: jactor-presistence behandler en bruker
     Så skal statuskoden fra resttjenesten være '200'
     Og responsen skal inneholde '"tip"'
 
+  Scenario: Hent administratorerer fra jactor-persistence
+    Gitt url til resttjeneste: 'http://localhost:1099/jactor-persistence/user'
+    Og endpoint url '/usernames'
+    Når en get gjøres på resttjenesten med parameter 'userType' = 'ADMIN'
+    Så skal statuskoden fra resttjenesten være '200'
+    Og responsen skal inneholde '"jactor"'
+
   Scenario: Hent en bruker etter brukernavn
     Gitt url til resttjeneste: 'http://localhost:1099/jactor-persistence/user/name'
     Og path variable '/jactor'
