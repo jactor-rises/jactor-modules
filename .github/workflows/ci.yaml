@@ -5,7 +5,7 @@ on:
       - '**'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/jactor-persistence:REPLACE_WITH_SHORT_SHA
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/jactor-persistence:${{ github.sha }}
 
 jobs:
 
@@ -34,15 +34,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          IMAGE_WITH_SHORT_SHA=$(echo $IMAGE | sed "s/REPLACE_WITH_SHORT_SHA/$SHORT_SHA/")
-          docker build --tag ${IMAGE_WITH_SHORT_SHA} .
+          docker build --tag ${IMAGE} .
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE_WITH_SHORT_SHA}
 
-  git:
+  cucumber:
     needs: build
-    if: github.ref == 'refs/heads/master'
+    name: Integration tests with cucumber
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache@v1.1.2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - run: git clone --depth 1 https://github.com/jactor-rises/jactor-cucumber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: run docker image and cucumber tests
+        run: |
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker run --publish 1099:1099 --detach ${IMAGE}
+          sleep 25
+          cd jactor-cucumber
+          mvn test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  git:
+    needs: cucumber
+#    if: github.ref == 'refs/heads/master'
     name: Modify git history
     runs-on: ubuntu-latest
 
