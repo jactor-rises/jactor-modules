@@ -64,7 +64,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   private UserType userType;
 
   @SuppressWarnings("unused")
-  UserEntity() {
+  public UserEntity() {
     // used by entity manager
   }
 
@@ -83,6 +83,10 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   }
 
   public UserEntity(@NotNull UserInternalDto user) {
+    addValues(user);
+  }
+
+  private void addValues(@NotNull UserInternalDto user) {
     emailAddress = user.getEmailAddress();
     id = user.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(user.fetchPersistentDto());
@@ -124,6 +128,11 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   public void add(BlogEntity blogEntity) {
     blogs.add(blogEntity);
     blogEntity.setUser(this);
+  }
+
+  public UserEntity update(UserInternalDto userInternalDto) {
+    addValues(userInternalDto);
+    return this;
   }
 
   @Override
