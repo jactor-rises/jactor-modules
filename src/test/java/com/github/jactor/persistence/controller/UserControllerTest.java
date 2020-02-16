@@ -3,25 +3,20 @@ package com.github.jactor.persistence.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
-import com.github.jactor.persistence.repository.PersonRepository;
 import com.github.jactor.persistence.repository.UserRepository;
-import com.github.jactor.persistence.service.UserService;
 import com.github.jactor.shared.dto.PersonDto;
 import com.github.jactor.shared.dto.UserDto;
 import java.util.List;
 import java.util.Optional;
-import org.h2.engine.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -115,7 +110,7 @@ class UserControllerTest {
     UserInternalDto userInternalDto = new UserInternalDto();
     userInternalDto.setId(1L);
 
-    when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity(userInternalDto));
+    when(userRepositoryMock.findById(1L)).thenReturn(Optional.of(new UserEntity(userInternalDto)));
 
     var userRespnse = testRestTemplate.exchange(
         buildFullPath("/user/1"), HttpMethod.PUT, new HttpEntity<>(userInternalDto.toUserDto()), UserDto.class
@@ -124,8 +119,7 @@ class UserControllerTest {
     assertAll(
         () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.ACCEPTED),
         () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user")
-            .isNotNull().extracting(UserDto::getId).as("user id").isEqualTo(1L),
-        () -> verify(userRepositoryMock).save(any(UserEntity.class))
+            .isNotNull().extracting(UserDto::getId).as("user id").isEqualTo(1L)
     );
   }
 
@@ -149,23 +143,23 @@ class UserControllerTest {
   }
 
   @Test
-  @DisplayName("should add user id from url to payload when updating user")
-  void shouldAddUserIdFromPathWhenUpdatingUser() {
-    when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity(new UserInternalDto()));
+  @DisplayName("should accept if user id is valid")
+  void shouldAcceptValidUserId() {
+    when(userRepositoryMock.findById(101L)).thenReturn(Optional.of(new UserEntity(new UserInternalDto())));
 
     var userResponse = testRestTemplate.exchange(buildFullPath("/user/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
 
-    assertAll(
-        () -> assertThat(userResponse.getStatusCode()).as("status code").isEqualTo(HttpStatus.ACCEPTED),
-        () -> {
-          var userArgument = ArgumentCaptor.forClass(UserEntity.class);
+    assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+  }
 
-          verify(userRepositoryMock).save(userArgument.capture());
-          var userEntity = userArgument.getValue();
+  @Test
+  @DisplayName("should not accept if user id is invalid")
+  void shouldNotAcceptInvalidUserId() {
+    when(userRepositoryMock.findById(any())).thenReturn(Optional.empty());
 
-          assertThat(userEntity.getId()).as("id").isEqualTo(101L);
-        }
-    );
+    var userResponse = testRestTemplate.exchange(buildFullPath("/user/101"), HttpMethod.PUT, new HttpEntity<>(new UserDto()), UserDto.class);
+
+    assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
   private String buildFullPath(String url) {
