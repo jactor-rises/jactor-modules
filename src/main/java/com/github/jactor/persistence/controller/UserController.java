@@ -65,7 +65,7 @@ public class UserController {
   @ApiResponses(value = {
       @ApiResponse(code = 201, message = "User created")
   })
-  @PostMapping
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CreateUserCommandResponse> post(@RequestBody CreateUserCommand createUserCommand) {
     var primaryKey = userServicey.create(createUserCommand);
 
