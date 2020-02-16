@@ -7,19 +7,19 @@ import io.cucumber.java.no.Så
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.http.HttpStatus
 
-class FellesEgenskaper {
+class RestServiceSteps {
     companion object {
-        private lateinit var restService: RestServie
+        private lateinit var restService: RestService
     }
 
     @Gitt("url til resttjeneste: {string}")
     fun `url til resttjeneste`(baseUrl: String) {
-        restService = RestServie(baseUrl)
+        restService = RestService(baseUrl)
     }
 
     @Gitt("endpoint url {string}")
     @Og("path variable {string}")
-    fun `url`(url: String) {
+    fun url(url: String) {
         restService.url = url
     }
 

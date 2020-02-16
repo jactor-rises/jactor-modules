@@ -4,7 +4,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 
-data class RestServie(val baseUrl: String, var url: String = "") {
+data class RestService(val baseUrl: String, var url: String = "") {
     private lateinit var responseEntity: ResponseEntity<String>
     private var restTemplate: RestTemplate? = null
 
