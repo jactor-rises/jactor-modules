@@ -6,11 +6,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.JactorPersistence;
-import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
 import com.github.jactor.persistence.repository.UserRepository;
+import com.github.jactor.shared.dto.CreateUserCommandDto;
 import com.github.jactor.shared.dto.PersonDto;
 import com.github.jactor.shared.dto.UserDto;
 import java.util.List;
@@ -177,7 +177,7 @@ class UserControllerTest {
   void shouldReturnBadRequestWhenUsernameIsOccupied() {
     when(userRepositoryMock.findByUsername("turbo")).thenReturn(Optional.of(new UserEntity()));
 
-    CreateUserCommand createUserCommand = new CreateUserCommand();
+    CreateUserCommandDto createUserCommand = new CreateUserCommandDto();
     createUserCommand.setUsername("turbo");
     var userResponse = testRestTemplate.exchange(buildFullPath("/user"), HttpMethod.POST, new HttpEntity<>(createUserCommand), UserDto.class);
 
