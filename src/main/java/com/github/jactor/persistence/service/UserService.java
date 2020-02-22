@@ -62,4 +62,8 @@ public class UserService {
         .map(UserEntity::getUsername)
         .collect(Collectors.toList());
   }
+
+  public boolean isAllreadyPresent(String username) {
+    return userRepository.findByUsername(username).isPresent();
+  }
 }

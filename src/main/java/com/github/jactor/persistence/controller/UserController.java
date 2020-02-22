@@ -69,6 +69,10 @@ public class UserController {
   })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CreateUserCommandResponse> post(@NotNull @RequestBody CreateUserCommand createUserCommand) {
+    if (userServicey.isAllreadyPresent(createUserCommand.getUsername())) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     var primaryKey = userServicey.create(createUserCommand);
 
     return new ResponseEntity<>(new CreateUserCommandResponse(primaryKey), HttpStatus.CREATED);
