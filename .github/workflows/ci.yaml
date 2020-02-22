@@ -44,18 +44,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/checkout@b2
+        with:
+          repository: jactor-rises/jactor-cucumber
+          path: jactor-cucumber
       - uses: actions/setup-java@v1.3.0
         with:
           java-version: 13
       - uses: actions/cache@v1.1.2
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/jactor-cucumber/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - run: git clone --depth 1 https://github.com/jactor-rises/jactor-cucumber
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: run docker image and cucumber tests
         run: |
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
