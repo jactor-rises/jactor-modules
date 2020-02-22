@@ -13,6 +13,7 @@ class RestServiceSteps {
     }
 
     @Gitt("url til resttjeneste: {string}")
+    @Og("gitt url til resttjeneste: {string}")
     fun `url til resttjeneste`(baseUrl: String) {
         restService = RestService(baseUrl)
     }
@@ -31,6 +32,11 @@ class RestServiceSteps {
     @Når("en get gjøres på resttjenesten med parameter {string} = {string}")
     fun `en get gjores pa resttjenesten med parameter`(navn: String, verdi: String) {
         restService.exchangeGet(navn, verdi)
+    }
+
+    @Når("en post gjøres med body:")
+    fun `en post gjores med body`(json: String) {
+        restService.exchangePost(json)
     }
 
     @Så("skal statuskoden fra resttjenesten være {string}")
