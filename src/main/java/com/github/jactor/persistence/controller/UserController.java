@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -63,10 +64,15 @@ public class UserController {
 
   @ApiOperation("Create a user")
   @ApiResponses(value = {
-      @ApiResponse(code = 201, message = "User created")
+      @ApiResponse(code = 201, message = "User created"),
+      @ApiResponse(code = 400, message = "Username already occupied or no body is present")
   })
-  @PostMapping
-  public ResponseEntity<CreateUserCommandResponse> post(@RequestBody CreateUserCommand createUserCommand) {
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<CreateUserCommandResponse> post(@NotNull @RequestBody CreateUserCommand createUserCommand) {
+    if (userServicey.isAllreadyPresent(createUserCommand.getUsername())) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     var primaryKey = userServicey.create(createUserCommand);
 
     return new ResponseEntity<>(new CreateUserCommandResponse(primaryKey), HttpStatus.CREATED);
@@ -75,15 +81,16 @@ public class UserController {
   @ApiOperation("Update a user by its id")
   @ApiResponses(value = {
       @ApiResponse(code = 202, message = "User updated"),
-      @ApiResponse(code = 400, message = "Did not find user with id")
+      @ApiResponse(code = 400, message = "Did not find user with id or no body is present")
   })
   @PutMapping("/{userId}")
-  public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
+  public ResponseEntity<UserDto> put(@NotNull @RequestBody UserDto userDto, @PathVariable Long userId) {
     userDto.setId(userId);
 
-    var saved = userServicey.update(new UserInternalDto(userDto));
-
-    return new ResponseEntity<>(saved.toUserDto(), HttpStatus.ACCEPTED);
+    return userServicey.update(new UserInternalDto(userDto))
+        .map(UserInternalDto::toUserDto)
+        .map(user -> new ResponseEntity<>(user, HttpStatus.ACCEPTED))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
   }
 
   @GetMapping("/usernames")

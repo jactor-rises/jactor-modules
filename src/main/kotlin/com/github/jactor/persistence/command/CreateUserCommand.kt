@@ -23,25 +23,19 @@ data class CreateUserCommand(
             null, null, null, null, null, null, null, null, null
     )
 
-    fun fetchPersonDto(): PersonInternalDto {
-        return PersonInternalDto(null,
-                fetchAddressDto(),
-                language,
-                firstName,
-                surname,
-                description
-        )
-    }
+    fun fetchUserDto() = UserInternalDto(null, null, emailAddress, username)
 
-    private fun fetchAddressDto(): AddressInternalDto? {
-        return if (zipCode == null) null else AddressInternalDto(null, zipCode, addressLine1, addressLine2, addressLine3, city, coutnry)
-    }
+    fun fetchPersonDto() = PersonInternalDto(null,
+            fetchAddressDto(),
+            language,
+            firstName,
+            surname,
+            description
+    )
 
-    fun fetchUserDto(): UserInternalDto {
-        return UserInternalDto(null, null, emailAddress, username)
-    }
+    private fun fetchAddressDto() = if (zipCode == null) null else AddressInternalDto(null, zipCode, addressLine1, addressLine2, addressLine3, city, coutnry)
 }
 
-data class CreateUserCommandResponse (
+data class CreateUserCommandResponse(
         var userInternal: UserInternalDto = UserInternalDto()
 )

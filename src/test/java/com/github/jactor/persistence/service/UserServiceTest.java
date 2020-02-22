@@ -18,6 +18,7 @@ import com.github.jactor.persistence.entity.PersonEntity;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.repository.PersonRepository;
 import com.github.jactor.persistence.repository.UserRepository;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,14 +95,15 @@ class UserServiceTest {
     userDto.setId(1L);
     userDto.setUsername("marley");
     userDto.setPersistentDto(new PersistentDto());
+    PersistentDto persistentDto = new PersistentDto(1L, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1));
 
-    userServiceToTest.update(userDto);
+    when(userRepositoryMock.findById(1L)).thenReturn(
+        Optional.of(new UserEntity(new UserInternalDto(persistentDto, userDto)))
+    );
 
-    var argCaptor = ArgumentCaptor.forClass(UserEntity.class);
-    verify(userRepositoryMock).save(argCaptor.capture());
-    var userEntity = argCaptor.getValue();
+    var optionalUser = userServiceToTest.update(userDto);
 
-    assertThat(userEntity.getUsername()).as("username").isEqualTo("marley");
+    assertThat(optionalUser).isPresent().get().extracting(UserInternalDto::getUsername).isEqualTo("marley");
   }
 
   @Test
