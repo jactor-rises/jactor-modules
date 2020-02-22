@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.JactorPersistence;
+import com.github.jactor.persistence.command.CreateUserCommand;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
@@ -169,5 +170,17 @@ class UserControllerTest {
   private ParameterizedTypeReference<List<String>> responsIslistOfStrings() {
     return new ParameterizedTypeReference<>() {
     };
+  }
+
+  @Test
+  @DisplayName("should return BAD_REQUEST when username is occupied")
+  void shouldReturnBadRequestWhenUsernameIsOccupied() {
+    when(userRepositoryMock.findByUsername("turbo")).thenReturn(Optional.of(new UserEntity()));
+
+    CreateUserCommand createUserCommand = new CreateUserCommand();
+    createUserCommand.setUsername("turbo");
+    var userResponse = testRestTemplate.exchange(buildFullPath("/user"), HttpMethod.POST, new HttpEntity<>(createUserCommand), UserDto.class);
+
+    assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 }
