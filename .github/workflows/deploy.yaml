@@ -23,7 +23,7 @@ jobs:
       - run: env
       - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0-jactor-rises
       - run: mvn -B install -e
-      - uses: jactor-rises/actions/release-prepare-mvn-pkg@vv1.0.0-jactor-rises
+      - uses: jactor-rises/actions/release-prepare-mvn-pkg@v1.0.0-jactor-rises
         if: github.ref == 'refs/heads/master'
         with:
           new_snapshot_version_file_name: .new-snapshot-version
