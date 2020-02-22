@@ -21,25 +21,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - run: env
-      - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0
+      - uses: jactor-rises/actions/verify-mvn-dependencies@v1.0.0-jactor-rises
       - run: mvn -B install -e
-      - uses: jactor-rises/actions/release-prepare-mvn-pkg@v1.0.0
+      - uses: jactor-rises/actions/release-prepare-mvn-pkg@v1.0.0-jactor-rises
         if: github.ref == 'refs/heads/master'
         with:
           new_snapshot_version_file_name: .new-snapshot-version
           release_version_file_name: .release-version
-      - uses: jactor-rises/actions/release-verify-auto-deploy@v1.0.0
+      - uses: jactor-rises/actions/release-verify-auto-deploy@v1.0.0-jactor-rises
         if: github.ref == 'refs/heads/master'
         with:
           changelog_file: README.md
           release_version_file: .release-version
-      - uses: jactor-rises/actions/release-mvn-pkg@v1.0.0
+      - uses: jactor-rises/actions/release-mvn-pkg@v1.0.0-jactor-rises
         if: github.ref == 'refs/heads/master'
         with:
           new_snapshot_version_file: .new-snapshot-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: jactor-rises/actions/git-tag-n-commit-mvn-deploy@v1.0.0
+      - uses: jactor-rises/actions/git-tag-n-commit-mvn-deploy@v1.0.0-jactor-rises
         if: github.ref == 'refs/heads/master'
         with:
           commit_message: Bumped to new SNAPSHOT version after release of version {}
