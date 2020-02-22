@@ -5,6 +5,7 @@ import com.github.jactor.persistence.command.CreateUserCommandResponse;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.UserEntity.UserType;
 import com.github.jactor.persistence.service.UserService;
+import com.github.jactor.shared.dto.CreateUserCommandDto;
 import com.github.jactor.shared.dto.UserDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -68,12 +69,12 @@ public class UserController {
       @ApiResponse(code = 400, message = "Username already occupied or no body is present")
   })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CreateUserCommandResponse> post(@NotNull @RequestBody CreateUserCommand createUserCommand) {
+  public ResponseEntity<CreateUserCommandResponse> post(@NotNull @RequestBody CreateUserCommandDto createUserCommand) {
     if (userServicey.isAllreadyPresent(createUserCommand.getUsername())) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    var primaryKey = userServicey.create(createUserCommand);
+    var primaryKey = userServicey.create(new CreateUserCommand(createUserCommand));
 
     return new ResponseEntity<>(new CreateUserCommandResponse(primaryKey), HttpStatus.CREATED);
   }
