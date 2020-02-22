@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -32,13 +33,11 @@ public class UserService {
     return userRepository.findById(id).map(UserEntity::asDto);
   }
 
-  public UserInternalDto update(UserInternalDto userInternalDto) {
-    Objects.requireNonNull(userInternalDto.getId());
-
-    UserEntity userEntity = new UserEntity(userInternalDto);
-    userRepository.save(userEntity);
-
-    return userEntity.asDto();
+  @Transactional
+  public Optional<UserInternalDto> update(UserInternalDto userInternalDto) {
+    return userRepository.findById(Objects.requireNonNull(userInternalDto.getId()))
+        .map(userEntity -> userEntity.update(userInternalDto))
+        .map(UserEntity::asDto);
   }
 
   public UserInternalDto create(CreateUserCommand createUserCommand) {
@@ -62,5 +61,9 @@ public class UserService {
     return userRepository.findByUserTypeIn(List.of(userType)).stream()
         .map(UserEntity::getUsername)
         .collect(Collectors.toList());
+  }
+
+  public boolean isAllreadyPresent(String username) {
+    return userRepository.findByUsername(username).isPresent();
   }
 }
