@@ -121,8 +121,8 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("should find all active users and admins")
-  void shouldFindAllActiveUsersAndAdmins() {
+  @DisplayName("should find active users and admins")
+  void shouldFindActiveUsersAndAdmins() {
     AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonInternalDto spidyPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Parker", null);
     PersonInternalDto superPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Kent", null);
@@ -135,6 +135,7 @@ class UserRepositoryTest {
         .map(UserEntity::getUsername)
         .collect(toList());
 
-    assertThat(new HashSet<>(usernames)).isEqualTo(new HashSet<>(List.of("tip", "spiderman", "jactor")));
+    assertThat(new HashSet<>(usernames))
+        .contains("tip").contains("spiderman").contains("jactor");
   }
 }
