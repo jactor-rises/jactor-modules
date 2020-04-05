@@ -40,6 +40,10 @@ After a valid build one can execute the generated jar file as plain java:
 ```
 java -jar target/jactor-persistence-<version>-SNAPSHOT-app.jar
 ```
+or run an image with maven and spring-boot:
+```
+mvn spring-boot:run
+```
 or build and run an image with [docker](https://www.docker.com):
 ```
 docker build -t jactor-persistence .
