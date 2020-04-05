@@ -19,7 +19,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - run: env
-      - uses: navikt/bidrag-maven/setup@v1.0.4
+      - uses: jactor-rises/actions/setup-maven@v1.x-jactor-rises
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: mvn -B install -e
