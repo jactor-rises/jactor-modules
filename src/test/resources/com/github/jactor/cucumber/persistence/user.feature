@@ -24,7 +24,7 @@ Egenskap: jactor-presistence behandler en bruker
 
   Scenario: Opprett en ny bruker, hent opprettet bruker, feil oppretting av ny bruker grunnet identisk brukernavn
     Gitt url til resttjeneste: 'http://localhost:1099/jactor-persistence/user'
-    Når en post gjøres med body:
+    Når en post gjøres for unik nøkkel 'fish' med body:
     """
       {
         "username":"fish",
@@ -41,13 +41,13 @@ Egenskap: jactor-presistence behandler en bruker
       }
     """
     Så skal statuskoden fra resttjenesten være '201'
-    Og gitt url til resttjeneste: 'http://localhost:1099/jactor-persistence/user/name/fish'
+    Og gitt nøkkel 'fish' og url til resttjeneste: 'http://localhost:1099/jactor-persistence/user/name/fish'
     Når en get gjøres på resttjenesten
     Så skal statuskoden fra resttjenesten være '200'
-    Og responsen skal inneholde '"username":"fish"'
-    Og responsen skal inneholde '"emailAddress":"fishy@smelly.org"'
+    Og responsen skal inneholde '"username":"fish.'
+    Og responsen skal inneholde '"surname":"Fish"'
     Gitt url til resttjeneste: 'http://localhost:1099/jactor-persistence/user'
-    Når en post gjøres med body:
+    Når en post gjøres for unik nøkkel 'fish', men den unike nøkkelen gjenbrukes på body:
     """
       {
         "username":"fish",
