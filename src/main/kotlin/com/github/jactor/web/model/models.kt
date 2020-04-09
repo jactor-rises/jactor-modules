@@ -1,9 +1,9 @@
 package com.github.jactor.web.model
 
+import com.github.jactor.shared.dto.AddressDto
+import com.github.jactor.shared.dto.PersonDto
+import com.github.jactor.shared.dto.UserDto
 import com.github.jactor.web.Technology
-import com.github.jactor.web.dto.AddressDto
-import com.github.jactor.web.dto.PersonDto
-import com.github.jactor.web.dto.UserDto
 
 data class HomePageModel(
         val technologies: List<Technology> = ArrayList()

@@ -1,6 +1,6 @@
 package com.github.jactor.web.consumer;
 
-import com.github.jactor.web.dto.UserDto;
+import com.github.jactor.shared.dto.UserDto;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

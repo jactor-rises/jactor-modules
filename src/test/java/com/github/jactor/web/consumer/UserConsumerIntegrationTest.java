@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import com.github.jactor.web.dto.PersonDto;
-import com.github.jactor.web.dto.UserDto;
+import com.github.jactor.shared.dto.PersonDto;
+import com.github.jactor.shared.dto.UserDto;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
