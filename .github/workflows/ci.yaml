@@ -5,7 +5,7 @@ on:
       - '**'
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/jactor-persistence:${{ github.sha }}
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/jactor-persistence:latest
 
 jobs:
 
