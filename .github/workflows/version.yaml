@@ -1,4 +1,4 @@
-ame: Bump version
+name: Bump version
 on:
   push:
     branches:
