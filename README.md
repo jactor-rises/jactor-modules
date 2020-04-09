@@ -1,6 +1,8 @@
 # jactor-cucumber
 Integration testing of jactor-persistence
 
+![](https://github.com/jactor-rises/jactor-cucumber/workflows/bump%20version/badge.svg)
+
 ### Test rapportering
 
 Etter at testing er gjennomført så kan man lage en rapport som blir tilgjengelig
