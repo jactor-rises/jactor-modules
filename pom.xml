@@ -17,6 +17,7 @@
 
   <properties>
     <!-- dependencies -->
+    <jactor-shared.version>0.1.2</jactor-shared.version>
     <webjars-bootstrap.version>4.4.1-1</webjars-bootstrap.version>
     <webjars-jquery.version>3.4.1</webjars-jquery.version>
 
@@ -30,6 +31,12 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.github.jactor-rises</groupId>
+      <artifactId>jactor-shared</artifactId>
+      <version>${jactor-shared.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>
