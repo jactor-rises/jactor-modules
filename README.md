@@ -1,5 +1,7 @@
-# jactor-persistence  ![](https://github.com/jactor-rises/jactor-persistence/workflows/continious%20integration/badge.svg)
- 
+# jactor-persistence
+
+![](https://github.com/jactor-rises/jactor-persistence/workflows/continious%20integration/badge.svg)
+
 ### What is this repository for?
 
 The main purpose is to learn about programming microservices (with REST and spring jpa).
