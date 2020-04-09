@@ -17,7 +17,6 @@
 
   <properties>
     <!-- dependencies -->
-    <mockito.version>3.1.0</mockito.version>
     <webjars-bootstrap.version>4.3.1</webjars-bootstrap.version>
     <webjars-jquery.version>3.4.1</webjars-jquery.version>
 
@@ -96,7 +95,6 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>${mockito.version}</version>
     </dependency>
   </dependencies>
 
