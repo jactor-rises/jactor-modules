@@ -1,5 +1,6 @@
 package com.github.jactor.web.dto;
 
+import com.github.jactor.shared.dto.UserDto;
 import java.util.Optional;
 
 public class UserDtoBuilder {

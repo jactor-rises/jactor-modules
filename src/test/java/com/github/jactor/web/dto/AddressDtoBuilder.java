@@ -1,5 +1,7 @@
 package com.github.jactor.web.dto;
 
+import com.github.jactor.shared.dto.AddressDto;
+
 public class AddressDtoBuilder {
 
   private String addressLine1;

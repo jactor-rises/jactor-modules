@@ -1,5 +1,8 @@
 package com.github.jactor.web.dto;
 
+import com.github.jactor.shared.dto.AddressDto;
+import com.github.jactor.shared.dto.PersonDto;
+import com.github.jactor.shared.dto.UserDto;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

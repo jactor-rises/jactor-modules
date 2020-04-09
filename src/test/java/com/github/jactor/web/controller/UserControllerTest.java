@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+import com.github.jactor.shared.dto.UserDto;
 import com.github.jactor.web.consumer.UserConsumer;
-import com.github.jactor.web.dto.UserDto;
 import com.github.jactor.web.menu.MenuFacade;
 import com.github.jactor.web.menu.MenuItem;
 import java.util.HashMap;
