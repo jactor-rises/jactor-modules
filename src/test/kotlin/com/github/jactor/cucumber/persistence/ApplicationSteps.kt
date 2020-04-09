@@ -5,7 +5,7 @@ import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
 import org.assertj.core.api.Assertions.assertThat
 
-class AppEgenskap {
+class ApplicationSteps {
     companion object {
         private lateinit var application: Application
         private var status: Int? = null
