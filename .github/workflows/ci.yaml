@@ -59,7 +59,7 @@ jobs:
       - uses: jactor-rises/jactor-persistence/run-docker@feature-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE: ${{ IMAGE }}
+          IMAGE: ${IMAGE}
       - name: run cucumber tests
         run: cd jactor-cucumber && mvn test
 
