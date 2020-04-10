@@ -60,8 +60,21 @@ jobs:
         run: |
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker run --publish 1099:1099 --detach ${IMAGE}
-          echo "sleep in 25 seconds to ensure the image is up when tests are running"
-          sleep 25
+
+          echo -n "Starting jactor-persistence "
+
+          RUNNING=""
+
+          while [ -z "$RUNNING" ]
+          do
+            HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
+            RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"") || true
+            echo -n .
+            sleep 1
+          done
+
+          echo "\njactor-presistene is started..."
+
           cd jactor-cucumber
           mvn test
         env:
