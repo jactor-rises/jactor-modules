@@ -58,6 +58,7 @@ jobs:
             ${{ runner.os }}-maven-
       - name: run docker image and cucumber tests
         run: |
+          set -x
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker run --publish 1099:1099 --detach ${IMAGE}
 
