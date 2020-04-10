@@ -68,7 +68,7 @@ jobs:
 
           while [ -z "$RUNNING" ]
           do
-            HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health)
+            HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
             RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"") || true
           echo -n .
           sleep 1
