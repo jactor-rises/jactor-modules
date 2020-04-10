@@ -58,7 +58,6 @@ jobs:
             ${{ runner.os }}-maven-
       - name: run docker image and cucumber tests
         run: |
-          set -x
           docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker run --publish 1099:1099 --detach ${IMAGE}
 
@@ -70,8 +69,8 @@ jobs:
           do
             HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
             RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"") || true
-          echo -n .
-          sleep 1
+            echo -n .
+            sleep 1
           done
 
           echo "\njactor-presistene is started..."
