@@ -56,7 +56,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/jactor-cucumber/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: jactor-rises/jactor-persistence/run-docker@feature-action
+      - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: run cucumber tests
