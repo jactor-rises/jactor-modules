@@ -22,13 +22,15 @@ docker run --detach --publish 1099:1099 ${IMAGE}
 echo -n "Starting jactor-persistence "
 
 RUNNING=""
+PROGRESS=""
 
 while [[ -z "$RUNNING" ]]
 do
   HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
   RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"" || true)
-  echo -n .
+  PROGRESS="$PROGRESS."
+  echo "$PROGRESS"
   sleep 1
 done
 
-echo " jactor-presistene is started..."
+echo "jactor-presistene is started..."
