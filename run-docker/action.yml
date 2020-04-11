@@ -3,7 +3,3 @@ description: Runs the latest docker image of jactor-persistene
 runs:
   using: node12
   main: dist/index.js
-inputs:
-  image:
-    required: true
-    description: the name of the docker image to run

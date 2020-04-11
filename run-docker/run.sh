@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-set -x
-
-env
+set -e
 
 if [[ -z ${GITHUB_ACTOR} ]]; then
   echo "no actor to use as user for docker login"
@@ -13,13 +11,13 @@ if [[ -z ${GITHUB_TOKEN} ]]; then
   exit 1;
 fi
 
-if [[ -z ${INPUT_IMAGE} ]]; then
-  echo "no docker image to run has been given"
+if [[ -z ${IMAGE} ]]; then
+  echo "no docker image to run has been configured"
   exit 1;
 fi
 
 echo ${GITHUB_ACTOR} | docker login docker.pkg.github.com -u jactor-rises --password-stdin
-docker run --detach --publish 1099:1099 ${INPUT_IMAGE}
+docker run --detach --publish 1099:1099 ${IMAGE}
 
 echo -n "Starting jactor-persistence "
 
