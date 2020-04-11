@@ -24,7 +24,7 @@ public class UserConsumer {
 
   public List<String> findAllUsernames() {
     ResponseEntity<String[]> responseEntity = restTemplate.getForEntity(
-        "/user/active/usernames", String[].class
+        "/user/usernames", String[].class
     );
 
     return List.of(Objects.requireNonNull(responseEntity.getBody()));

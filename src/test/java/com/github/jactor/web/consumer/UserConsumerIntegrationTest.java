@@ -26,8 +26,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class UserConsumerIntegrationTest {
 
-  private static final String EXPECTED_BASE_URL = "http://localhost:1099/jactor-persistence";
-
   @Autowired
   private RestTemplate restTemplate;
 
@@ -45,7 +43,7 @@ class UserConsumerIntegrationTest {
     ResponseEntity<String> response = null;
 
     try {
-      response = testRestTemplate.getForEntity(EXPECTED_BASE_URL + "/actuator/health", String.class);
+      response = testRestTemplate.getForEntity(baseUrl + "/actuator/health", String.class);
     } catch (RestClientException e) {
       Assumptions.assumeTrue(false, "Failure with rest api: " + e.getMessage());
     }
@@ -57,8 +55,8 @@ class UserConsumerIntegrationTest {
   @Test
   @DisplayName("should verify expected base url")
   void shouldVerifyExpectedBaseUrl() throws URISyntaxException {
-    URI uri = restTemplate.getUriTemplateHandler().expand("/user");
-    assertThat(uri).isEqualTo(new URI(EXPECTED_BASE_URL + "/user"));
+    var uri = restTemplate.getUriTemplateHandler().expand("/user");
+    assertThat(uri).isEqualTo(new URI(baseUrl + "/user"));
   }
 
   @Test
