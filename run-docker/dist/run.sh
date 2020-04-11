@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -x
 
+env
+
 if [[ -z ${GITHUB_ACTOR} ]]; then
   echo "no actor to use as user for docker login"
   exit 1;
