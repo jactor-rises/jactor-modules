@@ -56,29 +56,11 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/jactor-cucumber/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: run docker image and cucumber tests
-        run: |
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
-          docker run --publish 1099:1099 --detach ${IMAGE}
-
-          echo -n "Starting jactor-persistence "
-
-          RUNNING=""
-
-          while [ -z "$RUNNING" ]
-          do
-            HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
-            RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"") || true
-            echo -n .
-            sleep 1
-          done
-
-          echo "\njactor-presistene is started..."
-
-          cd jactor-cucumber
-          mvn test
+      - uses: jactor-rises/jactor-persistence/run-docker@feature-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: run cucumber tests
+        run: cd jactor-cucumber && mvn test
 
   git:
     needs: cucumber

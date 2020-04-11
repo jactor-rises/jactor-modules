@@ -3,3 +3,4 @@ target/
 .java-version
 *.iml
 /**/.DS_Store
+/run-docker/node_modules/@actions/
