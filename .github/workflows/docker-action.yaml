@@ -1,4 +1,4 @@
-name: build docker run
+name: build run docker
 on:
   push:
     branches-ignore:

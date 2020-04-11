@@ -1,6 +1,6 @@
 # jactor-persistence/run-docker
 
-![](https://github.com/jactor-rises/jactor-persistence/workflows/build%20docker%20run/badge.svg)
+![](https://github.com/jactor-rises/jactor-persistence/workflows/build%20run%20docker/badge.svg)
 
 This action will run the image tag configured using the github actor and github token in the workflow
 where it is used.
