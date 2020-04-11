@@ -50,6 +50,7 @@ docker run -p 1099:1099 jactor-persistence
 
 * [spring-boot 2.2.x](https://spring.io/projects/spring-boot)
     * with spring-data-jpa
+    * with spring mvc
 * [docker](https://www.docker.com)
 * [h2](http://h2database.com)
 * [junit 5.x](https://junit.org/junit5/)
@@ -57,3 +58,4 @@ docker run -p 1099:1099 jactor-persistence
 * [mockito](http://site.mockito.org)
 * [kotlin](https://kotlinlang.org)
 * [swagger-ui](https://swagger.io/tools/swagger-ui/)
+* [github workflows](https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow)
