@@ -16,7 +16,7 @@ if [[ -z ${IMAGE} ]]; then
   exit 1;
 fi
 
-echo ${GITHUB_ACTOR} | docker login docker.pkg.github.com -u jactor-rises --password-stdin
+echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
 docker run --detach --publish 1099:1099 ${IMAGE}
 
 echo -n "Starting jactor-persistence "
