@@ -56,12 +56,9 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/jactor-cucumber/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - run: echo ::set-output name=docker::${IMAGE}
-        id: image
       - uses: jactor-rises/jactor-persistence/run-docker@feature-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE: ${{ steps.image.outputs.docker }}
       - name: run cucumber tests
         run: cd jactor-cucumber && mvn test
 
