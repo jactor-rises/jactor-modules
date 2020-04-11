@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -x
 
 if [[ -z ${GITHUB_ACTOR} ]]; then
   echo "no actor to use as user for docker login"
@@ -8,6 +8,11 @@ fi
 
 if [[ -z ${GITHUB_TOKEN} ]]; then
   echo "no token to use as password for docker login"
+  exit 1;
+fi
+
+if [[ -z ${INPUT_IMAGE} ]]; then
+  echo "no docker image to run has been given"
   exit 1;
 fi
 
@@ -21,7 +26,7 @@ RUNNING=""
 while [[ -z "$RUNNING" ]]
 do
   HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
-  RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"") || true
+  RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"" || true)
   echo -n .
   sleep 1
 done
