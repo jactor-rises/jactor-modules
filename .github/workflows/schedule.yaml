@@ -1,8 +1,7 @@
 name: Integration testing
 on:
-  push:
-    branches:
-      - feature-schedule
+  schedule:
+    '30 6 * * *'
 
 jobs:
 
