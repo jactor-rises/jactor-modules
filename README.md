@@ -16,3 +16,7 @@ Etter at testing er gjennomført så kan man lage en rapport som blir tilgjengel
 mvn cluecumber-report:reporting
 ```
 Man kan også gjøre både testing og rapportgenerering i et steg med `mvn install`
+
+### Report
+
+A generated report can be viewed [here](https://jactor-rises.github.io/jactor-cucumber/docs)
