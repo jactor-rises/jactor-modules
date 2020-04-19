@@ -31,10 +31,10 @@ jobs:
       - uses: jactor-rises/actions-gh-pages/move@master
         with:
           folder_move_from: target/generated-report
-          folder_for_html: ${{ steps.generated.date }}
+          folder_for_html: ${{ steps.generated.outputs.date }}
       - uses: navikt/bidrag-git/commit@v3
         with:
-          commit_message: "Integration tests from ${{ steps.generated.date }}"
+          commit_message: "Integration tests from ${{ steps.generated.outputs.date }}"
           pattern: .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
