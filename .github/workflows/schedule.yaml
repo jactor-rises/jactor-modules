@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
       - run: mvn install
-      - run: ::set-output name=date::$(date +"%Y-%m-%d")
+      - run: echo ::set-output name=date::$(date +"%Y-%m-%d")
         id: generated
       - uses: jactor-rises/actions-gh-pages/move@master
         with:
