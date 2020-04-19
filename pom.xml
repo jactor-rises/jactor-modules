@@ -155,7 +155,6 @@
                     <customParameters>
                         <Tittel>Integrasjonstest for jactor-persistence</Tittel>
                         <URL>https://github.com/jactor-rises/jactor-persistence</URL>
-                        <URL>https://github.com/jactor-rises/jactor-cucumber</URL>
                         <_avsnitt.a>Integrasjonstester gjort ifm. utvikling av jactor-persistence</_avsnitt.a>
                     </customParameters>
                     <sourceJsonReportDirectory>${project.build.directory}/cucumber-report</sourceJsonReportDirectory>
