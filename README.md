@@ -19,4 +19,4 @@ Man kan også gjøre både testing og rapportgenerering i et steg med `mvn insta
 
 ### Report
 
-A [generated report](https://jactor-rises.github.io/jactor-cucumber/docs) can be viewed here
+A generated report can be viewed [here](https://jactor-rises.github.io/jactor-cucumber/docs)
