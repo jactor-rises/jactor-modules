@@ -1,0 +1,40 @@
+name: Integration testing
+on:
+  push:
+    branches:
+      - feature-schedule
+
+jobs:
+
+  it:
+    name: cucumber integration testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1.3.0
+        with:
+          java-version: 14
+      - uses: actions/cache@v1.1.2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - uses: jactor-rises/jactor-persistence/run-docker@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
+      - run: mvn install
+      - run: echo ::set-output name=date::$(date +"%Y-%m-%d")
+        id: generated
+      - uses: jactor-rises/actions-gh-pages/move@master
+        with:
+          folder_move_from: target/generated-report
+          folder_for_html: ${{ steps.generated.outputs.date }}
+      - uses: navikt/bidrag-git/commit@v3
+        with:
+          commit_message: "Integration tests from ${{ steps.generated.outputs.date }}"
+          pattern: .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
