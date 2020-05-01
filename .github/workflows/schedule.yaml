@@ -24,12 +24,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
       - run: mvn install || true
-      - run: echo ::set-output name=date::$(date +"%Y-%m-%d")
-        id: generated
       - uses: jactor-rises/actions-gh-pages/move@master
         with:
           folder_move_from: target/generated-report
-          folder_for_html: ${{ steps.generated.outputs.date }}
       - uses: navikt/bidrag-git/commit@v3
         with:
           commit_message: "Integration tests from ${{ steps.generated.outputs.date }}"
