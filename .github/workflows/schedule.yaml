@@ -1,6 +1,7 @@
+name: scheduled integration tests
 on:
   schedule:
-    - cron: '30 6 * * *'
+    - cron: '30 2 * * *'
 
 jobs:
 
@@ -27,9 +28,9 @@ jobs:
       - uses: jactor-rises/actions-gh-pages/move@master
         with:
           folder_move_from: target/generated-report
-      - uses: navikt/bidrag-git/commit@v3
       - run: echo ::set-output name=date::$(date +"%Y-%m-%d")
         id: generated
+      - uses: navikt/bidrag-git/commit@v3
         with:
           commit_message: "Integration tests for ${{ steps.generated.outputs.date }}"
           pattern: docs/*
