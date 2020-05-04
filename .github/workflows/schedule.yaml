@@ -30,9 +30,9 @@ jobs:
           folder_move_from: target/generated-report
       - run: echo ::set-output name=date::$(date +"%Y-%m-%d")
         id: generated
-      - uses: navikt/bidrag-git/commit@v3
+      - uses: navikt/bidrag-git/commit@v3.0.6
         with:
+          author: gh-page-deployer
           commit_message: "Integration tests for ${{ steps.generated.outputs.date }}"
           pattern: docs/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          security_token: ${{ secrets.GITHUB_TOKEN }}
