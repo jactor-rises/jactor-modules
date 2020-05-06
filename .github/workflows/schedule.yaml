@@ -28,7 +28,7 @@ jobs:
       - uses: jactor-rises/actions-gh-pages/move@master
         with:
           folder_move_from: target/generated-report
-      - run: echo ::set-output name=date::$(date +"%Y-%m-%d")
+      - run: echo ::set-output name=date::$(date +"%Y-%m-%d:%T")
         id: generated
       - uses: navikt/bidrag-git/commit@v3.0.6
         with:
