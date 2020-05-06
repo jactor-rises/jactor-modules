@@ -17,6 +17,6 @@ mvn cluecumber-report:reporting
 ```
 Man kan også gjøre både testing og rapportgenerering i et steg med `mvn install`
 
-### Report
+### Reports automatically generated
 
-A generated report can be viewed [here](https://jactor-rises.github.io/jactor-cucumber/)
+The generated integration tests can be viewed [here](https://jactor-rises.github.io/jactor-cucumber/)
