@@ -24,6 +24,9 @@ jobs:
       - uses: jactor-rises/actions-gh-pages/move@master
         with:
           folder_move_from: target/generated-report
+      - uses: jactor-rises/actions-gh-pages/reports@feature-reports
+        with:
+          pages_address: https://jactor-rises.github.io/jactor-cucumber
       - run: echo ::set-output name=date::$(date +"%Y-%m-%d:%T")
         id: generated
       - uses: navikt/bidrag-git/commit@v3.0.6
