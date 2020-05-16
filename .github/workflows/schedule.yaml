@@ -20,7 +20,7 @@ jobs:
           IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
       - run: mvn versions:display-property-updates
       - run: mvn test || true
-      - run: mvn cluecumber:reporting
+      - run: mvn cluecumber-report:reporting
       - uses: jactor-rises/actions-gh-pages/move@feature-reports
         with:
           folder_move_from: target/generated-report
