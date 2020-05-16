@@ -18,7 +18,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
-      - run: mvn versions:display
+      - run: mvn versions:display-property-updates
       - run: mvn test || true
       - run: mvn cluecumber:reporting
       - uses: jactor-rises/actions-gh-pages/move@feature-reports
