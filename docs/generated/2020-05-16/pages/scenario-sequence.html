@@ -17,9 +17,9 @@
     -->
     <!DOCTYPE html>
     <html lang="en">
-    <base href=".">
-    <head title="jactor-cucumber - All Scenarios">
-        <title>jactor-cucumber - All Scenarios</title>
+    <base href="./..">
+    <head title="jactor-cucumber - Scenario Sequence">
+        <title>jactor-cucumber - Scenario Sequence</title>
 
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -174,10 +174,10 @@ font-src * data: blob: 'unsafe-inline';"/>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                                <a class="nav-link text-white" href="index.html">All Scenarios</a>
+                                <a class="nav-link " href="index.html">All Scenarios</a>
                     </li>
                     <li class="nav-item">
-                                <a class="nav-link " href="pages/scenario-sequence.html">Scenario Sequence</a>
+                                <a class="nav-link text-white" href="pages/scenario-sequence.html">Scenario Sequence</a>
                     </li>
                     <li class="nav-item">
                                 <a class="nav-link " href="pages/tag-summary.html">All Tags</a>
@@ -195,7 +195,7 @@ font-src * data: blob: 'unsafe-inline';"/>
     <main role="main" class="container">
         <div class="cluecumber-template">
             <div class="pb-2 mt-4 mb-2 border-bottom">
-                    <h3>All Scenarios</h3>
+                    <h3>Scenario Sequence</h3>
             </div>
 
         <div class="row" id="custom-parameters">
@@ -264,21 +264,15 @@ font-src * data: blob: 'unsafe-inline';"/>
 
                 </li>
                 <li class="list-group-item" data-cluecumber-item="scenario-summary">
-                        <a href="javascript:"
-                           onclick="document.location.hash='anchor-passed';">9
-                            passed</a>     <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+                        9 passed     <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
        title="passed"><span style="display:none">passed</span></i>
 
                         <br>
-                        <a href="javascript:"
-                           onclick="document.location.hash='anchor-failed';">0
-                            failed</a>     <i class="color-failed cluecumber-icon icon-failed" data-toggle="tooltip"
+                        0 failed     <i class="color-failed cluecumber-icon icon-failed" data-toggle="tooltip"
        title="failed"><span style="display:none">failed</span></i>
 
                         <br>
-                        <a href="javascript:"
-                           onclick="document.location.hash='anchor-skipped';">0
-                            skipped</a>     <i class="color-skipped cluecumber-icon icon-skipped" data-toggle="tooltip"
+                        0 skipped     <i class="color-skipped cluecumber-icon icon-skipped" data-toggle="tooltip"
        title="skipped"><span style="display:none">skipped</span></i>
 
                 </li>
@@ -289,33 +283,31 @@ font-src * data: blob: 'unsafe-inline';"/>
     </div>
 
 
-
-
-        <a class="anchor" id="anchor-passed"></a>
-        <div class="row" id="card_passed" data-cluecumber-item="scenario-summary-table">
+        <a class="anchor" id="anchor-all"></a>
+        <div class="row" id="card_all" data-cluecumber-item="scenario-summary-table">
             <div class=" col-sm-12">
                 <div class="card">
 
-                            <div class="card-header border-color-passed">
-                                9
-        passed Scenarios
-    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
-       title="passed"><span style="display:none">passed</span></i>
+                            <div class="card-header">
+                                Scenario Sequence (9)
                             </div>
 
                     <div class="card-body">
-                        <table id="results_passed" class="table table-hover renderAsDataTable">
+                        <table id="results_all" class="table table-hover renderAsDataTable">
                             <thead>
                             <tr>
+                                    <th class="text-left">#</th>
                                 <th class="text-left">Feature</th>
                                 <th class="text-left">Scenario</th>
                                 <th>Started</th>
                                 <th>Duration</th>
+                                    <th class="text-left">Status</th>
                             </tr>
                             </thead>
                             <tbody>
 
                                         <tr class="table-row-passed">
+                                                <td class="text-right">1</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/actuator.feature">
                                                     <a href="pages/feature-scenarios/feature_0.html">Actuator på app jactor-persistence</a>
@@ -332,9 +324,13 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="135,412,000">
                                                 <span class="nobr">0m 00s 135ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
 
                                         <tr class="table-row-passed">
+                                                <td class="text-right">2</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/app.feature">
                                                     <a href="pages/feature-scenarios/feature_1.html">Applikasjonen jactor-persistence</a>
@@ -351,8 +347,12 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="24,652,000">
                                                 <span class="nobr">0m 00s 024ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
                                         <tr class="table-row-passed">
+                                                <td class="text-right">3</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/app.feature">
                                                     <a href="pages/feature-scenarios/feature_1.html">Applikasjonen jactor-persistence</a>
@@ -369,8 +369,12 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="8,206,000">
                                                 <span class="nobr">0m 00s 008ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
                                         <tr class="table-row-passed">
+                                                <td class="text-right">4</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/app.feature">
                                                     <a href="pages/feature-scenarios/feature_1.html">Applikasjonen jactor-persistence</a>
@@ -387,8 +391,12 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="14,471,000">
                                                 <span class="nobr">0m 00s 014ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
                                         <tr class="table-row-passed">
+                                                <td class="text-right">5</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/app.feature">
                                                     <a href="pages/feature-scenarios/feature_1.html">Applikasjonen jactor-persistence</a>
@@ -405,9 +413,13 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="9,566,000">
                                                 <span class="nobr">0m 00s 009ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
 
                                         <tr class="table-row-passed">
+                                                <td class="text-right">6</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/user.feature">
                                                     <a href="pages/feature-scenarios/feature_2.html">jactor-presistence behandler en bruker</a>
@@ -424,8 +436,12 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="229,246,000">
                                                 <span class="nobr">0m 00s 229ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
                                         <tr class="table-row-passed">
+                                                <td class="text-right">7</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/user.feature">
                                                     <a href="pages/feature-scenarios/feature_2.html">jactor-presistence behandler en bruker</a>
@@ -442,8 +458,12 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="17,694,000">
                                                 <span class="nobr">0m 00s 017ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
                                         <tr class="table-row-passed">
+                                                <td class="text-right">8</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/user.feature">
                                                     <a href="pages/feature-scenarios/feature_2.html">jactor-presistence behandler en bruker</a>
@@ -460,8 +480,12 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="35,651,000">
                                                 <span class="nobr">0m 00s 035ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
                                         <tr class="table-row-passed">
+                                                <td class="text-right">9</td>
                                             <td class="text-left">
                                                 <span data-toggle="tooltip" title="classpath:com/github/jactor/cucumber/persistence/user.feature">
                                                     <a href="pages/feature-scenarios/feature_2.html">jactor-presistence behandler en bruker</a>
@@ -478,6 +502,9 @@ font-src * data: blob: 'unsafe-inline';"/>
                                                 data-order="241,956,000">
                                                 <span class="nobr">0m 00s 241ms</span>
                                             </td>
+                                                <td class="text-center">    <i class="color-passed cluecumber-icon icon-passed" data-toggle="tooltip"
+       title="passed"><span style="display:none">passed</span></i>
+</td>
                                         </tr>
                             </tbody>
                         </table>
