@@ -1,7 +1,7 @@
 name: scheduled integration tests
 on:
   schedule:
-    - cron: '30 2 * * *'
+    - cron: '5 * * * *'
 
 jobs:
 
@@ -21,7 +21,7 @@ jobs:
       - run: mvn versions:display
       - run: mvn test || true
       - run: mvn cluecumber:reporting
-      - uses: jactor-rises/actions-gh-pages/move@master
+      - uses: jactor-rises/actions-gh-pages/move@feature-reports
         with:
           folder_move_from: target/generated-report
       - uses: jactor-rises/actions-gh-pages/reports@feature-reports
