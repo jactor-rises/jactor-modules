@@ -23,4 +23,3 @@ Siste cucumber [rapport](https://jactor-rises.github.io/jactor-cucumber/latest)
 
 ### Eldre tester
 
-[Legges inn her]
