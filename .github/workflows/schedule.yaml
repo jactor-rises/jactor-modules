@@ -14,17 +14,13 @@ jobs:
       - uses: actions/setup-java@v1.3.0
         with:
           java-version: 14
-      - uses: actions/cache@v1.1.2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
-      - run: mvn install || true
+      - run: mvn versions:display
+      - run: mvn test || true
+      - run: mvn cluecumber:reporting
       - uses: jactor-rises/actions-gh-pages/move@master
         with:
           folder_move_from: target/generated-report
