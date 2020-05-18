@@ -21,10 +21,10 @@ jobs:
       - run: mvn versions:display-property-updates
       - run: mvn test || true
       - run: mvn cluecumber-report:reporting
-      - uses: jactor-rises/actions-gh-pages/move@feature-reports
+      - uses: jactor-rises/actions-gh-pages/move@v1
         with:
           folder_move_from: target/generated-report
-      - uses: jactor-rises/actions-gh-pages/reports@feature-reports
+      - uses: jactor-rises/actions-gh-pages/reports@v1
         with:
           pages_address: https://jactor-rises.github.io/jactor-cucumber
       - run: echo ::set-output name=date::$(date +"%Y-%m-%d:%T")
