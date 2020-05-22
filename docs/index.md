@@ -21,7 +21,9 @@ Man kan også gjøre både testing og rapportgenerering i et steg med `mvn insta
 
 Siste cucumber [rapport](https://jactor-rises.github.io/jactor-cucumber/latest)
 
-### Eldre tester
+### Alle tester
+
+Tests for [2020-05-22](https://jactor-rises.github.io/jactor-cucumber/generated/2020-05-22/)
 
 Tests for [2020-05-21](https://jactor-rises.github.io/jactor-cucumber/generated/2020-05-21/)
 
