@@ -23,6 +23,8 @@ Siste cucumber [rapport](https://jactor-rises.github.io/jactor-cucumber/latest)
 
 ### Alle tester
 
+Tests for [2020-05-27](https://jactor-rises.github.io/jactor-cucumber/generated/2020-05-27/)
+
 Tests for [2020-05-26](https://jactor-rises.github.io/jactor-cucumber/generated/2020-05-26/)
 
 Tests for [2020-05-25](https://jactor-rises.github.io/jactor-cucumber/generated/2020-05-25/)
