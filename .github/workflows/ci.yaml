@@ -16,7 +16,7 @@ jobs:
     steps:
       - run: env
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1.4.3
+      - uses: actions/setup-java@v1
         with:
           java-version: 15
       - uses: actions/cache@v1
@@ -47,7 +47,7 @@ jobs:
         with:
           repository: jactor-rises/jactor-cucumber
           path: jactor-cucumber
-      - uses: actions/setup-java@v1.4.3
+      - uses: actions/setup-java@v1
         with:
           java-version: 15
       - uses: actions/cache@v1
