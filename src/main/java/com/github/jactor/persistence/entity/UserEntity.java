@@ -28,7 +28,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -82,11 +81,11 @@ public class UserEntity implements PersistentEntity<UserEntity> {
     userType = user.userType;
   }
 
-  public UserEntity(@NotNull UserInternalDto user) {
+  public UserEntity(UserInternalDto user) {
     addValues(user);
   }
 
-  private void addValues(@NotNull UserInternalDto user) {
+  private void addValues(UserInternalDto user) {
     emailAddress = user.getEmailAddress();
     id = user.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(user.fetchPersistentDto());

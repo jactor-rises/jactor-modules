@@ -23,7 +23,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -67,7 +66,7 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
     user = guestBook.copyUserWithoutId();
   }
 
-  public GuestBookEntity(@NotNull GuestBookDto guestBook) {
+  public GuestBookEntity(GuestBookDto guestBook) {
     entries = guestBook.getEntries().stream().map(GuestBookEntryEntity::new).collect(toSet());
     id = guestBook.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(guestBook.fetchPersistentDto());
