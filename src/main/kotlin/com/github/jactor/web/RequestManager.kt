@@ -18,7 +18,7 @@ data class RequestManager(
     fun fetchChosenView(): String {
         val requestURI = fetchWithoutContextPath()
 
-        if (requestURI.length == 1 || requestURI.isEmpty()) return "home"
+        if (requestURI.length == 1 || requestURI.isBlank()) return "home"
 
         return if (requestURI[0] == '/') requestURI.substring(1) else requestURI
     }
@@ -31,7 +31,7 @@ data class RequestManager(
         }
 
         val parametersWithoutLanguage = Arrays.stream<String>(queryString!!.split("&".toRegex())
-                .dropLastWhile { it.isEmpty() }.toTypedArray())
+                .dropLastWhile { it.isBlank() }.toTypedArray())
                 .filter { param -> !param.startsWith("lang=") }
                 .collect(Collectors.toList<String>())
 
@@ -50,11 +50,11 @@ data class RequestManager(
         }
 
         languageParameter = Stream.of(*queryString!!.split("&".toRegex())
-                .dropLastWhile { it.isEmpty() }.toTypedArray())
+                .dropLastWhile { it.isBlank() }.toTypedArray())
                 .filter { string -> string.startsWith("lang=") }
                 .findFirst().orElse("")
 
-        return languageParameter.isEmpty()
+        return languageParameter.isBlank()
     }
 
     fun fetchFrom(supportedLanguages: List<Language>, locale: Locale, defaultLanguage: Language): Language {

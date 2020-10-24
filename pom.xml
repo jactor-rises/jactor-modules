@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.2.6.RELEASE</version>
+    <version>2.3.4.RELEASE</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -18,12 +18,12 @@
   <properties>
     <!-- dependencies -->
     <jactor-shared.version>0.1.2</jactor-shared.version>
-    <webjars-bootstrap.version>4.5.0</webjars-bootstrap.version>
-    <webjars-jquery.version>3.5.0</webjars-jquery.version>
+    <webjars-bootstrap.version>4.5.3</webjars-bootstrap.version>
+    <webjars-jquery.version>3.5.1</webjars-jquery.version>
 
     <!-- language -->
-    <java.version>14</java.version>
-    <kotlin.version>1.3.71</kotlin.version>
+    <java.version>15</java.version>
+    <kotlin.version>1.4.10</kotlin.version>
 
     <!-- build -->
     <build-helper-maven.version>3.1.0</build-helper-maven.version>
@@ -77,32 +77,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
     </dependency>
   </dependencies>
 
@@ -144,27 +119,6 @@
         <configuration>
           <release>${java.version}</release>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
 
       <plugin>

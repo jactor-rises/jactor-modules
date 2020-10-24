@@ -1,4 +1,6 @@
 # jactor-web #
+![](https://github.com/jactor-rises/jactor-web/workflows/continuous%20integration/badge.svg)
+![](https://github.com/jactor-rises/jactor-web/workflows/verify%20pull%20request/badge.svg)
 
 ### What is this repository for? ###
 
