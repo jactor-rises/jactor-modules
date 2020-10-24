@@ -1,4 +1,6 @@
 # jactor-shared
+![](https://github.com/jactor-rises/jactor-shared/workflows/deploy%20maven%20artifact/badge.svg)
+
 Shared beans between jactor-persistence and jactor-beans (mostly http api)
 
 ## Http api
