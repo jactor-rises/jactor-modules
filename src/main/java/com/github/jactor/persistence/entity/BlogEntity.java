@@ -24,7 +24,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -68,7 +67,7 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
     userEntity = Optional.ofNullable(blogEntity.getUser()).map(UserEntity::copyWithoutId).orElse(null);
   }
 
-  public BlogEntity(@NotNull BlogDto blogDto) {
+  public BlogEntity(BlogDto blogDto) {
     created = blogDto.getCreated();
     id = blogDto.getId();
     persistentDataEmbeddable = new PersistentDataEmbeddable(blogDto.fetchPersistentDto());

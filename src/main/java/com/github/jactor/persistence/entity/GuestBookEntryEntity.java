@@ -19,7 +19,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -61,7 +60,7 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
     persistentDataEmbeddable = new PersistentDataEmbeddable();
   }
 
-  public GuestBookEntryEntity(@NotNull GuestBookEntryDto guestBookEntry) {
+  public GuestBookEntryEntity(GuestBookEntryDto guestBookEntry) {
     entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     guestBook = Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).orElse(null);
     id = guestBookEntry.getId();
