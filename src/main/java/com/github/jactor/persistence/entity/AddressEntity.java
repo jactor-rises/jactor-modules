@@ -14,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -66,7 +65,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
     zipCode = address.getZipCode();
   }
 
-  AddressEntity(@NotNull AddressInternalDto addressInternalDto) {
+  AddressEntity(AddressInternalDto addressInternalDto) {
     persistentDataEmbeddable = new PersistentDataEmbeddable(addressInternalDto.fetchPersistentDto());
     addressLine1 = addressInternalDto.getAddressLine1();
     addressLine2 = addressInternalDto.getAddressLine2();
