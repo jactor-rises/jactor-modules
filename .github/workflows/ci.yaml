@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-java@v1.4.3
         with:
           java-version: 14
-      - uses: actions/cache@v1.1.2
+      - uses: actions/cache@v1
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -65,12 +65,12 @@ jobs:
   git:
     needs: cucumber
     if: github.ref == 'refs/heads/master'
-    name: Modify git history
+    name: Bump dev version
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v1.1.2
+      - uses: actions/cache@v1
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
