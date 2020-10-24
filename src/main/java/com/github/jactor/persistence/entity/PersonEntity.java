@@ -23,7 +23,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -73,7 +72,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     users = person.users;
   }
 
-  public PersonEntity(@NotNull PersonInternalDto person) {
+  public PersonEntity(PersonInternalDto person) {
     addressEntity = Optional.ofNullable(person.getAddress()).map(AddressEntity::new).orElse(null);
     description = person.getDescription();
     firstName = person.getFirstName();

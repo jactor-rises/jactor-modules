@@ -4,7 +4,6 @@ import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.shared.dto.CreateUserCommandDto
-import javax.validation.constraints.NotNull
 
 data class CreateUserCommand(
         var username: String = "",
@@ -25,7 +24,7 @@ data class CreateUserCommand(
             null, null, null, null, null, null, null, null, null
     )
 
-    constructor(createUserCommand: @NotNull CreateUserCommandDto) : this(
+    constructor(createUserCommand: CreateUserCommandDto) : this(
             username = createUserCommand.username,
             surname = createUserCommand.surname,
             emailAddress = createUserCommand.emailAddress,

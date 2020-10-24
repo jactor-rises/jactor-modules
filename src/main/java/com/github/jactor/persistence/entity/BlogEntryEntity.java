@@ -19,7 +19,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -60,7 +59,7 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
     persistentDataEmbeddable = new PersistentDataEmbeddable();
   }
 
-  public BlogEntryEntity(@NotNull BlogEntryDto blogEntryDto) {
+  public BlogEntryEntity(BlogEntryDto blogEntryDto) {
     blog = Optional.ofNullable(blogEntryDto.getBlog()).map(BlogEntity::new).orElse(null);
     entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     id = blogEntryDto.getId();

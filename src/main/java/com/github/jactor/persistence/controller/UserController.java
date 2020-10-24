@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -69,7 +68,7 @@ public class UserController {
       @ApiResponse(code = 400, message = "Username already occupied or no body is present")
   })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<CreateUserCommandResponse> post(@NotNull @RequestBody CreateUserCommandDto createUserCommand) {
+  public ResponseEntity<CreateUserCommandResponse> post(@RequestBody CreateUserCommandDto createUserCommand) {
     if (userServicey.isAllreadyPresent(createUserCommand.getUsername())) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -85,7 +84,7 @@ public class UserController {
       @ApiResponse(code = 400, message = "Did not find user with id or no body is present")
   })
   @PutMapping("/{userId}")
-  public ResponseEntity<UserDto> put(@NotNull @RequestBody UserDto userDto, @PathVariable Long userId) {
+  public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
     userDto.setId(userId);
 
     return userServicey.update(new UserInternalDto(userDto))
