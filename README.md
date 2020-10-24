@@ -1,6 +1,6 @@
 # jactor-persistence
 
-![](https://github.com/jactor-rises/jactor-persistence/workflows/continious%20integration/badge.svg)
+![](https://github.com/jactor-rises/jactor-persistence/workflows/continuous%20integration/badge.svg)
 
 ### What is this repository for?
 
