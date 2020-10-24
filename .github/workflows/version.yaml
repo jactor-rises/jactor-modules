@@ -2,7 +2,7 @@ name: bump version
 on:
   push:
     branches:
-      - master
+      - '**'
 
 jobs:
 
@@ -26,6 +26,7 @@ jobs:
     needs: it
     name: Bump dev version
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - uses: actions/checkout@v2
