@@ -1,7 +1,8 @@
 # jactor-cucumber
 Integrsjonstesting av jactor-persistence
 
-![](https://github.com/jactor-rises/jactor-cucumber/workflows/bump%20version/badge.svg)
+![](https://github.com/jactor-rises/jactor-cucumber/workflows/run%20tests/badge.svg)
+![](https://github.com/jactor-rises/jactor-cucumber/workflows/scheduled%20integration%20tests/badge.svg)
 
 ## Integrasjonstesting med maven
 Dette er et [maven](https://maven.apache.org) prosjekt som kjører [cucumber](https://cucumber.io) med [Kotlin](https://kotlinlang.org)
@@ -22,6 +23,8 @@ Man kan også gjøre både testing og rapportgenerering i et steg med `mvn insta
 Siste cucumber [rapport](https://jactor-rises.github.io/jactor-cucumber/latest)
 
 ### Alle tester
+
+Tests for [2020-10-25](https://jactor-rises.github.io/jactor-cucumber/generated/2020-10-25/)
 
 Tests for [2020-10-24](https://jactor-rises.github.io/jactor-cucumber/generated/2020-10-24/)
 
