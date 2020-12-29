@@ -7,5 +7,5 @@ Egenskap: Actuator på app jactor-persistence
   Scenario: Kall mot actuator/health
     Gitt endpoint url '/health'
     Når en get gjøres på resttjenesten
-    Så skal statuskoden fra resttjenesten være '200'
+    Så skal statuskoden fra resttjenesten være 200
     Og responsen skal inneholde '"status":"UP"'

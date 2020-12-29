@@ -12,8 +12,9 @@ import org.springframework.web.util.UriComponentsBuilder
 
 data class RestService(val baseUrl: String, var url: String = "") {
     private var httpClientErrorException: HttpClientErrorException? = null
+    private var initilazed: Boolean = false
     private var responseEntity: ResponseEntity<String>? = null
-    private var restTemplate: RestTemplate? = null
+    private lateinit var restTemplate: RestTemplate
 
     fun exchangeGet() {
         exchangeGet(null, null)
@@ -23,7 +24,7 @@ data class RestService(val baseUrl: String, var url: String = "") {
         initRestTemplate()
         val fullUrl = initUrl(navn, parameter)
 
-        responseEntity = restTemplate!!.exchange(fullUrl, HttpMethod.GET, null, String::class.java)
+        responseEntity = restTemplate.exchange(fullUrl, HttpMethod.GET, null, String::class.java)
     }
 
     fun exchangePost(json: String) {
@@ -33,7 +34,7 @@ data class RestService(val baseUrl: String, var url: String = "") {
         headers.contentType = MediaType.APPLICATION_JSON
 
         try {
-            responseEntity = restTemplate!!.exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
+            responseEntity = restTemplate.exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
         } catch (e: HttpClientErrorException) {
             httpClientErrorException = e
         }
@@ -41,12 +42,15 @@ data class RestService(val baseUrl: String, var url: String = "") {
 
     private fun initUrl() = initUrl(null, null)
     private fun initUrl(navn: String?, parameter: String?) = if (navn != null) initUrlWithBuilder(navn, parameter) else baseUrl + url
-    private fun initUrlWithBuilder(navn: String, parameter: String?) = UriComponentsBuilder.fromHttpUrl(baseUrl + url).queryParam(navn, parameter)
-            .build().toUriString()
+    private fun initUrlWithBuilder(navn: String, parameter: String?) = UriComponentsBuilder.fromHttpUrl(baseUrl + url)
+        .queryParam(navn, parameter)
+        .build()
+        .toUriString()
 
     private fun initRestTemplate() {
-        if (restTemplate == null) {
+        if (!initilazed) {
             restTemplate = RestTemplate()
+            initilazed = true
         }
     }
 
