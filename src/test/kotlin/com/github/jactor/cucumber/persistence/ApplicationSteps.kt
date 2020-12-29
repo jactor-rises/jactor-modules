@@ -1,33 +1,27 @@
 package com.github.jactor.cucumber.persistence
 
-import io.cucumber.java.no.Gitt
-import io.cucumber.java.no.Når
-import io.cucumber.java.no.Så
+import com.github.jactor.cucumber.StepValues.Companion.application
+import com.github.jactor.cucumber.StepValues.Companion.status
+import io.cucumber.java8.No
 import org.assertj.core.api.Assertions.assertThat
 
-class ApplicationSteps {
-    companion object {
-        private lateinit var application: Application
-        private var status: Int? = null
-    }
+class ApplicationSteps : No {
 
-    @Gitt("http url {string}")
-    fun `http url`(url: String) {
-        application = Application(url)
-    }
+    init {
+        Gitt("http url {string}") { url: String ->
+            application = Application(url)
+        }
 
-    @Gitt("kompletterende url {string}")
-    fun `kompletterende url`(url: String?) {
-        application.completeUrl = url
-    }
+        Gitt("kompletterende url {string}") { url: String ->
+            application.completeUrl = url
+        }
 
-    @Når("jeg ber om en response kode på en get request")
-    fun `jeg ber om en response kode paa en get request`() {
-        status = application.hentResponseStatusForGet()
-    }
+        Når("jeg ber om en response kode på en get request") {
+            status = application.hentResponseStatusForGet()
+        }
 
-    @Så("skal statuskoden være {string}")
-    fun `skal statuskoden vaere`(httpCode: String) {
-        assertThat(status).isEqualTo(httpCode.toInt())
+        Så("skal statuskoden være {int}") { httpCode: Int ->
+            assertThat(status).isEqualTo(httpCode)
+        }
     }
 }

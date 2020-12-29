@@ -1,52 +1,48 @@
 package com.github.jactor.cucumber
 
-import io.cucumber.java.no.Gitt
-import io.cucumber.java.no.Når
-import io.cucumber.java.no.Og
-import io.cucumber.java.no.Så
+import com.github.jactor.cucumber.StepValues.Companion.restService
+import io.cucumber.java8.No
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.http.HttpStatus
 
-class RestServiceSteps {
-    companion object {
-        private lateinit var restService: RestService
-    }
+class RestServiceSteps : No {
 
-    @Gitt("url til resttjeneste: {string}")
-    @Og("gitt url til resttjeneste: {string}")
-    fun `url til resttjeneste`(baseUrl: String) {
-        restService = RestService(baseUrl)
-    }
+    init {
+        Gitt("url til resttjeneste: {string}") { baseUrl: String ->
+            restService = RestService(baseUrl)
+        }
 
-    @Gitt("endpoint url {string}")
-    @Og("path variable {string}")
-    fun url(url: String) {
-        restService.url = url
-    }
+        Og("gitt url til resttjeneste: {string}") { baseUrl: String ->
+            restService = RestService(baseUrl)
+        }
 
-    @Når("en get gjøres på resttjenesten")
-    fun `en get gjores pa resttjenesten`() {
-        restService.exchangeGet()
-    }
+        Gitt("endpoint url {string}") { url: String ->
+            restService.url = url
+        }
 
-    @Når("en get gjøres på resttjenesten med parameter {string} = {string}")
-    fun `en get gjores pa resttjenesten med parameter`(navn: String, verdi: String) {
-        restService.exchangeGet(navn, verdi)
-    }
+        Og("path variable {string}") { url: String ->
+            restService.url = url
+        }
 
-    @Når("en post gjøres med body:")
-    fun `en post gjores med body`(json: String) {
-        restService.exchangePost(json)
-    }
+        Når("en get gjøres på resttjenesten") {
+            restService.exchangeGet()
+        }
 
-    @Så("skal statuskoden fra resttjenesten være {string}")
-    fun `skal statuskoden fra resttjenesten vare`(statusKode: String) {
-        val httpStatus = HttpStatus.valueOf(statusKode.toInt())
-        assertThat(restService.hentStatusKode()).isEqualTo(httpStatus)
-    }
+        Når("en get gjøres på resttjenesten med parameter {string} = {string}") { navn: String, verdi: String ->
+            restService.exchangeGet(navn, verdi)
+        }
 
-    @Og("responsen skal inneholde {string}")
-    fun `responsen skal inneholde`(tekst: String) {
-        assertThat(restService.hentResponse()).containsSubsequence(tekst)
+        Når("en post gjøres med body:") { json: String ->
+            restService.exchangePost(json)
+        }
+
+        Så("skal statuskoden fra resttjenesten være {int}") { statusKode: Int ->
+            val httpStatus = HttpStatus.valueOf(statusKode)
+            assertThat(restService.hentStatusKode()).isEqualTo(httpStatus)
+        }
+
+        Og("responsen skal inneholde {string}") { tekst: String ->
+            assertThat(restService.hentResponse()).containsSubsequence(tekst)
+        }
     }
 }
