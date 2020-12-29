@@ -1,9 +1,10 @@
 package com.github.jactor.cucumber.persistence
 
-import com.github.jactor.cucumber.StepValues.Companion.application
-import com.github.jactor.cucumber.StepValues.Companion.status
+import com.github.jactor.cucumber.ScenarioValues.Companion.application
+import com.github.jactor.cucumber.ScenarioValues.Companion.hentStatusKode
 import io.cucumber.java8.No
 import org.assertj.core.api.Assertions.assertThat
+import org.springframework.http.HttpStatus
 
 class ApplicationSteps : No {
 
@@ -16,12 +17,12 @@ class ApplicationSteps : No {
             application.completeUrl = url
         }
 
-        Når("jeg ber om en response kode på en get request") {
-            status = application.hentResponseStatusForGet()
+        Når("jeg utfører en get request") {
+            application.doGet()
         }
 
         Så("skal statuskoden være {int}") { httpCode: Int ->
-            assertThat(status).isEqualTo(httpCode)
+            assertThat(HttpStatus.valueOf(httpCode)).isEqualTo(hentStatusKode())
         }
     }
 }
