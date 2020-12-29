@@ -20,7 +20,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
       - run: mvn versions:display-property-updates
-      - run: mvn test
+      - run: mvn test -P cucumber
 
   git:
     needs: it
