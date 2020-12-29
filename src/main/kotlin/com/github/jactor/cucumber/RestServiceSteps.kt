@@ -1,6 +1,8 @@
 package com.github.jactor.cucumber
 
-import com.github.jactor.cucumber.StepValues.Companion.restService
+import com.github.jactor.cucumber.ScenarioValues.Companion.hentResponse
+import com.github.jactor.cucumber.ScenarioValues.Companion.hentStatusKode
+import com.github.jactor.cucumber.ScenarioValues.Companion.restService
 import io.cucumber.java8.No
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.http.HttpStatus
@@ -38,11 +40,11 @@ class RestServiceSteps : No {
 
         Så("skal statuskoden fra resttjenesten være {int}") { statusKode: Int ->
             val httpStatus = HttpStatus.valueOf(statusKode)
-            assertThat(restService.hentStatusKode()).isEqualTo(httpStatus)
+            assertThat(httpStatus).isEqualTo(hentStatusKode())
         }
 
         Og("responsen skal inneholde {string}") { tekst: String ->
-            assertThat(restService.hentResponse()).containsSubsequence(tekst)
+            assertThat(hentResponse()).containsSubsequence(tekst)
         }
     }
 }

@@ -1,9 +1,9 @@
 package com.github.jactor.cucumber
 
+import com.github.jactor.cucumber.ScenarioValues.Companion.responseEntity
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
@@ -11,9 +11,7 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 
 data class RestService(val baseUrl: String, var url: String = "") {
-    private var httpClientErrorException: HttpClientErrorException? = null
     private var initilazed: Boolean = false
-    private var responseEntity: ResponseEntity<String>? = null
     private lateinit var restTemplate: RestTemplate
 
     fun exchangeGet() {
@@ -36,7 +34,7 @@ data class RestService(val baseUrl: String, var url: String = "") {
         try {
             responseEntity = restTemplate.exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
         } catch (e: HttpClientErrorException) {
-            httpClientErrorException = e
+            responseEntity = ResponseEntity(e.statusCode)
         }
     }
 
@@ -53,13 +51,4 @@ data class RestService(val baseUrl: String, var url: String = "") {
             initilazed = true
         }
     }
-
-    fun hentStatusKode(): HttpStatus {
-        if (responseEntity != null) return responseEntity!!.statusCode
-        if (httpClientErrorException != null) return httpClientErrorException!!.statusCode
-
-        return HttpStatus.I_AM_A_TEAPOT
-    }
-
-    fun hentResponse() = responseEntity?.body
 }

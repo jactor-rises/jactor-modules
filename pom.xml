@@ -13,9 +13,27 @@
     <kotlin.version>1.4.21</kotlin.version>
     <spring-boot.version>2.4.1</spring-boot.version>
 
-    <maven-compiler.version>3.8.1</maven-compiler.version>
+    <!-- build -->
+    <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
+    <kotlin.version>1.4.21</kotlin.version>
+    <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
+    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- management with spring boot -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <!-- kotlin -->
@@ -33,9 +51,14 @@
     <!-- cucumber -->
     <dependency>
       <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-core</artifactId>
+      <version>${cucumber.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
       <artifactId>cucumber-java8</artifactId>
       <version>${cucumber.version}</version>
-   </dependency>
+    </dependency>
     <dependency>
       <groupId>io.cucumber</groupId>
       <artifactId>cucumber-junit</artifactId>
@@ -48,35 +71,94 @@
       <artifactId>spring-web</artifactId>
     </dependency>
 
-    <!-- assertions -->
+    <!-- junit & assertions-->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
     </dependency>
+
+    <!-- one logging framework to rule them all -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
+      <!-- API -->
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
+      <!-- Rute commons-logging gjennom slf4j -->
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+    <dependency>
+      <!-- Rute log4j gjennom slf4j -->
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+    </dependency>
+    <dependency>
+      <!-- Implementasjon: Logback -->
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
     </dependency>
   </dependencies>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>cucumber</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
   <build>
+    <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+      </plugin>
+
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
@@ -84,82 +166,89 @@
         <executions>
           <execution>
             <id>compile</id>
-            <phase>compile</phase>
+            <phase>process-sources</phase>
             <goals>
               <goal>compile</goal>
             </goals>
+            <configuration>
+              <sourceDirs>
+                <sourceDir>src/main/kotlin</sourceDir>
+              </sourceDirs>
+            </configuration>
           </execution>
           <execution>
             <id>test-compile</id>
-            <phase>test-compile</phase>
+            <phase>process-test-resources</phase>
             <goals>
               <goal>test-compile</goal>
             </goals>
             <configuration>
               <sourceDirs>
-                <source>src/test/java</source>
                 <source>src/test/kotlin</source>
               </sourceDirs>
             </configuration>
           </execution>
         </executions>
         <configuration>
+          <args>
+            <arg>-Xjsr305=strict</arg>
+          </args>
+          <compilerPlugins>
+            <plugin>spring</plugin>
+          </compilerPlugins>
           <jvmTarget>1.8</jvmTarget>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-allopen</artifactId>
+            <version>${kotlin.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>${build-helper-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>remove-old-artifacts</id>
+            <phase>package</phase>
+            <goals>
+              <goal>remove-project-artifact</goal>
+            </goals>
+            <configuration>
+              <removeAll>true</removeAll>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler.version}</version>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven-assembly-plugin.version}</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <finalName>${project.artifactId}</finalName>
+          <archive>
+            <manifest>
+              <mainClass>no.nav.bidrag.cucumber.nais.IntegrationTestsKt</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
         <executions>
           <execution>
-            <id>compile</id>
-            <phase>compile</phase>
+            <id>make-my-jar-with-dependenciess</id>
+            <phase>package</phase>
             <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>testCompile</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>testCompile</goal>
+              <goal>single</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <encoding>UTF-8</encoding>
-          <source>1.8</source>
-          <target>1.8</target>
-          <compilerArgument>-Werror</compilerArgument>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>com.trivago.rta</groupId>
-        <artifactId>cluecumber-report-plugin</artifactId>
-        <version>${cluecumber.version}</version>
-        <executions>
-          <execution>
-            <id>report</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>reporting</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <customPageTitle>jactor-cucumber</customPageTitle>
-          <customParameters>
-            <Tittel>Integrasjonstest for jactor-persistence</Tittel>
-            <URL>https://github.com/jactor-rises/jactor-persistence</URL>
-            <_avsnitt.a>Integrasjonstester gjort ifm. utvikling av jactor-persistence</_avsnitt.a>
-          </customParameters>
-          <sourceJsonReportDirectory>${project.build.directory}/cucumber-report</sourceJsonReportDirectory>
-          <generatedHtmlReportDirectory>${project.build.directory}/generated-report</generatedHtmlReportDirectory>
-          <failScenariosOnPendingOrUndefinedSteps>true</failScenariosOnPendingOrUndefinedSteps>
-        </configuration>
       </plugin>
     </plugins>
   </build>
