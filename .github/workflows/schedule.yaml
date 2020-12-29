@@ -19,7 +19,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
       - run: mvn versions:display-property-updates
-      - run: mvn test || true
+      - run: mvn test -P cucumber || true
       - run: mvn cluecumber-report:reporting
       - uses: jactor-rises/actions-gh-pages/move@v1
         with:
