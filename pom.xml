@@ -9,7 +9,7 @@
 
     <properties>
         <cluecumber.version>2.3.3</cluecumber.version>
-        <cucumber.version>5.6.0</cucumber.version>
+        <cucumber.version>6.9.1</cucumber.version>
         <kotlin.version>1.4.21</kotlin.version>
         <spring-boot.version>2.4.1</spring-boot.version>
 
