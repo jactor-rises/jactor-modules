@@ -34,9 +34,9 @@
     <!-- cucumber -->
     <dependency>
       <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-java</artifactId>
+      <artifactId>cucumber-java8</artifactId>
       <version>${cucumber.version}</version>
-    </dependency>
+   </dependency>
     <dependency>
       <groupId>io.cucumber</groupId>
       <artifactId>cucumber-junit</artifactId>
