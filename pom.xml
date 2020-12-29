@@ -11,7 +11,7 @@
         <cluecumber.version>2.3.3</cluecumber.version>
         <cucumber.version>5.6.0</cucumber.version>
         <kotlin.version>1.4.21</kotlin.version>
-        <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+        <spring-boot.version>2.4.1</spring-boot.version>
 
         <maven-compiler.version>3.7.0</maven-compiler.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
