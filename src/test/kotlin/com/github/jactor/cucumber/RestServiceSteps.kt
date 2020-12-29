@@ -36,8 +36,8 @@ class RestServiceSteps : No {
             restService.exchangePost(json)
         }
 
-        Så("skal statuskoden fra resttjenesten være {string}") { statusKode: String ->
-            val httpStatus = HttpStatus.valueOf(statusKode.toInt())
+        Så("skal statuskoden fra resttjenesten være {int}") { statusKode: Int ->
+            val httpStatus = HttpStatus.valueOf(statusKode)
             assertThat(restService.hentStatusKode()).isEqualTo(httpStatus)
         }
 
