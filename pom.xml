@@ -61,6 +61,7 @@
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib-jdk8</artifactId>
       <version>${kotlin.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.springfox</groupId>
@@ -68,25 +69,19 @@
       <version>${springfox-swagger.version}</version>
       <exclusions>
         <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
           <groupId>org.springframework.plugin</groupId>
           <artifactId>spring-plugin-core</artifactId>
         </exclusion>
       </exclusions>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-swagger-ui</artifactId>
       <version>${springfox-swagger.version}</version>
       <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
       </exclusions>
+      <scope>compile</scope>
     </dependency>
 
     <!-- test scope -->
