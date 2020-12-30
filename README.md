@@ -50,7 +50,7 @@ docker run -p 1099:1099 jactor-persistence
 ```
 ### Some technologies used
 
-* [spring-boot 2.3.x](https://spring.io/projects/spring-boot)
+* [spring-boot 2.4.x](https://spring.io/projects/spring-boot)
     * with spring-data-jpa
     * with spring mvc
 * [docker](https://www.docker.com)
