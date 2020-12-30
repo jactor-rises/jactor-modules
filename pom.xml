@@ -11,7 +11,7 @@
 
   <groupId>com.github.jactor-rises</groupId>
   <artifactId>jactor-web</artifactId>
-  <version>1.0.15-SNAPSHOT</version>
+  <version>1.0.16-SNAPSHOT</version>
 
   <description>A web module using jactor-persistence</description>
 
