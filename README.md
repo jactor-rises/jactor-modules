@@ -1,6 +1,8 @@
 # jactor-persistence
 
-![](https://github.com/jactor-rises/jactor-persistence/workflows/continuous%20integration/badge.svg)
+![continuous integration](https://github.com/jactor-rises/jactor-persistence/workflows/continuous%20integration/badge.svg)
+![verify pull request](https://github.com/jactor-rises/jactor-persistence/workflows/verify%20pull%20request/badge.svg)
+![build run docker](https://github.com/jactor-rises/jactor-persistence/workflows/build%20run%20docker/badge.svg)
 
 ### What is this repository for?
 
