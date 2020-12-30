@@ -135,6 +135,36 @@
           <scope>runtime</scope>
         </dependency>
       </dependencies>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.trivago.rta</groupId>
+            <artifactId>cluecumber-report-plugin</artifactId>
+            <version>${cluecumber.version}</version>
+            <executions>
+              <execution>
+                <id>report</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>reporting</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <customPageTitle>jactor-cucumber</customPageTitle>
+              <customParameters>
+                <Tittel>Integrasjonstest for jactor-persistence</Tittel>
+                <URL>https://github.com/jactor-rises/jactor-persistence</URL>
+                <_avsnitt.a>Integrasjonstester gjort ifm. utvikling av jactor-persistence</_avsnitt.a>
+              </customParameters>
+              <sourceJsonReportDirectory>${project.build.directory}/cucumber-report</sourceJsonReportDirectory>
+              <generatedHtmlReportDirectory>${project.build.directory}/generated-report</generatedHtmlReportDirectory>
+              <failScenariosOnPendingOrUndefinedSteps>true</failScenariosOnPendingOrUndefinedSteps>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
