@@ -7,7 +7,7 @@ Integrsjonstesting av jactor-persistence
 ## Integrasjonstesting med maven
 Dette er et [maven](https://maven.apache.org) prosjekt som kjører [cucumber](https://cucumber.io) med [Kotlin](https://kotlinlang.org)
 
-Utføring av testing gjøres med kommandoen `mvn test` i rotkatalogen til prosjektet
+Utføring av testing gjøres med kommandoen `mvn test -P cucumber` i rotkatalogen til prosjektet
 
 ## Test rapportering
 
@@ -16,7 +16,7 @@ Etter at testing er gjennomført så kan man lage en rapport som blir tilgjengel
 ```
 mvn cluecumber-report:reporting
 ```
-Man kan også gjøre både testing og rapportgenerering i et steg med `mvn install`
+Man kan også gjøre både testing og rapportgenerering i et steg med `mvn install -P cucumber`
 
 ### Sist utført integrasjonstest
 
