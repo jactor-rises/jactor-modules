@@ -55,7 +55,7 @@ docker run -p 1099:1099 jactor-persistence
     * with spring mvc
 * [docker](https://www.docker.com)
 * [h2](http://h2database.com)
-* [junit 5.x](https://junit.org/junit5/)
+* [junit jupiter](https://junit.org/)
 * [assertj](https://joel-costigliola.github.io/assertj/)
 * [mockito](http://site.mockito.org)
 * [kotlin](https://kotlinlang.org)
