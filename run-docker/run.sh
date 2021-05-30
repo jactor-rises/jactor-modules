@@ -19,7 +19,7 @@ fi
 echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
 docker run --detach --publish 1099:1099 ${IMAGE}
 
-echo -n "Starting jactor-persistence "
+echo "Starting jactor-persistence "
 
 RUNNING=""
 PROGRESS=""
@@ -29,7 +29,7 @@ do
   HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
   RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"" || true)
   PROGRESS="$PROGRESS."
-  echo "$PROGRESS"
+  echo -n "$PROGRESS"
   sleep 1
 done
 

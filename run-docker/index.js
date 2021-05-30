@@ -4,7 +4,7 @@ const exec = require("@actions/exec");
 async function run() {
   try {
     // Execute verify bash script
-    await exec.exec(`${__dirname}/run.sh`);
+    await exec.exec(`${__dirname}/../run.sh`);
   } catch (error) {
     core.setFailed(error.message);
   }
