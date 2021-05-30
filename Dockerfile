@@ -1,4 +1,4 @@
-FROM openjdk:15
+FROM openjdk:16.0.1
 
 LABEL jactor-rises="https://github.com/jactor-rises" \
       email="tor.egil.jacobsen@gmail.com"
