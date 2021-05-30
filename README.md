@@ -1,6 +1,6 @@
 # jactor-web #
-![](https://github.com/jactor-rises/jactor-web/workflows/continuous%20integration/badge.svg)
-![](https://github.com/jactor-rises/jactor-web/workflows/verify%20pull%20request/badge.svg)
+[![continuous integration](https://github.com/jactor-rises/jactor-web/actions/workflows/ci.yaml/badge.svg)](https://github.com/jactor-rises/jactor-web/actions/workflows/ci.yaml)
+[![verify pull request](https://github.com/jactor-rises/jactor-web/actions/workflows/pr.yaml/badge.svg)](https://github.com/jactor-rises/jactor-web/actions/workflows/pr.yaml)
 
 ### What is this repository for? ###
 
@@ -37,9 +37,9 @@ complete. And I just want to say that I am not a front-end programmer.
 
 ### Some technologies used on jactor-web ###
 
-* [spring-boot 2.3.x](https://spring.io/projects/spring-boot)
+* [spring-boot 2.5.x](https://spring.io/projects/spring-boot)
 * [kotlin](https://kotlinlang.org)
 * [junit 5.x](https://junit.org/junit5/)
-* [assertj](https://joel-costigliola.github.io/assertj/)
+* [assertj](https://assertj.github.io/doc/)
 * [mockito](http://site.mockito.org)
 * [thymeleaf](https://www.thymeleaf.org)
