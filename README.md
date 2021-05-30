@@ -1,8 +1,8 @@
 # jactor-persistence
 
-![continuous integration](https://github.com/jactor-rises/jactor-persistence/workflows/continuous%20integration/badge.svg)
-![verify pull request](https://github.com/jactor-rises/jactor-persistence/workflows/verify%20pull%20request/badge.svg)
-![build run docker](https://github.com/jactor-rises/jactor-persistence/workflows/build%20run%20docker/badge.svg)
+[![continuous integration](https://github.com/jactor-rises/jactor-persistence/actions/workflows/ci.yaml/badge.svg)](https://github.com/jactor-rises/jactor-persistence/actions/workflows/ci.yaml)
+[![verify pull request](https://github.com/jactor-rises/jactor-persistence/actions/workflows/pr.yaml/badge.svg)](https://github.com/jactor-rises/jactor-persistence/actions/workflows/pr.yaml)
+[![build run docker](https://github.com/jactor-rises/jactor-persistence/actions/workflows/docker-action.yaml/badge.svg)](https://github.com/jactor-rises/jactor-persistence/actions/workflows/docker-action.yaml)
 
 ### What is this repository for?
 
@@ -55,6 +55,7 @@ docker run -p 1099:1099 jactor-persistence
     * with spring mvc
 * [docker](https://www.docker.com)
 * [h2](http://h2database.com)
+* [flyway](https://flywaydb.org)
 * [junit jupiter](https://junit.org/)
 * [assertj](https://assertj.github.io/doc/)
 * [mockito](http://site.mockito.org)
