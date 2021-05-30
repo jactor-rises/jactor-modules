@@ -21,7 +21,7 @@ jpa (java persistence api) via spring-data-jpa and is a microservice to use unde
     * is using [h2](http://h2database.com) (in-memory database)
     * run it with docker, spring-boot, or as any other java-application
 * this application is documented with swagger. After startup, use links:
-    * <http://localhost:1099/jactor-persistence/v2/api-docsto> (json documentation)
+    * <http://localhost:1099/jactor-persistence/v3/api-docs> (json documentation)
     * <http://localhost:1099/jactor-persistence/swagger-ui.html> (swagger ui)
 
 ### Build
@@ -50,14 +50,14 @@ docker run -p 1099:1099 jactor-persistence
 ```
 ### Some technologies used
 
-* [spring-boot 2.4.x](https://spring.io/projects/spring-boot)
+* [spring-boot 2.5.x](https://spring.io/projects/spring-boot)
     * with spring-data-jpa
     * with spring mvc
 * [docker](https://www.docker.com)
 * [h2](http://h2database.com)
 * [junit jupiter](https://junit.org/)
-* [assertj](https://joel-costigliola.github.io/assertj/)
+* [assertj](https://assertj.github.io/doc/)
 * [mockito](http://site.mockito.org)
 * [kotlin](https://kotlinlang.org)
 * [swagger-ui](https://swagger.io/tools/swagger-ui/)
-* [github workflows](https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow)
+* [github actions](https://docs.github.com/en/actions/learn-github-actions)
