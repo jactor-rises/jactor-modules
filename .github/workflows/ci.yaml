@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 15
+          java-version: 16
       - uses: actions/cache@v1
         with:
           path: ~/.m2
@@ -28,7 +28,7 @@ jobs:
       - uses: jactor-rises/actions/setup-maven@v1.x-jactor-rises
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: navikt/bidrag-maven/verify-dependencies@v1.0.4
+      - uses: navikt/bidrag-maven/verify-dependencies@v7
       - run: mvn -B install -e
       - name: Build and publish Docker image
         env:
@@ -49,7 +49,7 @@ jobs:
           path: jactor-cucumber
       - uses: actions/setup-java@v1
         with:
-          java-version: 15
+          java-version: 16
       - uses: actions/cache@v1
         with:
           path: ~/.m2
