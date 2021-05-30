@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-    info = @Info(title = "jactor-persistenxe", version = "v1")
+    info = @Info(title = "jactor-persistence", version = "v1")
 )
 public class JactorPersistenceConfig {
 
