@@ -7,9 +7,9 @@ import com.github.jactor.persistence.entity.UserEntity.UserType;
 import com.github.jactor.persistence.service.UserService;
 import com.github.jactor.shared.dto.CreateUserCommandDto;
 import com.github.jactor.shared.dto.UserDto;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,10 +36,10 @@ public class UserController {
     this.userServicey = userServicey;
   }
 
-  @ApiOperation("Find a user by its username")
+  @Operation(description = "Find a user by its username")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "User found"),
-      @ApiResponse(code = 204, message = "No user with username")
+      @ApiResponse(responseCode = "200", description = "User found"),
+      @ApiResponse(responseCode = "204", description = "No user with username")
   })
   @GetMapping("/name/{username}")
   public ResponseEntity<UserDto> find(@PathVariable("username") String username) {
@@ -49,10 +49,10 @@ public class UserController {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
   }
 
-  @ApiOperation("Get a user by its id")
+  @Operation(description ="Get a user by its id")
   @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "User got"),
-      @ApiResponse(code = 404, message = "Did not find user with id")
+      @ApiResponse(responseCode = "200", description = "User got"),
+      @ApiResponse(responseCode = "404", description = "Did not find user with id")
   })
   @GetMapping("/{id}")
   public ResponseEntity<UserDto> get(@PathVariable("id") Long id) {
@@ -62,10 +62,10 @@ public class UserController {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @ApiOperation("Create a user")
+  @Operation(description ="Create a user")
   @ApiResponses(value = {
-      @ApiResponse(code = 201, message = "User created"),
-      @ApiResponse(code = 400, message = "Username already occupied or no body is present")
+      @ApiResponse(responseCode = "201", description = "User created"),
+      @ApiResponse(responseCode = "400", description = "Username already occupied or no body is present")
   })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<CreateUserCommandResponse> post(@RequestBody CreateUserCommandDto createUserCommand) {
@@ -78,10 +78,10 @@ public class UserController {
     return new ResponseEntity<>(new CreateUserCommandResponse(primaryKey), HttpStatus.CREATED);
   }
 
-  @ApiOperation("Update a user by its id")
+  @Operation(description ="Update a user by its id")
   @ApiResponses(value = {
-      @ApiResponse(code = 202, message = "User updated"),
-      @ApiResponse(code = 400, message = "Did not find user with id or no body is present")
+      @ApiResponse(responseCode = "202", description = "User updated"),
+      @ApiResponse(responseCode = "400", description = "Did not find user with id or no body is present")
   })
   @PutMapping("/{userId}")
   public ResponseEntity<UserDto> put(@RequestBody UserDto userDto, @PathVariable Long userId) {
