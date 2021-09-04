@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.jactor-rises</groupId>
   <artifactId>jactor-shared</artifactId>
-  <version>0.1.4-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
 
   <description>Komponenter delt mellom jactor-persistence og jactor-web</description>
   <url>https://github.com/jactor-rises/jactor-shared</url>
@@ -13,12 +14,12 @@
   <properties>
 
     <!-- language -->
-    <java.version>15</java.version>
-    <kotlin.version>1.4.21</kotlin.version>
+    <java.version>16</java.version>
+    <kotlin.version>1.5.30</kotlin.version>
 
     <!-- dependencies -->
-    <spring-boot.version>2.4.1</spring-boot.version>
-    <springfox-swagger.version>2.9.2</springfox-swagger.version>
+    <spring-boot.version>2.5.4</spring-boot.version>
+    <springdoc-openapi-ui.version>1.5.10</springdoc-openapi-ui.version>
 
     <!-- build -->
     <maven-compiler.version>3.8.1</maven-compiler.version>
@@ -64,46 +65,10 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-swagger2</artifactId>
-      <version>${springfox-swagger.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.springframework.plugin</groupId>
-          <artifactId>spring-plugin-core</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>${springdoc-openapi-ui.version}</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.springfox</groupId>
-      <artifactId>springfox-swagger-ui</artifactId>
-      <version>${springfox-swagger.version}</version>
-      <exclusions>
-      </exclusions>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- test scope -->
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -190,19 +155,6 @@
         <configuration>
           <release>${java.version}</release>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>${maven-source.version}</version>
-        <executions>
-          <execution>
-            <id>include-sources</id>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
