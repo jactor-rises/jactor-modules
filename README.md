@@ -14,6 +14,7 @@ Command objects used for manipulation the data model of jactor-persistence
 ## Changelog
 version | type of change | description
 --------|----------------|------------------------
+  0.2.0 | changed        | springfox-swagger -> springdoc-openapi-ui, kotlin, and spring-boot
   0.1.3 | changed        | kotlin and spring-boot version
   0.1.2 | changed        | kotlin and java version
   0.1.1 | changed        | `CreateUserCommandDto`: added swagger documentation
