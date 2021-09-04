@@ -191,19 +191,6 @@
           <release>${java.version}</release>
         </configuration>
       </plugin>
-
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>${maven-source.version}</version>
-        <executions>
-          <execution>
-            <id>include-sources</id>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 
