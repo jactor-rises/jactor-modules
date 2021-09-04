@@ -10,6 +10,13 @@
   <url>https://github.com/jactor-rises/jactor-shared</url>
   <packaging>jar</packaging>
 
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+
   <properties>
 
     <!-- language -->
@@ -73,6 +80,7 @@
 
   <build>
     <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -95,6 +103,7 @@
     </pluginManagement>
 
     <plugins>
+
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
@@ -155,6 +164,7 @@
           <release>${java.version}</release>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 
