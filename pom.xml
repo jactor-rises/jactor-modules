@@ -17,7 +17,7 @@
     <kotlin.version>1.5.30</kotlin.version>
 
     <!-- dependencies -->
-    <spring-boot.version>2.4.1</spring-boot.version>
+    <spring-boot.version>2.5.4</spring-boot.version>
     <springfox-swagger.version>2.9.2</springfox-swagger.version>
 
     <!-- build -->
