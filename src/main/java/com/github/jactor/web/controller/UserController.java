@@ -35,7 +35,7 @@ public class UserController {
   public ModelAndView get(@RequestParam(name = "choose", required = false) String username) {
     ModelAndView modelAndView = new ModelAndView("user");
 
-    if (!StringUtils.isEmpty(username)) {
+    if (isNotEmpty(username)) {
       populateUser(username, modelAndView);
     }
 
@@ -43,6 +43,10 @@ public class UserController {
     populateDefaultUsers(modelAndView);
 
     return modelAndView;
+  }
+
+  private boolean isNotEmpty(String string) {
+    return !(string == null || "".equals(string.trim()));
   }
 
   private void populateUser(String username, ModelAndView modelAndView) {
