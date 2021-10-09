@@ -22,7 +22,7 @@
     <webjars-jquery.version>3.5.1</webjars-jquery.version>
 
     <!-- language -->
-    <java.version>16</java.version>
+    <java.version>17</java.version>
     <kotlin.version>1.5.31</kotlin.version>
 
     <!-- build -->
