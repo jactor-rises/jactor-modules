@@ -27,7 +27,7 @@ working of `jactor-persistence` and to gain expertise in mocroservices
 and kotlin programming language. It is therefore simple and not
 complete. And I just want to say that I am not a front-end programmer.
 
-* This microservice is tested using `jactor-persistence`, version 1.2.0
+* This microservice is tested using `jactor-persistence`, version 1.3.0
 * `Blog`s and `GuestBook`s is only persisted and present in 
 `jactor-persistence` and tested though integration tests there.
 * `User` (with `Person` and `Address`) is integrated with communications
