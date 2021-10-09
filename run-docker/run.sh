@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ -z ${GITHUB_ACTOR} ]]; then
-  echo "no actor to use as user for docker login"
-  exit 1;
-fi
-
 if [[ -z ${GITHUB_TOKEN} ]]; then
   echo "no token to use as password for docker login"
   exit 1;
@@ -16,7 +11,7 @@ if [[ -z ${IMAGE} ]]; then
   exit 1;
 fi
 
-echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
 docker run --detach --publish 1099:1099 ${IMAGE}
 
 echo "Starting jactor-persistence "
