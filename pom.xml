@@ -30,8 +30,6 @@
 
     <!-- build -->
     <build-helper-maven.version>3.2.0</build-helper-maven.version>
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -112,14 +110,6 @@
       </plugin>
 
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler-plugin.version}</version>
-        <configuration>
-          <release>${java.version}</release>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
         <version>${kotlin.version}</version>
@@ -140,14 +130,6 @@
         </executions>
         <configuration>
           <jvmTarget>1.8</jvmTarget>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-surefire-plugin.version}</version>
-        <configuration>
-          <argLine>-Xmx2048m</argLine>
         </configuration>
       </plugin>
 
