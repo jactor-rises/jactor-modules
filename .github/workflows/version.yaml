@@ -14,11 +14,11 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 16
+          java-version: 17
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE: docker.pkg.github.com/jactor-rises/jactor-persistence/jactor-persistence:latest
+          IMAGE: ghcr.io/jactor-rises/jactor-persistence:latest
       - run: mvn versions:display-property-updates
       - run: mvn test -P cucumber
 
