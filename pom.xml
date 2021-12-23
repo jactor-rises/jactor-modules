@@ -36,16 +36,6 @@
 
   </properties>
 
-  <dependencyManagement>
-    <!-- override vulnerabilities -->
-    <dependencies>
-      <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>com.github.jactor-rises</groupId>
