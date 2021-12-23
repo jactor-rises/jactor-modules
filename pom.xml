@@ -10,8 +10,8 @@
   <properties>
     <cluecumber.version>2.3.3</cluecumber.version>
     <cucumber.version>6.11.0</cucumber.version>
-    <kotlin.version>1.5.30</kotlin.version>
-    <spring-boot.version>2.5.4</spring-boot.version>
+    <kotlin.version>1.6.10</kotlin.version>
+    <spring-boot.version>2.6.2</spring-boot.version>
 
     <!-- build -->
     <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
