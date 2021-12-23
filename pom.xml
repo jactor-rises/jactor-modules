@@ -25,7 +25,7 @@
 
     <!-- dependencies -->
     <spring-boot.version>2.6.2</spring-boot.version>
-    <springdoc-openapi-ui.version>1.5.11</springdoc-openapi-ui.version>
+    <springdoc-openapi-ui.version>1.6.2</springdoc-openapi-ui.version>
 
     <!-- build -->
     <maven-compiler.version>3.8.1</maven-compiler.version>
