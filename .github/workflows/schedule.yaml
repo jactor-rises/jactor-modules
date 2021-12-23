@@ -20,18 +20,3 @@ jobs:
           IMAGE:  ghcr.io/jactor-rises/jactor-persistence:latest
       - run: mvn versions:display-property-updates
       - run: mvn test -P cucumber || true
-      - run: mvn cluecumber-report:reporting
-      - uses: jactor-rises/actions-gh-pages/move@v1
-        with:
-          folder_move_from: target/generated-report
-      - uses: jactor-rises/actions-gh-pages/reports@v1
-        with:
-          pages_address: https://jactor-rises.github.io/jactor-cucumber
-      - run: echo ::set-output name=date::$(date +"%Y-%m-%d:%T")
-        id: generated
-      - uses: navikt/bidrag-git/commit@v3.0.6
-        with:
-          author: gh-page-deployer
-          commit_message: "Integration tests for ${{ steps.generated.outputs.date }}"
-          pattern: docs/*
-          security_token: ${{ secrets.GITHUB_TOKEN }}
