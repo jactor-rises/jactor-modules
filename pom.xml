@@ -22,7 +22,7 @@
 
     <!-- languages -->
     <java.version>17</java.version>
-    <kotlin.version>1.6.0</kotlin.version>
+    <kotlin.version>1.6.10</kotlin.version>
 
     <!-- dependencies -->
     <jactor-shared.version>0.3.0</jactor-shared.version>
