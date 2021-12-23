@@ -21,16 +21,15 @@
 
     <!-- language -->
     <java.version>17</java.version>
-    <kotlin.version>1.5.31</kotlin.version>
+    <kotlin.version>1.6.10</kotlin.version>
 
     <!-- dependencies -->
-    <spring-boot.version>2.5.5</spring-boot.version>
-    <springdoc-openapi-ui.version>1.5.11</springdoc-openapi-ui.version>
+    <spring-boot.version>2.6.2</spring-boot.version>
+    <springdoc-openapi-ui.version>1.6.2</springdoc-openapi-ui.version>
 
     <!-- build -->
     <maven-compiler.version>3.8.1</maven-compiler.version>
     <maven-release.version>2.3.2</maven-release.version>
-    <maven-source.version>3.2.1</maven-source.version>
     <maven-surefire.version>2.22.0</maven-surefire.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
