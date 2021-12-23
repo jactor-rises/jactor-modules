@@ -59,4 +59,5 @@ docker run -p 1099:1099 jactor-persistence
 * [mockito](http://site.mockito.org)
 * [kotlin](https://kotlinlang.org)
 * [swagger-ui](https://swagger.io/tools/swagger-ui/)
+  * herunder [springdoc](https://springdoc.org)
 * [github actions](https://docs.github.com/en/actions/learn-github-actions)
