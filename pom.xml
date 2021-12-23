@@ -21,7 +21,7 @@
 
     <!-- language -->
     <java.version>17</java.version>
-    <kotlin.version>1.5.31</kotlin.version>
+    <kotlin.version>1.6.10</kotlin.version>
 
     <!-- dependencies -->
     <spring-boot.version>2.5.5</spring-boot.version>
