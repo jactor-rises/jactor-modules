@@ -24,7 +24,7 @@
     <kotlin.version>1.6.10</kotlin.version>
 
     <!-- dependencies -->
-    <spring-boot.version>2.5.5</spring-boot.version>
+    <spring-boot.version>2.6.2</spring-boot.version>
     <springdoc-openapi-ui.version>1.5.11</springdoc-openapi-ui.version>
 
     <!-- build -->
