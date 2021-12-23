@@ -18,9 +18,8 @@ use under `com.github.jactor.percistence` (formerly as part of the archived proj
     * build with [maven](https://maven.apache.org).
     * is using [h2](http://h2database.com) (in-memory database)
     * run it with docker, spring-boot, or as any other java-application
-* this application is documented with swagger. After startup, use links:
-    * <http://localhost:1099/jactor-persistence/v3/api-docs> (open api documentation in json)
-    * <http://localhost:1099/jactor-persistence/swagger-ui/index.html?configUrl=/jactor-persistence/v3/api-docs/swagger-config#/blog-controller/post_2> (swagger ui)
+* this application is documented with swagger. After startup, use link:
+    * <http://localhost:1099/jactor-persistence/swagger-ui/index.html?configUrl=/jactor-persistence/v3/api-docs/swagger-config#/> (swagger ui)
 
 ### Build
 
@@ -48,7 +47,7 @@ docker run -p 1099:1099 jactor-persistence
 ```
 ### Some technologies used
 
-* [spring-boot 2.5.x](https://spring.io/projects/spring-boot)
+* [spring-boot 2.6.x](https://spring.io/projects/spring-boot)
     * with spring-data-jpa
     * with spring mvc
 * [docker](https://www.docker.com)
