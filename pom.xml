@@ -4,7 +4,7 @@
 
   <groupId>com.github.jactor.cucumber</groupId>
   <artifactId>jactor-cucumber</artifactId>
-  <version>1.0.44-SNAPSHOT</version>
+  <version>1.0.45-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
