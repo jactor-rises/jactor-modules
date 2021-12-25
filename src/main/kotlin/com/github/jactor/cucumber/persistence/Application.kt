@@ -1,6 +1,5 @@
 package com.github.jactor.cucumber.persistence
 
-import com.github.jactor.cucumber.ScenarioValues
 import com.github.jactor.cucumber.ScenarioValues.Companion.responseEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
