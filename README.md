@@ -1,5 +1,5 @@
 # jactor-shared
-![](https://github.com/jactor-rises/jactor-shared/workflows/deploy%20maven%20artifact/badge.svg)
+[![deploy maven artifact](https://github.com/jactor-rises/jactor-shared/actions/workflows/deploy.yaml/badge.svg)](https://github.com/jactor-rises/jactor-shared/actions/workflows/deploy.yaml)
 
 Shared beans between jactor-persistence and jactor-beans (mostly http api)
 
