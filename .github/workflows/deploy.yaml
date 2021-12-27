@@ -20,7 +20,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: jactor-rises/actions/maven-verify-dependencies@feature/release
+      - uses: jactor-rises/actions/maven-verify-dependencies@v2.0.0-maven-verify-dependencies
       - run: mvn -B install -e
       - uses: jactor-rises/actions/maven-prepare-deploy@feature/release
         id: prepare
