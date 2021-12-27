@@ -4,7 +4,7 @@
 
   <groupId>com.github.jactor-rises</groupId>
   <artifactId>jactor-shared</artifactId>
-  <version>0.3.2-SNAPSHOT</version>
+  <version>0.3.3-SNAPSHOT</version>
 
   <description>Komponenter delt mellom jactor-persistence og jactor-web</description>
   <url>https://github.com/jactor-rises/jactor-shared</url>
