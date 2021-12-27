@@ -25,12 +25,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: jactor-rises/actions/setup-maven@v1.0.0-setup-maven
+      - uses: jactor-rises/actions/setup-maven@v1-setup-maven
         with:
           repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: jactor-rises/actions/verify-maven-dependencies@v1.0.0-verify-maven-dependencies
+      - uses: jactor-rises/actions/verify-maven-dependencies@v1-verify-maven-dependencies
       - run: mvn -B install -e
       - name: Build and publish Docker image
         env:
@@ -82,7 +82,7 @@ jobs:
       - name: Next snapshot version
         id: snapshot
         run: echo ::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-      - uses: jactor-rises/actions/commit@v1.0.0-commit
+      - uses: jactor-rises/actions/commit@v1-commit
         with:
           commit_message: "Bumped to new version: ${{ steps.snapshot.outputs.version }}"
           pattern: pom.xml
