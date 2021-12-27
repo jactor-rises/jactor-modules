@@ -21,7 +21,7 @@ jobs:
       - name: Generate timestamp
         id: now
         run: echo ::set-output name=timestamp::$(date +"%Y-%m-%d:%T")
-      - uses: jactor-rises/actions/commit@v1-commit
+      - uses: jactor-rises/actions/git-commit@v2.0.0-git-commit
         with:
           commit_message: "build-node-action@${{ steps.now.outputs.timestamp }}"
           pattern: run-docker/.
