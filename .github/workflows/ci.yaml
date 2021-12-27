@@ -30,7 +30,7 @@ jobs:
           repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: jactor-rises/actions/verify-maven-dependencies@v1-verify-maven-dependencies
+      - uses: jactor-rises/actions/maven-verify-dependencies@v2.0.0-maven-verify-dependencies
       - run: mvn -B install -e
       - name: Build and publish Docker image
         env:
