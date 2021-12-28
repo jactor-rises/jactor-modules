@@ -24,7 +24,7 @@ do
   HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
   RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"" || true)
   PROGRESS="$PROGRESS."
-  echo -n "$PROGRESS"
+  echo "$PROGRESS"
   sleep 1
 done
 
