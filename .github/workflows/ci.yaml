@@ -74,7 +74,7 @@ jobs:
       - name: Next snapshot version
         id: snapshot
         run: echo ::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-      - uses: navikt/bidrag-git/commit@v3
+      - uses: jactor-rises/actions/git-commit@v2.0.0-git-commit
         with:
           commit_message: "Bumped to new version: ${{ steps.snapshot.outputs.version }}"
           pattern: pom.xml
