@@ -15,13 +15,13 @@ jobs:
           node-version: '13.x'
       - run: npm i -g @zeit/ncc
       - name: Install run-docker
-        uses: jactor-rises/actions/node-build-action@v2.0.0-node-build-action
+        uses: jactor-rises/actions/node-build-action@v2-node-build-action
         with:
           artifact_folder: jactor-persistence/run-docker
       - name: Generate timestamp
         id: now
         run: echo ::set-output name=timestamp::$(date +"%Y-%m-%d:%T")
-      - uses: jactor-rises/actions/git-commit@v2.0.0-git-commit
+      - uses: jactor-rises/actions/git-commit@v2-git-commit
         with:
           commit_message: "node-build-action@${{ steps.now.outputs.timestamp }}"
           pattern: run-docker/.
