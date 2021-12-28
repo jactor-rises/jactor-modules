@@ -18,7 +18,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: jactor-rises/actions/maven-setup@v2.0.0-maven-setup
+      - uses: jactor-rises/actions/maven-setup@v2-maven-setup
         with:
           repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
         env:

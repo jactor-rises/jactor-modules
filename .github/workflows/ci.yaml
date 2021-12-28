@@ -22,12 +22,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: jactor-rises/actions/maven-setup@v2.0.0-maven-setup
+      - uses: jactor-rises/actions/maven-setup@v2-maven-setup
         with:
           repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: jactor-rises/actions/maven-verify-dependencies@v2.0.0-maven-verify-dependencies
+      - uses: jactor-rises/actions/maven-verify-dependencies@v2-maven-verify-dependencies
       - run: mvn -B install -e
 
   integration:
@@ -45,7 +45,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: jactor-rises/actions/maven-setup@v2.0.0-maven-setup
+      - uses: jactor-rises/actions/maven-setup@v2-maven-setup
         with:
           repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
         env:
@@ -74,7 +74,7 @@ jobs:
       - name: Next snapshot version
         id: snapshot
         run: echo ::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-      - uses: jactor-rises/actions/git-commit@v2.0.0-git-commit
+      - uses: jactor-rises/actions/git-commit@v2-git-commit
         with:
           commit_message: "Bumped to new version: ${{ steps.snapshot.outputs.version }}"
           pattern: pom.xml
