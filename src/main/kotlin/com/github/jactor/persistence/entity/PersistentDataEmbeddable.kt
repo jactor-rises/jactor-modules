@@ -16,7 +16,7 @@ class PersistentDataEmbeddable : PersistentData {
     override var timeOfModification: LocalDateTime
         private set
 
-    protected constructor() {
+    constructor() {
         createdBy = "todo"
         timeOfCreation = asDateTime()
         modifiedBy = "todo"

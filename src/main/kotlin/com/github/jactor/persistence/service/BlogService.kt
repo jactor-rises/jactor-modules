@@ -25,20 +25,18 @@ class BlogService(
     }
 
     fun findBlogsBy(title: String?): List<BlogDto> {
-        return blogRepository.findBlogsByTitle(title)?.map { obj: BlogEntity? -> obj?.asDto()!! } ?: emptyList()
+        return blogRepository.findBlogsByTitle(title).map { obj: BlogEntity? -> obj?.asDto()!! }
     }
 
     fun findEntriesForBlog(blogId: Long?): List<BlogEntryDto> {
-        return blogEntryRepository.findByBlog_Id(blogId)?.map { obj: BlogEntryEntity? -> obj?.asDto()!! } ?: emptyList()
+        return blogEntryRepository.findByBlog_Id(blogId).map { obj: BlogEntryEntity? -> obj?.asDto()!! }
     }
 
-    fun saveOrUpdate(blogDto: BlogDto?): BlogDto {
+    fun saveOrUpdate(blogDto: BlogDto): BlogDto {
         userService.find(fetchUsername(blogDto))
-            .ifPresent { userDto: UserInternalDto? -> blogDto!!.userInternal = userDto }
+            .ifPresent { userDto: UserInternalDto? -> blogDto.userInternal = userDto }
 
-        val blogEntity = BlogEntity(blogDto)
-
-        return blogRepository.save(blogEntity).asDto()
+        return blogRepository.save(BlogEntity(blogDto)).asDto()
     }
 
     fun saveOrUpdate(blogEntryDto: BlogEntryDto): BlogEntryDto {

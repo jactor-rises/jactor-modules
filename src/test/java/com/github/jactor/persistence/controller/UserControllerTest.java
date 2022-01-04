@@ -71,11 +71,11 @@ class UserControllerTest {
   void shouldFindByUsername() {
     when(userRepositoryMock.findByUsername("me")).thenReturn(Optional.of(new UserEntity(new UserInternalDto())));
 
-    var userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserInternalDto.class);
+    var userResponse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserInternalDto.class);
 
     assertAll(
-        () -> assertThat(userRespnse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
-        () -> assertThat(userRespnse).extracting(ResponseEntity::getBody).as("user").isNotNull()
+        () -> assertThat(userResponse).extracting(ResponseEntity::getStatusCode).as("status").isEqualTo(HttpStatus.OK),
+        () -> assertThat(userResponse).extracting(ResponseEntity::getBody).as("user").isNotNull()
     );
   }
 

@@ -158,8 +158,4 @@ class BlogRepositoryTest {
         }
     );
   }
-
-  private AssertionError blogNotFound() {
-    return new AssertionError("Blog not found");
-  }
 }

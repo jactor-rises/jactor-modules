@@ -22,11 +22,11 @@ class GuestBookService(
         return guestBookEntryRepository.findById(id).map { obj: GuestBookEntryEntity? -> obj?.asDto() }
     }
 
-    fun saveOrUpdate(guestBookDto: GuestBookDto?): GuestBookDto {
+    fun saveOrUpdate(guestBookDto: GuestBookDto): GuestBookDto {
         return guestBookRepository.save(GuestBookEntity(guestBookDto)).asDto()
     }
 
-    fun saveOrUpdate(guestBookEntryDto: GuestBookEntryDto?): GuestBookEntryDto {
+    fun saveOrUpdate(guestBookEntryDto: GuestBookEntryDto): GuestBookEntryDto {
         return guestBookEntryRepository.save(GuestBookEntryEntity(guestBookEntryDto)).asDto()
     }
 }
