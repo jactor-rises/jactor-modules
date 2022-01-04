@@ -4,6 +4,7 @@ import static com.github.jactor.persistence.entity.GuestBookEntity.aGuestBook;
 import static com.github.jactor.persistence.entity.GuestBookEntryEntity.aGuestBookEntry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,6 +81,7 @@ class GuestBookServiceTest {
     guestBookDto.setTitle("home sweet home");
     guestBookDto.setUserInternal(new UserInternalDto());
 
+    when(guestBookRepositoryMock.save(any())).thenReturn(new GuestBookEntity(guestBookDto));
     guestBookServiceToTest.saveOrUpdate(guestBookDto);
 
     ArgumentCaptor<GuestBookEntity> argCaptor = ArgumentCaptor.forClass(GuestBookEntity.class);
@@ -101,6 +103,7 @@ class GuestBookServiceTest {
     guestBookEntryDto.setCreatorName("me");
     guestBookEntryDto.setEntry("if i where a rich man...");
 
+    when(guestBookEntryRepositoryMock.save(any())).thenReturn(new GuestBookEntryEntity(guestBookEntryDto));
     guestBookServiceToTest.saveOrUpdate(guestBookEntryDto);
 
     ArgumentCaptor<GuestBookEntryEntity> argCaptor = ArgumentCaptor.forClass(GuestBookEntryEntity.class);
