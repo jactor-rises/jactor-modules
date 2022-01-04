@@ -37,9 +37,9 @@ class GuestBookRepositoryTest {
   @Test
   @DisplayName("should write then read guest book")
   void shouldWriteThenReadGuestBook() {
-    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(new PersistentDto(), personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
 
     userEntity.setGuestBook(
@@ -60,9 +60,9 @@ class GuestBookRepositoryTest {
   @Test
   @DisplayName("should write then update and read guest book")
   void shouldWriteThenUpdateAndReadGuestBook() {
-    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(new PersistentDto(), personDto, "casuel@tantooine.com", "causual");
     var userEntity = userRepository.save(aUser(userDto));
 
     userEntity.setGuestBook(
@@ -84,9 +84,5 @@ class GuestBookRepositoryTest {
     var guestBookEntity = guestBookRepository.findByUser(userEntity);
 
     assertThat(guestBookEntity.getTitle()).isEqualTo("5000 thousands miles away from home");
-  }
-
-  private AssertionError guestBookNotFound() {
-    return new AssertionError("Guest book not found");
   }
 }

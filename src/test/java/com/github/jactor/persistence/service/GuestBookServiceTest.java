@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.dto.GuestBookDto;
 import com.github.jactor.persistence.dto.GuestBookEntryDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.GuestBookEntity;
 import com.github.jactor.persistence.entity.GuestBookEntryEntity;
@@ -40,7 +41,7 @@ class GuestBookServiceTest {
   @Test
   @DisplayName("should map guest book to a dto")
   void shouldMapBlogToDto() {
-    Optional<GuestBookEntity> guestBookEntity = Optional.of(aGuestBook(new GuestBookDto(null, new HashSet<>(), "@home", null)));
+    Optional<GuestBookEntity> guestBookEntity = Optional.of(aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "@home", null)));
     when(guestBookRepositoryMock.findById(1001L)).thenReturn(guestBookEntity);
 
     GuestBookDto guestBookDto = guestBookServiceToTest.find(1001L).orElseThrow(mockError());
@@ -52,7 +53,7 @@ class GuestBookServiceTest {
   @DisplayName("should map guest book entry to a dto")
   void shouldMapFoundBlogToDto() {
     Optional<GuestBookEntryEntity> anEntry = Optional.of(aGuestBookEntry(
-        new GuestBookEntryDto(null, new GuestBookDto(), "me", "too")
+        new GuestBookEntryDto(new PersistentDto(), new GuestBookDto(), "me", "too")
     ));
 
     when(guestBookEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);

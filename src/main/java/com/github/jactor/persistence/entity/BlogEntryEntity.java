@@ -48,7 +48,7 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
   private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
   @SuppressWarnings("unused")
-  BlogEntryEntity() {
+  protected BlogEntryEntity() {
     // used by entity manager
   }
 
@@ -63,7 +63,7 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
     blog = Optional.ofNullable(blogEntryDto.getBlog()).map(BlogEntity::new).orElse(null);
     entryEmbeddable = new EntryEmbeddable(blogEntryDto.getCreatorName(), blogEntryDto.getEntry());
     id = blogEntryDto.getId();
-    persistentDataEmbeddable = new PersistentDataEmbeddable(blogEntryDto.fetchPersistentDto());
+    persistentDataEmbeddable = new PersistentDataEmbeddable(blogEntryDto.getPersistentDto());
   }
 
   private BlogEntity copyBlog() {

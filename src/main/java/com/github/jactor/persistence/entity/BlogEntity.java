@@ -54,7 +54,7 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
   private Set<BlogEntryEntity> entries = new HashSet<>();
 
   @SuppressWarnings("unused")
-  BlogEntity() {
+  protected BlogEntity() {
     // used by entity manager
   }
 
@@ -70,7 +70,7 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
   public BlogEntity(BlogDto blogDto) {
     created = blogDto.getCreated();
     id = blogDto.getId();
-    persistentDataEmbeddable = new PersistentDataEmbeddable(blogDto.fetchPersistentDto());
+    persistentDataEmbeddable = new PersistentDataEmbeddable(blogDto.getPersistentDto());
     title = blogDto.getTitle();
     userEntity = Optional.ofNullable(blogDto.getUserInternal()).map(UserEntity::new).orElse(null);
   }

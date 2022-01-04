@@ -42,16 +42,14 @@ class UserServiceTest {
   @DisplayName("should map a user entity to a dto")
   void shouldMapUserToDto() {
     var addressDto = new AddressInternalDto();
-    addressDto.setPersistentDto(new PersistentDto());
 
     var personDto = new PersonInternalDto();
-    personDto.setPersistentDto(new PersistentDto());
     personDto.setAddress(addressDto);
 
     when(userRepositoryMock.findByUsername("jactor"))
         .thenReturn(
             Optional.of(aUser(
-                new UserInternalDto(null, personDto, null, "jactor", Usertype.ACTIVE)
+                new UserInternalDto(new PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE)
             ))
         );
 
@@ -67,16 +65,14 @@ class UserServiceTest {
   @DisplayName("should also map a user entity to a dto when finding by id")
   void shouldMapUserToDtoWhenFindingById() {
     var addressDto = new AddressInternalDto();
-    addressDto.setPersistentDto(new PersistentDto());
 
     var personDto = new PersonInternalDto();
-    personDto.setPersistentDto(new PersistentDto());
     personDto.setAddress(addressDto);
 
     when(userRepositoryMock.findById(69L))
         .thenReturn(
             Optional.of(aUser(
-                new UserInternalDto(null, personDto, null, "jactor", Usertype.ACTIVE)
+                new UserInternalDto(new PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE)
             ))
         );
 
@@ -94,7 +90,6 @@ class UserServiceTest {
     var userDto = new UserInternalDto();
     userDto.setId(1L);
     userDto.setUsername("marley");
-    userDto.setPersistentDto(new PersistentDto());
     PersistentDto persistentDto = new PersistentDto(1L, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1));
 
     when(userRepositoryMock.findById(1L)).thenReturn(

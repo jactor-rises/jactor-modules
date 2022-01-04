@@ -20,7 +20,7 @@ class PersonInternalDtoTest {
         personInternalDto.setLocale("no");
         personInternalDto.setSurname("surname");
 
-        PersonInternalDto copied = new PersonInternalDto(personInternalDto.fetchPersistentDto(), personInternalDto);
+        PersonInternalDto copied = new PersonInternalDto(personInternalDto.getPersistentDto(), personInternalDto);
 
         assertAll(
                 () -> assertThat(copied.getAddress()).as("address").isEqualTo(personInternalDto.getAddress()),
@@ -40,7 +40,7 @@ class PersonInternalDtoTest {
         persistentDto.setModifiedBy("tip");
         persistentDto.setTimeOfModification(LocalDateTime.now());
 
-        PersistentDto copied = new PersonInternalDto(persistentDto, new PersonInternalDto()).fetchPersistentDto();
+        PersistentDto copied = new PersonInternalDto(persistentDto, new PersonInternalDto()).getPersistentDto();
 
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),
