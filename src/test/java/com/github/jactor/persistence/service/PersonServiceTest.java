@@ -33,6 +33,7 @@ class PersonServiceTest {
   @Test
   @DisplayName("should create a new Person")
   void shouldCreateNewUser() {
+    when(personRepositoryMock.save(any())).thenReturn(new PersonEntity(new PersonInternalDto()));
     personService.createWhenNotExists(new PersonInternalDto());
 
     ArgumentCaptor<PersonEntity> personEntityCaptor = ArgumentCaptor.forClass(PersonEntity.class);
