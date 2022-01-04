@@ -22,103 +22,109 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping(value = ["/guestBook"], produces = [MediaType.APPLICATION_JSON_VALUE])
 class GuestBookController(private val guestBookService: GuestBookService) {
-  @Operation(description = "Henter en gjesdebok ved å angi id")
-  @ApiResponses(
-    value = [
-      ApiResponse(responseCode = "200", description = "Gjesteboka er hentet"),
-      ApiResponse(responseCode = "204", description = "Fant ingen gjestebok på id", content = arrayOf(Content(schema = Schema(hidden = true))))
-    ]
-  )
-  @GetMapping("/{id}")
-  operator fun get(@PathVariable("id") id: Long?): ResponseEntity<GuestBookDto?>? {
-    return guestBookService.find(id).map { guestBookDto: GuestBookDto? -> ResponseEntity(guestBookDto, HttpStatus.OK) }
-      .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
-  }
-
-  @Operation(description = "Hent et innslag i en gjesdebok ved å angi id til innslaget")
-  @ApiResponses(
-    value = [
-      ApiResponse(responseCode = "200", description = "Innslaget i gjesteboka er hentet"),
-      ApiResponse(responseCode = "204", description = "Fant ingen innslag med id", content = arrayOf(Content(schema = Schema(hidden = true))))
-    ]
-  )
-  @GetMapping("/entry/{id}")
-  fun getEntry(@PathVariable("id") id: Long?): ResponseEntity<GuestBookEntryDto?>? {
-    return guestBookService.findEntry(id).map { guestBookDto: GuestBookEntryDto? -> ResponseEntity(guestBookDto, HttpStatus.OK) }
-      .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
-  }
-
-  @Operation(description = "Opprett en gjestebok")
-  @ApiResponses(
-    value = [
-      ApiResponse(responseCode = "201", description = "Gjesteboka er opprettet"),
-      ApiResponse(
-        responseCode = "400",
-        description = "Ingen gjestebok er gitt eller gjesteboka er allerede opprettet",
-        content = arrayOf(Content(schema = Schema(hidden = true)))
-      )
-    ]
-  )
-  @PostMapping
-  fun post(@RequestBody guestBookDto: GuestBookDto?): ResponseEntity<GuestBookDto> {
-    if (guestBookDto == null || guestBookDto.getId() != null) {
-      return ResponseEntity(HttpStatus.BAD_REQUEST)
+    @Operation(description = "Henter en gjesdebok ved å angi id")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Gjesteboka er hentet"),
+            ApiResponse(responseCode = "204", description = "Fant ingen gjestebok på id", content = arrayOf(Content(schema = Schema(hidden = true))))
+        ]
+    )
+    @GetMapping("/{id}")
+    operator fun get(@PathVariable("id") id: Long?): ResponseEntity<GuestBookDto?>? {
+        return guestBookService.find(id).map { guestBookDto: GuestBookDto? -> ResponseEntity(guestBookDto, HttpStatus.OK) }
+            .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
     }
 
-    return ResponseEntity(guestBookService.saveOrUpdate(guestBookDto), HttpStatus.CREATED)
-  }
-
-  @Operation(description = "Endre en gjestebok")
-  @ApiResponses(
-    value = [
-      ApiResponse(responseCode = "202", description = "Gjesteboka er endret"),
-      ApiResponse(
-        responseCode = "400",
-        description = "Ingen gjestebok er gitt eller det mangler gjestebok å endre for id",
-        content = arrayOf(Content(schema = Schema(hidden = true)))
-      )
-    ]
-  )
-  @PutMapping("/{guestBookId}")
-  fun put(@RequestBody guestBookDto: GuestBookDto?, @PathVariable guestBookId: Long): ResponseEntity<GuestBookDto> {
-    if (guestBookDto?.getId() != guestBookId) {
-      return ResponseEntity(HttpStatus.BAD_REQUEST)
+    @Operation(description = "Hent et innslag i en gjesdebok ved å angi id til innslaget")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Innslaget i gjesteboka er hentet"),
+            ApiResponse(responseCode = "204", description = "Fant ingen innslag med id", content = arrayOf(Content(schema = Schema(hidden = true))))
+        ]
+    )
+    @GetMapping("/entry/{id}")
+    fun getEntry(@PathVariable("id") id: Long?): ResponseEntity<GuestBookEntryDto?>? {
+        return guestBookService.findEntry(id).map { guestBookDto: GuestBookEntryDto? -> ResponseEntity(guestBookDto, HttpStatus.OK) }
+            .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
     }
 
-    return ResponseEntity(guestBookService.saveOrUpdate(guestBookDto), HttpStatus.ACCEPTED)
-  }
+    @Operation(description = "Opprett en gjestebok")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "201", description = "Gjesteboka er opprettet"),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ingen gjestebok er gitt eller gjesteboka er allerede opprettet",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
+        ]
+    )
+    @PostMapping
+    fun post(@RequestBody guestBookDto: GuestBookDto): ResponseEntity<GuestBookDto> {
+        if (guestBookDto.id != null) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
 
-  @Operation(description = "Opprett et innslag i en gjestebok")
-  @ApiResponses(
-    value = [ApiResponse(responseCode = "201", description = "Innslaget i gjesteboka er opprettet"), ApiResponse(
-      responseCode = "400",
-      description = "Ingen innslag eller id til innslag å opprette",
-      content = arrayOf(Content(schema = Schema(hidden = true)))
-    )]
-  )
-  @PostMapping("/entry")
-  fun postEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto?): ResponseEntity<GuestBookEntryDto> {
-    if (guestBookEntryDto == null || guestBookEntryDto.getId() != null) {
-      return ResponseEntity(HttpStatus.BAD_REQUEST)
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookDto), HttpStatus.CREATED)
     }
 
-    return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryDto), HttpStatus.CREATED)
-  }
+    @Operation(description = "Endre en gjestebok")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "202", description = "Gjesteboka er endret"),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ingen gjestebok er gitt eller det mangler gjestebok å endre for id",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
+        ]
+    )
+    @PutMapping("/{guestBookId}")
+    fun put(@RequestBody guestBookDto: GuestBookDto, @PathVariable guestBookId: Long): ResponseEntity<GuestBookDto> {
+        if (guestBookDto.id != guestBookId) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
 
-  @Operation(description = "Endre et innslag i en gjestebok")
-  @ApiResponses(
-    value = [ApiResponse(responseCode = "202", description = "Innslaget i gjesteboka er endret"), ApiResponse(
-      responseCode = "400",
-      description = "Ingen innslag eller id til innslag for gjestebok er gitt",
-      content = arrayOf(Content(schema = Schema(hidden = true)))
-    )]
-  )
-  @PutMapping("/entry/{guestBookEntryId}")
-  fun putEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto?, @PathVariable guestBookEntryId: Long): ResponseEntity<GuestBookEntryDto> {
-    if (guestBookEntryDto == null || guestBookEntryDto.getId() == null || guestBookEntryDto.getId() != guestBookEntryId) {
-      return ResponseEntity(HttpStatus.BAD_REQUEST)
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookDto), HttpStatus.ACCEPTED)
     }
 
-    return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryDto), HttpStatus.ACCEPTED)
-  }
+    @Operation(description = "Opprett et innslag i en gjestebok")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "201", description = "Innslaget i gjesteboka er opprettet"),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ingen id til innslag å opprette",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
+        ]
+    )
+    @PostMapping("/entry")
+    fun postEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto): ResponseEntity<GuestBookEntryDto> {
+        if (guestBookEntryDto.id != null) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryDto), HttpStatus.CREATED)
+    }
+
+    @Operation(description = "Endre et innslag i en gjestebok")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "202", description = "Innslaget i gjesteboka er endret"),
+            ApiResponse(
+                responseCode = "400",
+                description = "Ingen id til innslag for gjestebok er gitt",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
+        ]
+    )
+    @PutMapping("/entry/{guestBookEntryId}")
+    fun putEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto, @PathVariable guestBookEntryId: Long): ResponseEntity<GuestBookEntryDto> {
+        if (guestBookEntryDto.id != guestBookEntryId) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryDto), HttpStatus.ACCEPTED)
+    }
 }
