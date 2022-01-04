@@ -47,7 +47,7 @@ class UserController(private val userService: UserService) {
         ]
     )
     @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") id: Long?): ResponseEntity<UserDto> {
+    operator fun get(@PathVariable("id") id: Long): ResponseEntity<UserDto> {
         return userService.find(id).map { userDto: UserInternalDto -> ResponseEntity(userDto.toUserDto(), HttpStatus.OK) }
             .orElseGet { ResponseEntity(HttpStatus.NOT_FOUND) }
     }
@@ -61,7 +61,7 @@ class UserController(private val userService: UserService) {
     )
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun post(@RequestBody createUserCommand: CreateUserCommandDto): ResponseEntity<CreateUserCommandResponse> {
-        if (userService.isAllreadyPresent(createUserCommand.username)) {
+        if (userService.isAlreadyPresent(createUserCommand.username)) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 

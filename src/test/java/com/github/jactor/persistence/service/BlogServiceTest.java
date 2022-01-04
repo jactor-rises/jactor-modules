@@ -5,6 +5,7 @@ import static com.github.jactor.persistence.entity.BlogEntryEntity.aBlogEntry;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -109,6 +110,7 @@ class BlogServiceTest {
     blogDto.setTitle("some blog");
     blogDto.setUserInternal(new UserInternalDto());
 
+    when(blogRepositoryMock.save(any())).thenReturn(new BlogEntity(blogDto));
     blogServiceToTest.saveOrUpdate(blogDto);
 
     ArgumentCaptor<BlogEntity> argCaptor = ArgumentCaptor.forClass(BlogEntity.class);
@@ -130,6 +132,7 @@ class BlogServiceTest {
     blogEntryDto.setCreatorName("me");
     blogEntryDto.setEntry("if i where a rich man...");
 
+    when(blogEntryRepositoryMock.save(any())).thenReturn(new BlogEntryEntity(blogEntryDto));
     blogServiceToTest.saveOrUpdate(blogEntryDto);
 
     ArgumentCaptor<BlogEntryEntity> argCaptor = ArgumentCaptor.forClass(BlogEntryEntity.class);
