@@ -1,21 +1,19 @@
 package com.github.jactor.persistence.dto
 
-open class PersistentData (
-        private var persistentDto: PersistentDto?
-)  {
-    fun fetchPersistentDto(): PersistentDto {
-        return if (persistentDto != null) persistentDto!! else PersistentDto()
-    }
+open class PersistentData(
+    private var persistentDto: PersistentDto?
+) {
+    var id: Long?
+        get() = persistentDto?.id
+        set(value) {
+            if (persistentDto == null) {
+                persistentDto = PersistentDto()
+            }
 
-    fun getId(): Long? {
-        return persistentDto?.id
-    }
-
-    fun setId(id: Long?) {
-        if (persistentDto == null) {
-            persistentDto = PersistentDto()
+            persistentDto!!.id = value
         }
 
-        persistentDto!!.id = id
+    fun fetchPersistentDto(): PersistentDto {
+        return if (persistentDto != null) persistentDto!! else PersistentDto()
     }
 }
