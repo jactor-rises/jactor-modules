@@ -89,7 +89,7 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
 
   public void modify(String entry, String modifiedCreator) {
     entryEmbeddable.modify(modifiedCreator, entry);
-    persistentDataEmbeddable.modify();
+    persistentDataEmbeddable.modifiedBy(modifiedCreator);
   }
 
   @Override
@@ -101,8 +101,9 @@ public class BlogEntryEntity implements PersistentEntity<BlogEntryEntity> {
   }
 
   @Override
-  public void modify() {
-    persistentDataEmbeddable.modify();
+  public BlogEntryEntity modifiedBy(String modifier) {
+    persistentDataEmbeddable.modifiedBy(modifier);
+    return this;
   }
 
   @Override

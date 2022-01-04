@@ -90,7 +90,7 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
 
   public void modify(String modifiedBy, String entry) {
     entryEmbeddable.modify(modifiedBy, entry);
-    persistentDataEmbeddable.modify();
+    persistentDataEmbeddable.modifiedBy(modifiedBy);
   }
 
   @Override
@@ -102,8 +102,9 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
   }
 
   @Override
-  public void modify() {
-    persistentDataEmbeddable.modify();
+  public GuestBookEntryEntity modifiedBy(String modifier) {
+    persistentDataEmbeddable.modifiedBy(modifier);
+    return this;
   }
 
   @Override

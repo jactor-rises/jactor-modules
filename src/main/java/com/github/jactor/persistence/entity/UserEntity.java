@@ -119,8 +119,9 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   }
 
   @Override
-  public void modify() {
-    persistentDataEmbeddable.modify();
+  public UserEntity modifiedBy(String modifier) {
+    persistentDataEmbeddable.modifiedBy(modifier);
+    return this;
   }
 
   public void add(BlogEntity blogEntity) {
