@@ -42,9 +42,9 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then read guest book entry entity")
   void shouldSaveThenReadGuestBookEntryEntity() {
-    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(new PersistentDto(), personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
     savedUser.setGuestBook(
@@ -56,7 +56,7 @@ class GuestBookEntryRepositoryTest {
         aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), savedUser.getGuestBook().asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus"))
     );
 
-    savedGuestBook.getEntries().forEach(guestBookEntryEntityToSave -> guestBookEntryRepository.save(guestBookEntryEntityToSave));
+    guestBookEntryRepository.saveAll(savedGuestBook.getEntries());
     entityManager.flush();
     entityManager.clear();
 
@@ -73,9 +73,9 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should save then modify and read guest book entry entity")
   void shouldSaveThenModifyAndReadGuestBookEntryEntity() {
-    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(new PersistentDto(), personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
     savedUser.setGuestBook(
@@ -87,7 +87,7 @@ class GuestBookEntryRepositoryTest {
         aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), savedUser.getGuestBook().asDto(), "Harry", "Draco Dormiens Nunquam Tittilandus"))
     );
 
-    savedGuestBook.getEntries().forEach(guestBookEntryEntityToSave -> guestBookEntryRepository.save(guestBookEntryEntityToSave));
+    guestBookEntryRepository.saveAll(savedGuestBook.getEntries());
     entityManager.flush();
     entityManager.clear();
 
@@ -115,9 +115,9 @@ class GuestBookEntryRepositoryTest {
   @Test
   @DisplayName("should write two entries to two different guest books and then find one entry")
   void shouldWriteTwoEntriesToTwoGuestBooksAndThenFindEntry() {
-    var addressDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    var personDto = new PersonInternalDto(null, addressDto, null, null, "AA", null);
-    var userDto = new UserInternalDto(null, personDto, "casuel@tantooine.com", "causual");
+    var addressDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    var personDto = new PersonInternalDto(new PersistentDto(), addressDto, null, null, "AA", null);
+    var userDto = new UserInternalDto(new PersistentDto(), personDto, "casuel@tantooine.com", "causual");
 
     var savedUser = userRepository.save(new UserEntity(userDto));
     savedUser.setGuestBook(
@@ -129,9 +129,9 @@ class GuestBookEntryRepositoryTest {
         aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), savedGuestBook.asDto(), "somone", "jadda"))
     );
 
-    savedGuestBook.getEntries().forEach(guestBookEntryEntityToSave -> guestBookEntryRepository.save(guestBookEntryEntityToSave));
+    guestBookEntryRepository.saveAll(savedGuestBook.getEntries());
 
-    var anotherUserDto = new UserInternalDto(null, personDto, "hidden@tantooine.com", "hidden");
+    var anotherUserDto = new UserInternalDto(new PersistentDto(), personDto, "hidden@tantooine.com", "hidden");
     var anotherSavedUser = userRepository.save(new UserEntity(anotherUserDto));
     anotherSavedUser.setGuestBook(
         aGuestBook(new GuestBookDto(new PersistentDto(), new HashSet<>(), "home sweet home", savedUser.asDto()))
@@ -142,7 +142,7 @@ class GuestBookEntryRepositoryTest {
         aGuestBookEntry(new GuestBookEntryDto(new PersistentDto(), anotherSavedGuestBook.asDto(), "shrek", "far far away"))
     );
 
-    anotherSavedGuestBook.getEntries().forEach(guestBookEntryToSave -> guestBookEntryRepository.save(guestBookEntryToSave));
+    guestBookEntryRepository.saveAll(anotherSavedGuestBook.getEntries());
     entityManager.flush();
     entityManager.clear();
 

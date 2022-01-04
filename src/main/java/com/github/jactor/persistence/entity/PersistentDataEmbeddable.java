@@ -13,7 +13,7 @@ public class PersistentDataEmbeddable implements PersistentData {
   private String modifiedBy;
   private LocalDateTime timeOfModification;
 
-  PersistentDataEmbeddable() {
+  protected PersistentDataEmbeddable() {
     createdBy = "todo";
     timeOfCreation = Now.asDateTime();
     modifiedBy = "todo";

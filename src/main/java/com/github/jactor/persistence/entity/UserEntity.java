@@ -62,7 +62,6 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   @Enumerated(EnumType.STRING)
   private UserType userType;
 
-  @SuppressWarnings("unused")
   public UserEntity() {
     // used by entity manager
   }
@@ -88,7 +87,7 @@ public class UserEntity implements PersistentEntity<UserEntity> {
   private void addValues(UserInternalDto user) {
     emailAddress = user.getEmailAddress();
     id = user.getId();
-    persistentDataEmbeddable = new PersistentDataEmbeddable(user.fetchPersistentDto());
+    persistentDataEmbeddable = new PersistentDataEmbeddable(user.getPersistentDto());
     personEntity = Optional.ofNullable(user.getPerson()).map(PersonEntity::new).orElse(null);
     username = user.getUsername();
     userType = Arrays.stream(UserType.values())

@@ -47,7 +47,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
   private String zipCode;
 
   @SuppressWarnings("unused")
-  AddressEntity() {
+  protected AddressEntity() {
     // used by entity manager
   }
 
@@ -66,7 +66,7 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
   }
 
   AddressEntity(AddressInternalDto addressInternalDto) {
-    persistentDataEmbeddable = new PersistentDataEmbeddable(addressInternalDto.fetchPersistentDto());
+    persistentDataEmbeddable = new PersistentDataEmbeddable(addressInternalDto.getPersistentDto());
     addressLine1 = addressInternalDto.getAddressLine1();
     addressLine2 = addressInternalDto.getAddressLine2();
     addressLine3 = addressInternalDto.getAddressLine3();

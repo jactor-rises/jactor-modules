@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.jactor.persistence.JactorPersistence;
 import com.github.jactor.persistence.dto.AddressInternalDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.PersonInternalDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.dto.Usertype;
@@ -15,7 +16,6 @@ import com.github.jactor.persistence.entity.UserEntity.UserType;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,10 +56,10 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should write then read a user entity")
   void shouldWriteThenReadUserEntity() {
-    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    PersonInternalDto personInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Solo", null);
+    AddressInternalDto addressInternalDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    PersonInternalDto personInternalDto = new PersonInternalDto(new PersistentDto(), addressInternalDto, null, null, "Solo", null);
     UserEntity userToPersist = aUser(new UserInternalDto(
-        null, personInternalDto, "smuggle.fast@tantooine.com", "smuggler"
+        new PersistentDto(), personInternalDto, "smuggle.fast@tantooine.com", "smuggler"
     ));
 
     userRepository.save(userToPersist);
@@ -84,10 +84,10 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should write then update and read a user entity")
   void shouldWriteThenUpdateAndReadUserEntity() {
-    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    PersonInternalDto personInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "AA", null);
+    AddressInternalDto addressInternalDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    PersonInternalDto personInternalDto = new PersonInternalDto(new PersistentDto(), addressInternalDto, null, null, "AA", null);
     UserEntity userToPersist = aUser(new UserInternalDto(
-        null, personInternalDto, "casuel@tantooine.com", "causual"
+        new PersistentDto(), personInternalDto, "casuel@tantooine.com", "causual"
     ));
 
     userRepository.save(userToPersist);
@@ -123,11 +123,11 @@ class UserRepositoryTest {
   @Test
   @DisplayName("should find active users and admins")
   void shouldFindActiveUsersAndAdmins() {
-    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
-    PersonInternalDto spidyPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Parker", null);
-    PersonInternalDto superPersonInternalDto = new PersonInternalDto(null, addressInternalDto, null, null, "Kent", null);
-    userRepository.save(aUser(new UserInternalDto(null, spidyPersonInternalDto, null, "spiderman")));
-    userRepository.save(aUser(new UserInternalDto(null, superPersonInternalDto, null, "superman", Usertype.INACTIVE)));
+    AddressInternalDto addressInternalDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
+    PersonInternalDto spidyPersonInternalDto = new PersonInternalDto(new PersistentDto(), addressInternalDto, null, null, "Parker", null);
+    PersonInternalDto superPersonInternalDto = new PersonInternalDto(new PersistentDto(), addressInternalDto, null, null, "Kent", null);
+    userRepository.save(aUser(new UserInternalDto(new PersistentDto(), spidyPersonInternalDto, null, "spiderman")));
+    userRepository.save(aUser(new UserInternalDto(new PersistentDto(), superPersonInternalDto, null, "superman", Usertype.INACTIVE)));
     entityManager.flush();
     entityManager.clear();
 
