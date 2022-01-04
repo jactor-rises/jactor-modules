@@ -106,9 +106,9 @@ class UserServiceTest {
   void shouldCreateAndSavePersonForTheUser() {
     var createUserCommand = new CreateUserCommand("jactor", "Jacobsen");
     var userDto = new UserInternalDto();
-    var userEntityMock = mockUserEntityWith(userDto);
+    var userEntity = new UserEntity(userDto);
 
-    when(userRepositoryMock.save(any())).thenReturn(userEntityMock);
+    when(userRepositoryMock.save(any())).thenReturn(userEntity);
     when(personRepository.save(any())).thenReturn(new PersonEntity(new PersonInternalDto()));
 
     var user = userServiceToTest.create(createUserCommand);
