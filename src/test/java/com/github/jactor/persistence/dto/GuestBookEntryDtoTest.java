@@ -18,7 +18,7 @@ class GuestBookEntryDtoTest {
         guestBookEntryDto.setGuestBook(new GuestBookDto());
         guestBookEntryDto.setEntry("entry");
 
-        GuestBookEntryDto copied = new GuestBookEntryDto(guestBookEntryDto.fetchPersistentDto(), guestBookEntryDto);
+        GuestBookEntryDto copied = new GuestBookEntryDto(guestBookEntryDto.getPersistentDto(), guestBookEntryDto);
 
         assertAll(
                 () -> assertThat(copied.getCreatorName()).as("creator name").isEqualTo(guestBookEntryDto.getCreatorName()),
@@ -36,7 +36,7 @@ class GuestBookEntryDtoTest {
         persistentDto.setModifiedBy("tip");
         persistentDto.setTimeOfModification(LocalDateTime.now());
 
-        PersistentDto copied = new GuestBookEntryDto(persistentDto, new GuestBookEntryDto()).fetchPersistentDto();
+        PersistentDto copied = new GuestBookEntryDto(persistentDto, new GuestBookEntryDto()).getPersistentDto();
 
         assertAll(
                 () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

@@ -57,7 +57,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   private Set<UserEntity> users = new HashSet<>();
 
   @SuppressWarnings("unused")
-  PersonEntity() {
+  protected PersonEntity() {
     // used by entity manager
   }
 
@@ -78,7 +78,7 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
     firstName = person.getFirstName();
     locale = person.getLocale();
     id = person.getId();
-    persistentDataEmbeddable = new PersistentDataEmbeddable(person.fetchPersistentDto());
+    persistentDataEmbeddable = new PersistentDataEmbeddable(person.getPersistentDto());
     surname = person.getSurname();
   }
 

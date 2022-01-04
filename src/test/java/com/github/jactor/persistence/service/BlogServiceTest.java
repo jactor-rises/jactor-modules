@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.jactor.persistence.dto.BlogDto;
 import com.github.jactor.persistence.dto.BlogEntryDto;
+import com.github.jactor.persistence.dto.PersistentDto;
 import com.github.jactor.persistence.dto.UserInternalDto;
 import com.github.jactor.persistence.entity.BlogEntity;
 import com.github.jactor.persistence.entity.BlogEntryEntity;
@@ -37,13 +38,14 @@ class BlogServiceTest {
   private BlogRepository blogRepositoryMock;
   @Mock
   private BlogEntryRepository blogEntryRepositoryMock;
+  @SuppressWarnings("unused") // used by mockito
   @Mock
   private UserService userServiceMock;
 
   @Test
   @DisplayName("should map blog to dto")
   void shouldMapBlogToDto() {
-    Optional<BlogEntity> blogEntity = Optional.of(aBlog(new BlogDto(null, null, "full speed ahead", null)));
+    Optional<BlogEntity> blogEntity = Optional.of(aBlog(new BlogDto(new PersistentDto(), null, "full speed ahead", null)));
     when(blogRepositoryMock.findById(1001L)).thenReturn(blogEntity);
 
     BlogDto blog = blogServiceToTest.find(1001L).orElseThrow(mockError());
@@ -54,7 +56,7 @@ class BlogServiceTest {
   @Test
   @DisplayName("should map blog entry to dto")
   void shouldMapFoundBlogToDto() {
-    BlogEntryDto blogEntryDto = new BlogEntryDto(null, new BlogDto(), "me", "too");
+    BlogEntryDto blogEntryDto = new BlogEntryDto(new PersistentDto(), new BlogDto(), "me", "too");
     Optional<BlogEntryEntity> anEntry = Optional.of(aBlogEntry(blogEntryDto));
     when(blogEntryRepositoryMock.findById(1001L)).thenReturn(anEntry);
 
@@ -73,7 +75,7 @@ class BlogServiceTest {
   @Test
   @DisplayName("should find blogs for title")
   void shouldFindBlogsForTitle() {
-    List<BlogEntity> blogsToFind = Collections.singletonList(aBlog(new BlogDto(null, null, "Star Wars", null)));
+    List<BlogEntity> blogsToFind = Collections.singletonList(aBlog(new BlogDto(new PersistentDto(), null, "Star Wars", null)));
     when(blogRepositoryMock.findBlogsByTitle("Star Wars")).thenReturn(blogsToFind);
 
     List<BlogDto> blogForTitle = blogServiceToTest.findBlogsBy("Star Wars");
@@ -85,7 +87,7 @@ class BlogServiceTest {
   @DisplayName("should map blog entries to a list of dto")
   void shouldMapBlogEntriesToListOfDto() {
     List<BlogEntryEntity> blogEntryEntities = Collections.singletonList(
-        aBlogEntry(new BlogEntryDto(null, new BlogDto(), "you", "too"))
+        aBlogEntry(new BlogEntryDto(new PersistentDto(), new BlogDto(), "you", "too"))
     );
 
     when(blogEntryRepositoryMock.findByBlog_Id(1001L)).thenReturn(blogEntryEntities);

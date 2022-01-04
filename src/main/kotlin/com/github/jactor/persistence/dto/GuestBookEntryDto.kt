@@ -1,14 +1,17 @@
 package com.github.jactor.persistence.dto
 
 data class GuestBookEntryDto(
-        var persistentDto: PersistentDto? = null,
-        var guestBook: GuestBookDto? = null,
-        var creatorName: String? = null,
-        var entry: String? = null
+    override val persistentDto: PersistentDto = PersistentDto(),
+    var guestBook: GuestBookDto? = null,
+    var creatorName: String? = null,
+    var entry: String? = null
 ) : PersistentData(persistentDto) {
     constructor(
-            persistent: PersistentDto, guestBookEntry: GuestBookEntryDto
+        persistentDto: PersistentDto, guestBookEntry: GuestBookEntryDto
     ) : this(
-            persistent, guestBookEntry.guestBook, guestBookEntry.creatorName, guestBookEntry.entry
+        persistentDto = persistentDto,
+        guestBook = guestBookEntry.guestBook,
+        creatorName = guestBookEntry.creatorName,
+        entry = guestBookEntry.entry
     )
 }

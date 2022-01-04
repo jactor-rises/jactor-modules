@@ -3,14 +3,17 @@ package com.github.jactor.persistence.dto
 import java.time.LocalDate
 
 data class BlogDto(
-        var persistentDto: PersistentDto? = null,
-        var created: LocalDate? = null,
-        var title: String? = null,
-        var userInternal: UserInternalDto? = null
+    override val persistentDto: PersistentDto = PersistentDto(),
+    var created: LocalDate? = null,
+    var title: String? = null,
+    var userInternal: UserInternalDto? = null
 ) : PersistentData(persistentDto) {
     constructor(
-            persistent: PersistentDto, blog: BlogDto
+        persistentDto: PersistentDto, blog: BlogDto
     ) : this(
-            persistent, blog.created, blog.title, blog.userInternal
+        persistentDto = persistentDto,
+        created = blog.created,
+        title = blog.title,
+        userInternal = blog.userInternal
     )
 }
