@@ -15,7 +15,7 @@ class UserService(
     private val userRepository: UserRepository
 ) {
     fun find(username: String?): Optional<UserInternalDto> {
-        return userRepository.findByUsername(username)!!.map { obj: UserEntity? -> obj?.asDto() }
+        return userRepository.findByUsername(username).map { obj: UserEntity? -> obj?.asDto() }
     }
 
     fun find(id: Long): Optional<UserInternalDto> {
@@ -42,12 +42,12 @@ class UserService(
     }
 
     fun findUsernames(userType: UserEntity.UserType?): List<String> {
-        return userRepository.findByUserTypeIn(listOf(userType))!!.stream()
+        return userRepository.findByUserTypeIn(listOf(userType)).stream()
             .map<String> { obj: UserEntity? -> obj?.username }
             .collect(Collectors.toList())
     }
 
     fun isAlreadyPresent(username: String?): Boolean {
-        return userRepository.findByUsername(username)!!.isPresent
+        return userRepository.findByUsername(username).isPresent
     }
 }
