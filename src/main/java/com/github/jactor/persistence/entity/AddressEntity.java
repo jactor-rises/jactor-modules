@@ -89,8 +89,9 @@ public class AddressEntity implements PersistentEntity<AddressEntity> {
   }
 
   @Override
-  public void modify() {
-    persistentDataEmbeddable.modify();
+  public AddressEntity modifiedBy(String modifier) {
+    persistentDataEmbeddable.modifiedBy(modifier);
+    return this;
   }
 
   @Override

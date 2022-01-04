@@ -27,7 +27,8 @@ public class PersistentDataEmbeddable implements PersistentData {
     timeOfModification = persistentDto.getTimeOfModification();
   }
 
-  void modify() {
+  void modifiedBy(String modifier) {
+    modifiedBy = modifier;
     timeOfModification = Now.asDateTime();
   }
 

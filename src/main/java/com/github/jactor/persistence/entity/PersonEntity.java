@@ -96,8 +96,9 @@ public class PersonEntity implements PersistentEntity<PersonEntity> {
   }
 
   @Override
-  public void modify() {
-    persistentDataEmbeddable.modify();
+  public PersonEntity modifiedBy(String modifier) {
+    persistentDataEmbeddable.modifiedBy(modifier);
+    return this;
   }
 
   @Override

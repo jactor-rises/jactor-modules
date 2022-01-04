@@ -96,8 +96,8 @@ public class BlogEntity implements PersistentEntity<BlogEntity> {
   }
 
   @Override
-  public void modify() {
-    persistentDataEmbeddable.modify();
+  public BlogEntity modifiedBy(String modifier) {
+    persistentDataEmbeddable.modifiedBy(modifier); return this;
   }
 
   @Override
