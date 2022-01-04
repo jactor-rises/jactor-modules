@@ -16,7 +16,7 @@ public class EntryEmbeddable {
   @Lob
   private String entry;
 
-  EntryEmbeddable() {
+  protected EntryEmbeddable() {
   }
 
   /**

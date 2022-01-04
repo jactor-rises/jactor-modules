@@ -48,9 +48,9 @@ class PersonRepositoryTest {
   void shouldWriteThenReadPersonEntity() {
     int allreadyPresentPeople = numberOf(personRepository.findAll());
 
-    AddressInternalDto address = new AddressInternalDto(null, "1001", "Test Boulevar 1", null, null, "Testington", null);
+    AddressInternalDto address = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevar 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonInternalDto(
-        null, address, "no_NO", "Born", "Sometime", "Me, myself, and I"
+        new PersistentDto(), address, "no_NO", "Born", "Sometime", "Me, myself, and I"
     ));
 
     personRepository.save(personToPersist);
@@ -76,9 +76,9 @@ class PersonRepositoryTest {
   @Test
   @DisplayName("should save then update and read a person entity")
   void shouldWriteThenUpdateAndReadPersonEntity() {
-    AddressInternalDto addressInternalDto = new AddressInternalDto(null, "1001", "Test Boulevard 1", null, null, "Testington", null);
+    AddressInternalDto addressInternalDto = new AddressInternalDto(new PersistentDto(), "1001", "Test Boulevard 1", null, null, "Testington", null);
     PersonEntity personToPersist = aPerson(new PersonInternalDto(
-        null,
+        new PersistentDto(),
         addressInternalDto,
         "no_NO",
         "B",

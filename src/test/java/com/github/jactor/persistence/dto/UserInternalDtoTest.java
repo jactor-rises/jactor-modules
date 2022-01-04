@@ -18,7 +18,7 @@ class UserInternalDtoTest {
     userInternalDto.setPerson(new PersonInternalDto());
     userInternalDto.setUsername("me");
 
-    UserInternalDto copied = new UserInternalDto(userInternalDto.fetchPersistentDto(), userInternalDto);
+    UserInternalDto copied = new UserInternalDto(userInternalDto.getPersistentDto(), userInternalDto);
 
     assertAll(
         () -> assertThat(copied.getEmailAddress()).as("email address").isEqualTo(userInternalDto.getEmailAddress()),
@@ -37,7 +37,7 @@ class UserInternalDtoTest {
     persistentDto.setModifiedBy("tip");
     persistentDto.setTimeOfModification(LocalDateTime.now());
 
-    PersistentDto copied = new UserInternalDto(persistentDto, new UserInternalDto()).fetchPersistentDto();
+    PersistentDto copied = new UserInternalDto(persistentDto, new UserInternalDto()).getPersistentDto();
 
     assertAll(
         () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

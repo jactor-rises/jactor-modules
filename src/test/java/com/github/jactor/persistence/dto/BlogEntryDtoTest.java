@@ -18,7 +18,7 @@ class BlogEntryDtoTest {
     blogEntryDto.setCreatorName("someone");
     blogEntryDto.setEntry("entry");
 
-    BlogEntryDto copied = new BlogEntryDto(blogEntryDto.fetchPersistentDto(), blogEntryDto);
+    BlogEntryDto copied = new BlogEntryDto(blogEntryDto.getPersistentDto(), blogEntryDto);
 
     assertAll(
         () -> assertThat(copied.getBlog()).as("blog").isEqualTo(blogEntryDto.getBlog()),
@@ -37,7 +37,7 @@ class BlogEntryDtoTest {
     persistentDto.setModifiedBy("tip");
     persistentDto.setTimeOfModification(LocalDateTime.now());
 
-    PersistentDto copied = new BlogEntryDto(persistentDto, new BlogEntryDto()).fetchPersistentDto();
+    PersistentDto copied = new BlogEntryDto(persistentDto, new BlogEntryDto()).getPersistentDto();
 
     assertAll(
         () -> assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

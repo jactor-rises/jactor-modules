@@ -49,7 +49,7 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
   private EntryEmbeddable entryEmbeddable = new EntryEmbeddable();
 
   @SuppressWarnings("unused")
-  GuestBookEntryEntity() {
+  protected GuestBookEntryEntity() {
     // used by entity manager
   }
 
@@ -64,7 +64,7 @@ public class GuestBookEntryEntity implements PersistentEntity<GuestBookEntryEnti
     entryEmbeddable = new EntryEmbeddable(guestBookEntry.getCreatorName(), guestBookEntry.getEntry());
     guestBook = Optional.ofNullable(guestBookEntry.getGuestBook()).map(GuestBookEntity::new).orElse(null);
     id = guestBookEntry.getId();
-    persistentDataEmbeddable = new PersistentDataEmbeddable(guestBookEntry.fetchPersistentDto());
+    persistentDataEmbeddable = new PersistentDataEmbeddable(guestBookEntry.getPersistentDto());
   }
 
   private GuestBookEntity copyGuestBookWithoutId() {

@@ -22,7 +22,7 @@ class AddressInternalDtoTest {
         addressInternalDto.setCountry("NO");
         addressInternalDto.setZipCode("1234");
 
-        AddressInternalDto copied = new AddressInternalDto(addressInternalDto.fetchPersistentDto(), addressInternalDto);
+        AddressInternalDto copied = new AddressInternalDto(addressInternalDto.getPersistentDto(), addressInternalDto);
 
         assertAll(
                 () -> assertThat(copied.getAddressLine1()).as("address line one").isEqualTo(addressInternalDto.getAddressLine1()),
@@ -43,7 +43,7 @@ class AddressInternalDtoTest {
         persistentDto.setModifiedBy("tip");
         persistentDto.setTimeOfModification(LocalDateTime.now());
 
-        PersistentDto copied = new AddressInternalDto(persistentDto, new AddressInternalDto()).fetchPersistentDto();
+        PersistentDto copied = new AddressInternalDto(persistentDto, new AddressInternalDto()).getPersistentDto();
 
         assertAll(
                 () -> Assertions.assertThat(copied.getCreatedBy()).as("created by").isEqualTo(persistentDto.getCreatedBy()),

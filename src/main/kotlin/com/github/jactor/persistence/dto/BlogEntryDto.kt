@@ -1,14 +1,17 @@
 package com.github.jactor.persistence.dto
 
 data class BlogEntryDto(
-        var persistentDto: PersistentDto? = null,
-        var blog: BlogDto? = null,
-        var creatorName: String? = null,
-        var entry: String? = null
+    override val persistentDto: PersistentDto = PersistentDto(),
+    var blog: BlogDto? = null,
+    var creatorName: String? = null,
+    var entry: String? = null
 ) : PersistentData(persistentDto) {
     constructor(
-            persistent: PersistentDto, blogEntry: BlogEntryDto
+        persistentDto: PersistentDto, blogEntry: BlogEntryDto
     ) : this(
-            persistent, blogEntry.blog, blogEntry.creatorName, blogEntry.entry
+        persistentDto = persistentDto,
+        blog = blogEntry.blog,
+        creatorName = blogEntry.creatorName,
+        entry = blogEntry.entry
     )
 }

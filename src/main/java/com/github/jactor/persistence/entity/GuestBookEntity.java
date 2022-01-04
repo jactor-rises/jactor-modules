@@ -51,7 +51,7 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
   private Set<GuestBookEntryEntity> entries = new HashSet<>();
 
   @SuppressWarnings("unused")
-  GuestBookEntity() {
+  protected GuestBookEntity() {
     // used by entity manager
   }
 
@@ -69,7 +69,7 @@ public class GuestBookEntity implements PersistentEntity<GuestBookEntity> {
   public GuestBookEntity(GuestBookDto guestBook) {
     entries = guestBook.getEntries().stream().map(GuestBookEntryEntity::new).collect(toSet());
     id = guestBook.getId();
-    persistentDataEmbeddable = new PersistentDataEmbeddable(guestBook.fetchPersistentDto());
+    persistentDataEmbeddable = new PersistentDataEmbeddable(guestBook.getPersistentDto());
     title = guestBook.getTitle();
     user = Optional.ofNullable(guestBook.getUserInternal()).map(UserEntity::new).orElse(null);
   }
