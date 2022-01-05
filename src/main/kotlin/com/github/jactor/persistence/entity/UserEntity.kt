@@ -139,11 +139,11 @@ class UserEntity : PersistentEntity<UserEntity?> {
         return this
     }
 
-    override fun equals(o: Any?): Boolean {
-        return o === this || o != null && javaClass == o.javaClass &&
-                emailAddress == (o as UserEntity).emailAddress &&
-                person == o.person &&
-                username == o.username
+    override fun equals(other: Any?): Boolean {
+        return other === this || other != null && javaClass == other.javaClass &&
+                emailAddress == (other as UserEntity).emailAddress &&
+                person == other.person &&
+                username == other.username
     }
 
     override fun hashCode(): Int {

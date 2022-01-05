@@ -41,7 +41,7 @@ class UserService(
         return userEntity
     }
 
-    fun findUsernames(userType: UserEntity.UserType?): List<String> {
+    fun findUsernames(userType: UserEntity.UserType): List<String> {
         return userRepository.findByUserTypeIn(listOf(userType)).stream()
             .map<String> { obj: UserEntity? -> obj?.username }
             .collect(Collectors.toList())
