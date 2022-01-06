@@ -28,7 +28,7 @@ data class PersonDto(
     @Schema(description = "Adressen til en person") var address: AddressDto? = null,
     @Schema(description = "Beskrivelse") var description: String? = null,
     @Schema(description = "Fornavn") var firstName: String? = null,
-    @Schema(description = "Internasjonal id (land $ språk)") var locale: String? = null,
+    @Schema(description = "Internasjonal id (land & språk - ISO/IEC 15897)") var locale: String? = null,
     @Schema(description = "Etternavn") var surname: String? = null
 )
 
