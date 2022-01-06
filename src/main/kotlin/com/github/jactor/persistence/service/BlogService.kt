@@ -48,7 +48,7 @@ class BlogService(
         return blogEntryRepository.save(blogEntryEntity).asDto()
     }
 
-    private fun fetchUsername(blogDto: BlogDto?): String? {
-        return if (blogDto?.userInternal != null) blogDto.userInternal!!.username else null
+    private fun fetchUsername(blogDto: BlogDto?): String {
+        return blogDto?.userInternal?.username ?: throw IllegalStateException("Unnable to find username in $blogDto")
     }
 }

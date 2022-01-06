@@ -105,7 +105,7 @@ internal class BlogServiceTest {
 
         blogDto.created = LocalDate.now()
         blogDto.title = "some blog"
-        blogDto.userInternal = UserInternalDto()
+        blogDto.userInternal = UserInternalDto(username = "itsme")
 
         whenever(blogRepositoryMock.save(BlogEntity(blogDto))).thenReturn(BlogEntity(blogDto))
 
@@ -124,8 +124,7 @@ internal class BlogServiceTest {
     @Test
     fun `should save BlogEntryDto as BlogEntryEntity`() {
         val blogEntryDto = BlogEntryDto()
-
-        blogEntryDto.blog = BlogDto()
+        blogEntryDto.blog = BlogDto(userInternal = UserInternalDto(username = "itsme"))
         blogEntryDto.creatorName = "me"
         blogEntryDto.entry = "if i where a rich man..."
 

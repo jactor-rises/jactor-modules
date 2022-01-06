@@ -74,6 +74,8 @@ internal class GuestBookServiceTest {
     fun `should save GuestBookDto as GuestBookEntity`() {
         val guestBookEntryDto = GuestBookEntryDto()
         guestBookEntryDto.guestBook = GuestBookDto()
+        guestBookEntryDto.creatorName = "me"
+        guestBookEntryDto.entry = "all about this"
 
         val guestBookDto = GuestBookDto()
 
