@@ -41,8 +41,8 @@ data class UserInternalDto(
         username = username,
         userType = if (usertype == Usertype.ADMIN) UserType.ACTIVE else UserType.valueOf(usertype.name)
     )
-}
 
-enum class Usertype {
-    ADMIN, ACTIVE, INACTIVE
+    enum class Usertype {
+        ADMIN, ACTIVE, INACTIVE
+    }
 }
