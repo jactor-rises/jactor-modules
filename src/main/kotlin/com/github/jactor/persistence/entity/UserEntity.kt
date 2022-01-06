@@ -41,7 +41,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private var persistentDataEmbeddable: PersistentDataEmbeddable? = null
+    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
 
     @Column(name = "EMAIL")
     var emailAddress: String? = null
@@ -106,7 +106,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
 
     fun asDto(): UserInternalDto {
         return UserInternalDto(
-            persistentDataEmbeddable!!.asPersistentDto(id),
+            persistentDataEmbeddable.asPersistentDto(id),
             Optional.ofNullable(person).map { obj: PersonEntity -> obj.asDto() }.orElse(null),
             emailAddress,
             username
@@ -125,7 +125,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
     }
 
     override fun modifiedBy(modifier: String): UserEntity {
-        persistentDataEmbeddable!!.modifiedBy(modifier)
+        persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
@@ -162,13 +162,13 @@ class UserEntity : PersistentEntity<UserEntity?> {
     }
 
     override val createdBy: String
-        get() = persistentDataEmbeddable!!.createdBy
+        get() = persistentDataEmbeddable.createdBy
     override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfCreation
+        get() = persistentDataEmbeddable.timeOfCreation
     override val modifiedBy: String
-        get() = persistentDataEmbeddable!!.modifiedBy
+        get() = persistentDataEmbeddable.modifiedBy
     override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfModification
+        get() = persistentDataEmbeddable.timeOfModification
 
     fun getBlogs(): Set<BlogEntity> {
         return Collections.unmodifiableSet(blogs)

@@ -7,10 +7,8 @@ import java.time.LocalDateTime
 
 @Embeddable
 class PersistentDataEmbeddable : PersistentData {
-    override var createdBy: String
-        private set
-    override var timeOfCreation: LocalDateTime
-        private set
+    override val createdBy: String
+    override val timeOfCreation: LocalDateTime
     override var modifiedBy: String
         private set
     override var timeOfModification: LocalDateTime
