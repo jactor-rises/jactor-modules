@@ -33,7 +33,7 @@ class UserController(private val userService: UserService) {
         ]
     )
     @GetMapping("/name/{username}")
-    fun find(@PathVariable("username") username: String?): ResponseEntity<UserDto> {
+    fun find(@PathVariable("username") username: String): ResponseEntity<UserDto> {
         return userService.find(username)
             .map { userDto: UserInternalDto -> ResponseEntity(userDto.toUserDto(), HttpStatus.OK) }
             .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }

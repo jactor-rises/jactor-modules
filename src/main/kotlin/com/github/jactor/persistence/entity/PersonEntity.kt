@@ -35,7 +35,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private var persistentDataEmbeddable: PersistentDataEmbeddable? = null
+    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
 
     @Column(name = "DESCRIPTION")
     var description: String? = null
@@ -90,7 +90,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         val addressInternalDto = Optional.ofNullable(addressEntity).map { obj: AddressEntity -> obj.asDto() }
             .orElse(null)
 
-        return PersonInternalDto(persistentDataEmbeddable!!.asPersistentDto(id), addressInternalDto, locale, firstName, surname, description)
+        return PersonInternalDto(persistentDataEmbeddable.asPersistentDto(id), addressInternalDto, locale, firstName, surname, description)
     }
 
     override fun copyWithoutId(): PersonEntity {
@@ -100,7 +100,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     }
 
     override fun modifiedBy(modifier: String): PersonEntity {
-        persistentDataEmbeddable!!.modifiedBy(modifier)
+        persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
@@ -128,13 +128,13 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     }
 
     override val createdBy: String
-        get() = persistentDataEmbeddable!!.createdBy
+        get() = persistentDataEmbeddable.createdBy
     override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfCreation
+        get() = persistentDataEmbeddable.timeOfCreation
     override val modifiedBy: String
-        get() = persistentDataEmbeddable!!.modifiedBy
+        get() = persistentDataEmbeddable.modifiedBy
     override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfModification
+        get() = persistentDataEmbeddable.timeOfModification
 
     fun getUsers(): Set<UserEntity> {
         return users
