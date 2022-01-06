@@ -15,6 +15,11 @@ class EntryEmbeddable {
     var entry: String? = null
         private set
 
+    val notNullableCreator: String
+        get() = creatorName ?: throw IllegalStateException("A creator is not provided!")
+    val notNullableEntry: String
+        get() = entry ?: throw IllegalStateException("An entry is not provided!")
+
     constructor()
 
     /**
@@ -25,16 +30,13 @@ class EntryEmbeddable {
         entry = entryEmbeddable.entry
     }
 
-    internal constructor(creatorName: String?, entry: String?) {
+    internal constructor(creatorName: String, entry: String) {
         this.creatorName = creatorName
         this.entry = entry
     }
 
     fun copy() = EntryEmbeddable(this)
-    fun fetchCreatorName() = creatorName ?: throw IllegalStateException("No creatorName provided for $this")
-    fun fetchEntry() = entry ?: throw IllegalStateException("No entry in $this")
-
-    fun modify(modifiedCreator: String?, modifiedEntry: String?) {
+    fun modify(modifiedCreator: String, modifiedEntry: String) {
         creatorName = modifiedCreator
         entry = modifiedEntry
     }
@@ -52,10 +54,10 @@ class EntryEmbeddable {
         return ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(creatorName).append(shortEntry()).toString()
     }
 
-    private fun shortEntry(): String? {
-        return if (entry == null || entry!!.length < 50) {
-            entry
-        } else entry!!.substring(0, 47) + "..."
+    private fun shortEntry(): String {
+        return if (entry != null) if (entry!!.length < 50) entry!! else entry!!.substring(0, 47) + "..." else throw IllegalStateException(
+            "Entry should be provided when needed!"
+        )
     }
 
     override fun hashCode(): Int {

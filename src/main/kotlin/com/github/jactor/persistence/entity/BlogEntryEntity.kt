@@ -61,7 +61,7 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
                 blogDto!!
             )
         }.orElse(null)
-        entryEmbeddable = EntryEmbeddable(blogEntryDto.creatorName, blogEntryDto.entry)
+        entryEmbeddable = EntryEmbeddable(blogEntryDto.notNullableCreator, blogEntryDto.notNullableEntry)
         id = blogEntryDto.id
         persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryDto.persistentDto)
     }
@@ -86,9 +86,9 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
         return blogEntryDto
     }
 
-    fun modify(entry: String?, modifiedCreator: String?) {
+    fun modify(entry: String, modifiedCreator: String) {
         entryEmbeddable.modify(modifiedCreator, entry)
-        persistentDataEmbeddable.modifiedBy(modifiedCreator!!)
+        persistentDataEmbeddable.modifiedBy(modifiedCreator)
     }
 
     override fun copyWithoutId(): BlogEntryEntity {
@@ -132,9 +132,9 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
     override val timeOfModification: LocalDateTime
         get() = persistentDataEmbeddable.timeOfModification
     val creatorName: String
-        get() = entryEmbeddable.fetchCreatorName()
+        get() = entryEmbeddable.notNullableCreator
     val entry: String
-        get() = entryEmbeddable.fetchEntry()
+        get() = entryEmbeddable.notNullableEntry
 
     companion object {
         @JvmStatic

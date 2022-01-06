@@ -64,8 +64,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blogEntry when used`() {
-        val blogEntryWithoutId = aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto()))
-        val blogEntry = aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto()))
+        val blogEntryWithoutId = aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit")))
+        val blogEntry = aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit")))
         blogEntry.id = 1L
 
         whenever(joinPointMock.args).thenReturn(arrayOf<Any>(blogEntry, blogEntryWithoutId))
@@ -92,8 +92,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on guestBookEntry when used`() {
-        val guestBookEntryWithoutId = aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto()))
-        val guestBookEntry = aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto()))
+        val guestBookEntryWithoutId = aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")))
+        val guestBookEntry = aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")))
         guestBookEntry.id = 1L
 
         whenever(joinPointMock.args).thenReturn(arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId))

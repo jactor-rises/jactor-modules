@@ -56,7 +56,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     }
 
     constructor(guestBookEntry: GuestBookEntryDto) {
-        entryEmbeddable = EntryEmbeddable(guestBookEntry.creatorName, guestBookEntry.entry)
+        entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
         guestBook = Optional.ofNullable(guestBookEntry.guestBook).map { guestBook: GuestBookDto? ->
             GuestBookEntity(
                 guestBook!!
@@ -87,9 +87,9 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         )
     }
 
-    fun modify(modifiedBy: String?, entry: String?) {
+    fun modify(modifiedBy: String, entry: String) {
         entryEmbeddable.modify(modifiedBy, entry)
-        persistentDataEmbeddable.modifiedBy(modifiedBy!!)
+        persistentDataEmbeddable.modifiedBy(modifiedBy)
     }
 
     override fun copyWithoutId(): GuestBookEntryEntity {
@@ -133,9 +133,9 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     override val timeOfModification: LocalDateTime
         get() = persistentDataEmbeddable.timeOfModification
     val entry: String
-        get() = entryEmbeddable.fetchEntry()
+        get() = entryEmbeddable.notNullableEntry
     val creatorName: String
-        get() = entryEmbeddable.fetchCreatorName()
+        get() = entryEmbeddable.notNullableCreator
 
     companion object {
         @JvmStatic
