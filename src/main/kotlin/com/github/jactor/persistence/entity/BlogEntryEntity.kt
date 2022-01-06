@@ -33,7 +33,7 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private var persistentDataEmbeddable: PersistentDataEmbeddable? = null
+    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "BLOG_ID")
@@ -61,13 +61,13 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
                 blogDto!!
             )
         }.orElse(null)
-        entryEmbeddable = EntryEmbeddable(blogEntryDto.creatorName, blogEntryDto.entry)
+        entryEmbeddable = EntryEmbeddable(blogEntryDto.notNullableCreator, blogEntryDto.notNullableEntry)
         id = blogEntryDto.id
         persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryDto.persistentDto)
     }
 
     private fun copyBlog(): BlogEntity {
-        return blog!!.copyWithoutId()
+        return blog?.copyWithoutId() ?: throw IllegalStateException("No blog to copy!")
     }
 
     private fun copyEntry(): EntryEmbeddable {
@@ -86,9 +86,9 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
         return blogEntryDto
     }
 
-    fun modify(entry: String?, modifiedCreator: String?) {
+    fun modify(entry: String, modifiedCreator: String) {
         entryEmbeddable.modify(modifiedCreator, entry)
-        persistentDataEmbeddable!!.modifiedBy(modifiedCreator!!)
+        persistentDataEmbeddable.modifiedBy(modifiedCreator)
     }
 
     override fun copyWithoutId(): BlogEntryEntity {
@@ -98,7 +98,7 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
     }
 
     override fun modifiedBy(modifier: String): BlogEntryEntity {
-        persistentDataEmbeddable!!.modifiedBy(modifier)
+        persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
@@ -124,17 +124,17 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
     }
 
     override val createdBy: String
-        get() = persistentDataEmbeddable!!.createdBy
+        get() = persistentDataEmbeddable.createdBy
     override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfCreation
+        get() = persistentDataEmbeddable.timeOfCreation
     override val modifiedBy: String
-        get() = persistentDataEmbeddable!!.modifiedBy
+        get() = persistentDataEmbeddable.modifiedBy
     override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfModification
+        get() = persistentDataEmbeddable.timeOfModification
     val creatorName: String
-        get() = entryEmbeddable.fetchCreatorName()
+        get() = entryEmbeddable.notNullableCreator
     val entry: String
-        get() = entryEmbeddable.fetchEntry()
+        get() = entryEmbeddable.notNullableEntry
 
     companion object {
         @JvmStatic

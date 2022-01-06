@@ -14,7 +14,7 @@ class UserService(
     private val personService: PersonService,
     private val userRepository: UserRepository
 ) {
-    fun find(username: String?): Optional<UserInternalDto> {
+    fun find(username: String): Optional<UserInternalDto> {
         return userRepository.findByUsername(username).map { obj: UserEntity? -> obj?.asDto() }
     }
 
@@ -37,7 +37,9 @@ class UserService(
         val personDto = createUserCommand.fetchPersonDto()
         val personEntity = personService.createWhenNotExists(personDto)
         val userEntity = UserEntity(createUserCommand.fetchUserDto())
+
         userEntity.setPersonEntity(personEntity)
+
         return userEntity
     }
 
@@ -47,7 +49,7 @@ class UserService(
             .collect(Collectors.toList())
     }
 
-    fun isAlreadyPresent(username: String?): Boolean {
+    fun isAlreadyPresent(username: String): Boolean {
         return userRepository.findByUsername(username).isPresent
     }
 }

@@ -36,10 +36,9 @@ class JactorPersistence {
         }
     }
 
-    private data class SpringBeanNames(
-        private val beanNames: MutableList<String> = ArrayList(),
+    internal class SpringBeanNames {
+        private val beanNames: MutableList<String> = ArrayList()
         private val tenNames: MutableList<String> = ArrayList()
-    ) {
 
         fun add(name: String) {
             if (name.contains(".")) {
@@ -56,10 +55,10 @@ class JactorPersistence {
         }
 
         fun listBeanNames(): List<String> {
-          beanNames.add(tenNames.joinToString(", "))
-          tenNames.clear()
+            beanNames.add(tenNames.joinToString(", "))
+            tenNames.clear()
 
-          return beanNames
+            return beanNames
         }
     }
 }

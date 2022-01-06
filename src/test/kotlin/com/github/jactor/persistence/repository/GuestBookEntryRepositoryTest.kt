@@ -61,7 +61,7 @@ internal class GuestBookEntryRepositoryTest {
         entityManager.flush()
         entityManager.clear()
 
-        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook)
+        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook!!)
         assertThat(entriesByGuestBook).hasSize(1)
         val entry = entriesByGuestBook.iterator().next()
 
@@ -99,7 +99,7 @@ internal class GuestBookEntryRepositoryTest {
         entityManager.flush()
         entityManager.clear()
 
-        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook)
+        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook!!)
         assertThat(entriesByGuestBook).hasSize(1)
         entriesByGuestBook.iterator().next().modify("Willie", "On the road again")
 
@@ -108,7 +108,7 @@ internal class GuestBookEntryRepositoryTest {
         entityManager.flush()
         entityManager.clear()
 
-        val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook)
+        val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook!!)
         assertThat(modifiedEntriesByGuestBook).`as`("entries").hasSize(1)
         val entry = modifiedEntriesByGuestBook.iterator().next()
 

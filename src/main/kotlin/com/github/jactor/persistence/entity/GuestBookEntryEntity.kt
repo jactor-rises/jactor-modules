@@ -33,7 +33,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private var persistentDataEmbeddable: PersistentDataEmbeddable? = null
+    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "GUEST_BOOK_ID")
@@ -56,7 +56,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     }
 
     constructor(guestBookEntry: GuestBookEntryDto) {
-        entryEmbeddable = EntryEmbeddable(guestBookEntry.creatorName, guestBookEntry.entry)
+        entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
         guestBook = Optional.ofNullable(guestBookEntry.guestBook).map { guestBook: GuestBookDto? ->
             GuestBookEntity(
                 guestBook!!
@@ -80,16 +80,16 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
 
     private fun asDto(guestBook: GuestBookDto): GuestBookEntryDto {
         return GuestBookEntryDto(
-            persistentDataEmbeddable!!.asPersistentDto(id),
+            persistentDataEmbeddable.asPersistentDto(id),
             guestBook,
             entryEmbeddable.creatorName,
             entryEmbeddable.entry
         )
     }
 
-    fun modify(modifiedBy: String?, entry: String?) {
+    fun modify(modifiedBy: String, entry: String) {
         entryEmbeddable.modify(modifiedBy, entry)
-        persistentDataEmbeddable!!.modifiedBy(modifiedBy!!)
+        persistentDataEmbeddable.modifiedBy(modifiedBy)
     }
 
     override fun copyWithoutId(): GuestBookEntryEntity {
@@ -99,7 +99,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     }
 
     override fun modifiedBy(modifier: String): GuestBookEntryEntity {
-        persistentDataEmbeddable!!.modifiedBy(modifier)
+        persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
@@ -125,17 +125,17 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     }
 
     override val createdBy: String
-        get() = persistentDataEmbeddable!!.createdBy
+        get() = persistentDataEmbeddable.createdBy
     override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfCreation
+        get() = persistentDataEmbeddable.timeOfCreation
     override val modifiedBy: String
-        get() = persistentDataEmbeddable!!.modifiedBy
+        get() = persistentDataEmbeddable.modifiedBy
     override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfModification
+        get() = persistentDataEmbeddable.timeOfModification
     val entry: String
-        get() = entryEmbeddable.fetchEntry()
+        get() = entryEmbeddable.notNullableEntry
     val creatorName: String
-        get() = entryEmbeddable.fetchCreatorName()
+        get() = entryEmbeddable.notNullableCreator
 
     companion object {
         @JvmStatic
