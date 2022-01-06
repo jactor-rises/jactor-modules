@@ -5,5 +5,5 @@ import com.github.jactor.persistence.entity.GuestBookEntryEntity
 import org.springframework.data.repository.CrudRepository
 
 interface GuestBookEntryRepository : CrudRepository<GuestBookEntryEntity, Long?> {
-    fun findByGuestBook(guestBookEntity: GuestBookEntity?): List<GuestBookEntryEntity>
+    fun findByGuestBook(guestBookEntity: GuestBookEntity): List<GuestBookEntryEntity>
 }

@@ -5,7 +5,7 @@ import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.persistence.dto.Usertype
+import com.github.jactor.persistence.dto.UserInternalDto.Usertype
 import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser

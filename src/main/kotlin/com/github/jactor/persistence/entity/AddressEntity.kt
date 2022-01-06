@@ -48,7 +48,7 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     @Column(name = "ZIP_CODE", nullable = false)
     var zipCode: String? = null
 
-    constructor() {
+    @Suppress("UNUSED") constructor() {
         // used by entity manager
     }
 
@@ -133,7 +133,6 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
         get() = persistentDataEmbeddable!!.timeOfModification
 
     companion object {
-        @JvmStatic
         fun anAddress(addressInternalDto: AddressInternalDto): AddressEntity {
             return AddressEntity(addressInternalDto)
         }

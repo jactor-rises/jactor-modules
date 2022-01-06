@@ -16,32 +16,36 @@ import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGues
 import com.github.jactor.persistence.entity.PersonEntity.Companion.aPerson
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import org.aspectj.lang.JoinPoint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.whenever
 import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 internal class ModifierAspectTest {
+
     private val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
     private val modifierAspect = ModifierAspect()
     private val persistentDto = PersistentDto(null, "na", oneMinuteAgo, "na", oneMinuteAgo)
 
     @Mock
-    private val joinPointMock: JoinPoint? = null
+    private lateinit var joinPointMock: JoinPoint
 
     @Test
     fun `should modify timestamp on address when used`() {
         val addressWithoutId = anAddress(AddressInternalDto(persistentDto, AddressInternalDto()))
         val address = anAddress(AddressInternalDto(persistentDto, AddressInternalDto()))
         address.id = 1L
-        Mockito.`when`(joinPointMock!!.args).thenReturn(arrayOf<Any>(address, addressWithoutId))
+
+        whenever(joinPointMock.args).thenReturn(arrayOf<Any>(address, addressWithoutId))
+
         modifierAspect.modifyPersistentEntity(joinPointMock)
-        Assertions.assertThat(address.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
-        Assertions.assertThat(addressWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+
+        assertThat(address.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(addressWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
@@ -49,10 +53,13 @@ internal class ModifierAspectTest {
         val blogWithouId = aBlog(BlogDto(persistentDto, BlogDto()))
         val blog = aBlog(BlogDto(persistentDto, BlogDto()))
         blog.id = 1L
-        Mockito.`when`(joinPointMock!!.args).thenReturn(arrayOf<Any>(blog, blogWithouId))
+
+        whenever(joinPointMock.args).thenReturn(arrayOf<Any>(blog, blogWithouId))
+
         modifierAspect.modifyPersistentEntity(joinPointMock)
-        Assertions.assertThat(blog.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
-        Assertions.assertThat(blogWithouId.timeOfModification).isEqualTo(oneMinuteAgo)
+
+        assertThat(blog.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(blogWithouId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
@@ -60,10 +67,13 @@ internal class ModifierAspectTest {
         val blogEntryWithoutId = aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto()))
         val blogEntry = aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto()))
         blogEntry.id = 1L
-        Mockito.`when`(joinPointMock!!.args).thenReturn(arrayOf<Any>(blogEntry, blogEntryWithoutId))
+
+        whenever(joinPointMock.args).thenReturn(arrayOf<Any>(blogEntry, blogEntryWithoutId))
+
         modifierAspect.modifyPersistentEntity(joinPointMock)
-        Assertions.assertThat(blogEntry.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
-        Assertions.assertThat(blogEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+
+        assertThat(blogEntry.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(blogEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
@@ -71,10 +81,13 @@ internal class ModifierAspectTest {
         val guestBookWithoutId = aGuestBook(GuestBookDto(persistentDto, GuestBookDto()))
         val guestBook = aGuestBook(GuestBookDto(persistentDto, GuestBookDto()))
         guestBook.id = 1L
-        Mockito.`when`(joinPointMock!!.args).thenReturn(arrayOf<Any>(guestBook, guestBookWithoutId))
+
+        whenever(joinPointMock.args).thenReturn(arrayOf<Any>(guestBook, guestBookWithoutId))
+
         modifierAspect.modifyPersistentEntity(joinPointMock)
-        Assertions.assertThat(guestBook.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
-        Assertions.assertThat(guestBookWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+
+        assertThat(guestBook.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(guestBookWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
@@ -82,10 +95,13 @@ internal class ModifierAspectTest {
         val guestBookEntryWithoutId = aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto()))
         val guestBookEntry = aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto()))
         guestBookEntry.id = 1L
-        Mockito.`when`(joinPointMock!!.args).thenReturn(arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId))
+
+        whenever(joinPointMock.args).thenReturn(arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId))
+
         modifierAspect.modifyPersistentEntity(joinPointMock)
-        Assertions.assertThat(guestBookEntry.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
-        Assertions.assertThat(guestBookEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+
+        assertThat(guestBookEntry.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(guestBookEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
@@ -93,10 +109,13 @@ internal class ModifierAspectTest {
         val personWithoutId = aPerson(PersonInternalDto(persistentDto, PersonInternalDto()))
         val person = aPerson(PersonInternalDto(persistentDto, PersonInternalDto()))
         person.id = 1L
-        Mockito.`when`(joinPointMock!!.args).thenReturn(arrayOf<Any>(person, personWithoutId))
+
+        whenever(joinPointMock.args).thenReturn(arrayOf<Any>(person, personWithoutId))
+
         modifierAspect.modifyPersistentEntity(joinPointMock)
-        Assertions.assertThat(person.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
-        Assertions.assertThat(personWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+
+        assertThat(person.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(personWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
@@ -104,9 +123,12 @@ internal class ModifierAspectTest {
         val userWithoutId = aUser(UserInternalDto(persistentDto, UserInternalDto()))
         val user = aUser(UserInternalDto(persistentDto, UserInternalDto()))
         user.id = 1L
-        Mockito.`when`(joinPointMock!!.args).thenReturn(arrayOf<Any>(user, userWithoutId))
+
+        whenever(joinPointMock.args).thenReturn(arrayOf<Any>(user, userWithoutId))
+
         modifierAspect.modifyPersistentEntity(joinPointMock)
-        Assertions.assertThat(user.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
-        Assertions.assertThat(userWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+
+        assertThat(user.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(userWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 }

@@ -11,15 +11,13 @@ open class Now {
         private val SYNC = Any()
 
         @Volatile
-        private var instance: Now? = null
+        private lateinit var instance: Now
 
-        @JvmStatic
         fun asDateTime(): LocalDateTime {
-            return instance!!.nowAsDateTime()
+            return instance.nowAsDateTime()
         }
 
-        @JvmStatic
-        fun reset(instance: Now?) {
+        private fun reset(instance: Now) {
             synchronized(SYNC) { Companion.instance = instance }
         }
 
