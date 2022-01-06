@@ -28,7 +28,7 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private var persistentDataEmbeddable: PersistentDataEmbeddable? = null
+    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
 
     @Column(name = "ADDRESS_LINE_1", nullable = false)
     var addressLine1: String? = null
@@ -78,7 +78,7 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     }
 
     fun asDto(): AddressInternalDto {
-        return AddressInternalDto(persistentDataEmbeddable!!.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country)
+        return AddressInternalDto(persistentDataEmbeddable.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country)
     }
 
     override fun copyWithoutId(): AddressEntity {
@@ -88,7 +88,7 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     }
 
     override fun modifiedBy(modifier: String): AddressEntity {
-        persistentDataEmbeddable!!.modifiedBy(modifier)
+        persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
@@ -124,13 +124,13 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     }
 
     override val createdBy: String
-        get() = persistentDataEmbeddable!!.createdBy
+        get() = persistentDataEmbeddable.createdBy
     override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfCreation
+        get() = persistentDataEmbeddable.timeOfCreation
     override val modifiedBy: String
-        get() = persistentDataEmbeddable!!.modifiedBy
+        get() = persistentDataEmbeddable.modifiedBy
     override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable!!.timeOfModification
+        get() = persistentDataEmbeddable.timeOfModification
 
     companion object {
         fun anAddress(addressInternalDto: AddressInternalDto): AddressEntity {
