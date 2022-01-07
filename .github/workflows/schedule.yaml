@@ -3,6 +3,9 @@ on:
   schedule:
     - cron: '30 2 * * 1'
 
+env:
+  CUCUMBER_PUBLISH_ENABLED: true
+
 jobs:
 
   it:
