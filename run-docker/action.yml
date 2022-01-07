@@ -3,3 +3,4 @@ description: Runs the latest docker image of jactor-persistene
 runs:
   using: node12
   main: dist/index.js
+author: Tor Egil Jacobsen aka. jactor-rises

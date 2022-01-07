@@ -6,11 +6,11 @@
 
 ### What is this repository for?
 
-The main purpose is to learn about programming microservices (with REST and spring jpa). I also use github to get a deeper understanding of continuous
-integration/DevOps using github actions and docker running integration testing with cucumber and Kotlin, ie. GitOps (devops).
+The main purpose is to learn about programming microservices using Kotlin, (with REST and spring JPA). I also use GitHub to get a deeper understanding
+of continuous integration/DevOps using GitHub workflow/actions and docker running integration testing with cucumber and Kotlin.
 
-This project is a microservice dealing with persistence to an database using jpa (java persistence api) via spring-data-jpa and is a microservice to
-use under `com.github.jactor.percistence` (formerly as part of the archived project `jactor-rises`)
+This project is a microservice dealing with persistence to a database using JPA (java persistence api) via spring-data-jpa and is a microservice to
+use under `com.github.jactor.percistence` (formerly as part of the archived project [jactor-rises](https://github.com/jactor-rises/jactor-rises))
 
 ### Set up
 
@@ -23,7 +23,7 @@ use under `com.github.jactor.percistence` (formerly as part of the archived proj
 
 ### Build
 
-This is application is build with with [maven](https://maven.apache.org).
+This is application is build with [maven](https://maven.apache.org).
 
 From the root of the source code:
 ```
