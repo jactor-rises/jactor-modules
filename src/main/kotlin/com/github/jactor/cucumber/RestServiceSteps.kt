@@ -7,6 +7,7 @@ import io.cucumber.java8.No
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.http.HttpStatus
 
+@Suppress("unused") // brukes av cucumber
 class RestServiceSteps : No {
 
     init {
