@@ -6,11 +6,10 @@ import org.springframework.http.ResponseEntity
 import java.net.HttpURLConnection
 import java.net.URL
 
-data class Application(val contextUrl: String, var completeUrl: String?) {
-    constructor(contextUrl: String) : this(contextUrl, null)
+data class Application(val contextUrl: String, var completeUrl: String? = null) {
 
     fun doGet() {
-        val url = URL("$contextUrl${if (completeUrl != null) completeUrl else ""}")
+        val url = URL("$contextUrl${completeUrl ?: throw IllegalStateException("No completeUrl for $this")}")
         val connection = url.openConnection() as HttpURLConnection
 
         connection.requestMethod = "GET"
