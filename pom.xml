@@ -8,7 +8,6 @@
   <packaging>jar</packaging>
 
   <properties>
-    <cluecumber.version>2.3.3</cluecumber.version>
     <cucumber.version>7.1.0</cucumber.version>
     <kotlin.version>1.6.10</kotlin.version>
     <spring-boot.version>2.6.2</spring-boot.version>
@@ -134,36 +133,6 @@
           <scope>runtime</scope>
         </dependency>
       </dependencies>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.trivago.rta</groupId>
-            <artifactId>cluecumber-report-plugin</artifactId>
-            <version>${cluecumber.version}</version>
-            <executions>
-              <execution>
-                <id>report</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>reporting</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <customPageTitle>jactor-cucumber</customPageTitle>
-              <customParameters>
-                <Tittel>Integrasjonstest for jactor-persistence</Tittel>
-                <URL>https://github.com/jactor-rises/jactor-persistence</URL>
-                <_avsnitt.a>Integrasjonstester gjort ifm. utvikling av jactor-persistence</_avsnitt.a>
-              </customParameters>
-              <sourceJsonReportDirectory>${project.build.directory}/cucumber-report</sourceJsonReportDirectory>
-              <generatedHtmlReportDirectory>${project.build.directory}/generated-report</generatedHtmlReportDirectory>
-              <failScenariosOnPendingOrUndefinedSteps>true</failScenariosOnPendingOrUndefinedSteps>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 
@@ -177,8 +146,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <release>17</release>
         </configuration>
       </plugin>
 

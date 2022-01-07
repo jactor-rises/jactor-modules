@@ -1,0 +1,36 @@
+name: run tests
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+
+  it:
+    name: cucumber integration testing
+    runs-on: ubuntu-latest
+
+    env:
+      CUCUMBER_PUBLISH_ENABLED: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - uses: jactor-rises/jactor-persistence/run-docker@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE: ghcr.io/jactor-rises/jactor-persistence:latest
+      - run: mvn versions:display-property-updates
+      - run: mvn test -P cucumber
+
+  git:
+    needs: it
+    name: Bump dev version
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: jactor-rises/actions/git-tag-snapshot@v2-git-tag-snapshot
