@@ -31,10 +31,10 @@ data class RestService(val baseUrl: String, var url: String = "") {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
 
-        try {
-            responseEntity = restTemplate.exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
+        responseEntity = try {
+            restTemplate.exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
         } catch (e: HttpClientErrorException) {
-            responseEntity = ResponseEntity(e.statusCode)
+            ResponseEntity(e.statusCode)
         }
     }
 

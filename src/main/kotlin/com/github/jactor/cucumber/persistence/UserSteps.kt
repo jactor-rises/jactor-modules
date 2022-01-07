@@ -7,6 +7,7 @@ import com.github.jactor.cucumber.UniqueKey
 import io.cucumber.java8.No
 import org.assertj.core.api.Assertions.assertThat
 
+@Suppress("unused") // brukes av cucumber
 class UserSteps : No {
     init {
         Når("en post gjøres for unik nøkkel {string} med body:") { keyToBeUnique: String, body: String ->
