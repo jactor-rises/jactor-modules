@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  it:
+  cucumber:
     name: cucumber integration testing
     runs-on: ubuntu-latest
 
@@ -21,12 +21,12 @@ jobs:
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE: ghcr.io/jactor-rises/jactor-persistence:latest
+          IMAGE: ghcr.io/jactor-rises/jactor-persistence
       - run: mvn versions:display-property-updates
       - run: mvn test -P cucumber
 
   git:
-    needs: it
+    needs: cucumber
     name: Bump dev version
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
