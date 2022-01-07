@@ -11,9 +11,6 @@ Utføring av testing gjøres med kommandoen `mvn test -P cucumber` i rotkataloge
 
 ## Test rapportering
 
-Etter at testing er gjennomført så kan man lage en rapport som blir tilgjengelig i
-`target/generated-report/index.html`. Dette gjøres av en maven-plugin:
-```
-mvn cluecumber-report:reporting
-```
-Man kan også gjøre både testing og rapportgenerering i et steg med `mvn install -P cucumber`
+Når testene kjøres av prosjektets workflows vil en [cucumber report](https://reports.cucumber.io) bli generert. Link til denne finner du under tabben
+"Action", workflows: "run tests" eller "scheduled integration tests" og på bunnen av utskriften til steget `Run mvn test -P cucumber`. Du kan også
+publisere testresulater fra lokal kjøring ved å sette miljøvariabelen `CUCUMBER_PUBLISH_ENABLED=true`
