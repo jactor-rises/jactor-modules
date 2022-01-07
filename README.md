@@ -1,7 +1,7 @@
 # jactor-cucumber
 Integrsjonstesting av jactor-persistence
 
-[![run tests](https://github.com/jactor-rises/jactor-cucumber/actions/workflows/tests.yaml/badge.svg)](https://github.com/jactor-rises/jactor-cucumber/actions/workflows/version.yaml)
+[![run tests](https://github.com/jactor-rises/jactor-cucumber/actions/workflows/tests.yaml/badge.svg)](https://github.com/jactor-rises/jactor-cucumber/actions/workflows/tests.yaml)
 [![scheduled integration tests](https://github.com/jactor-rises/jactor-cucumber/actions/workflows/schedule.yaml/badge.svg)](https://github.com/jactor-rises/jactor-cucumber/actions/workflows/schedule.yaml)
 
 ## Integrasjonstesting med maven
