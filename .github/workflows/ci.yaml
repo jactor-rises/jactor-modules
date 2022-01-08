@@ -37,7 +37,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           docker image build --tag ${IMAGE} .
-          docker tag ${IMAGE} "ghcr.io/${GITHUB_REPOSITORY}:$(git rev-parse --short HEAD)"
+          CONTAINER_ID=$(docker inspect --format="{{.Id}}" ${IMAGE})
+          docker tag ${CONTAINER_ID} "ghcr.io/${GITHUB_REPOSITORY}:$(git rev-parse --short HEAD)"
           echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
           docker image push ${IMAGE}
 
