@@ -1,5 +1,5 @@
 name: deploy maven artifact
-on: [pull_request, push]
+on: push
 
 jobs:
 
@@ -23,16 +23,13 @@ jobs:
       - uses: jactor-rises/actions/maven-verify-dependencies@v2-maven-verify-dependencies
       - run: mvn -B install -e
       - uses: jactor-rises/actions/maven-prepare-deploy@v1-maven-prepare-deploy
-        if: github.event_name != 'pull_request'
         id: prepare
       - uses: jactor-rises/actions/maven-verify-deploy@v1-maven-verify-deploy
-        if: github.event_name != 'pull_request'
         id: verify
         with:
           changelog_file: README.md
           release_version: ${{ steps.prepare.outputs.release_version }}
       - uses: jactor-rises/actions/maven-deploy@v1-maven-deploy
-        if: github.event_name != 'pull_request'
         with:
           is_release_candidate: ${{ steps.verify.outputs.is_release_candidate }}
           new_snapshot_version: ${{ steps.prepare.outputs.new_snapshot_version }}
@@ -42,7 +39,7 @@ jobs:
       - uses: jactor-rises/actions/git-commit-n-tag@v1-git-commit-n-tag
         if: github.event_name != 'pull_request'
         with:
-          commit_message: "[skip actions] Bumped to new SNAPSHOT version after release of version ${{ steps.prepare.outputs.release_version }}"
+          commit_message: "[skip actions] Bumped to new SNAPSHOT version after release of version${{ steps.prepare.outputs.release_version }}"
           tag_message: Released new version - ${{ steps.prepare.outputs.release_version }}
           pattern: pom.xml
           is_release_candidate: ${{ steps.verify.outputs.is_release_candidate }}
