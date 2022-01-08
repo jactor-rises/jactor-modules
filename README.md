@@ -7,7 +7,7 @@
 
 The main purpose is to learn about programming microservices using another microservice for persistence.
 
-(https://github.com/jactor-rises/jactor-persistence)his project is consisted of a microsevice for web content which use another microservice in order
+This project is consisted of a microsevice for web content which use another microservice in order
 to persist its data through a REST api.
 
 ### Set up
