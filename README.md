@@ -1,4 +1,4 @@
-# jactor-web #
+'# jactor-web #
 
 [![continuous integration](https://github.com/jactor-rises/jactor-web/actions/workflows/ci.yaml/badge.svg)](https://github.com/jactor-rises/jactor-web/actions/workflows/ci.yaml)
 [![verify pull request](https://github.com/jactor-rises/jactor-web/actions/workflows/pr.yaml/badge.svg)](https://github.com/jactor-rises/jactor-web/actions/workflows/pr.yaml)
@@ -7,12 +7,14 @@
 
 The main purpose is to learn about programming microservices using another microservice for persistence.
 
-This project is consisted of a microsevice for web content which use another microservice in order to persist its data through a REST api.
+(https://github.com/jactor-rises/jactor-persistence)his project is consisted of a microsevice for web content which use another microservice in order
+to persist its data through a REST api.
 
 ### Set up
 
 * a spring-boot application is created when building (`mvn install`)
-    * `jactor-web` which is a web application on apache tomcat and which is dependent on `jactor-persistence` to handle persistence
+    * `jactor-web` which is a web application on apache tomcat and which is dependent
+      on [jactor-persistence](https://github.com/jactor-rises/jactor-persistence)` to handle persistence
     * also start `jactor-persistence` in order to have a working persistence layer for the application.
 * after started `jactor-web`, point a browser to
   <http://localhost:8080/jactor-web/>
