@@ -1,8 +1,5 @@
 name: continuous integration
-on:
-  push:
-    branches:
-      - '**'
+on: [pull_request, push]
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:latest
@@ -11,7 +8,9 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: Build and test with maven, then create and publish docker image
+    name: Build and create, then publish docker image
+
+    if: github.ref != 'refs/heads/main'
 
     steps:
       - run: env
@@ -46,6 +45,7 @@ jobs:
     needs: build
     name: Integration tests with cucumber
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
         with:
@@ -67,7 +67,6 @@ jobs:
         run: cd jactor-cucumber && mvn test -P cucumber
 
   git:
-    needs: cucumber
     if: github.ref == 'refs/heads/main'
     name: Bump dev version
     runs-on: ubuntu-latest
