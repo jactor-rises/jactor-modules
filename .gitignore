@@ -1,6 +1,20 @@
+ # intellij
 .idea/
-target/
-.java-version
 *.iml
+
+# maven
+target/
+
+# gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# misc
+.java-version
 /**/.DS_Store
 /run-docker/node_modules/@actions/
+/out
+@

@@ -15,7 +15,7 @@ use under `com.github.jactor.percistence` (formerly as part of the archived proj
 ### Set up
 
 * a spring-boot 2 application
-    * build with [maven](https://maven.apache.org).
+    * build with [gradle](https://gradle.org).
     * is using [h2](http://h2database.com) (in-memory database)
     * run it with docker, spring-boot, or as any other java-application
 * this application is documented with swagger. After startup, use link:
@@ -23,22 +23,22 @@ use under `com.github.jactor.percistence` (formerly as part of the archived proj
 
 ### Build
 
-This is application is build with [maven](https://maven.apache.org).
+This is application is build with [gradle](https://gradle.org).
 
 From the root of the source code:
 ```
-mvn clean install
+./gradlew build
 ```
 ### Run
 All commands are being executed from the root of the source code.
 
-Run it with [maven](https://maven.apache.org):
+Run it with [gradle](https://gradle.org):
 ```
-mvn spring-boot:run
+./gradlew bootRun
 ```
 After a valid build one can execute the generated jar file as plain java:
 ```
-java -jar target/jactor-persistence-<version>-SNAPSHOT-app.jar
+java -jar build/lib/jactor-persistence-<version>-SNAPSHOT.jar
 ```
 or build and run an image with [docker](https://www.docker.com):
 ```
@@ -48,8 +48,8 @@ docker run -p 1099:1099 jactor-persistence
 ### Some technologies used
 
 * [spring-boot 2.6.x](https://spring.io/projects/spring-boot)
-    * with spring-data-jpa
-    * with spring mvc
+    * with [spring-data-jpa](https://spring.io/projects/spring-data-jpa)
+    * with [spring-webflow](https://spring.io/projects/spring-webflow) (mvc)
 * [docker](https://www.docker.com)
 * [h2](http://h2database.com)
 * [flyway](https://flywaydb.org)
