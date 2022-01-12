@@ -32,7 +32,7 @@ class BlogController(private val blogService: BlogService) {
     )
     @GetMapping("/{id}")
     operator fun get(@PathVariable("id") blogId: Long): ResponseEntity<BlogDto> {
-        return blogService.find(blogId).map { blogDto: BlogDto? -> ResponseEntity(blogDto, HttpStatus.OK) }
+        return blogService.find(blogId).map { blogDto: BlogDto -> ResponseEntity(blogDto, HttpStatus.OK) }
             .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
     }
 
@@ -45,7 +45,7 @@ class BlogController(private val blogService: BlogService) {
     )
     @GetMapping("/entry/{id}")
     fun getEntryById(@PathVariable("id") blogEntryId: Long): ResponseEntity<BlogEntryDto> {
-        return blogService.findEntryBy(blogEntryId).map { blogEntryDto: BlogEntryDto? -> ResponseEntity(blogEntryDto, HttpStatus.OK) }
+        return blogService.findEntryBy(blogEntryId).map { blogEntryDto: BlogEntryDto -> ResponseEntity(blogEntryDto, HttpStatus.OK) }
             .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
     }
 

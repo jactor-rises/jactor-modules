@@ -9,19 +9,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - uses: actions/setup-java@v1
+      - uses: actions/cache@v2
         with:
-          java-version: 17
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - run: env
-      - uses: jactor-rises/actions/maven-setup@v2-maven-setup
-        with:
-          repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: mvn -B install -e
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+      - run: ./gradlew build

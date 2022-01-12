@@ -31,7 +31,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     )
     @GetMapping("/{id}")
     operator fun get(@PathVariable("id") id: Long): ResponseEntity<GuestBookDto> {
-        return guestBookService.find(id).map { guestBookDto: GuestBookDto? -> ResponseEntity(guestBookDto, HttpStatus.OK) }
+        return guestBookService.find(id).map { guestBookDto: GuestBookDto -> ResponseEntity(guestBookDto, HttpStatus.OK) }
             .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
     }
 
@@ -44,7 +44,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     )
     @GetMapping("/entry/{id}")
     fun getEntry(@PathVariable("id") id: Long): ResponseEntity<GuestBookEntryDto> {
-        return guestBookService.findEntry(id).map { guestBookDto: GuestBookEntryDto? -> ResponseEntity(guestBookDto, HttpStatus.OK) }
+        return guestBookService.findEntry(id).map { guestBookDto: GuestBookEntryDto -> ResponseEntity(guestBookDto, HttpStatus.OK) }
             .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
     }
 
