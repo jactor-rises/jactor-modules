@@ -8,30 +8,30 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: Build and create, then publish docker image
+    name: Build, create, and then publish
 
     if: github.ref != 'refs/heads/main'
 
     steps:
       - run: env
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/cache@v2
         with:
-          java-version: 17
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - uses: jactor-rises/actions/maven-setup@v2-maven-setup
-        with:
-          repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: jactor-rises/actions/maven-verify-dependencies@v2-maven-verify-dependencies
-      - run: mvn -B install -e
-      - name: Build and publish Docker image
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+      - run: ./gradlew build # build before verification so that downloads are visible in the console
+      - name: verify dependencies
+        run: |
+          COUNT=$(./gradlew -q dependencies | grep -c SNAPSHOT || true)
+
+          echo "Found $COUNT SNAPSHOT dependencies"
+
+          if [ "$COUNT" -gt 0 ]
+          then
+            >&2 echo ::error No SNAPSHOT dependencies allowed
+            exit 1;
+          fi
+      - name: build and publish docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
