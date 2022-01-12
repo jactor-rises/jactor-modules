@@ -1,6 +1,7 @@
 plugins {
     id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("com.github.ben-manes.versions") version ("0.41.0")
 
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
@@ -15,7 +16,7 @@ dependencies {
 
     // --- dependencies ---
 
-    implementation("com.github.jactor-rises:jactor-shared:0.3.3")
+    implementation("com.github.jactor-rises:jactor-shared:0.3.4")
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
     // database
