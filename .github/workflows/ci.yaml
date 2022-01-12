@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Build, create, and then publish
 
-    if: github.ref != 'refs/heads/main'
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
