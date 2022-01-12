@@ -13,14 +13,13 @@ jobs:
     if: github.ref != 'refs/heads/main'
 
     steps:
-      - run: env
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
-          path: ~/.gradle/wrapper
+          path: ~/.gradle
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - run: ./gradlew build # build before verification so that downloads are visible in the console
-      - name: verify dependencies
+      - run: ./gradlew build
+      - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q dependencies | grep -c SNAPSHOT || true)
 
@@ -31,7 +30,7 @@ jobs:
             >&2 echo ::error No SNAPSHOT dependencies allowed
             exit 1;
           fi
-      - name: build and publish docker image
+      - name: Build and publish docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -51,15 +50,6 @@ jobs:
         with:
           repository: jactor-rises/jactor-cucumber
           path: jactor-cucumber
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 17
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/jactor-cucumber/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
