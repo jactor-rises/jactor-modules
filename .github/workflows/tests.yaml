@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Fetch current snapshot tag
+      - name: Fetch current semantic version
         id: current
         run: |
           git fetch --tags
