@@ -28,9 +28,10 @@ jobs:
       - run: mvn test -P cucumber
 
   git:
+    needs: cucumber
     name: Bump dev version
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/feature/semver'
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - uses: actions/checkout@v2
@@ -72,7 +73,7 @@ jobs:
           git config --global user.email "$AUTHOR_EMAIL"
           git config --global user.name "$AUTHOR_NAME"
           git tag -a snapshot-$SEMANTIC_VERSION_NEW -m 'New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT'
-          # git push --tags
+          git push --tags
         env:
           AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
           AUTHOR_NAME: ${{ steps.metadata.outputs.name }}
