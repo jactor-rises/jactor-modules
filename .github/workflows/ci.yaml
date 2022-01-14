@@ -6,6 +6,14 @@ env:
 
 jobs:
 
+  env:
+    runs-on: ubuntu-latest
+    name: debug environment
+
+    steps:
+      - run: cat $GITHUB_EVENT_PATH
+      - run: env
+
   build:
     runs-on: ubuntu-latest
     name: Build, create, and then publish
@@ -22,7 +30,7 @@ jobs:
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-      - run: ./gradlew build
+      - run: ./gradlew build -x test
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q dependencies | grep -c SNAPSHOT || true)
@@ -34,6 +42,7 @@ jobs:
             >&2 echo ::error No SNAPSHOT dependencies allowed
             exit 1;
           fi
+      - run: ./gradlew test --tests "*"
       - name: Build and publish docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -76,4 +85,50 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: jactor-rises/actions/git-tag-snapshot@v2-git-tag-snapshot
+      - name: Fetch current snapshot tag
+        id: current
+        run: |
+          git fetch --tags
+          CURRENT_SEMVER=$(git tag --sort=-v:refname --list "snapshot-[0-9]*" | head -n 1 | sed 's;snapshot-;;')
+          echo ::set-output name=semver::$CURRENT_SEMVER
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
+      - name: Setup Gradle Wrapper Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+      - name: Fetch current major/minor release
+        id: version
+        run: |
+          MAJOR_MINOR=$(./gradlew properties | grep version: | grep SNAPSHOT | awk '{print $2}' | sed 's;.x-SNAPSHOT;;')
+          echo ::set-output name=toPatch::$MAJOR_MINOR
+      - name: Create new semantic version
+        id: semver
+        run: |
+          build/scripts/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
+          echo ::set-output name=new::$(cat newSemVer)
+        env:
+          CURRENT_SEMANTIC_VERSION: ${{ steps.current.outputs.semver }}
+          PATCH_MAJOR_MINOR_VERSION: ${{ steps.version.outputs.toPatch }}
+      - name: Fetch github event metadata
+        id: metadata
+        run: |
+          echo ::set-output name=email::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)
+          echo ::set-output name=name::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)
+      - name: Tag new snapshot semantic version
+        run: |
+          git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git config --global user.email "$AUTHOR_EMAIL"
+          git config --global user.name "$AUTHOR_NAME"
+          git tag -a snapshot-$SEMANTIC_VERSION_NEW -m 'New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT'
+        env:
+          AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}}
+          AUTHOR_NAME: ${{ steps.metadata.outputs.name }}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEMANTIC_VERSION_CURRENT: ${{ steps.current.outputs.semver }}
+          SEMANTIC_VERSION_NEW: ${{ steps.semver.outputs.new }}
+
