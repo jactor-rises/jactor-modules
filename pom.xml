@@ -4,18 +4,18 @@
 
   <groupId>com.github.jactor.cucumber</groupId>
   <artifactId>jactor-cucumber</artifactId>
-  <version>1.0.48-SNAPSHOT</version>
+  <version>1.0.x-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
-    <cucumber.version>7.2.1</cucumber.version>
+    <cucumber.version>7.2.3</cucumber.version>
     <kotlin.version>1.6.10</kotlin.version>
     <spring-boot.version>2.6.2</spring-boot.version>
 
     <!-- build -->
-    <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
+    <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
     <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
