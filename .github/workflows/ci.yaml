@@ -6,6 +6,14 @@ env:
 
 jobs:
 
+  env:
+    runs-on: ubuntu-latest
+    name: debug environment
+
+    steps:
+      - run: cat $GITHUB_EVENT_PATH
+      - run: env
+
   build:
     runs-on: ubuntu-latest
     name: Build, create, and then publish
@@ -101,12 +109,26 @@ jobs:
       - name: Create new semantic version
         id: semver
         run: |
-          .github/scripts/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$PATCH_MAJOR_MINOR_VERSION
+          .github/scripts/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
           echo ::set-output name=new::$(cat newSemVer)
         env:
           CURRENT_SEMANTIC_VERSION: ${{ steps.current.outputs.semver }}
           PATCH_MAJOR_MINOR_VERSION: ${{ steps.version.outputs.toPatch }}
-          IS_DEBUG: true
-      - run: echo $CREATED_SEMVER_MESSAGE
+      - name: Fetch github event metadata
+        id: metadata
+        run: |
+          echo ::set-output name=email::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)
+          echo ::set-output name=name::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)
+      - name: Tag new snapshot semantic version
+        run: |
+          git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git config --global user.email "$AUTHOR_EMAIL"
+          git config --global user.name "$AUTHOR_NAME"
+          echo "git tag -a snapshot-$SEMANTIC_VERSION_NEW -m 'New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT'"
         env:
-          CREATED_SEMVER_MESSAGE: "created new semantic version ${{ steps.semver.outputs.new }}"
+          AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}}
+          AUTHOR_NAME: ${{ steps.metadata.outputs.name }}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEMANTIC_VERSION_CURRENT: ${{ steps.current.outputs.semver }}
+          SEMANTIC_VERSION_NEW: ${{ steps.semver.outputs.new }}
+
