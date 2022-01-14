@@ -53,7 +53,8 @@ jobs:
       - run: mvn test -e -Dtest=UserConsumerIntegrationTest
 
   git:
-    if: github.ref == 'refs/heads/feature/semver'
+    needs: [build, integration]
+    if: github.ref == 'refs/heads/main'
     name: Tag new snapshot version
     runs-on: ubuntu-latest
 
@@ -97,7 +98,7 @@ jobs:
           git config --global user.email "$AUTHOR_EMAIL"
           git config --global user.name "$AUTHOR_NAME"
           git tag -a snapshot-$SEMANTIC_VERSION_NEW -m 'New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT'
-          # git push --tags
+          git push --tags
         env:
           AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
           AUTHOR_NAME: ${{ steps.metadata.outputs.name }}
