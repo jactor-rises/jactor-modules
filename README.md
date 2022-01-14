@@ -7,8 +7,7 @@
 
 The main purpose is to learn about programming microservices using another microservice for persistence.
 
-This project is consisted of a microsevice for web content which use another microservice in order
-to persist its data through a REST api.
+This project is consisted of a microservice for web content which use another microservice in order to persist its data through a REST api.
 
 ### Set up
 
