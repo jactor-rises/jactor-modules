@@ -109,7 +109,7 @@ jobs:
       - name: Create new semantic version
         id: semver
         run: |
-          build/scripts/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
+          workflow/scripts/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
           echo ::set-output name=new::$(cat newSemVer)
         env:
           CURRENT_SEMANTIC_VERSION: ${{ steps.current.outputs.semver }}

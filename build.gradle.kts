@@ -54,4 +54,5 @@ tasks.compileKotlin {
 
 tasks.test {
     useJUnitPlatform()
+    testLogging.showStandardStreams = true
 }
