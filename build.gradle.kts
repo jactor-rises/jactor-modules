@@ -1,7 +1,7 @@
 plugins {
     id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.github.ben-manes.versions") version ("0.41.0")
+    id("com.github.ben-manes.versions") version "0.41.0"
 
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
@@ -20,7 +20,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
     // database
-    implementation("org.flywaydb:flyway-core:8.0.5")
+    implementation("org.flywaydb:flyway-core:8.4.1")
     runtimeOnly("com.h2database:h2:1.4.200")
 
     // swagger
