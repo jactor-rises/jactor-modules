@@ -20,16 +20,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
+      - uses: actions/setup-java@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          distribution: temurin
+          java-version: 17
+          cache: gradle
       - run: ./gradlew build -x test
       - name: Verify dependencies
         run: |
@@ -67,10 +62,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/jactor-cucumber/pom.xml') }}
+          cache: maven
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -91,16 +83,11 @@ jobs:
           git fetch --tags
           CURRENT_SEMVER=$(git tag --sort=-v:refname --list "snapshot-[0-9]*" | head -n 1 | sed 's;snapshot-;;')
           echo ::set-output name=semver::$CURRENT_SEMVER
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
+      - uses: actions/setup-java@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          distribution: temurin
+          java-version: 17
+          cache: gradle
       - name: Fetch current major/minor release
         id: version
         run: |
