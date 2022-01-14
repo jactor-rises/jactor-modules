@@ -7,13 +7,8 @@ target/
 
 # gradle
 .gradle
-/build/bootJarMainClassName
-/build/classes/kotlin/main/
-/build/kotlin/
-/build/libs/
-/build/resources/main/
-/build/tmp/
-!gradle/wrapper/gradle-wrapper.jar
+/build/
+gradle/wrapper/gradle-wrapper.jar
 
 # misc
 .java-version
