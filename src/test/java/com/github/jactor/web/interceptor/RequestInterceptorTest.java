@@ -4,6 +4,7 @@ import static com.github.jactor.web.interceptor.RequestInterceptor.CHOSEN_LANGUA
 import static com.github.jactor.web.interceptor.RequestInterceptor.CURRENT_REQUEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.github.jactor.web.Language;
@@ -13,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,13 +47,13 @@ class RequestInterceptorTest {
     when(httpServletRequestMock.getRequestURI()).thenReturn("/somewhere");
     when(httpServletRequestMock.getQueryString()).thenReturn("out=there&lang=something&another=param");
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Map<String, Object> model = modelAndView.getModel();
 
     var currentRequest = Optional.ofNullable(model.get(CURRENT_REQUEST));
 
-    assertThat(currentRequest).hasValueSatisfying(request-> assertAll(
+    assertThat(currentRequest).hasValueSatisfying(request -> assertAll(
         () -> assertThat(request).isInstanceOf(Request.class),
         () -> assertThat((Request) request).extracting(Request::getCurrentUrl).isEqualTo("/somewhere?out=there&another=param")
     ));
@@ -63,7 +65,7 @@ class RequestInterceptorTest {
     LocaleContextHolder.setLocale(new Locale("no"));
     ModelAndView modelAndView = new ModelAndView();
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -79,7 +81,7 @@ class RequestInterceptorTest {
     LocaleContextHolder.setLocale(new Locale("en"));
     ModelAndView modelAndView = new ModelAndView();
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -95,7 +97,7 @@ class RequestInterceptorTest {
     LocaleContextHolder.setLocale(new Locale("th"));
     ModelAndView modelAndView = new ModelAndView();
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -110,7 +112,7 @@ class RequestInterceptorTest {
   void shouldAddEnglishLanguageToModelWhenLocaleIsUnsupported() {
     ModelAndView modelAndView = new ModelAndView();
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -128,7 +130,7 @@ class RequestInterceptorTest {
 
     when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=th");
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -146,7 +148,7 @@ class RequestInterceptorTest {
 
     when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=en");
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -164,7 +166,7 @@ class RequestInterceptorTest {
 
     when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=no");
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -182,7 +184,7 @@ class RequestInterceptorTest {
 
     when(httpServletRequestMock.getQueryString()).thenReturn("select=something&lang=fi");
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Language language = (Language) modelAndView.getModel().getOrDefault(CHOSEN_LANGUAGE, new Language(new Locale("svada"), "there"));
 
@@ -198,13 +200,13 @@ class RequestInterceptorTest {
     ModelAndView modelAndView = new ModelAndView();
     when(httpServletRequestMock.getRequestURI()).thenReturn("/user");
 
-    requestInterceptorToTest.postHandle(httpServletRequestMock, null, null, modelAndView);
+    requestInterceptorToTest.postHandle(httpServletRequestMock, mock(HttpServletResponse.class), mock(Object.class), modelAndView);
 
     Map<String, Object> model = modelAndView.getModel();
 
     var currentRequest = Optional.ofNullable(model.get(CURRENT_REQUEST));
 
-    assertThat(currentRequest).hasValueSatisfying(request-> assertAll(
+    assertThat(currentRequest).hasValueSatisfying(request -> assertAll(
         () -> assertThat(request).isInstanceOf(Request.class),
         () -> assertThat((Request) request).extracting(Request::getChosenView).isEqualTo("user")
     ));
