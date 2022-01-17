@@ -61,7 +61,7 @@ class HomeControllerTest {
           HomePageModel homePageModel = (HomePageModel) model.get("homepage");
 
           assertAll(
-              () -> assertThat(homePageModel.getTechnologies()).as("technologies").hasSize(9)
+              () -> assertThat(homePageModel.getTechnologies()).as("technologies").hasSize(10)
           );
         }
     );
