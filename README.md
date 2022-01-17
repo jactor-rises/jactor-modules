@@ -20,8 +20,9 @@ This project is consisted of a microservice for web content which use another mi
 
 ### Disclaimer
 
-This application is a playground and is made to demonstrate the working of `jactor-persistence` and to gain expertise in mocroservices and kotlin
-programming language. It is therefore simple and not complete. And I just want to mention: I am not a front-end programmer.
+This application is a playground and is made to demonstrate the working of `jactor-persistence` and to gain expertise in microservices and kotlin
+programming language. It is therefore simple and not complete. And I just want to mention: I am not a front-end programmer and is only present for
+interactive use of jactor-persistence
 
 * This microservice is tested using `jactor-persistence`
 * `Blog`s and `GuestBook`s is only persisted and present in `jactor-persistence` and tested through integration tests there.
