@@ -1,5 +1,6 @@
 package com.github.jactor.web;
 
+import com.github.jactor.web.consumer.DefaultUserConsumer;
 import com.github.jactor.web.consumer.UserConsumer;
 import com.github.jactor.web.menu.Menu;
 import com.github.jactor.web.menu.MenuFacade;
@@ -31,10 +32,10 @@ public class JactorWebBeans {
         .addItem(new MenuItem("tip", contextPath + "/user?choose=tip", "menu.users.tip.desc"));
   }
 
-  @Bean
+  @Bean(name = "userConsumer")
   public UserConsumer userConsumer(RestTemplate restTemplate, @Value("${jactor-persistence.url.root}") String rootUrlPersistence) {
     restTemplate.setUriTemplateHandler(new RootUriTemplateHandler(rootUrlPersistence));
-    return new UserConsumer(restTemplate);
+    return new DefaultUserConsumer(restTemplate);
   }
 
   @Bean
