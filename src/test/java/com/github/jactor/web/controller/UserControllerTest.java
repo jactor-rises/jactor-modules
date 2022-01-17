@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,7 +40,8 @@ class UserControllerTest {
 
   private MockMvc mockMvc;
   @MockBean
-  private UserConsumer userRestServiceMock;
+  @Qualifier("userConsumer")
+  private UserConsumer userConsumerMock;
   @Autowired
   private MenuFacade menuFacade;
   @Value("${server.servlet.context-path}")
@@ -55,7 +57,7 @@ class UserControllerTest {
     internalResourceViewResolver.setPrefix(prefix);
     internalResourceViewResolver.setSuffix(suffix);
 
-    mockMvc = standaloneSetup(new UserController(userRestServiceMock, menuFacade, contextPath))
+    mockMvc = standaloneSetup(new UserController(userConsumerMock, menuFacade, contextPath))
         .setViewResolvers(internalResourceViewResolver)
         .build();
   }
@@ -65,7 +67,7 @@ class UserControllerTest {
   void shouldNotFetchUserByUsernameIfTheUsernameIsMissongFromTheRequest() throws Exception {
     mockMvc.perform(get(USER_ENDPOINT)).andExpect(status().isOk());
 
-    verify(userRestServiceMock, never()).find(anyString());
+    verify(userConsumerMock, never()).find(anyString());
   }
 
   @Test
@@ -75,13 +77,13 @@ class UserControllerTest {
         get(USER_ENDPOINT).requestAttr(REQUEST_USER, " \n \t")
     ).andExpect(status().isOk());
 
-    verify(userRestServiceMock, never()).find(anyString());
+    verify(userConsumerMock, never()).find(anyString());
   }
 
   @Test
   @DisplayName("should fetch user by username when the username is requested")
   void shouldFetchTheUserIfChooseParameterExist() throws Exception {
-    when(userRestServiceMock.find(USER_JACTOR)).thenReturn(Optional.of(new UserDto()));
+    when(userConsumerMock.find(USER_JACTOR)).thenReturn(Optional.of(new UserDto()));
 
     ModelAndView modelAndView = mockMvc.perform(
         get(USER_ENDPOINT).param(REQUEST_USER, USER_JACTOR)
@@ -95,7 +97,7 @@ class UserControllerTest {
   @Test
   @DisplayName("should fetch user by username, but not find user")
   void shouldFetchTheUserByUsernameButNotFindUser() throws Exception {
-    when(userRestServiceMock.find(anyString())).thenReturn(Optional.empty());
+    when(userConsumerMock.find(anyString())).thenReturn(Optional.empty());
 
     ModelAndView modelAndView = mockMvc.perform(
         get(USER_ENDPOINT).param(REQUEST_USER, "someone")
@@ -107,7 +109,7 @@ class UserControllerTest {
   @Test
   @DisplayName("should add context path to target of the user names")
   void shouldAddContextPathToTheMenuItemsInTheUsersMenu() throws Exception {
-    when(userRestServiceMock.findAllUsernames()).thenReturn(List.of("jactor"));
+    when(userConsumerMock.findAllUsernames()).thenReturn(List.of("jactor"));
 
     ModelAndView modelAndView = mockMvc.perform(get(USER_ENDPOINT))
         .andExpect(status().isOk()).andReturn().getModelAndView();

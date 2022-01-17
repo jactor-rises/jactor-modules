@@ -1,6 +1,5 @@
 package com.github.jactor.web.menu;
 
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -33,7 +32,7 @@ class MenuFacadeIntegrationTest {
 
     var menuItems = testMenuFacade.fetchMenuItemsByName(JactorWebBeans.USERS_MENU_NAME).stream()
         .flatMap(menuItem -> menuItem.getChildren().stream())
-        .collect(toList());
+        .toList();
 
     assertSoftly(
         softly -> {
