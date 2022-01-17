@@ -84,17 +84,10 @@ class UserController(private val userService: UserService) {
     }
 
     @Operation(description = "Find all usernames for a user type")
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Usernames found"),
-            ApiResponse(responseCode = "404", description = "No usernames for user type")
-        ]
-    )
+    @ApiResponses(ApiResponse(responseCode = "200", description = "List of usernames found"))
     @GetMapping("/usernames")
     fun findAllUsernames(@RequestParam(required = false, defaultValue = "ACTIVE") userType: String): ResponseEntity<List<String>> {
-        val usernames = userService.findUsernames(UserEntity.UserType.valueOf(userType))
-
-        return ResponseEntity(usernames, if (usernames.isNotEmpty()) HttpStatus.OK else HttpStatus.NO_CONTENT)
+        return ResponseEntity(userService.findUsernames(UserEntity.UserType.valueOf(userType)), HttpStatus.OK)
     }
 
     companion object {
