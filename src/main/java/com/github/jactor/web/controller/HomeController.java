@@ -26,6 +26,7 @@ public class HomeController {
     return new ModelAndView(HOME_VIEW)
         .addObject("homepage", new HomePageModel(
                 List.of(
+                    new Technology(myMessages.fetchMessage("page.home.tech.gradle"), "Gradle", "http://gradle.org"),
                     new Technology(myMessages.fetchMessage("page.home.tech.maven"), "Maven", "http://maven.apache.org"),
                     new Technology(myMessages.fetchMessage("page.home.tech.kotlin"), "Kotlin", "https://kotlinlang.org"),
                     new Technology(myMessages.fetchMessage("page.home.tech.springboot"), "Spring Boot", "https://spring.io/projects/spring-boot"),
