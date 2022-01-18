@@ -9,10 +9,10 @@ data class HomePageModel(val technologies: List<Technology> = ArrayList())
 data class UserModel(private val user: UserDto) {
 
     private val address: AddressDto
-    private val person: PersonDto = if (user.person != null) user.person!! else PersonDto()
+    private val person: PersonDto = user.person ?: PersonDto()
 
     init {
-        address = if (person.address != null) person.address!! else AddressDto()
+        address = person.address ?: AddressDto()
     }
 
     fun fetchAddress(): List<String> {
@@ -38,7 +38,6 @@ data class UserModel(private val user: UserDto) {
     fun fetchFullName(): String {
         val surname = person.surname ?: ""
         val firstName = person.firstName ?: ""
-
         val fullName = "$firstName $surname".trim()
 
         return fullName.ifEmpty { throw IllegalStateException("Unable to determine name of person") }

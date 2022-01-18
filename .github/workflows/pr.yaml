@@ -13,10 +13,5 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: maven
-      - uses: jactor-rises/actions/maven-setup@v2-maven-setup
-        with:
-          repositories: maven-central=https://repo.maven.apache.org/maven2,jactor-shared=https://maven.pkg.github.com/jactor-rises/jactor-shared
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: mvn -B install -e
+          cache: gradle
+      - run: ./gradlew build
