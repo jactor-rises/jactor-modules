@@ -24,10 +24,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
+      - uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
+          arguments: build --scan
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q dependencies | grep -c SNAPSHOT || true)
@@ -49,9 +48,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:
-          cache: gradle
           distribution: temurin
           java-version: 17
+      - uses: gradle/gradle-build-action@v2
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -76,7 +75,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --scan
       - name: Fetch current major/minor release
         id: version
         run: |
