@@ -8,7 +8,6 @@ target/
 # gradle
 .gradle
 /build/
-gradle/wrapper/gradle-wrapper.jar
 
 # misc
 .java-version
