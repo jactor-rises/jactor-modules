@@ -1,5 +1,8 @@
 .idea/
-target/
 .java-version
 *.iml
 /**/.DS_Store
+
+# gradle
+.gradle
+/build/
