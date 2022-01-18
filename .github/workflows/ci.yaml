@@ -24,8 +24,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
-      - run: ./gradlew build -x test --no-daemon
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --scan
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q dependencies | grep -c SNAPSHOT || true)
@@ -37,7 +38,6 @@ jobs:
             >&2 echo ::error No SNAPSHOT dependencies allowed
             exit 1;
           fi
-      - run: ./gradlew test --tests "*"
       - name: Build and publish docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,7 +87,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --scan
       - name: Fetch current major/minor release
         id: version
         run: |
