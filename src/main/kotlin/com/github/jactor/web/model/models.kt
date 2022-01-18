@@ -5,10 +5,7 @@ import com.github.jactor.shared.dto.PersonDto
 import com.github.jactor.shared.dto.UserDto
 import com.github.jactor.web.Technology
 
-data class HomePageModel(
-        val technologies: List<Technology> = ArrayList()
-)
-
+data class HomePageModel(val technologies: List<Technology> = ArrayList())
 data class UserModel(private val user: UserDto) {
 
     private val address: AddressDto
@@ -19,57 +16,32 @@ data class UserModel(private val user: UserDto) {
     }
 
     fun fetchAddress(): List<String> {
-        val address = ArrayList<String>()
-        val addressLine1 = fetchAddressLine1()
-        val addressLine2 = fetchAddressLine2()
-        val addressLine3 = fetchAddressLine3()
-        val city = fetchCity()
-        val zipCode = fetchZipCode()
+        val allFields = listOf(
+            address.addressLine1,
+            address.addressLine2,
+            address.addressLine3,
+            address.zipCode,
+            address.city
+        )
 
-        if (addressLine1 != null) address.add(addressLine1)
-        if (addressLine2 != null) address.add(addressLine2)
-        if (addressLine3 != null) address.add(addressLine3)
-        if (zipCode != null) address.add(zipCode)
-        if (city != null) address.add(city)
+        val fieldsNotNull = mutableListOf<String>()
 
-        return address
+        allFields.forEach {
+            if (it != null) {
+                fieldsNotNull.add(it)
+            }
+        }
+
+        return fieldsNotNull
     }
 
     fun fetchFullName(): String {
-        val surname = fetchSurname()
-        val firstName = fetchFirstname()
+        val surname = person.surname ?: ""
+        val firstName = person.firstName ?: ""
 
         val fullName = "$firstName $surname".trim()
 
-        return if (fullName.isNotEmpty()) fullName else throw IllegalStateException("Unable to determine name of person")
-    }
-
-    private fun fetchAddressLine1(): String? {
-        return address.addressLine1
-    }
-
-    private fun fetchAddressLine2(): String? {
-        return address.addressLine2
-    }
-
-    private fun fetchAddressLine3(): String? {
-        return address.addressLine3
-    }
-
-    private fun fetchCity(): String? {
-        return address.city
-    }
-
-    private fun fetchZipCode(): String? {
-        return address.zipCode
-    }
-
-    private fun fetchFirstname(): String {
-        return if (person.firstName != null) person.firstName!! else ""
-    }
-
-    private fun fetchSurname(): String {
-        return if (person.surname != null) person.surname!! else ""
+        return fullName.ifEmpty { throw IllegalStateException("Unable to determine name of person") }
     }
 
     fun fetchUsername(): String? {
