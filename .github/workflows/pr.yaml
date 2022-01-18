@@ -1,5 +1,8 @@
 name: verify pull request
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   verify-pull-request:
