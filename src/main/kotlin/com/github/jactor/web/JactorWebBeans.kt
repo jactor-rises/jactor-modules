@@ -28,9 +28,9 @@ class JactorWebBeans {
 
     private fun usersMenu(contextPath: String): Menu {
         return Menu(USERS_MENU_NAME)
-            .addItem(MenuItem("menu.users.default"))
-            .addItem(MenuItem("jactor", "$contextPath/user?choose=jactor", "menu.users.jactor.desc"))
-            .addItem(MenuItem("tip", "$contextPath/user?choose=tip", "menu.users.tip.desc"))
+            .addItem(MenuItem(itemName = "menu.users.default"))
+            .addItem(MenuItem(itemName = "jactor", target = "$contextPath/user?choose=jactor", description = "menu.users.jactor.desc"))
+            .addItem(MenuItem(itemName = "tip", target = "$contextPath/user?choose=tip", description = "menu.users.tip.desc"))
     }
 
     @Bean(name = ["userConsumer"])

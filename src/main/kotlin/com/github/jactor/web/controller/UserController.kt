@@ -47,7 +47,7 @@ class UserController @Autowired constructor(
         val menuItems = userConsumer.findAllUsernames()
             .map { chooseUserItem(it) }
 
-        modelAndView.addObject("usersMenu", listOf(MenuItem("menu.users.choose", menuItems)))
+        modelAndView.addObject("usersMenu", listOf(MenuItem(itemName = "menu.users.choose", children = menuItems as MutableList<MenuItem>)))
     }
 
     private fun chooseUserItem(username: String): MenuItem {

@@ -120,8 +120,8 @@ internal class UserControllerTest {
         assertThat(menuItem).`as`("users menu among: ${model.keys}").isEqualTo(
             listOf(
                 MenuItem(
-                    "menu.users.choose", listOf(
-                        MenuItem("jactor", "$contextPath/user?choose=jactor", "user.choose.desc")
+                    itemName = "menu.users.choose", children = mutableListOf(
+                        MenuItem(itemName = "jactor", target = "$contextPath/user?choose=jactor", description = "user.choose.desc")
                     )
                 )
             )

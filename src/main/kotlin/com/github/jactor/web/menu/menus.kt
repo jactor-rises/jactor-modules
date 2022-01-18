@@ -1,7 +1,7 @@
 package com.github.jactor.web.menu
 
 class MenuItems(
-        private val menuItemsByTarget: MutableMap<String?, MenuItem> = HashMap()
+    private val menuItemsByTarget: MutableMap<String?, MenuItem> = HashMap()
 ) {
     fun addAll(menuItems: List<MenuItem>) {
         menuItems.filter { it.hasTarget() }.associateBy({ it.target }, { it }).filterTo(menuItemsByTarget) { true }
@@ -21,7 +21,7 @@ class MenuItems(
 }
 
 class MenuFacade(
-        private val menusByName: Map<String, Menu>
+    private val menusByName: Map<String, Menu>
 ) {
     constructor(menus: List<Menu>) : this(menus.associate { it.name to it })
 
@@ -31,8 +31,8 @@ class MenuFacade(
 }
 
 data class Menu(
-        val name: String,
-        private val menuItems: MutableList<MenuItem>
+    val name: String,
+    private val menuItems: MutableList<MenuItem>
 ) {
     constructor(name: String) : this(name, ArrayList())
 
@@ -47,15 +47,15 @@ data class Menu(
 }
 
 data class MenuItem(
-        val itemName: String,
-        val target: String?,
-        var description: String?,
-        private val children: MutableList<MenuItem>
+    val itemName: String,
+    val target: String? = null,
+    var description: String? = null,
+    private val children: MutableList<MenuItem> = mutableListOf()
 ) {
-    constructor(itemName: String) : this(itemName, null, null, ArrayList())
-    constructor(itemName: String, children: List<MenuItem>) : this(itemName, null, null, children as MutableList<MenuItem>)
+    //    constructor(itemName: String) : this(itemName, null, null, ArrayList())
+//    constructor(itemName: String, children: List<MenuItem>) : this(itemName, null, null, children as MutableList<MenuItem>)
     constructor(itemName: String, target: String) : this(itemName, target, null, ArrayList())
-    constructor(itemName: String, target: String, description: String) : this(itemName, target, description, ArrayList())
+//    constructor(itemName: String, target: String, description: String) : this(itemName, target, description, ArrayList())
 
     fun addChild(child: MenuItem): MenuItem {
         children.add(child)
