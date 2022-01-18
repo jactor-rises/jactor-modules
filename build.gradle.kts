@@ -21,7 +21,7 @@ dependencies {
 
     // database
     implementation("org.flywaydb:flyway-core:8.4.1")
-    runtimeOnly("com.h2database:h2:1.4.200")
+    runtimeOnly("com.h2database:h2:2.1.210")
 
     // swagger
     implementation("org.springdoc:springdoc-openapi-ui:1.6.4")
