@@ -26,7 +26,7 @@ jobs:
           java-version: 17
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: build --scan
+          arguments: build --scan -x test
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q dependencies | grep -c SNAPSHOT || true)
@@ -38,6 +38,7 @@ jobs:
             >&2 echo ::error No SNAPSHOT dependencies allowed
             exit 1;
           fi
+      - run: ./gradlew test --tests "*"
       - name: Build and publish docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
