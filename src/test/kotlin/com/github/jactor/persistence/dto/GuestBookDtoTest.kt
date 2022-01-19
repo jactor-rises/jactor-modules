@@ -2,11 +2,9 @@ package com.github.jactor.persistence.dto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
-@DisplayName("A GuestBookDto")
 internal class GuestBookDtoTest {
 
     @Test

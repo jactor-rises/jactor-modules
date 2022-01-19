@@ -10,7 +10,6 @@ import com.github.jactor.shared.dto.UserDto
 import com.github.jactor.shared.dto.UserType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
@@ -31,7 +30,6 @@ import java.util.Optional
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)
-@DisplayName("A UserController")
 internal class UserControllerTest {
 
     @LocalServerPort

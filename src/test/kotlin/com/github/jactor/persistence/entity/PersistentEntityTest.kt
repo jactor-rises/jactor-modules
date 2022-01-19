@@ -17,10 +17,8 @@ import com.github.jactor.persistence.entity.PersonEntity.Companion.aPerson
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("A PersistentEntity")
 internal class PersistentEntityTest {
     private lateinit var persistentEntityToTest: PersistentEntity<*>
 
@@ -136,8 +134,7 @@ internal class PersistentEntityTest {
     }
 
     @Test
-    @DisplayName("should be able to copy a guest book entry without the id")
-    fun shouldCopyGuestBookEntry() {
+    fun `should be able to copy a guest book entry without the id`() {
         persistentEntityToTest = aGuestBookEntry(
             GuestBookEntryDto(persistentDto = PersistentDto(), guestBook = GuestBookDto(), creatorName = "jactor", entry = "the one")
         )

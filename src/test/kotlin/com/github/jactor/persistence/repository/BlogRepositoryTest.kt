@@ -12,7 +12,6 @@ import com.github.jactor.persistence.entity.BlogEntryEntity
 import javax.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,7 +20,6 @@ import java.time.LocalDate
 
 @SpringBootTest
 @Transactional
-@DisplayName("A BlogRepository")
 internal class BlogRepositoryTest {
     @Autowired
     private lateinit var blogRepositoryToTest: BlogRepository

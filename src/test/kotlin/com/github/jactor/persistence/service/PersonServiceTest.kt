@@ -6,7 +6,6 @@ import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.repository.PersonRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
@@ -19,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import java.time.LocalDateTime
 import java.util.Optional
 
-@DisplayName("A PersonService")
 @SpringBootTest
 internal class PersonServiceTest {
 
