@@ -11,7 +11,6 @@ import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGues
 import com.github.jactor.persistence.repository.GuestBookEntryRepository
 import com.github.jactor.persistence.repository.GuestBookRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
@@ -27,7 +26,6 @@ import java.util.Optional
 import java.util.function.Supplier
 
 @ExtendWith(MockitoExtension::class)
-@DisplayName("A GuestBookService")
 internal class GuestBookServiceTest {
 
     @InjectMocks

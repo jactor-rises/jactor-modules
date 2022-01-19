@@ -10,7 +10,6 @@ import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import javax.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @Transactional
-@DisplayName("A GuestBookRepository")
 internal class GuestBookRepositoryTest {
 
     @Autowired
@@ -51,8 +49,7 @@ internal class GuestBookRepositoryTest {
     }
 
     @Test
-    @DisplayName("should write then update and read guest book")
-    fun shouldWriteThenUpdateAndReadGuestBook() {
+    fun `should write then update and read guest book`() {
         val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         val personDto = PersonInternalDto(address = addressDto, surname = "AA")
         val userDto = UserInternalDto(PersistentDto(), personInternal = personDto, emailAddress = "casuel@tantooine.com", username = "causual")
