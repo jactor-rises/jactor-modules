@@ -2,7 +2,6 @@ package com.github.jactor.web
 
 import javax.servlet.http.HttpServletRequest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.mockito.kotlin.whenever
@@ -11,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
 @SpringBootTest
-@DisplayName("RequestManager")
 internal class RequestManagerTest {
 
     @MockBean
@@ -37,8 +35,7 @@ internal class RequestManagerTest {
     }
 
     @Test
-    @DisplayName("should not add parameter called lang")
-    fun shouldNotAddLangParameter() {
+    fun `should not add parameter called lang`() {
         whenever(httpServletRequestMock.requestURI).thenReturn("$contextPath/home")
         whenever(httpServletRequestMock.queryString).thenReturn("lang=en")
 
@@ -56,16 +53,14 @@ internal class RequestManagerTest {
     }
 
     @Test
-    @DisplayName("should not add context-path to current url")
-    fun shouldNotAddContextPath() {
+    fun `should not add context-path to current url`() {
         whenever(httpServletRequestMock.requestURI).thenReturn("$contextPath/home")
 
         assertThat(RequestManager(contextPath, httpServletRequestMock).fetchCurrentUrl()).isEqualTo("/home")
     }
 
     @Test
-    @DisplayName("should not add centext-path to the view name")
-    fun shouldNotAddViewNameToTheModel() {
+    fun `should not add centext-path to the view name`() {
         whenever(httpServletRequestMock.requestURI).thenReturn("$contextPath/someView")
 
         assertThat(RequestManager(contextPath, httpServletRequestMock).fetchChosenView()).isEqualTo("someView")

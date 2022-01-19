@@ -2,15 +2,12 @@ package com.github.jactor.web.menu
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("A MenuFacade")
 internal class MenuFacadeTest {
 
     @Test
-    @DisplayName("should fail if the menu asked for is unknown")
-    fun willFailWhenMenuIsUnknown() {
+    fun `should fail if the menu asked for is unknown`() {
         val menuItem = MenuItem(itemName = "name", target = "target")
         val menuFacadeToTest = MenuFacade(
             listOf(
@@ -24,8 +21,7 @@ internal class MenuFacadeTest {
     }
 
     @Test
-    @DisplayName("should find menu items for known Menu")
-    fun willFindKnownMenuItems() {
+    fun `should find menu items for known Menu`() {
         val menuItem = MenuItem(itemName = "name", target = "target")
         val menuFacadeToTest = MenuFacade(
             listOf(

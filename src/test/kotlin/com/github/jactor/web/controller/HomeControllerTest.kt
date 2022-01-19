@@ -5,7 +5,6 @@ import com.github.jactor.web.model.HomePageModel
 import junit.framework.AssertionFailedError
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +17,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
 
 @SpringBootTest
-@DisplayName("The HomeController")
 internal class HomeControllerTest {
     private lateinit var mockMvc: MockMvc
 

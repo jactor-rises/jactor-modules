@@ -1,10 +1,8 @@
 package com.github.jactor.web.menu
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("A MenuItem")
 internal class MenuItemTest {
 
     companion object {
@@ -12,22 +10,19 @@ internal class MenuItemTest {
     }
 
     @Test
-    @DisplayName("should not be chosen when the target is unknown")
-    fun shouldNotBeChosenWhenTheTargetIsUnknown() {
+    fun `should not be chosen when the target is unknown`() {
         val testMenuItem = MenuItem(itemName = "an item", target = "miss")
         assertThat(testMenuItem.isChosen(HIT_DEAD_CENTER)).isEqualTo(false)
     }
 
     @Test
-    @DisplayName("should be chosen when the target is known")
-    fun shouldBeChosenWhenTheTargetIsKnown() {
+    fun `should be chosen when the target is known`() {
         val testMenuItem = MenuItem(itemName = "an item", target = HIT_DEAD_CENTER)
         assertThat(testMenuItem.isChosen(HIT_DEAD_CENTER)).isEqualTo(true)
     }
 
     @Test
-    @DisplayName("should not have chosen child when the target is unknown")
-    fun shouldNotBeChosenChildWhenMenuTargetOnChildIsUnknown() {
+    fun `should not have chosen child when the target is unknown`() {
         val testMenuItem = MenuItem(itemName = "an item", target = HIT_DEAD_CENTER)
             .addChild(MenuItem(itemName = "a child", target = "miss"))
 
@@ -35,8 +30,7 @@ internal class MenuItemTest {
     }
 
     @Test
-    @DisplayName("should have chosen child when the target is known")
-    fun shouldBeChosenChildWhenMenuTargetOnChildIsKnown() {
+    fun `should have chosen child when the target is known`() {
         val testMenuItem = MenuItem(itemName = "an item", target = "miss")
             .addChild(MenuItem(itemName = "an item", target = HIT_DEAD_CENTER))
 
