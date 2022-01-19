@@ -4,11 +4,9 @@ import com.github.jactor.shared.dto.AddressDto
 import com.github.jactor.shared.dto.PersonDto
 import com.github.jactor.shared.dto.UserDto
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 
-@DisplayName("A UserModel")
 internal class UserModelTest {
     @Test
     fun `should fetch the address of the user as a list of strings`() {
@@ -48,15 +46,13 @@ internal class UserModelTest {
     }
 
     @Test
-    @DisplayName("should fetch the username of the user")
-    fun shouldFetchTheUsername() {
+    fun `should fetch the username of the user`() {
         val testUserModel = UserModel(UserDto(username = "user"))
         assertThat(testUserModel.fetchUsername()).isEqualTo("user")
     }
 
     @Test
-    @DisplayName("should fetch the person behind the user")
-    fun shouldFetchThePersonBehindTheUser() {
+    fun `should fetch the person behind the user`() {
         val testUserModel = UserModel(UserDto(person = PersonDto(firstName = "John", surname = "Smith", description = "description")))
 
         assertAll(

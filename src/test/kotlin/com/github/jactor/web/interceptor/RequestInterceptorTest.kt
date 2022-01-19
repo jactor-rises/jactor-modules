@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.mockito.kotlin.whenever
@@ -23,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView
 import java.util.Locale
 
 @SpringBootTest
-@DisplayName("A RequestInterceptor")
 class RequestInterceptorTest {
 
     @Autowired
@@ -77,7 +75,6 @@ class RequestInterceptorTest {
     }
 
     @Test
-    @DisplayName("")
     fun `should add English language to model`() {
         LocaleContextHolder.setLocale(Locale("en"))
         val modelAndView = ModelAndView()

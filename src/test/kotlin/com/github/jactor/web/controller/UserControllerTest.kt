@@ -6,7 +6,6 @@ import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.never
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver
 import java.util.Optional
 
 @SpringBootTest
-@DisplayName("The UserController")
 internal class UserControllerTest {
 
     companion object {

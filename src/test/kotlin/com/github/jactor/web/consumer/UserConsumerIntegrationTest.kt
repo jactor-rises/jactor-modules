@@ -4,7 +4,6 @@ import com.github.jactor.shared.dto.UserDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +17,6 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import java.net.URI
 
-@DisplayName("The UserConsumer")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 internal class UserConsumerIntegrationTest {
 
