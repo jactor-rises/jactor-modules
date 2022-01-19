@@ -5,7 +5,6 @@ import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
 import com.github.jactor.persistence.service.BlogService
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
@@ -27,7 +26,6 @@ import java.util.Optional
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)
-@DisplayName("A BlogController")
 internal class BlogControllerTest {
     @LocalServerPort
     private val port = 0

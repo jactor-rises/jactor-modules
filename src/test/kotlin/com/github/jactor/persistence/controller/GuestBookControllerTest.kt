@@ -6,7 +6,6 @@ import com.github.jactor.persistence.dto.GuestBookEntryDto
 import com.github.jactor.persistence.service.GuestBookService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.verify
@@ -85,8 +84,7 @@ internal class GuestBookControllerTest {
     }
 
     @Test
-    @DisplayName("should get a guest book entry")
-    fun shouldGetGuestBookEntry() {
+    fun `should get a guest book entry`() {
         whenever(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.of(GuestBookEntryDto()))
 
         val guestBookEntryRespnse = testRestTemplate.getForEntity(

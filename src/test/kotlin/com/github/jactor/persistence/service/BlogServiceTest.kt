@@ -12,7 +12,6 @@ import com.github.jactor.persistence.repository.BlogEntryRepository
 import com.github.jactor.persistence.repository.BlogRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentCaptor
@@ -26,7 +25,6 @@ import java.util.Optional
 import java.util.function.Supplier
 
 @ExtendWith(MockitoExtension::class)
-@DisplayName("A BlogService")
 internal class BlogServiceTest {
 
     @InjectMocks

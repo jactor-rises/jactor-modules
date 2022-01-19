@@ -13,7 +13,6 @@ import com.github.jactor.persistence.repository.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
@@ -25,7 +24,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import java.time.LocalDateTime
 import java.util.Optional
 
-@DisplayName("A UserService")
 @SpringBootTest
 internal class UserServiceTest {
 
@@ -39,8 +37,7 @@ internal class UserServiceTest {
     private lateinit var userRepositoryMock: UserRepository
 
     @Test
-    @DisplayName("should map a user entity to a dto")
-    fun shouldMapUserToDto() {
+    fun `should map a user entity to a dto`() {
         val addressDto = AddressInternalDto()
         val personDto = PersonInternalDto()
 

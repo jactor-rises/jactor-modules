@@ -5,7 +5,6 @@ import com.github.jactor.persistence.command.CreateUserCommandResponse
 import com.github.jactor.persistence.entity.UniqueUsername
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@DisplayName("An integrated UserController")
 @Transactional
 internal class UserControllerIntegrationTest {
 
@@ -43,8 +41,7 @@ internal class UserControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("should create a new user with an email address")
-    fun shouldCreateNewUserWithAnEmailAddress() {
+    fun `should create a new user with an email address`() {
         val createUserCommand = CreateUserCommand(UniqueUsername.generate("turbo"), "Someone")
         createUserCommand.emailAddress = "somewhere@somehow.com"
 

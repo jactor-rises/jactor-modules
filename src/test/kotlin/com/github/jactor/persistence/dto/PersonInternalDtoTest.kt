@@ -2,11 +2,9 @@ package com.github.jactor.persistence.dto
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
-@DisplayName("A PersonDto")
 internal class PersonInternalDtoTest {
 
     @Test
@@ -29,9 +27,8 @@ internal class PersonInternalDtoTest {
         )
     }
 
-    @DisplayName("should give values to PersistentDto")
     @Test
-    fun shouldGiveValuesToPersistentDto() {
+    fun `should give values to PersistentDto`() {
         val persistentDto = PersistentDto()
         persistentDto.createdBy = "jactor"
         persistentDto.timeOfCreation = LocalDateTime.now()
