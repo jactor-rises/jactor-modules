@@ -6,7 +6,6 @@ import com.github.jactor.persistence.entity.AddressEntity
 import com.github.jactor.persistence.entity.AddressEntity.Companion.anAddress
 import javax.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest(classes = [JactorPersistence::class])
 @Transactional
-@DisplayName("An AddressRepository")
 internal class AddressRepositoryTest {
 
     @Autowired
