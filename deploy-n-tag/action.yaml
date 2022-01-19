@@ -1,0 +1,63 @@
+name: Deploy with maven
+description: Deploys java artifact to ghcr.io with maven
+
+inputs:
+  release:
+    description: the version to release
+    required: true
+  token:
+    description: the secret token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v2
+      with:
+        cache: maven
+        distribution: temurin
+        java-version: 17
+    - name: Create new semantic version
+      id: semver
+      run: |
+        workflow/scripts/new-semver.main.kts semver=$RELEASE_VERSION
+        echo ::set-output name=new::$(cat newSemVer)
+      shell: bash
+      env:
+        RELEASE_VERSION: ${{ inputs.release }}
+        IS_DEBUG: 'true'
+    - uses: jactor-rises/actions/maven-setup@v2-maven-setup
+    - run: |
+        echo "Setting release version: $RELEASE_VERSION"
+        mvn -B -e versions:set -DnewVersion="$RELEASE_VERSION"
+        
+        echo "Maven deploy"
+        mvn -B --settings maven-settings.xml deploy -e -DskipTests -Dmaven.wagon.http.pool=false
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        RELEASE_VERSION: ${{ inputs.release }}
+      shell: bash
+    - name: Fetch github event metadata
+      id: metadata
+      run: |
+        echo ::set-output name=email::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)
+        echo ::set-output name=name::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)
+      shell: bash
+    - name: Tag new release and new snapshot semantic version
+      run: |
+        git remote set-url origin https://${GITHUB_ACTOR}:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        git config --global user.email "$AUTHOR_EMAIL"
+        git config --global user.name "$AUTHOR_NAME"
+        
+        git tag -a $SEMANTIC_VERSION_RELEASE -m "Released new version. New semantic snapshot: $SEMANTIC_VERSION_NEW"
+        git tag -a $SEMANTIC_VERSION_NEW-snapshot -m "New snapshot tagged after release of: $SEMANTIC_VERSION_RELEASE"
+        
+        git push --tags
+      shell: bash
+      env:
+        AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
+        AUTHOR_NAME: ${{ steps.metadata.outputs.name }}
+        TOKEN: ${{ inputs.token }}
+        SEMANTIC_VERSION_RELEASE: ${{ inputs.release }}
+        SEMANTIC_VERSION_NEW: ${{ steps.semver.outputs.new }}
