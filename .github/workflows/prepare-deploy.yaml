@@ -1,4 +1,4 @@
-name: Deploy maven artifact
+name: Prepare deploy of maven artifact
 
 on: [workflow_call]
 
@@ -22,16 +22,17 @@ jobs:
           CURRENT_SEMVER=$(cat README.md | grep "[0-9]*\.[0-9]*\.[0-9]" | awk '{print $2}' | head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - name: Create new semantic version
+        if: ${{ steps.snapshot.outputs.semver == steps.changelog.outputs.semver }}
         id: semver
         run: |
           workflow/scripts/new-semver.main.kts semver=$CURRENT_SNAPSHOT_VERSION
           echo ::set-output name=new::$(cat newSemVer)
         env:
-          CURRENT_SNAPSHOT_VERSION: ${{ steps.snapshot.output.semver }}
+          CURRENT_SNAPSHOT_VERSION: ${{ steps.snapshot.outputs.semver }}
           IS_DEBUG: true
       - name: Deploy when versions are equal
         if: ${{ steps.snapshot.outputs.semver == steps.changelog.outputs.semver }}
         uses: jactor-rises/jactor-shared/deploy-n-tag@feature/tag-snapshot
         with:
-          relase: ${{ steps.changelog.outputs.semver }}
+          release: ${{ steps.changelog.outputs.semver }}
           token: ${{ secrets.GITHUB_TOKEN }}

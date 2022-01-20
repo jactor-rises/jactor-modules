@@ -50,8 +50,8 @@ runs:
         git config --global user.email "$AUTHOR_EMAIL"
         git config --global user.name "$AUTHOR_NAME"
         
-        git tag -a $SEMANTIC_VERSION_RELEASE -m "Released new version. New semantic snapshot: $SEMANTIC_VERSION_NEW"
-        git tag -a $SEMANTIC_VERSION_NEW-snapshot -m "New snapshot tagged after release of: $SEMANTIC_VERSION_RELEASE"
+        git tag -a "$SEMANTIC_VERSION_RELEASE" -m "Released new version. New semantic snapshot: $SEMANTIC_VERSION_NEW"
+        git tag -a "$SEMANTIC_VERSION_NEW-snapshot" -m "New snapshot tagged after release of: $SEMANTIC_VERSION_RELEASE"
         
         git push --tags
       shell: bash
