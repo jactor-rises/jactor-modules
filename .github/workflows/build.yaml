@@ -16,9 +16,6 @@ jobs:
           java-version: 17
       - uses: jactor-rises/actions/maven-verify-dependencies@v2-maven-verify-dependencies
       - run: mvn -B install -e
-        if: github.ref != 'refs/heads/main'
-      - run: mvn -B install -DskipTests
-        if: github.ref == 'refs/heads/main'
 
   deploy:
     needs: build
