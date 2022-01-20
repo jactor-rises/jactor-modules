@@ -19,5 +19,5 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/feature/tag-snapshot'
-    uses: jactor-rises/jactor-shared/.github/workflows/prepare-deploy.yaml@feature/tag-snapshot
+    if: github.ref == 'refs/heads/main'
+    uses: jactor-rises/jactor-shared/.github/workflows/prepare-deploy.yaml@v1
