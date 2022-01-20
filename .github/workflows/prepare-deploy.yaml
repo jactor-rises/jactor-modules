@@ -32,7 +32,7 @@ jobs:
           IS_DEBUG: true
       - name: Deploy when versions are equal
         if: ${{ steps.snapshot.outputs.semver == steps.changelog.outputs.semver }}
-        uses: jactor-rises/jactor-shared/deploy-n-tag@feature/tag-snapshot
+        uses: jactor-rises/jactor-shared/deploy-n-tag@v1
         with:
           release: ${{ steps.changelog.outputs.semver }}
           token: ${{ secrets.GITHUB_TOKEN }}
