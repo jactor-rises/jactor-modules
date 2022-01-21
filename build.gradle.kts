@@ -22,7 +22,7 @@ dependencies {
 
     // --- dependencies ---
 
-    implementation("com.github.jactor-rises:jactor-shared:0.3.4")
+    implementation("com.github.jactor-rises:jactor-shared:0.3.5")
     implementation("org.webjars:bootstrap:5.1.3")
     implementation("org.webjars:jquery:3.6.0")
 
