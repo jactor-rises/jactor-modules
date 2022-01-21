@@ -59,7 +59,7 @@ jobs:
 
   git:
     needs: [build, integration]
-    if: github.ref == 'refs/heads/feature/versions'
+    if: github.ref == 'refs/heads/main'
     name: Tag new snapshot version
     runs-on: ubuntu-latest
 
