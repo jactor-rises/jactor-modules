@@ -90,7 +90,7 @@ jobs:
           java-version: 17
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: build --scan
+          arguments: build -x test
       - name: Fetch current major/minor release
         id: version
         run: |
