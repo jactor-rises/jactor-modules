@@ -16,7 +16,7 @@ dependencies {
 
     // --- dependencies ---
 
-    implementation("com.github.jactor-rises:jactor-shared:0.3.4")
+    implementation("com.github.jactor-rises:jactor-shared:0.3.5")
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
     // database
