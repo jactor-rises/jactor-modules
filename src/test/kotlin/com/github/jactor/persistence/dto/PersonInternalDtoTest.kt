@@ -46,4 +46,27 @@ internal class PersonInternalDtoTest {
             { assertThat(timeOfModification).`as`("updated time").isEqualTo(persistentDto.timeOfModification) }
         )
     }
+
+    @Test
+    fun `should get address for person`() {
+        val personInternalDto = PersonInternalDto(
+            address = AddressInternalDto(
+                addressLine1 = "somewhere",
+                addressLine2 = "in",
+                addressLine3 = "time",
+                city = "out there",
+                zipCode = "1234"
+            )
+        )
+
+        val address = PersonInternalDto(personInternalDto.persistentDto, personInternalDto).toPersonDto().address
+
+        assertAll(
+            { assertThat(address?.addressLine1).`as`("address.addressLine1").isEqualTo("somewhere") },
+            { assertThat(address?.addressLine2).`as`("address.addressLine2").isEqualTo("in") },
+            { assertThat(address?.addressLine3).`as`("address.addressLine3").isEqualTo("time") },
+            { assertThat(address?.city).`as`("address.city").isEqualTo("out there") },
+            { assertThat(address?.zipCode).`as`("address.zipCode").isEqualTo("1234") }
+        )
+    }
 }
