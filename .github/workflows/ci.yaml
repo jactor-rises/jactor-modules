@@ -71,7 +71,7 @@ jobs:
         run: cd jactor-cucumber && mvn test -P cucumber
 
   git:
-    if: github.ref == 'refs/heads/feature/semver-tagging'
+    if: github.ref == 'refs/heads/main'
     name: Bump dev version
     runs-on: ubuntu-latest
     needs: cucumber
