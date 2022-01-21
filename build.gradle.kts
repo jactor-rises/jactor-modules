@@ -16,9 +16,9 @@ repositories {
 
 dependencies {
     // spring-boot dependencies
-    implementation("org.springframework.boot:spring-boot-starter-actuator:2.6.2")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf:2.6.2")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.6.2")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
     // --- dependencies ---
 
@@ -27,8 +27,8 @@ dependencies {
     implementation("org.webjars:jquery:3.6.0")
 
     // kotlin
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // test
     testImplementation("org.assertj:assertj-core")
