@@ -1,5 +1,5 @@
 plugins {
-    id("org.springframework.boot") version "2.6.2"
+    id("org.springframework.boot") version "2.6.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.github.ben-manes.versions") version "0.41.0"
 
@@ -16,11 +16,11 @@ dependencies {
 
     // --- dependencies ---
 
-    implementation("com.github.jactor-rises:jactor-shared:0.3.4")
+    implementation("com.github.jactor-rises:jactor-shared:0.3.5")
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
     // database
-    implementation("org.flywaydb:flyway-core:8.4.1")
+    implementation("org.flywaydb:flyway-core:8.4.2")
     runtimeOnly("com.h2database:h2:2.1.210")
 
     // swagger
