@@ -4,6 +4,7 @@ import com.github.jactor.persistence.JactorPersistence
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.repository.UserRepository
+import com.github.jactor.shared.dto.AddressDto
 import com.github.jactor.shared.dto.CreateUserCommandDto
 import com.github.jactor.shared.dto.PersonDto
 import com.github.jactor.shared.dto.UserDto
@@ -26,7 +27,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.Optional
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -123,8 +124,8 @@ internal class UserControllerTest {
 
     @Test
     fun `should find all usernames on active users`() {
-        val bartDto = UserDto(null, null, PersonDto(), "bart", UserType.ACTIVE)
-        val lisaDto = UserDto(null, null, PersonDto(), "lisa", UserType.ACTIVE)
+        val bartDto = UserDto(person = PersonDto(address = AddressDto()), username = "bart", userType = UserType.ACTIVE)
+        val lisaDto = UserDto(person = PersonDto(address = AddressDto()), username = "lisa", userType = UserType.ACTIVE)
         val bart = UserEntity(UserInternalDto(bartDto))
         val lisa = UserEntity(UserInternalDto(lisaDto))
 
