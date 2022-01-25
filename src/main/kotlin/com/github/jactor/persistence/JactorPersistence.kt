@@ -1,11 +1,16 @@
 package com.github.jactor.persistence
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition
+import io.swagger.v3.oas.annotations.info.Info
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationContext
 
 @SpringBootApplication
+@OpenAPIDefinition(
+    info = Info(title = "jactor-persistence", version = "v1")
+)
 class JactorPersistence {
 
     companion object {
