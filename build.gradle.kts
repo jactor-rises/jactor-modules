@@ -20,7 +20,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
     // database
-    implementation("org.flywaydb:flyway-core:8.4.2")
+    implementation("org.flywaydb:flyway-core:8.4.3")
     runtimeOnly("com.h2database:h2:2.1.210")
 
     // swagger
@@ -69,6 +69,7 @@ tasks.test {
             showStackTraces = true
             showStandardStreams = true
         }
+
         info.events = lifecycle.events
         info.exceptionFormat = lifecycle.exceptionFormat
     }
@@ -93,10 +94,13 @@ class JactorRisesTestListener : TestListener {
 
     override fun afterSuite(suite: TestDescriptor, result: TestResult) {
         if (suite.parent == null) { // root suite
-            logger.lifecycle("----")
-            logger.lifecycle("Test result: ${result.resultType}")
+            logger.lifecycle("")
+            logger.lifecycle("/=======================================")
+            logger.lifecycle("| Test result: ${result.resultType}")
+            logger.lifecycle("|=======================================")
+
             logger.lifecycle(
-                "Test summary: ${result.testCount} tests, ${result.successfulTestCount} succeeded, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped"
+                "| Test summary: ${result.testCount} tests, ${result.successfulTestCount} succeeded, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped"
             )
 
             failedTests.takeIf { it.isNotEmpty() }?.prefixedSummary("\tFailed Tests")
