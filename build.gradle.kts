@@ -43,6 +43,7 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven(url = "https://jitpack.io")
 }
 
