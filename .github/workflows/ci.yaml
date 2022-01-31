@@ -71,7 +71,7 @@ jobs:
         run: cd jactor-cucumber && mvn test -P cucumber
 
   git:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/feature/workflow'
     name: Bump dev version
     runs-on: ubuntu-latest
     needs: cucumber
@@ -99,7 +99,7 @@ jobs:
       - name: Create new semantic version
         id: semver
         run: |
-          workflow/scripts/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
+          .github/workflows/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
           echo ::set-output name=new::$(cat newSemVer)
         env:
           CURRENT_SEMANTIC_VERSION: ${{ steps.current.outputs.semver }}
