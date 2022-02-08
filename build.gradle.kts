@@ -24,7 +24,7 @@ dependencies {
     runtimeOnly("com.h2database:h2:2.1.210")
 
     // swagger
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.5")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
