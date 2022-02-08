@@ -1,10 +1,10 @@
 plugins {
     id("org.springframework.boot") version "2.6.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.github.ben-manes.versions") version "0.41.0"
+    id("com.github.ben-manes.versions") version "0.42.0"
 
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.spring") version "1.6.10"
+    kotlin("jvm") version "1.6.20-M1"
+    kotlin("plugin.spring") version "1.6.20-M1"
 }
 
 dependencies {
@@ -24,7 +24,7 @@ dependencies {
     runtimeOnly("com.h2database:h2:2.1.210")
 
     // swagger
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.5")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
