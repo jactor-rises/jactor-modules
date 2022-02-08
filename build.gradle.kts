@@ -1,10 +1,13 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     id("org.springframework.boot") version "2.6.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.github.ben-manes.versions") version "0.41.0"
+    id("com.github.ben-manes.versions") version "0.42.0"
 
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.spring") version "1.6.10"
+    kotlin("jvm") version "1.6.20-M1"
+    kotlin("plugin.spring") version "1.6.20-M1"
 }
 
 repositories {
@@ -59,5 +62,58 @@ tasks.compileKotlin {
 
 tasks.test {
     useJUnitPlatform()
-    testLogging.showStandardStreams = true
+
+    testLogging {
+        lifecycle {
+            events = mutableSetOf(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED)
+            exceptionFormat = TestExceptionFormat.FULL
+            showExceptions = true
+            showCauses = true
+            showStackTraces = true
+            showStandardStreams = true
+        }
+        info.events = lifecycle.events
+        info.exceptionFormat = lifecycle.exceptionFormat
+    }
+
+    // Se https://github.com/gradle/kotlin-dsl/issues/836
+    addTestListener(MyTestListener())
+}
+
+class MyTestListener : TestListener {
+    private val failedTests = mutableListOf<TestDescriptor>()
+    private val skippedTests = mutableListOf<TestDescriptor>()
+
+    override fun beforeSuite(suite: TestDescriptor) {}
+    override fun beforeTest(testDescriptor: TestDescriptor) {}
+    override fun afterTest(testDescriptor: TestDescriptor, result: TestResult) {
+        when (result.resultType) {
+            TestResult.ResultType.FAILURE -> failedTests.add(testDescriptor)
+            TestResult.ResultType.SKIPPED -> skippedTests.add(testDescriptor)
+            else -> Unit
+        }
+    }
+
+    override fun afterSuite(suite: TestDescriptor, result: TestResult) {
+        if (suite.parent == null) { // root suite
+            logger.lifecycle("")
+            logger.lifecycle("/=======================================")
+            logger.lifecycle("| Test result: ${result.resultType}")
+            logger.lifecycle("|=======================================")
+
+            logger.lifecycle(
+                "| Test summary: ${result.testCount} tests, ${result.successfulTestCount} succeeded, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped"
+            )
+
+            failedTests.takeIf { it.isNotEmpty() }?.prefixedSummary("\tFailed Tests")
+            skippedTests.takeIf { it.isNotEmpty() }?.prefixedSummary("\tSkipped Tests:")
+        }
+    }
+
+    private infix fun List<TestDescriptor>.prefixedSummary(subject: String) {
+        logger.lifecycle(subject)
+        forEach { test -> logger.lifecycle("\t\t${test.className}: ${test.displayName()}") }
+    }
+
+    private fun TestDescriptor.displayName() = parent?.name ?: name
 }
