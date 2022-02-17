@@ -20,7 +20,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
     // database
-    runtimeOnly("org.flywaydb:flyway-core:8.4.4")
+    runtimeOnly("org.flywaydb:flyway-core:8.5.0")
     runtimeOnly("com.h2database:h2:2.1.210")
 
     // swagger
