@@ -1,5 +1,8 @@
-name: continuous integration
-on: push
+name: continuous integration on jactor-persistence
+on:
+  push:
+    paths:
+      - 'persistence/**'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:latest

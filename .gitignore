@@ -12,7 +12,7 @@ target/
 # misc
 .java-version
 /**/.DS_Store
-/run-docker/node_modules/@actions/
+/persistence/run-docker/node_modules/@actions/
 /out
 **/newSemVer
 @
