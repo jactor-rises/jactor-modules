@@ -90,7 +90,7 @@ jobs:
         id: current
         run: |
           git fetch --tags
-log          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-snapshot-persistence" | sed 's;-snapshot-persistence;;'| head -n 1)
+          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-snapshot-persistence" | sed 's;-snapshot-persistence;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
