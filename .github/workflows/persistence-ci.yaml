@@ -1,0 +1,132 @@
+name: continuous integration on jactor-persistence
+on:
+  push:
+    paths:
+      - 'persistence/**'
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}:latest
+
+jobs:
+
+  env:
+    runs-on: ubuntu-latest
+    name: debug environment
+
+    steps:
+      - run: cat $GITHUB_EVENT_PATH
+      - run: env
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build, create, and then publish
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: :persistence:build --scan -x test
+      - name: Verify dependencies
+        run: |
+          COUNT=$(./gradlew -q :persistence:dependencies | grep -c SNAPSHOT || true)
+
+          echo "Found $COUNT SNAPSHOT dependencies"
+
+          if [ "$COUNT" -gt 0 ]
+          then
+            >&2 echo ::error No SNAPSHOT dependencies allowed
+          ./gradlew -q :persistence:dependencies
+            exit 1;
+          fi
+      - run: ./gradlew :persistence:test --tests "*"
+      - name: Build and publish docker image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd persistence || exit 1
+          ls -la build
+          ls -la build/libs
+          docker image build --tag ${IMAGE} .
+          CONTAINER_ID=$(docker inspect --format="{{.Id}}" ${IMAGE})
+          docker tag ${CONTAINER_ID} "ghcr.io/${GITHUB_REPOSITORY}:$(git rev-parse --short HEAD)"
+          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
+          docker image push ${IMAGE}
+
+  cucumber:
+    needs: build
+    name: Integration tests with cucumber
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: jactor-rises/jactor-cucumber
+          path: jactor-cucumber
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: jactor-rises/jactor-persistence/run-docker@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: run cucumber tests
+        run: cd jactor-cucumber && mvn test -P cucumber
+
+  git:
+    if: github.ref == 'refs/heads/feature/modules'
+    name: Bump dev version
+    runs-on: ubuntu-latest
+    needs: cucumber
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Fetch current semantic version
+        id: current
+        run: |
+          git fetch --tags
+          CURRENT_SEMVER=$(git tag --sort=-v:refname --list "[0-9].[0-9].[0-9]*[-snapshot-persistence]" | sed 's;-snapshot-persistence;;'| head -n 1)
+          echo ::set-output name=semver::$CURRENT_SEMVER
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: --build-cache :persistence:assemble
+      - name: Fetch current major/minor release
+        id: version
+        run: |
+          MAJOR_MINOR=$(./gradlew :persistence:properties | grep version: | grep SNAPSHOT | awk '{print $2}' | sed 's;.x-SNAPSHOT;;')
+          echo ::set-output name=toPatch::$MAJOR_MINOR
+      - name: Create new semantic version
+        id: semver
+        run: |
+          .github/workflows/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
+          echo ::set-output name=new::$(cat newSemVer)
+        env:
+          CURRENT_SEMANTIC_VERSION: ${{ steps.current.outputs.semver }}
+          PATCH_MAJOR_MINOR_VERSION: ${{ steps.version.outputs.toPatch }}
+      - name: Fetch github event metadata
+        id: metadata
+        run: |
+          echo ::set-output name=email::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)
+          echo ::set-output name=name::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)
+      - name: Tag new snapshot semantic version
+        run: |
+          git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git config --global user.email "$AUTHOR_EMAIL"
+          git config --global user.name "$AUTHOR_NAME"
+
+          git tag -a "$SEMANTIC_VERSION_NEW-snapshot-persistence" -m "New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT"
+          git push --tags
+        env:
+          AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
+          AUTHOR_NAME: ${{ steps.metadata.outputs.name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEMANTIC_VERSION_CURRENT: ${{ steps.current.outputs.semver }}
+          SEMANTIC_VERSION_NEW: ${{ steps.semver.outputs.new }}

@@ -1,0 +1,8 @@
+name: Run latest jactor-persistence
+author: Tor Egil Jacobsen aka. jactor-rises
+description: |
+  Runs the latest docker image of jactor-persistene
+  Action needs an environment variable named IMAGE which is the name of the docker image to run
+runs:
+  using: node12
+  main: dist/index.js

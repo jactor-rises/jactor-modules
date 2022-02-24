@@ -1,0 +1,32 @@
+logging:
+  level:
+    com.githnub.jactor: debug
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 1099
+  servlet:
+    context-path: "/jactor-persistence"
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:jactor
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      username: sa
+      password:
+
+springdoc:
+  packages-to-scan: com.github.jactor.persistence.controller

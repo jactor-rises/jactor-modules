@@ -1,8 +1,15 @@
+ # intellij
 .idea/
 .java-version
 *.iml
-/**/.DS_Store
+
+# maven
+target/
 
 # gradle
 .gradle
-**/build/
+**build/
+
+# misc
+.java-version
+/**/.DS_Store
