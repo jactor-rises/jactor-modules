@@ -1,10 +1,7 @@
-name: continuous integration
+name: continuous integration on jactor-web
 on:
   push:
-    branches:
-      - '**'
     paths:
-      - '.github/**'
       - 'web/**'
 
 jobs:
@@ -19,7 +16,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: Build and test with maven
+    name: Build and test with gradle
 
     steps:
       - uses: actions/checkout@v2
@@ -27,12 +24,14 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: :web:build --scan -x test
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q :web:dependencies | grep -c SNAPSHOT || true)
+
           echo "Found $COUNT SNAPSHOT dependencies"
 
           if [ "$COUNT" -gt 0 ]
@@ -53,6 +52,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
       - uses: gradle/gradle-build-action@v2
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
@@ -62,25 +62,27 @@ jobs:
 
   git:
     needs: [build, integration]
-    if: github.ref == 'refs/heads/main'
-    name: Tag new snapshot version
+    if: github.ref == 'refs/heads/feature/fix-workflow'
+    name: Bump dev version
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Fetch current snapshot tag
+      - name: Fetch current semantic version
         id: current
         run: |
           git fetch --tags
+          echo $( git tag | grep snapshot )
           CURRENT_SEMVER=$(git tag --sort=-v:refname --list "[0-9].[0-9].[0-9]*[-snapshot-web]" | sed 's;-snapshot-web;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: --build-cache assemble
+          arguments: --build-cache :web:assemble
       - name: Fetch current major/minor release
         id: version
         run: |
@@ -89,7 +91,7 @@ jobs:
       - name: Create new semantic version
         id: semver
         run: |
-          workflow/scripts/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
+          .github/workflows/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
           echo ::set-output name=new::$(cat newSemVer)
         env:
           CURRENT_SEMANTIC_VERSION: ${{ steps.current.outputs.semver }}
