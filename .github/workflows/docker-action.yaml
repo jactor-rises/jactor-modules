@@ -3,6 +3,8 @@ on:
   push:
     branches-ignore:
       - main
+    paths:
+      - 'persistence/**'
 
 jobs:
   build-docker-run:
@@ -24,6 +26,6 @@ jobs:
       - uses: jactor-rises/actions/git-commit@v2-git-commit
         with:
           commit_message: "node-build-action@${{ steps.now.outputs.timestamp }}"
-          pattern: run-docker/.
+          pattern: persistence/run-docker/.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
