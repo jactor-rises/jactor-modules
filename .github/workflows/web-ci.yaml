@@ -62,7 +62,7 @@ jobs:
 
   git:
     needs: [build, integration]
-    if: github.ref == 'refs/heads/feature/fix-workflow'
+    if: github.ref == 'refs/heads/main'
     name: Bump dev version
     runs-on: ubuntu-latest
 
@@ -72,8 +72,7 @@ jobs:
         id: current
         run: |
           git fetch --tags
-          echo $( git tag | grep snapshot )
-          CURRENT_SEMVER=$(git tag --sort=-v:refname --list "[0-9].[0-9].[0-9]*[-snapshot-web]" | sed 's;-snapshot-web;;'| head -n 1)
+          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-snapshot-web" | sed 's;-snapshot-web;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
