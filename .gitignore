@@ -1,6 +1,5 @@
  # intellij
 .idea/
-.java-version
 *.iml
 
 # maven
@@ -13,3 +12,4 @@ target/
 # misc
 .java-version
 /**/.DS_Store
+/persistence/run-docker/node_modules
