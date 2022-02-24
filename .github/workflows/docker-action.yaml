@@ -19,7 +19,7 @@ jobs:
       - name: Install run-docker
         uses: jactor-rises/actions/node-build-action@v2-node-build-action
         with:
-          artifact_folder: jactor-persistence/persistence/run-docker
+          artifact_folder: jactor-modules/persistence/run-docker
       - name: Generate timestamp
         id: now
         run: echo ::set-output name=timestamp::$(date +"%Y-%m-%d:%T")
