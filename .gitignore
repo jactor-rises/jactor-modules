@@ -7,7 +7,7 @@ target/
 
 # gradle
 .gradle
-/build/
+**build/
 
 # misc
 .java-version

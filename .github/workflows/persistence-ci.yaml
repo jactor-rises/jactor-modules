@@ -29,7 +29,7 @@ jobs:
           java-version: 17
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: build --scan -x test
+          arguments: :persistence:build --scan -x test
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q dependencies | grep -c SNAPSHOT || true)
@@ -41,7 +41,7 @@ jobs:
             >&2 echo ::error No SNAPSHOT dependencies allowed
             exit 1;
           fi
-      - run: ./gradlew test --tests "*"
+      - run: ./gradlew :persistence:test --tests "*"
       - name: Build and publish docker image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -85,7 +85,7 @@ jobs:
         id: current
         run: |
           git fetch --tags
-          CURRENT_SEMVER=$(git tag --sort=-v:refname --list "[0-9].[0-9].[0-9]*[-snapshot]" | sed 's;-snapshot;;'| head -n 1)
+          CURRENT_SEMVER=$(git tag --sort=-v:refname --list "[0-9].[0-9].[0-9]*[-snapshot-persistence]" | sed 's;-snapshot-persistence;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
@@ -93,11 +93,11 @@ jobs:
           java-version: 17
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: --build-cache assemble
+          arguments: --build-cache :persistence:assemble
       - name: Fetch current major/minor release
         id: version
         run: |
-          MAJOR_MINOR=$(./gradlew properties | grep version: | grep SNAPSHOT | awk '{print $2}' | sed 's;.x-SNAPSHOT;;')
+          MAJOR_MINOR=$(./gradlew :persistence:properties | grep version: | grep SNAPSHOT | awk '{print $2}' | sed 's;.x-SNAPSHOT;;')
           echo ::set-output name=toPatch::$MAJOR_MINOR
       - name: Create new semantic version
         id: semver
@@ -118,7 +118,7 @@ jobs:
           git config --global user.email "$AUTHOR_EMAIL"
           git config --global user.name "$AUTHOR_NAME"
 
-          git tag -a "$SEMANTIC_VERSION_NEW-snapshot" -m "New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT"
+          git tag -a "$SEMANTIC_VERSION_NEW-snapshot-persistence" -m "New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT"
           git push --tags
         env:
           AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
