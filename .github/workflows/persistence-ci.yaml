@@ -80,7 +80,7 @@ jobs:
 
   git:
     needs: cucumber
-    if: github.ref == 'refs/heads/feature/fix-workflow'
+    if: github.ref == 'refs/heads/feature/bump-dev'
     name: Bump dev version
     runs-on: ubuntu-latest
 
@@ -90,7 +90,7 @@ jobs:
         id: current
         run: |
           git fetch --tags
-          CURRENT_SEMVER=$(git tag --sort=-v:refname --list "[0-9].[0-9].[0-9]*[-snapshot-persistence]" | sed 's;-snapshot-persistence;;'| head -n 1)
+log          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-snapshot-persistence" | sed 's;-snapshot-persistence;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
