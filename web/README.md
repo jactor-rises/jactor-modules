@@ -1,6 +1,6 @@
 # jactor-web #
 
-[![continuous integration](https://github.com/jactor-rises/jactor-modules/actions/workflows/web-ci.yaml/badge.svg)](https://github.com/jactor-rises/jactor-modules/actions/workflows/web-ci.yaml)
+[![continuous integration on jactor-web](https://github.com/jactor-rises/jactor-modules/actions/workflows/web-ci.yaml/badge.svg)](https://github.com/jactor-rises/jactor-modules/actions/workflows/web-ci.yaml)
 [![verify pull request](https://github.com/jactor-rises/jactor-modules/actions/workflows/pr.yaml/badge.svg)](https://github.com/jactor-rises/jactor-modules/actions/workflows/pr.yaml)
 
 ### What is this repository for?

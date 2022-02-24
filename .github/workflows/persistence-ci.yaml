@@ -27,6 +27,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: :persistence:build --scan -x test
@@ -78,10 +79,10 @@ jobs:
         run: cd jactor-cucumber && mvn test -P cucumber
 
   git:
-    if: github.ref == 'refs/heads/feature/modules'
+    needs: cucumber
+    if: github.ref == 'refs/heads/feature/fix-workflow'
     name: Bump dev version
     runs-on: ubuntu-latest
-    needs: cucumber
 
     steps:
       - uses: actions/checkout@v2
@@ -95,6 +96,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: --build-cache :persistence:assemble
