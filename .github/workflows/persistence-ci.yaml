@@ -80,7 +80,7 @@ jobs:
 
   git:
     needs: cucumber
-    if: github.ref == 'refs/heads/feature/bump-dev'
+    if: github.ref == 'refs/heads/main'
     name: Bump dev version
     runs-on: ubuntu-latest
 

@@ -2,7 +2,6 @@ name: continuous integration on jactor-web
 on:
   push:
     paths:
-      - '.github/**'
       - 'web/**'
 
 jobs:
@@ -63,7 +62,7 @@ jobs:
 
   git:
     needs: [build, integration]
-    if: github.ref == 'refs/heads/feature/bump-dev'
+    if: github.ref == 'refs/heads/main'
     name: Bump dev version
     runs-on: ubuntu-latest
 
