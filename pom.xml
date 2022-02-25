@@ -22,7 +22,7 @@
 
     <!-- language -->
     <java.version>17</java.version>
-    <kotlin.version>1.6.20-M1</kotlin.version>
+    <kotlin.version>1.6.20-RC</kotlin.version>
 
     <!-- dependencies -->
     <spring-boot.version>2.6.4</spring-boot.version>
