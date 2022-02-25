@@ -12,11 +12,24 @@ repositories {
 }
 
 dependencies {
+    // spring-boot
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // common dependencies
+    implementation("com.github.jactor-rises:jactor-shared:0.3.5")
+
+    // kotlin
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+
+    // test
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 }
-
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 tasks {
     compileKotlin {
