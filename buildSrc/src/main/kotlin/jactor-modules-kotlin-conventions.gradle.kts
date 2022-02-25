@@ -31,8 +31,6 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_17
-
 tasks {
     compileKotlin {
         kotlinOptions {
