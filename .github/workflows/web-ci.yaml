@@ -44,7 +44,7 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
-    name: Integration tests of jactor-web <-> jactor-persistence
+    name: Tests of web <-> persistence
 
     steps:
       - uses: actions/checkout@v2
