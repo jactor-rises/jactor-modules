@@ -7,7 +7,7 @@
 ### What is this repository for?
 
 The main purpose is to learn about programming microservices using Kotlin, (with REST and spring JPA). I also use GitHub to get a deeper understanding
-of continuous integration/DevOps using GitHub workflow/actions and docker running integration testing with cucumber and Kotlin.
+of continuous integration/DevOps using GitHub workflow/actions, gradle, and docker running integration testing with cucumber.
 
 This project is a microservice dealing with persistence to a database using JPA (java persistence api) via spring-data-jpa and is a microservice to
 use under `com.github.jactor.percistence` (formerly as part of the archived project [jactor-rises](https://github.com/jactor-rises/jactor-rises))

@@ -72,7 +72,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: maven
-      - uses: jactor-rises/jactor-persistence/run-docker@v1
+      - uses: jactor-rises/jactor-modules/persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: run cucumber tests
