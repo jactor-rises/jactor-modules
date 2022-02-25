@@ -1,9 +1,3 @@
-repositories {
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
-}
-
 ext["assertj.version"] = "3.22.0"
 
 dependencies {
