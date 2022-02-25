@@ -54,10 +54,10 @@ jobs:
           java-version: 17
           cache: gradle
       - uses: gradle/gradle-build-action@v2
-      - uses: jactor-rises/jactor-persistence/run-docker@v1
+      - uses: jactor-rises/jactor-modules/persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE: ghcr.io/jactor-rises/jactor-persistence
+          IMAGE: ghcr.io/jactor-rises/jactor-modules
       - run: ./gradlew :web:test --tests "UserConsumerIntegrationTest"
 
   git:
