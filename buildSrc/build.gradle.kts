@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     `kotlin-dsl`
 }
@@ -12,7 +10,13 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-tasks.withType<KotlinCompile> {
+tasks.compileKotlin {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+tasks.compileTestKotlin {
     kotlinOptions {
         jvmTarget = "17"
     }
