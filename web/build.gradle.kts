@@ -1,11 +1,3 @@
-repositories {
-    maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
-    }
-}
-
-ext["assertj.version"] = "3.22.0"
-
 dependencies {
     // spring-boot dependencies
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
