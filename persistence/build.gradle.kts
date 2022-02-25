@@ -1,13 +1,9 @@
 dependencies {
     // spring-boot
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // --- dependencies ---
-
-    implementation("com.github.jactor-rises:jactor-shared:0.3.5")
+    // --- misc dependencies ---
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
     // database
@@ -16,15 +12,6 @@ dependencies {
 
     // swagger
     implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
-
-    // kotlin
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-    // test
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 }
 
 group = "com.github.jactor-rises"
