@@ -16,8 +16,8 @@ dependencies {
     implementation(project(":shared"))
 
     // --- misc dependencies ---
-    implementation(libs.webjars.bootstrap)
-    implementation(libs.webjars.jquery)
+    implementation(Library.Dependencies.webjarsBootstrap)
+    implementation(Library.Dependencies.webjarsJquery)
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
