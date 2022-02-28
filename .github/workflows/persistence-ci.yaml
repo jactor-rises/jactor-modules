@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'persistence/**'
+      - 'shared/**'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:latest
@@ -28,9 +29,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: :persistence:build --scan -x test
+      - run: ./gradlew :persistence:build --scan -x test
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q :persistence:dependencies | grep -c SNAPSHOT || true)
@@ -49,8 +48,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd persistence || exit 1
-          ls -la build
-          ls -la build/libs
           docker image build --tag ${IMAGE} .
           CONTAINER_ID=$(docker inspect --format="{{.Id}}" ${IMAGE})
           docker tag ${CONTAINER_ID} "ghcr.io/${GITHUB_REPOSITORY}:$(git rev-parse --short HEAD)"
@@ -97,9 +94,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: --build-cache :persistence:assemble
+      - run: ./gradlew :persistence:assemble
       - name: Fetch current major/minor release
         id: version
         run: |
