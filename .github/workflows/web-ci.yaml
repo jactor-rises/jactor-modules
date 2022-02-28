@@ -52,7 +52,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - run: ./gradlew :web:build
+      - run: ./gradlew :web:assemble
       - uses: jactor-rises/jactor-modules/persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
