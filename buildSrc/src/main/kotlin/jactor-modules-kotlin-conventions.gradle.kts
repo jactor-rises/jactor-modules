@@ -15,7 +15,6 @@ dependencies {
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation(Library.Plugin.kotlinGradle)
 
     // test
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
