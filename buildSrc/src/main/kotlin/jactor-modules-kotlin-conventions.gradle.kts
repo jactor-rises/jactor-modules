@@ -15,13 +15,12 @@ dependencies {
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+    implementation(Library.Plugin.kotlinGradle)
 
     // test
-    testImplementation("org.assertj:assertj-core")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation(Library.Dependencies.mockitoKotlin)
 }
 
 tasks {

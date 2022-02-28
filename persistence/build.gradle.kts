@@ -17,9 +17,9 @@ dependencies {
     implementation(project(":shared"))
 
     // database
-    runtimeOnly(libs.h2)
-    runtimeOnly(libs.flyway)
+    runtimeOnly(Library.Dependencies.flyway)
+    runtimeOnly(Library.Dependencies.h2)
 
     // swagger
-    implementation(libs.swagger)
+    implementation(Library.Dependencies.springdocSwagger)
 }

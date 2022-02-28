@@ -9,8 +9,11 @@
 ## gradle multi-build
 
 Two standalone microservices merget into one gradle build.
-- https://github.com/jactor-rises/jactor-persistence
-- https://github.com/jactor-rises/jactor-web
+- https://github.com/jactor-rises/jactor-persistence: [jactor-modules/persistence](https://github.com/jactor-rises/jactor-modules/tree/main/persistence) 
+- https://github.com/jactor-rises/jactor-web: [jactor-modules/web](https://github.com/jactor-rises/jactor-modules/tree/main/web)
+
+These microservices also have common http-api which was previously a separate module:
+- https://github.com/jactor-rises/jactor-shared: [jactor-modules/shared](https://github.com/jactor-rises/jactor-modules/tree/main/shared)
 
 For details on each microservice, see [persistence/README.md](https://github.com/jactor-rises/jactor-modules/blob/main/persistence/README.md)
 and [web/README.md](https://github.com/jactor-rises/jactor-modules/blob/main/web/README.md)
