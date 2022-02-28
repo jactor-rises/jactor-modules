@@ -1,0 +1,21 @@
+[versions]
+gradle = "7.4"
+vCommonsLang3 = "3.12.0"
+vFlyway = "8.5.1"
+vH2 = "2.1.210"
+vKotlin = "1.6.20-RC"
+vSwagger = "1.6.6"
+vMockitoKotlin = "4.0.0"
+vWebjarsBootstrap = "5.1.3"
+vWebjarsJquery = "3.6.0"
+
+[libraries]
+commonsLang3 = { module = "org.apache.commons:commons-lang3", version.ref = "vCommonsLang3" }
+flyway = { module = "org.flywaydb:flyway-core", version.ref = "vFlyway" }
+h2 = { module = "com.h2database:h2", version.ref = "vH2" }
+swagger = { module = "org.springdoc:springdoc-openapi-ui", version.ref = "vSwagger" }
+webjars-bootstrap = { module = "org.webjars:bootstrap", version.ref = "vWebjarsBootstrap" }
+webjars-jquery = { module = "org.webjars:jquery", version.ref = "vWebjarsJquery" }
+
+[bundles]
+webjars = ["webjars-bootstrap", "webjars-jquery"]
