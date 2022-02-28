@@ -6,6 +6,9 @@ dependencies {
     // spring-boot dependencies
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
+    // internal dependency
+    implementation(":shared")
+
     // --- misc dependencies ---
     implementation(libs.webjars.bootstrap)
     implementation(libs.webjars.jquery)

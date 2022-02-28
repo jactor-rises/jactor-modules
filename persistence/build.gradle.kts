@@ -7,6 +7,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // internal dependency
+    implementation(":shared")
+
     // database
     runtimeOnly(libs.h2)
     runtimeOnly(libs.flyway)

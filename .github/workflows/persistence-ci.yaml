@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'persistence/**'
+      - 'shared/**'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:latest

@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'web/**'
+      - 'shared/**'
 
 jobs:
 
