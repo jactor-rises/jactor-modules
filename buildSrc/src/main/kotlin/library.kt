@@ -1,7 +1,7 @@
 object Library {
     object Version {
-        // kotlin language
-        const val kotlin = "1.6.20-RC"
+        // PS!
+        // kotlin language version and kotlin-gradle plugin is an implementation in root build.gradle.kts
 
         // plugins
         const val benManesVersionsPlugin = "0.42.0"
@@ -16,10 +16,6 @@ object Library {
         const val swagger = "1.6.6"
         const val webjarsBootstrap = "5.1.3"
         const val webjarsJquery = "3.6.0"
-    }
-
-    object Plugin {
-        const val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Version.kotlin}"
     }
 
     object Dependencies {
