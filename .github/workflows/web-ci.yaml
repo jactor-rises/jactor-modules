@@ -26,9 +26,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: :web:build --scan -x test
+      - run: ./gradlew :web:build --scan -x test
       - name: Verify dependencies
         run: |
           COUNT=$(./gradlew -q :web:dependencies | grep -c SNAPSHOT || true)
@@ -54,7 +52,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - uses: gradle/gradle-build-action@v2
+      - run: ./gradlew :web:build
       - uses: jactor-rises/jactor-modules/persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -80,9 +78,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: --build-cache :web:assemble
+      - run: ./gradlew :web:assemble
       - name: Fetch current major/minor release
         id: version
         run: |
