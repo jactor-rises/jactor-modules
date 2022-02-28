@@ -1,8 +1,8 @@
 plugins {
-    id("com.github.ben-manes.versions") version "0.42.0" apply false
-    id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
+    id("com.github.ben-manes.versions") version Library.Version.benManesVersionsPlugin apply false
+    id("io.spring.dependency-management") version Library.Version.springDependencyPlugin apply false
 
-    kotlin("plugin.spring") version "1.6.20-M1" apply false
+    kotlin("plugin.spring") version Library.Version.springPlugin apply false
 }
 
 subprojects {
