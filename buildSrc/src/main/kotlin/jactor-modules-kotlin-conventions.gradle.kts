@@ -16,9 +16,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // common dependencies
-    implementation("com.github.jactor-rises:jactor-shared:0.3.5")
-
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
