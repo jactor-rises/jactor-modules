@@ -1,11 +1,10 @@
 object Library {
     object Version {
         // PS!
-        // kotlin language version and kotlin-gradle plugin is an implementation in root build.gradle.kts
+        // kotlin language version and kotlin-gradle plugin is an implementation defined in buildSrc/build.gradle.kts
 
         // plugins
         const val benManesVersionsPlugin = "0.42.0"
-
         const val springDependencyPlugin = "1.0.11.RELEASE"
         const val springPlugin = "1.6.20-M1"
 
