@@ -3,7 +3,7 @@ version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
 plugins {
-    id("org.springframework.boot") version "2.6.4"
+    id("org.springframework.boot") version Library.Version.springBoot
 }
 
 dependencies {
