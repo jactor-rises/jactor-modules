@@ -12,6 +12,7 @@ object Library {
         const val flyway = "8.5.2"
         const val h2 = "2.1.210"
         const val mockitoKotlin = "4.0.0"
+        const val springBoot = "2.6.4"
         const val swagger = "1.6.6"
         const val webjarsBootstrap = "5.1.3"
         const val webjarsJquery = "3.6.0"
