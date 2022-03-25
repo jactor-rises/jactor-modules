@@ -21,5 +21,5 @@ dependencies {
     runtimeOnly(Library.Dependencies.h2)
 
     // swagger
-    implementation(Library.Dependencies.springdocSwagger)
+    implementation(Library.Dependencies.springdocOpenApi)
 }
