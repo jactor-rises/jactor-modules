@@ -10,7 +10,7 @@
   <properties>
     <cucumber.version>7.2.3</cucumber.version>
     <kotlin.version>1.6.20-M1</kotlin.version>
-    <spring-boot.version>2.6.3</spring-boot.version>
+    <spring-boot.version>2.6.5</spring-boot.version>
 
     <!-- build -->
     <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
