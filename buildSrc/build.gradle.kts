@@ -23,5 +23,5 @@ tasks.compileTestKotlin {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20-RC")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20")
 }
