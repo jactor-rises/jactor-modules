@@ -11,9 +11,10 @@ This project consists of a microservice for web content which use another micros
 
 ### Set up
 
-* a spring-boot application is created when building (`mvn install`)
+* a spring-boot application is created when building (`gradle build`)
     * `jactor-web` which is a web application on apache tomcat and which is dependent
-      on [jactor-persistence](https://github.com/jactor-rises/jactor-persistence) to handle persistence
+      on [jactor-persistence](https://github.com/jactor-rises/jactor-modules/blob/main/persistence/README.md) to handle
+      persistence
     * also start `jactor-persistence` in order to have a working persistence layer for the application.
 * after started `jactor-web`, point a browser to [http://localhost:8080/jactor-web](http://localhost:8080/jactor-web)
 
