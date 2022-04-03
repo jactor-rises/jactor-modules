@@ -55,7 +55,7 @@ debugMessage("map args: $commands")
 
 // read arguments
 val majorMinorVersion = commands[Argument.MAJOR_MINOR] ?: throw IllegalArgumentException(errMsg("${Argument.MAJOR_MINOR} argument is not supplied!"))
-val semantictVersion = commands[Argument.SEMANTIC] ?: throw IllegalArgumentException(errMsg("${Argument.SEMANTIC} argument is not supplied!"))
+val semanticVersion = commands[Argument.SEMANTIC] ?: throw IllegalArgumentException(errMsg("${Argument.SEMANTIC} argument is not supplied!"))
 
 val newSemanticVersion = createNewSemanticVersion()
 val semVerFile = File(Constants.FILE_NAME_NEW_SEM_VER)
@@ -64,18 +64,18 @@ Files.write(semVerFile.toPath(), newSemanticVersion.toByteArray())
 
 fun errMsg(message: String): String = Constants.ERROR_MESSAGE.replace("{}", message)
 fun createNewSemanticVersion(): String {
-    debugMessage("creating new semantic version from $majorMinorVersion and current semantic version ($semantictVersion)")
+    debugMessage("creating new semantic version from $majorMinorVersion and current semantic version ($semanticVersion)")
 
-    if (!semantictVersion.startsWith(majorMinorVersion)) {
+    if (!semanticVersion.startsWith(majorMinorVersion)) {
         return createNewSemanticVersion(
             majorMinorVersion.split(".")[0].toInt(),
             majorMinorVersion.split(".")[1].toInt(),
-            semantictVersion.split(".")[0].toInt(),
-            semantictVersion.split(".")[1].toInt()
+            semanticVersion.split(".")[0].toInt(),
+            semanticVersion.split(".")[1].toInt()
         )
     }
 
-    val currentPatch = semantictVersion.substring(semantictVersion.lastIndexOf('.') + 1).toInt()
+    val currentPatch = semanticVersion.substring(semanticVersion.lastIndexOf('.') + 1).toInt()
 
     return "$majorMinorVersion.${currentPatch + 1}"
 }
