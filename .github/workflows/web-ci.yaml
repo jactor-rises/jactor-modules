@@ -61,7 +61,7 @@ jobs:
 
   git:
     needs: [build, integration]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/feature/semantic'
     name: Bump dev version
     runs-on: ubuntu-latest
 
