@@ -6,11 +6,11 @@ object Library {
         // plugins
         const val benManesVersionsPlugin = "0.42.0"
         const val springDependencyPlugin = "1.0.11.RELEASE"
-        const val springBoot = "2.6.4"
-        const val springKotlin = "1.6.20-M1"
+        const val springBoot = "2.6.6"
+        const val springKotlin = "1.6.20"
 
         // dependencies
-        const val flyway = "8.5.4"
+        const val flyway = "8.5.5"
         const val h2 = "2.1.210"
         const val mockitoKotlin = "4.0.0"
         const val springdocOpenApi = "1.6.6"
