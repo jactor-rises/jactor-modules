@@ -3,5 +3,5 @@ description = "jactor::shared"
 
 dependencies {
     // swagger
-    implementation(Library.Dependencies.springdocOpenApi)
+    implementation(JactorModules.Dependencies.springdocOpenApi)
 }
