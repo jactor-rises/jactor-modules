@@ -10,10 +10,10 @@ object Library {
         const val springKotlin = "1.6.20"
 
         // dependencies
-        const val flyway = "8.5.5"
-        const val h2 = "2.1.210"
+        const val flyway = "8.5.7"
+        const val h2 = "2.1.212"
         const val mockitoKotlin = "4.0.0"
-        const val springdocOpenApi = "1.6.6"
+        const val springdocOpenApi = "1.6.7"
         const val webjarsBootstrap = "5.1.3"
         const val webjarsJquery = "3.6.0"
     }
