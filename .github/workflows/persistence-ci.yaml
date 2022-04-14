@@ -4,6 +4,7 @@ on:
     paths:
       - 'persistence/**'
       - 'shared/**'
+      - 'buildSrc/**'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:latest
