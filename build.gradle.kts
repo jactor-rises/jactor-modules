@@ -1,8 +1,8 @@
 plugins {
-    id("com.github.ben-manes.versions") version Library.Version.benManesVersionsPlugin apply false
-    id("io.spring.dependency-management") version Library.Version.springDependencyPlugin apply false
+    id("com.github.ben-manes.versions") version JactorModules.Version.benManesVersionsPlugin apply false
+    id("io.spring.dependency-management") version JactorModules.Version.springDependencyPlugin apply false
 
-    kotlin("plugin.spring") version Library.Version.springKotlin apply false
+    kotlin("plugin.spring") version JactorModules.Version.springKotlin apply false
 }
 
 subprojects {

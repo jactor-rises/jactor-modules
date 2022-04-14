@@ -3,7 +3,7 @@ version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
 plugins {
-    id("org.springframework.boot") version Library.Version.springBoot
+    id("org.springframework.boot") version JactorModules.Version.springBoot
 }
 
 dependencies {
@@ -17,9 +17,9 @@ dependencies {
     implementation(project(":shared"))
 
     // database
-    runtimeOnly(Library.Dependencies.flyway)
-    runtimeOnly(Library.Dependencies.h2)
+    runtimeOnly(JactorModules.Dependencies.flyway)
+    runtimeOnly(JactorModules.Dependencies.h2)
 
     // swagger
-    implementation(Library.Dependencies.springdocOpenApi)
+    implementation(JactorModules.Dependencies.springdocOpenApi)
 }
