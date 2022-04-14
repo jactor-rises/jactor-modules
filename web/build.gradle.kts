@@ -3,7 +3,7 @@ version = "1.0.x-SNAPSHOT"
 description = "jactor-web"
 
 plugins {
-    id("org.springframework.boot") version Library.Version.springBoot
+    id("org.springframework.boot") version JactorModules.Version.springBoot
 }
 
 dependencies {
@@ -16,8 +16,8 @@ dependencies {
     implementation(project(":shared"))
 
     // --- misc dependencies ---
-    implementation(Library.Dependencies.webjarsBootstrap)
-    implementation(Library.Dependencies.webjarsJquery)
+    implementation(JactorModules.Dependencies.webjarsBootstrap)
+    implementation(JactorModules.Dependencies.webjarsJquery)
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")

@@ -1,4 +1,4 @@
-object Library {
+object JactorModules {
     object Version {
         // PS!
         // kotlin language version and kotlin-gradle plugin is an implementation defined in buildSrc/build.gradle.kts
