@@ -11,18 +11,16 @@ import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import com.github.jactor.persistence.repository.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.slot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito
-import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import java.time.LocalDateTime
-import java.util.Optional
+import java.util.*
 
 @SpringBootTest
 internal class UserServiceTest {
@@ -30,10 +28,10 @@ internal class UserServiceTest {
     @Autowired
     private lateinit var userServiceToTest: UserService
 
-    @MockBean
+    @MockkBean
     private lateinit var personRepository: PersonRepository
 
-    @MockBean
+    @MockkBean
     private lateinit var userRepositoryMock: UserRepository
 
     @Test
@@ -43,8 +41,17 @@ internal class UserServiceTest {
 
         personDto.address = addressDto
 
-        whenever(userRepositoryMock.findByUsername("jactor"))
-            .thenReturn(Optional.of(aUser(UserInternalDto(PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE))))
+        every { userRepositoryMock.findByUsername("jactor") } returns Optional.of(
+            aUser(
+                UserInternalDto(
+                    PersistentDto(),
+                    personDto,
+                    null,
+                    "jactor",
+                    Usertype.ACTIVE
+                )
+            )
+        )
 
         val user = userServiceToTest.find("jactor").orElseThrow { AssertionError("mocking?") }
 
@@ -60,8 +67,9 @@ internal class UserServiceTest {
         val personDto = PersonInternalDto()
         personDto.address = addressDto
 
-        whenever(userRepositoryMock.findById(69L))
-            .thenReturn(Optional.of(aUser(UserInternalDto(PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE))))
+        every { userRepositoryMock.findById(69L) } returns Optional.of(
+            aUser(UserInternalDto(PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE))
+        )
 
         val user = userServiceToTest.find(69L).orElseThrow { AssertionError("mocking?") }
 
@@ -77,9 +85,13 @@ internal class UserServiceTest {
         userDto.id = 1L
         userDto.username = "marley"
 
-        val persistentDto = PersistentDto(1L, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1))
+        val persistentDto = PersistentDto(
+            1L, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1)
+        )
 
-        whenever(userRepositoryMock.findById(1L)).thenReturn(Optional.of(UserEntity(UserInternalDto(persistentDto, userDto))))
+        every { userRepositoryMock.findById(1L) } returns Optional.of(
+            UserEntity(UserInternalDto(persistentDto, userDto))
+        )
 
         val optionalUser = userServiceToTest.update(userDto)
         assertThat(optionalUser).isPresent.get().extracting(UserInternalDto::username).isEqualTo("marley")
@@ -90,19 +102,16 @@ internal class UserServiceTest {
         val createUserCommand = CreateUserCommand("jactor", "Jacobsen")
         val userDto = UserInternalDto()
         val userEntity = UserEntity(userDto)
+        val personEntitySlot = slot<PersonEntity>()
 
-        Mockito.`when`(userRepositoryMock.save(ArgumentMatchers.any())).thenReturn(userEntity)
-        Mockito.`when`(personRepository.save(ArgumentMatchers.any())).thenReturn(PersonEntity(PersonInternalDto()))
+        every { userRepositoryMock.save(any()) } returns userEntity
+        every { personRepository.save(capture(personEntitySlot)) } returns PersonEntity(PersonInternalDto())
 
         val user = userServiceToTest.create(createUserCommand)
 
         assertAll(
             { assertThat(user).`as`("user").isEqualTo(userDto) },
-            {
-                val personCaptor = ArgumentCaptor.forClass(PersonEntity::class.java)
-                Mockito.verify(personRepository).save(personCaptor.capture())
-                assertThat(personCaptor.value).`as`("person to save").isNotNull()
-            }
+            { assertThat(personEntitySlot.captured).`as`("person to save").isNotNull }
         )
     }
 }

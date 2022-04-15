@@ -4,18 +4,17 @@ import com.github.jactor.shared.dto.UserDto
 import com.github.jactor.web.consumer.UserConsumer
 import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.called
+import io.mockk.every
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
-import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -34,7 +33,7 @@ internal class UserControllerTest {
 
     private lateinit var mockMvc: MockMvc
 
-    @MockBean
+    @MockkBean
     @Qualifier("userConsumer")
     private lateinit var userConsumerMock: UserConsumer
 
@@ -64,24 +63,28 @@ internal class UserControllerTest {
 
     @Test
     fun `should not fetch user by username if the username is missing from the request`() {
+        every { userConsumerMock.findAllUsernames() } returns emptyList()
         mockMvc.perform(MockMvcRequestBuilders.get(USER_ENDPOINT)).andExpect(MockMvcResultMatchers.status().isOk)
-        verify(userConsumerMock, never()).find(ArgumentMatchers.anyString())
+        verify { userConsumerMock.find(any()) wasNot called }
     }
 
     @Test
     fun `should not fetch user by username when the username is requested, but is only whitespace`() {
+        every { userConsumerMock.findAllUsernames() } returns emptyList()
+
         mockMvc.perform(
             MockMvcRequestBuilders.get(USER_ENDPOINT).requestAttr(REQUEST_USER, " \n \t")
         ).andExpect(
             MockMvcResultMatchers.status().isOk
         )
 
-        verify(userConsumerMock, never()).find(ArgumentMatchers.anyString())
+        verify { userConsumerMock.find(any()) wasNot called }
     }
 
     @Test
     fun `should fetch user by username when the username is requested`() {
-        whenever(userConsumerMock.find(USER_JACTOR)).thenReturn(Optional.of(UserDto()))
+        every { userConsumerMock.find(USER_JACTOR) } returns Optional.of(UserDto())
+        every { userConsumerMock.findAllUsernames() } returns emptyList()
 
         val modelAndView = mockMvc.perform(MockMvcRequestBuilders.get(USER_ENDPOINT).param(REQUEST_USER, USER_JACTOR))
             .andExpect(MockMvcResultMatchers.status().isOk).andReturn().modelAndView
@@ -93,7 +96,8 @@ internal class UserControllerTest {
 
     @Test
     fun `should fetch user by username, but not find user`() {
-        whenever(userConsumerMock.find(ArgumentMatchers.anyString())).thenReturn(Optional.empty())
+        every { userConsumerMock.find(any()) } returns Optional.empty()
+        every { userConsumerMock.findAllUsernames() } returns emptyList()
 
         val modelAndView = mockMvc.perform(
             MockMvcRequestBuilders.get(USER_ENDPOINT).param(REQUEST_USER, "someone")
@@ -105,7 +109,7 @@ internal class UserControllerTest {
 
     @Test
     fun `should add context path to target of the user names`() {
-        whenever(userConsumerMock.findAllUsernames()).thenReturn(listOf("jactor"))
+        every { userConsumerMock.findAllUsernames() } returns listOf("jactor")
 
         val modelAndView = mockMvc.perform(MockMvcRequestBuilders.get(USER_ENDPOINT))
             .andExpect(MockMvcResultMatchers.status().isOk).andReturn().modelAndView
@@ -119,7 +123,11 @@ internal class UserControllerTest {
             listOf(
                 MenuItem(
                     itemName = "menu.users.choose", children = mutableListOf(
-                        MenuItem(itemName = "jactor", target = "$contextPath/user?choose=jactor", description = "user.choose.desc")
+                        MenuItem(
+                            itemName = "jactor",
+                            target = "$contextPath/user?choose=jactor",
+                            description = "user.choose.desc"
+                        )
                     )
                 )
             )

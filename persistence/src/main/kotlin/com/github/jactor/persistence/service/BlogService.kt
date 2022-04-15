@@ -33,14 +33,14 @@ class BlogService(
     }
 
     fun saveOrUpdate(blogDto: BlogDto): BlogDto {
-        userService.find(fetchUsername(blogDto))
+        userService.find(username = fetchUsername(blogDto))
             .ifPresent { userDto: UserInternalDto? -> blogDto.userInternal = userDto }
 
         return blogRepository.save(BlogEntity(blogDto)).asDto()
     }
 
     fun saveOrUpdate(blogEntryDto: BlogEntryDto): BlogEntryDto {
-        userService.find(fetchUsername(blogEntryDto.blog))
+        userService.find(username = fetchUsername(blogEntryDto.blog))
             .ifPresent { userDto: UserInternalDto? -> blogEntryDto.blog!!.userInternal = userDto }
 
         val blogEntryEntity = BlogEntryEntity(blogEntryDto)

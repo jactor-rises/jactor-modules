@@ -35,5 +35,5 @@ interactive use of jactor-persistence
 * [kotlin](https://kotlinlang.org)
 * [junit 5.x](https://junit.org/junit5/)
 * [assertj](https://assertj.github.io/doc/)
-* [mockito](http://site.mockito.org)
+* [mockk](http://mockk.org)
 * [thymeleaf](https://www.thymeleaf.org)

@@ -10,37 +10,34 @@ import com.github.jactor.persistence.entity.GuestBookEntryEntity
 import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGuestBookEntry
 import com.github.jactor.persistence.repository.GuestBookEntryRepository
 import com.github.jactor.persistence.repository.GuestBookRepository
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
+import io.mockk.slot
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
-import java.util.Optional
+import java.util.*
 import java.util.function.Supplier
 
-@ExtendWith(MockitoExtension::class)
+@ExtendWith(MockKExtension::class)
 internal class GuestBookServiceTest {
 
-    @InjectMocks
+    @InjectMockKs
     private lateinit var guestBookServiceToTest: GuestBookService
 
-    @Mock
+    @MockK
     private lateinit var guestBookRepositoryMock: GuestBookRepository
 
-    @Mock
+    @MockK
     private lateinit var guestBookEntryRepositoryMock: GuestBookEntryRepository
 
     @Test
     fun `should map guest book to a dto`() {
-        val guestBookEntity = Optional.of(aGuestBook(GuestBookDto(PersistentDto(), HashSet(), "@home", null)))
-        whenever(guestBookRepositoryMock.findById(1001L)).thenReturn(guestBookEntity)
+        val guestBookEntity = aGuestBook(GuestBookDto(PersistentDto(), HashSet(), "@home", null))
+        every { guestBookRepositoryMock.findById(1001L) } returns Optional.of(guestBookEntity)
 
         val (_, _, title) = guestBookServiceToTest.find(1001L).orElseThrow(mockError())
         assertThat(title).`as`("title").isEqualTo("@home")
@@ -48,13 +45,9 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should map guest book entry to a dto`() {
-        val anEntry = Optional.of(
-            aGuestBookEntry(
-                GuestBookEntryDto(PersistentDto(), GuestBookDto(), "me", "too")
-            )
-        )
+        val anEntry = aGuestBookEntry(GuestBookEntryDto(PersistentDto(), GuestBookDto(), "me", "too"))
 
-        whenever(guestBookEntryRepositoryMock.findById(1001L)).thenReturn(anEntry)
+        every { guestBookEntryRepositoryMock.findById(1001L) } returns Optional.of(anEntry)
 
         val (_, _, creatorName, entry) = guestBookServiceToTest.findEntry(1001L).orElseThrow(mockError())
 
@@ -75,18 +68,17 @@ internal class GuestBookServiceTest {
         guestBookEntryDto.creatorName = "me"
         guestBookEntryDto.entry = "all about this"
 
+        val guestBookEntitySlot = slot<GuestBookEntity>()
         val guestBookDto = GuestBookDto()
 
         guestBookDto.entries = setOf(guestBookEntryDto)
         guestBookDto.title = "home sweet home"
         guestBookDto.userInternal = UserInternalDto()
 
-        Mockito.`when`(guestBookRepositoryMock.save(ArgumentMatchers.any())).thenReturn(GuestBookEntity(guestBookDto))
+        every { guestBookRepositoryMock.save(capture(guestBookEntitySlot)) } returns GuestBookEntity(guestBookDto)
 
         guestBookServiceToTest.saveOrUpdate(guestBookDto)
-        val argCaptor = ArgumentCaptor.forClass(GuestBookEntity::class.java)
-        verify(guestBookRepositoryMock).save(argCaptor.capture())
-        val guestBookEntity = argCaptor.value
+        val guestBookEntity = guestBookEntitySlot.captured
 
         assertAll(
             { assertThat(guestBookEntity.getEntries()).`as`("entries").hasSize(1) },
@@ -97,21 +89,19 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should save GuestBookEntryDto as GuestBookEntryEntity`() {
+        val guestBookEntryEntitySlot = slot<GuestBookEntryEntity>()
         val guestBookEntryDto = GuestBookEntryDto()
 
         guestBookEntryDto.guestBook = GuestBookDto()
         guestBookEntryDto.creatorName = "me"
         guestBookEntryDto.entry = "if i where a rich man..."
 
-        Mockito.`when`(guestBookEntryRepositoryMock.save(ArgumentMatchers.any())).thenReturn(GuestBookEntryEntity(guestBookEntryDto))
-
-        guestBookServiceToTest.saveOrUpdate(guestBookEntryDto)
-        val argCaptor = ArgumentCaptor.forClass(
-            GuestBookEntryEntity::class.java
+        every { guestBookEntryRepositoryMock.save(capture(guestBookEntryEntitySlot)) } returns GuestBookEntryEntity(
+            guestBookEntryDto
         )
 
-        verify(guestBookEntryRepositoryMock).save(argCaptor.capture())
-        val guestBookEntryEntity = argCaptor.value
+        guestBookServiceToTest.saveOrUpdate(guestBookEntryDto)
+        val guestBookEntryEntity = guestBookEntryEntitySlot.captured
 
         assertAll(
             { assertThat(guestBookEntryEntity.guestBook).`as`("guest book").isNotNull() },

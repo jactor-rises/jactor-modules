@@ -6,13 +6,13 @@ import java.util.stream.Stream
 import javax.servlet.http.HttpServletRequest
 
 data class RequestManager(
-        val contextPath: String,
-        val httpServletRequest: HttpServletRequest,
-        private var queryString: String? = null,
-        private var languageParameter: String = ""
+    val contextPath: String,
+    val httpServletRequest: HttpServletRequest,
+    private var queryString: String? = null,
+    private var languageParameter: String = ""
 ) {
     constructor(contextPath: String, httpServletRequest: HttpServletRequest) : this(
-            contextPath, httpServletRequest, httpServletRequest.queryString, ""
+        contextPath, httpServletRequest, httpServletRequest.queryString, languageParameter = ""
     )
 
     fun fetchChosenView(): String {
@@ -30,16 +30,17 @@ data class RequestManager(
             return requestURI
         }
 
-        val parametersWithoutLanguage = Arrays.stream<String>(queryString!!.split("&".toRegex())
-                .dropLastWhile { it.isBlank() }.toTypedArray())
-                .filter { param -> !param.startsWith("lang=") }
-                .collect(Collectors.toList<String>())
+        val parametersWithoutLanguage = Arrays.stream(
+            queryString!!.split("&".toRegex()).dropLastWhile { it.isBlank() }.toTypedArray()
+        )
+            .filter { param -> !param.startsWith("lang=") }
+            .collect(Collectors.toList())
 
         if (parametersWithoutLanguage.isEmpty()) {
             return requestURI
         }
 
-        return "$requestURI?" + parametersWithoutLanguage.joinToString("&")
+        return "$requestURI?${parametersWithoutLanguage.joinToString("&")}"
     }
 
     private fun fetchWithoutContextPath() = httpServletRequest.getRequestURI().replace(contextPath.toRegex(), "")
@@ -49,26 +50,28 @@ data class RequestManager(
             return true
         }
 
-        languageParameter = Stream.of(*queryString!!.split("&".toRegex())
-                .dropLastWhile { it.isBlank() }.toTypedArray())
-                .filter { string -> string.startsWith("lang=") }
-                .findFirst().orElse("")
+        languageParameter = Stream.of(
+            *queryString!!.split("&".toRegex())
+                .dropLastWhile { it.isBlank() }.toTypedArray()
+        )
+            .filter { string -> string.startsWith("lang=") }
+            .findFirst().orElse("")
 
         return languageParameter.isBlank()
     }
 
     fun fetchFrom(supportedLanguages: List<Language>, locale: Locale, defaultLanguage: Language): Language {
         return supportedLanguages.stream()
-                .filter { language -> language.matches(locale) }
-                .findFirst()
-                .orElse(defaultLanguage)
+            .filter { language -> language.matches(locale) }
+            .findFirst()
+            .orElse(defaultLanguage)
 
     }
 
     fun fetchFromParameters(supportedLanguages: List<Language>, defaultLanguage: Language): Language {
         return supportedLanguages.stream()
-                .filter { language -> language.matches(languageParameter) }
-                .findFirst()
-                .orElse(defaultLanguage)
+            .filter { language -> language.matches(languageParameter) }
+            .findFirst()
+            .orElse(defaultLanguage)
     }
 }
