@@ -19,7 +19,8 @@ dependencies {
     // test
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(JactorModules.Dependencies.mockitoKotlin)
+    testImplementation(JactorModules.Dependencies.mockk)
+    testImplementation(JactorModules.Dependencies.springmock)
 }
 
 tasks {
