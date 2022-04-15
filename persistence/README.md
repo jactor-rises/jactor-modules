@@ -58,7 +58,7 @@ docker run -p 1099:1099 jactor-persistence
 #### Unit testing
 * [assertj](https://assertj.github.io/doc/)
 * [junit jupiter](https://junit.org/)
-* [mockito](http://site.mockito.org)
+* [mockk](http://mockk.io) and [springmockk](https://github.com/Ninja-Squad/springmockk)
 
 #### Build and documentation
 * [flyway](https://flywaydb.org)

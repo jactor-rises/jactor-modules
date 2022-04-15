@@ -4,17 +4,17 @@ import com.github.jactor.persistence.JactorPersistence
 import com.github.jactor.persistence.dto.GuestBookDto
 import com.github.jactor.persistence.dto.GuestBookEntryDto
 import com.github.jactor.persistence.service.GuestBookService
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.verify
-import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpEntity
@@ -33,7 +33,7 @@ internal class GuestBookControllerTest {
     @Value("\${server.servlet.context-path}")
     private lateinit var contextPath: String
 
-    @MockBean
+    @MockkBean
     private lateinit var guestBookServiceMock: GuestBookService
 
     @Autowired
@@ -46,7 +46,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should not get a guest book`() {
-        whenever(guestBookServiceMock.find(1L)).thenReturn(Optional.empty())
+        every { guestBookServiceMock.find(1L) } returns Optional.empty()
 
         val guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto::class.java)
 
@@ -58,7 +58,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should get a guest book`() {
-        whenever(guestBookServiceMock.find(1L)).thenReturn(Optional.of(GuestBookDto()))
+        every { guestBookServiceMock.find(1L) } returns Optional.of(GuestBookDto())
 
         val guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto::class.java)
 
@@ -70,7 +70,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should not get a guest book entry`() {
-        whenever(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.empty())
+        every { guestBookServiceMock.findEntry(1L) } returns Optional.empty()
 
         val guestBookEntryRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/entry/1"),
@@ -85,7 +85,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should get a guest book entry`() {
-        whenever(guestBookServiceMock.findEntry(1L)).thenReturn(Optional.of(GuestBookEntryDto()))
+        every { guestBookServiceMock.findEntry(1L) } returns Optional.of(GuestBookEntryDto())
 
         val guestBookEntryRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/entry/1"),
@@ -103,7 +103,7 @@ internal class GuestBookControllerTest {
         val guestBookDto = GuestBookDto()
         guestBookDto.id = 1L
 
-        whenever(guestBookServiceMock.saveOrUpdate(guestBookDto)).thenReturn(guestBookDto)
+        every { guestBookServiceMock.saveOrUpdate(guestBookDto) } returns guestBookDto
 
         val guestbookResponse = testRestTemplate.exchange(
             buildFullPath("/guestBook/1"), HttpMethod.PUT, HttpEntity(guestBookDto), GuestBookDto::class.java
@@ -113,7 +113,7 @@ internal class GuestBookControllerTest {
             { assertThat(guestbookResponse.statusCode).`as`("status").isEqualTo(HttpStatus.ACCEPTED) },
             { assertThat(guestbookResponse.body).`as`("guest book").isNotNull() },
             { assertThat(guestbookResponse.body?.id).`as`("guest book id").isEqualTo(1L) },
-            { verify(guestBookServiceMock).saveOrUpdate(guestBookDto) }
+            { verify { guestBookServiceMock.saveOrUpdate(guestBookDto) } }
         )
     }
 
@@ -123,7 +123,7 @@ internal class GuestBookControllerTest {
         val createdDto = GuestBookDto()
         createdDto.id = 1L
 
-        whenever(guestBookServiceMock.saveOrUpdate(guestBookDto)).thenReturn(createdDto)
+        every { guestBookServiceMock.saveOrUpdate(guestBookDto) } returns createdDto
 
         val guestbookResponse = testRestTemplate.postForEntity(
             buildFullPath("/guestBook"), guestBookDto,
@@ -134,7 +134,7 @@ internal class GuestBookControllerTest {
             { assertThat(guestbookResponse.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
             { assertThat(guestbookResponse.body).`as`("guest book").isNotNull() },
             { assertThat(guestbookResponse.body?.id).`as`("guest book id").isEqualTo(1L) },
-            { verify(guestBookServiceMock).saveOrUpdate(guestBookDto) }
+            { verify { guestBookServiceMock.saveOrUpdate(guestBookDto) } }
         )
     }
 
@@ -143,7 +143,7 @@ internal class GuestBookControllerTest {
         val guestBookEntryDto = GuestBookEntryDto()
         guestBookEntryDto.id = 1L
 
-        whenever(guestBookServiceMock.saveOrUpdate(guestBookEntryDto)).thenReturn(guestBookEntryDto)
+        every { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } returns guestBookEntryDto
 
         val guestbookEntryResponse = testRestTemplate.exchange(
             buildFullPath("/guestBook/entry/1"), HttpMethod.PUT, HttpEntity(guestBookEntryDto),
@@ -154,7 +154,7 @@ internal class GuestBookControllerTest {
             { assertThat(guestbookEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.ACCEPTED) },
             { assertThat(guestbookEntryResponse.body).`as`("guest book entry").isNotNull() },
             { assertThat(guestbookEntryResponse.body?.id).isEqualTo(1L) },
-            { verify(guestBookServiceMock).saveOrUpdate(guestBookEntryDto) }
+            { verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } }
         )
     }
 
@@ -164,7 +164,7 @@ internal class GuestBookControllerTest {
         val createdDto = GuestBookEntryDto()
         createdDto.id = 1L
 
-        whenever(guestBookServiceMock.saveOrUpdate(guestBookEntryDto)).thenReturn(createdDto)
+        every { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } returns createdDto
 
         val guestbookEntryResponse = testRestTemplate.postForEntity(
             buildFullPath("/guestBook/entry"), guestBookEntryDto,
@@ -175,7 +175,7 @@ internal class GuestBookControllerTest {
             { assertThat(guestbookEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
             { assertThat(guestbookEntryResponse.body).`as`("guest book entry").isNotNull() },
             { assertThat(guestbookEntryResponse.body?.id).isEqualTo(1L) },
-            { verify(guestBookServiceMock).saveOrUpdate(guestBookEntryDto) }
+            { verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } }
         )
     }
 
