@@ -8,6 +8,7 @@ repositories {
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.compileKotlin {
