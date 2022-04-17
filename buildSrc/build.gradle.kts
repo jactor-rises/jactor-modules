@@ -14,11 +14,6 @@ java {
 tasks.compileKotlin {
     kotlinOptions {
         jvmTarget = "17"
-    }
-}
-
-tasks.compileTestKotlin {
-    kotlinOptions {
         jvmTarget = "17"
     }
 }
