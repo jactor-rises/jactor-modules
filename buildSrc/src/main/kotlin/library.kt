@@ -6,14 +6,14 @@ object JactorModules {
         // plugins
         const val benManesVersionsPlugin = "0.42.0"
         const val springDependencyPlugin = "1.0.11.RELEASE"
-        const val springBoot = "2.6.6"
+        const val springBoot = "2.6.7"
         const val springKotlin = "1.6.20"
 
         // dependencies
-        const val flyway = "8.5.8"
+        const val flyway = "8.5.9"
         const val h2 = "2.1.212"
         const val mockk = "1.12.3"
-        const val springdocOpenApi = "1.6.7"
+        const val springdocOpenApi = "1.6.8"
         const val springmockk = "3.1.1"
         const val webjarsBootstrap = "5.1.3"
         const val webjarsJquery = "3.6.0"
