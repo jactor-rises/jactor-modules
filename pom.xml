@@ -8,15 +8,15 @@
   <packaging>jar</packaging>
 
   <properties>
-    <cucumber.version>7.2.3</cucumber.version>
-    <kotlin.version>1.6.20</kotlin.version>
-    <spring-boot.version>2.6.6</spring-boot.version>
+    <cucumber.version>7.3.2</cucumber.version>
+    <kotlin.version>1.6.21</kotlin.version>
+    <spring-boot.version>2.6.7</spring-boot.version>
 
     <!-- build -->
     <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
     <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
     <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
-    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
