@@ -85,8 +85,8 @@ fun createNewSemanticVersion(majorVersion: Int, minorVersion: Int, currentMajorV
         """
         supplied major version: $majorVersion
         supplied minor version: $minorVersion
-        snapshot major version: $currentMajorVersion
-        snapshot minor version: $currentMinorVersion
+        current major version: $currentMajorVersion
+        current minor version: $currentMinorVersion
     """.trimIndent()
     )
 
