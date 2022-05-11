@@ -12,7 +12,7 @@ object JactorModules {
         // dependencies
         const val flyway = "8.5.10"
         const val h2 = "2.1.212"
-        const val mockk = "1.12.3"
+        const val mockk = "1.12.4"
         const val springdocOpenApi = "1.6.8"
         const val springmockk = "3.1.1"
         const val webjarsBootstrap = "5.1.3"
