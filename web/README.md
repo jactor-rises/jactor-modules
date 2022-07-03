@@ -31,7 +31,7 @@ interactive use of jactor-persistence
 
 ### Some technologies used on jactor-web
 
-* [spring-boot 2.6.x](https://spring.io/projects/spring-boot)
+* [spring-boot 2.7.x](https://spring.io/projects/spring-boot)
 * [kotlin](https://kotlinlang.org)
 * [junit 5.x](https://junit.org/junit5/)
 * [assertj](https://assertj.github.io/doc/)
