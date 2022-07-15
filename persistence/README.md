@@ -63,7 +63,7 @@ docker run -p 1099:1099 jactor-persistence
 #### Build and documentation
 * [flyway](https://flywaydb.org)
 * [github actions](https://docs.github.com/en/actions/learn-github-actions)
-* [gradle](https://gradle.org)
+* [gradle](https://gradle.org) (7.x)
 * [swagger-ui](https://swagger.io/tools/swagger-ui/)
   * herunder [springdoc](https://springdoc.org)
 * [sdk man](https://sdkman.io)
