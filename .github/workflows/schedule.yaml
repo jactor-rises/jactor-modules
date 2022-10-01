@@ -1,0 +1,26 @@
+name: scheduled integration tests
+on:
+  schedule:
+    - cron: '30 2 * * 1'
+
+env:
+  CUCUMBER_PUBLISH_ENABLED: true
+
+jobs:
+
+  it:
+    name: cucumber integration testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: jactor-rises/jactor-persistence/run-docker@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE:  ghcr.io/jactor-rises/jactor-persistence
+      - run: cd sys-test && mvn test -P cucumber || true
