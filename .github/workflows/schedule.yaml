@@ -23,4 +23,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE:  ghcr.io/jactor-rises/jactor-persistence
-      - run: mvn test -P cucumber || true
+      - run: cd sys-test && mvn test -P cucumber || true
