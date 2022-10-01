@@ -3,13 +3,12 @@
 *.iml
 
 # maven
-target/
+sys-test/target
 
 # gradle
 .gradle
 **build/
 
 # misc
-.java-version
 /**/.DS_Store
-/persistence/run-docker/node_modules
+
