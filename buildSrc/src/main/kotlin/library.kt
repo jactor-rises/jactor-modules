@@ -16,7 +16,7 @@ object JactorModules {
         const val springdocOpenApi = "1.6.11"
         const val springmockk = "3.1.1"
         const val webjarsBootstrap = "5.2.0"
-        const val webjarsJquery = "3.6.0"
+        const val webjarsJquery = "3.6.1"
     }
 
     object Dependencies {
