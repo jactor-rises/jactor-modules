@@ -9,7 +9,7 @@
 
   <properties>
     <cucumber.version>7.4.1</cucumber.version>
-    <kotlin.version>1.7.10</kotlin.version>
+    <kotlin.version>1.7.20</kotlin.version>
     <spring-boot.version>2.7.1</spring-boot.version>
 
     <!-- build -->
