@@ -6,7 +6,7 @@ object JactorModules {
         // plugins
         const val benManesVersionsPlugin = "0.42.0"
         const val springDependencyPlugin = "1.0.11.RELEASE"
-        const val springBoot = "2.7.3"
+        const val springBoot = "2.7.4"
         const val springKotlin = "1.7.10"
 
         // dependencies
