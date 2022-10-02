@@ -42,20 +42,22 @@ if (args.size < 2) {
     throw IllegalArgumentException(errMsg("Two arguments are required!"))
 }
 
-val inputs = allArgs.split(Regex(" "))
-val commands: MutableMap<String, String> = HashMap()
-
-inputs.filter { it.contains('=') }.filter { !it.endsWith('=') }.forEach {
-    val key = it.split("=")[0]
-    val value = it.split("=")[1]
-    commands[key] = value
+val commands = buildMap {
+    allArgs.split(Regex(" "))
+        .filter { it.contains('=') }
+        .filter { !it.endsWith('=') }
+        .forEach {
+            put(it.split('=')[0], it.split('=')[1])
+        }
 }
 
 debugMessage("map args: $commands")
 
 // read arguments
-val majorMinorVersion = commands[Argument.MAJOR_MINOR] ?: throw IllegalArgumentException(errMsg("${Argument.MAJOR_MINOR} argument is not supplied!"))
-val semanticVersion = commands[Argument.SEMANTIC] ?: throw IllegalArgumentException(errMsg("${Argument.SEMANTIC} argument is not supplied!"))
+val majorMinorVersion = commands[Argument.MAJOR_MINOR]
+    ?: throw IllegalArgumentException(errMsg("${Argument.MAJOR_MINOR} argument is not supplied!"))
+val semanticVersion = commands[Argument.SEMANTIC]
+    ?: throw IllegalArgumentException(errMsg("${Argument.SEMANTIC} argument is not supplied!"))
 
 val newSemanticVersion = createNewSemanticVersion()
 val semVerFile = File(Constants.FILE_NAME_NEW_SEM_VER)
@@ -63,6 +65,7 @@ val semVerFile = File(Constants.FILE_NAME_NEW_SEM_VER)
 Files.write(semVerFile.toPath(), newSemanticVersion.toByteArray())
 
 fun errMsg(message: String): String = Constants.ERROR_MESSAGE.replace("{}", message)
+fun illegalState(message: String) = IllegalStateException(errMsg(message = message))
 fun createNewSemanticVersion(): String {
     debugMessage("creating new semantic version from $majorMinorVersion and current semantic version ($semanticVersion)")
 
@@ -80,7 +83,12 @@ fun createNewSemanticVersion(): String {
     return "$majorMinorVersion.${currentPatch + 1}"
 }
 
-fun createNewSemanticVersion(majorVersion: Int, minorVersion: Int, currentMajorVersion: Int, currentMinorVersion: Int): String {
+fun createNewSemanticVersion(
+    majorVersion: Int,
+    minorVersion: Int,
+    currentMajorVersion: Int,
+    currentMinorVersion: Int
+): String {
     debugMessage(
         """
         supplied major version: $majorVersion
@@ -91,19 +99,19 @@ fun createNewSemanticVersion(majorVersion: Int, minorVersion: Int, currentMajorV
     )
 
     if (majorVersion < currentMajorVersion) {
-        throw IllegalStateException("Supplied major/minor version ($majorMinorVersion) is less than current snapshot major version!")
+        throw illegalState("Supplied major/minor version ($majorMinorVersion) is less than current snapshot major version!")
     }
 
     if (majorVersion == currentMajorVersion && minorVersion < currentMinorVersion) {
-        throw IllegalStateException("Supplied major/minor version ($majorMinorVersion) is less than current snapshot major/minor version")
+        throw illegalState("Supplied major/minor version ($majorMinorVersion) is less than current snapshot major/minor version")
     }
 
     if (majorVersion > (currentMajorVersion + 1)) {
-        throw IllegalStateException("New major version should only be bumped! (new: $majorVersion, current: $currentMajorVersion)")
+        throw illegalState("New major version should only be bumped! (new: $majorVersion, current: $currentMajorVersion)")
     }
 
     if (majorVersion == currentMajorVersion && minorVersion > (currentMinorVersion + 1)) {
-        throw IllegalStateException("New minor version should only be bumped! (new: $minorVersion, current: $currentMinorVersion)")
+        throw illegalState("New minor version should only be bumped! (new: $minorVersion, current: $currentMinorVersion)")
     }
 
     return "$majorMinorVersion.0"

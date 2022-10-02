@@ -22,5 +22,5 @@ jobs:
       - uses: jactor-rises/jactor-persistence/run-docker@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE:  ghcr.io/jactor-rises/jactor-persistence
+          IMAGE: ghcr.io/jactor-rises/jactor-persistence
       - run: cd sys-test && mvn test -P cucumber || true
