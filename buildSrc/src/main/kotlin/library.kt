@@ -10,7 +10,7 @@ object JactorModules {
         const val springKotlin = "1.7.10"
 
         // dependencies
-        const val flyway = "8.5.13"
+        const val flyway = "9.4.0"
         const val h2 = "2.1.214"
         const val mockk = "1.13.2"
         const val springdocOpenApi = "1.6.11"
