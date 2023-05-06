@@ -13,7 +13,7 @@ object JactorModules {
         const val flyway = "9.4.0"
         const val h2 = "2.1.214"
         const val mockk = "1.13.5"
-        const val springdocOpenApi = "1.6.11"
+        const val springdocOpenApi = "1.7.0"
         const val springmockk = "4.0.2"
         const val webjarsBootstrap = "5.2.0"
         const val webjarsJquery = "3.6.1"
