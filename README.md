@@ -2,8 +2,6 @@
 
 [![continuous integration on jactor-persistence](https://github.com/jactor-rises/jactor-modules/actions/workflows/persistence-ci.yaml/badge.svg)](https://github.com/jactor-rises/jactor-modules/actions/workflows/persistence-ci.yaml)
 [![continuous integration on jactor-web](https://github.com/jactor-rises/jactor-modules/actions/workflows/web-ci.yaml/badge.svg)](https://github.com/jactor-rises/jactor-modules/actions/workflows/web-ci.yaml)
-
-[![build run docker](https://github.com/jactor-rises/jactor-modules/actions/workflows/docker-action.yaml/badge.svg)](https://github.com/jactor-rises/jactor-modules/actions/workflows/docker-action.yaml)
 [![verify pull request](https://github.com/jactor-rises/jactor-modules/actions/workflows/pr.yaml/badge.svg)](https://github.com/jactor-rises/jactor-modules/actions/workflows/pr.yaml)
 
 ## gradle multi-build
