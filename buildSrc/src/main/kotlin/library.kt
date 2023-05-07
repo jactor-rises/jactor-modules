@@ -4,8 +4,8 @@ object JactorModules {
         // kotlin language version and kotlin-gradle plugin is an implementation defined in buildSrc/build.gradle.kts
 
         // plugins
-        const val benManesVersionsPlugin = "0.42.0"
-        const val springDependencyPlugin = "1.0.11.RELEASE"
+        const val benManesVersionsPlugin = "0.46.0"
+        const val springDependencyPlugin = "1.1.0"
         const val springBoot = "2.7.4"
         const val springKotlin = "1.8.21"
 
