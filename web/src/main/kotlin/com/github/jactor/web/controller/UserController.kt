@@ -1,18 +1,18 @@
 package com.github.jactor.web.controller
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.ModelAndView
 import com.github.jactor.web.JactorWebBeans
 import com.github.jactor.web.consumer.UserConsumer
 import com.github.jactor.web.dto.UserModel
 import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.servlet.ModelAndView
 
-@Controller
+@RestController
 class UserController @Autowired constructor(
     private val userConsumer: UserConsumer,
     private val menuFacade: MenuFacade,
