@@ -27,7 +27,7 @@ internal class UserControllerIntegrationTest {
 
     @Test
     fun `should create a new user`() {
-        val createUserCommand = CreateUserCommand(UniqueUsername.generate("turbo"), "Someone")
+        val createUserCommand = CreateUserCommand(UniqueUsername.generate(name = "turbo"), surname =  "Someone")
 
         val response = testRestTemplate.postForEntity(
             "${basePath()}/user", HttpEntity(createUserCommand), CreateUserCommandResponse::class.java
@@ -42,8 +42,11 @@ internal class UserControllerIntegrationTest {
 
     @Test
     fun `should create a new user with an email address`() {
-        val createUserCommand = CreateUserCommand(UniqueUsername.generate("turbo"), "Someone")
-        createUserCommand.emailAddress = "somewhere@somehow.com"
+        val createUserCommand = CreateUserCommand(
+            UniqueUsername.generate("turbo"),
+            surname = "Someone",
+            emailAddress = "somewhere@somehow.com"
+        )
 
         val response = testRestTemplate.postForEntity(
             "${basePath()}/user", HttpEntity(createUserCommand), CreateUserCommandResponse::class.java
