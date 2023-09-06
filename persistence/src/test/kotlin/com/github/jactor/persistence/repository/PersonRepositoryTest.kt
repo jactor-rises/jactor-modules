@@ -7,8 +7,8 @@ import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.entity.PersonEntity.Companion.aPerson
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
-import javax.persistence.EntityManager
-import javax.transaction.Transactional
+import jakarta.persistence.EntityManager
+import jakarta.transaction.Transactional
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test

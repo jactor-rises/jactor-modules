@@ -3,7 +3,7 @@ package com.github.jactor.web
 import java.util.*
 import java.util.stream.Collectors
 import java.util.stream.Stream
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 data class RequestManager(
     val contextPath: String,

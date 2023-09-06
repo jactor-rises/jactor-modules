@@ -7,7 +7,7 @@ import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.GuestBookEntity.Companion.aGuestBook
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
-import javax.persistence.EntityManager
+import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test

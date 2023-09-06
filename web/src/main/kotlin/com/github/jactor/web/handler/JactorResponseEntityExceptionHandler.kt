@@ -21,7 +21,7 @@ class JactorResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(value = [RuntimeException::class])
-    fun handleInternalServerError(rex: RuntimeException, headers: HttpHeaders?, webRequest: WebRequest): ResponseEntity<Any> {
+    fun handleInternalServerError(rex: RuntimeException, headers: HttpHeaders?, webRequest: WebRequest): ResponseEntity<Any>? {
         logException(rex, webRequest)
         logCause(rex.cause)
 

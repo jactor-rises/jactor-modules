@@ -43,7 +43,7 @@ internal class UserConsumerIntegrationTest {
             assumeTrue(false, "Failure with rest api: " + e.message)
         }
 
-        assumeTrue(response.statusCode.is2xxSuccessful, response.statusCode.reasonPhrase)
+        assumeTrue(response.statusCode.is2xxSuccessful, response.statusCode.toString())
         assumeTrue(response.body?.contains("UP") ?: false, response.body)
     }
 
