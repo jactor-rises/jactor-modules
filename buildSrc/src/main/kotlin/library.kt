@@ -7,7 +7,7 @@ object JactorModules {
         const val benManesVersionsPlugin = "0.46.0"
         const val springDependencyPlugin = "1.1.0"
         const val springBoot = "2.7.4"
-        const val springKotlin = "1.8.21"
+        const val springKotlin = "1.9.10"
 
         // dependencies
         const val flyway = "9.17.0"
