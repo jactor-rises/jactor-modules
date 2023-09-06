@@ -41,7 +41,7 @@ class RestServiceSteps : No {
 
         Så("skal statuskoden fra resttjenesten være {int}") { statusKode: Int ->
             val httpStatus = HttpStatus.valueOf(statusKode)
-            assertThat(httpStatus).isEqualTo(hentStatusKode())
+            assertThat(hentStatusKode()).isEqualTo(httpStatus)
         }
 
         Og("responsen skal inneholde {string}") { tekst: String ->
