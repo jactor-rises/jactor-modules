@@ -23,7 +23,7 @@ class ApplicationSteps : No {
         }
 
         Så("skal statuskoden være {int}") { httpCode: Int ->
-            assertThat(HttpStatus.valueOf(httpCode)).isEqualTo(hentStatusKode())
+            assertThat(hentStatusKode()).isEqualTo(HttpStatus.valueOf(httpCode))
         }
     }
 }
