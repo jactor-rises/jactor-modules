@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.web.servlet.ModelAndView
 import java.util.*
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 @SpringBootTest
 class RequestInterceptorTest {
