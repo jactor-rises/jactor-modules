@@ -7,7 +7,7 @@ data class PersonInternalDto(
     var address: AddressInternalDto? = null,
     var locale: String? = null,
     var firstName: String? = null,
-    var surname: String? = null,
+    var surname: String = "",
     var description: String? = null
 ) : PersistentData(persistentDto) {
     constructor(

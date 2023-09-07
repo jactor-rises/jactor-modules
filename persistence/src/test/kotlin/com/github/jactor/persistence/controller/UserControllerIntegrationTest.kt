@@ -1,29 +1,16 @@
 package com.github.jactor.persistence.controller
 
-import com.github.jactor.persistence.command.CreateUserCommand
-import com.github.jactor.persistence.command.CreateUserCommandResponse
-import com.github.jactor.persistence.entity.UniqueUsername
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
-import org.springframework.transaction.annotation.Transactional
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.command.CreateUserCommand
+import com.github.jactor.persistence.command.CreateUserCommandResponse
+import com.github.jactor.persistence.entity.UniqueUsername
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Transactional
-internal class UserControllerIntegrationTest {
-
-    @Autowired
-    private lateinit var testRestTemplate: TestRestTemplate
-
-    @LocalServerPort
-    private val port = 0
+internal class UserControllerIntegrationTest: AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should create a new user`() {

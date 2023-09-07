@@ -47,7 +47,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     var locale: String? = null
 
     @Column(name = "SURNAME", nullable = false)
-    var surname: String? = null
+    var surname: String = ""
 
     @JoinColumn(name = "ADDRESS_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
@@ -90,7 +90,8 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         val addressInternalDto = Optional.ofNullable(addressEntity).map { obj: AddressEntity -> obj.asDto() }
             .orElse(null)
 
-        return PersonInternalDto(persistentDataEmbeddable.asPersistentDto(id), addressInternalDto, locale, firstName, surname, description)
+        return PersonInternalDto(
+            persistentDataEmbeddable.asPersistentDto(id), addressInternalDto, locale, firstName, surname, description)
     }
 
     override fun copyWithoutId(): PersonEntity {

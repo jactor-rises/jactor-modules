@@ -36,7 +36,7 @@ data class UserModel(private val user: UserDto) {
     }
 
     fun fetchFullName(): String {
-        val surname = person.surname ?: ""
+        val surname = person.surname
         val firstName = person.firstName ?: ""
         val fullName = "$firstName $surname".trim()
 

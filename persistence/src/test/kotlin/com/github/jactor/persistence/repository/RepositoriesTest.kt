@@ -1,5 +1,11 @@
 package com.github.jactor.persistence.repository
 
+import java.time.LocalDate
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.PersistentDto
@@ -8,26 +14,8 @@ import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.BlogEntity.Companion.aBlog
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import jakarta.persistence.EntityManager
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 
-@SpringBootTest
-@Transactional
-internal class RepositoriesTest {
-
-    @Autowired
-    private lateinit var blogRepository: BlogRepository
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var entityManager: EntityManager
+internal class RepositoriesTest: AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should use a BlogRepository to save a blog with a user that was saved with a UserRepository earlier`() {
