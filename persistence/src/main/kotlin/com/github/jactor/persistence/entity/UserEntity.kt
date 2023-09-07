@@ -1,6 +1,11 @@
 package com.github.jactor.persistence.entity
 
-import com.github.jactor.persistence.dto.PersonInternalDto
+import java.time.LocalDateTime
+import java.util.Collections
+import java.util.Objects
+import java.util.stream.Collectors
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.UserInternalDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -19,14 +24,6 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
-import java.time.LocalDateTime
-import java.util.Arrays
-import java.util.Collections
-import java.util.Objects
-import java.util.Optional
-import java.util.stream.Collectors
 
 @Entity
 @Table(name = "T_USER")
@@ -75,11 +72,10 @@ class UserEntity : PersistentEntity<UserEntity?> {
     private constructor(user: UserEntity) {
         blogs = user.blogs.stream().map { obj: BlogEntity -> obj.copyWithoutId() }.collect(Collectors.toSet())
         emailAddress = user.emailAddress
-        guestBook = Optional.ofNullable(user.guestBook).map { obj: GuestBookEntity -> obj.copyWithoutId() }
-            .orElse(null)
+        guestBook = user.guestBook?.copyWithoutId()
         id = user.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
-        person = Optional.ofNullable(user.person).map { obj: PersonEntity -> obj.copyWithoutId() }.orElse(null)
+        person = user.person?.copyWithoutId()
         username = user.username
         userType = user.userType
     }
@@ -92,22 +88,17 @@ class UserEntity : PersistentEntity<UserEntity?> {
         emailAddress = user.emailAddress
         id = user.id
         persistentDataEmbeddable = PersistentDataEmbeddable(user.persistentDto)
-        person = Optional.ofNullable(user.person).map { person: PersonInternalDto? ->
-            PersonEntity(
-                person!!
-            )
-        }.orElse(null)
+        person = user.person?.let { PersonEntity(it) }
         username = user.username
-        userType = Arrays.stream(UserType.values())
-            .filter { aUserType: UserType -> aUserType.name == user.usertype.name }
-            .findFirst()
-            .orElseThrow { IllegalArgumentException("Unknown UserType: " + user.usertype) }
+        userType = UserType.entries
+            .firstOrNull { aUserType: UserType -> aUserType.name == user.usertype.name }
+            ?: throw IllegalArgumentException("Unknown UserType: " + user.usertype)
     }
 
     fun asDto(): UserInternalDto {
         return UserInternalDto(
             persistentDataEmbeddable.asPersistentDto(id),
-            Optional.ofNullable(person).map { obj: PersonEntity -> obj.asDto() }.orElse(null),
+            person?.asDto(),
             emailAddress,
             username
         )
@@ -141,9 +132,9 @@ class UserEntity : PersistentEntity<UserEntity?> {
 
     override fun equals(other: Any?): Boolean {
         return other === this || other != null && javaClass == other.javaClass &&
-                emailAddress == (other as UserEntity).emailAddress &&
-                person == other.person &&
-                username == other.username
+            emailAddress == (other as UserEntity).emailAddress &&
+            person == other.person &&
+            username == other.username
     }
 
     override fun hashCode(): Int {

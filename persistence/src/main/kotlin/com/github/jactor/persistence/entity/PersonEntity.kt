@@ -20,7 +20,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.time.LocalDateTime
 import java.util.Objects
-import java.util.Optional
 
 @Entity
 @Table(name = "T_PERSON")
@@ -73,11 +72,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     }
 
     constructor(person: PersonInternalDto) {
-        addressEntity = Optional.ofNullable(person.address).map { addressInternalDto: AddressInternalDto? ->
-            AddressEntity(
-                addressInternalDto!!
-            )
-        }.orElse(null)
+        addressEntity = person.address?.let { AddressEntity(it) }
         description = person.description
         firstName = person.firstName
         locale = person.locale
@@ -86,13 +81,9 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         surname = person.surname
     }
 
-    fun asDto(): PersonInternalDto {
-        val addressInternalDto = Optional.ofNullable(addressEntity).map { obj: AddressEntity -> obj.asDto() }
-            .orElse(null)
-
-        return PersonInternalDto(
-            persistentDataEmbeddable.asPersistentDto(id), addressInternalDto, locale, firstName, surname, description)
-    }
+    fun asDto() = PersonInternalDto(
+        persistentDataEmbeddable.asPersistentDto(id), addressEntity?.asDto(), locale, firstName, surname, description
+    )
 
     override fun copyWithoutId(): PersonEntity {
         val personEntity = PersonEntity(this)
@@ -107,11 +98,11 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
 
     override fun equals(other: Any?): Boolean {
         return this === other || other != null && javaClass == other.javaClass &&
-                addressEntity == (other as PersonEntity).addressEntity &&
-                description == other.description &&
-                firstName == other.firstName &&
-                surname == other.surname &&
-                locale == other.locale
+            addressEntity == (other as PersonEntity).addressEntity &&
+            description == other.description &&
+            firstName == other.firstName &&
+            surname == other.surname &&
+            locale == other.locale
     }
 
     override fun hashCode(): Int {
