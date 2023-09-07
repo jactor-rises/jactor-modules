@@ -1,6 +1,6 @@
 package com.github.jactor.web.consumer
 
-import com.github.jactor.shared.dto.UserDto
+import java.net.URI
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.BeforeEach
@@ -15,7 +15,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-import java.net.URI
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 internal class UserConsumerIntegrationTest {
@@ -64,9 +63,9 @@ internal class UserConsumerIntegrationTest {
         val possibleUser = userConsumerToTest.find("jactor")
 
         assertAll(
-            { assertThat(possibleUser).`as`("possible user").isPresent },
+            { assertThat(possibleUser).`as`("possible user").isNotNull },
             {
-                val user = possibleUser.orElse(UserDto())
+                val user = possibleUser!!
 
                 assertAll(
                     { assertThat(user.person?.firstName).`as`("user.person.firstName").isEqualTo("Tor Egil") },

@@ -1,6 +1,5 @@
 package com.github.jactor.web.consumer
 
-import java.util.Optional
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -10,8 +9,8 @@ import com.github.jactor.shared.dto.UserDto
 @Service
 class DefaultUserConsumer(private val restTemplate: RestTemplate) : UserConsumer {
 
-    override fun find(username: String): Optional<UserDto> {
-        return Optional.ofNullable(bodyOf(restTemplate.getForEntity("/user/name/$username", UserDto::class.java)))
+    override fun find(username: String): UserDto? {
+        return bodyOf(restTemplate.getForEntity("/user/name/$username", UserDto::class.java))
     }
 
     override fun findAllUsernames(): List<String> {
@@ -40,6 +39,6 @@ class DefaultUserConsumer(private val restTemplate: RestTemplate) : UserConsumer
 }
 
 interface UserConsumer {
-    fun find(username: String): Optional<UserDto>
+    fun find(username: String): UserDto?
     fun findAllUsernames(): List<String>
 }

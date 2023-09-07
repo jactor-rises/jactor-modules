@@ -1,5 +1,8 @@
 package com.github.jactor.web.handler
 
+import java.util.function.Consumer
+import java.util.stream.Collectors
+import java.util.stream.Stream
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -8,10 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import java.util.Optional
-import java.util.function.Consumer
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 @ControllerAdvice
 class JactorResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
@@ -21,7 +20,11 @@ class JactorResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(value = [RuntimeException::class])
-    fun handleInternalServerError(rex: RuntimeException, headers: HttpHeaders?, webRequest: WebRequest): ResponseEntity<Any>? {
+    fun handleInternalServerError(
+        rex: RuntimeException,
+        headers: HttpHeaders?,
+        webRequest: WebRequest
+    ): ResponseEntity<Any>? {
         logException(rex, webRequest)
         logCause(rex.cause)
 
@@ -48,12 +51,11 @@ class JactorResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     private fun logCause(cause: Throwable?) {
-        var possibleCause: Optional<Throwable> = Optional.ofNullable(cause)
+        var possibleCause: Throwable? = cause
 
-        while (possibleCause.isPresent) {
-            val theCause = possibleCause.get()
-            LOGGER.error("  ...caused by ${theCause.javaClass.name}: ${theCause.message} ", theCause)
-            possibleCause = Optional.ofNullable(theCause.cause)
+        while (possibleCause != null) {
+            LOGGER.error("  ...caused by ${possibleCause.javaClass.name}: ${possibleCause.message} ", possibleCause)
+            possibleCause = possibleCause.cause
         }
     }
 }
