@@ -53,7 +53,7 @@ internal class UserServiceTest {
             )
         )
 
-        val user = userServiceToTest.find("jactor").orElseThrow { AssertionError("mocking?") }
+        val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
 
         assertAll(
             { assertThat(user).`as`("user").isNotNull() },
@@ -71,7 +71,7 @@ internal class UserServiceTest {
             aUser(UserInternalDto(PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE))
         )
 
-        val user = userServiceToTest.find(69L).orElseThrow { AssertionError("mocking?") }
+        val user = userServiceToTest.find(69L) ?: throw AssertionError("mocking?")
 
         assertAll(
             { assertThat(user).`as`("user").isNotNull() },
@@ -93,8 +93,8 @@ internal class UserServiceTest {
             UserEntity(UserInternalDto(persistentDto, userDto))
         )
 
-        val optionalUser = userServiceToTest.update(userDto)
-        assertThat(optionalUser).isPresent.get().extracting(UserInternalDto::username).isEqualTo("marley")
+        val user = userServiceToTest.update(userDto)
+        assertThat(user?.username).isEqualTo("marley")
     }
 
     @Test

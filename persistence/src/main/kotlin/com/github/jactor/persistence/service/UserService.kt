@@ -1,32 +1,35 @@
 package com.github.jactor.persistence.service
 
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.command.CreateUserCommand
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.repository.UserRepository
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import java.util.Optional
-import java.util.stream.Collectors
 
 @Service
 class UserService(
     private val personService: PersonService,
     private val userRepository: UserRepository
 ) {
-    fun find(username: String): Optional<UserInternalDto> {
-        return userRepository.findByUsername(username).map { obj: UserEntity? -> obj?.asDto() }
+    fun find(username: String): UserInternalDto? {
+        return userRepository.findByUsername(username)
+            .map { it.asDto() }
+            .orElse(null)
     }
 
-    fun find(id: Long): Optional<UserInternalDto> {
-        return userRepository.findById(id).map { obj: UserEntity? -> obj?.asDto() }
+    fun find(id: Long): UserInternalDto? {
+        return userRepository.findById(id)
+            .map { it.asDto() }
+            .orElse(null)
     }
 
     @Transactional
-    fun update(userInternalDto: UserInternalDto): Optional<UserInternalDto> {
+    fun update(userInternalDto: UserInternalDto): UserInternalDto? {
         return userRepository.findById(userInternalDto.id ?: throw IllegalArgumentException("User must have an id!"))
-            .map<UserEntity> { userEntity: UserEntity? -> userEntity?.update(userInternalDto) }
-            .map { obj: UserEntity -> obj.asDto() }
+            .map { it.update(userInternalDto) }
+            .map { it.asDto() }
+            .orElse(null)
     }
 
     fun create(createUserCommand: CreateUserCommand): UserInternalDto {
@@ -44,9 +47,8 @@ class UserService(
     }
 
     fun findUsernames(userType: UserEntity.UserType): List<String> {
-        return userRepository.findByUserTypeIn(listOf(userType)).stream()
-            .map<String> { obj: UserEntity? -> obj?.username }
-            .collect(Collectors.toList())
+        return userRepository.findByUserTypeIn(listOf(userType))
+            .map { it.username ?: "username of user with id '${it.id} is null!" }
     }
 
     fun isAlreadyPresent(username: String): Boolean {

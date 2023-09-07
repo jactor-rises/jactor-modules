@@ -27,33 +27,45 @@ class BlogController(private val blogService: BlogService) {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "En blogg for id"),
-            ApiResponse(responseCode = "204", description = "Fant ikke blog for id", content = arrayOf(Content(schema = Schema(hidden = true))))
+            ApiResponse(
+                responseCode = "204",
+                description = "Fant ikke blog for id",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
         ]
     )
     @GetMapping("/{id}")
     operator fun get(@PathVariable("id") blogId: Long): ResponseEntity<BlogDto> {
-        return blogService.find(blogId).map { blogDto: BlogDto -> ResponseEntity(blogDto, HttpStatus.OK) }
-            .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
+        return blogService.find(blogId)?.let { ResponseEntity(it, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
     @Operation(description = "Henter et innslag i en blogg ved å angi id")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Et blogg-innslag for id"),
-            ApiResponse(responseCode = "204", description = "Fant ikke innslaget for id", content = arrayOf(Content(schema = Schema(hidden = true))))
+            ApiResponse(
+                responseCode = "204",
+                description = "Fant ikke innslaget for id",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
         ]
     )
     @GetMapping("/entry/{id}")
     fun getEntryById(@PathVariable("id") blogEntryId: Long): ResponseEntity<BlogEntryDto> {
-        return blogService.findEntryBy(blogEntryId).map { blogEntryDto: BlogEntryDto -> ResponseEntity(blogEntryDto, HttpStatus.OK) }
-            .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
+        return blogService.findEntryBy(blogEntryId)?.let { ResponseEntity(it, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
     @Operation(description = "Søker etter blogger basert på en blog tittel")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Blogger basert på tittel"),
-            ApiResponse(responseCode = "204", description = "Fant ikke innslaget for id", content = arrayOf(Content(schema = Schema(hidden = true))))
+            ApiResponse(
+                responseCode = "204",
+                description = "Fant ikke innslaget for id",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
         ]
     )
     @GetMapping("/title/{title}")
@@ -67,7 +79,11 @@ class BlogController(private val blogService: BlogService) {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Blogg-innslag basert på blogg id"),
-            ApiResponse(responseCode = "204", description = "Fant ikke innslaget for id", content = arrayOf(Content(schema = Schema(hidden = true))))
+            ApiResponse(
+                responseCode = "204",
+                description = "Fant ikke innslaget for id",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
         ]
     )
     @GetMapping("/{id}/entries")
@@ -101,7 +117,11 @@ class BlogController(private val blogService: BlogService) {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Bloggen er opprettet"),
-            ApiResponse(responseCode = "400", description = "Mangler blogg å opprette", content = arrayOf(Content(schema = Schema(hidden = true))))
+            ApiResponse(
+                responseCode = "400",
+                description = "Mangler blogg å opprette",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
         ]
     )
     @PostMapping
@@ -125,7 +145,10 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @PutMapping("/entry/{blogEntryId}")
-    fun putEntry(@RequestBody blogEntryDto: BlogEntryDto, @PathVariable blogEntryId: Long): ResponseEntity<BlogEntryDto> {
+    fun putEntry(
+        @RequestBody blogEntryDto: BlogEntryDto,
+        @PathVariable blogEntryId: Long
+    ): ResponseEntity<BlogEntryDto> {
         if (blogEntryDto.id != blogEntryId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }

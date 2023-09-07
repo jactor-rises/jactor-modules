@@ -1,5 +1,9 @@
 package com.github.jactor.persistence.entity
 
+import java.time.LocalDateTime
+import java.util.Objects
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
 import jakarta.persistence.AttributeOverride
@@ -14,11 +18,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
-import java.time.LocalDateTime
-import java.util.Objects
-import java.util.Optional
 
 @Entity
 @Table(name = "T_BLOG_ENTRY")
@@ -56,11 +55,7 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
     }
 
     constructor(blogEntryDto: BlogEntryDto) {
-        blog = Optional.ofNullable(blogEntryDto.blog).map { blogDto: BlogDto? ->
-            BlogEntity(
-                blogDto!!
-            )
-        }.orElse(null)
+        blog = blogEntryDto.blog?.let { BlogEntity(it) }
         entryEmbeddable = EntryEmbeddable(blogEntryDto.notNullableCreator, blogEntryDto.notNullableEntry)
         id = blogEntryDto.id
         persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryDto.persistentDto)
@@ -108,7 +103,7 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
 
     private fun isEqualTo(blogEntry: BlogEntryEntity): Boolean {
         return entryEmbeddable == blogEntry.entryEmbeddable &&
-                blog == blogEntry.blog
+            blog == blogEntry.blog
     }
 
     override fun hashCode(): Int {

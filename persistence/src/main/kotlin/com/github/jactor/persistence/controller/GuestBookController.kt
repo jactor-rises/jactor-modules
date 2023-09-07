@@ -26,26 +26,34 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Gjesteboka er hentet"),
-            ApiResponse(responseCode = "204", description = "Fant ingen gjestebok på id", content = arrayOf(Content(schema = Schema(hidden = true))))
+            ApiResponse(
+                responseCode = "204",
+                description = "Fant ingen gjestebok på id",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
         ]
     )
     @GetMapping("/{id}")
     operator fun get(@PathVariable("id") id: Long): ResponseEntity<GuestBookDto> {
-        return guestBookService.find(id).map { guestBookDto: GuestBookDto -> ResponseEntity(guestBookDto, HttpStatus.OK) }
-            .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
+        return guestBookService.find(id)?.let { ResponseEntity(it, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
     @Operation(description = "Hent et innslag i en gjesdebok ved å angi id til innslaget")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Innslaget i gjesteboka er hentet"),
-            ApiResponse(responseCode = "204", description = "Fant ingen innslag med id", content = arrayOf(Content(schema = Schema(hidden = true))))
+            ApiResponse(
+                responseCode = "204",
+                description = "Fant ingen innslag med id",
+                content = arrayOf(Content(schema = Schema(hidden = true)))
+            )
         ]
     )
     @GetMapping("/entry/{id}")
     fun getEntry(@PathVariable("id") id: Long): ResponseEntity<GuestBookEntryDto> {
-        return guestBookService.findEntry(id).map { guestBookDto: GuestBookEntryDto -> ResponseEntity(guestBookDto, HttpStatus.OK) }
-            .orElseGet { ResponseEntity(HttpStatus.NO_CONTENT) }
+        return guestBookService.findEntry(id)?.let { ResponseEntity(it, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
     @Operation(description = "Opprett en gjestebok")
@@ -120,7 +128,10 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @PutMapping("/entry/{guestBookEntryId}")
-    fun putEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto, @PathVariable guestBookEntryId: Long): ResponseEntity<GuestBookEntryDto> {
+    fun putEntry(
+        @RequestBody guestBookEntryDto: GuestBookEntryDto,
+        @PathVariable guestBookEntryId: Long
+    ): ResponseEntity<GuestBookEntryDto> {
         if (guestBookEntryDto.id != guestBookEntryId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }

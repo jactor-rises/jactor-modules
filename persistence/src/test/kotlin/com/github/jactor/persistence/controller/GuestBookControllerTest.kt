@@ -46,7 +46,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should not get a guest book`() {
-        every { guestBookServiceMock.find(1L) } returns Optional.empty()
+        every { guestBookServiceMock.find(1L) } returns null
 
         val guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto::class.java)
 
@@ -58,7 +58,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should get a guest book`() {
-        every { guestBookServiceMock.find(1L) } returns Optional.of(GuestBookDto())
+        every { guestBookServiceMock.find(1L) } returns GuestBookDto()
 
         val guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto::class.java)
 
@@ -70,7 +70,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should not get a guest book entry`() {
-        every { guestBookServiceMock.findEntry(1L) } returns Optional.empty()
+        every { guestBookServiceMock.findEntry(1L) } returns null
 
         val guestBookEntryRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/entry/1"),
@@ -85,7 +85,7 @@ internal class GuestBookControllerTest {
 
     @Test
     fun `should get a guest book entry`() {
-        every { guestBookServiceMock.findEntry(1L) } returns Optional.of(GuestBookEntryDto())
+        every { guestBookServiceMock.findEntry(1L) } returns GuestBookEntryDto()
 
         val guestBookEntryRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/entry/1"),

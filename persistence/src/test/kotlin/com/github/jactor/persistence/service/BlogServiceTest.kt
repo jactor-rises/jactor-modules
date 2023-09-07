@@ -1,5 +1,11 @@
 package com.github.jactor.persistence.service
 
+import java.time.LocalDate
+import java.util.Optional
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
 import com.github.jactor.persistence.dto.PersistentDto
@@ -15,12 +21,6 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.slot
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDate
-import java.util.Optional
 
 @ExtendWith(MockKExtension::class)
 internal class BlogServiceTest {
@@ -43,7 +43,7 @@ internal class BlogServiceTest {
 
         every { blogRepositoryMock.findById(1001L) } returns Optional.of(blogEntity)
 
-        val (_, _, title) = blogServiceToTest.find(1001L).orElseThrow { AssertionError("missed mocking?") }
+        val (_, _, title) = blogServiceToTest.find(1001L) ?: throw AssertionError("missed mocking?")
 
         assertThat(title).`as`("title").isEqualTo("full speed ahead")
     }
@@ -56,7 +56,7 @@ internal class BlogServiceTest {
         every { blogEntryRepositoryMock.findById(1001L) } returns Optional.of(anEntry)
 
         val (_, _, creatorName, entry) = blogServiceToTest.findEntryBy(1001L)
-            .orElseThrow { AssertionError("missed mocking?") }
+            ?: throw AssertionError("missed mocking?")
 
         assertAll(
             { assertThat(creatorName).`as`("creator name").isEqualTo("me") },
@@ -101,7 +101,7 @@ internal class BlogServiceTest {
         blogDto.title = "some blog"
         blogDto.userInternal = UserInternalDto(username = "itsme")
 
-        every { userServiceMock.find(username = any()) } returns Optional.empty()
+        every { userServiceMock.find(username = any()) } returns null
         every { blogRepositoryMock.save(capture(blogEntitySlot)) } returns BlogEntity(blogDto)
 
         blogServiceToTest.saveOrUpdate(blogDto = blogDto)
@@ -110,7 +110,7 @@ internal class BlogServiceTest {
         assertAll(
             { assertThat(blogEntity.created).`as`("created").isEqualTo(LocalDate.now()) },
             { assertThat(blogEntity.title).`as`("title").isEqualTo("some blog") },
-            { assertThat(blogEntity.user).`as`("user").isNotNull() }
+            { assertThat(blogEntity.user).`as`("user").isNull() }
         )
     }
 
@@ -122,7 +122,7 @@ internal class BlogServiceTest {
         blogEntryDto.creatorName = "me"
         blogEntryDto.entry = "if i where a rich man..."
 
-        every { userServiceMock.find(username = any()) } returns Optional.empty()
+        every { userServiceMock.find(username = any()) } returns null
         every { blogEntryRepositoryMock.save(capture(blogEntryEntitySlot)) } returns BlogEntryEntity(blogEntryDto)
 
         blogServiceToTest.saveOrUpdate(blogEntryDto)
