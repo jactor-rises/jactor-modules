@@ -3,7 +3,7 @@ version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
 plugins {
-    id("org.springframework.boot") version JactorModules.Version.springBoot
+    id("org.springframework.boot") version Versions.v3_1_3
 }
 
 dependencies {
@@ -17,9 +17,9 @@ dependencies {
     implementation(project(":shared"))
 
     // database
-    runtimeOnly(JactorModules.Dependencies.flyway)
-    runtimeOnly(JactorModules.Dependencies.h2)
+    runtimeOnly("org.flywaydb:flyway-core:${Versions.v9_22_0}")
+    runtimeOnly("com.h2database:h2:${Versions.v2_2_222}")
 
     // swagger
-    implementation(JactorModules.Dependencies.springdocOpenApi)
+    implementation("org.springdoc:springdoc-openapi-ui:${Versions.v1_7_0}")
 }
