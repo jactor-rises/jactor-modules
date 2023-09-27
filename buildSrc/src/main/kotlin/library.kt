@@ -10,7 +10,7 @@ object Versions {
 
     // dependencies
     const val v9_22_0 = "9.22.0"
-    const val v2_2_222 = "2.2.222"
+    const val v2_2_224 = "2.2.224"
     const val v1_13_8 = "1.13.8"
     const val v1_7_0 = "1.7.0"
     const val v4_0_2 = "4.0.2"
