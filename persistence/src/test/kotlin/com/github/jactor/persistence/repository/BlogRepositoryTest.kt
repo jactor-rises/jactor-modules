@@ -9,7 +9,7 @@ import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.BlogEntity
 import com.github.jactor.persistence.entity.BlogEntity.Companion.aBlog
 import com.github.jactor.persistence.entity.BlogEntryEntity
-import javax.persistence.EntityManager
+import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test

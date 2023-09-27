@@ -1,5 +1,10 @@
 package com.github.jactor.persistence.service
 
+import java.util.Optional
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.extension.ExtendWith
 import com.github.jactor.persistence.dto.GuestBookDto
 import com.github.jactor.persistence.dto.GuestBookEntryDto
 import com.github.jactor.persistence.dto.PersistentDto
@@ -15,12 +20,6 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.slot
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.extension.ExtendWith
-import java.util.*
-import java.util.function.Supplier
 
 @ExtendWith(MockKExtension::class)
 internal class GuestBookServiceTest {
@@ -39,7 +38,8 @@ internal class GuestBookServiceTest {
         val guestBookEntity = aGuestBook(GuestBookDto(PersistentDto(), HashSet(), "@home", null))
         every { guestBookRepositoryMock.findById(1001L) } returns Optional.of(guestBookEntity)
 
-        val (_, _, title) = guestBookServiceToTest.find(1001L).orElseThrow(mockError())
+        val (_, _, title) = guestBookServiceToTest.find(1001L) ?: throw mockError()
+
         assertThat(title).`as`("title").isEqualTo("@home")
     }
 
@@ -49,7 +49,7 @@ internal class GuestBookServiceTest {
 
         every { guestBookEntryRepositoryMock.findById(1001L) } returns Optional.of(anEntry)
 
-        val (_, _, creatorName, entry) = guestBookServiceToTest.findEntry(1001L).orElseThrow(mockError())
+        val (_, _, creatorName, entry) = guestBookServiceToTest.findEntry(1001L) ?: throw mockError()
 
         assertAll(
             { assertThat(creatorName).`as`("creator name").isEqualTo("me") },
@@ -57,8 +57,8 @@ internal class GuestBookServiceTest {
         )
     }
 
-    private fun mockError(): Supplier<AssertionError> {
-        return Supplier { AssertionError("missed mocking?") }
+    private fun mockError(): AssertionError {
+        return AssertionError("missed mocking?")
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.github.jactor.web
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll

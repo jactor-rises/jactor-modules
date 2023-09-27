@@ -10,7 +10,7 @@ import com.github.jactor.persistence.entity.GuestBookEntity.Companion.aGuestBook
 import com.github.jactor.persistence.entity.GuestBookEntryEntity
 import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGuestBookEntry
 import com.github.jactor.persistence.entity.UserEntity
-import javax.persistence.EntityManager
+import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test

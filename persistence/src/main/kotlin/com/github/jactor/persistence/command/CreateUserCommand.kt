@@ -6,25 +6,21 @@ import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.shared.dto.CreateUserCommandDto
 
+@JvmRecord
 data class CreateUserCommand(
-    var username: String = "",
-    var surname: String = "",
-    var emailAddress: String? = null,
-    var description: String? = null,
-    var firstName: String? = null,
-    var language: String? = null,
-    var addressLine1: String? = null,
-    var addressLine2: String? = null,
-    var addressLine3: String? = null,
-    var zipCode: String? = null,
-    var city: String? = null,
-    var coutnry: String? = null
+    val username: String = "",
+    val surname: String = "",
+    val emailAddress: String? = null,
+    val description: String? = null,
+    val firstName: String? = null,
+    val language: String? = null,
+    val addressLine1: String? = null,
+    val addressLine2: String? = null,
+    val addressLine3: String? = null,
+    val zipCode: String? = null,
+    val city: String? = null,
+    val coutnry: String? = null
 ) {
-    constructor(username: String, surname: String) : this(
-        username, surname,
-        null, null, null, null, null, null, null, null, null
-    )
-
     constructor(createUserCommand: CreateUserCommandDto) : this(
         username = createUserCommand.username,
         surname = createUserCommand.surname,
@@ -70,5 +66,5 @@ data class CreateUserCommand(
 }
 
 data class CreateUserCommandResponse(
-    var userInternal: UserInternalDto = UserInternalDto()
+    val userInternal: UserInternalDto = UserInternalDto()
 )

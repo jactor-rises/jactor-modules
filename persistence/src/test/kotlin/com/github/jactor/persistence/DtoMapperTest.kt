@@ -1,19 +1,12 @@
 package com.github.jactor.persistence
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.jactor.shared.dto.UserDto
-import com.github.jactor.shared.dto.UserType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+import com.github.jactor.shared.dto.UserDto
+import com.github.jactor.shared.dto.UserType
 
-@SpringBootTest
-internal class DtoMapperTest {
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+internal class DtoMapperTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should map a user to json`() {

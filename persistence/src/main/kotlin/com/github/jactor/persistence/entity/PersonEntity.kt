@@ -2,25 +2,24 @@ package com.github.jactor.persistence.entity
 
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersonInternalDto
-import javax.persistence.AttributeOverride
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.SequenceGenerator
-import javax.persistence.Table
+import jakarta.persistence.AttributeOverride
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.SequenceGenerator
+import jakarta.persistence.Table
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.time.LocalDateTime
 import java.util.Objects
-import java.util.Optional
 
 @Entity
 @Table(name = "T_PERSON")
@@ -47,7 +46,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     var locale: String? = null
 
     @Column(name = "SURNAME", nullable = false)
-    var surname: String? = null
+    var surname: String = ""
 
     @JoinColumn(name = "ADDRESS_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
@@ -73,11 +72,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     }
 
     constructor(person: PersonInternalDto) {
-        addressEntity = Optional.ofNullable(person.address).map { addressInternalDto: AddressInternalDto? ->
-            AddressEntity(
-                addressInternalDto!!
-            )
-        }.orElse(null)
+        addressEntity = person.address?.let { AddressEntity(it) }
         description = person.description
         firstName = person.firstName
         locale = person.locale
@@ -86,12 +81,9 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         surname = person.surname
     }
 
-    fun asDto(): PersonInternalDto {
-        val addressInternalDto = Optional.ofNullable(addressEntity).map { obj: AddressEntity -> obj.asDto() }
-            .orElse(null)
-
-        return PersonInternalDto(persistentDataEmbeddable.asPersistentDto(id), addressInternalDto, locale, firstName, surname, description)
-    }
+    fun asDto() = PersonInternalDto(
+        persistentDataEmbeddable.asPersistentDto(id), addressEntity?.asDto(), locale, firstName, surname, description
+    )
 
     override fun copyWithoutId(): PersonEntity {
         val personEntity = PersonEntity(this)
@@ -106,11 +98,11 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
 
     override fun equals(other: Any?): Boolean {
         return this === other || other != null && javaClass == other.javaClass &&
-                addressEntity == (other as PersonEntity).addressEntity &&
-                description == other.description &&
-                firstName == other.firstName &&
-                surname == other.surname &&
-                locale == other.locale
+            addressEntity == (other as PersonEntity).addressEntity &&
+            description == other.description &&
+            firstName == other.firstName &&
+            surname == other.surname &&
+            locale == other.locale
     }
 
     override fun hashCode(): Int {

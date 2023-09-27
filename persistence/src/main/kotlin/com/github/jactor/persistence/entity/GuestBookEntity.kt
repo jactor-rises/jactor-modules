@@ -1,28 +1,24 @@
 package com.github.jactor.persistence.entity
 
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
-import com.github.jactor.persistence.dto.UserInternalDto
-import javax.persistence.AttributeOverride
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.OneToMany
-import javax.persistence.OneToOne
-import javax.persistence.SequenceGenerator
-import javax.persistence.Table
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
 import java.time.LocalDateTime
 import java.util.Objects
-import java.util.Optional
-import java.util.stream.Collectors
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
+import com.github.jactor.persistence.dto.GuestBookDto
+import jakarta.persistence.AttributeOverride
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OneToOne
+import jakarta.persistence.SequenceGenerator
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "T_GUEST_BOOK")
@@ -57,7 +53,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
      * @param guestBook to copyWithoutId...
      */
     private constructor(guestBook: GuestBookEntity) {
-        entries = guestBook.entries.stream().map { obj: GuestBookEntryEntity -> obj.copyWithoutId() }.collect(Collectors.toSet())
+        entries = guestBook.entries.map { it.copyWithoutId() }.toMutableSet()
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
         title = guestBook.title
@@ -65,29 +61,23 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     }
 
     constructor(guestBook: GuestBookDto) {
-        entries = guestBook.entries.stream().map { guestBookEntry: GuestBookEntryDto ->
-            GuestBookEntryEntity(
-                guestBookEntry
-            )
-        }.collect(Collectors.toSet())
+        entries = guestBook.entries.map { GuestBookEntryEntity(it) }.toMutableSet()
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistentDto)
         title = guestBook.title
-        user = Optional.ofNullable(guestBook.userInternal).map { user: UserInternalDto ->
-            UserEntity(user)
-        }.orElse(null)
+        user = guestBook.userInternal?.let { UserEntity(it) }
     }
 
     private fun copyUserWithoutId(): UserEntity? {
-        return Optional.ofNullable(user).map { obj: UserEntity -> obj.copyWithoutId() }.orElse(null)
+        return user?.copyWithoutId()
     }
 
     fun asDto(): GuestBookDto {
         return GuestBookDto(
-            persistentDataEmbeddable.asPersistentDto(id),
-            entries.stream().map { obj: GuestBookEntryEntity -> obj.asDto() }.collect(Collectors.toSet()),
-            title,
-            Optional.ofNullable(user).map { obj: UserEntity -> obj.asDto() }.orElse(null)
+            persistentDto = persistentDataEmbeddable.asPersistentDto(id),
+            entries = entries.map { it.asDto() }.toMutableSet(),
+            title = title,
+            userInternal = user?.asDto()
         )
     }
 
@@ -109,8 +99,8 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
 
     override fun equals(other: Any?): Boolean {
         return this === other || other != null && javaClass == other.javaClass &&
-                title == (other as GuestBookEntity).title &&
-                user == other.user
+            title == (other as GuestBookEntity).title &&
+            user == other.user
     }
 
     override fun hashCode(): Int {

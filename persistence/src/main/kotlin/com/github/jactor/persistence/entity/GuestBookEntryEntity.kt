@@ -1,24 +1,23 @@
 package com.github.jactor.persistence.entity
 
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
-import javax.persistence.AttributeOverride
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.SequenceGenerator
-import javax.persistence.Table
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
 import java.time.LocalDateTime
 import java.util.Objects
-import java.util.Optional
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
+import com.github.jactor.persistence.dto.GuestBookDto
+import com.github.jactor.persistence.dto.GuestBookEntryDto
+import jakarta.persistence.AttributeOverride
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.SequenceGenerator
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
@@ -57,11 +56,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
 
     constructor(guestBookEntry: GuestBookEntryDto) {
         entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
-        guestBook = Optional.ofNullable(guestBookEntry.guestBook).map { guestBook: GuestBookDto? ->
-            GuestBookEntity(
-                guestBook!!
-            )
-        }.orElse(null)
+        guestBook = guestBookEntry.guestBook?.let { GuestBookEntity(it) }
         id = guestBookEntry.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistentDto)
     }
@@ -109,7 +104,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
 
     private fun isEqualTo(o: GuestBookEntryEntity): Boolean {
         return entryEmbeddable == o.entryEmbeddable &&
-                guestBook == o.guestBook
+            guestBook == o.guestBook
     }
 
     override fun hashCode(): Int {
