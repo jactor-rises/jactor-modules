@@ -3,7 +3,6 @@ package com.github.jactor.persistence.entity
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Objects
-import java.util.stream.Collectors
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.BlogDto
@@ -57,8 +56,9 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
 
     private constructor(blogEntity: BlogEntity) {
         created = blogEntity.created
-        entries =
-            blogEntity.entries.stream().map { obj: BlogEntryEntity -> obj.copyWithoutId() }.collect(Collectors.toSet())
+        entries = blogEntity.entries
+            .map { obj: BlogEntryEntity -> obj.copyWithoutId() }
+            .toMutableSet()
         id = blogEntity.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
         title = blogEntity.title

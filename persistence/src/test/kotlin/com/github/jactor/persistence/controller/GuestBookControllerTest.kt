@@ -1,12 +1,5 @@
 package com.github.jactor.persistence.controller
 
-import com.github.jactor.persistence.JactorPersistence
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
-import com.github.jactor.persistence.service.GuestBookService
-import com.ninjasquad.springmockk.MockkBean
-import io.mockk.every
-import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
@@ -21,7 +14,13 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.Optional
+import com.github.jactor.persistence.JactorPersistence
+import com.github.jactor.persistence.dto.GuestBookDto
+import com.github.jactor.persistence.dto.GuestBookEntryDto
+import com.github.jactor.persistence.service.GuestBookService
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)

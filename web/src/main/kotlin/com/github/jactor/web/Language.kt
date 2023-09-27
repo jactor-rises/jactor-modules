@@ -1,6 +1,6 @@
 package com.github.jactor.web
 
-import java.util.*
+import java.util.Locale
 
 const val ENGLISH = "English"
 const val NORSK = "Norsk"

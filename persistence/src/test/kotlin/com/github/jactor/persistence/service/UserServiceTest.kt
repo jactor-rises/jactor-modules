@@ -1,5 +1,12 @@
 package com.github.jactor.persistence.service
 
+import java.time.LocalDateTime
+import java.util.Optional
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import com.github.jactor.persistence.command.CreateUserCommand
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
@@ -14,13 +21,6 @@ import com.github.jactor.persistence.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.slot
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
-import java.util.*
 
 @SpringBootTest
 internal class UserServiceTest {

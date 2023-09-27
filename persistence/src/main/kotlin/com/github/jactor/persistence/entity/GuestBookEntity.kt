@@ -2,11 +2,9 @@ package com.github.jactor.persistence.entity
 
 import java.time.LocalDateTime
 import java.util.Objects
-import java.util.stream.Collectors
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -55,8 +53,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
      * @param guestBook to copyWithoutId...
      */
     private constructor(guestBook: GuestBookEntity) {
-        entries = guestBook.entries.stream().map { obj: GuestBookEntryEntity -> obj.copyWithoutId() }
-            .collect(Collectors.toSet())
+        entries = guestBook.entries.map { it.copyWithoutId() }.toMutableSet()
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
         title = guestBook.title
@@ -64,11 +61,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     }
 
     constructor(guestBook: GuestBookDto) {
-        entries = guestBook.entries.stream().map { guestBookEntry: GuestBookEntryDto ->
-            GuestBookEntryEntity(
-                guestBookEntry
-            )
-        }.collect(Collectors.toSet())
+        entries = guestBook.entries.map { GuestBookEntryEntity(it) }.toMutableSet()
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistentDto)
         title = guestBook.title
@@ -81,10 +74,10 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
 
     fun asDto(): GuestBookDto {
         return GuestBookDto(
-            persistentDataEmbeddable.asPersistentDto(id),
-            entries.stream().map { obj: GuestBookEntryEntity -> obj.asDto() }.collect(Collectors.toSet()),
-            title,
-            user?.asDto()
+            persistentDto = persistentDataEmbeddable.asPersistentDto(id),
+            entries = entries.map { it.asDto() }.toMutableSet(),
+            title = title,
+            userInternal = user?.asDto()
         )
     }
 

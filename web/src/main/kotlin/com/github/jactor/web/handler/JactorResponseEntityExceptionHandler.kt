@@ -1,8 +1,5 @@
 package com.github.jactor.web.handler
 
-import java.util.function.Consumer
-import java.util.stream.Collectors
-import java.util.stream.Stream
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -37,17 +34,13 @@ class JactorResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
 
         logCause(throwable.cause)
 
-        StackWalker.getInstance().walk { stackFrameStream: Stream<StackWalker.StackFrame> ->
-            stackFrameStream.filter { stackFrame: StackWalker.StackFrame ->
-                stackFrame.className.startsWith("com.github.jactor")
-            }
+        StackWalker.getInstance().walk { frames ->
+            frames.filter { it.className.startsWith("com.github.jactor") }
                 .skip(1) // skip this method
-                .collect(Collectors.toList())
-        }.forEach(
-            Consumer { stackFrame: StackWalker.StackFrame ->
-                LOGGER.error(" - ${stackFrame.className}(line:${stackFrame.lineNumber}) - ${stackFrame.fileName}")
-            }
-        )
+                .toList()
+        }.forEach {
+            LOGGER.error(" - ${it.className}(line:${it.lineNumber}) - ${it.fileName}")
+        }
     }
 
     private fun logCause(cause: Throwable?) {
