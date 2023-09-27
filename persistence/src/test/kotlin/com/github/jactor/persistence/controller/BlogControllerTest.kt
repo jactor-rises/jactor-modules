@@ -1,12 +1,5 @@
 package com.github.jactor.persistence.controller
 
-import com.github.jactor.persistence.JactorPersistence
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
-import com.github.jactor.persistence.service.BlogService
-import com.ninjasquad.springmockk.MockkBean
-import io.mockk.every
-import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -22,7 +15,13 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.*
+import com.github.jactor.persistence.JactorPersistence
+import com.github.jactor.persistence.dto.BlogDto
+import com.github.jactor.persistence.dto.BlogEntryDto
+import com.github.jactor.persistence.service.BlogService
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.verify
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -46,7 +45,7 @@ internal class BlogControllerTest {
 
     @Test
     fun `should find a blog`() {
-        every { blogServiceMock.find(1L) } returns Optional.of(BlogDto())
+        every { blogServiceMock.find(1L) } returns BlogDto()
         val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto::class.java)
 
         assertAll(
@@ -57,7 +56,7 @@ internal class BlogControllerTest {
 
     @Test
     fun `should not find a blog`() {
-        every { blogServiceMock.find(1L) } returns Optional.empty()
+        every { blogServiceMock.find(1L) } returns null
 
         val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto::class.java)
 
@@ -69,7 +68,7 @@ internal class BlogControllerTest {
 
     @Test
     fun `should find a blog entry`() {
-        every { blogServiceMock.findEntryBy(1L) } returns Optional.of(BlogEntryDto())
+        every { blogServiceMock.findEntryBy(1L) } returns BlogEntryDto()
 
         val blogEntryResponse = testRestTemplate.getForEntity(
             buildFullPath("/blog/entry/1"),
@@ -84,7 +83,7 @@ internal class BlogControllerTest {
 
     @Test
     fun `should not find a blog entry`() {
-        every { blogServiceMock.findEntryBy(1L) } returns Optional.empty()
+        every { blogServiceMock.findEntryBy(1L) } returns null
 
         val blogEntryResponse = testRestTemplate.getForEntity(
             buildFullPath("/blog/entry/1"),

@@ -3,7 +3,6 @@ package com.github.jactor.web.dto
 import com.github.jactor.shared.dto.AddressDto
 import com.github.jactor.shared.dto.PersonDto
 import com.github.jactor.shared.dto.UserDto
-import java.util.Optional
 
 class UserModel(private val address: AddressDto?, private val person: PersonDto?, private val user: UserDto) {
     constructor(user: UserDto) : this(address = user.person?.address, person = user.person, user = user)
@@ -25,5 +24,5 @@ class UserModel(private val address: AddressDto?, private val person: PersonDto?
     }
 
     fun fetchUsername() = user.username ?: ""
-    fun fetchDescriptionCode() = Optional.ofNullable(person?.description)
+    fun fetchDescriptionCode() = person?.description
 }

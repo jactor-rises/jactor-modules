@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.entity
 
-import javax.persistence.Embeddable
-import javax.persistence.Lob
+import jakarta.persistence.Embeddable
+import jakarta.persistence.Lob
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import java.util.Objects

@@ -4,7 +4,7 @@ import com.github.jactor.persistence.JactorPersistence
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.entity.AddressEntity
 import com.github.jactor.persistence.entity.AddressEntity.Companion.anAddress
-import javax.persistence.EntityManager
+import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll

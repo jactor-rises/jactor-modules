@@ -1,14 +1,14 @@
 package com.github.jactor.web.controller
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.ModelAndView
 import com.github.jactor.web.Technology
 import com.github.jactor.web.i18n.MyMessages
 import com.github.jactor.web.model.HomePageModel
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.servlet.ModelAndView
 
-@Controller
+@RestController
 class HomeController @Autowired constructor(private val myMessages: MyMessages) {
     @GetMapping(value = ["/", HOME_VIEW])
     fun get(): ModelAndView {

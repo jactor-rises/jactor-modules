@@ -1,5 +1,12 @@
 package com.github.jactor.persistence.service
 
+import java.time.LocalDateTime
+import java.util.Optional
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import com.github.jactor.persistence.command.CreateUserCommand
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
@@ -14,13 +21,6 @@ import com.github.jactor.persistence.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.slot
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
-import java.util.*
 
 @SpringBootTest
 internal class UserServiceTest {
@@ -53,7 +53,7 @@ internal class UserServiceTest {
             )
         )
 
-        val user = userServiceToTest.find("jactor").orElseThrow { AssertionError("mocking?") }
+        val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
 
         assertAll(
             { assertThat(user).`as`("user").isNotNull() },
@@ -71,7 +71,7 @@ internal class UserServiceTest {
             aUser(UserInternalDto(PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE))
         )
 
-        val user = userServiceToTest.find(69L).orElseThrow { AssertionError("mocking?") }
+        val user = userServiceToTest.find(69L) ?: throw AssertionError("mocking?")
 
         assertAll(
             { assertThat(user).`as`("user").isNotNull() },
@@ -93,8 +93,8 @@ internal class UserServiceTest {
             UserEntity(UserInternalDto(persistentDto, userDto))
         )
 
-        val optionalUser = userServiceToTest.update(userDto)
-        assertThat(optionalUser).isPresent.get().extracting(UserInternalDto::username).isEqualTo("marley")
+        val user = userServiceToTest.update(userDto)
+        assertThat(user?.username).isEqualTo("marley")
     }
 
     @Test

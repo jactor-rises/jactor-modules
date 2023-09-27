@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
-internal class JactorPersistenceTest {
+internal class JactorPersistenceTest: AbstractSpringBootNoDirtyContextTest() {
 
     @Autowired
     private lateinit var commandLineRunner: CommandLineRunner

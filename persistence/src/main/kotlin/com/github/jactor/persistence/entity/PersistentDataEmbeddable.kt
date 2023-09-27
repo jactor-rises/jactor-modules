@@ -2,7 +2,7 @@ package com.github.jactor.persistence.entity
 
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.time.Now
-import javax.persistence.Embeddable
+import jakarta.persistence.Embeddable
 import java.time.LocalDateTime
 
 @Embeddable

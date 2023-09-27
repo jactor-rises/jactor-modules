@@ -19,8 +19,9 @@ dependencies {
     // test
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(JactorModules.Dependencies.mockk)
-    testImplementation(JactorModules.Dependencies.springmock)
+    testImplementation("io.mockk:mockk:${Versions.V1_13_8}")
+    testImplementation("org.springdoc:springdoc-openapi-ui:${Versions.V1_7_0}")
+    testImplementation("com.ninja-squad:springmockk:${Versions.V4_0_2}")
 }
 
 tasks {

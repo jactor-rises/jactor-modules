@@ -1,28 +1,25 @@
 package com.github.jactor.persistence.entity
 
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.UserInternalDto
-import javax.persistence.AttributeOverride
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.SequenceGenerator
-import javax.persistence.Table
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Objects
-import java.util.Optional
-import java.util.stream.Collectors
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
+import com.github.jactor.persistence.dto.BlogDto
+import jakarta.persistence.AttributeOverride
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.SequenceGenerator
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "T_BLOG")
@@ -59,11 +56,13 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
 
     private constructor(blogEntity: BlogEntity) {
         created = blogEntity.created
-        entries = blogEntity.entries.stream().map { obj: BlogEntryEntity -> obj.copyWithoutId() }.collect(Collectors.toSet())
+        entries = blogEntity.entries
+            .map { obj: BlogEntryEntity -> obj.copyWithoutId() }
+            .toMutableSet()
         id = blogEntity.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
         title = blogEntity.title
-        user = Optional.ofNullable(blogEntity.user).map { obj: UserEntity -> obj.copyWithoutId() }.orElse(null)
+        user = blogEntity.user?.copyWithoutId()
     }
 
     constructor(blogDto: BlogDto) {
@@ -71,15 +70,12 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
         id = blogDto.id
         persistentDataEmbeddable = PersistentDataEmbeddable(blogDto.persistentDto)
         title = blogDto.title
-        user = Optional.ofNullable(blogDto.userInternal).map { user: UserInternalDto ->
-            UserEntity(user)
-        }.orElse(null)
+        user = blogDto.userInternal?.let { UserEntity(it) }
     }
 
     fun asDto(): BlogDto {
         return BlogDto(
-            persistentDataEmbeddable.asPersistentDto(id),
-            created, title, Optional.ofNullable(user).map { obj: UserEntity -> obj.asDto() }.orElse(null)
+            persistentDataEmbeddable.asPersistentDto(id), created, title, user?.asDto()
         )
     }
 
@@ -101,8 +97,8 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
 
     override fun equals(other: Any?): Boolean {
         return this === other || other != null && javaClass == other.javaClass &&
-                title == (other as BlogEntity).title &&
-                user == other.user
+            title == (other as BlogEntity).title &&
+            user == other.user
     }
 
     override fun hashCode(): Int {
