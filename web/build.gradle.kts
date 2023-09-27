@@ -3,7 +3,7 @@ version = "1.0.x-SNAPSHOT"
 description = "jactor-web"
 
 plugins {
-    id("org.springframework.boot") version Versions.v3_1_3
+    id("org.springframework.boot") version Versions.v3_1_4
 }
 
 dependencies {

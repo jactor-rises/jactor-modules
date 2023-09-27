@@ -5,7 +5,7 @@ object Versions {
     // plugins
     const val v0_46_0 = "0.46.0"
     const val v1_1_0 = "1.1.0"
-    const val v3_1_3 = "3.1.3"
+    const val v3_1_4 = "3.1.4"
     const val v1_9_10 = "1.9.10"
 
     // dependencies
