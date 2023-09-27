@@ -1,4 +1,4 @@
-package com.github.jactor.persistence;
+package com.github.jactor.persistence
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -38,8 +38,6 @@ internal abstract class AbstractSpringBootNoDirtyContextTest {
     @Autowired
     protected lateinit var userRepository: UserRepository
 
-
     @LocalServerPort
     protected val port = 0
-
 }

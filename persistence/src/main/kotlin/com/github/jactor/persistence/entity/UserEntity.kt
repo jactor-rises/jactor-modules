@@ -1,9 +1,7 @@
 package com.github.jactor.persistence.entity
 
 import java.time.LocalDateTime
-import java.util.Collections
 import java.util.Objects
-import java.util.stream.Collectors
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.UserInternalDto
@@ -70,7 +68,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
      * @param user is used to create an entity
      */
     private constructor(user: UserEntity) {
-        blogs = user.blogs.stream().map { obj: BlogEntity -> obj.copyWithoutId() }.collect(Collectors.toSet())
+        blogs = user.blogs.map { it.copyWithoutId() }.toMutableSet()
         emailAddress = user.emailAddress
         guestBook = user.guestBook?.copyWithoutId()
         id = user.id
@@ -162,7 +160,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
         get() = persistentDataEmbeddable.timeOfModification
 
     fun getBlogs(): Set<BlogEntity> {
-        return Collections.unmodifiableSet(blogs)
+        return blogs
     }
 
     fun setGuestBook(guestBook: GuestBookEntity) {

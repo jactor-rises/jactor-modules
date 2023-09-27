@@ -1,12 +1,6 @@
 package com.github.jactor.persistence.controller
 
-import com.github.jactor.persistence.JactorPersistence
-import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.persistence.repository.UserRepository
-import com.github.jactor.shared.dto.*
-import com.ninjasquad.springmockk.MockkBean
-import io.mockk.every
+import java.util.Optional
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
@@ -22,7 +16,17 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.*
+import com.github.jactor.persistence.JactorPersistence
+import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.entity.UserEntity
+import com.github.jactor.persistence.repository.UserRepository
+import com.github.jactor.shared.dto.AddressDto
+import com.github.jactor.shared.dto.CreateUserCommandDto
+import com.github.jactor.shared.dto.PersonDto
+import com.github.jactor.shared.dto.UserDto
+import com.github.jactor.shared.dto.UserType
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)

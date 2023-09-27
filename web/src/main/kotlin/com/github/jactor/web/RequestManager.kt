@@ -1,8 +1,6 @@
 package com.github.jactor.web
 
-import java.util.*
-import java.util.stream.Collectors
-import java.util.stream.Stream
+import java.util.Locale
 import jakarta.servlet.http.HttpServletRequest
 
 data class RequestManager(
@@ -30,11 +28,9 @@ data class RequestManager(
             return requestURI
         }
 
-        val parametersWithoutLanguage = Arrays.stream(
-            queryString!!.split("&".toRegex()).dropLastWhile { it.isBlank() }.toTypedArray()
-        )
-            .filter { param -> !param.startsWith("lang=") }
-            .collect(Collectors.toList())
+        val parametersWithoutLanguage =
+            queryString!!.split("&".toRegex()).dropLastWhile { it.isBlank() }
+                .filter { param -> !param.startsWith("lang=") }
 
         if (parametersWithoutLanguage.isEmpty()) {
             return requestURI
@@ -43,19 +39,17 @@ data class RequestManager(
         return "$requestURI?${parametersWithoutLanguage.joinToString("&")}"
     }
 
-    private fun fetchWithoutContextPath() = httpServletRequest.getRequestURI().replace(contextPath.toRegex(), "")
+    private fun fetchWithoutContextPath() = httpServletRequest.requestURI.replace(contextPath.toRegex(), "")
 
     fun noLanguageParameters(): Boolean {
         if (queryString == null) {
             return true
         }
 
-        languageParameter = Stream.of(
-            *queryString!!.split("&".toRegex())
-                .dropLastWhile { it.isBlank() }.toTypedArray()
-        )
-            .filter { string -> string.startsWith("lang=") }
-            .findFirst().orElse("")
+        languageParameter = queryString!!
+            .split("&".toRegex())
+            .dropLastWhile { it.isBlank() }
+            .firstOrNull { string -> string.startsWith("lang=") } ?: ""
 
         return languageParameter.isBlank()
     }
@@ -65,7 +59,6 @@ data class RequestManager(
             .filter { language -> language.matches(locale) }
             .findFirst()
             .orElse(defaultLanguage)
-
     }
 
     fun fetchFromParameters(supportedLanguages: List<Language>, defaultLanguage: Language): Language {
