@@ -1,7 +1,5 @@
 package com.github.jactor.persistence.controller
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +17,11 @@ import com.github.jactor.persistence.dto.GuestBookDto
 import com.github.jactor.persistence.dto.GuestBookEntryDto
 import com.github.jactor.persistence.service.GuestBookService
 import com.ninjasquad.springmockk.MockkBean
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.verify
 
@@ -49,10 +52,10 @@ internal class GuestBookControllerTest {
 
         val guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto::class.java)
 
-        assertAll(
-            { assertThat(guestBookRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.NO_CONTENT) },
-            { assertThat(guestBookRespnse.body).`as`("guest book").isNull() }
-        )
+        assertAll {
+            assertThat(guestBookRespnse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+            assertThat(guestBookRespnse.body).isNull()
+        }
     }
 
     @Test
@@ -61,10 +64,10 @@ internal class GuestBookControllerTest {
 
         val guestBookRespnse = testRestTemplate.getForEntity(buildFullPath("/guestBook/1"), GuestBookDto::class.java)
 
-        assertAll(
-            { assertThat(guestBookRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(guestBookRespnse.body).`as`("guest book").isNotNull() }
-        )
+        assertAll {
+            assertThat(guestBookRespnse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(guestBookRespnse.body).isNotNull()
+        }
     }
 
     @Test
@@ -76,10 +79,10 @@ internal class GuestBookControllerTest {
             GuestBookDto::class.java
         )
 
-        assertAll(
-            { assertThat(guestBookEntryRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.NO_CONTENT) },
-            { assertThat(guestBookEntryRespnse.body).`as`("guest book entry").isNull() }
-        )
+        assertAll {
+            assertThat(guestBookEntryRespnse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+            assertThat(guestBookEntryRespnse.body).isNull()
+        }
     }
 
     @Test
@@ -91,10 +94,10 @@ internal class GuestBookControllerTest {
             GuestBookDto::class.java
         )
 
-        assertAll(
-            { assertThat(guestBookEntryRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(guestBookEntryRespnse.body).`as`("guest book entry").isNotNull() }
-        )
+        assertAll {
+            assertThat(guestBookEntryRespnse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(guestBookEntryRespnse.body).isNotNull()
+        }
     }
 
     @Test
@@ -108,12 +111,12 @@ internal class GuestBookControllerTest {
             buildFullPath("/guestBook/1"), HttpMethod.PUT, HttpEntity(guestBookDto), GuestBookDto::class.java
         )
 
-        assertAll(
-            { assertThat(guestbookResponse.statusCode).`as`("status").isEqualTo(HttpStatus.ACCEPTED) },
-            { assertThat(guestbookResponse.body).`as`("guest book").isNotNull() },
-            { assertThat(guestbookResponse.body?.id).`as`("guest book id").isEqualTo(1L) },
-            { verify { guestBookServiceMock.saveOrUpdate(guestBookDto) } }
-        )
+        assertAll {
+            assertThat(guestbookResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
+            assertThat(guestbookResponse.body).isNotNull()
+            assertThat(guestbookResponse.body?.id).isEqualTo(1L)
+            verify { guestBookServiceMock.saveOrUpdate(guestBookDto) }
+        }
     }
 
     @Test
@@ -129,12 +132,12 @@ internal class GuestBookControllerTest {
             GuestBookDto::class.java
         )
 
-        assertAll(
-            { assertThat(guestbookResponse.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
-            { assertThat(guestbookResponse.body).`as`("guest book").isNotNull() },
-            { assertThat(guestbookResponse.body?.id).`as`("guest book id").isEqualTo(1L) },
-            { verify { guestBookServiceMock.saveOrUpdate(guestBookDto) } }
-        )
+        assertAll {
+            assertThat(guestbookResponse.statusCode).isEqualTo(HttpStatus.CREATED)
+            assertThat(guestbookResponse.body).isNotNull()
+            assertThat(guestbookResponse.body?.id).isEqualTo(1L)
+            verify { guestBookServiceMock.saveOrUpdate(guestBookDto) }
+        }
     }
 
     @Test
@@ -149,12 +152,12 @@ internal class GuestBookControllerTest {
             GuestBookEntryDto::class.java
         )
 
-        assertAll(
-            { assertThat(guestbookEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.ACCEPTED) },
-            { assertThat(guestbookEntryResponse.body).`as`("guest book entry").isNotNull() },
-            { assertThat(guestbookEntryResponse.body?.id).isEqualTo(1L) },
-            { verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } }
-        )
+        assertAll {
+            assertThat(guestbookEntryResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
+            assertThat(guestbookEntryResponse.body).isNotNull()
+            assertThat(guestbookEntryResponse.body?.id).isEqualTo(1L)
+            verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) }
+        }
     }
 
     @Test
@@ -170,12 +173,12 @@ internal class GuestBookControllerTest {
             GuestBookEntryDto::class.java
         )
 
-        assertAll(
-            { assertThat(guestbookEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
-            { assertThat(guestbookEntryResponse.body).`as`("guest book entry").isNotNull() },
-            { assertThat(guestbookEntryResponse.body?.id).isEqualTo(1L) },
-            { verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } }
-        )
+        assertAll {
+            assertThat(guestbookEntryResponse.statusCode).isEqualTo(HttpStatus.CREATED)
+            assertThat(guestbookEntryResponse.body).isNotNull()
+            assertThat(guestbookEntryResponse.body?.id).isEqualTo(1L)
+            verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) }
+        }
     }
 
     private fun buildFullPath(url: String): String {

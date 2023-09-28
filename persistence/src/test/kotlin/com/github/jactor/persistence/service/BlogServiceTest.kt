@@ -2,8 +2,6 @@ package com.github.jactor.persistence.service
 
 import java.time.LocalDate
 import java.util.Optional
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import com.github.jactor.persistence.dto.BlogDto
@@ -16,6 +14,12 @@ import com.github.jactor.persistence.entity.BlogEntryEntity
 import com.github.jactor.persistence.entity.BlogEntryEntity.Companion.aBlogEntry
 import com.github.jactor.persistence.repository.BlogEntryRepository
 import com.github.jactor.persistence.repository.BlogRepository
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -45,7 +49,7 @@ internal class BlogServiceTest {
 
         val (_, _, title) = blogServiceToTest.find(1001L) ?: throw AssertionError("missed mocking?")
 
-        assertThat(title).`as`("title").isEqualTo("full speed ahead")
+        assertThat(title).isEqualTo("full speed ahead")
     }
 
     @Test
@@ -58,10 +62,10 @@ internal class BlogServiceTest {
         val (_, _, creatorName, entry) = blogServiceToTest.findEntryBy(1001L)
             ?: throw AssertionError("missed mocking?")
 
-        assertAll(
-            { assertThat(creatorName).`as`("creator name").isEqualTo("me") },
-            { assertThat(entry).`as`("entry").isEqualTo("too") }
-        )
+        assertAll {
+            assertThat(creatorName).isEqualTo("me")
+            assertThat(entry).isEqualTo("too")
+        }
     }
 
     @Test
@@ -85,11 +89,11 @@ internal class BlogServiceTest {
 
         val blogEntries = blogServiceToTest.findEntriesForBlog(1001L)
 
-        assertAll(
-            { assertThat(blogEntries).`as`("entries").hasSize(1) },
-            { assertThat(blogEntries[0].creatorName).`as`("creator name").isEqualTo("you") },
-            { assertThat(blogEntries[0].entry).`as`("entry").isEqualTo("too") }
-        )
+        assertAll {
+            assertThat(blogEntries).hasSize(1)
+            assertThat(blogEntries[0].creatorName).isEqualTo("you")
+            assertThat(blogEntries[0].entry).isEqualTo("too")
+        }
     }
 
     @Test
@@ -107,11 +111,11 @@ internal class BlogServiceTest {
         blogServiceToTest.saveOrUpdate(blogDto = blogDto)
         val blogEntity = blogEntitySlot.captured
 
-        assertAll(
-            { assertThat(blogEntity.created).`as`("created").isEqualTo(LocalDate.now()) },
-            { assertThat(blogEntity.title).`as`("title").isEqualTo("some blog") },
-            { assertThat(blogEntity.user).`as`("user").isNull() }
-        )
+        assertAll {
+            assertThat(blogEntity.created).isEqualTo(LocalDate.now())
+            assertThat(blogEntity.title).isEqualTo("some blog")
+            assertThat(blogEntity.user).isNull()
+        }
     }
 
     @Test
@@ -128,10 +132,10 @@ internal class BlogServiceTest {
         blogServiceToTest.saveOrUpdate(blogEntryDto)
         val blogEntryEntity = blogEntryEntitySlot.captured
 
-        assertAll(
-            { assertThat(blogEntryEntity.blog).`as`("blog").isNotNull() },
-            { assertThat(blogEntryEntity.creatorName).`as`("creator name").isEqualTo("me") },
-            { assertThat(blogEntryEntity.entry).`as`("entry").isEqualTo("if i where a rich man...") }
-        )
+        assertAll {
+            assertThat(blogEntryEntity.blog).isNotNull()
+            assertThat(blogEntryEntity.creatorName).isEqualTo("me")
+            assertThat(blogEntryEntity.entry).isEqualTo("if i where a rich man...")
+        }
     }
 }

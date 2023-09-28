@@ -8,12 +8,14 @@ import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.GuestBookEntity.Companion.aGuestBook
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import jakarta.persistence.EntityManager
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 
 @SpringBootTest
 @Transactional
@@ -32,30 +34,56 @@ internal class GuestBookRepositoryTest {
     fun `should write then read guest book`() {
         val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         val personDto = PersonInternalDto(address = addressDto, surname = "AA")
-        val userDto = UserInternalDto(PersistentDto(), personInternal = personDto, emailAddress = "casuel@tantooine.com", username = "causual")
+        val userDto = UserInternalDto(
+            PersistentDto(),
+            personInternal = personDto,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        )
         val userEntity = userRepository.save(aUser(userDto))
 
-        userEntity.setGuestBook(aGuestBook(GuestBookDto(entries = emptySet(), title = "home sweet home", userInternal = userEntity.asDto())))
+        userEntity.setGuestBook(
+            aGuestBook(
+                GuestBookDto(
+                    entries = emptySet(),
+                    title = "home sweet home",
+                    userInternal = userEntity.asDto()
+                )
+            )
+        )
 
         entityManager.flush()
         entityManager.clear()
 
         val guestBookEntity = guestBookRepository.findByUser(userEntity)
 
-        assertAll(
-            { assertThat(guestBookEntity!!.title).`as`("title").isEqualTo("home sweet home") },
-            { assertThat(guestBookEntity!!.user).`as`("user").isNotNull() }
-        )
+        assertAll {
+            assertThat(guestBookEntity?.title).isEqualTo("home sweet home")
+            assertThat(guestBookEntity?.user).isNotNull()
+        }
     }
 
     @Test
     fun `should write then update and read guest book`() {
         val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         val personDto = PersonInternalDto(address = addressDto, surname = "AA")
-        val userDto = UserInternalDto(PersistentDto(), personInternal = personDto, emailAddress = "casuel@tantooine.com", username = "causual")
+        val userDto = UserInternalDto(
+            PersistentDto(),
+            personInternal = personDto,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        )
         val userEntity = userRepository.save(aUser(userDto))
 
-        userEntity.setGuestBook(aGuestBook(GuestBookDto(entries = emptySet(), title = "home sweet home", userInternal = userEntity.asDto())))
+        userEntity.setGuestBook(
+            aGuestBook(
+                GuestBookDto(
+                    entries = emptySet(),
+                    title = "home sweet home",
+                    userInternal = userEntity.asDto()
+                )
+            )
+        )
 
         guestBookRepository.save(userEntity.guestBook!!)
         entityManager.flush()
