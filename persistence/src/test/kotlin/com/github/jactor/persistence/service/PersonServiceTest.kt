@@ -1,13 +1,15 @@
 package com.github.jactor.persistence.service
 
 import java.time.LocalDateTime
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.entity.PersonEntity
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 
 internal class PersonServiceTest : AbstractSpringBootNoDirtyContextTest() {
 
@@ -18,7 +20,7 @@ internal class PersonServiceTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should create a new Person`() {
         val entity = personService.createWhenNotExists(PersonInternalDto())
 
-        assertThat(entity).isNotNull
+        assertThat(entity).isNotNull()
     }
 
     @Test
@@ -39,6 +41,6 @@ internal class PersonServiceTest : AbstractSpringBootNoDirtyContextTest() {
         )
 
         // then
-        assertThat(person).`as`("person").isEqualTo(personEntity)
+        assertThat(person).isEqualTo(personEntity)
     }
 }

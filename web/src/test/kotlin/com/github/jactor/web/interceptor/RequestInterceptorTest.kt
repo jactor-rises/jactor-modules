@@ -1,10 +1,8 @@
 package com.github.jactor.web.interceptor
 
 import java.util.Locale
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.i18n.LocaleContextHolder
@@ -17,6 +15,10 @@ import com.github.jactor.web.THAI
 import com.github.jactor.web.interceptor.RequestInterceptor.Companion.CHOSEN_LANGUAGE
 import com.github.jactor.web.interceptor.RequestInterceptor.Companion.CURRENT_REQUEST
 import com.ninjasquad.springmockk.MockkBean
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isInstanceOf
 import io.mockk.every
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -51,15 +53,12 @@ class RequestInterceptorTest {
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
         val model = modelAndView.model
-        val currentRequest = model[CURRENT_REQUEST]
+        val currentRequest = model[CURRENT_REQUEST] ?: throw IllegalStateException("No current request!")
 
-        assertAll(
-            { assertThat(currentRequest).isInstanceOf(Request::class.java) },
-            {
-                assertThat(currentRequest as Request).extracting(Request::currentUrl)
-                    .isEqualTo("/somewhere?out=there&another=param")
-            }
-        )
+        assertAll {
+            assertThat(currentRequest).isInstanceOf(Request::class.java)
+            assertThat((currentRequest as Request).currentUrl).isEqualTo("/somewhere?out=there&another=param")
+        }
     }
 
     @Test
@@ -69,12 +68,13 @@ class RequestInterceptorTest {
 
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
-        val language = modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
+        val language =
+            modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
 
-        assertAll(
-            { assertThat(language.name).`as`("name").isEqualTo(NORSK) },
-            { assertThat(language.locale).isEqualTo(Locale("no")) }
-        )
+        assertAll {
+            assertThat(language.name).isEqualTo(NORSK)
+            assertThat(language.locale).isEqualTo(Locale("no"))
+        }
     }
 
     @Test
@@ -84,12 +84,13 @@ class RequestInterceptorTest {
 
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
-        val language = modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
+        val language =
+            modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
 
-        assertAll(
-            { assertThat(language.name).`as`("name").isEqualTo(ENGLISH) },
-            { assertThat(language.locale).isEqualTo(Locale("en")) }
-        )
+        assertAll {
+            assertThat(language.name).isEqualTo(ENGLISH)
+            assertThat(language.locale).isEqualTo(Locale("en"))
+        }
     }
 
     @Test
@@ -99,12 +100,13 @@ class RequestInterceptorTest {
 
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
-        val language = modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
+        val language =
+            modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
 
-        assertAll(
-            { assertThat(language.name).`as`("name").isEqualTo(THAI) },
-            { assertThat(language.locale).isEqualTo(Locale("th")) }
-        )
+        assertAll {
+            assertThat(language.name).isEqualTo(THAI)
+            assertThat(language.locale).isEqualTo(Locale("th"))
+        }
     }
 
     @Test
@@ -115,12 +117,13 @@ class RequestInterceptorTest {
 
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
-        val language = modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
+        val language =
+            modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
 
-        assertAll(
-            { assertThat(language.name).`as`("name").isEqualTo(THAI) },
-            { assertThat(language.locale).isEqualTo(Locale("th")) }
-        )
+        assertAll {
+            assertThat(language.name).isEqualTo(THAI)
+            assertThat(language.locale).isEqualTo(Locale("th"))
+        }
     }
 
     @Test
@@ -131,12 +134,13 @@ class RequestInterceptorTest {
 
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
-        val language = modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
+        val language =
+            modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
 
-        assertAll(
-            { assertThat(language.name).`as`("name").isEqualTo(ENGLISH) },
-            { assertThat(language.locale).isEqualTo(Locale("en")) }
-        )
+        assertAll {
+            assertThat(language.name).isEqualTo(ENGLISH)
+            assertThat(language.locale).isEqualTo(Locale("en"))
+        }
     }
 
     @Test
@@ -147,12 +151,13 @@ class RequestInterceptorTest {
 
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
-        val language = modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
+        val language =
+            modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
 
-        assertAll(
-            { assertThat(language.name).`as`("name").isEqualTo(NORSK) },
-            { assertThat(language.locale).isEqualTo(Locale("no")) }
-        )
+        assertAll {
+            assertThat(language.name).isEqualTo(NORSK)
+            assertThat(language.locale).isEqualTo(Locale("no"))
+        }
     }
 
     @Test
@@ -163,12 +168,14 @@ class RequestInterceptorTest {
 
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
-        val language = modelAndView.model.getOrDefault(CHOSEN_LANGUAGE, Language(Locale("svada"), "there")) as Language
+        val language = modelAndView.model.getOrDefault(
+            CHOSEN_LANGUAGE, Language(Locale("svada"), "there")
+        ) as Language
 
-        assertAll(
-            { assertThat(language.name).`as`("name").isEqualTo(ENGLISH) },
-            { assertThat(language.locale).isEqualTo(Locale("en")) }
-        )
+        assertAll {
+            assertThat(language.name).isEqualTo(ENGLISH)
+            assertThat(language.locale).isEqualTo(Locale("en"))
+        }
     }
 
     @Test
@@ -179,11 +186,11 @@ class RequestInterceptorTest {
         requestInterceptorToTest.postHandle(httpServletRequestMock, httpServletResponseMock, handler, modelAndView)
 
         val model = modelAndView.model
-        val currentRequest = model[CURRENT_REQUEST]
+        val currentRequest = model[CURRENT_REQUEST] ?: throw IllegalStateException("No current request!")
 
-        assertAll(
-            { assertThat(currentRequest).isInstanceOf(Request::class.java) },
-            { assertThat(currentRequest as Request).extracting(Request::chosenView).isEqualTo("user") }
-        )
+        assertAll {
+            assertThat(currentRequest).isInstanceOf(Request::class.java)
+            assertThat((currentRequest as Request).chosenView).isEqualTo("user")
+        }
     }
 }

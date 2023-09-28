@@ -1,7 +1,5 @@
 package com.github.jactor.persistence.controller
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
@@ -9,22 +7,26 @@ import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.command.CreateUserCommand
 import com.github.jactor.persistence.command.CreateUserCommandResponse
 import com.github.jactor.persistence.entity.UniqueUsername
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 
-internal class UserControllerIntegrationTest: AbstractSpringBootNoDirtyContextTest() {
+internal class UserControllerIntegrationTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should create a new user`() {
-        val createUserCommand = CreateUserCommand(UniqueUsername.generate(name = "turbo"), surname =  "Someone")
+        val createUserCommand = CreateUserCommand(UniqueUsername.generate(name = "turbo"), surname = "Someone")
 
         val response = testRestTemplate.postForEntity(
             "${basePath()}/user", HttpEntity(createUserCommand), CreateUserCommandResponse::class.java
         )
 
-        assertAll(
-            { assertThat(response.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
-            { assertThat(response.body?.userInternal).`as`("response.user").isNotNull() },
-            { assertThat(response.body?.userInternal?.id).`as`("userDto.id").isNotNull() }
-        )
+        assertAll {
+            assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
+            assertThat(response.body?.userInternal).isNotNull()
+            assertThat(response.body?.userInternal?.id).isNotNull()
+        }
     }
 
     @Test
@@ -39,11 +41,11 @@ internal class UserControllerIntegrationTest: AbstractSpringBootNoDirtyContextTe
             "${basePath()}/user", HttpEntity(createUserCommand), CreateUserCommandResponse::class.java
         )
 
-        assertAll(
-            { assertThat(response.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
-            { assertThat(response.body?.userInternal).`as`("response.user").isNotNull() },
-            { assertThat(response.body?.userInternal?.emailAddress).`as`("userDto.emailAddress").isEqualTo("somewhere@somehow.com") }
-        )
+        assertAll {
+            assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
+            assertThat(response.body?.userInternal).isNotNull()
+            assertThat(response.body?.userInternal?.emailAddress).isEqualTo("somewhere@somehow.com")
+        }
     }
 
     private fun basePath(): String {
