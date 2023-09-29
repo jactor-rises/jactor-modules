@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.entity
 
+import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
@@ -15,9 +16,11 @@ import com.github.jactor.persistence.entity.GuestBookEntity.Companion.aGuestBook
 import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGuestBookEntry
 import com.github.jactor.persistence.entity.PersonEntity.Companion.aPerson
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotSameAs
+import assertk.assertions.isNull
 
 internal class PersistentEntityTest {
     private lateinit var persistentEntityToTest: PersistentEntity<*>
@@ -40,12 +43,12 @@ internal class PersistentEntityTest {
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
-        assertAll(
-            { assertThat(persistentEntityToTest.id).`as`("id of persistent entity").isEqualTo(1L) },
-            { assertThat(copy.id).`as`("id of copy").isNull() },
-            { assertThat(persistentEntityToTest).`as`("persistent entity equals copy").isEqualTo(copy) },
-            { assertThat(persistentEntityToTest).`as`("persistent entity is not same instance as copy").isNotSameAs(copy) }
-        )
+        assertAll {
+            assertThat(persistentEntityToTest.id).isEqualTo(1L)
+            assertThat(copy.id).isNull()
+            assertThat(persistentEntityToTest).isEqualTo(copy)
+            assertThat(persistentEntityToTest).isNotSameAs(copy)
+        }
     }
 
     @Test
@@ -64,42 +67,51 @@ internal class PersistentEntityTest {
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
-        assertAll(
-            { assertThat(persistentEntityToTest.id).`as`("id of persistent entity").isEqualTo(1L) },
-            { assertThat(copy.id).`as`("id of copy").isNull() },
-            { assertThat(persistentEntityToTest).`as`("persistent entity equals copy").isEqualTo(copy) },
-            { assertThat(persistentEntityToTest).`as`("persistent entity is not same instance as copy").isNotSameAs(copy) }
-        )
+        assertAll {
+            assertThat(persistentEntityToTest.id).isEqualTo(1L)
+            assertThat(copy.id).isNull()
+            assertThat(persistentEntityToTest).isEqualTo(copy)
+            assertThat(persistentEntityToTest).isNotSameAs(copy)
+        }
     }
 
     @Test
     fun `should be able to copy a user without the id`() {
-        persistentEntityToTest = aUser(UserInternalDto(persistentDto = PersistentDto(), emailAddress = "i.am@home", username = "jactor"))
+        persistentEntityToTest = aUser(
+            UserInternalDto(persistentDto = PersistentDto(), emailAddress = "i.am@home", username = "jactor")
+        )
+
         persistentEntityToTest.id = 1L
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
-        assertAll(
-            { assertThat(persistentEntityToTest.id).`as`("id of persistent entity").isEqualTo(1L) },
-            { assertThat(copy.id).`as`("id of copy").isNull() },
-            { assertThat(persistentEntityToTest).`as`("persistent entity equals copy").isEqualTo(copy) },
-            { assertThat(persistentEntityToTest).`as`("persistent entity is not same instance as copy").isNotSameAs(copy) }
-        )
+        assertAll {
+            assertThat(persistentEntityToTest.id).isEqualTo(1L)
+            assertThat(copy.id).isNull()
+            assertThat(persistentEntityToTest).isEqualTo(copy)
+            assertThat(persistentEntityToTest).isNotSameAs(copy)
+        }
     }
 
     @Test
     fun `should be able to copy a blog without the id`() {
-        persistentEntityToTest = aBlog(BlogDto(persistentDto = PersistentDto(), title = "general ignorance", userInternal = UserInternalDto()))
+        persistentEntityToTest = aBlog(
+            BlogDto(
+                persistentDto = PersistentDto(),
+                title = "general ignorance",
+                userInternal = UserInternalDto()
+            )
+        )
         persistentEntityToTest.id = 1L
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
-        assertAll(
-            { assertThat(persistentEntityToTest.id).`as`("id of persistent entity").isEqualTo(1L) },
-            { assertThat(copy.id).`as`("id of copy").isNull() },
-            { assertThat(persistentEntityToTest).`as`("persistent entity equals copy").isEqualTo(copy) },
-            { assertThat(persistentEntityToTest).`as`("persistent entity is not same instance as copy").isNotSameAs(copy) }
-        )
+        assertAll {
+            assertThat(persistentEntityToTest.id).isEqualTo(1L)
+            assertThat(copy.id).isNull()
+            assertThat(persistentEntityToTest).isEqualTo(copy)
+            assertThat(persistentEntityToTest).isNotSameAs(copy)
+        }
     }
 
     @Test
@@ -110,44 +122,47 @@ internal class PersistentEntityTest {
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
-        assertAll(
-            { assertThat(persistentEntityToTest.id).`as`("id of persistent entity").isEqualTo(1L) },
-            { assertThat(copy.id).`as`("id of copy").isNull() },
-            { assertThat(persistentEntityToTest).`as`("persistent entity equals copy").isEqualTo(copy) },
-            { assertThat(persistentEntityToTest).`as`("persistent entity is not same instance as copy").isNotSameAs(copy) }
-        )
+        assertAll {
+            assertThat(persistentEntityToTest.id).isEqualTo(1L)
+            assertThat(copy.id).isNull()
+            assertThat(persistentEntityToTest).isEqualTo(copy)
+            assertThat(persistentEntityToTest).isNotSameAs(copy)
+        }
     }
 
     @Test
     fun `should be able to copy a guest book without the id`() {
-        persistentEntityToTest = aGuestBook(GuestBookDto(PersistentDto(), HashSet(), "enter when applied", UserInternalDto()))
+        persistentEntityToTest =
+            aGuestBook(GuestBookDto(PersistentDto(), HashSet(), "enter when applied", UserInternalDto()))
         persistentEntityToTest.id = 1L
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
-        assertAll(
-            { assertThat(persistentEntityToTest.id).`as`("id of persistent entity").isEqualTo(1L) },
-            { assertThat(copy.id).`as`("id of copy").isNull() },
-            { assertThat(persistentEntityToTest).`as`("persistent entity equals copy").isEqualTo(copy) },
-            { assertThat(persistentEntityToTest).`as`("persistent entity is not same instance as copy").isNotSameAs(copy) }
-        )
+        assertAll {
+            assertThat(persistentEntityToTest.id).isEqualTo(1L)
+            assertThat(copy.id).isNull()
+            assertThat(persistentEntityToTest).isEqualTo(copy)
+            assertThat(persistentEntityToTest).isNotSameAs(copy)
+        }
     }
 
     @Test
     fun `should be able to copy a guest book entry without the id`() {
         persistentEntityToTest = aGuestBookEntry(
-            GuestBookEntryDto(persistentDto = PersistentDto(), guestBook = GuestBookDto(), creatorName = "jactor", entry = "the one")
+            GuestBookEntryDto(
+                persistentDto = PersistentDto(), guestBook = GuestBookDto(), creatorName = "jactor", entry = "the one"
+            )
         )
 
         persistentEntityToTest.id = 1L
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
-        assertAll(
-            { assertThat(persistentEntityToTest.id).`as`("id of persistent entity").isEqualTo(1L) },
-            { assertThat(copy.id).`as`("id of copy").isNull() },
-            { assertThat(persistentEntityToTest).`as`("persistent entity equals copy").isEqualTo(copy) },
-            { assertThat(persistentEntityToTest).`as`("persistent entity is not same instance as copy").isNotSameAs(copy) }
-        )
+        assertAll {
+            assertThat(persistentEntityToTest.id).isEqualTo(1L)
+            assertThat(copy.id).isNull()
+            assertThat(persistentEntityToTest).isEqualTo(copy)
+            assertThat(persistentEntityToTest).isNotSameAs(copy)
+        }
     }
 }

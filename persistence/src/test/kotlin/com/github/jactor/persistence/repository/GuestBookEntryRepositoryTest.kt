@@ -11,12 +11,14 @@ import com.github.jactor.persistence.entity.GuestBookEntryEntity
 import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGuestBookEntry
 import com.github.jactor.persistence.entity.UserEntity
 import jakarta.persistence.EntityManager
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isEqualTo
 
 @SpringBootTest
 @Transactional
@@ -38,10 +40,23 @@ internal class GuestBookEntryRepositoryTest {
     fun `should save then read guest book entry entity`() {
         val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         val personDto = PersonInternalDto(address = addressDto, surname = "AA")
-        val userDto = UserInternalDto(PersistentDto(), personInternal = personDto, emailAddress = "casuel@tantooine.com", username = "causual")
+        val userDto = UserInternalDto(
+            PersistentDto(),
+            personInternal = personDto,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        )
         val savedUser = userRepository.save(UserEntity(userDto))
 
-        savedUser.setGuestBook(aGuestBook(GuestBookDto(entries = emptySet(), title = "home sweet home", userInternal = savedUser.asDto())))
+        savedUser.setGuestBook(
+            aGuestBook(
+                GuestBookDto(
+                    entries = emptySet(),
+                    title = "home sweet home",
+                    userInternal = savedUser.asDto()
+                )
+            )
+        )
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
 
@@ -63,10 +78,10 @@ internal class GuestBookEntryRepositoryTest {
         assertThat(entriesByGuestBook).hasSize(1)
         val entry = entriesByGuestBook.iterator().next()
 
-        assertAll(
-            { assertThat(entry.creatorName).`as`("creator name").isEqualTo("Harry") },
-            { assertThat(entry.entry).`as`("entry").isEqualTo("Draco Dormiens Nunquam Tittilandus") }
-        )
+        assertAll {
+            assertThat(entry.creatorName).isEqualTo("Harry")
+            assertThat(entry.entry).isEqualTo("Draco Dormiens Nunquam Tittilandus")
+        }
     }
 
     @Test
@@ -74,12 +89,23 @@ internal class GuestBookEntryRepositoryTest {
         val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         val personDto = PersonInternalDto(address = addressDto, surname = "AA")
         val userDto = UserInternalDto(
-            persistentDto = PersistentDto(), personInternal = personDto, emailAddress = "casuel@tantooine.com", username = "causual"
+            persistentDto = PersistentDto(),
+            personInternal = personDto,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
         )
 
         val savedUser = userRepository.save(UserEntity(userDto))
 
-        savedUser.setGuestBook(aGuestBook(GuestBookDto(entries = emptySet(), title = "home sweet home", userInternal = savedUser.asDto())))
+        savedUser.setGuestBook(
+            aGuestBook(
+                GuestBookDto(
+                    entries = emptySet(),
+                    title = "home sweet home",
+                    userInternal = savedUser.asDto()
+                )
+            )
+        )
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
 
@@ -107,37 +133,77 @@ internal class GuestBookEntryRepositoryTest {
         entityManager.clear()
 
         val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook!!)
-        assertThat(modifiedEntriesByGuestBook).`as`("entries").hasSize(1)
+        assertThat(modifiedEntriesByGuestBook).hasSize(1)
         val entry = modifiedEntriesByGuestBook.iterator().next()
 
-        assertAll(
-            { assertThat(entry.creatorName).isEqualTo("Willie") },
-            { assertThat(entry.entry).isEqualTo("On the road again") }
-        )
+        assertAll {
+            assertThat(entry.creatorName).isEqualTo("Willie")
+            assertThat(entry.entry).isEqualTo("On the road again")
+        }
     }
 
     @Test
     fun `should write two entries to two different guest books and then find one entry`() {
         val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         val personDto = PersonInternalDto(address = addressDto, surname = "AA")
-        val userDto = UserInternalDto(PersistentDto(), personInternal = personDto, emailAddress = "casuel@tantooine.com", username = "causual")
+        val userDto = UserInternalDto(
+            PersistentDto(),
+            personInternal = personDto,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        )
         val savedUser = userRepository.save(UserEntity(userDto))
 
-        savedUser.setGuestBook(aGuestBook(GuestBookDto(entries = emptySet(), title = "home sweet home", userInternal = savedUser.asDto())))
+        savedUser.setGuestBook(
+            aGuestBook(
+                GuestBookDto(
+                    entries = emptySet(),
+                    title = "home sweet home",
+                    userInternal = savedUser.asDto()
+                )
+            )
+        )
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
 
-        savedGuestBook.add(aGuestBookEntry(GuestBookEntryDto(guestBook = savedGuestBook.asDto(), creatorName = "somone", entry = "jadda")))
+        savedGuestBook.add(
+            aGuestBookEntry(
+                GuestBookEntryDto(
+                    guestBook = savedGuestBook.asDto(),
+                    creatorName = "somone",
+                    entry = "jadda"
+                )
+            )
+        )
 
         guestBookEntryRepository.saveAll(savedGuestBook.getEntries())
 
-        val anotherUserDto = UserInternalDto(PersistentDto(), personInternal = personDto, emailAddress = "hidden@tantooine.com", username = "hidden")
+        val anotherUserDto = UserInternalDto(
+            PersistentDto(),
+            personInternal = personDto,
+            emailAddress = "hidden@tantooine.com",
+            username = "hidden"
+        )
         val anotherSavedUser = userRepository.save(UserEntity(anotherUserDto))
-        anotherSavedUser.setGuestBook(aGuestBook(GuestBookDto(entries = emptySet(), title = "home sweet home", userInternal = savedUser.asDto())))
+        anotherSavedUser.setGuestBook(
+            aGuestBook(
+                GuestBookDto(
+                    entries = emptySet(),
+                    title = "home sweet home",
+                    userInternal = savedUser.asDto()
+                )
+            )
+        )
 
         val anotherSavedGuestBook = guestBookRepository.save(anotherSavedUser.guestBook!!)
 
         anotherSavedGuestBook.add(
-            aGuestBookEntry(GuestBookEntryDto(guestBook = anotherSavedGuestBook.asDto(), creatorName = "shrek", entry = "far far away"))
+            aGuestBookEntry(
+                GuestBookEntryDto(
+                    guestBook = anotherSavedGuestBook.asDto(),
+                    creatorName = "shrek",
+                    entry = "far far away"
+                )
+            )
         )
 
         guestBookEntryRepository.saveAll(anotherSavedGuestBook.getEntries())
@@ -145,12 +211,12 @@ internal class GuestBookEntryRepositoryTest {
         entityManager.clear()
 
         val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(anotherSavedGuestBook)
-        assertThat(guestBookEntryRepository.findAll()).`as`("all entries").hasSize(2)
+        assertThat(guestBookEntryRepository.findAll().toList()).hasSize(2)
 
-        assertAll(
-            { assertThat(entriesByGuestBook).`as`("entriesByGuestBook").hasSize(1) },
-            { assertThat(entriesByGuestBook[0].creatorName).`as`("entry.creatorName").isEqualTo("shrek") },
-            { assertThat(entriesByGuestBook[0].entry).`as`("entry.entry").isEqualTo("far far away") }
-        )
+        assertAll {
+            assertThat(entriesByGuestBook).hasSize(1)
+            assertThat(entriesByGuestBook[0].creatorName).isEqualTo("shrek")
+            assertThat(entriesByGuestBook[0].entry).isEqualTo("far far away")
+        }
     }
 }
