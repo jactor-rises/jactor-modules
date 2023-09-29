@@ -1,16 +1,20 @@
 package com.github.jactor.persistence.repository
 
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.JactorPersistence
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.entity.AddressEntity
 import com.github.jactor.persistence.entity.AddressEntity.Companion.anAddress
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isEqualTo
+import assertk.assertions.isIn
+import assertk.assertions.isPresent
 import jakarta.persistence.EntityManager
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest(classes = [JactorPersistence::class])
 @Transactional
@@ -41,10 +45,12 @@ internal class AddressRepositoryTest {
 
         val addressEntities = addressRepository.findByZipCode("1234")
 
-        assertAll(
-            { assertThat(addressEntities).hasSize(2) },
-            { addressEntities.forEach { assertThat(it.addressLine1).`as`("address line 1").isIn("somewhere out there", "somewhere in there") } }
-        )
+        assertAll {
+            assertThat(addressEntities).hasSize(2)
+            addressEntities.forEach {
+                assertThat(it.addressLine1).isIn("somewhere out there", "somewhere in there")
+            }
+        }
     }
 
     @Test
@@ -66,15 +72,15 @@ internal class AddressRepositoryTest {
 
         val possibleAddressEntityById = addressRepository.findById(addressEntityToPersist.id!!)
 
-        assertThat(possibleAddressEntityById).isPresent.hasValueSatisfying { addressEntity: AddressEntity ->
-            assertAll(
-                { assertThat(addressEntity.addressLine1).`as`("address line 1").isEqualTo("somewhere out there") },
-                { assertThat(addressEntity.addressLine2).`as`("address line 2").isEqualTo("where the streets have no name") },
-                { assertThat(addressEntity.addressLine3).`as`("address line 3").isEqualTo("in the middle of it") },
-                { assertThat(addressEntity.zipCode).`as`("zip code").isEqualTo("1234") },
-                { assertThat(addressEntity.country).`as`("country").isEqualTo("NO") },
-                { assertThat(addressEntity.city).`as`("city").isEqualTo("Rud") }
-            )
+        assertThat(possibleAddressEntityById).isPresent().given { addressEntity: AddressEntity ->
+            assertAll {
+                assertThat(addressEntity.addressLine1).isEqualTo("somewhere out there")
+                assertThat(addressEntity.addressLine2).isEqualTo("where the streets have no name")
+                assertThat(addressEntity.addressLine3).isEqualTo("in the middle of it")
+                assertThat(addressEntity.zipCode).isEqualTo("1234")
+                assertThat(addressEntity.country).isEqualTo("NO")
+                assertThat(addressEntity.city).isEqualTo("Rud")
+            }
         }
     }
 
@@ -95,7 +101,8 @@ internal class AddressRepositoryTest {
         entityManager.flush()
         entityManager.clear()
 
-        val addressEntitySaved = addressRepository.findById(addressEntityToPersist.id!!).orElseThrow { addressNotFound() }!!
+        val addressEntitySaved =
+            addressRepository.findById(addressEntityToPersist.id!!).orElseThrow { addressNotFound() }!!
         addressEntitySaved.addressLine1 = "the truth is out there"
         addressEntitySaved.addressLine2 = "among the stars"
         addressEntitySaved.addressLine3 = "there will be life"
@@ -109,15 +116,15 @@ internal class AddressRepositoryTest {
 
         val possibleAddressEntityById = addressRepository.findById(addressEntityToPersist.id!!)
 
-        assertThat(possibleAddressEntityById).isPresent.hasValueSatisfying { addressEntity: AddressEntity ->
-            assertAll(
-                { assertThat(addressEntity.addressLine1).`as`("address line 1").isEqualTo("the truth is out there") },
-                { assertThat(addressEntity.addressLine2).`as`("address line 2").isEqualTo("among the stars") },
-                { assertThat(addressEntity.addressLine3).`as`("address line 3").isEqualTo("there will be life") },
-                { assertThat(addressEntity.zipCode).`as`("zip code").isEqualTo("666") },
-                { assertThat(addressEntity.country).`as`("country").isEqualTo("XX") },
-                { assertThat(addressEntity.city).`as`("city").isEqualTo("Cloud city") }
-            )
+        assertThat(possibleAddressEntityById).isPresent().given { addressEntity: AddressEntity ->
+            assertAll {
+                assertThat(addressEntity.addressLine1).isEqualTo("the truth is out there")
+                assertThat(addressEntity.addressLine2).isEqualTo("among the stars")
+                assertThat(addressEntity.addressLine3).isEqualTo("there will be life")
+                assertThat(addressEntity.zipCode).isEqualTo("666")
+                assertThat(addressEntity.country).isEqualTo("XX")
+                assertThat(addressEntity.city).isEqualTo("Cloud city")
+            }
         }
     }
 

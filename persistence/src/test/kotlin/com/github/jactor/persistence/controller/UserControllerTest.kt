@@ -1,8 +1,6 @@
 package com.github.jactor.persistence.controller
 
 import java.util.Optional
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +24,11 @@ import com.github.jactor.shared.dto.PersonDto
 import com.github.jactor.shared.dto.UserDto
 import com.github.jactor.shared.dto.UserType
 import com.ninjasquad.springmockk.MockkBean
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import io.mockk.every
 
 @ExtendWith(SpringExtension::class)
@@ -58,10 +61,10 @@ internal class UserControllerTest {
             UserInternalDto::class.java
         )
 
-        assertAll(
-            { assertThat(userRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.NO_CONTENT) },
-            { assertThat(userRespnse.body).`as`("user").isNull() }
-        )
+        assertAll {
+            assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+            assertThat(userRespnse.body).isNull()
+        }
     }
 
     @Test
@@ -73,10 +76,10 @@ internal class UserControllerTest {
             UserInternalDto::class.java
         )
 
-        assertAll(
-            { assertThat(userResponse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(userResponse.body).`as`("user").isNotNull() }
-        )
+        assertAll {
+            assertThat(userResponse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(userResponse.body).isNotNull()
+        }
     }
 
     @Test
@@ -85,10 +88,10 @@ internal class UserControllerTest {
 
         val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserInternalDto::class.java)
 
-        assertAll(
-            { assertThat(userRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.NOT_FOUND) },
-            { assertThat(userRespnse.body).`as`("user").isNull() }
-        )
+        assertAll {
+            assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+            assertThat(userRespnse.body).isNull()
+        }
     }
 
     @Test
@@ -97,10 +100,10 @@ internal class UserControllerTest {
 
         val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserInternalDto::class.java)
 
-        assertAll(
-            { assertThat(userRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(userRespnse.body).`as`("user").isNotNull() }
-        )
+        assertAll {
+            assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(userRespnse.body).isNotNull()
+        }
     }
 
     @Test
@@ -114,11 +117,11 @@ internal class UserControllerTest {
             buildFullPath("/user/1"), HttpMethod.PUT, HttpEntity(userInternalDto.toUserDto()), UserDto::class.java
         )
 
-        assertAll(
-            { assertThat(userRespnse.statusCode).`as`("status").isEqualTo(HttpStatus.ACCEPTED) },
-            { assertThat(userRespnse.body).`as`("user").isNotNull() },
-            { assertThat(userRespnse.body?.id).`as`("user id").isEqualTo(1L) }
-        )
+        assertAll {
+            assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
+            assertThat(userRespnse.body).isNotNull()
+            assertThat(userRespnse.body?.id).isEqualTo(1L)
+        }
     }
 
     @Test
@@ -133,10 +136,10 @@ internal class UserControllerTest {
         val userResponse =
             testRestTemplate.exchange(buildFullPath("/user/usernames"), HttpMethod.GET, null, responsIslistOfStrings())
 
-        assertAll(
-            { assertThat(userResponse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(userResponse.body).`as`("usernames").isEqualTo(listOf("bart", "lisa")) }
-        )
+        assertAll {
+            assertThat(userResponse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(userResponse.body).isEqualTo(listOf("bart", "lisa"))
+        }
     }
 
     @Test
