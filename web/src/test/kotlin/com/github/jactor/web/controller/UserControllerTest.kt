@@ -1,6 +1,5 @@
 package com.github.jactor.web.controller
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +16,9 @@ import com.github.jactor.web.consumer.UserConsumer
 import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
 import com.ninjasquad.springmockk.MockkBean
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 import io.mockk.called
 import io.mockk.every
 import io.mockk.verify
@@ -90,7 +92,7 @@ internal class UserControllerTest {
 
         val model = modelAndView?.model ?: HashMap<Any, Any>()
 
-        assertThat(model["user"]).isNotNull
+        assertThat(model["user"]).isNotNull()
     }
 
     @Test
@@ -102,7 +104,7 @@ internal class UserControllerTest {
             MockMvcRequestBuilders.get(USER_ENDPOINT).param(REQUEST_USER, "someone")
         ).andExpect(MockMvcResultMatchers.status().isOk).andReturn().modelAndView
 
-        assertThat(modelAndView?.model).isNotNull
+        assertThat(modelAndView?.model).isNotNull()
         assertThat(modelAndView?.model!!["unknownUser"]).isEqualTo("someone")
     }
 
@@ -114,11 +116,11 @@ internal class UserControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk).andReturn().modelAndView
 
         val model = modelAndView?.model
-        assertThat(model).`as`("model").isNotNull
+        assertThat(model).isNotNull()
 
         val menuItem = model!!["usersMenu"]
 
-        assertThat(menuItem).`as`("users menu among: ${model.keys}").isEqualTo(
+        assertThat(menuItem).isEqualTo(
             listOf(
                 MenuItem(
                     itemName = "menu.users.choose", children = mutableListOf(

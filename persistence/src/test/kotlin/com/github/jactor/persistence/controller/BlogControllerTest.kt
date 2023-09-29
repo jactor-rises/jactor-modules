@@ -1,8 +1,6 @@
 package com.github.jactor.persistence.controller
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -20,6 +18,12 @@ import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
 import com.github.jactor.persistence.service.BlogService
 import com.ninjasquad.springmockk.MockkBean
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotEmpty
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.verify
 
@@ -48,10 +52,10 @@ internal class BlogControllerTest {
         every { blogServiceMock.find(1L) } returns BlogDto()
         val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto::class.java)
 
-        assertAll(
-            { assertThat(blogResponse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(blogResponse).`as`("blog").isNotNull() }
-        )
+        assertAll {
+            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(blogResponse).isNotNull()
+        }
     }
 
     @Test
@@ -60,10 +64,10 @@ internal class BlogControllerTest {
 
         val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto::class.java)
 
-        assertAll(
-            { assertThat(blogResponse.statusCode).`as`("status").isEqualTo(HttpStatus.NO_CONTENT) },
-            { assertThat(blogResponse.body).`as`("blog").isNull() }
-        )
+        assertAll {
+            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+            assertThat(blogResponse.body).isNull()
+        }
     }
 
     @Test
@@ -75,10 +79,10 @@ internal class BlogControllerTest {
             BlogEntryDto::class.java
         )
 
-        assertAll(
-            { assertThat(blogEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(blogEntryResponse.body).`as`("blog entry").isNotNull() }
-        )
+        assertAll {
+            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(blogEntryResponse.body).isNotNull()
+        }
     }
 
     @Test
@@ -90,10 +94,10 @@ internal class BlogControllerTest {
             BlogEntryDto::class.java
         )
 
-        assertAll(
-            { assertThat(blogEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.NO_CONTENT) },
-            { assertThat(blogEntryResponse.body).`as`("blog entry").isNull() }
-        )
+        assertAll {
+            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+            assertThat(blogEntryResponse.body).isNull()
+        }
     }
 
     @Test
@@ -104,10 +108,10 @@ internal class BlogControllerTest {
             buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs()
         )
 
-        assertAll(
-            { assertThat(blogResponse.statusCode).`as`("status").isEqualTo(HttpStatus.NO_CONTENT) },
-            { assertThat(blogResponse.body).`as`("blogs").isNull() }
-        )
+        assertAll {
+            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+            assertThat(blogResponse.body).isNull()
+        }
     }
 
     @Test
@@ -117,10 +121,10 @@ internal class BlogControllerTest {
         val blogResponse =
             testRestTemplate.exchange(buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs())
 
-        assertAll(
-            { assertThat(blogResponse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(blogResponse.body).`as`("blogs").isNotEmpty() }
-        )
+        assertAll {
+            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(blogResponse.body as List).isNotEmpty()
+        }
     }
 
     private fun typeIsListOfBlogs(): ParameterizedTypeReference<List<BlogDto>> {
@@ -134,10 +138,10 @@ internal class BlogControllerTest {
         val blogEntriesResponse =
             testRestTemplate.exchange(buildFullPath("/blog/1/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries())
 
-        assertAll(
-            { assertThat(blogEntriesResponse.statusCode).`as`("status").isEqualTo(HttpStatus.NO_CONTENT) },
-            { assertThat(blogEntriesResponse.body).`as`("blogs").isNull() }
-        )
+        assertAll {
+            assertThat(blogEntriesResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
+            assertThat(blogEntriesResponse.body).isNull()
+        }
     }
 
     @Test
@@ -148,10 +152,10 @@ internal class BlogControllerTest {
             buildFullPath("/blog/1/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries()
         )
 
-        assertAll(
-            { assertThat(blogEntriesResponse.statusCode).`as`("status").isEqualTo(HttpStatus.OK) },
-            { assertThat(blogEntriesResponse.body).`as`("blogs").isNotEmpty() }
-        )
+        assertAll {
+            assertThat(blogEntriesResponse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(blogEntriesResponse.body as List).isNotEmpty()
+        }
     }
 
     private fun typeIsListOfBlogEntries(): ParameterizedTypeReference<List<BlogEntryDto>> {
@@ -170,11 +174,12 @@ internal class BlogControllerTest {
             BlogDto::class.java
         )
 
-        assertAll(
-            { assertThat(blogResponse.statusCode).`as`("status").isEqualTo(HttpStatus.ACCEPTED) },
-            { assertThat(blogResponse.body).`as`("updated blog").isNotNull() },
-            { verify { blogServiceMock.saveOrUpdate(blogDto) } }
-        )
+        assertAll {
+            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
+            assertThat(blogResponse.body).isNotNull()
+        }
+
+        verify { blogServiceMock.saveOrUpdate(blogDto) }
     }
 
     @Test
@@ -190,12 +195,13 @@ internal class BlogControllerTest {
             BlogDto::class.java
         )
 
-        assertAll(
-            { assertThat(blogResponse.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
-            { assertThat(blogResponse).`as`("created blog").isNotNull() },
-            { assertThat(blogResponse.body?.id).`as`("blog id").isEqualTo(1L) },
-            { verify { blogServiceMock.saveOrUpdate(blogDto) } }
-        )
+        assertAll {
+            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.CREATED)
+            assertThat(blogResponse).isNotNull()
+            assertThat(blogResponse.body?.id).isEqualTo(1L)
+        }
+
+        verify { blogServiceMock.saveOrUpdate(blogDto) }
     }
 
     @Test
@@ -209,11 +215,12 @@ internal class BlogControllerTest {
             buildFullPath("/blog/entry/1"), HttpMethod.PUT, HttpEntity(blogEntryDto), BlogEntryDto::class.java
         )
 
-        assertAll(
-            { assertThat(blogEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.ACCEPTED) },
-            { assertThat(blogEntryResponse.body).`as`("updated entry").isNotNull() },
-            { verify { blogServiceMock.saveOrUpdate(blogEntryDto) } }
-        )
+        assertAll {
+            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
+            assertThat(blogEntryResponse.body).isNotNull()
+        }
+
+        verify { blogServiceMock.saveOrUpdate(blogEntryDto) }
     }
 
     @Test
@@ -228,12 +235,13 @@ internal class BlogControllerTest {
             buildFullPath("/blog/entry"), HttpMethod.POST, HttpEntity(blogEntryDto), BlogEntryDto::class.java
         )
 
-        assertAll(
-            { assertThat(blogEntryResponse.statusCode).`as`("status").isEqualTo(HttpStatus.CREATED) },
-            { assertThat(blogEntryResponse.body).`as`("created entry").isNotNull() },
-            { assertThat(blogEntryResponse.body?.id).`as`("blog entry id").isEqualTo(1L) },
-            { verify { blogServiceMock.saveOrUpdate(blogEntryDto) } }
-        )
+        assertAll {
+            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.CREATED)
+            assertThat(blogEntryResponse.body).isNotNull()
+            assertThat(blogEntryResponse.body?.id).isEqualTo(1L)
+        }
+
+        verify { blogServiceMock.saveOrUpdate(blogEntryDto) }
     }
 
     private fun buildFullPath(url: String): String {
