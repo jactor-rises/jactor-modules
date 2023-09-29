@@ -1,13 +1,14 @@
 package com.github.jactor.web
 
-import com.ninjasquad.springmockk.MockkBean
-import io.mockk.every
-import jakarta.servlet.http.HttpServletRequest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
+import com.ninjasquad.springmockk.MockkBean
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import io.mockk.every
+import jakarta.servlet.http.HttpServletRequest
 
 @SpringBootTest
 internal class RequestManagerTest {
@@ -47,10 +48,10 @@ internal class RequestManagerTest {
 
         val langAndOtherParam = RequestManager(contextPath, httpServletRequestMock).fetchCurrentUrl()
 
-        assertAll(
-            { assertThat(languageParam).`as`("only language param").isEqualTo("/home") },
-            { assertThat(langAndOtherParam).`as`("one language and one user params").isEqualTo("/user?choose=tip") }
-        )
+        assertAll {
+            assertThat(languageParam).isEqualTo("/home")
+            assertThat(langAndOtherParam).isEqualTo("/user?choose=tip")
+        }
     }
 
     @Test

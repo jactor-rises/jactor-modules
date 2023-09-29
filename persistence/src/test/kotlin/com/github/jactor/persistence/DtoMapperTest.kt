@@ -1,10 +1,11 @@
 package com.github.jactor.persistence
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import com.github.jactor.shared.dto.UserDto
 import com.github.jactor.shared.dto.UserType
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.contains
 
 internal class DtoMapperTest : AbstractSpringBootNoDirtyContextTest() {
 
@@ -16,11 +17,11 @@ internal class DtoMapperTest : AbstractSpringBootNoDirtyContextTest() {
         userlDto.username = "mine"
         userlDto.userType = UserType.ACTIVE
 
-        assertAll(
-            { assertThat(objectMapper.writeValueAsString(userlDto)).`as`("id").contains("\"id\":1") },
-            { assertThat(objectMapper.writeValueAsString(userlDto)).`as`("email address").contains("\"emailAddress\":\"some@where\"") },
-            { assertThat(objectMapper.writeValueAsString(userlDto)).`as`("username").contains("\"username\":\"mine\"") },
-            { assertThat(objectMapper.writeValueAsString(userlDto)).`as`("user type").contains("\"userType\":\"ACTIVE\"") }
-        )
+        assertAll {
+            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"id\":1")
+            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"emailAddress\":\"some@where\"")
+            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"username\":\"mine\"")
+            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"userType\":\"ACTIVE\"")
+        }
     }
 }

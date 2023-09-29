@@ -1,9 +1,10 @@
 package com.github.jactor.persistence.dto
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
+import org.junit.jupiter.api.Test
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 
 internal class AddressInternalDtoTest {
 
@@ -22,14 +23,14 @@ internal class AddressInternalDtoTest {
             addressInternalDto
         )
 
-        assertAll(
-            { assertThat(addressLine1).`as`("address line one").isEqualTo(addressInternalDto.addressLine1) },
-            { assertThat(addressLine2).`as`("address line two").isEqualTo(addressInternalDto.addressLine2) },
-            { assertThat(addressLine3).`as`("address line three").isEqualTo(addressInternalDto.addressLine3) },
-            { assertThat(city).`as`("city").isEqualTo(addressInternalDto.city) },
-            { assertThat(country).`as`("country").isEqualTo(addressInternalDto.country) },
-            { assertThat(zipCode).`as`("zip code").isEqualTo(addressInternalDto.zipCode) }
-        )
+        assertAll {
+            assertThat(addressLine1).isEqualTo(addressInternalDto.addressLine1)
+            assertThat(addressLine2).isEqualTo(addressInternalDto.addressLine2)
+            assertThat(addressLine3).isEqualTo(addressInternalDto.addressLine3)
+            assertThat(city).isEqualTo(addressInternalDto.city)
+            assertThat(country).isEqualTo(addressInternalDto.country)
+            assertThat(zipCode).isEqualTo(addressInternalDto.zipCode)
+        }
     }
 
     @Test
@@ -41,14 +42,16 @@ internal class AddressInternalDtoTest {
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = AddressInternalDto(persistentDto, AddressInternalDto()).persistentDto
+        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = AddressInternalDto(
+            persistentDto, AddressInternalDto()
+        ).persistentDto
 
-        assertAll(
-            { assertThat(createdBy).`as`("created by").isEqualTo(persistentDto.createdBy) },
-            { assertThat(timeOfCreation).`as`("creation time").isEqualTo(persistentDto.timeOfCreation) },
-            { assertThat(id).`as`("id").isEqualTo(persistentDto.id) },
-            { assertThat(modifiedBy).`as`("updated by").isEqualTo(persistentDto.modifiedBy) },
-            { assertThat(timeOfModification).`as`("updated time").isEqualTo(persistentDto.timeOfModification) }
-        )
+        assertAll {
+            assertThat(createdBy).isEqualTo(persistentDto.createdBy)
+            assertThat(timeOfCreation).isEqualTo(persistentDto.timeOfCreation)
+            assertThat(id).isEqualTo(persistentDto.id)
+            assertThat(modifiedBy).isEqualTo(persistentDto.modifiedBy)
+            assertThat(timeOfModification).isEqualTo(persistentDto.timeOfModification)
+        }
     }
 }
