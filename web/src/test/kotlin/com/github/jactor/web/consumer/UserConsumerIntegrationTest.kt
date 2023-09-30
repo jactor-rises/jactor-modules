@@ -1,11 +1,9 @@
 package com.github.jactor.web.consumer
 
 import java.net.URI
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -15,6 +13,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.contains
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 internal class UserConsumerIntegrationTest {
@@ -62,16 +65,12 @@ internal class UserConsumerIntegrationTest {
     fun `should find the user named jactor`() {
         val possibleUser = userConsumerToTest.find("jactor")
 
-        assertAll(
-            { assertThat(possibleUser).`as`("possible user").isNotNull },
-            {
-                val user = possibleUser!!
+        assertThat(possibleUser).isNotNull()
+        val user = possibleUser!!
 
-                assertAll(
-                    { assertThat(user.person?.firstName).`as`("user.person.firstName").isEqualTo("Tor Egil") },
-                    { assertThat(user.emailAddress).`as`("user.emailaddress").isEqualTo("tor.egil.jacobsen@gmail.com") }
-                )
-            }
-        )
+        assertAll {
+            assertThat(user.person?.firstName).isEqualTo("Tor Egil")
+            assertThat(user.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
+        }
     }
 }
