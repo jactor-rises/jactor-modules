@@ -1,9 +1,10 @@
 package com.github.jactor.persistence.dto
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
+import org.junit.jupiter.api.Test
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 
 internal class PersonInternalDtoTest {
 
@@ -16,15 +17,18 @@ internal class PersonInternalDtoTest {
         personInternalDto.locale = "no"
         personInternalDto.surname = "surname"
 
-        val (_, address, locale, firstName, surname, description) = PersonInternalDto(personInternalDto.persistentDto, personInternalDto)
-
-        assertAll(
-            { assertThat(address).`as`("address").isEqualTo(personInternalDto.address) },
-            { assertThat(description).`as`("description").isEqualTo(personInternalDto.description) },
-            { assertThat(firstName).`as`("first name").isEqualTo(personInternalDto.firstName) },
-            { assertThat(locale).`as`("locale").isEqualTo(personInternalDto.locale) },
-            { assertThat(surname).`as`("surname").isEqualTo(personInternalDto.surname) }
+        val (_, address, locale, firstName, surname, description) = PersonInternalDto(
+            personInternalDto.persistentDto,
+            personInternalDto
         )
+
+        assertAll {
+            assertThat(address).isEqualTo(personInternalDto.address)
+            assertThat(description).isEqualTo(personInternalDto.description)
+            assertThat(firstName).isEqualTo(personInternalDto.firstName)
+            assertThat(locale).isEqualTo(personInternalDto.locale)
+            assertThat(surname).isEqualTo(personInternalDto.surname)
+        }
     }
 
     @Test
@@ -36,15 +40,18 @@ internal class PersonInternalDtoTest {
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = PersonInternalDto(persistentDto, PersonInternalDto()).persistentDto
+        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = PersonInternalDto(
+            persistentDto,
+            PersonInternalDto()
+        ).persistentDto
 
-        assertAll(
-            { assertThat(createdBy).`as`("created by").isEqualTo(persistentDto.createdBy) },
-            { assertThat(timeOfCreation).`as`("creation time").isEqualTo(persistentDto.timeOfCreation) },
-            { assertThat(id).`as`("id").isEqualTo(persistentDto.id) },
-            { assertThat(modifiedBy).`as`("updated by").isEqualTo(persistentDto.modifiedBy) },
-            { assertThat(timeOfModification).`as`("updated time").isEqualTo(persistentDto.timeOfModification) }
-        )
+        assertAll {
+            assertThat(createdBy).isEqualTo(persistentDto.createdBy)
+            assertThat(timeOfCreation).isEqualTo(persistentDto.timeOfCreation)
+            assertThat(id).isEqualTo(persistentDto.id)
+            assertThat(modifiedBy).isEqualTo(persistentDto.modifiedBy)
+            assertThat(timeOfModification).isEqualTo(persistentDto.timeOfModification)
+        }
     }
 
     @Test
@@ -61,12 +68,12 @@ internal class PersonInternalDtoTest {
 
         val address = PersonInternalDto(personInternalDto.persistentDto, personInternalDto).toPersonDto().address
 
-        assertAll(
-            { assertThat(address?.addressLine1).`as`("address.addressLine1").isEqualTo("somewhere") },
-            { assertThat(address?.addressLine2).`as`("address.addressLine2").isEqualTo("in") },
-            { assertThat(address?.addressLine3).`as`("address.addressLine3").isEqualTo("time") },
-            { assertThat(address?.city).`as`("address.city").isEqualTo("out there") },
-            { assertThat(address?.zipCode).`as`("address.zipCode").isEqualTo("1234") }
-        )
+        assertAll {
+            assertThat(address?.addressLine1).isEqualTo("somewhere")
+            assertThat(address?.addressLine2).isEqualTo("in")
+            assertThat(address?.addressLine3).isEqualTo("time")
+            assertThat(address?.city).isEqualTo("out there")
+            assertThat(address?.zipCode).isEqualTo("1234")
+        }
     }
 }

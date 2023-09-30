@@ -2,8 +2,6 @@ package com.github.jactor.persistence.service
 
 import java.time.LocalDateTime
 import java.util.Optional
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,6 +17,10 @@ import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import com.github.jactor.persistence.repository.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.slot
 
@@ -55,10 +57,10 @@ internal class UserServiceTest {
 
         val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
 
-        assertAll(
-            { assertThat(user).`as`("user").isNotNull() },
-            { assertThat(user.username).`as`("user.username").isEqualTo("jactor") }
-        )
+        assertAll {
+            assertThat(user).isNotNull()
+            assertThat(user.username).isEqualTo("jactor")
+        }
     }
 
     @Test
@@ -73,10 +75,10 @@ internal class UserServiceTest {
 
         val user = userServiceToTest.find(69L) ?: throw AssertionError("mocking?")
 
-        assertAll(
-            { assertThat(user).`as`("user").isNotNull() },
-            { assertThat(user.username).`as`("user.username").isEqualTo("jactor") }
-        )
+        assertAll {
+            assertThat(user).isNotNull()
+            assertThat(user.username).isEqualTo("jactor")
+        }
     }
 
     @Test
@@ -109,9 +111,9 @@ internal class UserServiceTest {
 
         val user = userServiceToTest.create(createUserCommand)
 
-        assertAll(
-            { assertThat(user).`as`("user").isEqualTo(userDto) },
-            { assertThat(personEntitySlot.captured).`as`("person to save").isNotNull }
-        )
+        assertAll {
+            assertThat(user).isEqualTo(userDto)
+            assertThat(personEntitySlot.captured).isNotNull()
+        }
     }
 }

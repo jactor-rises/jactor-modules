@@ -1,9 +1,10 @@
 package com.github.jactor.persistence.dto
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
+import org.junit.jupiter.api.Test
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 
 internal class GuestBookEntryDtoTest {
 
@@ -16,11 +17,11 @@ internal class GuestBookEntryDtoTest {
 
         val (_, guestBook, creatorName, entry) = GuestBookEntryDto(guestBookEntryDto.persistentDto, guestBookEntryDto)
 
-        assertAll(
-            { assertThat(creatorName).`as`("creator name").isEqualTo(guestBookEntryDto.creatorName) },
-            { assertThat(guestBook).`as`("guest book").isEqualTo(guestBookEntryDto.guestBook) },
-            { assertThat(entry).`as`("entry").isEqualTo(guestBookEntryDto.entry) }
-        )
+        assertAll {
+            assertThat(creatorName).isEqualTo(guestBookEntryDto.creatorName)
+            assertThat(guestBook).isEqualTo(guestBookEntryDto.guestBook)
+            assertThat(entry).isEqualTo(guestBookEntryDto.entry)
+        }
     }
 
     @Test
@@ -32,14 +33,17 @@ internal class GuestBookEntryDtoTest {
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = GuestBookEntryDto(persistentDto, GuestBookEntryDto()).persistentDto
+        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = GuestBookEntryDto(
+            persistentDto,
+            GuestBookEntryDto()
+        ).persistentDto
 
-        assertAll(
-            { assertThat(createdBy).`as`("created by").isEqualTo(persistentDto.createdBy) },
-            { assertThat(timeOfCreation).`as`("creation time").isEqualTo(persistentDto.timeOfCreation) },
-            { assertThat(id).`as`("id").isEqualTo(persistentDto.id) },
-            { assertThat(modifiedBy).`as`("updated by").isEqualTo(persistentDto.modifiedBy) },
-            { assertThat(timeOfModification).`as`("updated time").isEqualTo(persistentDto.timeOfModification) }
-        )
+        assertAll {
+            assertThat(createdBy).isEqualTo(persistentDto.createdBy)
+            assertThat(timeOfCreation).isEqualTo(persistentDto.timeOfCreation)
+            assertThat(id).isEqualTo(persistentDto.id)
+            assertThat(modifiedBy).isEqualTo(persistentDto.modifiedBy)
+            assertThat(timeOfModification).isEqualTo(persistentDto.timeOfModification)
+        }
     }
 }

@@ -1,8 +1,10 @@
 package com.github.jactor.web.menu
 
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import kotlin.test.junit.JUnitAsserter.fail
 import org.junit.jupiter.api.Test
+import assertk.assertThat
+import assertk.assertions.contains
+import assertk.assertions.isNotNull
 
 internal class MenuFacadeTest {
 
@@ -15,9 +17,12 @@ internal class MenuFacadeTest {
             )
         )
 
-        assertThatIllegalArgumentException().isThrownBy { menuFacadeToTest.fetchMenuItemsByName("unknown.menu") }
-            .withMessageContaining("unknown.menu")
-            .withMessageContaining("known.menu")
+        runCatching { menuFacadeToTest.fetchMenuItemsByName("unknown.menu") }
+            .onSuccess { fail("Test was supposed to fail!") }
+            .onFailure {
+                assertThat(it.message).isNotNull().contains("unknown.menu")
+                assertThat(it.message).isNotNull().contains("known.menu")
+            }
     }
 
     @Test

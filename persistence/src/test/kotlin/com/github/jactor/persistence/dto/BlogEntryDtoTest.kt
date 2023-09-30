@@ -1,9 +1,10 @@
 package com.github.jactor.persistence.dto
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
+import org.junit.jupiter.api.Test
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 
 internal class BlogEntryDtoTest {
 
@@ -16,11 +17,11 @@ internal class BlogEntryDtoTest {
 
         val (_, blog, creatorName, entry) = BlogEntryDto(blogEntryDto.persistentDto, blogEntryDto)
 
-        assertAll(
-            { assertThat(blog).`as`("blog").isEqualTo(blogEntryDto.blog) },
-            { assertThat(creatorName).`as`("creator name").isEqualTo(blogEntryDto.creatorName) },
-            { assertThat(entry).`as`("entry").isEqualTo(blogEntryDto.entry) }
-        )
+        assertAll {
+            assertThat(blog).isEqualTo(blogEntryDto.blog)
+            assertThat(creatorName).isEqualTo(blogEntryDto.creatorName)
+            assertThat(entry).isEqualTo(blogEntryDto.entry)
+        }
     }
 
     @Test
@@ -32,14 +33,17 @@ internal class BlogEntryDtoTest {
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = BlogEntryDto(persistentDto, BlogEntryDto()).persistentDto
+        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = BlogEntryDto(
+            persistentDto,
+            BlogEntryDto()
+        ).persistentDto
 
-        assertAll(
-            { assertThat(createdBy).`as`("created by").isEqualTo(persistentDto.createdBy) },
-            { assertThat(timeOfCreation).`as`("creation time").isEqualTo(persistentDto.timeOfCreation) },
-            { assertThat(id).`as`("id").isEqualTo(persistentDto.id) },
-            { assertThat(modifiedBy).`as`("updated by").isEqualTo(persistentDto.modifiedBy) },
-            { assertThat(timeOfModification).`as`("updated time").isEqualTo(persistentDto.timeOfModification) }
-        )
+        assertAll {
+            assertThat(createdBy).isEqualTo(persistentDto.createdBy)
+            assertThat(timeOfCreation).isEqualTo(persistentDto.timeOfCreation)
+            assertThat(id).isEqualTo(persistentDto.id)
+            assertThat(modifiedBy).isEqualTo(persistentDto.modifiedBy)
+            assertThat(timeOfModification).isEqualTo(persistentDto.timeOfModification)
+        }
     }
 }

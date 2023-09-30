@@ -1,9 +1,7 @@
 package com.github.jactor.persistence.service
 
 import java.util.Optional
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import com.github.jactor.persistence.dto.GuestBookDto
 import com.github.jactor.persistence.dto.GuestBookEntryDto
@@ -15,6 +13,11 @@ import com.github.jactor.persistence.entity.GuestBookEntryEntity
 import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGuestBookEntry
 import com.github.jactor.persistence.repository.GuestBookEntryRepository
 import com.github.jactor.persistence.repository.GuestBookRepository
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -40,7 +43,7 @@ internal class GuestBookServiceTest {
 
         val (_, _, title) = guestBookServiceToTest.find(1001L) ?: throw mockError()
 
-        assertThat(title).`as`("title").isEqualTo("@home")
+        assertThat(title).isEqualTo("@home")
     }
 
     @Test
@@ -51,10 +54,10 @@ internal class GuestBookServiceTest {
 
         val (_, _, creatorName, entry) = guestBookServiceToTest.findEntry(1001L) ?: throw mockError()
 
-        assertAll(
-            { assertThat(creatorName).`as`("creator name").isEqualTo("me") },
-            { assertThat(entry).`as`("entry").isEqualTo("too") }
-        )
+        assertAll {
+            assertThat(creatorName).isEqualTo("me")
+            assertThat(entry).isEqualTo("too")
+        }
     }
 
     private fun mockError(): AssertionError {
@@ -80,11 +83,11 @@ internal class GuestBookServiceTest {
         guestBookServiceToTest.saveOrUpdate(guestBookDto)
         val guestBookEntity = guestBookEntitySlot.captured
 
-        assertAll(
-            { assertThat(guestBookEntity.getEntries()).`as`("entries").hasSize(1) },
-            { assertThat(guestBookEntity.title).`as`("title").isEqualTo("home sweet home") },
-            { assertThat(guestBookEntity.user).`as`("user").isNotNull() }
-        )
+        assertAll {
+            assertThat(guestBookEntity.getEntries()).hasSize(1)
+            assertThat(guestBookEntity.title).isEqualTo("home sweet home")
+            assertThat(guestBookEntity.user).isNotNull()
+        }
     }
 
     @Test
@@ -103,10 +106,10 @@ internal class GuestBookServiceTest {
         guestBookServiceToTest.saveOrUpdate(guestBookEntryDto)
         val guestBookEntryEntity = guestBookEntryEntitySlot.captured
 
-        assertAll(
-            { assertThat(guestBookEntryEntity.guestBook).`as`("guest book").isNotNull() },
-            { assertThat(guestBookEntryEntity.creatorName).`as`("creator name").isEqualTo("me") },
-            { assertThat(guestBookEntryEntity.entry).`as`("entry").isEqualTo("if i where a rich man...") }
-        )
+        assertAll {
+            assertThat(guestBookEntryEntity.guestBook).isNotNull()
+            assertThat(guestBookEntryEntity.creatorName).isEqualTo("me")
+            assertThat(guestBookEntryEntity.entry).isEqualTo("if i where a rich man...")
+        }
     }
 }

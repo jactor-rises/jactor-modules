@@ -1,7 +1,9 @@
 package com.github.jactor.web.menu
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import assertk.assertThat
+import assertk.assertions.isFalse
+import assertk.assertions.isTrue
 
 internal class MenuItemTest {
 
@@ -12,13 +14,13 @@ internal class MenuItemTest {
     @Test
     fun `should not be chosen when the target is unknown`() {
         val testMenuItem = MenuItem(itemName = "an item", target = "miss")
-        assertThat(testMenuItem.isChosen(HIT_DEAD_CENTER)).isEqualTo(false)
+        assertThat(testMenuItem.isChosen(HIT_DEAD_CENTER)).isFalse()
     }
 
     @Test
     fun `should be chosen when the target is known`() {
         val testMenuItem = MenuItem(itemName = "an item", target = HIT_DEAD_CENTER)
-        assertThat(testMenuItem.isChosen(HIT_DEAD_CENTER)).isEqualTo(true)
+        assertThat(testMenuItem.isChosen(HIT_DEAD_CENTER)).isTrue()
     }
 
     @Test
@@ -26,7 +28,7 @@ internal class MenuItemTest {
         val testMenuItem = MenuItem(itemName = "an item", target = HIT_DEAD_CENTER)
             .addChild(MenuItem(itemName = "a child", target = "miss"))
 
-        assertThat(testMenuItem.isChildChosen(HIT_DEAD_CENTER)).isEqualTo(false)
+        assertThat(testMenuItem.isChildChosen(HIT_DEAD_CENTER)).isFalse()
     }
 
     @Test
@@ -34,6 +36,6 @@ internal class MenuItemTest {
         val testMenuItem = MenuItem(itemName = "an item", target = "miss")
             .addChild(MenuItem(itemName = "an item", target = HIT_DEAD_CENTER))
 
-        assertThat(testMenuItem.isChildChosen(HIT_DEAD_CENTER)).isEqualTo(true)
+        assertThat(testMenuItem.isChildChosen(HIT_DEAD_CENTER)).isTrue()
     }
 }
