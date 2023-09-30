@@ -24,7 +24,7 @@ class HomeController @Autowired constructor(private val myMessages: MyMessages) 
                         Technology(myMessages.fetchMessage("page.home.tech.h2"), "H2 database", "https://h2database.com"),
                         Technology(myMessages.fetchMessage("page.home.tech.junit"), "Junit", "https://junit.org/junit5/"),
                         Technology(myMessages.fetchMessage("page.home.tech.mockk"), "Mockk", "https://mockk.io"),
-                        Technology(myMessages.fetchMessage("page.home.tech.assertj"), "AssertJ", "https://joel-costigliola.github.io/assertj/"),
+                        Technology(myMessages.fetchMessage("page.home.tech.assertk"), "AssertK", "https://github.com/willowtreeapps/assertk"),
                         Technology(myMessages.fetchMessage("page.home.tech.git"), "Git", "https://git-scm.com")
                     )
                 )

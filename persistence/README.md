@@ -55,7 +55,7 @@ docker run -p 1099:1099 jactor-persistence
 * [kotlin](https://kotlinlang.org)
 
 #### Unit testing
-* [assertj](https://assertj.github.io/doc/)
+* [assertk](https://github.com/willowtreeapps/assertk)
 * [junit jupiter](https://junit.org/)
 * [mockk](http://mockk.io) and [springmockk](https://github.com/Ninja-Squad/springmockk)
 
