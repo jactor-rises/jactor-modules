@@ -1,12 +1,7 @@
 package com.github.jactor.web.controller
 
-import com.github.jactor.web.i18n.MyMessages
-import com.github.jactor.web.model.HomePageModel
-import junit.framework.AssertionFailedError
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,6 +10,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
+import com.github.jactor.web.i18n.MyMessages
+import com.github.jactor.web.model.HomePageModel
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isNotNull
+import junit.framework.AssertionFailedError
 
 @SpringBootTest
 internal class HomeControllerTest {
@@ -49,15 +51,13 @@ internal class HomeControllerTest {
             MockMvcResultMatchers.status().isOk
         ).andReturn().modelAndView
 
-        assertAll(
-            { assertThat(modelAndView).`as`("modelAndView").isNotNull() },
-            {
-                val model = modelAndView?.model ?: throw AssertionFailedError("No model to be found!")
-                assertThat(model).isNotNull
+        assertAll {
+            assertThat(modelAndView).isNotNull()
+            val model = modelAndView?.model ?: throw AssertionFailedError("No model to be found!")
+            assertThat(model).isNotNull()
 
-                val homePageModel = model["homepage"] as HomePageModel?
-                assertThat(homePageModel!!.technologies).`as`("technologies").hasSize(10)
-            }
-        )
+            val homePageModel = model["homepage"] as HomePageModel?
+            assertThat(homePageModel!!.technologies).hasSize(10)
+        }
     }
 }
