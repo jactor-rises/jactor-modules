@@ -1,4 +1,4 @@
-package com.github.jactor.cucumber
+package com.github.jactor.persistence.cucumber
 
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
@@ -8,9 +8,9 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.util.UriComponentsBuilder
-import com.github.jactor.cucumber.ScenarioValues.Companion.responseEntity
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.responseEntity
 
-data class RestService(val baseUrl: String, var url: String = "") {
+internal data class RestService(val baseUrl: String, var url: String = "") {
     private val restTemplate = TestRestTemplate()
 
     fun exchangeGet() {

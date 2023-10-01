@@ -1,17 +1,17 @@
-package com.github.jactor.cucumber
+package com.github.jactor.persistence.cucumber
 
 import org.springframework.http.HttpStatus
-import com.github.jactor.cucumber.ScenarioValues.Companion.hentResponse
-import com.github.jactor.cucumber.ScenarioValues.Companion.hentStatusKode
-import com.github.jactor.cucumber.ScenarioValues.Companion.restService
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.hentResponse
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.hentStatusKode
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.restService
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import io.cucumber.java8.No
 
-@Suppress("unused") // brukes av cucumber
-class RestServiceSteps : No {
+@Suppress("unused", "LeakingThis") // bestemmes av cucumber
+internal class RestServiceSteps : No, PersistenceCucumberContextConfiguration() {
 
     init {
         Gitt("base url {string}") { baseUrl: String ->

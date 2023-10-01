@@ -1,15 +1,13 @@
- package com.github.jactor.cucumber.persistence
+package com.github.jactor.persistence.cucumber
 
-import com.github.jactor.cucumber.RestService
-import com.github.jactor.cucumber.ScenarioValues.Companion.restService
-import com.github.jactor.cucumber.ScenarioValues.Companion.uniqueKey
-import com.github.jactor.cucumber.UniqueKey
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.restService
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.uniqueKey
 import assertk.assertThat
 import assertk.assertions.startsWith
 import io.cucumber.java8.No
 
- @Suppress("unused") // brukes av cucumber
-class UserSteps : No {
+@Suppress("unused", "LeakingThis") // bestemmes av cucumber
+internal class UserSteps : No, PersistenceCucumberContextConfiguration() {
     init {
         Når("en post gjøres for unik nøkkel {string} med body:") { keyToBeUnique: String, body: String ->
             uniqueKey = UniqueKey(keyToBeUnique)
