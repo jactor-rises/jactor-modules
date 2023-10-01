@@ -68,6 +68,10 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test</artifactId>
+    </dependency>
 
     <!-- junit & assertions-->
     <dependency>
@@ -79,8 +83,9 @@
       <artifactId>junit-jupiter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
+      <groupId>com.willowtreeapps.assertk</groupId>
+      <artifactId>assertk-jvm</artifactId>
+      <version>0.27.0</version>
     </dependency>
 
     <!-- one logging framework to rule them all -->

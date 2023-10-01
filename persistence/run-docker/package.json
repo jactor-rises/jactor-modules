@@ -1,8 +1,0 @@
-{
-  "name": "verify-dependencies",
-  "version": "1.0.0",
-  "dependencies": {
-    "@actions/core": "^1.9.1",
-    "@actions/exec": "^1.0.1"
-  }
-}
