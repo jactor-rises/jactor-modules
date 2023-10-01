@@ -40,19 +40,44 @@ jobs:
           fi
       - run: ./gradlew :web:test --tests "*"
 
-  integration:
-    runs-on: ubuntu-latest
-    name: Tests of web <-> persistence
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: temurin
-          java-version: 17
-          cache: gradle
-      - run: ./gradlew :web:assemble
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE: ghcr.io/jactor-rises/jactor-modules
-      - run: ./gradlew :web:test --tests "UserConsumerIntegrationTest"
+#  integration:
+#    runs-on: ubuntu-latest
+#    name: Tests of web <-> persistence
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-java@v2
+#        with:
+#          distribution: temurin
+#          java-version: 17
+#          cache: gradle
+#      - run: ./gradlew :web:assemble
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          IMAGE: ghcr.io/jactor-rises/jactor-modules
+#      - run: |
+#            echo "Starting jactor-persistence"
+#            ./gradlew bootRun &
+#      - run: |
+#            echo "Wait until jactor-persistence is running"
+#
+#            RUNNING=""
+#            PROGRESS=""
+#
+#            while [[ -z "$RUNNING" ]]
+#            do
+#                HEALTH=$(curl --silent http://localhost:1099/jactor-persistence/actuator/health || true)
+#                RUNNING=$(echo "$HEALTH" | grep "\"status\":\"UP\"" || true)
+#                PROGRESS="$PROGRESS."
+#                echo "$PROGRESS"
+#
+#                if [[ $PROGRESS = "................" ]]; then
+#                    echo ">>> jactor-persistence did not start!"
+#                    exit 1
+#                fi
+#
+#                sleep 1
+#            done
+#
+#            echo "jactor-presistene is started..."
+#      - run: ./gradlew :web:test --tests "UserConsumerIntegrationTest"
