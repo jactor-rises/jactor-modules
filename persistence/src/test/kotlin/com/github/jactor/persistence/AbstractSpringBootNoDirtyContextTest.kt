@@ -16,7 +16,7 @@ import jakarta.persistence.EntityManager
  * enhetstestene ikke skal ha innvirkning på spring-context<br>
  * Hvis test krever data i database, må det settes opp manuelt
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 internal abstract class AbstractSpringBootNoDirtyContextTest {
 
