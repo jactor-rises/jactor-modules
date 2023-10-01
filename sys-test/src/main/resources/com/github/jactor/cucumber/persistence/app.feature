@@ -2,24 +2,30 @@
 Egenskap: Applikasjonen jactor-persistence
 
   Bakgrunn:
-    Gitt http url 'http://localhost:1099/jactor-persistence'
+    Gitt base url 'http://localhost:1099/jactor-persistence/actuator'
+    Og endpoint '/mappings'
+    Når en get gjøres på resttjenesten
 
-  Scenario: Applikasjon skal være dokumentert av swagger
-    Gitt kompletterende url '/swagger-ui.html#/'
-    Når jeg utfører en get request
+  Scenario: BlogController skal være mappet
     Så skal statuskoden være 200
+    Og responsen skal inneholde 'com.github.jactor.persistence.controller.BlogController'
+    Og responsen skal inneholde '/blog/{blogId}'
+    Og responsen skal inneholde '/blog/{id}/entries'
+    Og responsen skal inneholde '/blog/entry'
+    Og responsen skal inneholde '/blog/entry/{id}'
+    Og responsen skal inneholde '/blog/entry/{blogEntryId}'
 
-  Scenario: BlogController skal være dokumentert av swagger
-    Gitt kompletterende url '/swagger-ui.html#/blog-controller'
-    Når jeg utfører en get request
+  Scenario: GuestBook skal være mappet
     Så skal statuskoden være 200
+    Og responsen skal inneholde 'com.github.jactor.persistence.controller.GuestBookController'
+    Og responsen skal inneholde '/guestBook'
+    Og responsen skal inneholde '/guestBook/{id}'
+    Og responsen skal inneholde '/guestBook/entry'
+    Og responsen skal inneholde '/guestBook/entry/{id}'
 
-  Scenario: GuestBook controller skal være dokumentert av swagger
-    Gitt kompletterende url '/swagger-ui.html#/guest-book-controller'
-    Når jeg utfører en get request
+  Scenario: UserController skal være mappet
     Så skal statuskoden være 200
-
-  Scenario: UserController skal være dokumentert av swagger
-    Gitt kompletterende url '/swagger-ui.html#/user-controller'
-    Når jeg utfører en get request
-    Så skal statuskoden være 200
+    Og responsen skal inneholde 'com.github.jactor.persistence.controller.UserController'
+    Og responsen skal inneholde '/user/{id}'
+    Og responsen skal inneholde '/user/name/{username}'
+    Og responsen skal inneholde '/user/usernames'

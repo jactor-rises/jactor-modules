@@ -1,17 +1,20 @@
 package com.github.jactor.cucumber
 
+import org.springframework.http.HttpStatus
 import com.github.jactor.cucumber.ScenarioValues.Companion.hentResponse
 import com.github.jactor.cucumber.ScenarioValues.Companion.hentStatusKode
 import com.github.jactor.cucumber.ScenarioValues.Companion.restService
+import assertk.assertThat
+import assertk.assertions.contains
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 import io.cucumber.java8.No
-import org.assertj.core.api.Assertions.assertThat
-import org.springframework.http.HttpStatus
 
 @Suppress("unused") // brukes av cucumber
 class RestServiceSteps : No {
 
     init {
-        Gitt("url til resttjeneste: {string}") { baseUrl: String ->
+        Gitt("base url {string}") { baseUrl: String ->
             restService = RestService(baseUrl)
         }
 
@@ -19,7 +22,7 @@ class RestServiceSteps : No {
             restService = RestService(baseUrl)
         }
 
-        Gitt("endpoint url {string}") { url: String ->
+        Gitt("endpoint {string}") { url: String ->
             restService.url = url
         }
 
@@ -45,7 +48,11 @@ class RestServiceSteps : No {
         }
 
         Og("responsen skal inneholde {string}") { tekst: String ->
-            assertThat(hentResponse()).containsSubsequence(tekst)
+            assertThat(hentResponse()).isNotNull().contains(tekst)
+        }
+
+        Så("skal statuskoden være {int}") { httpCode: Int ->
+            assertThat(hentStatusKode()).isEqualTo(HttpStatus.valueOf(httpCode))
         }
     }
 }
