@@ -42,11 +42,11 @@ internal class UserConsumerIntegrationTest {
         try {
             response = testRestTemplate.getForEntity("$baseUrl/actuator/health", String::class.java)
         } catch (e: RestClientException) {
-            assumeTrue(false, "Failure with rest api: " + e.message)
+            assumeTrue(false)
         }
 
         assumeTrue(response.statusCode.is2xxSuccessful, response.statusCode.toString())
-        assumeTrue(response.body?.contains("UP") ?: false, response.body)
+        assumeTrue(/* assumption = */ response.body?.contains("UP") ?: false, /* message = */ response.body)
     }
 
     @Test

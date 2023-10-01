@@ -1,32 +1,29 @@
-package com.github.jactor.cucumber
+package com.github.jactor.persistence.cucumber
 
-import com.github.jactor.cucumber.ScenarioValues.Companion.responseEntity
+import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.responseEntity
 
-data class RestService(val baseUrl: String, var url: String = "") {
-    private var initilazed: Boolean = false
-    private lateinit var restTemplate: RestTemplate
+internal data class RestService(val baseUrl: String, var url: String = "") {
+    private val restTemplate = TestRestTemplate()
 
     fun exchangeGet() {
         exchangeGet(null, null)
     }
 
     fun exchangeGet(navn: String?, parameter: String?) {
-        initRestTemplate()
         val fullUrl = initUrl(navn, parameter)
 
         responseEntity = restTemplate.exchange(fullUrl, HttpMethod.GET, null, String::class.java)
     }
 
     fun exchangePost(json: String) {
-        initRestTemplate()
         val fullUrl = initUrl()
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
@@ -44,11 +41,4 @@ data class RestService(val baseUrl: String, var url: String = "") {
         .queryParam(navn, parameter)
         .build()
         .toUriString()
-
-    private fun initRestTemplate() {
-        if (!initilazed) {
-            restTemplate = RestTemplate()
-            initilazed = true
-        }
-    }
 }

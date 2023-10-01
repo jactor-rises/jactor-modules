@@ -1,11 +1,9 @@
-package com.github.jactor.cucumber
+package com.github.jactor.persistence.cucumber
 
-import com.github.jactor.cucumber.persistence.Application
 import org.springframework.http.ResponseEntity
 
-class ScenarioValues {
+internal class ScenarioValues {
     companion object {
-        lateinit var application: Application
         lateinit var responseEntity: ResponseEntity<String>
         lateinit var restService: RestService
         lateinit var uniqueKey: UniqueKey
