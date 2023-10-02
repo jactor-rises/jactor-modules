@@ -8,37 +8,34 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.util.UriComponentsBuilder
-import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.responseEntity
 
-internal data class RestService(val baseUrl: String, var url: String = "") {
-    private val restTemplate = TestRestTemplate()
+internal data class RestService(val baseUrl: String, var endpoint: String = "") {
 
-    fun exchangeGet() {
-        exchangeGet(null, null)
+    fun exchangeGet(parameternavn: String?, parameter: String?, restTemplate: () -> TestRestTemplate): ResponseEntity<String> {
+        val fullUrl = initUrl(parameternavn, parameter)
+
+        return restTemplate.invoke().exchange(fullUrl, HttpMethod.GET, null as HttpEntity<*>?, String::class.java)
     }
 
-    fun exchangeGet(navn: String?, parameter: String?) {
-        val fullUrl = initUrl(navn, parameter)
-
-        responseEntity = restTemplate.exchange(fullUrl, HttpMethod.GET, null, String::class.java)
-    }
-
-    fun exchangePost(json: String) {
+    fun exchangePost(json: String, restTemplate: () -> TestRestTemplate): ResponseEntity<String> {
         val fullUrl = initUrl()
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
 
-        responseEntity = try {
-            restTemplate.exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
+        return try {
+            restTemplate.invoke().exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
         } catch (e: HttpClientErrorException) {
             ResponseEntity(e.statusCode)
         }
     }
 
     private fun initUrl() = initUrl(null, null)
-    private fun initUrl(navn: String?, parameter: String?) = if (navn != null) initUrlWithBuilder(navn, parameter) else baseUrl + url
-    private fun initUrlWithBuilder(navn: String, parameter: String?) = UriComponentsBuilder.fromHttpUrl(baseUrl + url)
-        .queryParam(navn, parameter)
-        .build()
-        .toUriString()
+    private fun initUrl(navn: String?, parameter: String?) = navn?.let { initUrlWithBuilder(it, parameter) }
+        ?: "$baseUrl$endpoint"
+
+    private fun initUrlWithBuilder(navn: String, parameter: String?) =
+        UriComponentsBuilder.fromHttpUrl("$baseUrl$endpoint")
+            .queryParam(navn, parameter)
+            .build()
+            .toUriString()
 }

@@ -3,6 +3,7 @@ package com.github.jactor.persistence.cucumber
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.hentResponse
 import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.hentStatusKode
+import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.responseEntity
 import com.github.jactor.persistence.cucumber.ScenarioValues.Companion.restService
 import assertk.assertThat
 import assertk.assertions.contains
@@ -22,24 +23,24 @@ internal class RestServiceSteps : No, PersistenceCucumberContextConfiguration() 
             restService = RestService(baseUrl)
         }
 
-        Gitt("endpoint {string}") { url: String ->
-            restService.url = url
+        Gitt("endpoint {string}") { endpoint: String ->
+            restService.endpoint = endpoint
         }
 
-        Og("path variable {string}") { url: String ->
-            restService.url = url
+        Og("path variable {string}") { endpoint: String ->
+            restService.endpoint = endpoint
         }
 
         Når("en get gjøres på resttjenesten") {
-            restService.exchangeGet()
+            responseEntity = restService.exchangeGet(parameternavn = null, parameter = null) { testRestTemplate }
         }
 
-        Når("en get gjøres på resttjenesten med parameter {string} = {string}") { navn: String, verdi: String ->
-            restService.exchangeGet(navn, verdi)
+        Når("en get gjøres på resttjenesten med parameter {string} = {string}") { parameternavn: String, verdi: String ->
+            responseEntity = restService.exchangeGet(parameternavn, verdi) { testRestTemplate }
         }
 
         Når("en post gjøres med body:") { json: String ->
-            restService.exchangePost(json)
+            responseEntity = restService.exchangePost(json) { testRestTemplate }
         }
 
         Så("skal statuskoden fra resttjenesten være {int}") { statusKode: Int ->
