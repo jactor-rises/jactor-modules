@@ -6,14 +6,14 @@ Egenskap: jactor-presistence behandler en bruker
     Og endpoint '/usernames'
     Når en get gjøres på resttjenesten
     Så skal statuskoden fra resttjenesten være 200
-    Og responsen skal inneholde '"tip"'
+    Og responsen skal inneholde 'tip'
 
   Scenario: Hent administratorerer fra jactor-persistence
     Gitt base url 'http://localhost:1099/jactor-persistence/user'
     Og endpoint '/usernames'
     Når en get gjøres på resttjenesten med parameter 'userType' = 'ADMIN'
     Så skal statuskoden fra resttjenesten være 200
-    Og responsen skal inneholde '"jactor"'
+    Og responsen skal inneholde 'jactor'
 
   Scenario: Hent en bruker etter brukernavn
     Gitt base url 'http://localhost:1099/jactor-persistence/user/name'
@@ -24,7 +24,7 @@ Egenskap: jactor-presistence behandler en bruker
 
   Scenario: Opprett en ny bruker, hent opprettet bruker, feil oppretting av ny bruker grunnet identisk brukernavn
     Gitt base url 'http://localhost:1099/jactor-persistence/user'
-    Når en post gjøres for unik nøkkel 'fish' med body:
+    Når en post gjøres for body:
     """
       {
         "username":"fish",
@@ -41,13 +41,13 @@ Egenskap: jactor-presistence behandler en bruker
       }
     """
     Så skal statuskoden fra resttjenesten være 201
-    Og gitt nøkkel 'fish' og base url 'http://localhost:1099/jactor-persistence/user/name/fish'
+    Og gitt url 'http://localhost:1099/jactor-persistence/user/name/fish'
     Når en get gjøres på resttjenesten
     Så skal statuskoden fra resttjenesten være 200
-    Og responsen skal inneholde '"username":"fish.'
+    Og responsen skal inneholde '"username":"fish"'
     Og responsen skal inneholde '"surname":"Fish"'
     Gitt base url 'http://localhost:1099/jactor-persistence/user'
-    Når en post gjøres for unik nøkkel 'fish', men den unike nøkkelen gjenbrukes på body:
+    Når en post gjøres for body:
     """
       {
         "username":"fish",
