@@ -178,8 +178,7 @@ internal class UserControllerTest {
     fun `should return BAD_REQUEST when username is occupied`() {
         every { userRepositoryMock.findByUsername("turbo") } returns Optional.of(UserEntity())
 
-        val createUserCommand = CreateUserCommandDto()
-        createUserCommand.username = "turbo"
+        val createUserCommand = CreateUserCommandDto(username = "turbo")
 
         val userResponse = testRestTemplate.exchange(
             buildFullPath("/user"), HttpMethod.POST, HttpEntity(createUserCommand),

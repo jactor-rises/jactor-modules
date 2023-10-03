@@ -11,11 +11,12 @@ internal class DtoMapperTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should map a user to json`() {
-        val userlDto = UserDto()
-        userlDto.id = 1L
-        userlDto.emailAddress = "some@where"
-        userlDto.username = "mine"
-        userlDto.userType = UserType.ACTIVE
+        val userlDto = UserDto(
+            id = 1L,
+            emailAddress = "some@where",
+            username = "mine",
+            userType = UserType.ACTIVE
+        )
 
         assertAll {
             assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"id\":1")
