@@ -79,10 +79,9 @@ class UserController(private val userService: UserService) {
     )
     @PutMapping("/{userId}")
     fun put(@RequestBody userDto: UserDto, @PathVariable userId: Long?): ResponseEntity<UserDto> {
-        userDto.id = userId
-
-        return userService.update(UserInternalDto(userDto))?.let { ResponseEntity(it.toUserDto(), HttpStatus.ACCEPTED) }
-            ?: ResponseEntity(HttpStatus.BAD_REQUEST)
+        return userService.update(UserInternalDto(userDto.copy(userId)))?.let {
+            ResponseEntity(it.toUserDto(), HttpStatus.ACCEPTED)
+        } ?: ResponseEntity(HttpStatus.BAD_REQUEST)
     }
 
     @Operation(description = "Find all usernames for a user type")
