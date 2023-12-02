@@ -21,7 +21,7 @@ dependencies {
     // test
     testImplementation("com.ninja-squad:springmockk:${Versions.V4_0_2}")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.27.0")
-    testImplementation("io.mockk:mockk:${Versions.V1_13_8}")
+    testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("org.junit.platform:junit-platform-suite")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
