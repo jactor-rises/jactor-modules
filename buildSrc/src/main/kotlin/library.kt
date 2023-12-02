@@ -15,6 +15,5 @@ object Versions {
     const val V3_6_4 = "3.6.4"
     const val V4_0_2 = "4.0.2"
     const val V5_2_3 = "5.2.3"
-    const val V7_14_0 = "7.14.0"
     const val V9_22_0 = "9.22.0"
 }
