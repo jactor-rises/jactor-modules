@@ -1,9 +1,8 @@
 package com.github.jactor.persistence.entity
 
-import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.time.Now
-import jakarta.persistence.Embeddable
 import java.time.LocalDateTime
+import com.github.jactor.persistence.dto.PersistentDto
+import jakarta.persistence.Embeddable
 
 @Embeddable
 class PersistentDataEmbeddable : PersistentData {
@@ -16,9 +15,9 @@ class PersistentDataEmbeddable : PersistentData {
 
     constructor() {
         createdBy = "todo"
-        timeOfCreation = Now.asDateTime()
+        timeOfCreation = LocalDateTime.now()
         modifiedBy = "todo"
-        timeOfModification = Now.asDateTime()
+        timeOfModification = LocalDateTime.now()
     }
 
     internal constructor(persistentDto: PersistentDto) {
@@ -30,7 +29,7 @@ class PersistentDataEmbeddable : PersistentData {
 
     fun modifiedBy(modifier: String) {
         modifiedBy = modifier
-        timeOfModification = Now.asDateTime()
+        timeOfModification = LocalDateTime.now()
     }
 
     fun asPersistentDto(id: Long?): PersistentDto {
