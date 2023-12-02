@@ -17,7 +17,7 @@ dependencies {
 
     // --- misc dependencies ---
     implementation("org.webjars:bootstrap:5.3.2")
-    implementation("org.webjars:jquery:${Versions.V3_6_4}")
+    implementation("org.webjars:jquery:3.7.1")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
