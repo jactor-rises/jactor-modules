@@ -18,5 +18,5 @@ dependencies {
 
     // database
     runtimeOnly("org.flywaydb:flyway-core:9.22.0")
-    runtimeOnly("com.h2database:h2:${Versions.V2_2_224}")
+    runtimeOnly("com.h2database:h2:2.2.224")
 }
