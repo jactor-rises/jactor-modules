@@ -19,7 +19,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 
     // test
-    testImplementation("com.ninja-squad:springmockk:${Versions.V4_0_2}")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.27.0")
     testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("org.junit.platform:junit-platform-suite")
