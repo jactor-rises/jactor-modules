@@ -27,10 +27,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
     // cucumber
-    testImplementation("io.cucumber:cucumber-java:${Versions.V7_14_0}")
-    testImplementation("io.cucumber:cucumber-java8:${Versions.V7_14_0}")
-    testImplementation("io.cucumber:cucumber-junit-platform-engine:${Versions.V7_14_0}")
-    testImplementation("io.cucumber:cucumber-spring:${Versions.V7_14_0}")
+    testImplementation("io.cucumber:cucumber-java:7.14.1")
+    testImplementation("io.cucumber:cucumber-java8:7.14.1")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.14.1")
+    testImplementation("io.cucumber:cucumber-spring:7.14.1")
 }
 
 tasks {
