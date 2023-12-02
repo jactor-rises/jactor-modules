@@ -3,7 +3,6 @@ object Versions {
     // kotlin language version and kotlin-gradle plugin is an implementation defined in buildSrc/build.gradle.kts
 
     // plugins
-    const val V0_46_0 = "0.46.0"
     const val V1_1_0 = "1.1.0"
     const val V1_9_10 = "1.9.10"
     const val V3_1_4 = "3.1.4"
