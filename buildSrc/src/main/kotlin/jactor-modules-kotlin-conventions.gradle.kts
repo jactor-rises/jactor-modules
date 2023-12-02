@@ -16,7 +16,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // springdoc-openapi (swagger)
-    implementation("org.springdoc:springdoc-openapi-ui:${Versions.V1_7_0}")
+    implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 
     // test
     testImplementation("com.ninja-squad:springmockk:${Versions.V4_0_2}")

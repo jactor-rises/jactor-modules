@@ -6,7 +6,6 @@ object Versions {
     const val V3_1_4 = "3.1.4"
 
     // dependencies
-    const val V1_7_0 = "1.7.0"
     const val V1_13_8 = "1.13.8"
     const val V2_2_224 = "2.2.224"
     const val V3_6_4 = "3.6.4"
