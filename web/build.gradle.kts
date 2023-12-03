@@ -3,7 +3,7 @@ version = "1.0.x-SNAPSHOT"
 description = "jactor-web"
 
 plugins {
-    id("org.springframework.boot") version Versions.V3_1_4
+    id("org.springframework.boot") version "3.2.0"
 }
 
 dependencies {
@@ -16,13 +16,13 @@ dependencies {
     implementation(project(":shared"))
 
     // --- misc dependencies ---
-    implementation("org.webjars:bootstrap:${Versions.V5_2_3}")
-    implementation("org.webjars:jquery:${Versions.V3_6_4}")
+    implementation("org.webjars:bootstrap:5.3.2")
+    implementation("org.webjars:jquery:3.7.1")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // swagger
-    implementation("org.springdoc:springdoc-openapi-ui:${Versions.V1_7_0}")
+    implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 }
