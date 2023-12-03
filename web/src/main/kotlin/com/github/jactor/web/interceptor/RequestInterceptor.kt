@@ -22,13 +22,13 @@ class RequestInterceptor(@param:Value("\${server.servlet.context-path}") private
         const val CURRENT_REQUEST = "currentRequest"
 
         @JvmStatic
-        private val LANGUAGE_DEFAULT_IS_ENGLISH = Language(Locale("en"), "English")
+        private val LANGUAGE_DEFAULT_IS_ENGLISH = Language(Locale.ENGLISH, "English")
 
         @JvmStatic
         private val SUPPORTED_LANGUAGES = listOf(
             LANGUAGE_DEFAULT_IS_ENGLISH,
-            Language(Locale("no"), "Norsk"),
-            Language(Locale("th"), "ไทย")
+            Language(Locale.of("no"), "Norsk"),
+            Language(Locale.of("th"), "ไทย")
         )
     }
 
