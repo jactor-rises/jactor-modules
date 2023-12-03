@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
           cache: gradle
       - run: ./gradlew :persistence:assemble
       - name: Fetch current major/minor release
