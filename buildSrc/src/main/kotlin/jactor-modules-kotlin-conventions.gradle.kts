@@ -20,7 +20,7 @@ dependencies {
 
     // test
     testImplementation("com.ninja-squad:springmockk:4.0.2")
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.27.0")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.0")
     testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("org.junit.platform:junit-platform-suite")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
