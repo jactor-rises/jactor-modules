@@ -13,7 +13,7 @@ import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import assertk.assertAll
 import assertk.assertThat
-import assertk.assertions.containsAll
+import assertk.assertions.containsAtLeast
 import assertk.assertions.isEqualTo
 import jakarta.persistence.EntityManager
 
@@ -134,6 +134,6 @@ internal class UserRepositoryTest {
         val usernames = userRepository.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE, UserEntity.UserType.ADMIN))
             .map(UserEntity::username)
 
-        assertThat(usernames).containsAll("tip", "spiderman", "jactor")
+        assertThat(usernames).containsAtLeast("tip", "spiderman", "jactor")
     }
 }
