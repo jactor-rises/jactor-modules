@@ -19,7 +19,7 @@ import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotSameAs
+import assertk.assertions.isNotSameInstanceAs
 import assertk.assertions.isNull
 
 internal class PersistentEntityTest {
@@ -47,7 +47,7 @@ internal class PersistentEntityTest {
             assertThat(persistentEntityToTest.id).isEqualTo(1L)
             assertThat(copy.id).isNull()
             assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameAs(copy)
+            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
         }
     }
 
@@ -71,7 +71,7 @@ internal class PersistentEntityTest {
             assertThat(persistentEntityToTest.id).isEqualTo(1L)
             assertThat(copy.id).isNull()
             assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameAs(copy)
+            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
         }
     }
 
@@ -89,7 +89,7 @@ internal class PersistentEntityTest {
             assertThat(persistentEntityToTest.id).isEqualTo(1L)
             assertThat(copy.id).isNull()
             assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameAs(copy)
+            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
         }
     }
 
@@ -110,7 +110,7 @@ internal class PersistentEntityTest {
             assertThat(persistentEntityToTest.id).isEqualTo(1L)
             assertThat(copy.id).isNull()
             assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameAs(copy)
+            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
         }
     }
 
@@ -126,7 +126,7 @@ internal class PersistentEntityTest {
             assertThat(persistentEntityToTest.id).isEqualTo(1L)
             assertThat(copy.id).isNull()
             assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameAs(copy)
+            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
         }
     }
 
@@ -142,7 +142,7 @@ internal class PersistentEntityTest {
             assertThat(persistentEntityToTest.id).isEqualTo(1L)
             assertThat(copy.id).isNull()
             assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameAs(copy)
+            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
         }
     }
 
@@ -162,7 +162,7 @@ internal class PersistentEntityTest {
             assertThat(persistentEntityToTest.id).isEqualTo(1L)
             assertThat(copy.id).isNull()
             assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameAs(copy)
+            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
         }
     }
 }
