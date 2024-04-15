@@ -1,17 +1,17 @@
 package com.github.jactor.web
 
-import com.github.jactor.web.consumer.DefaultUserConsumer
-import com.github.jactor.web.consumer.UserConsumer
-import com.github.jactor.web.menu.Menu
-import com.github.jactor.web.menu.MenuFacade
-import com.github.jactor.web.menu.MenuItem
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.client.RootUriTemplateHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import org.springframework.context.annotation.Scope
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.DefaultUriBuilderFactory
+import com.github.jactor.web.consumer.DefaultUserConsumer
+import com.github.jactor.web.consumer.UserConsumer
+import com.github.jactor.web.menu.Menu
+import com.github.jactor.web.menu.MenuFacade
+import com.github.jactor.web.menu.MenuItem
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -29,13 +29,30 @@ class JactorWebBeans {
     private fun usersMenu(contextPath: String): Menu {
         return Menu(USERS_MENU_NAME)
             .addItem(MenuItem(itemName = "menu.users.default"))
-            .addItem(MenuItem(itemName = "jactor", target = "$contextPath/user?choose=jactor", description = "menu.users.jactor.desc"))
-            .addItem(MenuItem(itemName = "tip", target = "$contextPath/user?choose=tip", description = "menu.users.tip.desc"))
+            .addItem(
+                MenuItem(
+                    itemName = "jactor",
+                    target = "$contextPath/user?choose=jactor",
+                    description = "menu.users.jactor.desc"
+                )
+            )
+            .addItem(
+                MenuItem(
+                    itemName = "tip",
+                    target = "$contextPath/user?choose=tip",
+                    description = "menu.users.tip.desc"
+                )
+            )
     }
 
     @Bean(name = ["userConsumer"])
-    fun userConsumer(restTemplate: RestTemplate, @Value("\${jactor-persistence.url.root}") rootUrlPersistence: String?): UserConsumer {
-        restTemplate.uriTemplateHandler = RootUriTemplateHandler(rootUrlPersistence)
+    fun userConsumer(
+        restTemplate: RestTemplate,
+        @Value("\${jactor-persistence.url.root}") rootUrlPersistence: String?
+    ): UserConsumer {
+        val uriTemplateHandler = DefaultUriBuilderFactory()
+        uriTemplateHandler.setDefaultUriVariables(mapOf("uri" to rootUrlPersistence))
+        restTemplate.uriTemplateHandler = uriTemplateHandler
 
         return DefaultUserConsumer(restTemplate)
     }
@@ -44,7 +61,9 @@ class JactorWebBeans {
     @Scope("prototype")
     fun restTemplate(@Value("\${jactor-persistence.url.root}") rootUrlPersistence: String?): RestTemplate {
         val restTemplate = RestTemplate()
-        restTemplate.uriTemplateHandler = RootUriTemplateHandler(rootUrlPersistence)
+        val uriTemplateHandler = DefaultUriBuilderFactory()
+        uriTemplateHandler.setDefaultUriVariables(mapOf("uri" to rootUrlPersistence))
+        restTemplate.uriTemplateHandler = uriTemplateHandler
 
         return restTemplate
     }
