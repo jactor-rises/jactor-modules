@@ -16,21 +16,21 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // springdoc-openapi (swagger)
-    implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
 
     // test
     testImplementation("com.ninja-squad:springmockk:4.0.2")
-    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.0")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.1")
     testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("org.junit.platform:junit-platform-suite")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
     // cucumber
-    testImplementation("io.cucumber:cucumber-java:7.16.1")
-    testImplementation("io.cucumber:cucumber-java8:7.16.1")
-    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.16.1")
-    testImplementation("io.cucumber:cucumber-spring:7.16.1")
+    testImplementation("io.cucumber:cucumber-java:7.17.0")
+    testImplementation("io.cucumber:cucumber-java8:7.17.0")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.17.0")
+    testImplementation("io.cucumber:cucumber-spring:7.17.0")
 }
 
 tasks {
