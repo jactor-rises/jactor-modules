@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":shared"))
 
     // --- misc dependencies ---
-    implementation("org.webjars:bootstrap:5.3.2")
+    implementation("org.webjars:bootstrap:5.3.3")
     implementation("org.webjars:jquery:3.7.1")
 
     // kotlin
