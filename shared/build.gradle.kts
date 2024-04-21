@@ -4,5 +4,5 @@ description = "jactor::shared"
 
 dependencies {
     // swagger
-    implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
 }
