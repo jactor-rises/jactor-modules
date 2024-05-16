@@ -19,7 +19,6 @@ import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import io.mockk.called
 import io.mockk.every
 import io.mockk.verify
 
@@ -66,7 +65,7 @@ internal class UserControllerTest {
     fun `should not fetch user by username if the username is missing from the request`() {
         every { userConsumerMock.findAllUsernames() } returns emptyList()
         mockMvc.perform(MockMvcRequestBuilders.get(USER_ENDPOINT)).andExpect(MockMvcResultMatchers.status().isOk)
-        verify { userConsumerMock.find(any())?.wasNot(called) }
+        verify(exactly = 0) { userConsumerMock.find(any()) }
     }
 
     @Test
@@ -79,7 +78,7 @@ internal class UserControllerTest {
             MockMvcResultMatchers.status().isOk
         )
 
-        verify { userConsumerMock.find(any())?.wasNot(called) }
+        verify(exactly = 0) { userConsumerMock.find(any()) }
     }
 
     @Test
