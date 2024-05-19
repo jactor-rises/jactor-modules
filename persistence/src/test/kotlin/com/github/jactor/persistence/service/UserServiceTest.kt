@@ -2,6 +2,7 @@ package com.github.jactor.persistence.service
 
 import java.time.LocalDateTime
 import java.util.Optional
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -12,8 +13,8 @@ import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto.Usertype
 import com.github.jactor.persistence.entity.PersonEntity
+import com.github.jactor.persistence.entity.UserBuilder
 import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import com.github.jactor.persistence.repository.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
@@ -44,15 +45,14 @@ internal class UserServiceTest {
         personDto.address = addressDto
 
         every { userRepositoryMock.findByUsername("jactor") } returns Optional.of(
-            aUser(
-                UserInternalDto(
-                    PersistentDto(),
-                    personDto,
-                    null,
-                    "jactor",
-                    Usertype.ACTIVE
+            UserBuilder.new(
+                userDto = UserInternalDto(
+                    person = personDto,
+                    emailAddress = null,
+                    username = "jactor",
+                    usertype = Usertype.ACTIVE
                 )
-            )
+            ).build()
         )
 
         val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
@@ -65,15 +65,23 @@ internal class UserServiceTest {
 
     @Test
     fun `should also map a user entity to a dto when finding by id`() {
+        val uuid = UUID.randomUUID()
         val addressDto = AddressInternalDto()
         val personDto = PersonInternalDto()
         personDto.address = addressDto
 
-        every { userRepositoryMock.findById(69L) } returns Optional.of(
-            aUser(UserInternalDto(PersistentDto(), personDto, null, "jactor", Usertype.ACTIVE))
+        every { userRepositoryMock.findById(uuid) } returns Optional.of(
+            UserBuilder.new(
+                UserInternalDto(
+                    person = personDto,
+                    emailAddress = null,
+                    username = "jactor",
+                    usertype = Usertype.ACTIVE
+                )
+            ).build()
         )
 
-        val user = userServiceToTest.find(69L) ?: throw AssertionError("mocking?")
+        val user = userServiceToTest.find(uuid) ?: throw AssertionError("mocking?")
 
         assertAll {
             assertThat(user).isNotNull()
@@ -83,15 +91,16 @@ internal class UserServiceTest {
 
     @Test
     fun `should update a UserDto with an UserEntity`() {
+        val uuid = UUID.randomUUID()
         val userDto = UserInternalDto()
-        userDto.id = 1L
+        userDto.id = uuid
         userDto.username = "marley"
 
         val persistentDto = PersistentDto(
-            1L, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1)
+            uuid, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1)
         )
 
-        every { userRepositoryMock.findById(1L) } returns Optional.of(
+        every { userRepositoryMock.findById(uuid) } returns Optional.of(
             UserEntity(UserInternalDto(persistentDto, userDto))
         )
 

@@ -2,6 +2,7 @@ package com.github.jactor.persistence.entity
 
 import java.time.LocalDateTime
 import java.util.Objects
+import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.GuestBookDto
@@ -11,21 +12,16 @@ import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
 class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "guestBookEntrySeq")
-    @SequenceGenerator(name = "guestBookEntrySeq", sequenceName = "T_GUEST_BOOK_ENTRY_SEQ", allocationSize = 1)
-    override var id: Long? = null
+    override var id: UUID? = null
 
     @Embedded
     @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
@@ -131,11 +127,4 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         get() = entryEmbeddable.notNullableEntry
     val creatorName: String
         get() = entryEmbeddable.notNullableCreator
-
-    companion object {
-        @JvmStatic
-        fun aGuestBookEntry(guestBookEntryDto: GuestBookEntryDto): GuestBookEntryEntity {
-            return GuestBookEntryEntity(guestBookEntryDto)
-        }
-    }
 }

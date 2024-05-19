@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.repository
 
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -7,12 +8,13 @@ import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.entity.PersonBuilder
 import com.github.jactor.persistence.entity.PersonEntity
-import com.github.jactor.persistence.entity.PersonEntity.Companion.aPerson
-import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
+import com.github.jactor.persistence.entity.UserBuilder
 import assertk.assertAll
 import assertk.assertThat
-import assertk.assertions.containsAll
+import assertk.assertions.contains
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import jakarta.persistence.EntityManager
@@ -37,22 +39,30 @@ internal class PersonRepositoryTest {
             firstNames.add(personEntity.firstName ?: "unknown")
         }
 
-        assertThat(firstNames).containsAll("Tor Egil", "Suthatip")
+        assertAll {
+            assertThat(firstNames).contains("Tor Egil")
+            assertThat(firstNames).contains("Suthatip")
+        }
     }
 
     @Test
     fun `should save then read a person entity`() {
-        val allreadyPresentPeople = numberOf(personRepository.findAll())
-        val address = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
-        val personToPersist = aPerson(
-            PersonInternalDto(
+        val allreadyPresentPeople = personRepository.findAll().count()
+        val address = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
+            )
+        ).addressInternalDto
+
+        val personToPersist = PersonBuilder.new(
+            personInternalDto = PersonInternalDto(
                 address = address,
                 locale = "no_NO",
                 firstName = "Born",
                 surname = "Sometime",
                 description = "Me, myself, and I"
             )
-        )
+        ).build()
 
         personRepository.save(personToPersist)
         entityManager.flush()
@@ -72,9 +82,13 @@ internal class PersonRepositoryTest {
 
     @Test
     fun `should save then update and read a person entity`() {
-        val addressInternalDto =
-            AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
-        val personToPersist = aPerson(
+        val addressInternalDto = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+            )
+        ).addressInternalDto
+
+        val personToPersist = PersonBuilder.new(
             PersonInternalDto(
                 address = addressInternalDto,
                 locale = "no_NO",
@@ -82,7 +96,7 @@ internal class PersonRepositoryTest {
                 surname = "Mine",
                 description = "Just me..."
             )
-        )
+        ).build()
 
         personRepository.save(personToPersist)
         entityManager.flush()
@@ -113,18 +127,25 @@ internal class PersonRepositoryTest {
 
     @Test
     fun `should be able to relate a user`() {
-        val alreadyPresentPeople = numberOf(personRepository.findAll())
-        val addressInternalDto =
-            AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
-        val personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Adder")
+        val alreadyPresentPeople = personRepository.findAll().count()
+        val addressInternalDto = AddressInternalDto(
+            persistentDto = PersistentDto(UUID.randomUUID()),
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
+        )
+
+        val personInternalDto = PersonInternalDto(
+            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressInternalDto, surname = "Adder"
+        )
+
         val userInternalDto = UserInternalDto(
-            PersistentDto(),
+            PersistentDto(id = UUID.randomUUID()),
             personInternalDto,
             emailAddress = "public@services.com",
             username = "black"
         )
-        val userEntity = aUser(userInternalDto)
-        val personToPersist = userEntity.fetchPerson()!!
+
+        val userEntity = UserBuilder.new(userDto = userInternalDto).build()
+        val personToPersist = userEntity.fetchPerson()
 
         personRepository.save<PersonEntity>(personToPersist)
         entityManager.flush()
@@ -139,17 +160,5 @@ internal class PersonRepositoryTest {
             assertThat(persistedUser.emailAddress).isEqualTo("public@services.com")
             assertThat(persistedUser.username).isEqualTo("black")
         }
-    }
-
-    private fun numberOf(people: Iterable<PersonEntity?>): Int {
-        var counter = 0
-        val peopleIterator = people.iterator()
-
-        while (peopleIterator.hasNext()) {
-            peopleIterator.next()
-            counter++
-        }
-
-        return counter
     }
 }

@@ -2,6 +2,7 @@ package com.github.jactor.persistence.entity
 
 import java.time.LocalDateTime
 import java.util.Objects
+import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.GuestBookDto
@@ -24,9 +25,7 @@ import jakarta.persistence.Table
 @Table(name = "T_GUEST_BOOK")
 class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "guestBookSeq")
-    @SequenceGenerator(name = "guestBookSeq", sequenceName = "T_GUEST_BOOK_SEQ", allocationSize = 1)
-    override var id: Long? = null
+    override var id: UUID? = null
 
     @Embedded
     @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
@@ -126,12 +125,5 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
 
     fun getEntries(): Set<GuestBookEntryEntity> {
         return entries
-    }
-
-    companion object {
-        @JvmStatic
-        fun aGuestBook(guestBookDto: GuestBookDto): GuestBookEntity {
-            return GuestBookEntity(guestBookDto)
-        }
     }
 }

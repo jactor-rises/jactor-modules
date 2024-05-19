@@ -1,24 +1,26 @@
 package com.github.jactor.persistence.repository
 
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
-import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.persistence.entity.GuestBookEntity.Companion.aGuestBook
-import com.github.jactor.persistence.entity.GuestBookEntryEntity
-import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGuestBookEntry
-import com.github.jactor.persistence.entity.UserEntity
-import jakarta.persistence.EntityManager
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
+import com.github.jactor.persistence.dto.AddressInternalDto
+import com.github.jactor.persistence.dto.GuestBookDto
+import com.github.jactor.persistence.dto.GuestBookEntryDto
+import com.github.jactor.persistence.dto.PersonInternalDto
+import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.entity.GuestBookBuilder
+import com.github.jactor.persistence.entity.GuestBookEntryEntity
+import com.github.jactor.persistence.entity.PersonBuilder
+import com.github.jactor.persistence.entity.UserBuilder
+import com.github.jactor.persistence.entity.UserEntity
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import jakarta.persistence.EntityManager
 
 @SpringBootTest
 @Transactional
@@ -38,43 +40,48 @@ internal class GuestBookEntryRepositoryTest {
 
     @Test
     fun `should save then read guest book entry entity`() {
-        val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
-        val personDto = PersonInternalDto(address = addressDto, surname = "AA")
-        val userDto = UserInternalDto(
-            PersistentDto(),
-            personInternal = personDto,
-            emailAddress = "casuel@tantooine.com",
-            username = "causual"
-        )
-        val savedUser = userRepository.save(UserEntity(userDto))
+        val addressDto = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+            )
+        ).addressInternalDto
 
-        savedUser.setGuestBook(
-            aGuestBook(
-                GuestBookDto(
-                    entries = emptySet(),
-                    title = "home sweet home",
-                    userInternal = savedUser.asDto()
-                )
+        val personDto = PersonBuilder.new(personInternalDto = PersonInternalDto(address = addressDto, surname = "AA"))
+            .personInternalDto
+
+        val userDto = UserBuilder.new(
+            userDto = UserInternalDto(
+                person = personDto,
+                emailAddress = "casuel@tantooine.com",
+                username = "causual"
+            )
+        ).userDto
+
+        val savedUser = userRepository.save(UserEntity(userDto))
+        var guestBookData = GuestBookBuilder.new(
+            GuestBookDto(
+                entries = emptySet(),
+                title = "home sweet home",
+                userInternal = savedUser.asDto()
             )
         )
+
+        savedUser.setGuestBook(guestBookData.buildGuestBookEntity())
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
-
-        savedGuestBook.add(
-            aGuestBookEntry(
-                GuestBookEntryDto(
-                    guestBook = savedUser.guestBook?.asDto(),
-                    creatorName = "Harry",
-                    entry = "Draco Dormiens Nunquam Tittilandus"
-                )
+        guestBookData = guestBookData.withEntry(
+            GuestBookEntryDto(
+                guestBook = savedUser.guestBook?.asDto(),
+                creatorName = "Harry",
+                entry = "Draco Dormiens Nunquam Tittilandus"
             )
         )
 
-        guestBookEntryRepository.saveAll(savedGuestBook.getEntries())
+        guestBookEntryRepository.save(guestBookData.buildGuestBookEntryEntity())
         entityManager.flush()
         entityManager.clear()
 
-        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook!!)
+        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
         val entry = entriesByGuestBook.iterator().next()
 
@@ -86,44 +93,47 @@ internal class GuestBookEntryRepositoryTest {
 
     @Test
     fun `should save then modify and read guest book entry entity`() {
-        val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
-        val personDto = PersonInternalDto(address = addressDto, surname = "AA")
-        val userDto = UserInternalDto(
-            persistentDto = PersistentDto(),
-            personInternal = personDto,
-            emailAddress = "casuel@tantooine.com",
-            username = "causual"
-        )
+        val addressDto = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+            )
+        ).addressInternalDto
+
+        val personDto = PersonBuilder.new(personInternalDto = PersonInternalDto(address = addressDto, surname = "AA"))
+            .personInternalDto
+
+        val userDto = UserBuilder.new(
+            userDto = UserInternalDto(
+                person = personDto,
+                emailAddress = "casuel@tantooine.com",
+                username = "causual"
+            )
+        ).userDto
 
         val savedUser = userRepository.save(UserEntity(userDto))
-
-        savedUser.setGuestBook(
-            aGuestBook(
-                GuestBookDto(
-                    entries = emptySet(),
-                    title = "home sweet home",
-                    userInternal = savedUser.asDto()
-                )
+        val guestBookData = GuestBookBuilder.new(
+            GuestBookDto(
+                entries = emptySet(),
+                title = "home sweet home",
+                userInternal = savedUser.asDto()
             )
         )
 
-        val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
-
-        savedGuestBook.add(
-            aGuestBookEntry(
+        val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
+        guestBookEntryRepository.save(
+            guestBookData.withEntry(
                 GuestBookEntryDto(
-                    guestBook = savedUser.guestBook!!.asDto(),
+                    guestBook = savedGuestBook.asDto(),
                     creatorName = "Harry",
                     entry = "Draco Dormiens Nunquam Tittilandus"
                 )
-            )
+            ).buildGuestBookEntryEntity()
         )
 
-        guestBookEntryRepository.saveAll(savedGuestBook.getEntries())
         entityManager.flush()
         entityManager.clear()
 
-        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook!!)
+        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
         entriesByGuestBook.iterator().next().modify("Willie", "On the road again")
 
@@ -132,7 +142,7 @@ internal class GuestBookEntryRepositoryTest {
         entityManager.flush()
         entityManager.clear()
 
-        val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedUser.guestBook!!)
+        val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(modifiedEntriesByGuestBook).hasSize(1)
         val entry = modifiedEntriesByGuestBook.iterator().next()
 
@@ -144,79 +154,83 @@ internal class GuestBookEntryRepositoryTest {
 
     @Test
     fun `should write two entries to two different guest books and then find one entry`() {
-        val addressDto = AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
-        val personDto = PersonInternalDto(address = addressDto, surname = "AA")
-        val userDto = UserInternalDto(
-            PersistentDto(),
-            personInternal = personDto,
-            emailAddress = "casuel@tantooine.com",
-            username = "causual"
-        )
-        val savedUser = userRepository.save(UserEntity(userDto))
+        val addressDto = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+            )
+        ).addressInternalDto
 
-        savedUser.setGuestBook(
-            aGuestBook(
-                GuestBookDto(
-                    entries = emptySet(),
-                    title = "home sweet home",
-                    userInternal = savedUser.asDto()
-                )
+        val personDto = PersonBuilder.new(personInternalDto = PersonInternalDto(address = addressDto, surname = "AA"))
+            .personInternalDto
+
+        val userDto = UserBuilder.new(
+            userDto = UserInternalDto(
+                person = personDto,
+                emailAddress = "casuel@tantooine.com",
+                username = "causual"
+            )
+        ).userDto
+
+        val savedUser = userRepository.save(UserEntity(userDto))
+        val guestBookData = GuestBookBuilder.new(
+            GuestBookDto(
+                entries = emptySet(),
+                title = "home sweet home",
+                userInternal = savedUser.asDto()
             )
         )
-        val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
 
-        savedGuestBook.add(
-            aGuestBookEntry(
+        val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
+        guestBookEntryRepository.save(
+            guestBookData.withEntry(
                 GuestBookEntryDto(
                     guestBook = savedGuestBook.asDto(),
                     creatorName = "somone",
                     entry = "jadda"
                 )
+            ).buildGuestBookEntryEntity()
+        )
+
+        val anotherUserDto = UserBuilder.new(
+            userDto = UserInternalDto(
+                person = personDto,
+                emailAddress = "hidden@tantooine.com",
+                username = "hidden"
+            )
+        ).userDto
+
+        userRepository.save(UserEntity(anotherUserDto))
+
+        val anotherGuestBookData = GuestBookBuilder.new(
+            guestBookDto = GuestBookDto(
+                entries = emptySet(),
+                title = "home sweet home",
+                userInternal = savedUser.asDto()
             )
         )
 
-        guestBookEntryRepository.saveAll(savedGuestBook.getEntries())
-
-        val anotherUserDto = UserInternalDto(
-            PersistentDto(),
-            personInternal = personDto,
-            emailAddress = "hidden@tantooine.com",
-            username = "hidden"
-        )
-        val anotherSavedUser = userRepository.save(UserEntity(anotherUserDto))
-        anotherSavedUser.setGuestBook(
-            aGuestBook(
-                GuestBookDto(
-                    entries = emptySet(),
-                    title = "home sweet home",
-                    userInternal = savedUser.asDto()
-                )
+        val anotherSavedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
+        val anotherEntry = anotherGuestBookData.withEntry(
+            guestBookEntryDto = GuestBookEntryDto(
+                guestBook = anotherSavedGuestBook.asDto(),
+                creatorName = "shrek",
+                entry = "far far away"
             )
-        )
+        ).buildGuestBookEntryEntity()
 
-        val anotherSavedGuestBook = guestBookRepository.save(anotherSavedUser.guestBook!!)
-
-        anotherSavedGuestBook.add(
-            aGuestBookEntry(
-                GuestBookEntryDto(
-                    guestBook = anotherSavedGuestBook.asDto(),
-                    creatorName = "shrek",
-                    entry = "far far away"
-                )
-            )
-        )
-
-        guestBookEntryRepository.saveAll(anotherSavedGuestBook.getEntries())
+        guestBookEntryRepository.save(anotherEntry)
         entityManager.flush()
         entityManager.clear()
 
-        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(anotherSavedGuestBook)
-        assertThat(guestBookEntryRepository.findAll().toList()).hasSize(2)
+        val lastEntry = guestBookRepository.findAll().toList()
+            .flatMap { it.getEntries() }
+            .firstOrNull { it.id == anotherEntry.id }
+
 
         assertAll {
-            assertThat(entriesByGuestBook).hasSize(1)
-            assertThat(entriesByGuestBook[0].creatorName).isEqualTo("shrek")
-            assertThat(entriesByGuestBook[0].entry).isEqualTo("far far away")
+            assertThat(lastEntry).isNotNull()
+            assertThat(lastEntry?.creatorName).isEqualTo("shrek")
+            assertThat(lastEntry?.entry).isEqualTo("far far away")
         }
     }
 }

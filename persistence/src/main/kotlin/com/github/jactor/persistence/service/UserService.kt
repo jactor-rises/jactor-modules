@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.service
 
+import java.util.UUID
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.command.CreateUserCommand
@@ -18,7 +19,7 @@ class UserService(
             .orElse(null)
     }
 
-    fun find(id: Long): UserInternalDto? {
+    fun find(id: UUID): UserInternalDto? {
         return userRepository.findById(id)
             .map { it.asDto() }
             .orElse(null)
@@ -33,7 +34,13 @@ class UserService(
     }
 
     fun create(createUserCommand: CreateUserCommand): UserInternalDto {
-        return userRepository.save(createNewFrom(createUserCommand)).asDto()
+        val user = createNewFrom(createUserCommand)
+
+        if (user.id == null) {
+            user.id = UUID.randomUUID()
+        }
+
+        return userRepository.save(user).asDto()
     }
 
     private fun createNewFrom(createUserCommand: CreateUserCommand): UserEntity {

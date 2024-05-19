@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.JactorPersistence
 import com.github.jactor.persistence.dto.AddressInternalDto
+import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.AddressEntity
-import com.github.jactor.persistence.entity.AddressEntity.Companion.anAddress
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -29,21 +29,33 @@ internal class AddressRepositoryTest {
     @Test
     fun `should fetch address entities`() {
         addressRepository.save(
-            anAddress(
-                AddressInternalDto(zipCode = "1234", addressLine1 = "somewhere out there", city = "Rud")
-            )
+            AddressBuilder
+                .new(
+                    addressInternalDto = AddressInternalDto(
+                        zipCode = "1234",
+                        addressLine1 = "somewhere out there",
+                        city = "Rud"
+                    )
+                )
+                .build()
         )
 
         addressRepository.save(
-            anAddress(
-                AddressInternalDto(zipCode = "1234", addressLine1 = "somewhere in there", city = "Rud")
-            )
+            AddressBuilder
+                .new(
+                    addressInternalDto = AddressInternalDto(
+                        zipCode = "1234",
+                        addressLine1 = "somewhere in there",
+                        city = "Rud"
+                    )
+                )
+                .build()
         )
 
         entityManager.flush()
         entityManager.clear()
 
-        val addressEntities = addressRepository.findByZipCode("1234")
+        val addressEntities = addressRepository.findByZipCode(zipCode = "1234")
 
         assertAll {
             assertThat(addressEntities).hasSize(2)
@@ -55,16 +67,17 @@ internal class AddressRepositoryTest {
 
     @Test
     fun `should write then read an address entity`() {
-        val addressEntityToPersist = anAddress(
-            AddressInternalDto(
-                zipCode = "1234",
-                addressLine1 = "somewhere out there",
-                addressLine2 = "where the streets have no name",
-                addressLine3 = "in the middle of it",
-                city = "Rud",
-                country = "NO"
-            )
-        )
+        val addressEntityToPersist = AddressBuilder
+            .new(
+                addressInternalDto = AddressInternalDto(
+                    zipCode = "1234",
+                    addressLine1 = "somewhere out there",
+                    addressLine2 = "where the streets have no name",
+                    addressLine3 = "in the middle of it",
+                    city = "Rud",
+                    country = "NO"
+                )
+            ).build()
 
         addressRepository.save(addressEntityToPersist)
         entityManager.flush()
@@ -86,16 +99,18 @@ internal class AddressRepositoryTest {
 
     @Test
     fun `should write then update and read an address entity`() {
-        val addressEntityToPersist = anAddress(
-            AddressInternalDto(
-                zipCode = "1234",
-                addressLine1 = "somewhere out there",
-                addressLine2 = "where the streets have no name",
-                addressLine3 = "in the middle of it",
-                city = "Rud",
-                country = "NO"
+        val addressEntityToPersist = AddressBuilder
+            .new(
+                addressInternalDto = AddressInternalDto(
+                    zipCode = "1234",
+                    addressLine1 = "somewhere out there",
+                    addressLine2 = "where the streets have no name",
+                    addressLine3 = "in the middle of it",
+                    city = "Rud",
+                    country = "NO"
+                )
             )
-        )
+            .build()
 
         addressRepository.save(addressEntityToPersist)
         entityManager.flush()

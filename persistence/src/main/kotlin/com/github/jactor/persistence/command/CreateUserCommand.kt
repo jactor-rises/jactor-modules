@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.command
 
+import java.util.UUID
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
@@ -54,7 +55,7 @@ data class CreateUserCommand(
 
     private fun fetchAddressDto(): AddressInternalDto? {
         return if (zipCode == null) null else AddressInternalDto(
-            persistentDto = PersistentDto(),
+            persistentDto = PersistentDto(id = UUID.randomUUID()),
             zipCode = zipCode,
             addressLine1 = addressLine1,
             addressLine2 = addressLine2,

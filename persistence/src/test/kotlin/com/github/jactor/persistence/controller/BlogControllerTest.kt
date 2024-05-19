@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.controller
 
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,8 +50,11 @@ internal class BlogControllerTest {
 
     @Test
     fun `should find a blog`() {
-        every { blogServiceMock.find(1L) } returns BlogDto()
-        val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto::class.java)
+        val uuid = UUID.randomUUID().also {
+            every { blogServiceMock.find(it) } returns BlogDto()
+        }
+
+        val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/$uuid"), BlogDto::class.java)
 
         assertAll {
             assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.OK)
@@ -60,9 +64,11 @@ internal class BlogControllerTest {
 
     @Test
     fun `should not find a blog`() {
-        every { blogServiceMock.find(1L) } returns null
+        val uuid = UUID.randomUUID().also {
+            every { blogServiceMock.find(it) } returns null
+        }
 
-        val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/1"), BlogDto::class.java)
+        val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/$uuid"), BlogDto::class.java)
 
         assertAll {
             assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
@@ -72,10 +78,12 @@ internal class BlogControllerTest {
 
     @Test
     fun `should find a blog entry`() {
-        every { blogServiceMock.findEntryBy(1L) } returns BlogEntryDto()
+        val uuid = UUID.randomUUID().also {
+            every { blogServiceMock.findEntryBy(it) } returns BlogEntryDto()
+        }
 
         val blogEntryResponse = testRestTemplate.getForEntity(
-            buildFullPath("/blog/entry/1"),
+            buildFullPath("/blog/entry/$uuid"),
             BlogEntryDto::class.java
         )
 
@@ -87,10 +95,12 @@ internal class BlogControllerTest {
 
     @Test
     fun `should not find a blog entry`() {
-        every { blogServiceMock.findEntryBy(1L) } returns null
+        val uuid = UUID.randomUUID().also {
+            every { blogServiceMock.findEntryBy(it) } returns null
+        }
 
         val blogEntryResponse = testRestTemplate.getForEntity(
-            buildFullPath("/blog/entry/1"),
+            buildFullPath("/blog/entry/$uuid"),
             BlogEntryDto::class.java
         )
 
@@ -115,7 +125,7 @@ internal class BlogControllerTest {
     }
 
     @Test
-    fun `hould find blogs by title`() {
+    fun `should find blogs by title`() {
         every { blogServiceMock.findBlogsBy("Anything") } returns listOf(BlogDto())
 
         val blogResponse =
@@ -133,10 +143,13 @@ internal class BlogControllerTest {
 
     @Test
     fun `should not find blog entries by blog id`() {
-        every { blogServiceMock.findEntriesForBlog(1L) } returns emptyList()
+        val uuid = UUID.randomUUID().also {
+            every { blogServiceMock.findEntriesForBlog(it) } returns emptyList()
+        }
 
-        val blogEntriesResponse =
-            testRestTemplate.exchange(buildFullPath("/blog/1/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries())
+        val blogEntriesResponse = testRestTemplate.exchange(
+            buildFullPath("/blog/$uuid/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries()
+        )
 
         assertAll {
             assertThat(blogEntriesResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
@@ -146,10 +159,12 @@ internal class BlogControllerTest {
 
     @Test
     fun `should find blog entries by blog id`() {
-        every { blogServiceMock.findEntriesForBlog(1L) } returns listOf(BlogEntryDto())
+        val uuid = UUID.randomUUID().also {
+            every { blogServiceMock.findEntriesForBlog(it) } returns listOf(BlogEntryDto())
+        }
 
         val blogEntriesResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/1/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries()
+            buildFullPath("/blog/$uuid/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries()
         )
 
         assertAll {
@@ -165,12 +180,12 @@ internal class BlogControllerTest {
     @Test
     fun `should persist changes to existing blog`() {
         val blogDto = BlogDto()
-        blogDto.id = 1L
+        blogDto.id = UUID.randomUUID()
 
         every { blogServiceMock.saveOrUpdate(blogDto) } returns blogDto
 
         val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/1"), HttpMethod.PUT, HttpEntity(blogDto),
+            buildFullPath("/blog/${blogDto.id}"), HttpMethod.PUT, HttpEntity(blogDto),
             BlogDto::class.java
         )
 
@@ -186,7 +201,7 @@ internal class BlogControllerTest {
     fun `should create a blog`() {
         val blogDto = BlogDto()
         val createdDto = BlogDto()
-        createdDto.id = 1L
+        createdDto.id = UUID.randomUUID()
 
         every { blogServiceMock.saveOrUpdate(blogDto) } returns createdDto
 
@@ -198,7 +213,7 @@ internal class BlogControllerTest {
         assertAll {
             assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.CREATED)
             assertThat(blogResponse).isNotNull()
-            assertThat(blogResponse.body?.id).isEqualTo(1L)
+            assertThat(blogResponse.body?.id).isEqualTo(createdDto.id)
         }
 
         verify { blogServiceMock.saveOrUpdate(blogDto) }
@@ -207,12 +222,13 @@ internal class BlogControllerTest {
     @Test
     fun `should persist changes to existing blog entry`() {
         val blogEntryDto = BlogEntryDto()
-        blogEntryDto.id = 1L
+        blogEntryDto.id = UUID.randomUUID()
 
         every { blogServiceMock.saveOrUpdate(blogEntryDto) } returns blogEntryDto
 
         val blogEntryResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/entry/1"), HttpMethod.PUT, HttpEntity(blogEntryDto), BlogEntryDto::class.java
+            buildFullPath("/blog/entry/${blogEntryDto.id}"),
+            HttpMethod.PUT, HttpEntity(blogEntryDto), BlogEntryDto::class.java
         )
 
         assertAll {
@@ -227,7 +243,7 @@ internal class BlogControllerTest {
     fun `should create blog entry`() {
         val blogEntryDto = BlogEntryDto()
         val createdDto = BlogEntryDto()
-        createdDto.id = 1L
+        createdDto.id = UUID.randomUUID()
 
         every { blogServiceMock.saveOrUpdate(blogEntryDto) } returns createdDto
 
@@ -238,7 +254,7 @@ internal class BlogControllerTest {
         assertAll {
             assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.CREATED)
             assertThat(blogEntryResponse.body).isNotNull()
-            assertThat(blogEntryResponse.body?.id).isEqualTo(1L)
+            assertThat(blogEntryResponse.body?.id).isEqualTo(createdDto.id)
         }
 
         verify { blogServiceMock.saveOrUpdate(blogEntryDto) }
