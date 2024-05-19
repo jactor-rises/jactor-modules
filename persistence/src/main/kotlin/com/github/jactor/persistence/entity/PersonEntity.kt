@@ -1,6 +1,10 @@
 package com.github.jactor.persistence.entity
 
-import com.github.jactor.persistence.dto.AddressInternalDto
+import java.time.LocalDateTime
+import java.util.Objects
+import java.util.UUID
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.PersonInternalDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -8,26 +12,17 @@ import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
-import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
-import java.time.LocalDateTime
-import java.util.Objects
 
 @Entity
 @Table(name = "T_PERSON")
 class PersonEntity : PersistentEntity<PersonEntity?> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personSeq")
-    @SequenceGenerator(name = "personSeq", sequenceName = "T_PERSON_SEQ", allocationSize = 1)
-    override var id: Long? = null
+    override var id: UUID? = null
 
     @Embedded
     @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
@@ -134,12 +129,5 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
 
     fun addUser(user: UserEntity) {
         users.add(user)
-    }
-
-    companion object {
-        @JvmStatic
-        fun aPerson(personInternalDto: PersonInternalDto): PersonEntity {
-            return PersonEntity(personInternalDto)
-        }
     }
 }

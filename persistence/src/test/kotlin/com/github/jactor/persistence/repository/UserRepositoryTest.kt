@@ -9,8 +9,10 @@ import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto.Usertype
+import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.entity.PersonBuilder
+import com.github.jactor.persistence.entity.UserBuilder
 import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -40,19 +42,23 @@ internal class UserRepositoryTest {
 
     @Test
     fun `should write then read a user entity`() {
-        val addressInternalDto = AddressInternalDto(
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        )
+        val addressInternalDto = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+            )
+        ).addressInternalDto
 
-        val personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Solo")
-        val userToPersist = aUser(
+        val personInternalDto = PersonBuilder.new(
+            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Solo")
+        ).personInternalDto
+
+        val userToPersist = UserBuilder.new(
             UserInternalDto(
-                PersistentDto(),
-                personInternalDto,
+                person = personInternalDto,
                 emailAddress = "smuggle.fast@tantooine.com",
                 username = "smuggler"
             )
-        )
+        ).build()
 
         userRepository.save(userToPersist)
         entityManager.flush()
@@ -70,17 +76,24 @@ internal class UserRepositoryTest {
 
     @Test
     fun `should write then update and read a user entity`() {
-        val addressInternalDto =
-            AddressInternalDto(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
-        val personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "AA")
-        val userToPersist = aUser(
-            UserInternalDto(
-                PersistentDto(),
-                personInternalDto,
+        val addressInternalDto = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+            )
+        ).addressInternalDto
+
+        val personInternalDto = PersonBuilder.new(
+            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "AA")
+        ).personInternalDto
+
+        val userToPersist = UserBuilder.new(
+            userDto = UserInternalDto(
+                persistentDto = PersistentDto(),
+                person = personInternalDto,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
             )
-        )
+        ).build()
 
         userRepository.save(userToPersist)
         entityManager.flush()
@@ -109,24 +122,34 @@ internal class UserRepositoryTest {
 
     @Test
     fun `should find active users and admins`() {
-        val addressInternalDto = AddressInternalDto(
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        )
+        val addressInternalDto = AddressBuilder.new(
+            addressInternalDto = AddressInternalDto(
+                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+            )
+        ).addressInternalDto
 
-        val spidyPersonInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Parker")
-        val superPersonInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Kent")
+        val spidyPersonInternalDto = PersonBuilder.new(
+            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Parker")
+        ).personInternalDto
 
-        userRepository.save(aUser(UserInternalDto(PersistentDto(), spidyPersonInternalDto, null, "spiderman")))
+        val superPersonInternalDto = PersonBuilder.new(
+            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Kent")
+        ).personInternalDto
+
+        val userEntity = UserBuilder.new(
+            UserInternalDto(PersistentDto(), spidyPersonInternalDto, null, "spiderman")
+        ).build()
+
+        userRepository.save(userEntity)
         userRepository.save(
-            aUser(
-                UserInternalDto(
-                    PersistentDto(),
-                    superPersonInternalDto,
+            UserBuilder.new(
+                userDto = UserInternalDto(
+                    person = superPersonInternalDto,
                     emailAddress = null,
                     username = "superman",
-                    Usertype.INACTIVE
+                    usertype = Usertype.INACTIVE
                 )
-            )
+            ).build()
         )
         entityManager.flush()
         entityManager.clear()

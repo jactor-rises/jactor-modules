@@ -3,6 +3,7 @@ package com.github.jactor.persistence.dto
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.UUID
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -30,7 +31,7 @@ internal class BlogDtoTest {
         val persistentDto = PersistentDto()
         persistentDto.createdBy = "jactor"
         persistentDto.timeOfCreation = LocalDateTime.now()
-        persistentDto.id = 1L
+        persistentDto.id = UUID.randomUUID()
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
