@@ -5,7 +5,7 @@ import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.command.CreateUserCommand
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
@@ -15,9 +15,6 @@ import com.github.jactor.persistence.dto.UserInternalDto.Usertype
 import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.entity.UserBuilder
 import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.persistence.repository.PersonRepository
-import com.github.jactor.persistence.repository.UserRepository
-import com.ninjasquad.springmockk.MockkBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -25,17 +22,10 @@ import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.slot
 
-@SpringBootTest
-internal class UserServiceTest {
+internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Autowired
     private lateinit var userServiceToTest: UserService
-
-    @MockkBean
-    private lateinit var personRepository: PersonRepository
-
-    @MockkBean
-    private lateinit var userRepositoryMock: UserRepository
 
     @Test
     fun `should map a user entity to a dto`() {
@@ -44,7 +34,7 @@ internal class UserServiceTest {
 
         personDto.address = addressDto
 
-        every { userRepositoryMock.findByUsername("jactor") } returns Optional.of(
+        every { userRepositorySpyk.findByUsername("jactor") } returns Optional.of(
             UserBuilder.new(
                 userDto = UserInternalDto(
                     person = personDto,
@@ -70,7 +60,7 @@ internal class UserServiceTest {
         val personDto = PersonInternalDto()
         personDto.address = addressDto
 
-        every { userRepositoryMock.findById(uuid) } returns Optional.of(
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(
             UserBuilder.new(
                 UserInternalDto(
                     person = personDto,
@@ -100,7 +90,7 @@ internal class UserServiceTest {
             uuid, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1)
         )
 
-        every { userRepositoryMock.findById(uuid) } returns Optional.of(
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(
             UserEntity(UserInternalDto(persistentDto, userDto))
         )
 
@@ -115,8 +105,8 @@ internal class UserServiceTest {
         val userEntity = UserEntity(userDto)
         val personEntitySlot = slot<PersonEntity>()
 
-        every { userRepositoryMock.save(any()) } returns userEntity
-        every { personRepository.save(capture(personEntitySlot)) } returns PersonEntity(PersonInternalDto())
+        every { userRepositorySpyk.save(any()) } returns userEntity
+        every { personRepositorySpyk.save(capture(personEntitySlot)) } returns PersonEntity(PersonInternalDto())
 
         val user = userServiceToTest.create(createUserCommand)
 

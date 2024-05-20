@@ -2,23 +2,13 @@ package com.github.jactor.persistence.controller
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import com.github.jactor.persistence.JactorPersistence
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
-import com.github.jactor.persistence.service.BlogService
-import com.ninjasquad.springmockk.MockkBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -28,21 +18,7 @@ import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.verify
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)
-internal class BlogControllerTest {
-    @LocalServerPort
-    private val port = 0
-
-    @Value("\${server.servlet.context-path}")
-    private lateinit var contextPath: String
-
-    @MockkBean
-    private lateinit var blogServiceMock: BlogService
-
-    @Autowired
-    private lateinit var testRestTemplate: TestRestTemplate
-
+internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should build full path`() {
         assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:$port/jactor-persistence/somewhere")
@@ -51,7 +27,7 @@ internal class BlogControllerTest {
     @Test
     fun `should find a blog`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMock.find(it) } returns BlogDto()
+            every { blogServiceSpyk.find(it) } returns BlogDto()
         }
 
         val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/$uuid"), BlogDto::class.java)
@@ -65,7 +41,7 @@ internal class BlogControllerTest {
     @Test
     fun `should not find a blog`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMock.find(it) } returns null
+            every { blogServiceSpyk.find(it) } returns null
         }
 
         val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/$uuid"), BlogDto::class.java)
@@ -79,7 +55,7 @@ internal class BlogControllerTest {
     @Test
     fun `should find a blog entry`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMock.findEntryBy(it) } returns BlogEntryDto()
+            every { blogServiceSpyk.findEntryBy(it) } returns BlogEntryDto()
         }
 
         val blogEntryResponse = testRestTemplate.getForEntity(
@@ -96,7 +72,7 @@ internal class BlogControllerTest {
     @Test
     fun `should not find a blog entry`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMock.findEntryBy(it) } returns null
+            every { blogServiceSpyk.findEntryBy(it) } returns null
         }
 
         val blogEntryResponse = testRestTemplate.getForEntity(
@@ -112,7 +88,7 @@ internal class BlogControllerTest {
 
     @Test
     fun `should not find blogs by title`() {
-        every { blogServiceMock.findBlogsBy("Anything") } returns emptyList()
+        every { blogServiceSpyk.findBlogsBy("Anything") } returns emptyList()
 
         val blogResponse = testRestTemplate.exchange(
             buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs()
@@ -126,7 +102,7 @@ internal class BlogControllerTest {
 
     @Test
     fun `should find blogs by title`() {
-        every { blogServiceMock.findBlogsBy("Anything") } returns listOf(BlogDto())
+        every { blogServiceSpyk.findBlogsBy("Anything") } returns listOf(BlogDto())
 
         val blogResponse =
             testRestTemplate.exchange(buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs())
@@ -144,7 +120,7 @@ internal class BlogControllerTest {
     @Test
     fun `should not find blog entries by blog id`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMock.findEntriesForBlog(it) } returns emptyList()
+            every { blogServiceSpyk.findEntriesForBlog(it) } returns emptyList()
         }
 
         val blogEntriesResponse = testRestTemplate.exchange(
@@ -160,7 +136,7 @@ internal class BlogControllerTest {
     @Test
     fun `should find blog entries by blog id`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMock.findEntriesForBlog(it) } returns listOf(BlogEntryDto())
+            every { blogServiceSpyk.findEntriesForBlog(it) } returns listOf(BlogEntryDto())
         }
 
         val blogEntriesResponse = testRestTemplate.exchange(
@@ -182,7 +158,7 @@ internal class BlogControllerTest {
         val blogDto = BlogDto()
         blogDto.id = UUID.randomUUID()
 
-        every { blogServiceMock.saveOrUpdate(blogDto) } returns blogDto
+        every { blogServiceSpyk.saveOrUpdate(blogDto) } returns blogDto
 
         val blogResponse = testRestTemplate.exchange(
             buildFullPath("/blog/${blogDto.id}"), HttpMethod.PUT, HttpEntity(blogDto),
@@ -194,7 +170,7 @@ internal class BlogControllerTest {
             assertThat(blogResponse.body).isNotNull()
         }
 
-        verify { blogServiceMock.saveOrUpdate(blogDto) }
+        verify { blogServiceSpyk.saveOrUpdate(blogDto) }
     }
 
     @Test
@@ -203,7 +179,7 @@ internal class BlogControllerTest {
         val createdDto = BlogDto()
         createdDto.id = UUID.randomUUID()
 
-        every { blogServiceMock.saveOrUpdate(blogDto) } returns createdDto
+        every { blogServiceSpyk.saveOrUpdate(blogDto) } returns createdDto
 
         val blogResponse = testRestTemplate.exchange(
             buildFullPath("/blog"), HttpMethod.POST, HttpEntity(blogDto),
@@ -216,7 +192,7 @@ internal class BlogControllerTest {
             assertThat(blogResponse.body?.id).isEqualTo(createdDto.id)
         }
 
-        verify { blogServiceMock.saveOrUpdate(blogDto) }
+        verify { blogServiceSpyk.saveOrUpdate(blogDto) }
     }
 
     @Test
@@ -224,7 +200,7 @@ internal class BlogControllerTest {
         val blogEntryDto = BlogEntryDto()
         blogEntryDto.id = UUID.randomUUID()
 
-        every { blogServiceMock.saveOrUpdate(blogEntryDto) } returns blogEntryDto
+        every { blogServiceSpyk.saveOrUpdate(blogEntryDto) } returns blogEntryDto
 
         val blogEntryResponse = testRestTemplate.exchange(
             buildFullPath("/blog/entry/${blogEntryDto.id}"),
@@ -236,7 +212,7 @@ internal class BlogControllerTest {
             assertThat(blogEntryResponse.body).isNotNull()
         }
 
-        verify { blogServiceMock.saveOrUpdate(blogEntryDto) }
+        verify { blogServiceSpyk.saveOrUpdate(blogEntryDto) }
     }
 
     @Test
@@ -245,7 +221,7 @@ internal class BlogControllerTest {
         val createdDto = BlogEntryDto()
         createdDto.id = UUID.randomUUID()
 
-        every { blogServiceMock.saveOrUpdate(blogEntryDto) } returns createdDto
+        every { blogServiceSpyk.saveOrUpdate(blogEntryDto) } returns createdDto
 
         val blogEntryResponse = testRestTemplate.exchange(
             buildFullPath("/blog/entry"), HttpMethod.POST, HttpEntity(blogEntryDto), BlogEntryDto::class.java
@@ -257,7 +233,7 @@ internal class BlogControllerTest {
             assertThat(blogEntryResponse.body?.id).isEqualTo(createdDto.id)
         }
 
-        verify { blogServiceMock.saveOrUpdate(blogEntryDto) }
+        verify { blogServiceSpyk.saveOrUpdate(blogEntryDto) }
     }
 
     private fun buildFullPath(url: String): String {

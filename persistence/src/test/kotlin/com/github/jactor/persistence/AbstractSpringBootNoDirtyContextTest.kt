@@ -1,14 +1,22 @@
 package com.github.jactor.persistence
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.transaction.annotation.Transactional
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.jactor.persistence.repository.AddressRepository
+import com.github.jactor.persistence.repository.BlogEntryRepository
 import com.github.jactor.persistence.repository.BlogRepository
+import com.github.jactor.persistence.repository.GuestBookEntryRepository
+import com.github.jactor.persistence.repository.GuestBookRepository
 import com.github.jactor.persistence.repository.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
+import com.github.jactor.persistence.service.BlogService
+import com.github.jactor.persistence.service.GuestBookService
+import com.ninjasquad.springmockk.SpykBean
 import jakarta.persistence.EntityManager
 
 /**
@@ -18,16 +26,28 @@ import jakarta.persistence.EntityManager
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-internal abstract class AbstractSpringBootNoDirtyContextTest {
+abstract class AbstractSpringBootNoDirtyContextTest {
 
     @Autowired
     protected lateinit var testRestTemplate: TestRestTemplate
 
     @Autowired
+    protected lateinit var addressRepository: AddressRepository
+
+    @Autowired
     protected lateinit var blogRepository: BlogRepository
 
     @Autowired
+    protected lateinit var blogEntryRepository: BlogEntryRepository
+
+    @Autowired
     protected lateinit var entityManager: EntityManager
+
+    @Autowired
+    protected lateinit var guestBookRepository: GuestBookRepository
+
+    @Autowired
+    protected lateinit var guestBookEntryRepository: GuestBookEntryRepository
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
@@ -38,6 +58,21 @@ internal abstract class AbstractSpringBootNoDirtyContextTest {
     @Autowired
     protected lateinit var userRepository: UserRepository
 
+    @SpykBean
+    protected lateinit var blogServiceSpyk: BlogService
+
+    @SpykBean
+    protected lateinit var guestBookServiceSpyk: GuestBookService
+
+    @SpykBean
+    protected lateinit var personRepositorySpyk: PersonRepository
+
+    @SpykBean
+    protected lateinit var userRepositorySpyk: UserRepository
+
     @LocalServerPort
     protected val port = 0
+
+    @Value("\${server.servlet.context-path}")
+    protected lateinit var contextPath: String
 }
