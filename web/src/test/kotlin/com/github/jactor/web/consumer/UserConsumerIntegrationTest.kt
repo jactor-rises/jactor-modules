@@ -7,26 +7,15 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.ResponseEntity
-import org.springframework.web.client.RestClientException
-import org.springframework.web.client.RestTemplate
+import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-internal class UserConsumerIntegrationTest {
-
-    @Autowired
-    private lateinit var restTemplate: RestTemplate
-
-    @Autowired
-    private lateinit var testRestTemplate: TestRestTemplate
+internal class UserConsumerIntegrationTest : AbstractNoDirtySpringContextTest() {
 
     @Autowired
     @Qualifier("userConsumer")
@@ -37,16 +26,14 @@ internal class UserConsumerIntegrationTest {
 
     @BeforeEach
     fun `assume jactor-persistence is running`() {
-        lateinit var response: ResponseEntity<String>
+        runCatching {
+            val response: ResponseEntity<String> = testRestTemplate.getForEntity(
+                "$baseUrl/actuator/health", String::class.java
+            )
 
-        try {
-            response = testRestTemplate.getForEntity("$baseUrl/actuator/health", String::class.java)
-        } catch (e: RestClientException) {
-            assumeTrue(false)
-        }
-
-        assumeTrue(response.statusCode.is2xxSuccessful, response.statusCode.toString())
-        assumeTrue(/* assumption = */ response.body?.contains("UP") ?: false, /* message = */ response.body)
+            assumeTrue(response.statusCode.is2xxSuccessful, response.statusCode.toString())
+            assumeTrue(/* assumption = */ response.body?.contains("UP") ?: false, /* message = */ response.body)
+        }.onFailure { assumeTrue(false) }
     }
 
     @Test

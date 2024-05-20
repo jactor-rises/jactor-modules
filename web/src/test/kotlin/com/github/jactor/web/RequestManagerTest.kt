@@ -1,52 +1,41 @@
 package com.github.jactor.web
 
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
-import com.ninjasquad.springmockk.MockkBean
+import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import io.mockk.every
-import jakarta.servlet.http.HttpServletRequest
 
-@SpringBootTest
-internal class RequestManagerTest {
-
-    @MockkBean
-    private lateinit var httpServletRequestMock: HttpServletRequest
-
-    @Value("\${server.servlet.context-path}")
-    private lateinit var contextPath: String
-
+internal class RequestManagerTest: AbstractNoDirtySpringContextTest() {
     @Test
     fun `should fetch currentUrl and attach it to the model`() {
-        every { httpServletRequestMock.requestURI } returns "$contextPath/user"
-        every { httpServletRequestMock.queryString } returns "choose=jactor"
+        every { httpServletRequestMockk.requestURI } returns "$contextPath/user"
+        every { httpServletRequestMockk.queryString } returns "choose=jactor"
 
-        assertThat(RequestManager(contextPath, httpServletRequestMock).fetchCurrentUrl())
+        assertThat(RequestManager(contextPath, httpServletRequestMockk).fetchCurrentUrl())
             .isEqualTo("/user?choose=jactor")
     }
 
     @Test
     fun `should not add query string to currentUrl if query string is blank`() {
-        every { httpServletRequestMock.requestURI } returns "$contextPath/user"
-        every { httpServletRequestMock.queryString } returns ""
+        every { httpServletRequestMockk.requestURI } returns "$contextPath/user"
+        every { httpServletRequestMockk.queryString } returns ""
 
-        assertThat(RequestManager(contextPath, httpServletRequestMock).fetchCurrentUrl()).isEqualTo("/user")
+        assertThat(RequestManager(contextPath, httpServletRequestMockk).fetchCurrentUrl()).isEqualTo("/user")
     }
 
     @Test
     fun `should not add parameter called lang`() {
-        every { httpServletRequestMock.requestURI } returns "$contextPath/home"
-        every { httpServletRequestMock.queryString } returns "lang=en"
+        every { httpServletRequestMockk.requestURI } returns "$contextPath/home"
+        every { httpServletRequestMockk.queryString } returns "lang=en"
 
-        val languageParam = RequestManager(contextPath, httpServletRequestMock).fetchCurrentUrl()
+        val languageParam = RequestManager(contextPath, httpServletRequestMockk).fetchCurrentUrl()
 
-        every { httpServletRequestMock.requestURI } returns "$contextPath/user"
-        every { httpServletRequestMock.queryString } returns "lang=no&choose=tip"
+        every { httpServletRequestMockk.requestURI } returns "$contextPath/user"
+        every { httpServletRequestMockk.queryString } returns "lang=no&choose=tip"
 
-        val langAndOtherParam = RequestManager(contextPath, httpServletRequestMock).fetchCurrentUrl()
+        val langAndOtherParam = RequestManager(contextPath, httpServletRequestMockk).fetchCurrentUrl()
 
         assertAll {
             assertThat(languageParam).isEqualTo("/home")
@@ -56,17 +45,17 @@ internal class RequestManagerTest {
 
     @Test
     fun `should not add context-path to current url`() {
-        every { httpServletRequestMock.requestURI } returns "$contextPath/home"
-        every { httpServletRequestMock.queryString } returns null
+        every { httpServletRequestMockk.requestURI } returns "$contextPath/home"
+        every { httpServletRequestMockk.queryString } returns null
 
-        assertThat(RequestManager(contextPath, httpServletRequestMock).fetchCurrentUrl()).isEqualTo("/home")
+        assertThat(RequestManager(contextPath, httpServletRequestMockk).fetchCurrentUrl()).isEqualTo("/home")
     }
 
     @Test
     fun `should not add centext-path to the view name`() {
-        every { httpServletRequestMock.requestURI } returns "$contextPath/someView"
-        every { httpServletRequestMock.queryString } returns null
+        every { httpServletRequestMockk.requestURI } returns "$contextPath/someView"
+        every { httpServletRequestMockk.queryString } returns null
 
-        assertThat(RequestManager(contextPath, httpServletRequestMock).fetchChosenView()).isEqualTo("someView")
+        assertThat(RequestManager(contextPath, httpServletRequestMockk).fetchChosenView()).isEqualTo("someView")
     }
 }

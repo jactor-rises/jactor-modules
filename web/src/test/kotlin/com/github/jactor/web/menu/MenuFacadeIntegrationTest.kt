@@ -3,17 +3,14 @@ package com.github.jactor.web.menu
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.PropertySource
 import com.github.jactor.web.JactorWebBeans
+import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
 
-@SpringBootTest
-@PropertySource("classpath:application.properties")
-internal class MenuFacadeIntegrationTest {
+internal class MenuFacadeIntegrationTest: AbstractNoDirtySpringContextTest() {
     @Autowired
     private lateinit var testMenuFacade: MenuFacade
 

@@ -1,46 +1,22 @@
 package com.github.jactor.web.controller
 
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
-import com.github.jactor.web.i18n.MyMessages
 import com.github.jactor.web.model.HomePageModel
+import com.github.jactor.web.test.AbstractSpringMockMvcTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isNotNull
 import junit.framework.AssertionFailedError
 
-@SpringBootTest
-internal class HomeControllerTest {
-    private lateinit var mockMvc: MockMvc
-
-    @Autowired
-    private lateinit var myMessages: MyMessages
-
-    @Value("\${spring.mvc.view.prefix}")
-    private lateinit var prefix: String
-
-    @Value("\${spring.mvc.view.suffix}")
-    private lateinit var suffix: String
-
-    @BeforeEach
-    fun `mock mvc with view resolver`() {
-        val internalResourceViewResolver = InternalResourceViewResolver()
-
-        internalResourceViewResolver.setPrefix(prefix)
-        internalResourceViewResolver.setSuffix(suffix)
-
-        mockMvc = MockMvcBuilders.standaloneSetup(HomeController(myMessages))
-            .setViewResolvers(internalResourceViewResolver)
-            .build()
+internal class HomeControllerTest : AbstractSpringMockMvcTest() {
+    override val initMockMvc: (InternalResourceViewResolver) -> MockMvc = {
+        MockMvcBuilders.standaloneSetup(HomeController(myMessages)).setViewResolvers(it).build()
     }
 
     @Test
