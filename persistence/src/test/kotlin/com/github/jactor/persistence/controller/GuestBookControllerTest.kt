@@ -2,22 +2,12 @@ package com.github.jactor.persistence.controller
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import com.github.jactor.persistence.JactorPersistence
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.GuestBookDto
 import com.github.jactor.persistence.dto.GuestBookEntryDto
-import com.github.jactor.persistence.service.GuestBookService
-import com.ninjasquad.springmockk.MockkBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -26,22 +16,7 @@ import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.verify
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)
-internal class GuestBookControllerTest {
-
-    @LocalServerPort
-    private val port = 0
-
-    @Value("\${server.servlet.context-path}")
-    private lateinit var contextPath: String
-
-    @MockkBean
-    private lateinit var guestBookServiceMock: GuestBookService
-
-    @Autowired
-    private lateinit var testRestTemplate: TestRestTemplate
-
+internal class GuestBookControllerTest : AbstractSpringBootNoDirtyContextTest(){
     @Test
     fun `should build full path`() {
         assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:$port/jactor-persistence/somewhere")
@@ -50,7 +25,7 @@ internal class GuestBookControllerTest {
     @Test
     fun `should not get a guest book`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMock.find(id = uuid) } returns null
+        every { guestBookServiceSpyk.find(id = uuid) } returns null
 
         val guestBookRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/$uuid"), GuestBookDto::class.java
@@ -65,7 +40,7 @@ internal class GuestBookControllerTest {
     @Test
     fun `should get a guest book`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMock.find(id = uuid) } returns GuestBookDto()
+        every { guestBookServiceSpyk.find(id = uuid) } returns GuestBookDto()
 
         val guestBookRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/$uuid"), GuestBookDto::class.java
@@ -80,7 +55,7 @@ internal class GuestBookControllerTest {
     @Test
     fun `should not get a guest book entry`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMock.findEntry(id = uuid) } returns null
+        every { guestBookServiceSpyk.findEntry(id = uuid) } returns null
 
         val guestBookEntryRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/entry/$uuid"),
@@ -96,7 +71,7 @@ internal class GuestBookControllerTest {
     @Test
     fun `should get a guest book entry`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMock.findEntry(id = uuid) } returns GuestBookEntryDto()
+        every { guestBookServiceSpyk.findEntry(id = uuid) } returns GuestBookEntryDto()
 
         val guestBookEntryRespnse = testRestTemplate.getForEntity(
             buildFullPath("/guestBook/entry/$uuid"),
@@ -114,7 +89,7 @@ internal class GuestBookControllerTest {
         val guestBookDto = GuestBookDto()
         guestBookDto.id = UUID.randomUUID()
 
-        every { guestBookServiceMock.saveOrUpdate(guestBookDto) } returns guestBookDto
+        every { guestBookServiceSpyk.saveOrUpdate(guestBookDto) } returns guestBookDto
 
         val guestbookResponse = testRestTemplate.exchange(
             buildFullPath("/guestBook/${guestBookDto.id}"),
@@ -125,7 +100,7 @@ internal class GuestBookControllerTest {
             assertThat(guestbookResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
             assertThat(guestbookResponse.body).isNotNull()
             assertThat(guestbookResponse.body?.id).isEqualTo(guestBookDto.id)
-            verify { guestBookServiceMock.saveOrUpdate(guestBookDto) }
+            verify { guestBookServiceSpyk.saveOrUpdate(guestBookDto) }
         }
     }
 
@@ -135,7 +110,7 @@ internal class GuestBookControllerTest {
         val createdDto = GuestBookDto()
         createdDto.id = UUID.randomUUID()
 
-        every { guestBookServiceMock.saveOrUpdate(guestBookDto) } returns createdDto
+        every { guestBookServiceSpyk.saveOrUpdate(guestBookDto) } returns createdDto
 
         val guestbookResponse = testRestTemplate.postForEntity(
             buildFullPath("/guestBook"), guestBookDto,
@@ -146,7 +121,7 @@ internal class GuestBookControllerTest {
             assertThat(guestbookResponse.statusCode).isEqualTo(HttpStatus.CREATED)
             assertThat(guestbookResponse.body).isNotNull()
             assertThat(guestbookResponse.body?.id).isEqualTo(createdDto.id)
-            verify { guestBookServiceMock.saveOrUpdate(guestBookDto) }
+            verify { guestBookServiceSpyk.saveOrUpdate(guestBookDto) }
         }
     }
 
@@ -155,7 +130,7 @@ internal class GuestBookControllerTest {
         val guestBookEntryDto = GuestBookEntryDto()
         guestBookEntryDto.id = UUID.randomUUID()
 
-        every { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } returns guestBookEntryDto
+        every { guestBookServiceSpyk.saveOrUpdate(guestBookEntryDto) } returns guestBookEntryDto
 
         val guestbookEntryResponse = testRestTemplate.exchange(
             buildFullPath("/guestBook/entry/${guestBookEntryDto.id}"), HttpMethod.PUT, HttpEntity(guestBookEntryDto),
@@ -166,7 +141,7 @@ internal class GuestBookControllerTest {
             assertThat(guestbookEntryResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
             assertThat(guestbookEntryResponse.body).isNotNull()
             assertThat(guestbookEntryResponse.body?.id).isEqualTo(guestBookEntryDto.id)
-            verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) }
+            verify { guestBookServiceSpyk.saveOrUpdate(guestBookEntryDto) }
         }
     }
 
@@ -176,7 +151,7 @@ internal class GuestBookControllerTest {
         val createdDto = GuestBookEntryDto()
         createdDto.id = UUID.randomUUID()
 
-        every { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) } returns createdDto
+        every { guestBookServiceSpyk.saveOrUpdate(guestBookEntryDto) } returns createdDto
 
         val guestbookEntryResponse = testRestTemplate.postForEntity(
             buildFullPath("/guestBook/entry"), guestBookEntryDto,
@@ -187,7 +162,7 @@ internal class GuestBookControllerTest {
             assertThat(guestbookEntryResponse.statusCode).isEqualTo(HttpStatus.CREATED)
             assertThat(guestbookEntryResponse.body).isNotNull()
             assertThat(guestbookEntryResponse.body?.id).isEqualTo(createdDto.id)
-            verify { guestBookServiceMock.saveOrUpdate(guestBookEntryDto) }
+            verify { guestBookServiceSpyk.saveOrUpdate(guestBookEntryDto) }
         }
     }
 

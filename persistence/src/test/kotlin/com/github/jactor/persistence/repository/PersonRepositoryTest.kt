@@ -2,8 +2,7 @@ package com.github.jactor.persistence.repository
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
@@ -17,27 +16,12 @@ import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
-import jakarta.persistence.EntityManager
-import jakarta.transaction.Transactional
 
-@SpringBootTest
-@Transactional
-internal class PersonRepositoryTest {
-
-    @Autowired
-    private lateinit var personRepository: PersonRepository
-
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
+internal class PersonRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find default persons`() {
-        val personEntities = personRepository.findBySurname("Jacobsen")
-        val firstNames: MutableList<String> = ArrayList()
-
-        for (personEntity in personEntities) {
-            firstNames.add(personEntity.firstName ?: "unknown")
-        }
+        val firstNames = personRepository.findBySurname("Jacobsen")
+            .map { it.firstName }
 
         assertAll {
             assertThat(firstNames).contains("Tor Egil")

@@ -3,28 +3,18 @@ package com.github.jactor.persistence.controller
 import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import com.github.jactor.persistence.JactorPersistence
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.persistence.repository.UserRepository
 import com.github.jactor.shared.dto.AddressDto
 import com.github.jactor.shared.dto.CreateUserCommandDto
 import com.github.jactor.shared.dto.PersonDto
 import com.github.jactor.shared.dto.UserDto
 import com.github.jactor.shared.dto.UserType
-import com.ninjasquad.springmockk.MockkBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -32,21 +22,7 @@ import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import io.mockk.every
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [JactorPersistence::class], webEnvironment = WebEnvironment.RANDOM_PORT)
-internal class UserControllerTest {
-
-    @LocalServerPort
-    private val port = 0
-
-    @Value("\${server.servlet.context-path}")
-    private lateinit var contextPath: String
-
-    @MockkBean
-    private lateinit var userRepositoryMock: UserRepository
-
-    @Autowired
-    private lateinit var testRestTemplate: TestRestTemplate
+internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should build full path`() {
@@ -55,7 +31,7 @@ internal class UserControllerTest {
 
     @Test
     fun `should not find a user by username`() {
-        every { userRepositoryMock.findByUsername("me") } returns Optional.empty()
+        every { userRepositorySpyk.findByUsername("me") } returns Optional.empty()
 
         val userRespnse = testRestTemplate.getForEntity(
             buildFullPath("/user/name/me"),
@@ -70,7 +46,7 @@ internal class UserControllerTest {
 
     @Test
     fun `should find a user by username`() {
-        every { userRepositoryMock.findByUsername("me") } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findByUsername("me") } returns Optional.of(UserEntity(UserInternalDto()))
 
         val userResponse = testRestTemplate.getForEntity(
             buildFullPath("/user/name/me"),
@@ -86,7 +62,7 @@ internal class UserControllerTest {
     @Test
     fun `should not get a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositoryMock.findById(uuid) } returns Optional.empty()
+        every { userRepositorySpyk.findById(uuid) } returns Optional.empty()
 
         val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
 
@@ -99,7 +75,7 @@ internal class UserControllerTest {
     @Test
     fun `should find a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositoryMock.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
 
         val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
 
@@ -115,7 +91,7 @@ internal class UserControllerTest {
         val userInternalDto = UserInternalDto()
         userInternalDto.id = uuid
 
-        every { userRepositoryMock.findById(uuid) } returns Optional.of(UserEntity(userInternalDto))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(userInternalDto))
 
         val userRespnse = testRestTemplate.exchange(
             buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(userInternalDto.toUserDto()),
@@ -136,7 +112,7 @@ internal class UserControllerTest {
         val bart = UserEntity(UserInternalDto(bartDto))
         val lisa = UserEntity(UserInternalDto(lisaDto))
 
-        every { userRepositoryMock.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE)) } returns listOf(bart, lisa)
+        every { userRepositorySpyk.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE)) } returns listOf(bart, lisa)
 
         val userResponse =
             testRestTemplate.exchange(buildFullPath("/user/usernames"), HttpMethod.GET, null, responsIslistOfStrings())
@@ -150,10 +126,10 @@ internal class UserControllerTest {
     @Test
     fun `should accept if user id is valid`() {
         val uuid = UUID.randomUUID()
-        every { userRepositoryMock.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
 
         val userResponse = testRestTemplate.exchange(
-            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(UserDto()),
+            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(UserDto(id = uuid)),
             UserDto::class.java
         )
 
@@ -162,7 +138,7 @@ internal class UserControllerTest {
 
     @Test
     fun `should not accept if user id is invalid`() {
-        every { userRepositoryMock.findById(any()) } returns Optional.empty()
+        every { userRepositorySpyk.findById(any()) } returns Optional.empty()
 
         val userResponse = testRestTemplate.exchange(
             buildFullPath("/user/${UUID.randomUUID()}"), HttpMethod.PUT, HttpEntity(UserDto()),
@@ -182,7 +158,7 @@ internal class UserControllerTest {
 
     @Test
     fun `should return BAD_REQUEST when username is occupied`() {
-        every { userRepositoryMock.findByUsername("turbo") } returns Optional.of(UserEntity())
+        every { userRepositorySpyk.findByUsername("turbo") } returns Optional.of(UserEntity())
 
         val createUserCommand = CreateUserCommandDto(username = "turbo")
 

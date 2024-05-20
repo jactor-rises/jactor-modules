@@ -1,9 +1,7 @@
 package com.github.jactor.persistence.repository
 
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
@@ -17,18 +15,8 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
 import assertk.assertions.isEqualTo
-import jakarta.persistence.EntityManager
 
-@SpringBootTest
-@Transactional
-internal class UserRepositoryTest {
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
+internal class UserRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find user with username jactor`() {
         val userByName = userRepository.findByUsername("jactor")
