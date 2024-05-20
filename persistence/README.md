@@ -47,7 +47,7 @@ docker run -p 1099:1099 jactor-persistence
 ### Some technologies used
 
 #### Implementation
-* [spring-boot 2.7.x](https://spring.io/projects/spring-boot)
+* [spring-boot 3.2.x](https://spring.io/projects/spring-boot)
     * with [spring-data-jpa](https://spring.io/projects/spring-data-jpa)
     * with [spring-webflow](https://spring.io/projects/spring-webflow) (mvc)
 * [docker](https://www.docker.com)
@@ -62,7 +62,7 @@ docker run -p 1099:1099 jactor-persistence
 #### Build and documentation
 * [flyway](https://flywaydb.org)
 * [github actions](https://docs.github.com/en/actions/learn-github-actions)
-* [gradle](https://gradle.org) (7.x)
+* [gradle](https://gradle.org) (8.x)
 * [swagger-ui](https://swagger.io/tools/swagger-ui/)
   * herunder [springdoc](https://springdoc.org)
 * [sdk man](https://sdkman.io)
