@@ -4,9 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
@@ -20,18 +18,8 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isStrictlyBetween
-import jakarta.persistence.EntityManager
 
-@SpringBootTest
-@Transactional
-internal class BlogEntryRepositoryTest {
-
-    @Autowired
-    private lateinit var blogEntryRepository: BlogEntryRepository
-
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
+internal class BlogEntryRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should save then read blog entry`() {
         val addressDto = AddressInternalDto(

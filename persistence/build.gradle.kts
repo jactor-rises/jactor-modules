@@ -20,3 +20,7 @@ dependencies {
     runtimeOnly("org.flywaydb:flyway-core:9.22.0")
     runtimeOnly("com.h2database:h2:2.2.224")
 }
+
+tasks.test {
+    jvmArgs("--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED")
+}
