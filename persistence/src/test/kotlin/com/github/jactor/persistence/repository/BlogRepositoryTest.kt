@@ -3,9 +3,7 @@ package com.github.jactor.persistence.repository
 import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
@@ -21,17 +19,8 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import jakarta.persistence.EntityManager
 
-@SpringBootTest
-@Transactional
-internal class BlogRepositoryTest {
-    @Autowired
-    private lateinit var blogRepositoryToTest: BlogRepository
-
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
+internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
     @Test
     fun `should save and then read blog entity`() {
         val addressDto = AddressBuilder
@@ -58,11 +47,11 @@ internal class BlogRepositoryTest {
             .new(blogDto = BlogDto(created = LocalDate.now(), title = "Blah", userInternal = userDto))
             .buildBlogEntity()
 
-        blogRepositoryToTest.save(blogEntityToSave)
+        blogRepository.save(blogEntityToSave)
         entityManager.flush()
         entityManager.clear()
 
-        val blogs = blogRepositoryToTest.findAll().toList()
+        val blogs = blogRepository.findAll().toList()
         assertThat(blogs).hasSize(1)
         val blogEntity = blogs.iterator().next()
 
@@ -99,21 +88,21 @@ internal class BlogRepositoryTest {
             .new(blogDto = BlogDto(created = LocalDate.now(), title = "Blah", userInternal = userDto))
             .buildBlogEntity()
 
-        blogRepositoryToTest.save(blogEntityToSave)
+        blogRepository.save(blogEntityToSave)
         entityManager.flush()
         entityManager.clear()
 
-        val blogs = blogRepositoryToTest.findBlogsByTitle("Blah")
+        val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)
 
         val blogEntitySaved = blogs.iterator().next()
         blogEntitySaved.title = "Duh"
 
-        blogRepositoryToTest.save(blogEntitySaved)
+        blogRepository.save(blogEntitySaved)
         entityManager.flush()
         entityManager.clear()
 
-        val modifiedBlogs = blogRepositoryToTest.findBlogsByTitle("Duh")
+        val modifiedBlogs = blogRepository.findBlogsByTitle("Duh")
         assertThat(modifiedBlogs).hasSize(1)
         val blogEntity: BlogEntity = modifiedBlogs.iterator().next()
 
@@ -149,11 +138,11 @@ internal class BlogRepositoryTest {
             .new(blogDto = BlogDto(created = LocalDate.now(), title = "Blah", userInternal = userDto))
             .buildBlogEntity()
 
-        blogRepositoryToTest.save(blogEntityToSave)
+        blogRepository.save(blogEntityToSave)
         entityManager.flush()
         entityManager.clear()
 
-        val blogs = blogRepositoryToTest.findBlogsByTitle("Blah")
+        val blogs = blogRepository.findBlogsByTitle("Blah")
 
         assertAll {
             assertThat(blogs).hasSize(1)
@@ -204,11 +193,11 @@ internal class BlogRepositoryTest {
         val blogEntryToSave: BlogEntryEntity = blogData.buildBlogEntryEntity()
 
         blogEntityToSave.add(blogEntryToSave)
-        blogRepositoryToTest.save(blogEntityToSave)
+        blogRepository.save(blogEntityToSave)
         entityManager.flush()
         entityManager.clear()
 
-        val blogs = blogRepositoryToTest.findBlogsByTitle("Blah")
+        val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)
         val blogEntity = blogs.iterator().next()
         assertThat(blogEntity.getEntries()).hasSize(1)

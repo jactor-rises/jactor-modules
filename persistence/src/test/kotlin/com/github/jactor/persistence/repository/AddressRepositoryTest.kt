@@ -1,10 +1,7 @@
 package com.github.jactor.persistence.repository
 
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
-import com.github.jactor.persistence.JactorPersistence
+import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.AddressEntity
@@ -14,18 +11,8 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isIn
 import assertk.assertions.isPresent
-import jakarta.persistence.EntityManager
 
-@SpringBootTest(classes = [JactorPersistence::class])
-@Transactional
-internal class AddressRepositoryTest {
-
-    @Autowired
-    private lateinit var addressRepository: AddressRepository
-
-    @Autowired
-    private lateinit var entityManager: EntityManager
-
+internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should fetch address entities`() {
         addressRepository.save(
