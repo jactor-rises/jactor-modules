@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.controller
 
+import java.util.UUID
 import com.github.jactor.persistence.dto.GuestBookDto
 import com.github.jactor.persistence.dto.GuestBookEntryDto
 import com.github.jactor.persistence.service.GuestBookService
@@ -34,7 +35,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") id: Long): ResponseEntity<GuestBookDto> {
+    operator fun get(@PathVariable("id") id: UUID): ResponseEntity<GuestBookDto> {
         return guestBookService.find(id)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -51,7 +52,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @GetMapping("/entry/{id}")
-    fun getEntry(@PathVariable("id") id: Long): ResponseEntity<GuestBookEntryDto> {
+    fun getEntry(@PathVariable("id") id: UUID): ResponseEntity<GuestBookEntryDto> {
         return guestBookService.findEntry(id)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -88,7 +89,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @PutMapping("/{guestBookId}")
-    fun put(@RequestBody guestBookDto: GuestBookDto, @PathVariable guestBookId: Long): ResponseEntity<GuestBookDto> {
+    fun put(@RequestBody guestBookDto: GuestBookDto, @PathVariable guestBookId: UUID): ResponseEntity<GuestBookDto> {
         if (guestBookDto.id != guestBookId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
@@ -130,7 +131,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     @PutMapping("/entry/{guestBookEntryId}")
     fun putEntry(
         @RequestBody guestBookEntryDto: GuestBookEntryDto,
-        @PathVariable guestBookEntryId: Long
+        @PathVariable guestBookEntryId: UUID
     ): ResponseEntity<GuestBookEntryDto> {
         if (guestBookEntryDto.id != guestBookEntryId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)

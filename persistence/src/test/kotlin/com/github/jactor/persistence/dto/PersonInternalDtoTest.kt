@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.dto
 
 import java.time.LocalDateTime
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import assertk.assertAll
 import assertk.assertThat
@@ -36,7 +37,7 @@ internal class PersonInternalDtoTest {
         val persistentDto = PersistentDto()
         persistentDto.createdBy = "jactor"
         persistentDto.timeOfCreation = LocalDateTime.now()
-        persistentDto.id = 1L
+        persistentDto.id = UUID.randomUUID()
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 

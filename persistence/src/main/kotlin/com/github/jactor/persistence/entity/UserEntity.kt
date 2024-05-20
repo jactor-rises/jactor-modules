@@ -2,6 +2,7 @@ package com.github.jactor.persistence.entity
 
 import java.time.LocalDateTime
 import java.util.Objects
+import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.UserInternalDto
@@ -13,23 +14,18 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
-import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
 
 @Entity
 @Table(name = "T_USER")
 class UserEntity : PersistentEntity<UserEntity?> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
-    @SequenceGenerator(name = "userSeq", sequenceName = "T_USER_SEQ", allocationSize = 1)
-    override var id: Long? = null
+    override var id: UUID? = null
 
     @Embedded
     @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
@@ -102,9 +98,9 @@ class UserEntity : PersistentEntity<UserEntity?> {
         )
     }
 
-    fun fetchPerson(): PersonEntity? {
-        person!!.addUser(this)
-        return person
+    fun fetchPerson(): PersonEntity {
+        person?.addUser(this)
+        return person ?: error("No person provided to the user entity")
     }
 
     override fun copyWithoutId(): UserEntity {
@@ -174,12 +170,5 @@ class UserEntity : PersistentEntity<UserEntity?> {
 
     enum class UserType {
         ADMIN, ACTIVE, INACTIVE
-    }
-
-    companion object {
-        @JvmStatic
-        fun aUser(userInternalDto: UserInternalDto): UserEntity {
-            return UserEntity(userInternalDto)
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.controller
 
+import java.util.UUID
 import com.github.jactor.persistence.dto.BlogDto
 import com.github.jactor.persistence.dto.BlogEntryDto
 import com.github.jactor.persistence.service.BlogService
@@ -35,7 +36,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") blogId: Long): ResponseEntity<BlogDto> {
+    operator fun get(@PathVariable("id") blogId: UUID): ResponseEntity<BlogDto> {
         return blogService.find(blogId)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -52,7 +53,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @GetMapping("/entry/{id}")
-    fun getEntryById(@PathVariable("id") blogEntryId: Long): ResponseEntity<BlogEntryDto> {
+    fun getEntryById(@PathVariable("id") blogEntryId: UUID): ResponseEntity<BlogEntryDto> {
         return blogService.findEntryBy(blogEntryId)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -87,7 +88,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @GetMapping("/{id}/entries")
-    fun findEntriesByBlogId(@PathVariable("id") blogId: Long?): ResponseEntity<List<BlogEntryDto>> {
+    fun findEntriesByBlogId(@PathVariable("id") blogId: UUID): ResponseEntity<List<BlogEntryDto>> {
         val entriesForBlog = blogService.findEntriesForBlog(blogId)
 
         return ResponseEntity(entriesForBlog, if (entriesForBlog.isEmpty()) HttpStatus.NO_CONTENT else HttpStatus.OK)
@@ -105,7 +106,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @PutMapping("/{blogId}")
-    fun put(@RequestBody blogDto: BlogDto, @PathVariable blogId: Long): ResponseEntity<BlogDto> {
+    fun put(@RequestBody blogDto: BlogDto, @PathVariable blogId: UUID): ResponseEntity<BlogDto> {
         if (blogDto.id != blogId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
@@ -147,7 +148,7 @@ class BlogController(private val blogService: BlogService) {
     @PutMapping("/entry/{blogEntryId}")
     fun putEntry(
         @RequestBody blogEntryDto: BlogEntryDto,
-        @PathVariable blogEntryId: Long
+        @PathVariable blogEntryId: UUID
     ): ResponseEntity<BlogEntryDto> {
         if (blogEntryDto.id != blogEntryId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)

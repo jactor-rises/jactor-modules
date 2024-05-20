@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.entity
 
 import java.time.LocalDateTime
+import java.util.UUID
 import com.github.jactor.persistence.dto.PersistentDto
 import jakarta.persistence.Embeddable
 
@@ -32,7 +33,7 @@ class PersistentDataEmbeddable : PersistentData {
         timeOfModification = LocalDateTime.now()
     }
 
-    fun asPersistentDto(id: Long?): PersistentDto {
+    fun asPersistentDto(id: UUID?): PersistentDto {
         return PersistentDto(id, createdBy, timeOfCreation, modifiedBy, timeOfModification)
     }
 }

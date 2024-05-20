@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.controller
 
+import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -46,7 +47,7 @@ class UserController(private val userService: UserService) {
         ]
     )
     @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") id: Long): ResponseEntity<UserDto> {
+    operator fun get(@PathVariable("id") id: UUID): ResponseEntity<UserDto> {
         return userService.find(id)?.let { ResponseEntity(it.toUserDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
@@ -78,7 +79,7 @@ class UserController(private val userService: UserService) {
         ]
     )
     @PutMapping("/{userId}")
-    fun put(@RequestBody userDto: UserDto, @PathVariable userId: Long?): ResponseEntity<UserDto> {
+    fun put(@RequestBody userDto: UserDto, @PathVariable userId: UUID?): ResponseEntity<UserDto> {
         return userService.update(UserInternalDto(userDto.copy(userId)))?.let {
             ResponseEntity(it.toUserDto(), HttpStatus.ACCEPTED)
         } ?: ResponseEntity(HttpStatus.BAD_REQUEST)
