@@ -1,27 +1,23 @@
 package com.github.jactor.persistence.entity
 
+import java.time.LocalDateTime
+import java.util.Objects
+import java.util.UUID
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.AddressInternalDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
-import java.time.LocalDateTime
-import java.util.Objects
 
 @Entity
 @Table(name = "T_ADDRESS")
 class AddressEntity : PersistentEntity<AddressEntity?> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addressSeq")
-    @SequenceGenerator(name = "addressSeq", sequenceName = "T_ADDRESS_SEQ", allocationSize = 1)
-    override var id: Long? = null
+    override var id: UUID? = null
 
     @Embedded
     @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
@@ -131,10 +127,4 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
         get() = persistentDataEmbeddable.modifiedBy
     override val timeOfModification: LocalDateTime
         get() = persistentDataEmbeddable.timeOfModification
-
-    companion object {
-        fun anAddress(addressInternalDto: AddressInternalDto): AddressEntity {
-            return AddressEntity(addressInternalDto)
-        }
-    }
 }

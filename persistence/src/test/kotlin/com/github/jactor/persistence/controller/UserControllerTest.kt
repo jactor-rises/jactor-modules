@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.controller
 
 import java.util.Optional
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -84,9 +85,10 @@ internal class UserControllerTest {
 
     @Test
     fun `should not get a user by id`() {
-        every { userRepositoryMock.findById(1L) } returns Optional.empty()
+        val uuid = UUID.randomUUID()
+        every { userRepositoryMock.findById(uuid) } returns Optional.empty()
 
-        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserInternalDto::class.java)
+        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
 
         assertAll {
             assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
@@ -96,9 +98,10 @@ internal class UserControllerTest {
 
     @Test
     fun `should find a user by id`() {
-        every { userRepositoryMock.findById(1L) } returns Optional.of(UserEntity(UserInternalDto()))
+        val uuid = UUID.randomUUID()
+        every { userRepositoryMock.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
 
-        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/1"), UserInternalDto::class.java)
+        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
 
         assertAll {
             assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.OK)
@@ -108,19 +111,21 @@ internal class UserControllerTest {
 
     @Test
     fun `should modify existing user`() {
+        val uuid = UUID.randomUUID()
         val userInternalDto = UserInternalDto()
-        userInternalDto.id = 1L
+        userInternalDto.id = uuid
 
-        every { userRepositoryMock.findById(1L) } returns Optional.of(UserEntity(userInternalDto))
+        every { userRepositoryMock.findById(uuid) } returns Optional.of(UserEntity(userInternalDto))
 
         val userRespnse = testRestTemplate.exchange(
-            buildFullPath("/user/1"), HttpMethod.PUT, HttpEntity(userInternalDto.toUserDto()), UserDto::class.java
+            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(userInternalDto.toUserDto()),
+            UserDto::class.java
         )
 
         assertAll {
             assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
             assertThat(userRespnse.body).isNotNull()
-            assertThat(userRespnse.body?.id).isEqualTo(1L)
+            assertThat(userRespnse.body?.id).isEqualTo(uuid)
         }
     }
 
@@ -144,10 +149,11 @@ internal class UserControllerTest {
 
     @Test
     fun `should accept if user id is valid`() {
-        every { userRepositoryMock.findById(101L) } returns Optional.of(UserEntity(UserInternalDto()))
+        val uuid = UUID.randomUUID()
+        every { userRepositoryMock.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
 
         val userResponse = testRestTemplate.exchange(
-            buildFullPath("/user/101"), HttpMethod.PUT, HttpEntity(UserDto()),
+            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(UserDto()),
             UserDto::class.java
         )
 
@@ -159,7 +165,7 @@ internal class UserControllerTest {
         every { userRepositoryMock.findById(any()) } returns Optional.empty()
 
         val userResponse = testRestTemplate.exchange(
-            buildFullPath("/user/101"), HttpMethod.PUT, HttpEntity(UserDto()),
+            buildFullPath("/user/${UUID.randomUUID()}"), HttpMethod.PUT, HttpEntity(UserDto()),
             UserDto::class.java
         )
 

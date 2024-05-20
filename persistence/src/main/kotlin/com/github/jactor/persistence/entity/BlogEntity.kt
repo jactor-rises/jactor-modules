@@ -3,6 +3,7 @@ package com.github.jactor.persistence.entity
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Objects
+import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.dto.BlogDto
@@ -12,22 +13,17 @@ import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
-import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
 
 @Entity
 @Table(name = "T_BLOG")
 class BlogEntity : PersistentEntity<BlogEntity?> {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blogSeq")
-    @SequenceGenerator(name = "blogSeq", sequenceName = "T_BLOG_SEQ", allocationSize = 1)
-    override var id: Long? = null
+    override var id: UUID? = null
 
     @Embedded
     @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
@@ -125,12 +121,5 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
 
     fun getEntries(): Set<BlogEntryEntity> {
         return entries
-    }
-
-    companion object {
-        @JvmStatic
-        fun aBlog(blogDto: BlogDto): BlogEntity {
-            return BlogEntity(blogDto)
-        }
     }
 }

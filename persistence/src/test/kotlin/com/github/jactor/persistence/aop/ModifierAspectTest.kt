@@ -12,13 +12,11 @@ import com.github.jactor.persistence.dto.GuestBookEntryDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.persistence.entity.AddressEntity.Companion.anAddress
-import com.github.jactor.persistence.entity.BlogEntity.Companion.aBlog
-import com.github.jactor.persistence.entity.BlogEntryEntity.Companion.aBlogEntry
-import com.github.jactor.persistence.entity.GuestBookEntity.Companion.aGuestBook
-import com.github.jactor.persistence.entity.GuestBookEntryEntity.Companion.aGuestBookEntry
-import com.github.jactor.persistence.entity.PersonEntity.Companion.aPerson
-import com.github.jactor.persistence.entity.UserEntity.Companion.aUser
+import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.entity.BlogBuilder
+import com.github.jactor.persistence.entity.GuestBookBuilder
+import com.github.jactor.persistence.entity.PersonBuilder
+import com.github.jactor.persistence.entity.UserBuilder
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isStrictlyBetween
@@ -38,9 +36,12 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on address when used`() {
-        val addressWithoutId = anAddress(AddressInternalDto(persistentDto, AddressInternalDto()))
-        val address = anAddress(AddressInternalDto(persistentDto, AddressInternalDto()))
-        address.id = 1L
+        val addressWithoutId = AddressBuilder.unchanged(
+            addressInternalDto = AddressInternalDto(persistentDto, AddressInternalDto())
+        ).build()
+
+        val address = AddressBuilder.new(addressInternalDto = AddressInternalDto(persistentDto, AddressInternalDto()))
+            .build()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
 
@@ -50,14 +51,14 @@ internal class ModifierAspectTest {
             LocalDateTime.now().minusSeconds(1),
             LocalDateTime.now()
         )
+
         assertThat(addressWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = aBlog(BlogDto(persistentDto, BlogDto()))
-        val blog = aBlog(BlogDto(persistentDto, BlogDto()))
-        blog.id = 1L
+        val blogWithouId = BlogBuilder.unchanged(BlogDto(persistentDto, BlogDto())).buildBlogEntity()
+        val blog = BlogBuilder.new(BlogDto(persistentDto, BlogDto())).buildBlogEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 
@@ -69,10 +70,13 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blogEntry when used`() {
-        val blogEntryWithoutId =
-            aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit")))
-        val blogEntry = aBlogEntry(BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit")))
-        blogEntry.id = 1L
+        val blogEntryWithoutId = BlogBuilder.new().withUnchangedEntry(
+            blogEntryDto = BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit"))
+        ).buildBlogEntryEntity()
+
+        val blogEntry = BlogBuilder.new().withEntry(
+            BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit"))
+        ).buildBlogEntryEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blogEntry, blogEntryWithoutId)
 
@@ -82,14 +86,18 @@ internal class ModifierAspectTest {
             LocalDateTime.now().minusSeconds(1),
             LocalDateTime.now()
         )
+
         assertThat(blogEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
     fun `should modify timestamp on guestBook when used`() {
-        val guestBookWithoutId = aGuestBook(GuestBookDto(persistentDto, GuestBookDto()))
-        val guestBook = aGuestBook(GuestBookDto(persistentDto, GuestBookDto()))
-        guestBook.id = 1L
+        val guestBookWithoutId = GuestBookBuilder.unchanged(
+            guestBookDto = GuestBookDto(persistentDto, GuestBookDto())
+        ).buildGuestBookEntity()
+
+        val guestBook = GuestBookBuilder.new(guestBookDto = GuestBookDto(persistentDto, GuestBookDto()))
+            .buildGuestBookEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBook, guestBookWithoutId)
 
@@ -99,16 +107,23 @@ internal class ModifierAspectTest {
             LocalDateTime.now().minusSeconds(1),
             LocalDateTime.now()
         )
+
         assertThat(guestBookWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
     fun `should modify timestamp on guestBookEntry when used`() {
-        val guestBookEntryWithoutId =
-            aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")))
-        val guestBookEntry =
-            aGuestBookEntry(GuestBookEntryDto(persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")))
-        guestBookEntry.id = 1L
+        val guestBookEntryWithoutId = GuestBookBuilder.new().withEntryContainingPersistentId(
+            guestBookEntryDto = GuestBookEntryDto(
+                persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")
+            )
+        ).buildGuestBookEntryEntity()
+
+        val guestBookEntry = GuestBookBuilder.new().withEntry(
+            guestBookEntryDto = GuestBookEntryDto(
+                persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")
+            )
+        ).buildGuestBookEntryEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId)
 
@@ -118,14 +133,15 @@ internal class ModifierAspectTest {
             LocalDateTime.now().minusSeconds(1),
             LocalDateTime.now()
         )
+
         assertThat(guestBookEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
     fun `should modify timestamp on person when used`() {
-        val personWithoutId = aPerson(PersonInternalDto(persistentDto, PersonInternalDto()))
-        val person = aPerson(PersonInternalDto(persistentDto, PersonInternalDto()))
-        person.id = 1L
+        val person = PersonBuilder.new(PersonInternalDto(persistentDto, PersonInternalDto())).build()
+        val personWithoutId = PersonBuilder.unchanged(PersonInternalDto(persistentDto, PersonInternalDto()))
+            .build()
 
         every { joinPointMock.args } returns arrayOf<Any>(person, personWithoutId)
 
@@ -135,14 +151,15 @@ internal class ModifierAspectTest {
             LocalDateTime.now().minusSeconds(1),
             LocalDateTime.now()
         )
+
         assertThat(personWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
     fun `should modify timestamp on user when used`() {
-        val userWithoutId = aUser(UserInternalDto(persistentDto, UserInternalDto()))
-        val user = aUser(UserInternalDto(persistentDto, UserInternalDto()))
-        user.id = 1L
+        val user = UserBuilder.new(UserInternalDto(persistentDto, UserInternalDto())).build()
+        val userWithoutId = UserBuilder.unchanged(UserInternalDto(persistentDto, UserInternalDto()))
+            .build()
 
         every { joinPointMock.args } returns arrayOf<Any>(user, userWithoutId)
 

@@ -11,11 +11,9 @@ import org.springframework.stereotype.Component
 class ModifierAspect {
     @Before("execution(* com.github.jactor.persistence.repository.*Repository.save(..))")
     fun modifyPersistentEntity(joinPoint: JoinPoint): Any? {
-        joinPoint.args
+        return joinPoint.args
             .filterIsInstance<PersistentEntity<*>>()
             .filter { persistentEntity: PersistentEntity<*> -> persistentEntity.id != null }
             .forEach { persistentEntity -> persistentEntity.modifiedBy("todo") }
-
-        return null
     }
 }
