@@ -1,64 +1,30 @@
 package com.github.jactor.web.controller
 
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
 import com.github.jactor.shared.dto.UserDto
-import com.github.jactor.web.consumer.UserConsumer
-import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
-import com.ninjasquad.springmockk.MockkBean
+import com.github.jactor.web.test.AbstractSpringMockMvcTest
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.verify
 
-@SpringBootTest
-internal class UserControllerTest {
+internal class UserControllerTest : AbstractSpringMockMvcTest() {
+    override val initMockMvc: (InternalResourceViewResolver) -> MockMvc = {
+        MockMvcBuilders.standaloneSetup(UserController(userConsumerMock, menuFacade, contextPath))
+            .setViewResolvers(it).build()
+    }
 
     companion object {
         private const val REQUEST_USER = "choose"
         private const val USER_ENDPOINT = "/user"
         private const val USER_JACTOR = "jactor"
-    }
-
-    private lateinit var mockMvc: MockMvc
-
-    @MockkBean
-    @Qualifier("userConsumer")
-    private lateinit var userConsumerMock: UserConsumer
-
-    @Autowired
-    private lateinit var menuFacade: MenuFacade
-
-    @Value("\${server.servlet.context-path}")
-    private lateinit var contextPath: String
-
-    @Value("\${spring.mvc.view.prefix}")
-    private lateinit var prefix: String
-
-    @Value("\${spring.mvc.view.suffix}")
-    private lateinit var suffix: String
-
-    @BeforeEach
-    fun `mock mvc with view resolver`() {
-        val internalResourceViewResolver = InternalResourceViewResolver()
-
-        internalResourceViewResolver.setPrefix(prefix)
-        internalResourceViewResolver.setSuffix(suffix)
-
-        mockMvc = MockMvcBuilders.standaloneSetup(UserController(userConsumerMock, menuFacade, contextPath))
-            .setViewResolvers(internalResourceViewResolver)
-            .build()
     }
 
     @Test

@@ -2,15 +2,14 @@ package com.github.jactor.web
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import com.github.jactor.web.controller.AboutController
 import com.github.jactor.web.controller.HomeController
 import com.github.jactor.web.controller.UserController
+import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import assertk.assertThat
 import assertk.assertions.isNotNull
 
-@SpringBootTest(classes = [JactorWeb::class])
-internal class JactorWebTest {
+internal class JactorWebTest: AbstractNoDirtySpringContextTest() {
 
     @Autowired
     private val homeController: HomeController? = null
