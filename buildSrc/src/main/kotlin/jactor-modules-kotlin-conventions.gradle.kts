@@ -33,11 +33,9 @@ dependencies {
     testImplementation("io.cucumber:cucumber-spring:7.17.0")
 }
 
-tasks {
-    compileKotlin {
-        kotlinOptions {
-            allWarningsAsErrors = true
-        }
+tasks.compileKotlin {
+    compilerOptions {
+        allWarningsAsErrors = true
     }
 }
 
