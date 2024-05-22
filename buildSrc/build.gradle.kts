@@ -18,5 +18,5 @@ tasks.compileKotlin {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.23")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
 }
