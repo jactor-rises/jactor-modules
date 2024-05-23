@@ -19,7 +19,7 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isStrictlyBetween
 
-internal class BlogEntryRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
+internal class BlogEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should save then read blog entry`() {
         val addressDto = AddressInternalDto(
@@ -47,9 +47,7 @@ internal class BlogEntryRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             blogEntryDto = BlogEntryDto(blog = blogDto, creatorName = "smith", entry = "once upon a time")
         )
 
-        blogEntryRepository.save(blogData.buildBlogEntryEntity())
-        entityManager.flush()
-        entityManager.clear()
+        flush { blogEntryRepository.save(blogData.buildBlogEntryEntity()) }
 
         val blogEntries = blogEntryRepository.findAll().toList()
 
@@ -91,9 +89,7 @@ internal class BlogEntryRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             .withEntry(BlogEntryDto(creatorName = "smith", entry = "once upon a time"))
             .buildBlogEntryEntity()
 
-        blogEntryRepository.save(blogEntryToSave)
-        entityManager.flush()
-        entityManager.clear()
+        flush { blogEntryRepository.save(blogEntryToSave) }
 
         val blogEntries = blogEntryRepository.findAll().toList()
 
@@ -102,9 +98,7 @@ internal class BlogEntryRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
         val blogEntry = blogEntries.iterator().next()
         blogEntry.modify("happily ever after", "luke")
 
-        blogEntryRepository.save(blogEntry)
-        entityManager.flush()
-        entityManager.clear()
+        flush { blogEntryRepository.save(blogEntry) }
 
         val modifiedEntries = blogEntryRepository.findAll().toList()
 
