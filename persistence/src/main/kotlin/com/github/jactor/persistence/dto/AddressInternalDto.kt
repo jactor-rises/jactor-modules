@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.dto
 
-import com.github.jactor.shared.dto.AddressDto
+import com.github.jactor.shared.api.AddressDto
 
 data class AddressInternalDto(
     override val persistentDto: PersistentDto = PersistentDto(),

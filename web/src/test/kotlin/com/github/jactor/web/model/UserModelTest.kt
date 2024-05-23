@@ -1,9 +1,9 @@
 package com.github.jactor.web.model
 
 import org.junit.jupiter.api.Test
-import com.github.jactor.shared.dto.AddressDto
-import com.github.jactor.shared.dto.PersonDto
-import com.github.jactor.shared.dto.UserDto
+import com.github.jactor.shared.api.AddressDto
+import com.github.jactor.shared.api.PersonDto
+import com.github.jactor.shared.api.UserDto
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsExactly

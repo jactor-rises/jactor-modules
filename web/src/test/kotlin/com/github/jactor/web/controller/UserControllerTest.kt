@@ -6,7 +6,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
-import com.github.jactor.shared.dto.UserDto
+import com.github.jactor.shared.api.UserDto
 import com.github.jactor.web.menu.MenuItem
 import com.github.jactor.web.test.AbstractSpringMockMvcTest
 import assertk.assertThat
@@ -17,7 +17,7 @@ import io.mockk.verify
 
 internal class UserControllerTest : AbstractSpringMockMvcTest() {
     override val initMockMvc: (InternalResourceViewResolver) -> MockMvc = {
-        MockMvcBuilders.standaloneSetup(UserController(userConsumerMock, menuFacade, contextPath))
+        MockMvcBuilders.standaloneSetup(UserController(userClientMock, menuFacade, contextPath))
             .setViewResolvers(it).build()
     }
 
@@ -29,14 +29,14 @@ internal class UserControllerTest : AbstractSpringMockMvcTest() {
 
     @Test
     fun `should not fetch user by username if the username is missing from the request`() {
-        every { userConsumerMock.findAllUsernames() } returns emptyList()
+        every { userClientMock.findAllUsernames() } returns emptyList()
         mockMvc.perform(MockMvcRequestBuilders.get(USER_ENDPOINT)).andExpect(MockMvcResultMatchers.status().isOk)
-        verify(exactly = 0) { userConsumerMock.find(any()) }
+        verify(exactly = 0) { userClientMock.find(any()) }
     }
 
     @Test
     fun `should not fetch user by username when the username is requested, but is only whitespace`() {
-        every { userConsumerMock.findAllUsernames() } returns emptyList()
+        every { userClientMock.findAllUsernames() } returns emptyList()
 
         mockMvc.perform(
             MockMvcRequestBuilders.get(USER_ENDPOINT).requestAttr(REQUEST_USER, " \n \t")
@@ -44,13 +44,13 @@ internal class UserControllerTest : AbstractSpringMockMvcTest() {
             MockMvcResultMatchers.status().isOk
         )
 
-        verify(exactly = 0) { userConsumerMock.find(any()) }
+        verify(exactly = 0) { userClientMock.find(any()) }
     }
 
     @Test
     fun `should fetch user by username when the username is requested`() {
-        every { userConsumerMock.find(USER_JACTOR) } returns UserDto()
-        every { userConsumerMock.findAllUsernames() } returns emptyList()
+        every { userClientMock.find(USER_JACTOR) } returns UserDto()
+        every { userClientMock.findAllUsernames() } returns emptyList()
 
         val modelAndView = mockMvc.perform(MockMvcRequestBuilders.get(USER_ENDPOINT).param(REQUEST_USER, USER_JACTOR))
             .andExpect(MockMvcResultMatchers.status().isOk).andReturn().modelAndView
@@ -62,8 +62,8 @@ internal class UserControllerTest : AbstractSpringMockMvcTest() {
 
     @Test
     fun `should fetch user by username, but not find user`() {
-        every { userConsumerMock.find(any()) } returns null
-        every { userConsumerMock.findAllUsernames() } returns emptyList()
+        every { userClientMock.find(any()) } returns null
+        every { userClientMock.findAllUsernames() } returns emptyList()
 
         val modelAndView = mockMvc.perform(
             MockMvcRequestBuilders.get(USER_ENDPOINT).param(REQUEST_USER, "someone")
@@ -75,7 +75,7 @@ internal class UserControllerTest : AbstractSpringMockMvcTest() {
 
     @Test
     fun `should add context path to target of the user names`() {
-        every { userConsumerMock.findAllUsernames() } returns listOf("jactor")
+        every { userClientMock.findAllUsernames() } returns listOf("jactor")
 
         val modelAndView = mockMvc.perform(MockMvcRequestBuilders.get(USER_ENDPOINT))
             .andExpect(MockMvcResultMatchers.status().isOk).andReturn().modelAndView

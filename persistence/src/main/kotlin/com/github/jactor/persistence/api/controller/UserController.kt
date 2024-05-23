@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.controller
+package com.github.jactor.persistence.api.controller
 
 import java.util.UUID
 import org.springframework.http.HttpStatus
@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.command.CreateUserCommand
-import com.github.jactor.persistence.command.CreateUserCommandResponse
+import com.github.jactor.persistence.api.command.CreateUserCommand
+import com.github.jactor.persistence.api.command.CreateUserCommandResponse
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.service.UserService
-import com.github.jactor.shared.dto.CreateUserCommandDto
-import com.github.jactor.shared.dto.UserDto
+import com.github.jactor.shared.api.CreateUserCommandDto
+import com.github.jactor.shared.api.UserDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 
 @RestController
-@RequestMapping(path = [UserController.USER], produces = [MediaType.APPLICATION_JSON_VALUE])
+@RequestMapping(path = ["/user"], produces = [MediaType.APPLICATION_JSON_VALUE])
 class UserController(private val userService: UserService) {
     @Operation(description = "Find a user by its username")
     @ApiResponses(
@@ -95,9 +95,5 @@ class UserController(private val userService: UserService) {
         ) userType: String
     ): ResponseEntity<List<String>> {
         return ResponseEntity(userService.findUsernames(UserEntity.UserType.valueOf(userType)), HttpStatus.OK)
-    }
-
-    companion object {
-        const val USER = "/user"
     }
 }

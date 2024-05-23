@@ -1,4 +1,4 @@
-package com.github.jactor.web.consumer
+package com.github.jactor.web.client
 
 import java.net.URI
 import org.junit.jupiter.api.Assumptions.assumeTrue
@@ -15,11 +15,10 @@ import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class UserConsumerIntegrationTest : AbstractNoDirtySpringContextTest() {
+internal class UserClientIntegrationTest : AbstractNoDirtySpringContextTest() {
 
     @Autowired
-    @Qualifier("userConsumer")
-    private lateinit var userConsumerToTest: UserConsumer
+    private lateinit var userClientToTest: UserClient
 
     @Value("\${jactor-persistence.url.root}")
     private lateinit var baseUrl: String
@@ -44,13 +43,13 @@ internal class UserConsumerIntegrationTest : AbstractNoDirtySpringContextTest() 
 
     @Test
     fun `should find the default persisted user`() {
-        val usernames = userConsumerToTest.findAllUsernames()
+        val usernames = userClientToTest.findAllUsernames()
         assertThat(usernames).contains("tip")
     }
 
     @Test
     fun `should find the user named jactor`() {
-        val possibleUser = userConsumerToTest.find("jactor")
+        val possibleUser = userClientToTest.find("jactor")
 
         assertThat(possibleUser).isNotNull()
         val user = possibleUser!!
