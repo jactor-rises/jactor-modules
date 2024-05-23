@@ -2,8 +2,8 @@ package com.github.jactor.persistence
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.shared.dto.UserDto
-import com.github.jactor.shared.dto.UserType
+import com.github.jactor.shared.api.UserDto
+import com.github.jactor.shared.api.UserType
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains

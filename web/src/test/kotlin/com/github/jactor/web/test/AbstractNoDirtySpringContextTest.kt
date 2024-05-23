@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.context.annotation.PropertySource
 import org.springframework.web.client.RestTemplate
+import com.github.jactor.web.JactorWebBeans
 import com.ninjasquad.springmockk.MockkBean
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -15,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 internal abstract class AbstractNoDirtySpringContextTest {
     @Autowired
-    protected lateinit var restTemplate: RestTemplate
+    protected lateinit var jactorWebUriTemplateHandler: JactorWebBeans.JactorWebUriTemplateHandler
 
     @Autowired
     protected lateinit var testRestTemplate: TestRestTemplate
@@ -28,4 +29,8 @@ internal abstract class AbstractNoDirtySpringContextTest {
 
     @Value("\${server.servlet.context-path}")
     protected lateinit var contextPath: String
+
+    protected val restTemplate: RestTemplate by lazy {
+        RestTemplate().apply { uriTemplateHandler = jactorWebUriTemplateHandler.uriTemplateHandler }
+    }
 }

@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.controller
+package com.github.jactor.persistence.api.controller
 
 import java.util.Optional
 import java.util.UUID
@@ -10,11 +10,11 @@ import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.shared.dto.AddressDto
-import com.github.jactor.shared.dto.CreateUserCommandDto
-import com.github.jactor.shared.dto.PersonDto
-import com.github.jactor.shared.dto.UserDto
-import com.github.jactor.shared.dto.UserType
+import com.github.jactor.shared.api.AddressDto
+import com.github.jactor.shared.api.CreateUserCommandDto
+import com.github.jactor.shared.api.PersonDto
+import com.github.jactor.shared.api.UserDto
+import com.github.jactor.shared.api.UserType
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo

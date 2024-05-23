@@ -1,11 +1,11 @@
-package com.github.jactor.persistence.command
+package com.github.jactor.persistence.api.command
 
 import java.util.UUID
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
 import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.shared.dto.CreateUserCommandDto
+import com.github.jactor.shared.api.CreateUserCommandDto
 
 @JvmRecord
 data class CreateUserCommand(

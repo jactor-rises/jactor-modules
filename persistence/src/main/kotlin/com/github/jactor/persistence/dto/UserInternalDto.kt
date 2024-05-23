@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.dto
 
-import com.github.jactor.shared.dto.UserDto
-import com.github.jactor.shared.dto.UserType
+import com.github.jactor.shared.api.UserDto
+import com.github.jactor.shared.api.UserType
 
 data class UserInternalDto(
     override val persistentDto: PersistentDto = PersistentDto(),

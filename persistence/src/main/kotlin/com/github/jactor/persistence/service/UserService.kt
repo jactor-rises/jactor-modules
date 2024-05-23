@@ -3,7 +3,7 @@ package com.github.jactor.persistence.service
 import java.util.UUID
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import com.github.jactor.persistence.command.CreateUserCommand
+import com.github.jactor.persistence.api.command.CreateUserCommand
 import com.github.jactor.persistence.dto.UserInternalDto
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.repository.UserRepository
