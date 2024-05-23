@@ -19,7 +19,7 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class GuestBookEntryRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
+internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should save then read guest book entry entity`() {
         val addressDto = AddressBuilder.new(
@@ -59,9 +59,7 @@ internal class GuestBookEntryRepositoryTest: AbstractSpringBootNoDirtyContextTes
             )
         )
 
-        guestBookEntryRepository.save(guestBookData.buildGuestBookEntryEntity())
-        entityManager.flush()
-        entityManager.clear()
+        flush { guestBookEntryRepository.save(guestBookData.buildGuestBookEntryEntity()) }
 
         val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
@@ -102,27 +100,24 @@ internal class GuestBookEntryRepositoryTest: AbstractSpringBootNoDirtyContextTes
         )
 
         val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
-        guestBookEntryRepository.save(
-            guestBookData.withEntry(
-                GuestBookEntryDto(
-                    guestBook = savedGuestBook.asDto(),
-                    creatorName = "Harry",
-                    entry = "Draco Dormiens Nunquam Tittilandus"
-                )
-            ).buildGuestBookEntryEntity()
-        )
 
-        entityManager.flush()
-        entityManager.clear()
+        flush {
+            guestBookEntryRepository.save(
+                guestBookData.withEntry(
+                    GuestBookEntryDto(
+                        guestBook = savedGuestBook.asDto(),
+                        creatorName = "Harry",
+                        entry = "Draco Dormiens Nunquam Tittilandus"
+                    )
+                ).buildGuestBookEntryEntity()
+            )
+        }
 
         val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
         entriesByGuestBook.iterator().next().modify("Willie", "On the road again")
 
-        guestBookEntryRepository.save<GuestBookEntryEntity>(entriesByGuestBook.iterator().next())
-
-        entityManager.flush()
-        entityManager.clear()
+        flush { guestBookEntryRepository.save<GuestBookEntryEntity>(entriesByGuestBook.iterator().next()) }
 
         val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(modifiedEntriesByGuestBook).hasSize(1)
@@ -200,9 +195,7 @@ internal class GuestBookEntryRepositoryTest: AbstractSpringBootNoDirtyContextTes
             )
         ).buildGuestBookEntryEntity()
 
-        guestBookEntryRepository.save(anotherEntry)
-        entityManager.flush()
-        entityManager.clear()
+        flush { guestBookEntryRepository.save(anotherEntry) }
 
         val lastEntry = guestBookRepository.findAll().toList()
             .flatMap { it.getEntries() }

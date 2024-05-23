@@ -38,4 +38,4 @@ jobs:
             ./gradlew -q :web:dependencies
             exit 1;
           fi
-      - run: ./gradlew :web:test --tests "*"
+      - run: ./gradlew :web:test --tests "*" --stacktrace

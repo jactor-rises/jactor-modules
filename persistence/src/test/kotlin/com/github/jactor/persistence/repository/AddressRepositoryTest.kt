@@ -15,33 +15,31 @@ import assertk.assertions.isPresent
 internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should fetch address entities`() {
-        addressRepository.save(
-            AddressBuilder
-                .new(
-                    addressInternalDto = AddressInternalDto(
-                        zipCode = "1234",
-                        addressLine1 = "somewhere out there",
-                        city = "Rud"
+        flush {
+            addressRepository.save(
+                AddressBuilder
+                    .new(
+                        addressInternalDto = AddressInternalDto(
+                            zipCode = "1234",
+                            addressLine1 = "somewhere out there",
+                            city = "Rud"
+                        )
                     )
-                )
-                .build()
-        )
+                    .build()
+            )
 
-        addressRepository.save(
-            AddressBuilder
-                .new(
-                    addressInternalDto = AddressInternalDto(
-                        zipCode = "1234",
-                        addressLine1 = "somewhere in there",
-                        city = "Rud"
+            addressRepository.save(
+                AddressBuilder
+                    .new(
+                        addressInternalDto = AddressInternalDto(
+                            zipCode = "1234",
+                            addressLine1 = "somewhere in there",
+                            city = "Rud"
+                        )
                     )
-                )
-                .build()
-        )
-
-        entityManager.flush()
-        entityManager.clear()
-
+                    .build()
+            )
+        }
         val addressEntities = addressRepository.findByZipCode(zipCode = "1234")
 
         assertAll {
@@ -66,9 +64,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
                 )
             ).build()
 
-        addressRepository.save(addressEntityToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { addressRepository.save(addressEntityToPersist) }
 
         val possibleAddressEntityById = addressRepository.findById(addressEntityToPersist.id!!)
 
@@ -99,9 +95,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
             )
             .build()
 
-        addressRepository.save(addressEntityToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { addressRepository.save(addressEntityToPersist) }
 
         val addressEntitySaved =
             addressRepository.findById(addressEntityToPersist.id!!).orElseThrow { addressNotFound() }!!
@@ -112,9 +106,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
         addressEntitySaved.city = "Cloud city"
         addressEntitySaved.country = "XX"
 
-        addressRepository.save(addressEntitySaved)
-        entityManager.flush()
-        entityManager.clear()
+        flush { addressRepository.save(addressEntitySaved) }
 
         val possibleAddressEntityById = addressRepository.findById(addressEntityToPersist.id!!)
 

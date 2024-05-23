@@ -2,6 +2,7 @@ package com.github.jactor.persistence.repository
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.GuestBookDto
@@ -12,12 +13,13 @@ import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.GuestBookBuilder
 import com.github.jactor.persistence.entity.PersonBuilder
 import com.github.jactor.persistence.entity.UserBuilder
+import com.github.jactor.persistence.entity.UserEntity
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class GuestBookRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
+internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should write then read guest book`() {
         val addressDto = AddressBuilder
@@ -55,8 +57,7 @@ internal class GuestBookRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             ).buildGuestBookEntity()
         )
 
-        entityManager.flush()
-        entityManager.clear()
+        flush {  }
 
         val guestBookEntity = guestBookRepository.findByUser(userEntity)
 
@@ -96,17 +97,13 @@ internal class GuestBookRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             ).buildGuestBookEntity()
         )
 
-        guestBookRepository.save(userEntity.guestBook!!)
-        entityManager.flush()
-        entityManager.clear()
+        flush { guestBookRepository.save(userEntity.guestBook ?: fail(message = "User missing guest book")) }
 
         val guestBookEntityToUpdate = guestBookRepository.findByUser(userEntity)
 
         guestBookEntityToUpdate!!.title = "5000 thousands miles away from home"
 
-        guestBookRepository.save(guestBookEntityToUpdate)
-        entityManager.flush()
-        entityManager.clear()
+        flush { guestBookRepository.save(guestBookEntityToUpdate) }
 
         val guestBookEntity = guestBookRepository.findByUser(userEntity)
 

@@ -16,7 +16,7 @@ import assertk.assertThat
 import assertk.assertions.containsAtLeast
 import assertk.assertions.isEqualTo
 
-internal class UserRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
+internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find user with username jactor`() {
         val userByName = userRepository.findByUsername("jactor")
@@ -48,9 +48,7 @@ internal class UserRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             )
         ).build()
 
-        userRepository.save(userToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { userRepository.save(userToPersist) }
 
         val userById = userRepository.findByUsername("smuggler")
         val userEntity = userById.orElseThrow { userNotFound() }
@@ -83,17 +81,13 @@ internal class UserRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             )
         ).build()
 
-        userRepository.save(userToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { userRepository.save(userToPersist) }
 
         val lukewarm = "lukewarm"
         userToPersist.username = lukewarm
         userToPersist.emailAddress = "luke@force.com"
 
-        userRepository.save(userToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { userRepository.save(userToPersist) }
 
         val userByName = userRepository.findByUsername(lukewarm)
         val userEntity = userByName.orElseThrow { userNotFound() }
@@ -128,19 +122,19 @@ internal class UserRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             UserInternalDto(PersistentDto(), spidyPersonInternalDto, null, "spiderman")
         ).build()
 
-        userRepository.save(userEntity)
-        userRepository.save(
-            UserBuilder.new(
-                userDto = UserInternalDto(
-                    person = superPersonInternalDto,
-                    emailAddress = null,
-                    username = "superman",
-                    usertype = Usertype.INACTIVE
-                )
-            ).build()
-        )
-        entityManager.flush()
-        entityManager.clear()
+        flush {
+            userRepository.save(userEntity)
+            userRepository.save(
+                UserBuilder.new(
+                    userDto = UserInternalDto(
+                        person = superPersonInternalDto,
+                        emailAddress = null,
+                        username = "superman",
+                        usertype = Usertype.INACTIVE
+                    )
+                ).build()
+            )
+        }
 
         val usernames = userRepository.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE, UserEntity.UserType.ADMIN))
             .map(UserEntity::username)
