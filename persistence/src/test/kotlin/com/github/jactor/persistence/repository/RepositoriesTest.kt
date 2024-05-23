@@ -38,25 +38,22 @@ internal class RepositoriesTest : AbstractSpringBootNoDirtyContextTest() {
             )
         ).build()
 
-        userRepository.save(userToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { userRepository.save(userToPersist) }
 
         var userByUsername = userRepository.findByUsername("r2d2")
             .orElseThrow { AssertionError("User not found!") }
 
-        blogRepository.save(
-            BlogBuilder.new(
-                blogDto = BlogDto(
-                    created = LocalDate.now(),
-                    title = "Far, far, away...",
-                    userInternal = userByUsername.asDto()
-                )
-            ).buildBlogEntity()
-        )
-
-        entityManager.flush()
-        entityManager.clear()
+        flush {
+            blogRepository.save(
+                BlogBuilder.new(
+                    blogDto = BlogDto(
+                        created = LocalDate.now(),
+                        title = "Far, far, away...",
+                        userInternal = userByUsername.asDto()
+                    )
+                ).buildBlogEntity()
+            )
+        }
 
         userByUsername = userRepository.findByUsername("r2d2")
             .orElseThrow { AssertionError("User not found!") }
