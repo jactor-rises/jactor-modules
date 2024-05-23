@@ -48,8 +48,6 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
-        entityManager.flush()
-        entityManager.clear()
 
         val blogs = blogRepository.findAll().toList()
         assertThat(blogs).hasSize(1)
@@ -89,8 +87,6 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
-        entityManager.flush()
-        entityManager.clear()
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)
@@ -99,8 +95,6 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         blogEntitySaved.title = "Duh"
 
         blogRepository.save(blogEntitySaved)
-        entityManager.flush()
-        entityManager.clear()
 
         val modifiedBlogs = blogRepository.findBlogsByTitle("Duh")
         assertThat(modifiedBlogs).hasSize(1)
@@ -139,8 +133,6 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
-        entityManager.flush()
-        entityManager.clear()
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
 
@@ -194,8 +186,6 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
 
         blogEntityToSave.add(blogEntryToSave)
         blogRepository.save(blogEntityToSave)
-        entityManager.flush()
-        entityManager.clear()
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)

@@ -48,9 +48,7 @@ internal class PersonRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             )
         ).build()
 
-        personRepository.save(personToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { personRepository.save(personToPersist) }
 
         val people = personRepository.findAll().toList()
         assertThat(people).hasSize(allreadyPresentPeople + 1)
@@ -82,9 +80,7 @@ internal class PersonRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
             )
         ).build()
 
-        personRepository.save(personToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { personRepository.save(personToPersist) }
 
         val mine = personRepository.findBySurname("Mine")
         val person = mine.iterator().next()
@@ -94,9 +90,7 @@ internal class PersonRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
         person.firstName = "Dr. A."
         person.surname = "Cula"
 
-        personRepository.save(person)
-        entityManager.flush()
-        entityManager.clear()
+        flush { personRepository.save(person) }
 
         val foundCula = personRepository.findBySurname("Cula")
         val personEntity = foundCula.iterator().next()
@@ -131,9 +125,7 @@ internal class PersonRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
         val userEntity = UserBuilder.new(userDto = userInternalDto).build()
         val personToPersist = userEntity.fetchPerson()
 
-        personRepository.save<PersonEntity>(personToPersist)
-        entityManager.flush()
-        entityManager.clear()
+        flush { personRepository.save<PersonEntity>(personToPersist) }
 
         assertThat(personRepository.findAll().toList()).hasSize(alreadyPresentPeople + 1)
         val personEntity = personRepository.findBySurname("Adder").iterator().next()

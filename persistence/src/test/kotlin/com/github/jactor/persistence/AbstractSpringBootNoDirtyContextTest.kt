@@ -41,9 +41,6 @@ abstract class AbstractSpringBootNoDirtyContextTest {
     protected lateinit var blogEntryRepository: BlogEntryRepository
 
     @Autowired
-    protected lateinit var entityManager: EntityManager
-
-    @Autowired
     protected lateinit var guestBookRepository: GuestBookRepository
 
     @Autowired
@@ -75,4 +72,17 @@ abstract class AbstractSpringBootNoDirtyContextTest {
 
     @Value("\${server.servlet.context-path}")
     protected lateinit var contextPath: String
+
+    // database operations
+
+    @Autowired
+    private lateinit var entityManager: EntityManager
+
+    protected fun<T> flush(databaseOperation: () -> T): T {
+        val entity = databaseOperation.invoke()
+        entityManager.flush()
+        entityManager.clear()
+
+        return entity
+    }
 }
