@@ -41,4 +41,4 @@ jobs:
           ./gradlew -q :persistence:dependencies
             exit 1;
           fi
-      - run: ./gradlew :persistence:test --tests "*"
+      - run: ./gradlew :persistence:test --tests "*" --stacktrace
