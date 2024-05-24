@@ -7,21 +7,21 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 
-internal class GuestBookEntryDtoTest {
+internal class BlogEntryModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val guestBookEntryDto = GuestBookEntryDto()
-        guestBookEntryDto.creatorName = "me"
-        guestBookEntryDto.guestBook = GuestBookDto()
-        guestBookEntryDto.entry = "entry"
+        val blogEntryModel = BlogEntryModel()
+        blogEntryModel.blog = BlogModel()
+        blogEntryModel.creatorName = "someone"
+        blogEntryModel.entry = "entry"
 
-        val (_, guestBook, creatorName, entry) = GuestBookEntryDto(guestBookEntryDto.persistentDto, guestBookEntryDto)
+        val (_, blog, creatorName, entry) = BlogEntryModel(blogEntryModel.persistentDto, blogEntryModel)
 
         assertAll {
-            assertThat(creatorName).isEqualTo(guestBookEntryDto.creatorName)
-            assertThat(guestBook).isEqualTo(guestBookEntryDto.guestBook)
-            assertThat(entry).isEqualTo(guestBookEntryDto.entry)
+            assertThat(blog).isEqualTo(blogEntryModel.blog)
+            assertThat(creatorName).isEqualTo(blogEntryModel.creatorName)
+            assertThat(entry).isEqualTo(blogEntryModel.entry)
         }
     }
 
@@ -34,9 +34,9 @@ internal class GuestBookEntryDtoTest {
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = GuestBookEntryDto(
+        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = BlogEntryModel(
             persistentDto,
-            GuestBookEntryDto()
+            BlogEntryModel()
         ).persistentDto
 
         assertAll {

@@ -6,7 +6,7 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.BlogDto
+import com.github.jactor.persistence.dto.BlogModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -61,16 +61,16 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
         user = blogEntity.user?.copyWithoutId()
     }
 
-    constructor(blogDto: BlogDto) {
-        created = blogDto.created
-        id = blogDto.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(blogDto.persistentDto)
-        title = blogDto.title
-        user = blogDto.userInternal?.let { UserEntity(it) }
+    constructor(blogModel: BlogModel) {
+        created = blogModel.created
+        id = blogModel.id
+        persistentDataEmbeddable = PersistentDataEmbeddable(blogModel.persistentDto)
+        title = blogModel.title
+        user = blogModel.userInternal?.let { UserEntity(it) }
     }
 
-    fun asDto(): BlogDto {
-        return BlogDto(
+    fun asDto(): BlogModel {
+        return BlogModel(
             persistentDataEmbeddable.asPersistentDto(id), created, title, user?.asDto()
         )
     }

@@ -4,12 +4,12 @@ import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
+import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.dto.BlogEntryModel
 import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.BlogBuilder
 import com.github.jactor.persistence.entity.BlogEntity
@@ -25,18 +25,18 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
     fun `should save and then read blog entity`() {
         val addressDto = AddressBuilder
             .new(
-                addressInternalDto = AddressInternalDto(
+                addressModel = AddressModel(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
-            ).addressInternalDto
+            ).addressModel
 
-        val personDto = PersonInternalDto(
+        val personDto = PersonModel(
             persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserInternalDto(
+        val userDto = UserModel(
             PersistentDto(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
@@ -44,7 +44,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogDto = BlogDto(created = LocalDate.now(), title = "Blah", userInternal = userDto))
+            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", userInternal = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -63,19 +63,19 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
     fun `should save then update and read blog entity`() {
         val addressDto = AddressBuilder
             .new(
-                addressInternalDto = AddressInternalDto(
+                addressModel = AddressModel(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
             )
-            .addressInternalDto
+            .addressModel
 
-        val personDto = PersonInternalDto(
+        val personDto = PersonModel(
             persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserInternalDto(
+        val userDto = UserModel(
             PersistentDto(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
@@ -83,7 +83,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogDto = BlogDto(created = LocalDate.now(), title = "Blah", userInternal = userDto))
+            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", userInternal = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -110,18 +110,18 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
     fun `should find blog by title`() {
         val addressDto = AddressBuilder
             .new(
-                addressInternalDto = AddressInternalDto(
+                addressModel = AddressModel(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
-            ).addressInternalDto
+            ).addressModel
 
-        val personDto = PersonInternalDto(
+        val personDto = PersonModel(
             persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserInternalDto(
+        val userDto = UserModel(
             PersistentDto(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
@@ -129,7 +129,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogDto = BlogDto(created = LocalDate.now(), title = "Blah", userInternal = userDto))
+            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", userInternal = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -148,18 +148,18 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
     fun `should be able to relate a blog entry`() {
         val addressDto = AddressBuilder
             .new(
-                addressInternalDto = AddressInternalDto(
+                addressModel = AddressModel(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
-            ).addressInternalDto
+            ).addressModel
 
-        val personDto = PersonInternalDto(
+        val personDto = PersonModel(
             persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserInternalDto(
+        val userDto = UserModel(
             persistentDto = PersistentDto(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
@@ -167,7 +167,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         )
 
         var blogData = BlogBuilder.new(
-            blogDto = BlogDto(
+            blogModel = BlogModel(
                 created = LocalDate.now(), title = "Blah", userInternal = userDto
             )
         )
@@ -175,7 +175,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         val blogEntityToSave: BlogEntity = blogData.buildBlogEntity()
 
         blogData = blogData.withEntry(
-            blogEntryDto = BlogEntryDto(
+            blogEntryModel = BlogEntryModel(
                 blog = blogEntityToSave.asDto(),
                 creatorName = "arnold",
                 entry = "i'll be back"

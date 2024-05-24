@@ -1,10 +1,10 @@
 package com.github.jactor.persistence.api.command
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.AddressInternalDto
+import com.github.jactor.persistence.dto.AddressModel
 import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.shared.api.CreateUserCommandDto
 
 @JvmRecord
@@ -37,14 +37,14 @@ data class CreateUserCommand(
         coutnry = createUserCommand.contry
     )
 
-    fun fetchUserDto() = UserInternalDto(
+    fun fetchUserDto() = UserModel(
         persistentDto = PersistentDto(),
         personInternal = null,
         emailAddress = emailAddress,
         username = username
     )
 
-    fun fetchPersonDto() = PersonInternalDto(
+    fun fetchPersonDto() = PersonModel(
         persistentDto = PersistentDto(),
         address = fetchAddressDto(),
         locale = language,
@@ -53,8 +53,8 @@ data class CreateUserCommand(
         description = description
     )
 
-    private fun fetchAddressDto(): AddressInternalDto? {
-        return if (zipCode == null) null else AddressInternalDto(
+    private fun fetchAddressDto(): AddressModel? {
+        return if (zipCode == null) null else AddressModel(
             persistentDto = PersistentDto(id = UUID.randomUUID()),
             zipCode = zipCode,
             addressLine1 = addressLine1,
@@ -67,5 +67,5 @@ data class CreateUserCommand(
 }
 
 data class CreateUserCommandResponse(
-    val userInternal: UserInternalDto = UserInternalDto()
+    val userInternal: UserModel = UserModel()
 )

@@ -1,21 +1,21 @@
 package com.github.jactor.persistence.entity
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.PersonInternalDto
+import com.github.jactor.persistence.dto.PersonModel
 
 internal object PersonBuilder {
-    fun new(personInternalDto: PersonInternalDto = PersonInternalDto()): PersonData = PersonData(
-        personInternalDto = personInternalDto.copy(
-            persistentDto = personInternalDto.persistentDto.copy(id = UUID.randomUUID())
+    fun new(personModel: PersonModel = PersonModel()): PersonData = PersonData(
+        personModel = personModel.copy(
+            persistentDto = personModel.persistentDto.copy(id = UUID.randomUUID())
         )
     )
 
-    fun unchanged(personInternalDto: PersonInternalDto): PersonData = PersonData(
-        personInternalDto = personInternalDto
+    fun unchanged(personModel: PersonModel): PersonData = PersonData(
+        personModel = personModel
     )
 
     @JvmRecord
-    data class PersonData(val personInternalDto: PersonInternalDto) {
-        fun build(): PersonEntity = PersonEntity(person = personInternalDto)
+    data class PersonData(val personModel: PersonModel) {
+        fun build(): PersonEntity = PersonEntity(person = personModel)
     }
 }

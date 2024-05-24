@@ -2,7 +2,7 @@ package com.github.jactor.persistence.dto
 
 import com.github.jactor.shared.api.AddressDto
 
-data class AddressInternalDto(
+data class AddressModel(
     override val persistentDto: PersistentDto = PersistentDto(),
     var zipCode: String? = null,
     var addressLine1: String? = null,
@@ -10,9 +10,9 @@ data class AddressInternalDto(
     var addressLine3: String? = null,
     var city: String? = null,
     var country: String? = null
-) : PersistentData(persistentDto) {
+) : PersistentDataModel(persistentDto) {
     constructor(
-        persistentDto: PersistentDto, addressInternal: AddressInternalDto
+        persistentDto: PersistentDto, addressInternal: AddressModel
     ) : this(
         persistentDto = persistentDto,
         addressLine1 = addressInternal.addressLine1,

@@ -2,11 +2,11 @@ package com.github.jactor.persistence.repository
 
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.dto.GuestBookModel
+import com.github.jactor.persistence.dto.GuestBookEntryModel
+import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.GuestBookBuilder
 import com.github.jactor.persistence.entity.GuestBookEntryEntity
@@ -23,16 +23,16 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
     @Test
     fun `should save then read guest book entry entity`() {
         val addressDto = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val personDto = PersonBuilder.new(personInternalDto = PersonInternalDto(address = addressDto, surname = "AA"))
-            .personInternalDto
+        val personDto = PersonBuilder.new(personModel = PersonModel(address = addressDto, surname = "AA"))
+            .personModel
 
         val userDto = UserBuilder.new(
-            userDto = UserInternalDto(
+            userDto = UserModel(
                 person = personDto,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
@@ -41,7 +41,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
 
         val savedUser = userRepository.save(UserEntity(userDto))
         var guestBookData = GuestBookBuilder.new(
-            GuestBookDto(
+            GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
                 userInternal = savedUser.asDto()
@@ -52,7 +52,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
         guestBookData = guestBookData.withEntry(
-            GuestBookEntryDto(
+            GuestBookEntryModel(
                 guestBook = savedUser.guestBook?.asDto(),
                 creatorName = "Harry",
                 entry = "Draco Dormiens Nunquam Tittilandus"
@@ -74,16 +74,16 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
     @Test
     fun `should save then modify and read guest book entry entity`() {
         val addressDto = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val personDto = PersonBuilder.new(personInternalDto = PersonInternalDto(address = addressDto, surname = "AA"))
-            .personInternalDto
+        val personDto = PersonBuilder.new(personModel = PersonModel(address = addressDto, surname = "AA"))
+            .personModel
 
         val userDto = UserBuilder.new(
-            userDto = UserInternalDto(
+            userDto = UserModel(
                 person = personDto,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
@@ -92,7 +92,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
 
         val savedUser = userRepository.save(UserEntity(userDto))
         val guestBookData = GuestBookBuilder.new(
-            GuestBookDto(
+            GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
                 userInternal = savedUser.asDto()
@@ -104,7 +104,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
         flush {
             guestBookEntryRepository.save(
                 guestBookData.withEntry(
-                    GuestBookEntryDto(
+                    GuestBookEntryModel(
                         guestBook = savedGuestBook.asDto(),
                         creatorName = "Harry",
                         entry = "Draco Dormiens Nunquam Tittilandus"
@@ -132,16 +132,16 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
     @Test
     fun `should write two entries to two different guest books and then find one entry`() {
         val addressDto = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val personDto = PersonBuilder.new(personInternalDto = PersonInternalDto(address = addressDto, surname = "AA"))
-            .personInternalDto
+        val personDto = PersonBuilder.new(personModel = PersonModel(address = addressDto, surname = "AA"))
+            .personModel
 
         val userDto = UserBuilder.new(
-            userDto = UserInternalDto(
+            userDto = UserModel(
                 person = personDto,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
@@ -150,7 +150,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
 
         val savedUser = userRepository.save(UserEntity(userDto))
         val guestBookData = GuestBookBuilder.new(
-            GuestBookDto(
+            GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
                 userInternal = savedUser.asDto()
@@ -160,7 +160,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
         val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
         guestBookEntryRepository.save(
             guestBookData.withEntry(
-                GuestBookEntryDto(
+                GuestBookEntryModel(
                     guestBook = savedGuestBook.asDto(),
                     creatorName = "somone",
                     entry = "jadda"
@@ -169,7 +169,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
         )
 
         val anotherUserDto = UserBuilder.new(
-            userDto = UserInternalDto(
+            userDto = UserModel(
                 person = personDto,
                 emailAddress = "hidden@tantooine.com",
                 username = "hidden"
@@ -179,7 +179,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
         userRepository.save(UserEntity(anotherUserDto))
 
         val anotherGuestBookData = GuestBookBuilder.new(
-            guestBookDto = GuestBookDto(
+            guestBookModel = GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
                 userInternal = savedUser.asDto()
@@ -188,7 +188,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
 
         val anotherSavedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
         val anotherEntry = anotherGuestBookData.withEntry(
-            guestBookEntryDto = GuestBookEntryDto(
+            guestBookEntryModel = GuestBookEntryModel(
                 guestBook = anotherSavedGuestBook.asDto(),
                 creatorName = "shrek",
                 entry = "far far away"

@@ -1,19 +1,19 @@
 package com.github.jactor.persistence.entity
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.UserModel
 
 internal object UserBuilder {
-    fun new(userDto: UserInternalDto): UserData = UserData(
+    fun new(userDto: UserModel): UserData = UserData(
         userDto = userDto.copy(persistentDto = userDto.persistentDto.copy(id = UUID.randomUUID()))
     )
 
-    fun unchanged(userInternalDto: UserInternalDto): UserData = UserData(
-        userDto = userInternalDto
+    fun unchanged(userModel: UserModel): UserData = UserData(
+        userDto = userModel
     )
 
     @JvmRecord
-    data class UserData(val userDto: UserInternalDto) {
+    data class UserData(val userDto: UserModel) {
         fun build(): UserEntity = UserEntity(user = userDto)
     }
 }

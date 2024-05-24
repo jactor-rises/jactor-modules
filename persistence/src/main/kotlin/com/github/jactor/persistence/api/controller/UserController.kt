@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.api.command.CreateUserCommand
 import com.github.jactor.persistence.api.command.CreateUserCommandResponse
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.service.UserService
 import com.github.jactor.shared.api.CreateUserCommandDto
@@ -80,7 +80,7 @@ class UserController(private val userService: UserService) {
     )
     @PutMapping("/{userId}")
     fun put(@RequestBody userDto: UserDto, @PathVariable userId: UUID?): ResponseEntity<UserDto> {
-        return userService.update(UserInternalDto(userDto.copy(userId)))?.let {
+        return userService.update(UserModel(userDto.copy(userId)))?.let {
             ResponseEntity(it.toUserDto(), HttpStatus.ACCEPTED)
         } ?: ResponseEntity(HttpStatus.BAD_REQUEST)
     }

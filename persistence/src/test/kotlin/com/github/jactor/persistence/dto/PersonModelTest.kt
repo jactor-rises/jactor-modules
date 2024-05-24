@@ -7,28 +7,28 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 
-internal class PersonInternalDtoTest {
+internal class PersonModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val personInternalDto = PersonInternalDto()
-        personInternalDto.address = AddressInternalDto()
-        personInternalDto.description = "description"
-        personInternalDto.firstName = "first name"
-        personInternalDto.locale = "no"
-        personInternalDto.surname = "surname"
+        val personModel = PersonModel()
+        personModel.address = AddressModel()
+        personModel.description = "description"
+        personModel.firstName = "first name"
+        personModel.locale = "no"
+        personModel.surname = "surname"
 
-        val (_, address, locale, firstName, surname, description) = PersonInternalDto(
-            personInternalDto.persistentDto,
-            personInternalDto
+        val (_, address, locale, firstName, surname, description) = PersonModel(
+            personModel.persistentDto,
+            personModel
         )
 
         assertAll {
-            assertThat(address).isEqualTo(personInternalDto.address)
-            assertThat(description).isEqualTo(personInternalDto.description)
-            assertThat(firstName).isEqualTo(personInternalDto.firstName)
-            assertThat(locale).isEqualTo(personInternalDto.locale)
-            assertThat(surname).isEqualTo(personInternalDto.surname)
+            assertThat(address).isEqualTo(personModel.address)
+            assertThat(description).isEqualTo(personModel.description)
+            assertThat(firstName).isEqualTo(personModel.firstName)
+            assertThat(locale).isEqualTo(personModel.locale)
+            assertThat(surname).isEqualTo(personModel.surname)
         }
     }
 
@@ -41,9 +41,9 @@ internal class PersonInternalDtoTest {
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = PersonInternalDto(
+        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = PersonModel(
             persistentDto,
-            PersonInternalDto()
+            PersonModel()
         ).persistentDto
 
         assertAll {
@@ -57,8 +57,8 @@ internal class PersonInternalDtoTest {
 
     @Test
     fun `should get address for person`() {
-        val personInternalDto = PersonInternalDto(
-            address = AddressInternalDto(
+        val personModel = PersonModel(
+            address = AddressModel(
                 addressLine1 = "somewhere",
                 addressLine2 = "in",
                 addressLine3 = "time",
@@ -67,7 +67,7 @@ internal class PersonInternalDtoTest {
             )
         )
 
-        val address = PersonInternalDto(personInternalDto.persistentDto, personInternalDto).toPersonDto().address
+        val address = PersonModel(personModel.persistentDto, personModel).toPersonDto().address
 
         assertAll {
             assertThat(address?.addressLine1).isEqualTo("somewhere")

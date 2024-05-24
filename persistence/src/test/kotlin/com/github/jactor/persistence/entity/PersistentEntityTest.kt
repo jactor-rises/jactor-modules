@@ -2,14 +2,14 @@ package com.github.jactor.persistence.entity
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
+import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.dto.BlogEntryModel
+import com.github.jactor.persistence.dto.GuestBookModel
+import com.github.jactor.persistence.dto.GuestBookEntryModel
 import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.dto.UserModel
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -23,7 +23,7 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy an address without the id`() {
         persistentEntityToTest = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+            addressModel = AddressModel(
                 persistentDto = PersistentDto(),
                 zipCode = "1001",
                 addressLine1 = "somewhere",
@@ -49,8 +49,8 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy a person without the id`() {
         persistentEntityToTest = PersonBuilder.new(
-            PersonInternalDto(
-                address = AddressInternalDto(),
+            PersonModel(
+                address = AddressModel(),
                 locale = "us_US",
                 firstName = "Bill",
                 surname = "Smith", description = "here i am"
@@ -70,7 +70,7 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy a user without the id`() {
         persistentEntityToTest = UserBuilder.new(
-            UserInternalDto(persistentDto = PersistentDto(), emailAddress = "i.am@home", username = "jactor")
+            UserModel(persistentDto = PersistentDto(), emailAddress = "i.am@home", username = "jactor")
         ).build()
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
@@ -86,9 +86,9 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy a blog without the id`() {
         persistentEntityToTest = BlogBuilder.new(
-            blogDto = BlogDto(
+            blogModel = BlogModel(
                 title = "general ignorance",
-                userInternal = UserInternalDto()
+                userInternal = UserModel()
             )
         ).buildBlogEntity()
 
@@ -104,8 +104,8 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a blog entry without the id`() {
-        val blogEntryDto = BlogEntryDto(PersistentDto(), BlogDto(), "jactor", "the one")
-        persistentEntityToTest = BlogBuilder.new().withEntry(blogEntryDto = blogEntryDto).buildBlogEntryEntity()
+        val blogEntryModel = BlogEntryModel(PersistentDto(), BlogModel(), "jactor", "the one")
+        persistentEntityToTest = BlogBuilder.new().withEntry(blogEntryModel = blogEntryModel).buildBlogEntryEntity()
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
         assertAll {
@@ -119,7 +119,7 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy a guest book without the id`() {
         persistentEntityToTest = GuestBookBuilder.new(
-            guestBookDto = GuestBookDto(PersistentDto(), HashSet(), "enter when applied", UserInternalDto())
+            guestBookModel = GuestBookModel(PersistentDto(), HashSet(), "enter when applied", UserModel())
         ).buildGuestBookEntity()
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
@@ -135,8 +135,8 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy a guest book entry without the id`() {
         persistentEntityToTest = GuestBookBuilder.new().withEntry(
-            GuestBookEntryDto(
-                persistentDto = PersistentDto(), guestBook = GuestBookDto(), creatorName = "jactor", entry = "the one"
+            GuestBookEntryModel(
+                persistentDto = PersistentDto(), guestBook = GuestBookModel(), creatorName = "jactor", entry = "the one"
             )
         ).buildGuestBookEntryEntity()
 

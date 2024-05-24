@@ -5,7 +5,7 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.PersonInternalDto
+import com.github.jactor.persistence.dto.PersonModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -66,7 +66,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         users = person.users
     }
 
-    constructor(person: PersonInternalDto) {
+    constructor(person: PersonModel) {
         addressEntity = person.address?.let { AddressEntity(it) }
         description = person.description
         firstName = person.firstName
@@ -76,7 +76,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         surname = person.surname
     }
 
-    fun asDto() = PersonInternalDto(
+    fun asDto() = PersonModel(
         persistentDataEmbeddable.asPersistentDto(id), addressEntity?.asDto(), locale, firstName, surname, description
     )
 
