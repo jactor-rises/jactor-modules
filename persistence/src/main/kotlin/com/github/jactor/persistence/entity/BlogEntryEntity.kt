@@ -51,7 +51,7 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
     }
 
     constructor(blogEntryDto: BlogEntryDto) {
-        blog = blogEntryDto.blog?.let { BlogEntity(it) }
+        blog = BlogEntity(blogDto = blogEntryDto.blog ?: error("Entry must belong to a blog"))
         entryEmbeddable = EntryEmbeddable(blogEntryDto.notNullableCreator, blogEntryDto.notNullableEntry)
         id = blogEntryDto.id
         persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryDto.persistentDto)
