@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.servlet.view.InternalResourceViewResolver
-import com.github.jactor.web.consumer.UserConsumer
+import com.github.jactor.web.client.UserClient
 import com.github.jactor.web.i18n.MyMessages
 import com.github.jactor.web.menu.MenuFacade
 import com.ninjasquad.springmockk.MockkBean
@@ -23,7 +23,7 @@ internal abstract class AbstractSpringMockMvcTest {
 
     @MockkBean
     @Qualifier("userConsumer")
-    protected lateinit var userConsumerMock: UserConsumer
+    protected lateinit var userClientMock: UserClient
 
     @Value("\${spring.mvc.view.prefix}")
     private lateinit var prefix: String

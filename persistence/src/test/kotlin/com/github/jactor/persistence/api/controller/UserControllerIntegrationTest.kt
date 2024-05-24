@@ -1,11 +1,11 @@
-package com.github.jactor.persistence.controller
+package com.github.jactor.persistence.api.controller
 
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.command.CreateUserCommand
-import com.github.jactor.persistence.command.CreateUserCommandResponse
+import com.github.jactor.persistence.api.command.CreateUserCommand
+import com.github.jactor.persistence.api.command.CreateUserCommandResponse
 import com.github.jactor.persistence.entity.UniqueUsername
 import assertk.assertAll
 import assertk.assertThat
