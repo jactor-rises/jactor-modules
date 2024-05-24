@@ -52,10 +52,11 @@ class DefaultBlogService(
     }
 
     override fun saveOrUpdate(blogEntryDto: BlogEntryDto): BlogEntryDto {
-        val userDto = userService.find(username = fetchUsername(blogEntryDto.blog))
-        blogEntryDto.blog!!.userInternal = userDto
+        blogEntryDto.blog?.also {
+            it.id ?: error("An entry must belong to a persistent blog!")
+        } ?: error("An entry must belong to a blog!")
 
-        val blogEntryEntity = BlogEntryEntity(blogEntryDto)
+        val blogEntryEntity = BlogEntryEntity(blogEntryDto = blogEntryDto)
 
         return blogEntryRepository.save(blogEntryEntity).asDto()
     }
