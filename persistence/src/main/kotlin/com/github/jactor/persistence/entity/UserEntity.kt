@@ -81,7 +81,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
     private fun addValues(user: UserModel) {
         emailAddress = user.emailAddress
         id = user.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(user.persistentDto)
+        persistentDataEmbeddable = PersistentDataEmbeddable(user.persistentModel)
         person = user.person?.let { PersonEntity(it) }
         username = user.username
         userType = UserType.entries

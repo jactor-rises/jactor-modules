@@ -87,7 +87,7 @@ internal class GuestBookControllerTest : AbstractSpringBootNoDirtyContextTest(){
     @Test
     fun `should modify existing guest book`() {
         val guestBookModel = GuestBookModel()
-        guestBookModel.id = UUID.randomUUID()
+        guestBookModel.persistentModel.id = UUID.randomUUID()
 
         every { guestBookServiceSpyk.saveOrUpdate(guestBookModel) } returns guestBookModel
 
@@ -108,7 +108,7 @@ internal class GuestBookControllerTest : AbstractSpringBootNoDirtyContextTest(){
     fun `should create a guest book`() {
         val guestBookModel = GuestBookModel()
         val createdDto = GuestBookModel()
-        createdDto.id = UUID.randomUUID()
+        createdDto.persistentModel.id = UUID.randomUUID()
 
         every { guestBookServiceSpyk.saveOrUpdate(guestBookModel) } returns createdDto
 
@@ -128,7 +128,7 @@ internal class GuestBookControllerTest : AbstractSpringBootNoDirtyContextTest(){
     @Test
     fun `should modify existing guest book entry`() {
         val guestBookEntryModel = GuestBookEntryModel()
-        guestBookEntryModel.id = UUID.randomUUID()
+        guestBookEntryModel.persistentModel.id = UUID.randomUUID()
 
         every { guestBookServiceSpyk.saveOrUpdate(guestBookEntryModel) } returns guestBookEntryModel
 
@@ -149,7 +149,7 @@ internal class GuestBookControllerTest : AbstractSpringBootNoDirtyContextTest(){
     fun `should create a guest book entry`() {
         val guestBookEntryModel = GuestBookEntryModel()
         val createdDto = GuestBookEntryModel()
-        createdDto.id = UUID.randomUUID()
+        createdDto.persistentModel.id = UUID.randomUUID()
 
         every { guestBookServiceSpyk.saveOrUpdate(guestBookEntryModel) } returns createdDto
 

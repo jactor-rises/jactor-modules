@@ -54,7 +54,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
         guestBook = guestBookEntry.guestBook?.let { GuestBookEntity(it) }
         id = guestBookEntry.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistentDto)
+        persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistentModel)
     }
 
     private fun copyGuestBookWithoutId(): GuestBookEntity {

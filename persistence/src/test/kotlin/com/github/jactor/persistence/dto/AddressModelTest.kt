@@ -20,7 +20,7 @@ internal class AddressModelTest {
         addressModel.zipCode = "1234"
 
         val (_, zipCode, addressLine1, addressLine2, addressLine3, city, country) = AddressModel(
-            addressModel.persistentDto,
+            addressModel.persistentModel,
             addressModel
         )
 
@@ -36,23 +36,23 @@ internal class AddressModelTest {
 
     @Test
     fun `should give values to PersistentDto`() {
-        val persistentDto = PersistentDto()
-        persistentDto.createdBy = "jactor"
-        persistentDto.timeOfCreation = LocalDateTime.now()
-        persistentDto.id = UUID.randomUUID()
-        persistentDto.modifiedBy = "tip"
-        persistentDto.timeOfModification = LocalDateTime.now()
+        val persistentModel = PersistentModel()
+        persistentModel.createdBy = "jactor"
+        persistentModel.timeOfCreation = LocalDateTime.now()
+        persistentModel.id = UUID.randomUUID()
+        persistentModel.modifiedBy = "tip"
+        persistentModel.timeOfModification = LocalDateTime.now()
 
         val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = AddressModel(
-            persistentDto, AddressModel()
-        ).persistentDto
+            persistentModel, AddressModel()
+        ).persistentModel
 
         assertAll {
-            assertThat(createdBy).isEqualTo(persistentDto.createdBy)
-            assertThat(timeOfCreation).isEqualTo(persistentDto.timeOfCreation)
-            assertThat(id).isEqualTo(persistentDto.id)
-            assertThat(modifiedBy).isEqualTo(persistentDto.modifiedBy)
-            assertThat(timeOfModification).isEqualTo(persistentDto.timeOfModification)
+            assertThat(createdBy).isEqualTo(persistentModel.createdBy)
+            assertThat(timeOfCreation).isEqualTo(persistentModel.timeOfCreation)
+            assertThat(id).isEqualTo(persistentModel.id)
+            assertThat(modifiedBy).isEqualTo(persistentModel.modifiedBy)
+            assertThat(timeOfModification).isEqualTo(persistentModel.timeOfModification)
         }
     }
 }

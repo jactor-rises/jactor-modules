@@ -10,7 +10,7 @@ import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
 import com.github.jactor.persistence.dto.GuestBookModel
 import com.github.jactor.persistence.dto.GuestBookEntryModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
@@ -30,7 +30,7 @@ internal class ModifierAspectTest {
 
     private val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
     private val modifierAspect = ModifierAspect()
-    private val persistentDto = PersistentDto(null, "na", oneMinuteAgo, "na", oneMinuteAgo)
+    private val persistentModel = PersistentModel(null, "na", oneMinuteAgo, "na", oneMinuteAgo)
 
     @MockK
     private lateinit var joinPointMock: JoinPoint
@@ -38,10 +38,10 @@ internal class ModifierAspectTest {
     @Test
     fun `should modify timestamp on address when used`() {
         val addressWithoutId = AddressBuilder.unchanged(
-            addressModel = AddressModel(persistentDto, AddressModel())
+            addressModel = AddressModel(persistentModel, AddressModel())
         ).build()
 
-        val address = AddressBuilder.new(addressModel = AddressModel(persistentDto, AddressModel()))
+        val address = AddressBuilder.new(addressModel = AddressModel(persistentModel, AddressModel()))
             .build()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
@@ -58,8 +58,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = BlogBuilder.unchanged(BlogModel(persistentDto, BlogModel())).buildBlogEntity()
-        val blog = BlogBuilder.new(BlogModel(persistentDto, BlogModel())).buildBlogEntity()
+        val blogWithouId = BlogBuilder.unchanged(BlogModel(persistentModel, BlogModel())).buildBlogEntity()
+        val blog = BlogBuilder.new(BlogModel(persistentModel, BlogModel())).buildBlogEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 
@@ -73,9 +73,9 @@ internal class ModifierAspectTest {
     fun `should modify timestamp on blogEntry when used`() {
         val blogEntryWithoutId = BlogBuilder.new().withUnchangedEntry(
             blogEntryModel = BlogEntryModel(
-                persistentDto = persistentDto,
-                blog = BlogEntryModel(
-                    blog = BlogModel(persistentDto = PersistentDto(id = UUID.randomUUID())),
+                persistentModel = persistentModel,
+                blog = BlogModel(
+                    blog = BlogModel(persistentModel = PersistentModel(id = UUID.randomUUID())),
                     creatorName = "me",
                     entry = "some shit"
                 )
@@ -83,7 +83,7 @@ internal class ModifierAspectTest {
         ).buildBlogEntryEntity()
 
         val blogEntry = BlogBuilder.new().withEntry(
-            BlogEntryModel(persistentDto, BlogEntryModel(creatorName = "me", entry = "some shit"))
+            BlogEntryModel(persistentModel, BlogEntryModel(creatorName = "me", entry = "some shit"))
         ).buildBlogEntryEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blogEntry, blogEntryWithoutId)
@@ -101,10 +101,10 @@ internal class ModifierAspectTest {
     @Test
     fun `should modify timestamp on guestBook when used`() {
         val guestBookWithoutId = GuestBookBuilder.unchanged(
-            guestBookDto = GuestBookDto(persistentDto, GuestBookDto())
+            guestBookModel = GuestBookModel(persistentModel, GuestBookModel())
         ).buildGuestBookEntity()
 
-        val guestBook = GuestBookBuilder.new(guestBookDto = GuestBookDto(persistentDto, GuestBookDto()))
+        val guestBook = GuestBookBuilder.new(guestBookModel = GuestBookModel(persistentModel, GuestBookModel()))
             .buildGuestBookEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBook, guestBookWithoutId)
@@ -122,14 +122,14 @@ internal class ModifierAspectTest {
     @Test
     fun `should modify timestamp on guestBookEntry when used`() {
         val guestBookEntryWithoutId = GuestBookBuilder.new().withEntryContainingPersistentId(
-            guestBookEntryDto = GuestBookEntryDto(
-                persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")
+            guestBookEntryModel = GuestBookEntryModel(
+                persistentModel, GuestBookEntryModel(creatorName = "me", entry = "hi there")
             )
         ).buildGuestBookEntryEntity()
 
         val guestBookEntry = GuestBookBuilder.new().withEntry(
-            guestBookEntryDto = GuestBookEntryDto(
-                persistentDto, GuestBookEntryDto(creatorName = "me", entry = "hi there")
+            guestBookEntryModel = GuestBookEntryModel(
+                persistentModel, GuestBookEntryModel(creatorName = "me", entry = "hi there")
             )
         ).buildGuestBookEntryEntity()
 
@@ -147,8 +147,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on person when used`() {
-        val person = PersonBuilder.new(PersonInternalDto(persistentDto, PersonInternalDto())).build()
-        val personWithoutId = PersonBuilder.unchanged(PersonInternalDto(persistentDto, PersonInternalDto()))
+        val person = PersonBuilder.new(PersonModel(persistentModel, PersonModel())).build()
+        val personWithoutId = PersonBuilder.unchanged(PersonModel(persistentModel, PersonModel()))
             .build()
 
         every { joinPointMock.args } returns arrayOf<Any>(person, personWithoutId)
@@ -165,8 +165,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on user when used`() {
-        val user = UserBuilder.new(UserInternalDto(persistentDto, UserInternalDto())).build()
-        val userWithoutId = UserBuilder.unchanged(UserInternalDto(persistentDto, UserInternalDto()))
+        val user = UserBuilder.new(UserModel(persistentModel, UserModel())).build()
+        val userWithoutId = UserBuilder.unchanged(UserModel(persistentModel, UserModel()))
             .build()
 
         every { joinPointMock.args } returns arrayOf<Any>(user, userWithoutId)

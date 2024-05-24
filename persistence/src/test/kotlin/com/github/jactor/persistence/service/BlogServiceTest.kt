@@ -6,7 +6,7 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.BlogBuilder
 import com.github.jactor.persistence.entity.BlogEntity
@@ -41,7 +41,7 @@ internal class BlogServiceTest {
     @Test
     fun `should map blog to dto`() {
         val blogEntity = BlogBuilder.new(
-            blogModel = BlogModel(PersistentDto(), null, "full speed ahead", null)
+            blogModel = BlogModel(PersistentModel(), null, "full speed ahead", null)
         ).buildBlogEntity()
 
         every { blogRepositoryMockk.findById(uuid) } returns Optional.of(blogEntity)
@@ -53,7 +53,7 @@ internal class BlogServiceTest {
 
     @Test
     fun `should map blog entry to dto`() {
-        val blogEntryModel = BlogEntryModel(PersistentDto(), BlogModel(), "me", "too")
+        val blogEntryModel = BlogEntryModel(PersistentModel(), BlogModel(), "me", "too")
         val anEntry = BlogBuilder.new().withEntry(blogEntryModel = blogEntryModel).buildBlogEntryEntity()
 
         every { blogEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
@@ -82,7 +82,7 @@ internal class BlogServiceTest {
     fun `should map blog entries to a list of dto`() {
         val blogEntryEntities: List<BlogEntryEntity?> = listOf(
             BlogBuilder.new()
-                .withEntry(blogEntryModel = BlogEntryModel(PersistentDto(), BlogModel(), "you", "too"))
+                .withEntry(blogEntryModel = BlogEntryModel(PersistentModel(), BlogModel(), "you", "too"))
                 .buildBlogEntryEntity()
         )
 

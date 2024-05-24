@@ -3,7 +3,7 @@ package com.github.jactor.persistence.dto
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class PersistentDto(
+data class PersistentModel(
         var id: UUID? = null,
         var createdBy: String = "todo: #3",
         var timeOfCreation: LocalDateTime = LocalDateTime.now(),

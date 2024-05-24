@@ -64,7 +64,7 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
     constructor(blogModel: BlogModel) {
         created = blogModel.created
         id = blogModel.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(blogModel.persistentDto)
+        persistentDataEmbeddable = PersistentDataEmbeddable(blogModel.persistentModel)
         title = blogModel.title
         user = blogModel.userInternal?.let { UserEntity(it) }
     }

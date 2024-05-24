@@ -5,7 +5,7 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.dto.GuestBookModel
 import com.github.jactor.persistence.dto.GuestBookEntryModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.GuestBookBuilder
 import com.github.jactor.persistence.entity.GuestBookEntity
@@ -36,7 +36,7 @@ internal class GuestBookServiceTest {
     @Test
     fun `should map guest book to a dto`() {
         val guestBookEntity = GuestBookBuilder.new(
-            guestBookModel = GuestBookModel(PersistentDto(), HashSet(), "@home", null)
+            guestBookModel = GuestBookModel(PersistentModel(), HashSet(), "@home", null)
         ).buildGuestBookEntity()
 
         every { guestBookRepositoryMockk.findById(uuid) } returns Optional.of(guestBookEntity)
@@ -49,7 +49,7 @@ internal class GuestBookServiceTest {
     @Test
     fun `should map guest book entry to a dto`() {
         val anEntry = GuestBookBuilder.new().withEntry(
-            guestBookEntryModel = GuestBookEntryModel(PersistentDto(), GuestBookModel(), "me", "too")
+            guestBookEntryModel = GuestBookEntryModel(PersistentModel(), GuestBookModel(), "me", "too")
         ).buildGuestBookEntryEntity()
 
         every { guestBookEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)

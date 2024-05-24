@@ -5,7 +5,7 @@ import com.github.jactor.persistence.dto.UserModel
 
 internal object UserBuilder {
     fun new(userDto: UserModel): UserData = UserData(
-        userDto = userDto.copy(persistentDto = userDto.persistentDto.copy(id = UUID.randomUUID()))
+        userDto = userDto.copy(persistentModel = userDto.persistentModel.copy(id = UUID.randomUUID()))
     )
 
     fun unchanged(userModel: UserModel): UserData = UserData(

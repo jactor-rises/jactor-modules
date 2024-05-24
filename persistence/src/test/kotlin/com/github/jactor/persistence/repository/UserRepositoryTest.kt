@@ -3,7 +3,7 @@ package com.github.jactor.persistence.repository
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.dto.UserModel.Usertype
@@ -74,7 +74,7 @@ internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
 
         val userToPersist = UserBuilder.new(
             userDto = UserModel(
-                persistentDto = PersistentDto(),
+                persistentModel = PersistentModel(),
                 person = personModel,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
@@ -119,7 +119,7 @@ internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
         ).personModel
 
         val userEntity = UserBuilder.new(
-            UserModel(PersistentDto(), spidyPersonModel, null, "spiderman")
+            UserModel(PersistentModel(), spidyPersonModel, null, "spiderman")
         ).build()
 
         flush {

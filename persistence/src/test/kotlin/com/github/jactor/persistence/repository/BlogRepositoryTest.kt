@@ -7,7 +7,7 @@ import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressModel
 import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
@@ -33,11 +33,11 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
             ).addressModel
 
         val personDto = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
         val userDto = UserModel(
-            PersistentDto(id = UUID.randomUUID()),
+            PersistentModel(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"
@@ -72,11 +72,11 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
             .addressModel
 
         val personDto = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
         val userDto = UserModel(
-            PersistentDto(id = UUID.randomUUID()),
+            PersistentModel(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"
@@ -118,11 +118,11 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
             ).addressModel
 
         val personDto = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
         val userDto = UserModel(
-            PersistentDto(id = UUID.randomUUID()),
+            PersistentModel(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"
@@ -156,11 +156,11 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
             ).addressModel
 
         val personDto = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
         val userDto = UserModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()),
+            persistentModel = PersistentModel(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"

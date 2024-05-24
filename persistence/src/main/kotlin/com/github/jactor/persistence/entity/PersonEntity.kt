@@ -72,7 +72,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         firstName = person.firstName
         locale = person.locale
         id = person.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(person.persistentDto)
+        persistentDataEmbeddable = PersistentDataEmbeddable(person.persistentModel)
         surname = person.surname
     }
 
