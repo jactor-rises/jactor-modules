@@ -7,8 +7,7 @@ import org.springframework.context.annotation.PropertySource
 import org.springframework.context.annotation.Scope
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.DefaultUriBuilderFactory
-import com.github.jactor.web.consumer.DefaultUserConsumer
-import com.github.jactor.web.consumer.UserConsumer
+import org.springframework.web.util.UriTemplateHandler
 import com.github.jactor.web.menu.Menu
 import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
@@ -45,26 +44,26 @@ class JactorWebBeans {
             )
     }
 
-    @Bean(name = ["userConsumer"])
-    fun userConsumer(
-        restTemplate: RestTemplate,
+    @Bean
+    fun jactorWebUriTemplateHandler(
         @Value("\${jactor-persistence.url.root}") rootUrlPersistence: String?
-    ): UserConsumer {
-        val uriTemplateHandler = DefaultUriBuilderFactory()
-        uriTemplateHandler.setDefaultUriVariables(mapOf("uri" to rootUrlPersistence))
-        restTemplate.uriTemplateHandler = uriTemplateHandler
+    ): JactorWebUriTemplateHandler = rootUrlPersistence?.let {
+        val uriTemplateHandler = DefaultUriBuilderFactory(it)
 
-        return DefaultUserConsumer(restTemplate)
-    }
+        JactorWebUriTemplateHandler(
+            uriTemplateHandler = uriTemplateHandler
+        )
+    } ?: throw IllegalArgumentException("No root url given!")
 
     @Bean
     @Scope("prototype")
-    fun restTemplate(@Value("\${jactor-persistence.url.root}") rootUrlPersistence: String?): RestTemplate {
+    fun restTemplate(jactorWebUriTemplateHandler: JactorWebUriTemplateHandler): RestTemplate {
         val restTemplate = RestTemplate()
-        val uriTemplateHandler = DefaultUriBuilderFactory()
-        uriTemplateHandler.setDefaultUriVariables(mapOf("uri" to rootUrlPersistence))
-        restTemplate.uriTemplateHandler = uriTemplateHandler
+        restTemplate.uriTemplateHandler = jactorWebUriTemplateHandler.uriTemplateHandler
 
         return restTemplate
     }
+
+    @JvmRecord
+    data class JactorWebUriTemplateHandler(val uriTemplateHandler: UriTemplateHandler)
 }

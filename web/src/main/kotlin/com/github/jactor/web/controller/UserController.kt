@@ -1,19 +1,20 @@
 package com.github.jactor.web.controller
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import com.github.jactor.web.JactorWebBeans
-import com.github.jactor.web.consumer.UserConsumer
+import com.github.jactor.web.client.UserClient
 import com.github.jactor.web.dto.UserModel
 import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
 
 @RestController
 class UserController(
-    private val userConsumer: UserConsumer,
+    @Qualifier("defaultUserClient") private val userClient: UserClient,
     private val menuFacade: MenuFacade,
     @param:Value("\${server.servlet.context-path}") private val contextPath: String
 ) {
@@ -32,7 +33,7 @@ class UserController(
     }
 
     private fun populateUser(username: String?, modelAndView: ModelAndView) {
-        val user = userConsumer.find(username!!)
+        val user = userClient.find(username!!)
         val modelMap = modelAndView.model
 
         if (user != null) {
@@ -43,7 +44,7 @@ class UserController(
     }
 
     private fun populateUserMenu(modelAndView: ModelAndView) {
-        val menuItems = userConsumer.findAllUsernames()
+        val menuItems = userClient.findAllUsernames()
             .map { chooseUserItem(it) }
 
         modelAndView.addObject(

@@ -1,4 +1,4 @@
-package com.github.jactor.shared.dto
+package com.github.jactor.shared.api
 
 import java.util.UUID
 import io.swagger.v3.oas.annotations.media.Schema

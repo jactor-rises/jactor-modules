@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.controller
+package com.github.jactor.persistence.api.controller
 
 import java.util.UUID
 import com.github.jactor.persistence.dto.GuestBookDto

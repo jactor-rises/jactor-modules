@@ -9,7 +9,7 @@ import assertk.assertions.isNotNull
 internal class JactorPersistenceTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Autowired
-    private lateinit var commandLineRunner: CommandLineRunner
+    private var commandLineRunner: CommandLineRunner? = null
 
     @Test
     fun `should contain bean named CommandlineRunner`() {

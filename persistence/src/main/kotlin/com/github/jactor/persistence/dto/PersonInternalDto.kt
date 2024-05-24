@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.dto
 
-import com.github.jactor.shared.dto.PersonDto
+import com.github.jactor.shared.api.PersonDto
 
 data class PersonInternalDto(
     override val persistentDto: PersistentDto = PersistentDto(),

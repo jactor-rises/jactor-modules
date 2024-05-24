@@ -8,7 +8,7 @@ Egenskap: Applikasjonen jactor-persistence
 
   Scenario: BlogController skal være mappet
     Så skal statuskoden være 200
-    Og responsen skal inneholde 'com.github.jactor.persistence.controller.BlogController'
+    Og responsen skal inneholde 'com.github.jactor.persistence.api.controller.BlogController'
     Og responsen skal inneholde '/blog/{blogId}'
     Og responsen skal inneholde '/blog/{id}/entries'
     Og responsen skal inneholde '/blog/entry'
@@ -17,7 +17,7 @@ Egenskap: Applikasjonen jactor-persistence
 
   Scenario: GuestBook skal være mappet
     Så skal statuskoden være 200
-    Og responsen skal inneholde 'com.github.jactor.persistence.controller.GuestBookController'
+    Og responsen skal inneholde 'com.github.jactor.persistence.api.controller.GuestBookController'
     Og responsen skal inneholde '/guestBook'
     Og responsen skal inneholde '/guestBook/{id}'
     Og responsen skal inneholde '/guestBook/entry'
@@ -25,7 +25,7 @@ Egenskap: Applikasjonen jactor-persistence
 
   Scenario: UserController skal være mappet
     Så skal statuskoden være 200
-    Og responsen skal inneholde 'com.github.jactor.persistence.controller.UserController'
+    Og responsen skal inneholde 'com.github.jactor.persistence.api.controller.UserController'
     Og responsen skal inneholde '/user/{id}'
     Og responsen skal inneholde '/user/name/{username}'
     Og responsen skal inneholde '/user/usernames'

@@ -6,7 +6,7 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.command.CreateUserCommand
+import com.github.jactor.persistence.api.command.CreateUserCommand
 import com.github.jactor.persistence.dto.AddressInternalDto
 import com.github.jactor.persistence.dto.PersistentDto
 import com.github.jactor.persistence.dto.PersonInternalDto
@@ -100,7 +100,7 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should create and save person for the user`() {
-        val createUserCommand = CreateUserCommand("jactor", "Jacobsen")
+        val createUserCommand = CreateUserCommand(username = "jactor", surname = "Jacobsen")
         val userDto = UserInternalDto()
         val userEntity = UserEntity(userDto)
         val personEntitySlot = slot<PersonEntity>()
