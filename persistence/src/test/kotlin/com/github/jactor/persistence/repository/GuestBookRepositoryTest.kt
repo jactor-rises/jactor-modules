@@ -6,7 +6,7 @@ import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressModel
 import com.github.jactor.persistence.dto.GuestBookModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
@@ -32,11 +32,11 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
             .addressModel
 
         val personDto = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "AA"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "AA"
         )
 
         val userDto = UserModel(
-            PersistentDto(id = UUID.randomUUID()),
+            PersistentModel(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
@@ -77,7 +77,7 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
         val personDto = PersonBuilder.new(PersonModel(address = addressDto, surname = "AA")).personModel
         val userDto = UserBuilder.unchanged(
             userModel = UserModel(
-                persistentDto = PersistentDto(),
+                persistentModel = PersistentModel(),
                 personInternal = personDto,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"

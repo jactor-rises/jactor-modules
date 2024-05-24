@@ -156,7 +156,7 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should persist changes to existing blog`() {
         val blogModel = BlogModel()
-        blogModel.id = UUID.randomUUID()
+        blogModel.persistentModel.id = UUID.randomUUID()
 
         every { blogServiceSpyk.saveOrUpdate(blogModel) } returns blogModel
 
@@ -177,7 +177,7 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     fun `should create a blog`() {
         val blogModel = BlogModel()
         val createdDto = BlogModel()
-        createdDto.id = UUID.randomUUID()
+        createdDto.persistentModel.id = UUID.randomUUID()
 
         every { blogServiceSpyk.saveOrUpdate(blogModel) } returns createdDto
 
@@ -198,7 +198,7 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should persist changes to existing blog entry`() {
         val blogEntryModel = BlogEntryModel()
-        blogEntryModel.id = UUID.randomUUID()
+        blogEntryModel.persistentModel.id = UUID.randomUUID()
 
         every { blogServiceSpyk.saveOrUpdate(blogEntryModel) } returns blogEntryModel
 
@@ -219,7 +219,7 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     fun `should create blog entry`() {
         val blogEntryModel = BlogEntryModel()
         val createdDto = BlogEntryModel()
-        createdDto.id = UUID.randomUUID()
+        createdDto.persistentModel.id = UUID.randomUUID()
 
         every { blogServiceSpyk.saveOrUpdate(blogEntryModel) } returns createdDto
 

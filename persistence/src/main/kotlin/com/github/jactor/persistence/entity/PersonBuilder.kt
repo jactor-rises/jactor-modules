@@ -6,7 +6,7 @@ import com.github.jactor.persistence.dto.PersonModel
 internal object PersonBuilder {
     fun new(personModel: PersonModel = PersonModel()): PersonData = PersonData(
         personModel = personModel.copy(
-            persistentDto = personModel.persistentDto.copy(id = UUID.randomUUID())
+            persistentModel = personModel.persistentModel.copy(id = UUID.randomUUID())
         )
     )
 

@@ -1,20 +1,24 @@
 package com.github.jactor.persistence.dto
 
+import java.util.UUID
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.shared.api.AddressDto
 
 data class AddressModel(
-    override val persistentDto: PersistentDto = PersistentDto(),
+    val persistentModel: PersistentModel = PersistentModel(),
     var zipCode: String? = null,
     var addressLine1: String? = null,
     var addressLine2: String? = null,
     var addressLine3: String? = null,
     var city: String? = null,
     var country: String? = null
-) : PersistentDataModel(persistentDto) {
+) {
+    val id: UUID? @JsonIgnore get() = persistentModel.id
+
     constructor(
-        persistentDto: PersistentDto, addressInternal: AddressModel
+        persistentModel: PersistentModel, addressInternal: AddressModel
     ) : this(
-        persistentDto = persistentDto,
+        persistentModel = persistentModel,
         addressLine1 = addressInternal.addressLine1,
         addressLine2 = addressInternal.addressLine2,
         addressLine3 = addressInternal.addressLine3,
@@ -24,7 +28,7 @@ data class AddressModel(
     )
 
     constructor(addressDto: AddressDto) : this(
-        persistentDto = PersistentDto(id = addressDto.id),
+        persistentModel = PersistentModel(id = addressDto.id),
         addressLine1 = addressDto.addressLine1,
         addressLine2 = addressDto.addressLine2,
         addressLine3 = addressDto.addressLine3,
@@ -34,7 +38,7 @@ data class AddressModel(
     )
 
     fun toAddressDto() = AddressDto(
-        id = persistentDto.id,
+        id = persistentModel.id,
         addressLine1 = addressLine1,
         addressLine2 = addressLine2,
         addressLine3 = addressLine3,

@@ -2,7 +2,7 @@ package com.github.jactor.persistence.api.command
 
 import java.util.UUID
 import com.github.jactor.persistence.dto.AddressModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.shared.api.CreateUserCommandDto
@@ -38,14 +38,14 @@ data class CreateUserCommand(
     )
 
     fun fetchUserDto() = UserModel(
-        persistentDto = PersistentDto(),
+        persistentModel = PersistentModel(),
         personInternal = null,
         emailAddress = emailAddress,
         username = username
     )
 
     fun fetchPersonDto() = PersonModel(
-        persistentDto = PersistentDto(),
+        persistentModel = PersistentModel(),
         address = fetchAddressDto(),
         locale = language,
         firstName = firstName,
@@ -55,7 +55,7 @@ data class CreateUserCommand(
 
     private fun fetchAddressDto(): AddressModel? {
         return if (zipCode == null) null else AddressModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()),
+            persistentModel = PersistentModel(id = UUID.randomUUID()),
             zipCode = zipCode,
             addressLine1 = addressLine1,
             addressLine2 = addressLine2,

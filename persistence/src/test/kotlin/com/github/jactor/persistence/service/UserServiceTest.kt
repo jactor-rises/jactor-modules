@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.api.command.CreateUserCommand
 import com.github.jactor.persistence.dto.AddressModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.dto.UserModel.Usertype
@@ -83,15 +83,15 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should update a UserDto with an UserEntity`() {
         val uuid = UUID.randomUUID()
         val userDto = UserModel()
-        userDto.id = uuid
+        userDto.persistentModel.id = uuid
         userDto.username = "marley"
 
-        val persistentDto = PersistentDto(
+        val persistentModel = PersistentModel(
             uuid, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1)
         )
 
         every { userRepositorySpyk.findById(uuid) } returns Optional.of(
-            UserEntity(UserModel(persistentDto, userDto))
+            UserEntity(UserModel(persistentModel, userDto))
         )
 
         val user = userServiceToTest.update(userDto)

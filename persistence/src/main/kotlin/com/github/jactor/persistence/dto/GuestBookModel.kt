@@ -1,15 +1,20 @@
 package com.github.jactor.persistence.dto
 
+import java.util.UUID
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 data class GuestBookModel(
-    override val persistentDto: PersistentDto = PersistentDto(),
+    val persistentModel: PersistentModel = PersistentModel(),
     var entries: Set<GuestBookEntryModel> = emptySet(),
     var title: String? = null,
     var userInternal: UserModel? = null
-) : PersistentDataModel(persistentDto) {
+) {
+    val id: UUID? @JsonIgnore get() = persistentModel.id
+
     constructor(
-        persistentDto: PersistentDto, guestBook: GuestBookModel
+        persistentModel: PersistentModel, guestBook: GuestBookModel
     ) : this(
-        persistentDto = persistentDto,
+        persistentModel = persistentModel,
         entries = guestBook.entries,
         title = guestBook.title,
         userInternal = guestBook.userInternal

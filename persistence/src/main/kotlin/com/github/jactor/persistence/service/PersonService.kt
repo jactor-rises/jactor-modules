@@ -15,7 +15,7 @@ class PersonService(private val personRepository: PersonRepository) {
 
     private fun create(person: PersonModel): PersonEntity {
         if (person.id == null) {
-            person.id = UUID.randomUUID()
+            person.persistentModel.id = UUID.randomUUID()
         }
 
         return personRepository.save(PersonEntity(person))

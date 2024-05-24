@@ -8,7 +8,7 @@ import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressModel
 import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
@@ -23,15 +23,15 @@ internal class BlogEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
     @Test
     fun `should save then read blog entry`() {
         val addressDto = AddressModel(
-            PersistentDto(id = UUID.randomUUID()), zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
+            PersistentModel(id = UUID.randomUUID()), zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
         )
 
         val personDto = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
         val userDto = UserModel(
-            PersistentDto(id = UUID.randomUUID()),
+            PersistentModel(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "white"
@@ -74,11 +74,11 @@ internal class BlogEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
             .addressModel
 
         val personDto = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
         val userDto = UserModel(
-            PersistentDto(id = UUID.randomUUID()),
+            PersistentModel(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "dark"

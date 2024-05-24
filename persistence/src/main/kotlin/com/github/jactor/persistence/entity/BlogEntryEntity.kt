@@ -54,7 +54,7 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
         blog = BlogEntity(blogModel = blogEntryModel.blog ?: error("Entry must belong to a blog"))
         entryEmbeddable = EntryEmbeddable(blogEntryModel.notNullableCreator, blogEntryModel.notNullableEntry)
         id = blogEntryModel.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryModel.persistentDto)
+        persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryModel.persistentModel)
     }
 
     private fun copyBlog(): BlogEntity {

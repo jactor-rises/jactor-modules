@@ -3,11 +3,11 @@ package com.github.jactor.persistence.entity
 import java.util.UUID
 import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 
 internal object BlogBuilder {
     fun new(blogModel: BlogModel = BlogModel()): BlogData = BlogData(
-        blogModel = blogModel.copy(persistentDto = blogModel.persistentDto.copy(id = UUID.randomUUID()))
+        blogModel = blogModel.copy(persistentModel = blogModel.persistentModel.copy(id = UUID.randomUUID()))
     )
 
     fun unchanged(blogModel: BlogModel = BlogModel()): BlogData = BlogData(
@@ -21,7 +21,7 @@ internal object BlogBuilder {
     ) {
         fun withEntry(blogEntryModel: BlogEntryModel): BlogData = copy(
             blogEntryModel = blogEntryModel.copy(
-                persistentDto = PersistentDto(id = UUID.randomUUID()),
+                persistentModel = PersistentModel(id = UUID.randomUUID()),
                 blog = blogModel,
             )
         )

@@ -2,7 +2,7 @@ package com.github.jactor.persistence.entity
 
 import java.time.LocalDateTime
 import java.util.UUID
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import jakarta.persistence.Embeddable
 
 @Embeddable
@@ -21,11 +21,11 @@ class PersistentDataEmbeddable : PersistentData {
         timeOfModification = LocalDateTime.now()
     }
 
-    internal constructor(persistentDto: PersistentDto) {
-        createdBy = persistentDto.createdBy
-        timeOfCreation = persistentDto.timeOfCreation
-        modifiedBy = persistentDto.modifiedBy
-        timeOfModification = persistentDto.timeOfModification
+    internal constructor(persistentModel: PersistentModel) {
+        createdBy = persistentModel.createdBy
+        timeOfCreation = persistentModel.timeOfCreation
+        modifiedBy = persistentModel.modifiedBy
+        timeOfModification = persistentModel.timeOfModification
     }
 
     fun modifiedBy(modifier: String) {
@@ -33,7 +33,7 @@ class PersistentDataEmbeddable : PersistentData {
         timeOfModification = LocalDateTime.now()
     }
 
-    fun asPersistentDto(id: UUID?): PersistentDto {
-        return PersistentDto(id, createdBy, timeOfCreation, modifiedBy, timeOfModification)
+    fun asPersistentDto(id: UUID?): PersistentModel {
+        return PersistentModel(id, createdBy, timeOfCreation, modifiedBy, timeOfModification)
     }
 }

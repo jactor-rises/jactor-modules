@@ -1,25 +1,29 @@
 package com.github.jactor.persistence.dto
 
+import java.util.UUID
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
 
 data class UserModel(
-    override val persistentDto: PersistentDto = PersistentDto(),
+    val persistentModel: PersistentModel = PersistentModel(),
     var person: PersonModel? = null,
     var emailAddress: String? = null,
     var username: String? = null,
     var usertype: Usertype = Usertype.ACTIVE
-) : PersistentDataModel(persistentDto) {
+) {
+    val id: UUID? @JsonIgnore get() = persistentModel.id
+
     constructor(
-        persistent: PersistentDto, userInternal: UserModel
+        persistent: PersistentModel, userInternal: UserModel
     ) : this(
         persistent, userInternal.person, userInternal.emailAddress, userInternal.username
     )
 
     constructor(
-        persistentDto: PersistentDto, personInternal: PersonModel?, emailAddress: String?, username: String?
+        persistentModel: PersistentModel, personInternal: PersonModel?, emailAddress: String?, username: String?
     ) : this(
-        persistentDto = persistentDto,
+        persistentModel = persistentModel,
         person = personInternal,
         emailAddress = emailAddress,
         username = username,
@@ -27,7 +31,7 @@ data class UserModel(
     )
 
     constructor(userDto: UserDto) : this(
-        persistentDto = PersistentDto(id = userDto.id),
+        persistentModel = PersistentModel(id = userDto.id),
         person = if (userDto.person != null) PersonModel(userDto.person!!) else null,
         emailAddress = userDto.emailAddress,
         username = userDto.username,
@@ -35,7 +39,7 @@ data class UserModel(
     )
 
     fun toUserDto() = UserDto(
-        id = persistentDto.id,
+        id = persistentModel.id,
         emailAddress = emailAddress,
         person = person?.toPersonDto(),
         username = username,

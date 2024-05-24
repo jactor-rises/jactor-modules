@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.entity.PersonBuilder
 import assertk.assertThat
@@ -30,7 +30,7 @@ internal class PersonServiceTest : AbstractSpringBootNoDirtyContextTest() {
         // when
         val person = personService.createWhenNotExists(
             PersonModel(
-                PersistentDto(
+                PersistentModel(
                     id = personEntity.id,
                     createdBy = "creator",
                     timeOfCreation = LocalDateTime.now(),

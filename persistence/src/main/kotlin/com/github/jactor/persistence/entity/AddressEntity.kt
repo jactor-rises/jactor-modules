@@ -63,7 +63,7 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     }
 
     internal constructor(addressModel: AddressModel) {
-        persistentDataEmbeddable = PersistentDataEmbeddable(addressModel.persistentDto)
+        persistentDataEmbeddable = PersistentDataEmbeddable(addressModel.persistentModel)
         addressLine1 = addressModel.addressLine1
         addressLine2 = addressModel.addressLine2
         addressLine3 = addressModel.addressLine3

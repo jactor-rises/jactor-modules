@@ -4,7 +4,7 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.dto.AddressModel
-import com.github.jactor.persistence.dto.PersistentDto
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
@@ -107,16 +107,16 @@ internal class PersonRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
     fun `should be able to relate a user`() {
         val alreadyPresentPeople = personRepository.findAll().count()
         val addressModel = AddressModel(
-            persistentDto = PersistentDto(UUID.randomUUID()),
+            persistentModel = PersistentModel(UUID.randomUUID()),
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
         )
 
         val personModel = PersonModel(
-            persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressModel, surname = "Adder"
+            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressModel, surname = "Adder"
         )
 
         val userModel = UserModel(
-            PersistentDto(id = UUID.randomUUID()),
+            PersistentModel(id = UUID.randomUUID()),
             personModel,
             emailAddress = "public@services.com",
             username = "black"

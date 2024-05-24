@@ -6,7 +6,7 @@ import com.github.jactor.persistence.dto.AddressModel
 internal object AddressBuilder {
     fun new(addressModel: AddressModel) = AddressData(
         addressModel = addressModel.copy(
-            persistentDto = addressModel.persistentDto.copy(id = UUID.randomUUID())
+            persistentModel = addressModel.persistentModel.copy(id = UUID.randomUUID())
         )
     )
 

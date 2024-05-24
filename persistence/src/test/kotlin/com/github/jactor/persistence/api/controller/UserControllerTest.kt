@@ -89,7 +89,7 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should modify existing user`() {
         val uuid = UUID.randomUUID()
         val userModel = UserModel()
-        userModel.id = uuid
+        userModel.persistentModel.id = uuid
 
         every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(userModel))
 

@@ -1,22 +1,24 @@
 package com.github.jactor.persistence.dto
 
+import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 data class GuestBookEntryModel(
-    override val persistentDto: PersistentDto = PersistentDto(),
+    val persistentModel: PersistentModel = PersistentModel(),
     var guestBook: GuestBookModel? = null,
     var creatorName: String? = null,
     var entry: String? = null
-) : PersistentDataModel(persistentDto) {
+) {
+    val id: UUID? @JsonIgnore get() = persistentModel.id
     val notNullableCreator: String
         @JsonIgnore get() = creatorName ?: throw IllegalStateException("No creator is provided!")
     val notNullableEntry: String
         @JsonIgnore get() = entry ?: throw IllegalStateException("No entry is provided!")
 
     constructor(
-        persistentDto: PersistentDto, guestBookEntry: GuestBookEntryModel
+        persistentModel: PersistentModel, guestBookEntry: GuestBookEntryModel
     ) : this(
-        persistentDto = persistentDto,
+        persistentModel = persistentModel,
         guestBook = guestBookEntry.guestBook,
         creatorName = guestBookEntry.creatorName,
         entry = guestBookEntry.entry

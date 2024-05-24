@@ -19,7 +19,7 @@ internal class PersonModelTest {
         personModel.surname = "surname"
 
         val (_, address, locale, firstName, surname, description) = PersonModel(
-            personModel.persistentDto,
+            personModel.persistentModel,
             personModel
         )
 
@@ -34,24 +34,24 @@ internal class PersonModelTest {
 
     @Test
     fun `should give values to PersistentDto`() {
-        val persistentDto = PersistentDto()
-        persistentDto.createdBy = "jactor"
-        persistentDto.timeOfCreation = LocalDateTime.now()
-        persistentDto.id = UUID.randomUUID()
-        persistentDto.modifiedBy = "tip"
-        persistentDto.timeOfModification = LocalDateTime.now()
+        val persistentModel = PersistentModel()
+        persistentModel.createdBy = "jactor"
+        persistentModel.timeOfCreation = LocalDateTime.now()
+        persistentModel.id = UUID.randomUUID()
+        persistentModel.modifiedBy = "tip"
+        persistentModel.timeOfModification = LocalDateTime.now()
 
         val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = PersonModel(
-            persistentDto,
+            persistentModel,
             PersonModel()
-        ).persistentDto
+        ).persistentModel
 
         assertAll {
-            assertThat(createdBy).isEqualTo(persistentDto.createdBy)
-            assertThat(timeOfCreation).isEqualTo(persistentDto.timeOfCreation)
-            assertThat(id).isEqualTo(persistentDto.id)
-            assertThat(modifiedBy).isEqualTo(persistentDto.modifiedBy)
-            assertThat(timeOfModification).isEqualTo(persistentDto.timeOfModification)
+            assertThat(createdBy).isEqualTo(persistentModel.createdBy)
+            assertThat(timeOfCreation).isEqualTo(persistentModel.timeOfCreation)
+            assertThat(id).isEqualTo(persistentModel.id)
+            assertThat(modifiedBy).isEqualTo(persistentModel.modifiedBy)
+            assertThat(timeOfModification).isEqualTo(persistentModel.timeOfModification)
         }
     }
 
@@ -67,7 +67,7 @@ internal class PersonModelTest {
             )
         )
 
-        val address = PersonModel(personModel.persistentDto, personModel).toPersonDto().address
+        val address = PersonModel(personModel.persistentModel, personModel).toPersonDto().address
 
         assertAll {
             assertThat(address?.addressLine1).isEqualTo("somewhere")

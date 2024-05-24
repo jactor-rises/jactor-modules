@@ -59,7 +59,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     constructor(guestBook: GuestBookModel) {
         entries = guestBook.entries.map { GuestBookEntryEntity(it) }.toMutableSet()
         id = guestBook.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistentDto)
+        persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistentModel)
         title = guestBook.title
         user = guestBook.userInternal?.let { UserEntity(it) }
     }
@@ -70,7 +70,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
 
     fun asDto(): GuestBookModel {
         return GuestBookModel(
-            persistentDto = persistentDataEmbeddable.asPersistentDto(id),
+            persistentModel = persistentDataEmbeddable.asPersistentDto(id),
             entries = entries.map { it.asDto() }.toMutableSet(),
             title = title,
             userInternal = user?.asDto()
