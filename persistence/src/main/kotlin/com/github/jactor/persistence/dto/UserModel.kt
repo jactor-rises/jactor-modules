@@ -3,21 +3,21 @@ package com.github.jactor.persistence.dto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
 
-data class UserInternalDto(
+data class UserModel(
     override val persistentDto: PersistentDto = PersistentDto(),
-    var person: PersonInternalDto? = null,
+    var person: PersonModel? = null,
     var emailAddress: String? = null,
     var username: String? = null,
     var usertype: Usertype = Usertype.ACTIVE
-) : PersistentData(persistentDto) {
+) : PersistentDataModel(persistentDto) {
     constructor(
-        persistent: PersistentDto, userInternal: UserInternalDto
+        persistent: PersistentDto, userInternal: UserModel
     ) : this(
         persistent, userInternal.person, userInternal.emailAddress, userInternal.username
     )
 
     constructor(
-        persistentDto: PersistentDto, personInternal: PersonInternalDto?, emailAddress: String?, username: String?
+        persistentDto: PersistentDto, personInternal: PersonModel?, emailAddress: String?, username: String?
     ) : this(
         persistentDto = persistentDto,
         person = personInternal,
@@ -28,7 +28,7 @@ data class UserInternalDto(
 
     constructor(userDto: UserDto) : this(
         persistentDto = PersistentDto(id = userDto.id),
-        person = if (userDto.person != null) PersonInternalDto(userDto.person!!) else null,
+        person = if (userDto.person != null) PersonModel(userDto.person!!) else null,
         emailAddress = userDto.emailAddress,
         username = userDto.username,
         usertype = Usertype.valueOf(userDto.userType.name)

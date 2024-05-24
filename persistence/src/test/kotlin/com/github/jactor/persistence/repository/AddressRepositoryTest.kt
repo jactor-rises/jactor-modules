@@ -2,7 +2,7 @@ package com.github.jactor.persistence.repository
 
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressInternalDto
+import com.github.jactor.persistence.dto.AddressModel
 import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.AddressEntity
 import assertk.assertAll
@@ -19,7 +19,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
             addressRepository.save(
                 AddressBuilder
                     .new(
-                        addressInternalDto = AddressInternalDto(
+                        addressModel = AddressModel(
                             zipCode = "1234",
                             addressLine1 = "somewhere out there",
                             city = "Rud"
@@ -31,7 +31,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
             addressRepository.save(
                 AddressBuilder
                     .new(
-                        addressInternalDto = AddressInternalDto(
+                        addressModel = AddressModel(
                             zipCode = "1234",
                             addressLine1 = "somewhere in there",
                             city = "Rud"
@@ -54,7 +54,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should write then read an address entity`() {
         val addressEntityToPersist = AddressBuilder
             .new(
-                addressInternalDto = AddressInternalDto(
+                addressModel = AddressModel(
                     zipCode = "1234",
                     addressLine1 = "somewhere out there",
                     addressLine2 = "where the streets have no name",
@@ -84,7 +84,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should write then update and read an address entity`() {
         val addressEntityToPersist = AddressBuilder
             .new(
-                addressInternalDto = AddressInternalDto(
+                addressModel = AddressModel(
                     zipCode = "1234",
                     addressLine1 = "somewhere out there",
                     addressLine2 = "where the streets have no name",

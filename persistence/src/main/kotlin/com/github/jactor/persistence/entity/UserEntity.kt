@@ -5,7 +5,7 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.UserModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -74,11 +74,11 @@ class UserEntity : PersistentEntity<UserEntity?> {
         userType = user.userType
     }
 
-    constructor(user: UserInternalDto) {
+    constructor(user: UserModel) {
         addValues(user)
     }
 
-    private fun addValues(user: UserInternalDto) {
+    private fun addValues(user: UserModel) {
         emailAddress = user.emailAddress
         id = user.id
         persistentDataEmbeddable = PersistentDataEmbeddable(user.persistentDto)
@@ -89,8 +89,8 @@ class UserEntity : PersistentEntity<UserEntity?> {
             ?: throw IllegalArgumentException("Unknown UserType: " + user.usertype)
     }
 
-    fun asDto(): UserInternalDto {
-        return UserInternalDto(
+    fun asDto(): UserModel {
+        return UserModel(
             persistentDataEmbeddable.asPersistentDto(id),
             person?.asDto(),
             emailAddress,
@@ -119,8 +119,8 @@ class UserEntity : PersistentEntity<UserEntity?> {
         blogEntity.user = this
     }
 
-    fun update(userInternalDto: UserInternalDto): UserEntity {
-        addValues(userInternalDto)
+    fun update(userModel: UserModel): UserEntity {
+        addValues(userModel)
         return this
     }
 

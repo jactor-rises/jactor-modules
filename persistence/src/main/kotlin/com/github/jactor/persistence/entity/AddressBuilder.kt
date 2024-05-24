@@ -1,21 +1,21 @@
 package com.github.jactor.persistence.entity
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.AddressInternalDto
+import com.github.jactor.persistence.dto.AddressModel
 
 internal object AddressBuilder {
-    fun new(addressInternalDto: AddressInternalDto) = AddressData(
-        addressInternalDto = addressInternalDto.copy(
-            persistentDto = addressInternalDto.persistentDto.copy(id = UUID.randomUUID())
+    fun new(addressModel: AddressModel) = AddressData(
+        addressModel = addressModel.copy(
+            persistentDto = addressModel.persistentDto.copy(id = UUID.randomUUID())
         )
     )
 
-    fun unchanged(addressInternalDto: AddressInternalDto): AddressData = AddressData(
-        addressInternalDto = addressInternalDto
+    fun unchanged(addressModel: AddressModel): AddressData = AddressData(
+        addressModel = addressModel
     )
 
     @JvmRecord
-    data class AddressData(val addressInternalDto: AddressInternalDto) {
-        fun build(): AddressEntity = AddressEntity(addressInternalDto = addressInternalDto)
+    data class AddressData(val addressModel: AddressModel) {
+        fun build(): AddressEntity = AddressEntity(addressModel = addressModel)
     }
 }

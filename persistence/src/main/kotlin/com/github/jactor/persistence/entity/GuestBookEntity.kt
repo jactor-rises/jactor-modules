@@ -5,20 +5,17 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.GuestBookDto
+import com.github.jactor.persistence.dto.GuestBookModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
-import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
 
 @Entity
@@ -59,7 +56,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
         user = guestBook.copyUserWithoutId()
     }
 
-    constructor(guestBook: GuestBookDto) {
+    constructor(guestBook: GuestBookModel) {
         entries = guestBook.entries.map { GuestBookEntryEntity(it) }.toMutableSet()
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistentDto)
@@ -71,8 +68,8 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
         return user?.copyWithoutId()
     }
 
-    fun asDto(): GuestBookDto {
-        return GuestBookDto(
+    fun asDto(): GuestBookModel {
+        return GuestBookModel(
             persistentDto = persistentDataEmbeddable.asPersistentDto(id),
             entries = entries.map { it.asDto() }.toMutableSet(),
             title = title,

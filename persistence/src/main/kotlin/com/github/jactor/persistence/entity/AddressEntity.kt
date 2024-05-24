@@ -5,7 +5,7 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.AddressInternalDto
+import com.github.jactor.persistence.dto.AddressModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
 import jakarta.persistence.Embedded
@@ -62,19 +62,19 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
         zipCode = address.zipCode
     }
 
-    internal constructor(addressInternalDto: AddressInternalDto) {
-        persistentDataEmbeddable = PersistentDataEmbeddable(addressInternalDto.persistentDto)
-        addressLine1 = addressInternalDto.addressLine1
-        addressLine2 = addressInternalDto.addressLine2
-        addressLine3 = addressInternalDto.addressLine3
-        city = addressInternalDto.city
-        country = addressInternalDto.country
-        id = addressInternalDto.id
-        zipCode = addressInternalDto.zipCode
+    internal constructor(addressModel: AddressModel) {
+        persistentDataEmbeddable = PersistentDataEmbeddable(addressModel.persistentDto)
+        addressLine1 = addressModel.addressLine1
+        addressLine2 = addressModel.addressLine2
+        addressLine3 = addressModel.addressLine3
+        city = addressModel.city
+        country = addressModel.country
+        id = addressModel.id
+        zipCode = addressModel.zipCode
     }
 
-    fun asDto(): AddressInternalDto {
-        return AddressInternalDto(persistentDataEmbeddable.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country)
+    fun asDto(): AddressModel {
+        return AddressModel(persistentDataEmbeddable.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country)
     }
 
     override fun copyWithoutId(): AddressEntity {

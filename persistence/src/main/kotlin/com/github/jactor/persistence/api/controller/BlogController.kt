@@ -1,8 +1,8 @@
 package com.github.jactor.persistence.api.controller
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
+import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.dto.BlogEntryModel
 import com.github.jactor.persistence.service.BlogService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -36,7 +36,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") blogId: UUID): ResponseEntity<BlogDto> {
+    operator fun get(@PathVariable("id") blogId: UUID): ResponseEntity<BlogModel> {
         return blogService.find(blogId)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -53,7 +53,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @GetMapping("/entry/{id}")
-    fun getEntryById(@PathVariable("id") blogEntryId: UUID): ResponseEntity<BlogEntryDto> {
+    fun getEntryById(@PathVariable("id") blogEntryId: UUID): ResponseEntity<BlogEntryModel> {
         return blogService.findEntryBy(blogEntryId)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -70,7 +70,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @GetMapping("/title/{title}")
-    fun findByTitle(@PathVariable("title") title: String?): ResponseEntity<List<BlogDto>> {
+    fun findByTitle(@PathVariable("title") title: String?): ResponseEntity<List<BlogModel>> {
         val blogsByTitle = blogService.findBlogsBy(title)
 
         return ResponseEntity(blogsByTitle, if (blogsByTitle.isEmpty()) HttpStatus.NO_CONTENT else HttpStatus.OK)
@@ -88,7 +88,7 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @GetMapping("/{id}/entries")
-    fun findEntriesByBlogId(@PathVariable("id") blogId: UUID): ResponseEntity<List<BlogEntryDto>> {
+    fun findEntriesByBlogId(@PathVariable("id") blogId: UUID): ResponseEntity<List<BlogEntryModel>> {
         val entriesForBlog = blogService.findEntriesForBlog(blogId)
 
         return ResponseEntity(entriesForBlog, if (entriesForBlog.isEmpty()) HttpStatus.NO_CONTENT else HttpStatus.OK)
@@ -106,12 +106,12 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @PutMapping("/{blogId}")
-    fun put(@RequestBody blogDto: BlogDto, @PathVariable blogId: UUID): ResponseEntity<BlogDto> {
-        if (blogDto.id != blogId) {
+    fun put(@RequestBody blogModel: BlogModel, @PathVariable blogId: UUID): ResponseEntity<BlogModel> {
+        if (blogModel.id != blogId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(blogService.saveOrUpdate(blogDto), HttpStatus.ACCEPTED)
+        return ResponseEntity(blogService.saveOrUpdate(blogModel), HttpStatus.ACCEPTED)
     }
 
     @Operation(description = "Opprett en blogg")
@@ -126,12 +126,12 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @PostMapping
-    fun post(@RequestBody blogDto: BlogDto): ResponseEntity<BlogDto> {
-        if (blogDto.id != null) {
+    fun post(@RequestBody blogModel: BlogModel): ResponseEntity<BlogModel> {
+        if (blogModel.id != null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(blogService.saveOrUpdate(blogDto), HttpStatus.CREATED)
+        return ResponseEntity(blogService.saveOrUpdate(blogModel), HttpStatus.CREATED)
     }
 
     @Operation(description = "Endrer et blogg-innslag")
@@ -147,14 +147,14 @@ class BlogController(private val blogService: BlogService) {
     )
     @PutMapping("/entry/{blogEntryId}")
     fun putEntry(
-        @RequestBody blogEntryDto: BlogEntryDto,
+        @RequestBody blogEntryModel: BlogEntryModel,
         @PathVariable blogEntryId: UUID
-    ): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.id != blogEntryId) {
+    ): ResponseEntity<BlogEntryModel> {
+        if (blogEntryModel.id != blogEntryId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(blogService.saveOrUpdate(blogEntryDto), HttpStatus.ACCEPTED)
+        return ResponseEntity(blogService.saveOrUpdate(blogEntryModel), HttpStatus.ACCEPTED)
     }
 
     @Operation(description = "Oppretter et blogg-innslag")
@@ -169,11 +169,11 @@ class BlogController(private val blogService: BlogService) {
         ]
     )
     @PostMapping("/entry")
-    fun postEntry(@RequestBody blogEntryDto: BlogEntryDto): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.id != null) {
+    fun postEntry(@RequestBody blogEntryModel: BlogEntryModel): ResponseEntity<BlogEntryModel> {
+        if (blogEntryModel.id != null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(blogService.saveOrUpdate(blogEntryDto), HttpStatus.CREATED)
+        return ResponseEntity(blogService.saveOrUpdate(blogEntryModel), HttpStatus.CREATED)
     }
 }

@@ -5,14 +5,14 @@ import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
+import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.dto.BlogEntryModel
+import com.github.jactor.persistence.dto.GuestBookModel
+import com.github.jactor.persistence.dto.GuestBookEntryModel
 import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.BlogBuilder
 import com.github.jactor.persistence.entity.GuestBookBuilder
@@ -38,10 +38,10 @@ internal class ModifierAspectTest {
     @Test
     fun `should modify timestamp on address when used`() {
         val addressWithoutId = AddressBuilder.unchanged(
-            addressInternalDto = AddressInternalDto(persistentDto, AddressInternalDto())
+            addressModel = AddressModel(persistentDto, AddressModel())
         ).build()
 
-        val address = AddressBuilder.new(addressInternalDto = AddressInternalDto(persistentDto, AddressInternalDto()))
+        val address = AddressBuilder.new(addressModel = AddressModel(persistentDto, AddressModel()))
             .build()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
@@ -58,8 +58,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = BlogBuilder.unchanged(BlogDto(persistentDto, BlogDto())).buildBlogEntity()
-        val blog = BlogBuilder.new(BlogDto(persistentDto, BlogDto())).buildBlogEntity()
+        val blogWithouId = BlogBuilder.unchanged(BlogModel(persistentDto, BlogModel())).buildBlogEntity()
+        val blog = BlogBuilder.new(BlogModel(persistentDto, BlogModel())).buildBlogEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 
@@ -72,10 +72,10 @@ internal class ModifierAspectTest {
     @Test
     fun `should modify timestamp on blogEntry when used`() {
         val blogEntryWithoutId = BlogBuilder.new().withUnchangedEntry(
-            blogEntryDto = BlogEntryDto(
+            blogEntryModel = BlogEntryModel(
                 persistentDto = persistentDto,
-                blogEntry = BlogEntryDto(
-                    blog = BlogDto(persistentDto = PersistentDto(id = UUID.randomUUID())),
+                blog = BlogEntryModel(
+                    blog = BlogModel(persistentDto = PersistentDto(id = UUID.randomUUID())),
                     creatorName = "me",
                     entry = "some shit"
                 )
@@ -83,7 +83,7 @@ internal class ModifierAspectTest {
         ).buildBlogEntryEntity()
 
         val blogEntry = BlogBuilder.new().withEntry(
-            BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit"))
+            BlogEntryModel(persistentDto, BlogEntryModel(creatorName = "me", entry = "some shit"))
         ).buildBlogEntryEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blogEntry, blogEntryWithoutId)

@@ -4,16 +4,15 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.GuestBookDto
+import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.dto.GuestBookModel
 import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.GuestBookBuilder
 import com.github.jactor.persistence.entity.PersonBuilder
 import com.github.jactor.persistence.entity.UserBuilder
-import com.github.jactor.persistence.entity.UserEntity
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -24,19 +23,19 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
     fun `should write then read guest book`() {
         val addressDto = AddressBuilder
             .new(
-                addressInternalDto = AddressInternalDto(
+                addressModel = AddressModel(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testington"
                 )
             )
-            .addressInternalDto
+            .addressModel
 
-        val personDto = PersonInternalDto(
+        val personDto = PersonModel(
             persistentDto = PersistentDto(id = UUID.randomUUID()), address = addressDto, surname = "AA"
         )
 
-        val userDto = UserInternalDto(
+        val userDto = UserModel(
             PersistentDto(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "casuel@tantooine.com",
@@ -49,7 +48,7 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
 
         userEntity.setGuestBook(
             GuestBookBuilder.new(
-                GuestBookDto(
+                GuestBookModel(
                     entries = emptySet(),
                     title = "home sweet home",
                     userInternal = userEntity.asDto()
@@ -70,14 +69,14 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
     @Test
     fun `should write then update and read guest book`() {
         val addressDto = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val personDto = PersonBuilder.new(PersonInternalDto(address = addressDto, surname = "AA")).personInternalDto
+        val personDto = PersonBuilder.new(PersonModel(address = addressDto, surname = "AA")).personModel
         val userDto = UserBuilder.unchanged(
-            userInternalDto = UserInternalDto(
+            userModel = UserModel(
                 persistentDto = PersistentDto(),
                 personInternal = personDto,
                 emailAddress = "casuel@tantooine.com",
@@ -89,7 +88,7 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
 
         userEntity.setGuestBook(
             GuestBookBuilder.new(
-                GuestBookDto(
+                GuestBookModel(
                     entries = emptySet(),
                     title = "home sweet home",
                     userInternal = userEntity.asDto()

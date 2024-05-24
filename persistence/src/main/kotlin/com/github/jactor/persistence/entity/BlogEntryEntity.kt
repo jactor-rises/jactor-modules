@@ -5,8 +5,8 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
+import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.dto.BlogEntryModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -50,11 +50,11 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
         persistentDataEmbeddable = PersistentDataEmbeddable()
     }
 
-    constructor(blogEntryDto: BlogEntryDto) {
-        blog = BlogEntity(blogDto = blogEntryDto.blog ?: error("Entry must belong to a blog"))
-        entryEmbeddable = EntryEmbeddable(blogEntryDto.notNullableCreator, blogEntryDto.notNullableEntry)
-        id = blogEntryDto.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryDto.persistentDto)
+    constructor(blogEntryModel: BlogEntryModel) {
+        blog = BlogEntity(blogModel = blogEntryModel.blog ?: error("Entry must belong to a blog"))
+        entryEmbeddable = EntryEmbeddable(blogEntryModel.notNullableCreator, blogEntryModel.notNullableEntry)
+        id = blogEntryModel.id
+        persistentDataEmbeddable = PersistentDataEmbeddable(blogEntryModel.persistentDto)
     }
 
     private fun copyBlog(): BlogEntity {
@@ -65,16 +65,16 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
         return entryEmbeddable.copy()
     }
 
-    fun asDto(): BlogEntryDto {
+    fun asDto(): BlogEntryModel {
         return asDto(blog!!.asDto())
     }
 
-    private fun asDto(blogDto: BlogDto): BlogEntryDto {
-        val blogEntryDto = BlogEntryDto()
-        blogEntryDto.blog = blogDto
-        blogEntryDto.creatorName = entryEmbeddable.creatorName
-        blogEntryDto.entry = entryEmbeddable.entry
-        return blogEntryDto
+    private fun asDto(blogModel: BlogModel): BlogEntryModel {
+        val blogEntryModel = BlogEntryModel()
+        blogEntryModel.blog = blogModel
+        blogEntryModel.creatorName = entryEmbeddable.creatorName
+        blogEntryModel.entry = entryEmbeddable.entry
+        return blogEntryModel
     }
 
     fun modify(entry: String, modifiedCreator: String) {

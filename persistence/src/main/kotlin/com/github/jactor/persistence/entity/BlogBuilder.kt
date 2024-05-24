@@ -1,39 +1,39 @@
 package com.github.jactor.persistence.entity
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
+import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.dto.BlogEntryModel
 import com.github.jactor.persistence.dto.PersistentDto
 
 internal object BlogBuilder {
-    fun new(blogDto: BlogDto = BlogDto()): BlogData = BlogData(
-        blogDto = blogDto.copy(persistentDto = blogDto.persistentDto.copy(id = UUID.randomUUID()))
+    fun new(blogModel: BlogModel = BlogModel()): BlogData = BlogData(
+        blogModel = blogModel.copy(persistentDto = blogModel.persistentDto.copy(id = UUID.randomUUID()))
     )
 
-    fun unchanged(blogDto: BlogDto = BlogDto()): BlogData = BlogData(
-        blogDto = blogDto
+    fun unchanged(blogModel: BlogModel = BlogModel()): BlogData = BlogData(
+        blogModel = blogModel
     )
 
     @JvmRecord
     data class BlogData(
-        val blogDto: BlogDto,
-        val blogEntryDto: BlogEntryDto? = null,
+        val blogModel: BlogModel,
+        val blogEntryModel: BlogEntryModel? = null,
     ) {
-        fun withEntry(blogEntryDto: BlogEntryDto): BlogData = copy(
-            blogEntryDto = blogEntryDto.copy(
+        fun withEntry(blogEntryModel: BlogEntryModel): BlogData = copy(
+            blogEntryModel = blogEntryModel.copy(
                 persistentDto = PersistentDto(id = UUID.randomUUID()),
-                blog = blogDto,
+                blog = blogModel,
             )
         )
 
-        fun withUnchangedEntry(blogEntryDto: BlogEntryDto): BlogData = copy(
-            blogEntryDto = blogEntryDto,
+        fun withUnchangedEntry(blogEntryModel: BlogEntryModel): BlogData = copy(
+            blogEntryModel = blogEntryModel,
         )
 
-        fun buildBlogEntity(): BlogEntity = BlogEntity(blogDto = blogDto)
+        fun buildBlogEntity(): BlogEntity = BlogEntity(blogModel = blogModel)
 
         fun buildBlogEntryEntity(): BlogEntryEntity = BlogEntryEntity(
-            blogEntryDto = blogEntryDto ?: error("No blog entry dto"),
+            blogEntryModel = blogEntryModel ?: error("No blog entry dto"),
         )
     }
 }

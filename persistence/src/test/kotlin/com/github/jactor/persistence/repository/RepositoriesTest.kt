@@ -3,10 +3,10 @@ package com.github.jactor.persistence.repository
 import java.time.LocalDate
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.AddressBuilder
 import com.github.jactor.persistence.entity.BlogBuilder
 import com.github.jactor.persistence.entity.PersonBuilder
@@ -21,18 +21,18 @@ internal class RepositoriesTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {
         val address = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testoplis"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val personInternalDto = PersonBuilder.new(
-            personInternalDto = PersonInternalDto(address = address, locale = "no_NO", surname = "Skywalker")
-        ).personInternalDto
+        val personModel = PersonBuilder.new(
+            personModel = PersonModel(address = address, locale = "no_NO", surname = "Skywalker")
+        ).personModel
 
         val userToPersist = UserBuilder.new(
-            userDto = UserInternalDto(
-                person = personInternalDto,
+            userDto = UserModel(
+                person = personModel,
                 emailAddress = "brains@rebels.com",
                 username = "r2d2"
             )
@@ -46,7 +46,7 @@ internal class RepositoriesTest : AbstractSpringBootNoDirtyContextTest() {
         flush {
             blogRepository.save(
                 BlogBuilder.new(
-                    blogDto = BlogDto(
+                    blogModel = BlogModel(
                         created = LocalDate.now(),
                         title = "Far, far, away...",
                         userInternal = userByUsername.asDto()

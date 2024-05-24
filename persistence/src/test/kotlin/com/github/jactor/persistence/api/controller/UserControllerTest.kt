@@ -8,7 +8,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.CreateUserCommandDto
@@ -35,7 +35,7 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
         val userRespnse = testRestTemplate.getForEntity(
             buildFullPath("/user/name/me"),
-            UserInternalDto::class.java
+            UserModel::class.java
         )
 
         assertAll {
@@ -46,11 +46,11 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find a user by username`() {
-        every { userRepositorySpyk.findByUsername("me") } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findByUsername("me") } returns Optional.of(UserEntity(UserModel()))
 
         val userResponse = testRestTemplate.getForEntity(
             buildFullPath("/user/name/me"),
-            UserInternalDto::class.java
+            UserModel::class.java
         )
 
         assertAll {
@@ -64,7 +64,7 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
         val uuid = UUID.randomUUID()
         every { userRepositorySpyk.findById(uuid) } returns Optional.empty()
 
-        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
+        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserModel::class.java)
 
         assertAll {
             assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
@@ -75,9 +75,9 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserModel()))
 
-        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
+        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserModel::class.java)
 
         assertAll {
             assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.OK)
@@ -88,13 +88,13 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should modify existing user`() {
         val uuid = UUID.randomUUID()
-        val userInternalDto = UserInternalDto()
-        userInternalDto.id = uuid
+        val userModel = UserModel()
+        userModel.id = uuid
 
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(userInternalDto))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(userModel))
 
         val userRespnse = testRestTemplate.exchange(
-            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(userInternalDto.toUserDto()),
+            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(userModel.toUserDto()),
             UserDto::class.java
         )
 
@@ -109,8 +109,8 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should find all usernames on active users`() {
         val bartDto = UserDto(person = PersonDto(address = AddressDto()), username = "bart", userType = UserType.ACTIVE)
         val lisaDto = UserDto(person = PersonDto(address = AddressDto()), username = "lisa", userType = UserType.ACTIVE)
-        val bart = UserEntity(UserInternalDto(bartDto))
-        val lisa = UserEntity(UserInternalDto(lisaDto))
+        val bart = UserEntity(UserModel(bartDto))
+        val lisa = UserEntity(UserModel(lisaDto))
 
         every { userRepositorySpyk.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE)) } returns listOf(bart, lisa)
 
@@ -126,7 +126,7 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should accept if user id is valid`() {
         val uuid = UUID.randomUUID()
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserModel()))
 
         val userResponse = testRestTemplate.exchange(
             buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(UserDto(id = uuid)),

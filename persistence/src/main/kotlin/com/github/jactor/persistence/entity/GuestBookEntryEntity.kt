@@ -5,8 +5,8 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
+import com.github.jactor.persistence.dto.GuestBookModel
+import com.github.jactor.persistence.dto.GuestBookEntryModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -50,7 +50,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         persistentDataEmbeddable = PersistentDataEmbeddable()
     }
 
-    constructor(guestBookEntry: GuestBookEntryDto) {
+    constructor(guestBookEntry: GuestBookEntryModel) {
         entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
         guestBook = guestBookEntry.guestBook?.let { GuestBookEntity(it) }
         id = guestBookEntry.id
@@ -65,12 +65,12 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         return entryEmbeddable.copy()
     }
 
-    fun asDto(): GuestBookEntryDto {
+    fun asDto(): GuestBookEntryModel {
         return asDto(guestBook!!.asDto())
     }
 
-    private fun asDto(guestBook: GuestBookDto): GuestBookEntryDto {
-        return GuestBookEntryDto(
+    private fun asDto(guestBook: GuestBookModel): GuestBookEntryModel {
+        return GuestBookEntryModel(
             persistentDataEmbeddable.asPersistentDto(id),
             guestBook,
             entryEmbeddable.creatorName,

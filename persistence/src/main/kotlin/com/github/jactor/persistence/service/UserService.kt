@@ -4,7 +4,7 @@ import java.util.UUID
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.api.command.CreateUserCommand
-import com.github.jactor.persistence.dto.UserInternalDto
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.repository.UserRepository
 
@@ -13,27 +13,27 @@ class UserService(
     private val personService: PersonService,
     private val userRepository: UserRepository
 ) {
-    fun find(username: String): UserInternalDto? {
+    fun find(username: String): UserModel? {
         return userRepository.findByUsername(username)
             .map { it.asDto() }
             .orElse(null)
     }
 
-    fun find(id: UUID): UserInternalDto? {
+    fun find(id: UUID): UserModel? {
         return userRepository.findById(id)
             .map { it.asDto() }
             .orElse(null)
     }
 
     @Transactional
-    fun update(userInternalDto: UserInternalDto): UserInternalDto? {
-        return userRepository.findById(userInternalDto.id ?: throw IllegalArgumentException("User must have an id!"))
-            .map { it.update(userInternalDto) }
+    fun update(userModel: UserModel): UserModel? {
+        return userRepository.findById(userModel.id ?: throw IllegalArgumentException("User must have an id!"))
+            .map { it.update(userModel) }
             .map { it.asDto() }
             .orElse(null)
     }
 
-    fun create(createUserCommand: CreateUserCommand): UserInternalDto {
+    fun create(createUserCommand: CreateUserCommand): UserModel {
         val user = createNewFrom(createUserCommand)
 
         if (user.id == null) {

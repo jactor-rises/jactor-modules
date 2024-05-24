@@ -7,21 +7,21 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 
-internal class UserInternalDtoTest {
+internal class UserModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val userInternalDto = UserInternalDto()
-        userInternalDto.emailAddress = "somewhere@time"
-        userInternalDto.person = PersonInternalDto()
-        userInternalDto.username = "me"
+        val userModel = UserModel()
+        userModel.emailAddress = "somewhere@time"
+        userModel.person = PersonModel()
+        userModel.username = "me"
 
-        val (_, person, emailAddress, username) = UserInternalDto(userInternalDto.persistentDto, userInternalDto)
+        val (_, person, emailAddress, username) = UserModel(userModel.persistentDto, userModel)
 
         assertAll {
-            assertThat(emailAddress).isEqualTo(userInternalDto.emailAddress)
-            assertThat(person).isEqualTo(userInternalDto.person)
-            assertThat(username).isEqualTo(userInternalDto.username)
+            assertThat(emailAddress).isEqualTo(userModel.emailAddress)
+            assertThat(person).isEqualTo(userModel.person)
+            assertThat(username).isEqualTo(userModel.username)
         }
     }
 
@@ -34,9 +34,9 @@ internal class UserInternalDtoTest {
         persistentDto.modifiedBy = "tip"
         persistentDto.timeOfModification = LocalDateTime.now()
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = UserInternalDto(
+        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = UserModel(
             persistentDto,
-            UserInternalDto()
+            UserModel()
         ).persistentDto
 
         assertAll {

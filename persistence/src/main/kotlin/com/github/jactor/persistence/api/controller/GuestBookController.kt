@@ -1,8 +1,8 @@
 package com.github.jactor.persistence.api.controller
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.GuestBookDto
-import com.github.jactor.persistence.dto.GuestBookEntryDto
+import com.github.jactor.persistence.dto.GuestBookModel
+import com.github.jactor.persistence.dto.GuestBookEntryModel
 import com.github.jactor.persistence.service.GuestBookService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -35,7 +35,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") id: UUID): ResponseEntity<GuestBookDto> {
+    operator fun get(@PathVariable("id") id: UUID): ResponseEntity<GuestBookModel> {
         return guestBookService.find(id)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -52,7 +52,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @GetMapping("/entry/{id}")
-    fun getEntry(@PathVariable("id") id: UUID): ResponseEntity<GuestBookEntryDto> {
+    fun getEntry(@PathVariable("id") id: UUID): ResponseEntity<GuestBookEntryModel> {
         return guestBookService.findEntry(id)?.let { ResponseEntity(it, HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -69,12 +69,12 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @PostMapping
-    fun post(@RequestBody guestBookDto: GuestBookDto): ResponseEntity<GuestBookDto> {
-        if (guestBookDto.id != null) {
+    fun post(@RequestBody guestBookModel: GuestBookModel): ResponseEntity<GuestBookModel> {
+        if (guestBookModel.id != null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(guestBookService.saveOrUpdate(guestBookDto), HttpStatus.CREATED)
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookModel), HttpStatus.CREATED)
     }
 
     @Operation(description = "Endre en gjestebok")
@@ -89,12 +89,12 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @PutMapping("/{guestBookId}")
-    fun put(@RequestBody guestBookDto: GuestBookDto, @PathVariable guestBookId: UUID): ResponseEntity<GuestBookDto> {
-        if (guestBookDto.id != guestBookId) {
+    fun put(@RequestBody guestBookModel: GuestBookModel, @PathVariable guestBookId: UUID): ResponseEntity<GuestBookModel> {
+        if (guestBookModel.id != guestBookId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(guestBookService.saveOrUpdate(guestBookDto), HttpStatus.ACCEPTED)
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookModel), HttpStatus.ACCEPTED)
     }
 
     @Operation(description = "Opprett et innslag i en gjestebok")
@@ -109,12 +109,12 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         ]
     )
     @PostMapping("/entry")
-    fun postEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto): ResponseEntity<GuestBookEntryDto> {
-        if (guestBookEntryDto.id != null) {
+    fun postEntry(@RequestBody guestBookEntryModel: GuestBookEntryModel): ResponseEntity<GuestBookEntryModel> {
+        if (guestBookEntryModel.id != null) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryDto), HttpStatus.CREATED)
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryModel), HttpStatus.CREATED)
     }
 
     @Operation(description = "Endre et innslag i en gjestebok")
@@ -130,13 +130,13 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     )
     @PutMapping("/entry/{guestBookEntryId}")
     fun putEntry(
-        @RequestBody guestBookEntryDto: GuestBookEntryDto,
+        @RequestBody guestBookEntryModel: GuestBookEntryModel,
         @PathVariable guestBookEntryId: UUID
-    ): ResponseEntity<GuestBookEntryDto> {
-        if (guestBookEntryDto.id != guestBookEntryId) {
+    ): ResponseEntity<GuestBookEntryModel> {
+        if (guestBookEntryModel.id != guestBookEntryId) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryDto), HttpStatus.ACCEPTED)
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBookEntryModel), HttpStatus.ACCEPTED)
     }
 }
