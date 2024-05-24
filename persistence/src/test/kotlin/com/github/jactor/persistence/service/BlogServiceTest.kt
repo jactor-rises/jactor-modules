@@ -123,7 +123,11 @@ internal class BlogServiceTest {
     fun `should save BlogEntryDto as BlogEntryEntity`() {
         val blogEntryEntitySlot = slot<BlogEntryEntity>()
         val blogEntryDto = BlogEntryDto()
-        blogEntryDto.blog = BlogDto(userInternal = UserInternalDto(username = "itsme"))
+        blogEntryDto.blog = BlogDto(
+            persistentDto = PersistentDto(id = UUID.randomUUID()),
+            userInternal = UserInternalDto(username = "itsme")
+        )
+
         blogEntryDto.creatorName = "me"
         blogEntryDto.entry = "if i where a rich man..."
 

@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.aop
 
 import java.time.LocalDateTime
+import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -71,7 +72,14 @@ internal class ModifierAspectTest {
     @Test
     fun `should modify timestamp on blogEntry when used`() {
         val blogEntryWithoutId = BlogBuilder.new().withUnchangedEntry(
-            blogEntryDto = BlogEntryDto(persistentDto, BlogEntryDto(creatorName = "me", entry = "some shit"))
+            blogEntryDto = BlogEntryDto(
+                persistentDto = persistentDto,
+                blogEntry = BlogEntryDto(
+                    blog = BlogDto(persistentDto = PersistentDto(id = UUID.randomUUID())),
+                    creatorName = "me",
+                    entry = "some shit"
+                )
+            )
         ).buildBlogEntryEntity()
 
         val blogEntry = BlogBuilder.new().withEntry(
