@@ -1,8 +1,6 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.blog
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.BlogModel
-import com.github.jactor.persistence.dto.BlogEntryModel
 import com.github.jactor.persistence.dto.PersistentModel
 
 internal object BlogBuilder {

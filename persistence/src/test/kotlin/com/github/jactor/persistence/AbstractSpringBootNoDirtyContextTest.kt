@@ -14,7 +14,7 @@ import com.github.jactor.persistence.repository.GuestBookEntryRepository
 import com.github.jactor.persistence.repository.GuestBookRepository
 import com.github.jactor.persistence.repository.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
-import com.github.jactor.persistence.service.BlogService
+import com.github.jactor.persistence.blog.BlogService
 import com.github.jactor.persistence.service.GuestBookService
 import com.ninjasquad.springmockk.SpykBean
 import jakarta.persistence.EntityManager

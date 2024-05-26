@@ -7,8 +7,8 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.BlogEntryModel
-import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.blog.BlogEntryModel
+import com.github.jactor.persistence.blog.BlogModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto

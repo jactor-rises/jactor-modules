@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.blog
 
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -6,7 +6,9 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.BlogModel
+import com.github.jactor.persistence.entity.PersistentDataEmbeddable
+import com.github.jactor.persistence.entity.PersistentEntity
+import com.github.jactor.persistence.entity.UserEntity
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
