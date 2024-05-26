@@ -1,27 +1,28 @@
 package com.github.jactor.persistence.dto
 
-import java.util.UUID
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
 
+@JvmRecord
 data class UserModel(
     val persistentModel: PersistentModel = PersistentModel(),
-    var person: PersonModel? = null,
-    var emailAddress: String? = null,
-    var username: String? = null,
-    var usertype: Usertype = Usertype.ACTIVE
+    val person: PersonModel? = null,
+    val emailAddress: String? = null,
+    val username: String? = null,
+    val usertype: Usertype = Usertype.ACTIVE
 ) {
-    val id: UUID? @JsonIgnore get() = persistentModel.id
-
-    constructor(
-        persistent: PersistentModel, userInternal: UserModel
-    ) : this(
-        persistent, userInternal.person, userInternal.emailAddress, userInternal.username
+    constructor(persistent: PersistentModel, userModel: UserModel) : this(
+        persistentModel = persistent,
+        emailAddress = userModel.emailAddress,
+        person = userModel.person,
+        username = userModel.username
     )
 
     constructor(
-        persistentModel: PersistentModel, personInternal: PersonModel?, emailAddress: String?, username: String?
+        persistentModel: PersistentModel,
+        personInternal: PersonModel?,
+        emailAddress: String?,
+        username: String?
     ) : this(
         persistentModel = persistentModel,
         person = personInternal,
@@ -31,15 +32,15 @@ data class UserModel(
     )
 
     constructor(userDto: UserDto) : this(
-        persistentModel = PersistentModel(id = userDto.id),
+        persistentModel = PersistentModel(userDto.persistentDto),
         person = if (userDto.person != null) PersonModel(userDto.person!!) else null,
         emailAddress = userDto.emailAddress,
         username = userDto.username,
         usertype = Usertype.valueOf(userDto.userType.name)
     )
 
-    fun toUserDto() = UserDto(
-        id = persistentModel.id,
+    fun toDto() = UserDto(
+        persistentDto = persistentModel.toDto(),
         emailAddress = emailAddress,
         person = person?.toPersonDto(),
         username = username,

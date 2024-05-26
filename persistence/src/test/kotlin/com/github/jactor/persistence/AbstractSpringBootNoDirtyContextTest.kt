@@ -85,4 +85,7 @@ abstract class AbstractSpringBootNoDirtyContextTest {
 
         return entity
     }
+    protected fun buildFullPath(url: String): String {
+        return "http://localhost:$port$contextPath$url"
+    }
 }

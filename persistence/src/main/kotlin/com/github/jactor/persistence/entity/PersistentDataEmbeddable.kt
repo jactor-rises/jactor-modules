@@ -6,13 +6,11 @@ import com.github.jactor.persistence.dto.PersistentModel
 import jakarta.persistence.Embeddable
 
 @Embeddable
-class PersistentDataEmbeddable : PersistentData {
-    override val createdBy: String
-    override val timeOfCreation: LocalDateTime
-    override var modifiedBy: String
-        private set
-    override var timeOfModification: LocalDateTime
-        private set
+class PersistentDataEmbeddable {
+    var createdBy: String
+    var timeOfCreation: LocalDateTime
+    var modifiedBy: String
+    var timeOfModification: LocalDateTime
 
     constructor() {
         createdBy = "todo"
@@ -33,7 +31,13 @@ class PersistentDataEmbeddable : PersistentData {
         timeOfModification = LocalDateTime.now()
     }
 
-    fun asPersistentDto(id: UUID?): PersistentModel {
-        return PersistentModel(id, createdBy, timeOfCreation, modifiedBy, timeOfModification)
+    fun toModel(id: UUID?): PersistentModel {
+        return PersistentModel(
+            createdBy = createdBy,
+            id = id,
+            modifiedBy = modifiedBy,
+            timeOfCreation = timeOfCreation,
+            timeOfModification = timeOfModification
+        )
     }
 }

@@ -6,7 +6,6 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.api.command.CreateUserCommand
 import com.github.jactor.persistence.dto.AddressModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
@@ -15,6 +14,7 @@ import com.github.jactor.persistence.dto.UserModel.Usertype
 import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.entity.UserBuilder
 import com.github.jactor.persistence.entity.UserEntity
+import com.github.jactor.shared.api.CreateUserCommand
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -30,9 +30,7 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should map a user entity to a dto`() {
         val addressDto = AddressModel()
-        val personDto = PersonModel()
-
-        personDto.address = addressDto
+        val personDto = PersonModel(address = addressDto)
 
         every { userRepositorySpyk.findByUsername("jactor") } returns Optional.of(
             UserBuilder.new(
@@ -57,8 +55,7 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should also map a user entity to a dto when finding by id`() {
         val uuid = UUID.randomUUID()
         val addressDto = AddressModel()
-        val personDto = PersonModel()
-        personDto.address = addressDto
+        val personDto = PersonModel(address = addressDto)
 
         every { userRepositorySpyk.findById(uuid) } returns Optional.of(
             UserBuilder.new(
@@ -82,12 +79,17 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should update a UserDto with an UserEntity`() {
         val uuid = UUID.randomUUID()
-        val userDto = UserModel()
-        userDto.persistentModel.id = uuid
-        userDto.username = "marley"
+        val userDto = UserModel(
+            persistentModel = PersistentModel(id = uuid),
+            username = "marley"
+        )
 
         val persistentModel = PersistentModel(
-            uuid, "", LocalDateTime.now().minusMonths(1), "", LocalDateTime.now().minusDays(1)
+            createdBy = "",
+            id = uuid,
+            modifiedBy = "",
+            timeOfCreation = LocalDateTime.now().minusMonths(1),
+            timeOfModification = LocalDateTime.now().minusDays(1)
         )
 
         every { userRepositorySpyk.findById(uuid) } returns Optional.of(

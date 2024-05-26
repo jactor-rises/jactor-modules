@@ -11,10 +11,11 @@ internal class UserModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val userModel = UserModel()
-        userModel.emailAddress = "somewhere@time"
-        userModel.person = PersonModel()
-        userModel.username = "me"
+        val userModel = UserModel(
+            emailAddress = "somewhere@time",
+            person = PersonModel(),
+            username = "me"
+        )
 
         val (_, person, emailAddress, username) = UserModel(userModel.persistentModel, userModel)
 
@@ -27,14 +28,15 @@ internal class UserModelTest {
 
     @Test
     fun `should give values to PersistentDto`() {
-        val persistentModel = PersistentModel()
-        persistentModel.createdBy = "jactor"
-        persistentModel.timeOfCreation = LocalDateTime.now()
-        persistentModel.id = UUID.randomUUID()
-        persistentModel.modifiedBy = "tip"
-        persistentModel.timeOfModification = LocalDateTime.now()
+        val persistentModel = PersistentModel(
+            createdBy = "jactor",
+            id = UUID.randomUUID(),
+            modifiedBy = "tip",
+            timeOfCreation = LocalDateTime.now(),
+            timeOfModification = LocalDateTime.now()
+        )
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = UserModel(
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = UserModel(
             persistentModel,
             UserModel()
         ).persistentModel

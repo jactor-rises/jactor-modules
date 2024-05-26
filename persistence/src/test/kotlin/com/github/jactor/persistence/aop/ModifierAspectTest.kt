@@ -30,7 +30,13 @@ internal class ModifierAspectTest {
 
     private val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
     private val modifierAspect = ModifierAspect()
-    private val persistentModel = PersistentModel(null, "na", oneMinuteAgo, "na", oneMinuteAgo)
+    private val persistentModel = PersistentModel(
+        createdBy = "na",
+        id = null,
+        modifiedBy = "na",
+        timeOfCreation = oneMinuteAgo,
+        timeOfModification = oneMinuteAgo,
+    )
 
     @MockK
     private lateinit var joinPointMock: JoinPoint
@@ -75,10 +81,11 @@ internal class ModifierAspectTest {
             blogEntryModel = BlogEntryModel(
                 persistentModel = persistentModel,
                 blog = BlogModel(
+                    persistentModel = PersistentModel(id = UUID.randomUUID()),
                     blog = BlogModel(persistentModel = PersistentModel(id = UUID.randomUUID())),
-                    creatorName = "me",
-                    entry = "some shit"
-                )
+                ),
+                creatorName = "me",
+                entry = "some shit"
             )
         ).buildBlogEntryEntity()
 

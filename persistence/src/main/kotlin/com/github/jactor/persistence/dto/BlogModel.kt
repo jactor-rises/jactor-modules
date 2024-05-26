@@ -3,21 +3,33 @@ package com.github.jactor.persistence.dto
 import java.time.LocalDate
 import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.shared.api.BlogDto
 
+@JvmRecord
 data class BlogModel(
+    val created: LocalDate? = null,
     val persistentModel: PersistentModel = PersistentModel(),
-    var created: LocalDate? = null,
-    var title: String? = null,
-    var userInternal: UserModel? = null
+    val title: String? = null,
+    val user: UserModel? = null
 ) {
     val id: UUID? @JsonIgnore get() = persistentModel.id
 
-    constructor(
-        persistentModel: PersistentModel, blog: BlogModel
-    ) : this(
+    constructor(blogDto: BlogDto) : this(
+        persistentModel = PersistentModel(blogDto.persistentDto),
+        title = blogDto.title,
+        user = blogDto.user?.let { UserModel(userDto = it) }
+    )
+
+    constructor(persistentModel: PersistentModel, blog: BlogModel) : this(
         persistentModel = persistentModel,
         created = blog.created,
         title = blog.title,
-        userInternal = blog.userInternal
+        user = blog.user
+    )
+
+    fun toDto() = BlogDto(
+        persistentDto = persistentModel.toDto(),
+        title = title,
+        user = user?.toDto()
     )
 }

@@ -23,21 +23,21 @@ class DefaultGuestBookService(
 ): GuestBookService {
     override fun find(id: UUID): GuestBookModel? {
         return guestBookRepository.findById(id)
-            .map { it.asDto() }
+            .map { it.toModel() }
             .orElse(null)
     }
 
     override fun findEntry(id: UUID):GuestBookEntryModel? {
         return guestBookEntryRepository.findById(id)
-            .map { it.asDto() }
+            .map { it.toModel() }
             .orElse(null)
     }
 
     override fun saveOrUpdate(guestBookModel: GuestBookModel): GuestBookModel {
-        return guestBookRepository.save(GuestBookEntity(guestBookModel)).asDto()
+        return guestBookRepository.save(GuestBookEntity(guestBookModel)).toModel()
     }
 
     override fun saveOrUpdate(guestBookEntryModel: GuestBookEntryModel): GuestBookEntryModel {
-        return guestBookEntryRepository.save(GuestBookEntryEntity(guestBookEntryModel)).asDto()
+        return guestBookEntryRepository.save(GuestBookEntryEntity(guestBookEntryModel)).toModel()
     }
 }

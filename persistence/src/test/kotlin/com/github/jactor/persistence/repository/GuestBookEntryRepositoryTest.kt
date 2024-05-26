@@ -44,7 +44,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
             GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
-                userInternal = savedUser.asDto()
+                user = savedUser.toModel()
             )
         )
 
@@ -53,7 +53,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
         guestBookData = guestBookData.withEntry(
             GuestBookEntryModel(
-                guestBook = savedUser.guestBook?.asDto(),
+                guestBook = savedUser.guestBook?.toModel(),
                 creatorName = "Harry",
                 entry = "Draco Dormiens Nunquam Tittilandus"
             )
@@ -95,7 +95,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
             GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
-                userInternal = savedUser.asDto()
+                user = savedUser.toModel()
             )
         )
 
@@ -105,7 +105,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
             guestBookEntryRepository.save(
                 guestBookData.withEntry(
                     GuestBookEntryModel(
-                        guestBook = savedGuestBook.asDto(),
+                        guestBook = savedGuestBook.toModel(),
                         creatorName = "Harry",
                         entry = "Draco Dormiens Nunquam Tittilandus"
                     )
@@ -153,7 +153,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
             GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
-                userInternal = savedUser.asDto()
+                user = savedUser.toModel()
             )
         )
 
@@ -161,7 +161,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
         guestBookEntryRepository.save(
             guestBookData.withEntry(
                 GuestBookEntryModel(
-                    guestBook = savedGuestBook.asDto(),
+                    guestBook = savedGuestBook.toModel(),
                     creatorName = "somone",
                     entry = "jadda"
                 )
@@ -182,14 +182,14 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
             guestBookModel = GuestBookModel(
                 entries = emptySet(),
                 title = "home sweet home",
-                userInternal = savedUser.asDto()
+                user = savedUser.toModel()
             )
         )
 
         val anotherSavedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
         val anotherEntry = anotherGuestBookData.withEntry(
             guestBookEntryModel = GuestBookEntryModel(
-                guestBook = anotherSavedGuestBook.asDto(),
+                guestBook = anotherSavedGuestBook.toModel(),
                 creatorName = "shrek",
                 entry = "far far away"
             )

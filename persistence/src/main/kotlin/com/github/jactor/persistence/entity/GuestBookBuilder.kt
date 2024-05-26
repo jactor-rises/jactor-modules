@@ -18,7 +18,9 @@ internal object GuestBookBuilder {
     @JvmRecord
     data class GuestBookData(val guestBookModel: GuestBookModel, val guestBookEntryModel: GuestBookEntryModel? = null) {
         fun withEntry(guestBookEntryModel: GuestBookEntryModel): GuestBookData = copy(
-            guestBookEntryModel = guestBookEntryModel.copy(guestBookEntryModel.persistentModel.copy(id = UUID.randomUUID()))
+            guestBookEntryModel = guestBookEntryModel.copy(
+                persistentModel = guestBookModel.persistentModel.copy(id = UUID.randomUUID())
+            )
         )
 
         fun withEntryContainingPersistentId(guestBookEntryModel: GuestBookEntryModel): GuestBookData = copy(
@@ -29,6 +31,5 @@ internal object GuestBookBuilder {
         fun buildGuestBookEntryEntity(): GuestBookEntryEntity = GuestBookEntryEntity(
             guestBookEntry = guestBookEntryModel ?: error("no guest book entry provided!")
         )
-
     }
 }

@@ -4,29 +4,30 @@ import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.shared.api.PersonDto
 
+@JvmRecord
 data class PersonModel(
     val persistentModel: PersistentModel = PersistentModel(),
-    var address: AddressModel? = null,
-    var locale: String? = null,
-    var firstName: String? = null,
-    var surname: String = "",
-    var description: String? = null
+    val address: AddressModel? = null,
+    val locale: String? = null,
+    val firstName: String? = null,
+    val surname: String = "",
+    val description: String? = null
 ) {
     val id: UUID? @JsonIgnore get() = persistentModel.id
 
     constructor(
-        persistentModel: PersistentModel, personInternal: PersonModel
+        persistentModel: PersistentModel, person: PersonModel
     ) : this(
         persistentModel = persistentModel,
-        address = personInternal.address,
-        description = personInternal.description,
-        firstName = personInternal.firstName,
-        locale = personInternal.locale,
-        surname = personInternal.surname
+        address = person.address,
+        description = person.description,
+        firstName = person.firstName,
+        locale = person.locale,
+        surname = person.surname
     )
 
     constructor(personDto: PersonDto) : this(
-        persistentModel = PersistentModel(id = personDto.id),
+        persistentModel = PersistentModel(persistentDto = personDto.persistentDto),
         address = if (personDto.address != null) AddressModel(personDto.address!!) else null,
         description = personDto.description,
         firstName = personDto.firstName,
@@ -35,7 +36,7 @@ data class PersonModel(
     )
 
     fun toPersonDto() = PersonDto(
-        id = persistentModel.id,
+        persistentDto = persistentModel.toDto(),
         address = address?.toAddressDto(),
         locale = locale,
         firstName = firstName,

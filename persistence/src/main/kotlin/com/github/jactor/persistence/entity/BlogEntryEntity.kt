@@ -5,7 +5,6 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -65,17 +64,11 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
         return entryEmbeddable.copy()
     }
 
-    fun asDto(): BlogEntryModel {
-        return asDto(blog!!.asDto())
-    }
-
-    private fun asDto(blogModel: BlogModel): BlogEntryModel {
-        val blogEntryModel = BlogEntryModel()
-        blogEntryModel.blog = blogModel
-        blogEntryModel.creatorName = entryEmbeddable.creatorName
-        blogEntryModel.entry = entryEmbeddable.entry
-        return blogEntryModel
-    }
+    fun toModel()= BlogEntryModel (
+        blog = blog?.let { it.toModel() },
+        creatorName = entryEmbeddable.creatorName,
+        entry = entryEmbeddable.entry
+    )
 
     fun modify(entry: String, modifiedCreator: String) {
         entryEmbeddable.modify(modifiedCreator, entry)

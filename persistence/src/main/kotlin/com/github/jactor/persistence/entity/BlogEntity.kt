@@ -66,12 +66,15 @@ class BlogEntity : PersistentEntity<BlogEntity?> {
         id = blogModel.id
         persistentDataEmbeddable = PersistentDataEmbeddable(blogModel.persistentModel)
         title = blogModel.title
-        user = blogModel.userInternal?.let { UserEntity(it) }
+        user = blogModel.user?.let { UserEntity(it) }
     }
 
-    fun asDto(): BlogModel {
+    fun toModel(): BlogModel {
         return BlogModel(
-            persistentDataEmbeddable.asPersistentDto(id), created, title, user?.asDto()
+            created = created,
+            persistentModel = persistentDataEmbeddable.toModel(id),
+            title = title,
+            user = user?.toModel()
         )
     }
 

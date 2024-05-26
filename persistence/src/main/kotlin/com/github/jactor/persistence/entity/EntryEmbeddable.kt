@@ -47,7 +47,7 @@ class EntryEmbeddable {
 
     private fun isEqualTo(obj: EntryEmbeddable): Boolean {
         return entry == obj.entry &&
-                creatorName == obj.creatorName
+            creatorName == obj.creatorName
     }
 
     override fun toString(): String {
@@ -55,9 +55,9 @@ class EntryEmbeddable {
     }
 
     private fun shortEntry(): String {
-        return if (entry != null) if (entry!!.length < 50) entry!! else entry!!.substring(0, 47) + "..." else throw IllegalStateException(
-            "Entry should be provided when needed!"
-        )
+        return entry?.let {
+            if (it.length < 50) it else it.substring(0, 47) + "..."
+        } ?: throw IllegalStateException("Entry should be provided when needed!")
     }
 
     override fun hashCode(): Int {
