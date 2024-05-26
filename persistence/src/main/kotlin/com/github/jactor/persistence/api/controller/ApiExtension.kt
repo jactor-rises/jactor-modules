@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.api.controller
 
-import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel

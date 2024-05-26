@@ -2,9 +2,9 @@ package com.github.jactor.persistence.repository
 
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressModel
-import com.github.jactor.persistence.entity.AddressBuilder
-import com.github.jactor.persistence.entity.AddressEntity
+import com.github.jactor.persistence.address.AddressModel
+import com.github.jactor.persistence.address.AddressBuilder
+import com.github.jactor.persistence.address.AddressEntity
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

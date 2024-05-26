@@ -4,12 +4,12 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.dto.GuestBookModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.entity.GuestBookBuilder
 import com.github.jactor.persistence.entity.PersonBuilder
 import com.github.jactor.persistence.entity.UserBuilder

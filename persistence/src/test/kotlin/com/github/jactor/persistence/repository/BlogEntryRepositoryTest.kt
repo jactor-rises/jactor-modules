@@ -5,13 +5,13 @@ import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.entity.BlogBuilder
 import assertk.assertAll
 import assertk.assertThat

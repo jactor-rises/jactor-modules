@@ -1,7 +1,6 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.address
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.AddressModel
 
 internal object AddressBuilder {
     fun new(addressModel: AddressModel) = AddressData(

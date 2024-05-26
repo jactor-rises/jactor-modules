@@ -5,6 +5,7 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
+import com.github.jactor.persistence.address.AddressEntity
 import com.github.jactor.persistence.dto.PersonModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType

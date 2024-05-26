@@ -5,7 +5,7 @@ import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.dto.BlogModel
 import com.github.jactor.persistence.dto.BlogEntryModel
 import com.github.jactor.persistence.dto.GuestBookModel
@@ -13,7 +13,7 @@ import com.github.jactor.persistence.dto.GuestBookEntryModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.entity.BlogBuilder
 import com.github.jactor.persistence.entity.GuestBookBuilder
 import com.github.jactor.persistence.entity.PersonBuilder
