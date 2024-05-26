@@ -1,7 +1,6 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence.blog
 
 import java.util.UUID
-import com.github.jactor.persistence.blog.BlogEntryEntity
 import org.springframework.data.repository.CrudRepository
 
 interface BlogEntryRepository : CrudRepository<BlogEntryEntity, UUID> {

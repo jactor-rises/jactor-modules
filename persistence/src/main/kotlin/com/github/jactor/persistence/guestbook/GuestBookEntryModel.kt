@@ -1,7 +1,8 @@
-package com.github.jactor.persistence.dto
+package com.github.jactor.persistence.guestbook
 
 import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.shared.api.GuestBookEntryDto
 
 @JvmRecord

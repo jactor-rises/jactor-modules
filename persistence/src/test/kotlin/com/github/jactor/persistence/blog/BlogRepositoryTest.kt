@@ -1,19 +1,14 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence.blog
 
 import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
-import com.github.jactor.persistence.blog.BlogModel
-import com.github.jactor.persistence.blog.BlogEntryModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.address.AddressBuilder
-import com.github.jactor.persistence.blog.BlogBuilder
-import com.github.jactor.persistence.blog.BlogEntity
-import com.github.jactor.persistence.blog.BlogEntryEntity
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

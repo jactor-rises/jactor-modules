@@ -2,8 +2,8 @@ package com.github.jactor.persistence.test
 
 import java.util.UUID
 import com.github.jactor.persistence.address.AddressEntity
-import com.github.jactor.persistence.entity.GuestBookEntity
-import com.github.jactor.persistence.entity.GuestBookEntryEntity
+import com.github.jactor.persistence.guestbook.GuestBookEntity
+import com.github.jactor.persistence.guestbook.GuestBookEntryEntity
 import com.github.jactor.persistence.entity.PersistentDataEmbeddable
 import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.entity.UserEntity

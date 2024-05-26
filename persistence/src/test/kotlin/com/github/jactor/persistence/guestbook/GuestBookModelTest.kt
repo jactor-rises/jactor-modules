@@ -1,31 +1,30 @@
-package com.github.jactor.persistence.dto
+package com.github.jactor.persistence.guestbook
 
 import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import com.github.jactor.persistence.dto.PersistentModel
+import com.github.jactor.persistence.dto.UserModel
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 
-internal class GuestBookEntryModelTest {
+internal class GuestBookModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val guestBookEntryModel = GuestBookEntryModel(
-            creatorName = "me",
-            entry = "entry",
-            guestBook = GuestBookModel()
+        val guestBookModel = GuestBookModel(
+            entries = setOf(GuestBookEntryModel()),
+            title = "title",
+            user = UserModel()
         )
 
-        val (creatorName, entry, guestBook) = GuestBookEntryModel(
-            guestBookEntryModel.persistentModel,
-            guestBookEntryModel
-        )
+        val (_, entries, title, userInternal) = GuestBookModel(guestBookModel.persistentModel, guestBookModel)
 
         assertAll {
-            assertThat(creatorName).isEqualTo(guestBookEntryModel.creatorName)
-            assertThat(guestBook).isEqualTo(guestBookEntryModel.guestBook)
-            assertThat(entry).isEqualTo(guestBookEntryModel.entry)
+            assertThat(entries).isEqualTo(guestBookModel.entries)
+            assertThat(title).isEqualTo(guestBookModel.title)
+            assertThat(userInternal).isEqualTo(guestBookModel.user)
         }
     }
 
@@ -39,9 +38,8 @@ internal class GuestBookEntryModelTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = GuestBookEntryModel(
-            persistentModel,
-            GuestBookEntryModel()
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = GuestBookModel(
+            persistentModel, GuestBookModel()
         ).persistentModel
 
         assertAll {

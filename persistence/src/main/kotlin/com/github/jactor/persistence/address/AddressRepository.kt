@@ -1,7 +1,6 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence.address
 
 import java.util.UUID
-import com.github.jactor.persistence.address.AddressEntity
 import org.springframework.data.repository.CrudRepository
 
 interface AddressRepository : CrudRepository<AddressEntity, UUID> {

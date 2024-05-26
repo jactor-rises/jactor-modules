@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.dto.GuestBookEntryModel
-import com.github.jactor.persistence.dto.GuestBookModel
-import com.github.jactor.persistence.service.GuestBookService
+import com.github.jactor.persistence.guestbook.GuestBookEntryModel
+import com.github.jactor.persistence.guestbook.GuestBookModel
+import com.github.jactor.persistence.guestbook.GuestBookService
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation
