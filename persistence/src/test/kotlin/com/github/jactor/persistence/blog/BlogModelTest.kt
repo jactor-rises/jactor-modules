@@ -1,28 +1,31 @@
-package com.github.jactor.persistence.dto
+package com.github.jactor.persistence.blog
 
+import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import org.junit.jupiter.api.Test
+import com.github.jactor.persistence.dto.PersistentModel
+import com.github.jactor.persistence.dto.UserModel
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 
-internal class BlogEntryModelTest {
+internal class BlogModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val blogEntryModel = BlogEntryModel(
-            blog = BlogModel(),
-            creatorName = "someone",
-            entry = "entry",
+        val blogModel = BlogModel(
+            created = LocalDate.now(),
+            title = "title",
+            user = UserModel()
         )
 
-        val (blog, creatorName, entry) = BlogEntryModel(blogEntryModel.persistentModel, blogEntryModel)
+        val (created, _, title, userInternal) = BlogModel(blogModel.persistentModel, blogModel)
 
         assertAll {
-            assertThat(blog).isEqualTo(blogEntryModel.blog)
-            assertThat(creatorName).isEqualTo(blogEntryModel.creatorName)
-            assertThat(entry).isEqualTo(blogEntryModel.entry)
+            assertThat(created).isEqualTo(blogModel.created)
+            assertThat(title).isEqualTo(blogModel.title)
+            assertThat(userInternal).isEqualTo(blogModel.user)
         }
     }
 
@@ -36,9 +39,9 @@ internal class BlogEntryModelTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = BlogEntryModel(
-            persistentModel = persistentModel,
-            blogEntry = BlogEntryModel()
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = BlogModel(
+            persistentModel,
+            BlogModel()
         ).persistentModel
 
         assertAll {

@@ -1,8 +1,10 @@
-package com.github.jactor.persistence.dto
+package com.github.jactor.persistence.blog
 
 import java.time.LocalDate
 import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.persistence.dto.PersistentModel
+import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.shared.api.BlogDto
 
 @JvmRecord

@@ -1,7 +1,8 @@
-package com.github.jactor.persistence.dto
+package com.github.jactor.persistence.blog
 
 import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.shared.api.BlogEntryDto
 
 @JvmRecord

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.dto.BlogEntryModel
-import com.github.jactor.persistence.dto.BlogModel
-import com.github.jactor.persistence.service.BlogService
+import com.github.jactor.persistence.blog.BlogEntryModel
+import com.github.jactor.persistence.blog.BlogModel
+import com.github.jactor.persistence.blog.BlogService
 import com.github.jactor.persistence.util.whenTrue
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
