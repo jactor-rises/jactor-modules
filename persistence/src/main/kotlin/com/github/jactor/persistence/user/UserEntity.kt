@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.user
 
 import java.time.LocalDateTime
 import java.util.Objects
@@ -8,7 +8,6 @@ import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.blog.BlogEntity
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.guestbook.GuestBookEntity
 import com.github.jactor.persistence.person.PersonEntity
 import jakarta.persistence.AttributeOverride

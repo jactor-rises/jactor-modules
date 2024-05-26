@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.persistence.service.UserService
+import com.github.jactor.persistence.user.UserModel
+import com.github.jactor.persistence.user.UserEntity
+import com.github.jactor.persistence.user.UserService
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
 import io.swagger.v3.oas.annotations.Operation

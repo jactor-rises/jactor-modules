@@ -1,13 +1,10 @@
-package com.github.jactor.persistence.service
+package com.github.jactor.persistence.user
 
 import java.util.UUID
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.api.controller.toModel
-import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.persistence.person.PersonService
-import com.github.jactor.persistence.repository.UserRepository
 import com.github.jactor.shared.api.CreateUserCommand
 
 @Service

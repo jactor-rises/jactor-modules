@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.dto
+package com.github.jactor.persistence.user
 
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.persistence.person.PersonModel

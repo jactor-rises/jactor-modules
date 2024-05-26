@@ -1,6 +1,5 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence.user
 
-import com.github.jactor.persistence.entity.UserEntity
 import org.springframework.data.repository.CrudRepository
 import java.util.Optional
 import java.util.UUID

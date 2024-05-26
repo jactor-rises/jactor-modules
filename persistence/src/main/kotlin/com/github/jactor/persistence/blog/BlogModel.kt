@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.dto.UserModel
+import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.shared.api.BlogDto
 
 @JvmRecord
