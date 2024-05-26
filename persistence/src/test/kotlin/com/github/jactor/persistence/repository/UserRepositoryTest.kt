@@ -2,15 +2,15 @@ package com.github.jactor.persistence.repository
 
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressInternalDto
-import com.github.jactor.persistence.dto.PersistentDto
-import com.github.jactor.persistence.dto.PersonInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.persistence.dto.UserInternalDto.Usertype
-import com.github.jactor.persistence.entity.AddressBuilder
-import com.github.jactor.persistence.entity.PersonBuilder
-import com.github.jactor.persistence.entity.UserBuilder
-import com.github.jactor.persistence.entity.UserEntity
+import com.github.jactor.persistence.address.AddressModel
+import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.person.PersonModel
+import com.github.jactor.persistence.user.UserModel
+import com.github.jactor.persistence.user.UserModel.Usertype
+import com.github.jactor.persistence.address.AddressBuilder
+import com.github.jactor.persistence.person.PersonBuilder
+import com.github.jactor.persistence.user.UserBuilder
+import com.github.jactor.persistence.user.UserEntity
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -30,19 +30,19 @@ internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should write then read a user entity`() {
-        val addressInternalDto = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+        val addressModel = AddressBuilder.new(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val personInternalDto = PersonBuilder.new(
-            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Solo")
-        ).personInternalDto
+        val personModel = PersonBuilder.new(
+            personModel = PersonModel(address = addressModel, surname = "Solo")
+        ).personModel
 
         val userToPersist = UserBuilder.new(
-            UserInternalDto(
-                person = personInternalDto,
+            UserModel(
+                person = personModel,
                 emailAddress = "smuggle.fast@tantooine.com",
                 username = "smuggler"
             )
@@ -62,20 +62,20 @@ internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should write then update and read a user entity`() {
-        val addressInternalDto = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+        val addressModel = AddressBuilder.new(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val personInternalDto = PersonBuilder.new(
-            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "AA")
-        ).personInternalDto
+        val personModel = PersonBuilder.new(
+            personModel = PersonModel(address = addressModel, surname = "AA")
+        ).personModel
 
         val userToPersist = UserBuilder.new(
-            userDto = UserInternalDto(
-                persistentDto = PersistentDto(),
-                person = personInternalDto,
+            userDto = UserModel(
+                persistentModel = PersistentModel(),
+                person = personModel,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
             )
@@ -104,30 +104,30 @@ internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find active users and admins`() {
-        val addressInternalDto = AddressBuilder.new(
-            addressInternalDto = AddressInternalDto(
+        val addressModel = AddressBuilder.new(
+            addressModel = AddressModel(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressInternalDto
+        ).addressModel
 
-        val spidyPersonInternalDto = PersonBuilder.new(
-            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Parker")
-        ).personInternalDto
+        val spidyPersonModel = PersonBuilder.new(
+            personModel = PersonModel(address = addressModel, surname = "Parker")
+        ).personModel
 
-        val superPersonInternalDto = PersonBuilder.new(
-            personInternalDto = PersonInternalDto(address = addressInternalDto, surname = "Kent")
-        ).personInternalDto
+        val superPersonModel = PersonBuilder.new(
+            personModel = PersonModel(address = addressModel, surname = "Kent")
+        ).personModel
 
         val userEntity = UserBuilder.new(
-            UserInternalDto(PersistentDto(), spidyPersonInternalDto, null, "spiderman")
+            UserModel(PersistentModel(), spidyPersonModel, null, "spiderman")
         ).build()
 
         flush {
             userRepository.save(userEntity)
             userRepository.save(
                 UserBuilder.new(
-                    userDto = UserInternalDto(
-                        person = superPersonInternalDto,
+                    userDto = UserModel(
+                        person = superPersonModel,
                         emailAddress = null,
                         username = "superman",
                         usertype = Usertype.INACTIVE

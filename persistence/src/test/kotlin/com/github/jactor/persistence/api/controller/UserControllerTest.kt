@@ -3,20 +3,25 @@ package com.github.jactor.persistence.api.controller
 import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.persistence.entity.UserEntity
+import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.user.UserModel
+import com.github.jactor.persistence.user.UserEntity
+import com.github.jactor.persistence.test.initUserEntity
 import com.github.jactor.shared.api.AddressDto
-import com.github.jactor.shared.api.CreateUserCommandDto
+import com.github.jactor.shared.api.CreateUserCommand
+import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.PersonDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
 import assertk.assertAll
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
@@ -35,7 +40,7 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
         val userRespnse = testRestTemplate.getForEntity(
             buildFullPath("/user/name/me"),
-            UserInternalDto::class.java
+            UserModel::class.java
         )
 
         assertAll {
@@ -46,12 +51,9 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find a user by username`() {
-        every { userRepositorySpyk.findByUsername("me") } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findByUsername("me") } returns Optional.of(UserEntity(UserModel()))
 
-        val userResponse = testRestTemplate.getForEntity(
-            buildFullPath("/user/name/me"),
-            UserInternalDto::class.java
-        )
+        val userResponse = testRestTemplate.getForEntity(buildFullPath("/user/name/me"), UserDto::class.java)
 
         assertAll {
             assertThat(userResponse.statusCode).isEqualTo(HttpStatus.OK)
@@ -64,7 +66,7 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
         val uuid = UUID.randomUUID()
         every { userRepositorySpyk.findById(uuid) } returns Optional.empty()
 
-        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
+        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserDto::class.java)
 
         assertAll {
             assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
@@ -75,33 +77,38 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(
+            initUserEntity(
+                id = uuid,
+            )
+        )
 
-        val userRespnse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserInternalDto::class.java)
+        val userResponse = testRestTemplate.getForEntity(buildFullPath("/user/$uuid"), UserDto::class.java)
 
         assertAll {
-            assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.OK)
-            assertThat(userRespnse.body).isNotNull()
+            assertThat(userResponse.statusCode).isEqualTo(HttpStatus.OK)
+            assertThat(userResponse.body).isNotNull()
         }
     }
 
     @Test
     fun `should modify existing user`() {
         val uuid = UUID.randomUUID()
-        val userInternalDto = UserInternalDto()
-        userInternalDto.id = uuid
+        val userModel = UserModel(
+            persistentModel = PersistentModel(id = uuid)
+        )
 
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(userInternalDto))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(user = userModel))
 
         val userRespnse = testRestTemplate.exchange(
-            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(userInternalDto.toUserDto()),
+            buildFullPath("/user/update"), HttpMethod.PUT, HttpEntity(userModel.toDto()),
             UserDto::class.java
         )
 
         assertAll {
             assertThat(userRespnse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
             assertThat(userRespnse.body).isNotNull()
-            assertThat(userRespnse.body?.id).isEqualTo(uuid)
+            assertThat(userRespnse.body?.persistentDto?.id).isEqualTo(uuid)
         }
     }
 
@@ -109,8 +116,8 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should find all usernames on active users`() {
         val bartDto = UserDto(person = PersonDto(address = AddressDto()), username = "bart", userType = UserType.ACTIVE)
         val lisaDto = UserDto(person = PersonDto(address = AddressDto()), username = "lisa", userType = UserType.ACTIVE)
-        val bart = UserEntity(UserInternalDto(bartDto))
-        val lisa = UserEntity(UserInternalDto(lisaDto))
+        val bart = UserEntity(UserModel(bartDto))
+        val lisa = UserEntity(UserModel(lisaDto))
 
         every { userRepositorySpyk.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE)) } returns listOf(bart, lisa)
 
@@ -124,12 +131,14 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     }
 
     @Test
-    fun `should accept if user id is valid`() {
+    fun `should accept if user id is not null`() {
         val uuid = UUID.randomUUID()
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(UserEntity(UserInternalDto()))
+        every { userRepositorySpyk.findById(uuid) } returns Optional.of(
+            UserEntity(UserModel(persistentModel = PersistentModel(id = uuid)))
+        )
 
         val userResponse = testRestTemplate.exchange(
-            buildFullPath("/user/$uuid"), HttpMethod.PUT, HttpEntity(UserDto(id = uuid)),
+            buildFullPath("/user/update"), HttpMethod.PUT, HttpEntity(UserDto(persistentDto = PersistentDto(id = uuid))),
             UserDto::class.java
         )
 
@@ -137,19 +146,18 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     }
 
     @Test
-    fun `should not accept if user id is invalid`() {
-        every { userRepositorySpyk.findById(any()) } returns Optional.empty()
+    fun `should not accept if user id is null`() {
+        val userDto = UserDto(persistentDto = PersistentDto(id = null))
 
-        val userResponse = testRestTemplate.exchange(
-            buildFullPath("/user/${UUID.randomUUID()}"), HttpMethod.PUT, HttpEntity(UserDto()),
-            UserDto::class.java
-        )
-
-        assertThat(userResponse.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    private fun buildFullPath(url: String): String {
-        return "http://localhost:$port$contextPath$url"
+        runCatching {
+            testRestTemplate.exchange(
+                buildFullPath("/user/update"), HttpMethod.PUT, HttpEntity(userDto), UserDto::class.java
+            )
+        }.onFailure {
+            assertThat(it.message).isNotNull().contains("UserDto mangler Identifikator!")
+        }.getOrNull()?.let {
+            assertThat(it.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        } ?: fail(message = "que?")
     }
 
     private fun responsIslistOfStrings(): ParameterizedTypeReference<List<String>> {
@@ -160,7 +168,7 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
     fun `should return BAD_REQUEST when username is occupied`() {
         every { userRepositorySpyk.findByUsername("turbo") } returns Optional.of(UserEntity())
 
-        val createUserCommand = CreateUserCommandDto(username = "turbo")
+        val createUserCommand = CreateUserCommand(username = "turbo")
 
         val userResponse = testRestTemplate.exchange(
             buildFullPath("/user"), HttpMethod.POST, HttpEntity(createUserCommand),

@@ -7,8 +7,12 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.BlogDto
-import com.github.jactor.persistence.dto.BlogEntryDto
+import com.github.jactor.persistence.blog.BlogEntryModel
+import com.github.jactor.persistence.blog.BlogModel
+import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.shared.api.BlogDto
+import com.github.jactor.shared.api.BlogEntryDto
+import com.github.jactor.shared.api.PersistentDto
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -18,7 +22,7 @@ import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.verify
 
-internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
+internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should build full path`() {
         assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:$port/jactor-persistence/somewhere")
@@ -27,7 +31,7 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find a blog`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.find(it) } returns BlogDto()
+            every { blogServiceSpyk.find(it) } returns BlogModel()
         }
 
         val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/$uuid"), BlogDto::class.java)
@@ -55,7 +59,7 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find a blog entry`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.findEntryBy(it) } returns BlogEntryDto()
+            every { blogServiceSpyk.findEntryBy(it) } returns BlogEntryModel()
         }
 
         val blogEntryResponse = testRestTemplate.getForEntity(
@@ -88,10 +92,13 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should not find blogs by title`() {
-        every { blogServiceSpyk.findBlogsBy("Anything") } returns emptyList()
+        every { blogServiceSpyk.findBlogsBy(title = "Anything") } returns emptyList()
 
         val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs()
+            buildFullPath("/blog/title/Anything"),
+            HttpMethod.GET,
+            null,
+            object : ParameterizedTypeReference<List<BlogDto>>() {}
         )
 
         assertAll {
@@ -102,19 +109,19 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find blogs by title`() {
-        every { blogServiceSpyk.findBlogsBy("Anything") } returns listOf(BlogDto())
+        every { blogServiceSpyk.findBlogsBy("Anything") } returns listOf(BlogModel())
 
-        val blogResponse =
-            testRestTemplate.exchange(buildFullPath("/blog/title/Anything"), HttpMethod.GET, null, typeIsListOfBlogs())
+        val blogResponse = testRestTemplate.exchange(
+            buildFullPath("/blog/title/Anything"),
+            HttpMethod.GET,
+            null,
+            object : ParameterizedTypeReference<List<BlogDto>>() {}
+        )
 
         assertAll {
             assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.OK)
             assertThat(blogResponse.body as List).isNotEmpty()
         }
-    }
-
-    private fun typeIsListOfBlogs(): ParameterizedTypeReference<List<BlogDto>> {
-        return object : ParameterizedTypeReference<List<BlogDto>>() {}
     }
 
     @Test
@@ -124,7 +131,10 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
         }
 
         val blogEntriesResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/$uuid/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries()
+            buildFullPath("/blog/$uuid/entries"),
+            HttpMethod.GET,
+            null,
+            object : ParameterizedTypeReference<List<BlogEntryDto>>() {}
         )
 
         assertAll {
@@ -136,11 +146,14 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should find blog entries by blog id`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.findEntriesForBlog(it) } returns listOf(BlogEntryDto())
+            every { blogServiceSpyk.findEntriesForBlog(it) } returns listOf(BlogEntryModel())
         }
 
         val blogEntriesResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/$uuid/entries"), HttpMethod.GET, null, typeIsListOfBlogEntries()
+            buildFullPath("/blog/$uuid/entries"),
+            HttpMethod.GET,
+            null,
+            object : ParameterizedTypeReference<List<BlogEntryDto>>() {}
         )
 
         assertAll {
@@ -149,19 +162,16 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
         }
     }
 
-    private fun typeIsListOfBlogEntries(): ParameterizedTypeReference<List<BlogEntryDto>> {
-        return object : ParameterizedTypeReference<List<BlogEntryDto>>() {}
-    }
-
     @Test
     fun `should persist changes to existing blog`() {
-        val blogDto = BlogDto()
-        blogDto.id = UUID.randomUUID()
+        val blogModel = BlogModel(
+            persistentModel = PersistentModel(id = UUID.randomUUID())
+        )
 
-        every { blogServiceSpyk.saveOrUpdate(blogDto) } returns blogDto
+        every { blogServiceSpyk.saveOrUpdate(blogModel) } returns blogModel
 
         val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/${blogDto.id}"), HttpMethod.PUT, HttpEntity(blogDto),
+            buildFullPath("/blog/${blogModel.id}"), HttpMethod.PUT, HttpEntity(blogModel.toDto()),
             BlogDto::class.java
         )
 
@@ -170,41 +180,42 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
             assertThat(blogResponse.body).isNotNull()
         }
 
-        verify { blogServiceSpyk.saveOrUpdate(blogDto) }
+        verify { blogServiceSpyk.saveOrUpdate(blogModel) }
     }
 
     @Test
     fun `should create a blog`() {
-        val blogDto = BlogDto()
-        val createdDto = BlogDto()
-        createdDto.id = UUID.randomUUID()
+        val createdBlogModel = BlogModel(
+            persistentModel = PersistentModel()
+        )
 
-        every { blogServiceSpyk.saveOrUpdate(blogDto) } returns createdDto
+        every { blogServiceSpyk.saveOrUpdate(blogModel = any()) } returns createdBlogModel
 
         val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog"), HttpMethod.POST, HttpEntity(blogDto),
+            buildFullPath("/blog"), HttpMethod.POST, HttpEntity(BlogDto()),
             BlogDto::class.java
         )
 
         assertAll {
             assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.CREATED)
             assertThat(blogResponse).isNotNull()
-            assertThat(blogResponse.body?.id).isEqualTo(createdDto.id)
+            assertThat(blogResponse.body?.persistentDto?.id).isEqualTo(createdBlogModel.id)
         }
 
-        verify { blogServiceSpyk.saveOrUpdate(blogDto) }
+        verify { blogServiceSpyk.saveOrUpdate(blogModel = any()) }
     }
 
     @Test
     fun `should persist changes to existing blog entry`() {
-        val blogEntryDto = BlogEntryDto()
-        blogEntryDto.id = UUID.randomUUID()
+        val blogEntryModel = BlogEntryModel(
+            persistentModel = PersistentModel(id = UUID.randomUUID())
+        )
 
-        every { blogServiceSpyk.saveOrUpdate(blogEntryDto) } returns blogEntryDto
+        every { blogServiceSpyk.saveOrUpdate(blogEntryModel = blogEntryModel) } returns blogEntryModel
 
         val blogEntryResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/entry/${blogEntryDto.id}"),
-            HttpMethod.PUT, HttpEntity(blogEntryDto), BlogEntryDto::class.java
+            buildFullPath("/blog/entry/${blogEntryModel.id}"),
+            HttpMethod.PUT, HttpEntity(blogEntryModel.toDto()), BlogEntryDto::class.java
         )
 
         assertAll {
@@ -212,16 +223,23 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
             assertThat(blogEntryResponse.body).isNotNull()
         }
 
-        verify { blogServiceSpyk.saveOrUpdate(blogEntryDto) }
+        verify { blogServiceSpyk.saveOrUpdate(blogEntryModel = blogEntryModel) }
     }
 
     @Test
     fun `should create blog entry`() {
-        val blogEntryDto = BlogEntryDto()
-        val createdDto = BlogEntryDto()
-        createdDto.id = UUID.randomUUID()
+        val blogEntryDto = BlogEntryDto(
+            entry = "hi",
+            blogDto = BlogDto(persistentDto = PersistentDto(id = UUID.randomUUID()))
+        )
 
-        every { blogServiceSpyk.saveOrUpdate(blogEntryDto) } returns createdDto
+        val blogEntryModelCreated = BlogEntryModel(
+            persistentModel = PersistentModel(id = UUID.randomUUID()),
+            entry = blogEntryDto.entry,
+            blog = BlogModel(persistentModel = PersistentModel(id = UUID.randomUUID()))
+        )
+
+        every { blogServiceSpyk.saveOrUpdate(blogEntryModel = any()) } returns blogEntryModelCreated
 
         val blogEntryResponse = testRestTemplate.exchange(
             buildFullPath("/blog/entry"), HttpMethod.POST, HttpEntity(blogEntryDto), BlogEntryDto::class.java
@@ -230,13 +248,10 @@ internal class BlogControllerTest: AbstractSpringBootNoDirtyContextTest() {
         assertAll {
             assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.CREATED)
             assertThat(blogEntryResponse.body).isNotNull()
-            assertThat(blogEntryResponse.body?.id).isEqualTo(createdDto.id)
+            assertThat(blogEntryResponse.body?.entry).isEqualTo(blogEntryDto.entry)
+            assertThat(blogEntryResponse.body?.persistentDto?.id).isEqualTo(blogEntryModelCreated.id)
         }
 
-        verify { blogServiceSpyk.saveOrUpdate(blogEntryDto) }
-    }
-
-    private fun buildFullPath(url: String): String {
-        return "http://localhost:$port$contextPath$url"
+        verify { blogServiceSpyk.saveOrUpdate(blogEntryModel = any()) }
     }
 }

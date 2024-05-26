@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.api.command.CreateUserCommand
-import com.github.jactor.persistence.api.command.CreateUserCommandResponse
-import com.github.jactor.persistence.dto.UserInternalDto
-import com.github.jactor.persistence.entity.UserEntity
-import com.github.jactor.persistence.service.UserService
-import com.github.jactor.shared.api.CreateUserCommandDto
+import com.github.jactor.persistence.user.UserModel
+import com.github.jactor.persistence.user.UserEntity
+import com.github.jactor.persistence.user.UserService
+import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -35,7 +33,7 @@ class UserController(private val userService: UserService) {
     )
     @GetMapping("/name/{username}")
     fun find(@PathVariable("username") username: String): ResponseEntity<UserDto> {
-        return userService.find(username = username)?.let { ResponseEntity(it.toUserDto(), HttpStatus.OK) }
+        return userService.find(username = username)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
@@ -48,7 +46,7 @@ class UserController(private val userService: UserService) {
     )
     @GetMapping("/{id}")
     operator fun get(@PathVariable("id") id: UUID): ResponseEntity<UserDto> {
-        return userService.find(id)?.let { ResponseEntity(it.toUserDto(), HttpStatus.OK) }
+        return userService.find(id)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
@@ -60,15 +58,12 @@ class UserController(private val userService: UserService) {
         ]
     )
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun post(@RequestBody createUserCommand: CreateUserCommandDto): ResponseEntity<CreateUserCommandResponse> {
+    fun post(@RequestBody createUserCommand: CreateUserCommand): ResponseEntity<UserDto> {
         if (userService.isAlreadyPresent(createUserCommand.username)) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
+            return ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST)
         }
 
-        return ResponseEntity(
-            CreateUserCommandResponse(userService.create(CreateUserCommand(createUserCommand))),
-            HttpStatus.CREATED
-        )
+        return ResponseEntity(userService.create(createUserCommand).toDto(), HttpStatus.CREATED)
     }
 
     @Operation(description = "Update a user by its id")
@@ -78,21 +73,25 @@ class UserController(private val userService: UserService) {
             ApiResponse(responseCode = "400", description = "Did not find user with id or no body is present")
         ]
     )
-    @PutMapping("/{userId}")
-    fun put(@RequestBody userDto: UserDto, @PathVariable userId: UUID?): ResponseEntity<UserDto> {
-        return userService.update(UserInternalDto(userDto.copy(userId)))?.let {
-            ResponseEntity(it.toUserDto(), HttpStatus.ACCEPTED)
-        } ?: ResponseEntity(HttpStatus.BAD_REQUEST)
+    @PutMapping("/update")
+    fun put(@RequestBody userDto: UserDto): ResponseEntity<UserDto> {
+        if (userDto.harIkkeIdentifikator()) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        val updatedUser = userService.update(
+            userModel = UserModel(userDto = userDto)
+        )
+
+        return updatedUser?.let { ResponseEntity(it.toDto(), HttpStatus.ACCEPTED) }
+            ?: ResponseEntity(HttpStatus.BAD_REQUEST)
     }
 
     @Operation(description = "Find all usernames for a user type")
     @ApiResponses(ApiResponse(responseCode = "200", description = "List of usernames found"))
     @GetMapping("/usernames")
     fun findAllUsernames(
-        @RequestParam(
-            required = false,
-            defaultValue = "ACTIVE"
-        ) userType: String
+        @RequestParam(required = false, defaultValue = "ACTIVE") userType: String
     ): ResponseEntity<List<String>> {
         return ResponseEntity(userService.findUsernames(UserEntity.UserType.valueOf(userType)), HttpStatus.OK)
     }
