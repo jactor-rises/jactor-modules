@@ -6,10 +6,10 @@ import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.address.AddressBuilder
-import com.github.jactor.persistence.entity.PersonBuilder
+import com.github.jactor.persistence.person.PersonBuilder
 import com.github.jactor.persistence.entity.UserBuilder
 import assertk.assertAll
 import assertk.assertThat

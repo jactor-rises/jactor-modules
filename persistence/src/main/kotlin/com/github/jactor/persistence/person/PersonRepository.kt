@@ -1,7 +1,6 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence.person
 
 import java.util.UUID
-import com.github.jactor.persistence.entity.PersonEntity
 import org.springframework.data.repository.CrudRepository
 
 interface PersonRepository : CrudRepository<PersonEntity, UUID> {

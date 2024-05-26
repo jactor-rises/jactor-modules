@@ -1,15 +1,12 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence.person
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.address.AddressBuilder
-import com.github.jactor.persistence.entity.PersonBuilder
-import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.entity.UserBuilder
 import assertk.assertAll
 import assertk.assertThat

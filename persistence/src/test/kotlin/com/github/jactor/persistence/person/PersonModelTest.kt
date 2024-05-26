@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.dto
+package com.github.jactor.persistence.person
 
 import java.time.LocalDateTime
 import java.util.UUID
