@@ -1,11 +1,8 @@
-package com.github.jactor.persistence.service
+package com.github.jactor.persistence.person
 
 import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
 import org.springframework.stereotype.Service
-import com.github.jactor.persistence.dto.PersonModel
-import com.github.jactor.persistence.entity.PersonEntity
-import com.github.jactor.persistence.repository.PersonRepository
 
 @Service
 class PersonService(private val personRepository: PersonRepository) {

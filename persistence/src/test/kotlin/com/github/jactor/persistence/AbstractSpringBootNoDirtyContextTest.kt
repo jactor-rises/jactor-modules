@@ -12,7 +12,7 @@ import com.github.jactor.persistence.blog.BlogEntryRepository
 import com.github.jactor.persistence.blog.BlogRepository
 import com.github.jactor.persistence.guestbook.GuestBookEntryRepository
 import com.github.jactor.persistence.guestbook.GuestBookRepository
-import com.github.jactor.persistence.repository.PersonRepository
+import com.github.jactor.persistence.person.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
 import com.github.jactor.persistence.blog.BlogService
 import com.github.jactor.persistence.guestbook.GuestBookService

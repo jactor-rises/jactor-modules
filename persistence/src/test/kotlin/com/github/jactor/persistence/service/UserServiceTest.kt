@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.dto.UserModel.Usertype
-import com.github.jactor.persistence.entity.PersonEntity
+import com.github.jactor.persistence.person.PersonEntity
 import com.github.jactor.persistence.entity.UserBuilder
 import com.github.jactor.persistence.entity.UserEntity
 import com.github.jactor.shared.api.CreateUserCommand

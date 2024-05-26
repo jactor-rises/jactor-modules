@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.person.PersonModel
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo

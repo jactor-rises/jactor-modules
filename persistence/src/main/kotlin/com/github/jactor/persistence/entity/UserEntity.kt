@@ -10,6 +10,7 @@ import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.guestbook.GuestBookEntity
+import com.github.jactor.persistence.person.PersonEntity
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column

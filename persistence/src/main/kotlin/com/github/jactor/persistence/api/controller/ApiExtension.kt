@@ -2,7 +2,7 @@ package com.github.jactor.persistence.api.controller
 
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.dto.PersonModel
+import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.shared.api.PersistentData
 import com.github.jactor.shared.api.PersonDto
