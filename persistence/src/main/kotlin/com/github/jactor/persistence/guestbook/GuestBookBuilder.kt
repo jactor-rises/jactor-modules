@@ -1,8 +1,6 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.guestbook
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.GuestBookModel
-import com.github.jactor.persistence.dto.GuestBookEntryModel
 
 internal object GuestBookBuilder {
     fun new(guestBookModel: GuestBookModel = GuestBookModel()): GuestBookData = GuestBookData(

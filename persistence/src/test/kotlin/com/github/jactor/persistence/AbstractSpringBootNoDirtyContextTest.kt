@@ -7,15 +7,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.transaction.annotation.Transactional
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.jactor.persistence.repository.AddressRepository
-import com.github.jactor.persistence.repository.BlogEntryRepository
-import com.github.jactor.persistence.repository.BlogRepository
-import com.github.jactor.persistence.repository.GuestBookEntryRepository
-import com.github.jactor.persistence.repository.GuestBookRepository
+import com.github.jactor.persistence.address.AddressRepository
+import com.github.jactor.persistence.blog.BlogEntryRepository
+import com.github.jactor.persistence.blog.BlogRepository
+import com.github.jactor.persistence.guestbook.GuestBookEntryRepository
+import com.github.jactor.persistence.guestbook.GuestBookRepository
 import com.github.jactor.persistence.repository.PersonRepository
 import com.github.jactor.persistence.repository.UserRepository
 import com.github.jactor.persistence.blog.BlogService
-import com.github.jactor.persistence.service.GuestBookService
+import com.github.jactor.persistence.guestbook.GuestBookService
 import com.ninjasquad.springmockk.SpykBean
 import jakarta.persistence.EntityManager
 

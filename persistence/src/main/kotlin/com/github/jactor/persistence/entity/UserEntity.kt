@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.blog.BlogEntity
 import com.github.jactor.persistence.dto.UserModel
+import com.github.jactor.persistence.guestbook.GuestBookEntity
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column

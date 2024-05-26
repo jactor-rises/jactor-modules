@@ -1,17 +1,10 @@
-package com.github.jactor.persistence.service
+package com.github.jactor.persistence.guestbook
 
 import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.dto.GuestBookModel
-import com.github.jactor.persistence.dto.GuestBookEntryModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.GuestBookBuilder
-import com.github.jactor.persistence.entity.GuestBookEntity
-import com.github.jactor.persistence.entity.GuestBookEntryEntity
-import com.github.jactor.persistence.repository.GuestBookEntryRepository
-import com.github.jactor.persistence.repository.GuestBookRepository
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

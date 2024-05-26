@@ -1,7 +1,6 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence.guestbook
 
 import java.util.UUID
-import com.github.jactor.persistence.entity.GuestBookEntity
 import com.github.jactor.persistence.entity.UserEntity
 import org.springframework.data.repository.CrudRepository
 

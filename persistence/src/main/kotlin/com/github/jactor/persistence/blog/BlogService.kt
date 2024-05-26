@@ -2,8 +2,6 @@ package com.github.jactor.persistence.blog
 
 import java.util.UUID
 import org.springframework.stereotype.Service
-import com.github.jactor.persistence.repository.BlogEntryRepository
-import com.github.jactor.persistence.repository.BlogRepository
 import com.github.jactor.persistence.service.UserService
 
 interface BlogService {

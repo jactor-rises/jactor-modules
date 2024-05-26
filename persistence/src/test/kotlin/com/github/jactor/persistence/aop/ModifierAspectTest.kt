@@ -8,14 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.blog.BlogModel
 import com.github.jactor.persistence.blog.BlogEntryModel
-import com.github.jactor.persistence.dto.GuestBookModel
-import com.github.jactor.persistence.dto.GuestBookEntryModel
+import com.github.jactor.persistence.guestbook.GuestBookModel
+import com.github.jactor.persistence.guestbook.GuestBookEntryModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
 import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.blog.BlogBuilder
-import com.github.jactor.persistence.entity.GuestBookBuilder
+import com.github.jactor.persistence.guestbook.GuestBookBuilder
 import com.github.jactor.persistence.entity.PersonBuilder
 import com.github.jactor.persistence.entity.UserBuilder
 import assertk.assertThat

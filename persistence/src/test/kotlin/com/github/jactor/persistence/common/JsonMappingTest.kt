@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.common
 
 import java.util.UUID
 import org.junit.jupiter.api.Test

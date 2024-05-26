@@ -1,20 +1,12 @@
-package com.github.jactor.persistence.service
+package com.github.jactor.persistence.blog
 
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.blog.BlogModel
-import com.github.jactor.persistence.blog.BlogEntryModel
 import com.github.jactor.persistence.dto.PersistentModel
 import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.blog.BlogBuilder
-import com.github.jactor.persistence.blog.BlogEntity
-import com.github.jactor.persistence.blog.BlogEntryEntity
-import com.github.jactor.persistence.blog.BlogService
-import com.github.jactor.persistence.blog.DefaultBlogService
-import com.github.jactor.persistence.repository.BlogEntryRepository
-import com.github.jactor.persistence.repository.BlogRepository
+import com.github.jactor.persistence.service.UserService
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
