@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.guestbook.GuestBookModel
 import com.github.jactor.persistence.guestbook.GuestBookEntryModel
-import com.github.jactor.persistence.dto.PersistentModel
+import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.persistence.test.initGuestBookEntryEntity
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto

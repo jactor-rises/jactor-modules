@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.blog.BlogEntryModel
 import com.github.jactor.persistence.blog.BlogModel
-import com.github.jactor.persistence.dto.PersistentModel
+import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto

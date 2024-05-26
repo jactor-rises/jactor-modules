@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.aop
 
-import com.github.jactor.persistence.entity.PersistentEntity
+import com.github.jactor.persistence.common.PersistentEntity
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
