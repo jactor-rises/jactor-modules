@@ -1,7 +1,6 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.user
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.UserModel
 
 internal object UserBuilder {
     fun new(userDto: UserModel): UserData = UserData(

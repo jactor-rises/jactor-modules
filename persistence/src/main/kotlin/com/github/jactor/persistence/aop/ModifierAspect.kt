@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Aspect
 @Component
 class ModifierAspect {
-    @Before("execution(* com.github.jactor.persistence.repository.*Repository.save(..))")
+    @Before("execution(* com.github.jactor.persistence.*.*Repository.save(..))")
     fun modifyPersistentEntity(joinPoint: JoinPoint): Any? {
         return joinPoint.args
             .filterIsInstance<PersistentEntity<*>>()

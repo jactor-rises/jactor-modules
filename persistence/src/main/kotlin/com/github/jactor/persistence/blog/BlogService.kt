@@ -2,7 +2,7 @@ package com.github.jactor.persistence.blog
 
 import java.util.UUID
 import org.springframework.stereotype.Service
-import com.github.jactor.persistence.service.UserService
+import com.github.jactor.persistence.user.UserService
 
 interface BlogService {
     fun find(id: UUID): BlogModel?

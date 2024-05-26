@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.transaction.annotation.Transactional
-import com.github.jactor.persistence.repository.UserRepository
+import com.github.jactor.persistence.user.UserRepository
 import io.cucumber.spring.CucumberContextConfiguration
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)

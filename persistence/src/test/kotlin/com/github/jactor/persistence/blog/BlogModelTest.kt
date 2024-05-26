@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.dto.UserModel
+import com.github.jactor.persistence.user.UserModel
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo

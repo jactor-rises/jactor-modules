@@ -2,19 +2,13 @@ package com.github.jactor.persistence.api.exception
 
 import java.util.UUID
 import org.assertj.core.api.Assertions.fail
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.api.controller.UserController
-import com.github.jactor.persistence.repository.UserRepository
-import com.github.jactor.persistence.service.UserService
+import com.github.jactor.persistence.user.UserRepository
+import com.github.jactor.persistence.user.UserService
 import com.github.jactor.persistence.test.containsSubstring
-import com.github.jactor.shared.api.UserDto
 import assertk.assertAll
 import assertk.assertThat
-import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import io.mockk.every
 import io.mockk.mockk

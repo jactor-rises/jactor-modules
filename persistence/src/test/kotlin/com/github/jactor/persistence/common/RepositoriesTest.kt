@@ -6,11 +6,11 @@ import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.blog.BlogModel
 import com.github.jactor.persistence.person.PersonModel
-import com.github.jactor.persistence.dto.UserModel
+import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.blog.BlogBuilder
 import com.github.jactor.persistence.person.PersonBuilder
-import com.github.jactor.persistence.entity.UserBuilder
+import com.github.jactor.persistence.user.UserBuilder
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

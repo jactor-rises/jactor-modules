@@ -10,8 +10,8 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.UserEntity
+import com.github.jactor.persistence.user.UserModel
+import com.github.jactor.persistence.user.UserEntity
 import com.github.jactor.persistence.test.initUserEntity
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.CreateUserCommand
