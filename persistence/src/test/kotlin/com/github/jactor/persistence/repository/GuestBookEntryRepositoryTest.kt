@@ -2,12 +2,12 @@ package com.github.jactor.persistence.repository
 
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.dto.AddressModel
+import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.dto.GuestBookModel
 import com.github.jactor.persistence.dto.GuestBookEntryModel
 import com.github.jactor.persistence.dto.PersonModel
 import com.github.jactor.persistence.dto.UserModel
-import com.github.jactor.persistence.entity.AddressBuilder
+import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.entity.GuestBookBuilder
 import com.github.jactor.persistence.entity.GuestBookEntryEntity
 import com.github.jactor.persistence.entity.PersonBuilder
