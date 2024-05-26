@@ -1,9 +1,0 @@
-package com.github.jactor.persistence.repository
-
-import java.util.UUID
-import com.github.jactor.persistence.entity.PersonEntity
-import org.springframework.data.repository.CrudRepository
-
-interface PersonRepository : CrudRepository<PersonEntity, UUID> {
-    fun findBySurname(surname: String?): List<PersonEntity>
-}

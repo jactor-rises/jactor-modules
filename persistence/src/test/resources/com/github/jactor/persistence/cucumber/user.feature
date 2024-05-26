@@ -37,7 +37,7 @@ Egenskap: jactor-presistence behandler en bruker
         "addressLine3":"there",
         "zipCode":"666",
         "city":"below",
-        "contry":"no"
+        "country":"no"
       }
     """
     Så skal statuskoden fra resttjenesten være 201
