@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.common
 
 import jakarta.persistence.Embeddable
 import jakarta.persistence.Lob

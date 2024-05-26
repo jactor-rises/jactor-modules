@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.blog
 
 import java.util.UUID
-import com.github.jactor.persistence.dto.PersistentModel
+import com.github.jactor.persistence.common.PersistentModel
 
 internal object BlogBuilder {
     fun new(blogModel: BlogModel = BlogModel()): BlogData = BlogData(

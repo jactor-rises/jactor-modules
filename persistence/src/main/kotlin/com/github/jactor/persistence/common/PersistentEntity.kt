@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.common
 
 import java.time.LocalDateTime
 import java.util.UUID

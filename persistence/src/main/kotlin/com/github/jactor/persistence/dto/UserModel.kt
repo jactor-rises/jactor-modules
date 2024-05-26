@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.dto
 
+import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
 

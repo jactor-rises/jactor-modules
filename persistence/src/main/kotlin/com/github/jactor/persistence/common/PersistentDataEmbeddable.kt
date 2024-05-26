@@ -1,8 +1,7 @@
-package com.github.jactor.persistence.entity
+package com.github.jactor.persistence.common
 
 import java.time.LocalDateTime
 import java.util.UUID
-import com.github.jactor.persistence.dto.PersistentModel
 import jakarta.persistence.Embeddable
 
 @Embeddable
