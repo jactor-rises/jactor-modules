@@ -38,7 +38,7 @@ internal class BlogEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
         )
 
         var blogData = BlogBuilder.new(
-            blogModel = BlogModel(created = LocalDate.now(), title = "and then some...", userInternal = userDto)
+            blogModel = BlogModel(created = LocalDate.now(), title = "and then some...", user = userDto)
         )
 
         val blogDto = blogData.blogModel
@@ -85,7 +85,7 @@ internal class BlogEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
         )
 
         val blogEntryToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "and then some...", userInternal = userDto))
+            .new(blogModel = BlogModel(created = LocalDate.now(), title = "and then some...", user = userDto))
             .withEntry(BlogEntryModel(creatorName = "smith", entry = "once upon a time"))
             .buildBlogEntryEntity()
 

@@ -12,30 +12,32 @@ internal class BlogModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val blogModel = BlogModel()
-        blogModel.created = LocalDate.now()
-        blogModel.title = "title"
-        blogModel.userInternal = UserModel()
+        val blogModel = BlogModel(
+            created = LocalDate.now(),
+            title = "title",
+            user = UserModel()
+        )
 
-        val (_, created, title, userInternal) = BlogModel(blogModel.persistentModel, blogModel)
+        val (created, _, title, userInternal) = BlogModel(blogModel.persistentModel, blogModel)
 
         assertAll {
             assertThat(created).isEqualTo(blogModel.created)
             assertThat(title).isEqualTo(blogModel.title)
-            assertThat(userInternal).isEqualTo(blogModel.userInternal)
+            assertThat(userInternal).isEqualTo(blogModel.user)
         }
     }
 
     @Test
     fun `should give values to PersistentDto`() {
-        val persistentModel = PersistentModel()
-        persistentModel.createdBy = "jactor"
-        persistentModel.timeOfCreation = LocalDateTime.now()
-        persistentModel.id = UUID.randomUUID()
-        persistentModel.modifiedBy = "tip"
-        persistentModel.timeOfModification = LocalDateTime.now()
+        val persistentModel = PersistentModel(
+            createdBy = "jactor",
+            id = UUID.randomUUID(),
+            modifiedBy = "tip",
+            timeOfCreation = LocalDateTime.now(),
+            timeOfModification = LocalDateTime.now()
+        )
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = BlogModel(
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = BlogModel(
             persistentModel,
             BlogModel()
         ).persistentModel

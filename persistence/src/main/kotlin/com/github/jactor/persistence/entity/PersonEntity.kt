@@ -29,7 +29,8 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+        internal set
 
     @Column(name = "DESCRIPTION")
     var description: String? = null
@@ -46,7 +47,7 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     @JoinColumn(name = "ADDRESS_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var addressEntity: AddressEntity? = null
-        private set
+        internal set
 
     @OneToMany(mappedBy = "person", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.EAGER)
     private var users: MutableSet<UserEntity> = HashSet()
@@ -76,8 +77,13 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         surname = person.surname
     }
 
-    fun asDto() = PersonModel(
-        persistentDataEmbeddable.asPersistentDto(id), addressEntity?.asDto(), locale, firstName, surname, description
+    fun toModel() = PersonModel(
+        persistentModel = persistentDataEmbeddable.toModel(id),
+        address = addressEntity?.toModel(),
+        locale = locale,
+        firstName = firstName,
+        surname = surname,
+        description = description
     )
 
     override fun copyWithoutId(): PersonEntity {

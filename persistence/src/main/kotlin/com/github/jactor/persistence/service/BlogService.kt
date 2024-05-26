@@ -26,29 +26,30 @@ class DefaultBlogService(
 ) : BlogService {
     override fun find(id: UUID): BlogModel? {
         return blogRepository.findById(id)
-            .map { it.asDto() }
+            .map { it.toModel() }
             .orElse(null)
     }
 
     override fun findEntryBy(blogEntryId: UUID): BlogEntryModel? {
         return blogEntryRepository.findById(blogEntryId)
-            .map { it.asDto() }
+            .map { it.toModel() }
             .orElse(null)
     }
 
     override fun findBlogsBy(title: String?): List<BlogModel> {
-        return blogRepository.findBlogsByTitle(title).map { obj: BlogEntity? -> obj?.asDto()!! }
+        return blogRepository.findBlogsByTitle(title).map { obj: BlogEntity? -> obj?.toModel()!! }
     }
 
     override fun findEntriesForBlog(blogId: UUID?): List<BlogEntryModel> {
-        return blogEntryRepository.findByBlog_Id(blogId).map { obj: BlogEntryEntity? -> obj?.asDto()!! }
+        return blogEntryRepository.findByBlog_Id(blogId).map { obj: BlogEntryEntity? -> obj?.toModel()!! }
     }
 
     override fun saveOrUpdate(blogModel: BlogModel): BlogModel {
-        val userDto = userService.find(username = fetchUsername(blogModel))
-        blogModel.userInternal = userDto
+        val userModel = userService.find(username = fetchUsername(blogModel))
 
-        return blogRepository.save(BlogEntity(blogModel)).asDto()
+        return blogRepository.save(
+            BlogEntity(blogModel.copy(user = userModel))
+        ).toModel()
     }
 
     override fun saveOrUpdate(blogEntryModel: BlogEntryModel): BlogEntryModel {
@@ -58,10 +59,11 @@ class DefaultBlogService(
 
         val blogEntryEntity = BlogEntryEntity(blogEntryModel)
 
-        return blogEntryRepository.save(blogEntryEntity).asDto()
+        return blogEntryRepository.save(blogEntryEntity).toModel()
     }
 
     private fun fetchUsername(blogModel: BlogModel?): String {
-        return blogModel?.userInternal?.username ?: throw IllegalStateException("Unnable to find username in $blogModel")
+        return blogModel?.user?.username
+            ?: throw IllegalStateException("Unnable to find username in $blogModel")
     }
 }

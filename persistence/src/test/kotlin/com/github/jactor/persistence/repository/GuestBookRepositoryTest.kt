@@ -51,7 +51,7 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
                 GuestBookModel(
                     entries = emptySet(),
                     title = "home sweet home",
-                    userInternal = userEntity.asDto()
+                    user = userEntity.toModel()
                 )
             ).buildGuestBookEntity()
         )
@@ -91,7 +91,7 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
                 GuestBookModel(
                     entries = emptySet(),
                     title = "home sweet home",
-                    userInternal = userEntity.asDto()
+                    user = userEntity.toModel()
                 )
             ).buildGuestBookEntity()
         )

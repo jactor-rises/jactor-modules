@@ -44,7 +44,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", userInternal = userDto))
+            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", user = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -83,7 +83,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", userInternal = userDto))
+            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", user = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -129,7 +129,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", userInternal = userDto))
+            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", user = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -168,7 +168,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
 
         var blogData = BlogBuilder.new(
             blogModel = BlogModel(
-                created = LocalDate.now(), title = "Blah", userInternal = userDto
+                created = LocalDate.now(), title = "Blah", user = userDto
             )
         )
 
@@ -176,7 +176,7 @@ internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest(){
 
         blogData = blogData.withEntry(
             blogEntryModel = BlogEntryModel(
-                blog = blogEntityToSave.asDto(),
+                blog = blogEntityToSave.toModel(),
                 creatorName = "arnold",
                 entry = "i'll be back"
             )

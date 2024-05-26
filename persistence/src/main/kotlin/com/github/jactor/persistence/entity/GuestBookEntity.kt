@@ -29,7 +29,8 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+        internal set
 
     @Column(name = "TITLE")
     var title: String? = null
@@ -61,19 +62,19 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistentModel)
         title = guestBook.title
-        user = guestBook.userInternal?.let { UserEntity(it) }
+        user = guestBook.user?.let { UserEntity(it) }
     }
 
     private fun copyUserWithoutId(): UserEntity? {
         return user?.copyWithoutId()
     }
 
-    fun asDto(): GuestBookModel {
+    fun toModel(): GuestBookModel {
         return GuestBookModel(
-            persistentModel = persistentDataEmbeddable.asPersistentDto(id),
-            entries = entries.map { it.asDto() }.toMutableSet(),
+            persistentModel = persistentDataEmbeddable.toModel(id),
+            entries = entries.map { it.toModel() }.toMutableSet(),
             title = title,
-            userInternal = user?.asDto()
+            user = user?.toModel()
         )
     }
 

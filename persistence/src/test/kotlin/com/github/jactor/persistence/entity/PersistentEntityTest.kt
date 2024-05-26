@@ -88,7 +88,7 @@ internal class PersistentEntityTest {
         persistentEntityToTest = BlogBuilder.new(
             blogModel = BlogModel(
                 title = "general ignorance",
-                userInternal = UserModel()
+                user = UserModel()
             )
         ).buildBlogEntity()
 
@@ -104,7 +104,13 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a blog entry without the id`() {
-        val blogEntryModel = BlogEntryModel(PersistentModel(), BlogModel(), "jactor", "the one")
+        val blogEntryModel = BlogEntryModel(
+            blog =  BlogModel(),
+            creatorName = "jactor",
+            entry = "the one",
+            persistentModel = PersistentModel(),
+        )
+
         persistentEntityToTest = BlogBuilder.new().withEntry(blogEntryModel = blogEntryModel).buildBlogEntryEntity()
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 

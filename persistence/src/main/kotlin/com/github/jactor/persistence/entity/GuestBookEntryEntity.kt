@@ -5,7 +5,6 @@ import java.util.Objects
 import java.util.UUID
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.dto.GuestBookModel
 import com.github.jactor.persistence.dto.GuestBookEntryModel
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -28,7 +27,8 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+        internal set
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "GUEST_BOOK_ID")
@@ -65,16 +65,12 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         return entryEmbeddable.copy()
     }
 
-    fun asDto(): GuestBookEntryModel {
-        return asDto(guestBook!!.asDto())
-    }
-
-    private fun asDto(guestBook: GuestBookModel): GuestBookEntryModel {
+    fun toModel(): GuestBookEntryModel {
         return GuestBookEntryModel(
-            persistentDataEmbeddable.asPersistentDto(id),
-            guestBook,
-            entryEmbeddable.creatorName,
-            entryEmbeddable.entry
+            creatorName = entryEmbeddable.creatorName,
+            entry = entryEmbeddable.entry,
+            guestBook = guestBook?.toModel(),
+            persistentModel = persistentDataEmbeddable.toModel(id),
         )
     }
 

@@ -14,11 +14,15 @@ class PersonService(private val personRepository: PersonRepository) {
     }
 
     private fun create(person: PersonModel): PersonEntity {
-        if (person.id == null) {
-            person.persistentModel.id = UUID.randomUUID()
-        }
-
-        return personRepository.save(PersonEntity(person))
+        return personRepository.save(
+            PersonEntity(
+                person = person.copy(
+                    persistentModel = person.persistentModel.copy(
+                        id = person.id ?: UUID.randomUUID()
+                    )
+                )
+            )
+        )
     }
 
     private fun findExisting(person: PersonModel): PersonEntity? {

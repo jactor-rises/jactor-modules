@@ -49,16 +49,21 @@ internal class GuestBookServiceTest {
     @Test
     fun `should map guest book entry to a dto`() {
         val anEntry = GuestBookBuilder.new().withEntry(
-            guestBookEntryModel = GuestBookEntryModel(PersistentModel(), GuestBookModel(), "me", "too")
+            guestBookEntryModel = GuestBookEntryModel(
+                guestBook = GuestBookModel(),
+                creatorName = "me",
+                entry = "too",
+                persistentModel = PersistentModel(),
+            )
         ).buildGuestBookEntryEntity()
 
         every { guestBookEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
 
-        val (_, _, creatorName, entry) = guestBookServiceToTest.findEntry(uuid) ?: throw mockError()
+        val guestBookEntryModel = guestBookServiceToTest.findEntry(uuid) ?: throw mockError()
 
         assertAll {
-            assertThat(creatorName).isEqualTo("me")
-            assertThat(entry).isEqualTo("too")
+            assertThat(guestBookEntryModel.creatorName).isEqualTo("me")
+            assertThat(guestBookEntryModel.entry).isEqualTo("too")
         }
     }
 
@@ -68,17 +73,18 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should save GuestBookDto as GuestBookEntity`() {
-        val guestBookEntryModel = GuestBookEntryModel()
-        guestBookEntryModel.guestBook = GuestBookModel()
-        guestBookEntryModel.creatorName = "me"
-        guestBookEntryModel.entry = "all about this"
+        val guestBookEntryModel = GuestBookEntryModel(
+            creatorName = "me",
+            entry = "all about this",
+            guestBook = GuestBookModel()
+        )
 
         val guestBookEntitySlot = slot<GuestBookEntity>()
-        val guestBookModel = GuestBookModel()
-
-        guestBookModel.entries = setOf(guestBookEntryModel)
-        guestBookModel.title = "home sweet home"
-        guestBookModel.userInternal = UserModel()
+        val guestBookModel = GuestBookModel(
+            entries = setOf(guestBookEntryModel),
+            title = "home sweet home",
+            user = UserModel()
+        )
 
         every { guestBookRepositoryMockk.save(capture(guestBookEntitySlot)) } returns GuestBookEntity(guestBookModel)
 
@@ -95,11 +101,11 @@ internal class GuestBookServiceTest {
     @Test
     fun `should save GuestBookEntryDto as GuestBookEntryEntity`() {
         val guestBookEntryEntitySlot = slot<GuestBookEntryEntity>()
-        val guestBookEntryModel = GuestBookEntryModel()
-
-        guestBookEntryModel.guestBook = GuestBookModel()
-        guestBookEntryModel.creatorName = "me"
-        guestBookEntryModel.entry = "if i where a rich man..."
+        val guestBookEntryModel = GuestBookEntryModel(
+            guestBook = GuestBookModel(),
+            creatorName = "me",
+            entry = "if i where a rich man..."
+        )
 
         every { guestBookEntryRepositoryMockk.save(capture(guestBookEntryEntitySlot)) } returns GuestBookEntryEntity(
             guestBookEntryModel

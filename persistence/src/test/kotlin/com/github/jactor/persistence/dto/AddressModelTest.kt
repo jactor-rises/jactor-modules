@@ -11,13 +11,14 @@ internal class AddressModelTest {
 
     @Test
     fun `hould have a copy constructor`() {
-        val addressModel = AddressModel()
-        addressModel.addressLine1 = "address line one"
-        addressModel.addressLine2 = "address line two"
-        addressModel.addressLine3 = "address line three"
-        addressModel.city = "oslo"
-        addressModel.country = "NO"
-        addressModel.zipCode = "1234"
+        val addressModel = AddressModel(
+            addressLine1 = "address line one",
+            addressLine2 = "address line two",
+            addressLine3 = "address line three",
+            city = "oslo",
+            country = "NO",
+            zipCode = "1234"
+        )
 
         val (_, zipCode, addressLine1, addressLine2, addressLine3, city, country) = AddressModel(
             addressModel.persistentModel,
@@ -36,14 +37,15 @@ internal class AddressModelTest {
 
     @Test
     fun `should give values to PersistentDto`() {
-        val persistentModel = PersistentModel()
-        persistentModel.createdBy = "jactor"
-        persistentModel.timeOfCreation = LocalDateTime.now()
-        persistentModel.id = UUID.randomUUID()
-        persistentModel.modifiedBy = "tip"
-        persistentModel.timeOfModification = LocalDateTime.now()
+        val persistentModel = PersistentModel(
+            createdBy = "jactor",
+            id = UUID.randomUUID(),
+            modifiedBy = "tip",
+            timeOfCreation = LocalDateTime.now(),
+            timeOfModification = LocalDateTime.now(),
+        )
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = AddressModel(
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = AddressModel(
             persistentModel, AddressModel()
         ).persistentModel
 

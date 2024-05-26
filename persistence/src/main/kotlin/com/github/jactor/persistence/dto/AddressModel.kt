@@ -4,31 +4,32 @@ import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.shared.api.AddressDto
 
+@JvmRecord
 data class AddressModel(
     val persistentModel: PersistentModel = PersistentModel(),
-    var zipCode: String? = null,
-    var addressLine1: String? = null,
-    var addressLine2: String? = null,
-    var addressLine3: String? = null,
-    var city: String? = null,
-    var country: String? = null
+    val zipCode: String? = null,
+    val addressLine1: String? = null,
+    val addressLine2: String? = null,
+    val addressLine3: String? = null,
+    val city: String? = null,
+    val country: String? = null
 ) {
     val id: UUID? @JsonIgnore get() = persistentModel.id
 
     constructor(
-        persistentModel: PersistentModel, addressInternal: AddressModel
+        persistentModel: PersistentModel, addressModel: AddressModel
     ) : this(
         persistentModel = persistentModel,
-        addressLine1 = addressInternal.addressLine1,
-        addressLine2 = addressInternal.addressLine2,
-        addressLine3 = addressInternal.addressLine3,
-        city = addressInternal.city,
-        country = addressInternal.country,
-        zipCode = addressInternal.zipCode
+        addressLine1 = addressModel.addressLine1,
+        addressLine2 = addressModel.addressLine2,
+        addressLine3 = addressModel.addressLine3,
+        city = addressModel.city,
+        country = addressModel.country,
+        zipCode = addressModel.zipCode
     )
 
     constructor(addressDto: AddressDto) : this(
-        persistentModel = PersistentModel(id = addressDto.id),
+        persistentModel = PersistentModel(persistentDto = addressDto.persistentDto),
         addressLine1 = addressDto.addressLine1,
         addressLine2 = addressDto.addressLine2,
         addressLine3 = addressDto.addressLine3,
@@ -38,7 +39,7 @@ data class AddressModel(
     )
 
     fun toAddressDto() = AddressDto(
-        id = persistentModel.id,
+        persistentDto = persistentModel.toDto(),
         addressLine1 = addressLine1,
         addressLine2 = addressLine2,
         addressLine3 = addressLine3,

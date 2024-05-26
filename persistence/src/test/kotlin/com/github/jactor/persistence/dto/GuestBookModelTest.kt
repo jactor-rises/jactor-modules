@@ -11,30 +11,32 @@ internal class GuestBookModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val guestBookModel = GuestBookModel()
-        guestBookModel.entries = setOf(GuestBookEntryModel())
-        guestBookModel.title = "title"
-        guestBookModel.userInternal = UserModel()
+        val guestBookModel = GuestBookModel(
+            entries = setOf(GuestBookEntryModel()),
+            title = "title",
+            user = UserModel()
+        )
 
         val (_, entries, title, userInternal) = GuestBookModel(guestBookModel.persistentModel, guestBookModel)
 
         assertAll {
             assertThat(entries).isEqualTo(guestBookModel.entries)
             assertThat(title).isEqualTo(guestBookModel.title)
-            assertThat(userInternal).isEqualTo(guestBookModel.userInternal)
+            assertThat(userInternal).isEqualTo(guestBookModel.user)
         }
     }
 
     @Test
     fun `should give values to PersistentDto`() {
-        val persistentModel = PersistentModel()
-        persistentModel.createdBy = "jactor"
-        persistentModel.timeOfCreation = LocalDateTime.now()
-        persistentModel.id = UUID.randomUUID()
-        persistentModel.modifiedBy = "tip"
-        persistentModel.timeOfModification = LocalDateTime.now()
+        val persistentModel = PersistentModel(
+            createdBy = "jactor",
+            id = UUID.randomUUID(),
+            modifiedBy = "tip",
+            timeOfCreation = LocalDateTime.now(),
+            timeOfModification = LocalDateTime.now()
+        )
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = GuestBookModel(
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = GuestBookModel(
             persistentModel, GuestBookModel()
         ).persistentModel
 

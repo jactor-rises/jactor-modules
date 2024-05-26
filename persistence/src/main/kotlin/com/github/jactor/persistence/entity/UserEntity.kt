@@ -32,7 +32,8 @@ class UserEntity : PersistentEntity<UserEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+        internal set
 
     @Column(name = "EMAIL")
     var emailAddress: String? = null
@@ -43,7 +44,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
     @JoinColumn(name = "PERSON_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var person: PersonEntity? = null
-        private set
+        internal set
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
     var guestBook: GuestBookEntity? = null
@@ -80,7 +81,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
 
     private fun addValues(user: UserModel) {
         emailAddress = user.emailAddress
-        id = user.id
+        id = user.persistentModel.id
         persistentDataEmbeddable = PersistentDataEmbeddable(user.persistentModel)
         person = user.person?.let { PersonEntity(it) }
         username = user.username
@@ -89,10 +90,10 @@ class UserEntity : PersistentEntity<UserEntity?> {
             ?: throw IllegalArgumentException("Unknown UserType: " + user.usertype)
     }
 
-    fun asDto(): UserModel {
+    fun toModel(): UserModel {
         return UserModel(
-            persistentDataEmbeddable.asPersistentDto(id),
-            person?.asDto(),
+            persistentDataEmbeddable.toModel(id),
+            person?.toModel(),
             emailAddress,
             username
         )

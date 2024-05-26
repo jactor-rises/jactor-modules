@@ -49,7 +49,7 @@ internal class RepositoriesTest : AbstractSpringBootNoDirtyContextTest() {
                     blogModel = BlogModel(
                         created = LocalDate.now(),
                         title = "Far, far, away...",
-                        userInternal = userByUsername.asDto()
+                        user = userByUsername.toModel()
                     )
                 ).buildBlogEntity()
             )

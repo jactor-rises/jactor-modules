@@ -107,7 +107,7 @@ internal class PersonRepositoryTest: AbstractSpringBootNoDirtyContextTest() {
     fun `should be able to relate a user`() {
         val alreadyPresentPeople = personRepository.findAll().count()
         val addressModel = AddressModel(
-            persistentModel = PersistentModel(UUID.randomUUID()),
+            persistentModel = PersistentModel(id = UUID.randomUUID()),
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
         )
 

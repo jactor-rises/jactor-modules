@@ -11,12 +11,13 @@ internal class PersonModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val personModel = PersonModel()
-        personModel.address = AddressModel()
-        personModel.description = "description"
-        personModel.firstName = "first name"
-        personModel.locale = "no"
-        personModel.surname = "surname"
+        val personModel = PersonModel(
+            address = AddressModel(),
+            description = "description",
+            firstName = "first name",
+            locale = "no",
+            surname = "surname"
+        )
 
         val (_, address, locale, firstName, surname, description) = PersonModel(
             personModel.persistentModel,
@@ -34,16 +35,17 @@ internal class PersonModelTest {
 
     @Test
     fun `should give values to PersistentDto`() {
-        val persistentModel = PersistentModel()
-        persistentModel.createdBy = "jactor"
-        persistentModel.timeOfCreation = LocalDateTime.now()
-        persistentModel.id = UUID.randomUUID()
-        persistentModel.modifiedBy = "tip"
-        persistentModel.timeOfModification = LocalDateTime.now()
+        val persistentModel = PersistentModel(
+            createdBy = "jactor",
+            id = UUID.randomUUID(),
+            modifiedBy = "tip",
+            timeOfModification = LocalDateTime.now(),
+            timeOfCreation = LocalDateTime.now()
+        )
 
-        val (id, createdBy, timeOfCreation, modifiedBy, timeOfModification) = PersonModel(
-            persistentModel,
-            PersonModel()
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = PersonModel(
+            persistentModel = persistentModel,
+            person = PersonModel()
         ).persistentModel
 
         assertAll {

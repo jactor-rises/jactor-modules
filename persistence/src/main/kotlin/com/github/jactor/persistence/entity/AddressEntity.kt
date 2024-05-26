@@ -24,7 +24,8 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
     @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
     @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    private lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
+        internal set
 
     @Column(name = "ADDRESS_LINE_1", nullable = false)
     var addressLine1: String? = null
@@ -44,7 +45,8 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
     @Column(name = "ZIP_CODE", nullable = false)
     var zipCode: String? = null
 
-    @Suppress("UNUSED") constructor() {
+    @Suppress("UNUSED")
+    constructor() {
         // used by entity manager
     }
 
@@ -73,8 +75,16 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
         zipCode = addressModel.zipCode
     }
 
-    fun asDto(): AddressModel {
-        return AddressModel(persistentDataEmbeddable.asPersistentDto(id), zipCode, addressLine1, addressLine2, addressLine3, city, country)
+    fun toModel(): AddressModel {
+        return AddressModel(
+            persistentDataEmbeddable.toModel(id),
+            zipCode,
+            addressLine1,
+            addressLine2,
+            addressLine3,
+            city,
+            country
+        )
     }
 
     override fun copyWithoutId(): AddressEntity {
@@ -96,11 +106,11 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
         val addressEntity = other as AddressEntity
 
         return this === other || addressLine1 == addressEntity.addressLine1 &&
-                addressLine2 == addressEntity.addressLine2 &&
-                addressLine3 == addressEntity.addressLine3 &&
-                city == addressEntity.city &&
-                country == addressEntity.country &&
-                zipCode == addressEntity.zipCode
+            addressLine2 == addressEntity.addressLine2 &&
+            addressLine3 == addressEntity.addressLine3 &&
+            city == addressEntity.city &&
+            country == addressEntity.country &&
+            zipCode == addressEntity.zipCode
     }
 
     override fun hashCode(): Int {
@@ -119,12 +129,8 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
             .toString()
     }
 
-    override val createdBy: String
-        get() = persistentDataEmbeddable.createdBy
-    override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfCreation
-    override val modifiedBy: String
-        get() = persistentDataEmbeddable.modifiedBy
-    override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfModification
+    override val createdBy: String get() = persistentDataEmbeddable.createdBy
+    override val timeOfCreation: LocalDateTime get() = persistentDataEmbeddable.timeOfCreation
+    override val modifiedBy: String get() = persistentDataEmbeddable.modifiedBy
+    override val timeOfModification: LocalDateTime get() = persistentDataEmbeddable.timeOfModification
 }

@@ -31,10 +31,11 @@ internal class PersonServiceTest : AbstractSpringBootNoDirtyContextTest() {
         val person = personService.createWhenNotExists(
             PersonModel(
                 PersistentModel(
-                    id = personEntity.id,
                     createdBy = "creator",
+                    id = personEntity.id,
+                    modifiedBy = "modifier",
                     timeOfCreation = LocalDateTime.now(),
-                    modifiedBy = "modifier", LocalDateTime.now()
+                    timeOfModification = LocalDateTime.now()
                 ),
                 PersonModel()
             )

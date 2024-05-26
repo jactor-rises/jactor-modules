@@ -2,6 +2,8 @@ package com.github.jactor.persistence.test
 
 import java.util.UUID
 import com.github.jactor.persistence.entity.AddressEntity
+import com.github.jactor.persistence.entity.GuestBookEntity
+import com.github.jactor.persistence.entity.GuestBookEntryEntity
 import com.github.jactor.persistence.entity.PersistentDataEmbeddable
 import com.github.jactor.persistence.entity.PersonEntity
 import com.github.jactor.persistence.entity.UserEntity
@@ -12,6 +14,7 @@ import assertk.assertions.support.show
 fun timestamped(username: String): String {
     return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
 }
+
 fun initUserEntity(
     id: UUID? = UUID.randomUUID(),
     person: PersonEntity = initPersonEntity()
@@ -28,6 +31,20 @@ fun initPersonEntity(
     this.id = id
     addressEntity = address
     this.persistentDataEmbeddable = PersistentDataEmbeddable()
+}
+
+fun initGuestBookEntity(id: UUID? = null) = GuestBookEntity().apply {
+    this.id = id
+    this.persistentDataEmbeddable = PersistentDataEmbeddable()
+}
+
+fun initGuestBookEntryEntity(
+    id: UUID? = null,
+    guestBook: GuestBookEntity = initGuestBookEntity()
+) = GuestBookEntryEntity().apply {
+    this.id = id
+    this.persistentDataEmbeddable = PersistentDataEmbeddable()
+    this.guestBook = guestBook
 }
 
 fun initAddressEntity(id: UUID? = UUID.randomUUID()) = AddressEntity().apply {
