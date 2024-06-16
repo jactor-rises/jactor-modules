@@ -3,7 +3,7 @@ version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
 plugins {
-    id("org.springframework.boot") version "3.2.5"
+    id("org.springframework.boot") version "3.3.0"
 }
 
 dependencies {
@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":shared"))
 
     // database
-    runtimeOnly("org.flywaydb:flyway-core:9.22.0")
+    runtimeOnly("org.flywaydb:flyway-core:10.15.0")
     runtimeOnly("com.h2database:h2:2.2.224")
 }
 
