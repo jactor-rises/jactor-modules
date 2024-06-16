@@ -47,10 +47,9 @@ docker run -p 1099:1099 jactor-persistence
 ### Some technologies used
 
 #### Implementation
-* [spring-boot 3.2.x](https://spring.io/projects/spring-boot)
+* [spring-boot 3.3.x](https://spring.io/projects/spring-boot)
     * with [spring-data-jpa](https://spring.io/projects/spring-data-jpa)
     * with [spring-webflow](https://spring.io/projects/spring-webflow) (mvc)
-* [docker](https://www.docker.com)
 * [h2](http://h2database.com)
 * [kotlin](https://kotlinlang.org)
 
