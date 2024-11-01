@@ -18,7 +18,7 @@ dependencies {
 
     // database
     runtimeOnly("org.flywaydb:flyway-core:10.20.1")
-    runtimeOnly("com.h2database:h2:2.2.224")
+    runtimeOnly("com.h2database:h2:2.3.232")
 }
 
 tasks.test {
