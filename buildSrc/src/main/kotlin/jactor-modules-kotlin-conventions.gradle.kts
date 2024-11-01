@@ -21,16 +21,16 @@ dependencies {
     // test
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.28.1")
-    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("io.mockk:mockk:1.13.13")
     testImplementation("org.junit.platform:junit-platform-suite")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
     // cucumber
-    testImplementation("io.cucumber:cucumber-java:7.18.0")
-    testImplementation("io.cucumber:cucumber-java8:7.18.0")
-    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.18.0")
-    testImplementation("io.cucumber:cucumber-spring:7.18.0")
+    testImplementation("io.cucumber:cucumber-java:7.20.1")
+    testImplementation("io.cucumber:cucumber-java8:7.20.1")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.20.1")
+    testImplementation("io.cucumber:cucumber-spring:7.20.1")
 }
 
 tasks.compileKotlin {
