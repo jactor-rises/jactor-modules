@@ -7,14 +7,8 @@ repositories {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     sourceCompatibility = JavaVersion.VERSION_21
-}
-
-tasks.compileKotlin {
-    kotlinOptions {
-        jvmTarget = "21"
-    }
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 dependencies {
