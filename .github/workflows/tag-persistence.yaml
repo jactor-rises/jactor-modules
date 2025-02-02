@@ -18,7 +18,7 @@ jobs:
         run: |
           git fetch --tags
           CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-persistence" | head -n 1)
-          echo ::set-output name=semver::$CURRENT_SEMVER
+          echo "semver=$CURRENT_SEMVER" >> $GITHUB_OUTPUT
       - uses: actions/setup-java@v2
         with:
           distribution: temurin
@@ -29,31 +29,24 @@ jobs:
         id: version
         run: |
           MAJOR_MINOR=$(./gradlew :persistence:properties | grep version: | grep SNAPSHOT | awk '{print $2}')
-          echo ::set-output name=toPatch::$MAJOR_MINOR
+          echo "toPatch=$MAJOR_MINOR" >> $GITHUB_OUTPUT
       - name: Create new semantic version
         id: semver
         run: |
-          .github/workflows/new-semver.main.kts majorMinor=$PATCH_MAJOR_MINOR_VERSION semantic=$CURRENT_SEMANTIC_VERSION
-          echo ::set-output name=new::$(cat newSemVer)
-        env:
-          CURRENT_SEMANTIC_VERSION: ${{ steps.current.outputs.semver }}
-          PATCH_MAJOR_MINOR_VERSION: ${{ steps.version.outputs.toPatch }}
+          .github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} semantic=${{ steps.current.outputs.semver }}
+          echo "new=$(cat newSemVer)" >> $GITHUB_OUTPUT
       - name: Fetch github event metadata
         id: metadata
         run: |
-          echo ::set-output name=email::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)
-          echo ::set-output name=name::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)
+          echo "email=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)" >> $GITHUB_OUTPUT
+          echo "name=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)" >> $GITHUB_OUTPUT
       - name: Tag new snapshot semantic version
         run: |
           git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          git config --global user.email "$AUTHOR_EMAIL"
-          git config --global user.name "$AUTHOR_NAME"
+          git config --global user.email "${{ steps.metadata.outputs.email }}"
+          git config --global user.name "${{ steps.metadata.outputs.name }}"
 
-          git tag -a "$SEMANTIC_VERSION_NEW-persistence" -m "New version tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT"
+          git tag -a "${{ steps.semver.outputs.new }}-persistence" -m "New version tagged. Previous snapshot: ${{ steps.current.outputs.semver }}"
           git push --tags
         env:
-          AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
-          AUTHOR_NAME: ${{ steps.metadata.outputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SEMANTIC_VERSION_CURRENT: ${{ steps.current.outputs.semver }}
-          SEMANTIC_VERSION_NEW: ${{ steps.semver.outputs.new }}
