@@ -53,7 +53,7 @@ docker run -p 1099:1099 jactor-persistence
     * with [spring-data-jpa](https://spring.io/projects/spring-data-jpa)
     * with [spring-webflow](https://spring.io/projects/spring-webflow) (mvc)
 * [h2](http://h2database.com)
-* [kotlin](https://kotlinlang.org)
+* [kotlin 2.x](https://kotlinlang.org)
 
 #### Unit testing
 * [assertk](https://github.com/willowtreeapps/assertk)
