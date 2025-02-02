@@ -80,7 +80,11 @@ fun createNewSemanticVersion(): String {
         )
     }
 
-    val currentPatch = semanticVersion.substring(semanticVersion.lastIndexOf('.') + 1).toInt()
+    val currentPatch = semanticVersion
+        .substring(semanticVersion.lastIndexOf('.') + 1)
+        .replace("snapshot", "") // in case of old tags
+        .replace("-", "")        // in case of old tags
+        .toInt()
 
     return "$majorMinorVersion.${currentPatch + 1}"
 }
