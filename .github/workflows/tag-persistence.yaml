@@ -17,7 +17,7 @@ jobs:
         id: current
         run: |
           git fetch --tags
-          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-snapshot-persistence" | sed 's;-snapshot-persistence;;'| head -n 1)
+          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-persistence" | sed 's;-persistence;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
@@ -49,7 +49,7 @@ jobs:
           git config --global user.email "$AUTHOR_EMAIL"
           git config --global user.name "$AUTHOR_NAME"
 
-          git tag -a "$SEMANTIC_VERSION_NEW-snapshot-persistence" -m "New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT"
+          git tag -a "$SEMANTIC_VERSION_NEW-persistence" -m "New tag for persistence. Previous version: $SEMANTIC_VERSION_CURRENT"
           git push --tags
         env:
           AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
