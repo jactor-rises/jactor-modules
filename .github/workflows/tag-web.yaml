@@ -28,7 +28,7 @@ jobs:
       - name: Fetch current major/minor release
         id: version
         run: |
-          MAJOR_MINOR=$(./gradlew :web:properties | grep version: | grep SNAPSHOT | awk '{print $2}' | sed 's;.x-SNAPSHOT;;')
+          MAJOR_MINOR=$(./gradlew :web:properties | grep version: | grep SNAPSHOT | awk '{print $2}')
           echo ::set-output name=toPatch::$MAJOR_MINOR
       - name: Create new semantic version
         id: semver
