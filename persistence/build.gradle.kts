@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":shared"))
 
     // database
-    runtimeOnly("org.flywaydb:flyway-core:10.20.1")
+    runtimeOnly("org.flywaydb:flyway-core:11.3.0")
     runtimeOnly("com.h2database:h2:2.3.232")
 }
 
