@@ -49,4 +49,4 @@ jobs:
           git tag -a "${{ steps.semver.outputs.new }}-web" -m "New version tagged. Previous snapshot: ${{ steps.current.outputs.semver }}"
           git push --tags
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}name: tag jactor-modules/web
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
