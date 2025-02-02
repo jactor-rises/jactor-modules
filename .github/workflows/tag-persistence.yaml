@@ -17,7 +17,7 @@ jobs:
         id: current
         run: |
           git fetch --tags
-          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-persistence" | head -n 1)
+          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-persistence" | sed 's;-persistence;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
@@ -28,7 +28,7 @@ jobs:
       - name: Fetch current major/minor release
         id: version
         run: |
-          MAJOR_MINOR=$(./gradlew :persistence:properties | grep version: | grep SNAPSHOT | awk '{print $2}')
+          MAJOR_MINOR=$(./gradlew :persistence:properties | grep version: | grep SNAPSHOT | awk '{print $2}' | sed 's;.x-SNAPSHOT;;')
           echo ::set-output name=toPatch::$MAJOR_MINOR
       - name: Create new semantic version
         id: semver
