@@ -6,15 +6,13 @@ import java.nio.file.Files
 /***********************************************
  * DESCRIPTION:
  * -----------
- * Will find next patched version when given current version and current major/minor-version (using semantic versioning)
+ * Will find next patched version when given current snapshot-version and current major/minor-version (using semantic versioning)
  * -
- * Major and minor version will be determined by previous tag and the patch-version is bumped.
+ * Major and minor version will be determined by previous snapshot tag and the patch-version is bumped.
  * -
  * The new patched version (full semantic version, <major>.<minor>.<patch>) will be written to a new file named newSemVer
  * -
- * Note!
- * If the major/minor version is less than current semantic version or larger than bumped new semantic version, the
- * script will fail...
+ * Note! If the major/minor version is less than current semantic version or larger than bumped semantic version, the script will fail...
  */
 object Argument {
     const val MAJOR_MINOR = "majorMinor"
@@ -95,17 +93,17 @@ fun createNewSemanticVersion(
         """
         supplied major version: $majorVersion
         supplied minor version: $minorVersion
-        major version: $currentMajorVersion
-        minor version: $currentMinorVersion
+        snapshot major version: $currentMajorVersion
+        snapshot minor version: $currentMinorVersion
     """.trimIndent()
     )
 
     if (majorVersion < currentMajorVersion) {
-        throw illegalState("Supplied major/minor version ($majorMinorVersion) is less than current major version!")
+        throw illegalState("Supplied major/minor version ($majorMinorVersion) is less than current snapshot major version!")
     }
 
     if (majorVersion == currentMajorVersion && minorVersion < currentMinorVersion) {
-        throw illegalState("Supplied major/minor version ($majorMinorVersion) is less than current major/minor version")
+        throw illegalState("Supplied major/minor version ($majorMinorVersion) is less than current snapshot major/minor version")
     }
 
     if (majorVersion > (currentMajorVersion + 1)) {
