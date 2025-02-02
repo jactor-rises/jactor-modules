@@ -7,7 +7,8 @@
 
 The main purpose is to learn about programming microservices using another microservice for persistence.
 
-This project consists of a microservice for web content which use another microservice in order to persist its data through a REST api.
+This project consists of a microservice for web content which use another microservice in order to persist its data
+through a REST api.
 
 ### Set up
 
@@ -20,12 +21,12 @@ This project consists of a microservice for web content which use another micros
 
 ### Disclaimer
 
-This application is a playground and is made to demonstrate the working of `jactor-persistence` and to gain expertise in microservices and kotlin
-programming language. It is therefore simple and not complete. And I just want to mention: I am not a front-end programmer and is only present for
-interactive use of jactor-persistence
+This application is a playground and is made to demonstrate the working of `jactor-persistence` and to gain expertise in
+microservices and kotlin programming language. It is therefore simple and not complete. And I just want to mention: I am
+not a front-end programmer and this module is only present for interactive use of jactor-persistence
 
 * This microservice is tested using `jactor-persistence`
-* `Blog`s and `GuestBook`s is only persisted and present in `jactor-persistence` and tested through integration tests there.
+* `Blog`s and `GuestBook`s is only persisted and present in `jactor-persistence` and tested through integration tests.
 * `User` (with `Person` and `Address`) is integrated with communications from `jactor-web`.
     * `jactor-web` only do a "read only" access of the persistence, and do not do other CRUD operations.
 
