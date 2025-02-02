@@ -32,8 +32,8 @@ not a front-end programmer and this module is only present for interactive use o
 
 ### Some technologies used on jactor-web
 
-* [spring-boot 3.3.x](https://spring.io/projects/spring-boot)
-* [kotlin](https://kotlinlang.org)
+* [spring-boot 3.4.x](https://spring.io/projects/spring-boot)
+* [kotlin 2.x](https://kotlinlang.org)
 * [junit 5](https://junit.org/junit5/)
 * [assertk](https://github.com/willowtreeapps/assertk)
 * [mockk](http://mockk.org)
