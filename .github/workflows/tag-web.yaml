@@ -17,7 +17,7 @@ jobs:
         id: current
         run: |
           git fetch --tags
-          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-web" | sed 's;-web;;'| head -n 1)
+          CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-snapshot-web" | sed 's;-snapshot-web;;'| head -n 1)
           echo ::set-output name=semver::$CURRENT_SEMVER
       - uses: actions/setup-java@v2
         with:
@@ -28,7 +28,7 @@ jobs:
       - name: Fetch current major/minor release
         id: version
         run: |
-          MAJOR_MINOR=$(./gradlew :web:properties | grep version: | grep SNAPSHOT | awk '{print $2}')
+          MAJOR_MINOR=$(./gradlew :web:properties | grep version: | grep SNAPSHOT | awk '{print $2}' | sed 's;.x-SNAPSHOT;;')
           echo ::set-output name=toPatch::$MAJOR_MINOR
       - name: Create new semantic version
         id: semver
@@ -43,13 +43,13 @@ jobs:
         run: |
           echo ::set-output name=email::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)
           echo ::set-output name=name::$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)
-      - name: Tag new semantic version
+      - name: Tag new snapshot semantic version
         run: |
           git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.email "$AUTHOR_EMAIL"
           git config --global user.name "$AUTHOR_NAME"
 
-          git tag -a "$SEMANTIC_VERSION_NEW-web" -m "New tag for web. Previous version: $SEMANTIC_VERSION_CURRENT"
+          git tag -a "$SEMANTIC_VERSION_NEW-snapshot-web" -m "New snapshot tagged. Previous snapshot: $SEMANTIC_VERSION_CURRENT"
           git push --tags
         env:
           AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
