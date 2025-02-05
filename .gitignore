@@ -12,5 +12,6 @@ sys-test/target
 # misc
 /**/.DS_Store
 
-# kotlin compiler v 2.x
+# kotlin
 /.kotlin/sessions/
+/buildSrc/.kotlin/sessions

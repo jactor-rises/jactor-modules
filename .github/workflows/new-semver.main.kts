@@ -8,7 +8,7 @@ import java.nio.file.Files
  * -----------
  * Will find next patched version when given current snapshot-version and current major/minor-version (using semantic versioning)
  * -
- * Major and minor version will be determined by previous snapshot tag and the patch-version is bumped.
+ * Major and minor version will be determined by previous tag and the patch-version is bumped.
  * -
  * The new patched version (full semantic version, <major>.<minor>.<patch>) will be written to a new file named newSemVer
  * -
