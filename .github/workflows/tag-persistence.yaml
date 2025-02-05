@@ -49,4 +49,8 @@ jobs:
           git tag -a "${{ steps.semver.outputs.new }}-persistence" -m "New version tagged. Previous: ${{ steps.current.outputs.semver }}"
           git push --tags
         env:
+          AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
+          AUTHOR_NAME: ${{ steps.metadata.outputs.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEMANTIC_VERSION_CURRENT: ${{ steps.current.outputs.semver }}
+          SEMANTIC_VERSION_NEW: ${{ steps.semver.outputs.new }}
