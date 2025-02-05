@@ -1,5 +1,5 @@
 # language: no
-Egenskap: Applikasjonen jactor-persistence
+Egenskap: back-end, jactor-persistence
 
   Bakgrunn:
     Gitt base url 'http://localhost:1099/jactor-persistence/actuator'
