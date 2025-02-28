@@ -1,11 +1,14 @@
+
 group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
+val flywayVersion: String by project
+val h2DatabaseVersion: String by project
+
 plugins {
     id("org.springframework.boot") version "3.4.3"
 }
-
 dependencies {
     // spring-boot
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -17,8 +20,8 @@ dependencies {
     implementation(project(":shared"))
 
     // database
-    runtimeOnly("org.flywaydb:flyway-core:11.3.0")
-    runtimeOnly("com.h2database:h2:2.3.232")
+    runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
+    runtimeOnly("com.h2database:h2:$h2DatabaseVersion")
 }
 
 tasks.test {
