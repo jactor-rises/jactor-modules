@@ -42,15 +42,14 @@ jobs:
           echo "name=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)" >> $GITHUB_OUTPUT
       - name: Tag new semantic version for persistence
         run: |
-          git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          git config --global user.email "${{ steps.metadata.outputs.email }}"
-          git config --global user.name "${{ steps.metadata.outputs.name }}"
-
-          git tag -a "${{ steps.semver.outputs.new }}-persistence" -m "New version tagged. Previous: ${{ steps.current.outputs.semver }}"
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git config --global user.email "${{ secrets.AUTHOR_EMAIL }}"
+          git config --global user.name "${{ secrets.AUTHOR_NAME }}"
+          git tag -a "${{ env.SEMANTIC_VERSION_NEW }}-persistence" -m "New version tagged. Previous: ${{ env.SEMANTIC_VERSION_CURRENT }}"
           git push --tags
         env:
-          AUTHOR_EMAIL: ${{ steps.metadata.outputs.email }}
-          AUTHOR_NAME: ${{ steps.metadata.outputs.name }}
+          AUTHOR_EMAIL: ${{ secrets.AUTHOR_EMAIL }}
+          AUTHOR_NAME: ${{ secrets.AUTHOR_NAME }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SEMANTIC_VERSION_CURRENT: ${{ steps.current.outputs.semver }}
-          SEMANTIC_VERSION_NEW: ${{ steps.semver.outputs.new }}
+          SEMANTIC_VERSION_CURRENT: ${{ steps.get_version.outputs.current }}
+          SEMANTIC_VERSION_NEW: ${{ steps.get_version.outputs.new }}
