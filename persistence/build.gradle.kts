@@ -9,6 +9,7 @@ val h2DatabaseVersion: String by project
 plugins {
     id("org.springframework.boot") version "3.4.3"
 }
+
 dependencies {
     // spring-boot
     implementation("org.springframework.boot:spring-boot-starter-actuator")
