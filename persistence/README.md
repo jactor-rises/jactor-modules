@@ -6,7 +6,7 @@
 ### What is this repository for?
 
 The main purpose is to learn about programming microservices using Kotlin, (with REST and spring JPA). I also use GitHub
-to get a deeper understanding of continuous integration/DevOps using GitHub workflow/actions, gradle, and docker running
+to get a deeper understanding of continuous integration/DevOps using GitHub workflow/actions and gradle.
 integration testing with cucumber.
 
 This project is a microservice dealing with persistence to a database using JPA (java persistence api) via
@@ -15,10 +15,10 @@ project [jactor-rises](https://github.com/jactor-rises/jactor-rises))
 
 ### Set up
 
-* a spring-boot 2 application
+* a spring-boot 3 application
     * build with [gradle](https://gradle.org).
     * is using [h2](http://h2database.com) (in-memory database)
-    * run it with docker, spring-boot, or as any other java-application
+    * run it with spring-boot, or as any other java-application
 * this application is documented with swagger. After startup, use link:
     * <http://localhost:1099/jactor-persistence/swagger-ui/index.html?configUrl=/jactor-persistence/v3/api-docs/swagger-config#/> (swagger ui)
 
@@ -40,11 +40,6 @@ Run it with [gradle](https://gradle.org):
 After a valid build one can execute the generated jar file as plain java:
 ```
 java -jar build/lib/jactor-persistence-<version>-SNAPSHOT.jar
-```
-or build and run an image with [docker](https://www.docker.com):
-```
-docker build -t jactor-persistence .
-docker run -p 1099:1099 jactor-persistence
 ```
 ### Some technologies used
 
