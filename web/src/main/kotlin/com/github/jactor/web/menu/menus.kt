@@ -8,6 +8,7 @@ class MenuFacade(private val menusByName: Map<String, Menu>) {
     }
 }
 
+@JvmRecord
 data class Menu(val name: String, private val menuItems: MutableList<MenuItem>) {
     constructor(name: String) : this(name, ArrayList())
 

@@ -11,6 +11,8 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import com.github.jactor.persistence.util.whenFalse
 import com.github.jactor.persistence.util.whenTrue
+import com.github.jactor.shared.filEllerKlassenavn
+import com.github.jactor.shared.kodelinjeEllerMetode
 
 @ControllerAdvice
 class ExceptionHandler : ResponseEntityExceptionHandler() {
@@ -35,7 +37,6 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
             put(HttpHeaders.WARNING, listOf(message))
         }
 
-        // kLogger.warn { "${e.message.toString()}, $e" }
         return handleExceptionInternal(e, ErrorResponse(message), headers, httpStatus, request)
     }
 
@@ -94,20 +95,4 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
 
     @JvmRecord
     data class ErrorResponse(val errorMessage: String)
-}
-
-private fun StackTraceElement.filEllerKlassenavn(): String {
-    if (fileName == null) {
-        return className
-    }
-
-    return fileName!!
-}
-
-private fun StackTraceElement.kodelinjeEllerMetode(): String {
-    if (lineNumber == -1) {
-        return "metode:$methodName"
-    }
-
-    return "linje:$lineNumber"
 }

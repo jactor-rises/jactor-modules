@@ -4,6 +4,7 @@ description = "jactor-web"
 
 val bootstrapVersion: String by project
 val jqueryVersion: String by project
+val kotlinLoggingVersion: String by project
 val springdocVersion: String by project
 
 plugins {
@@ -18,6 +19,7 @@ dependencies {
 
     // internal project dependency
     implementation(project(":shared"))
+    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
     // --- misc dependencies ---
     implementation("org.webjars:bootstrap:$bootstrapVersion")

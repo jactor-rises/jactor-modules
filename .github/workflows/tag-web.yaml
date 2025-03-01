@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "email=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)" >> $GITHUB_OUTPUT
           echo "name=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)" >> $GITHUB_OUTPUT
-      - name: Tag new semantic version for web
+      - name: Tag new snapshot version for web
         run: |
           git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.email "${{ steps.metadata.outputs.email }}"
