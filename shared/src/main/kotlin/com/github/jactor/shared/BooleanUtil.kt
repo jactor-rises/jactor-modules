@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.util
+package com.github.jactor.shared
 
 fun <T> Boolean.whenTrue(callback: () -> T): T? = when (this) {
     true -> callback()
