@@ -28,9 +28,14 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("org.junit.platform:junit-platform-suite")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation("org.junit.platform:junit-platform-suite")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.assertj")
+        exclude(group = "org.junit", module = "junit")
+        exclude(group = "org.hamcrest")
+        exclude(group = "org.mockito")
+    }
 
     // cucumber
     testImplementation("io.cucumber:cucumber-java:$cucumberVersion")

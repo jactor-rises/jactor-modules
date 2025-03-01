@@ -1,12 +1,13 @@
 package com.github.jactor.persistence.api.exception
 
 import java.util.UUID
-import org.assertj.core.api.Assertions.fail
+import kotlin.test.fail
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.api.controller.UserController
 import com.github.jactor.persistence.user.UserRepository
 import com.github.jactor.persistence.user.UserService
 import com.github.jactor.persistence.test.containsSubstring
+import com.github.jactor.shared.finnFeiledeLinjer
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -28,7 +29,7 @@ internal class ExceptionHandlerTest {
         }.onSuccess {
             fail("Kjøring skulle feilet!")
         }.onFailure {
-            val kodelinjer = ExceptionHandler.finnFeiledeLinjer(it)
+            val kodelinjer = it.finnFeiledeLinjer()
 
             assertAll {
                 assertThat(kodelinjer).containsSubstring("intern: UserController.kt (linje:")
@@ -51,7 +52,7 @@ internal class ExceptionHandlerTest {
             )
         }
 
-        val linjer = ExceptionHandler.finnFeiledeLinjer(throwableMock)
+        val linjer = throwableMock.finnFeiledeLinjer()
 
         assertThat(linjer).isEqualTo(listOf("intern: com.github.jactor.package.MyService (linje:15)"))
     }
@@ -70,7 +71,7 @@ internal class ExceptionHandlerTest {
             )
         }
 
-        val linjer = ExceptionHandler.finnFeiledeLinjer(throwableMock)
+        val linjer = throwableMock.finnFeiledeLinjer()
 
         assertThat(linjer).isEqualTo(listOf("intern: com.github.jactor.package.MyService (metode:run)"))
     }

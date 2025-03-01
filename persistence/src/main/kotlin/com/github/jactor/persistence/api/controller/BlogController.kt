@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.blog.BlogEntryModel
 import com.github.jactor.persistence.blog.BlogModel
 import com.github.jactor.persistence.blog.BlogService
-import com.github.jactor.persistence.util.whenTrue
+import com.github.jactor.shared.whenTrue
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import io.swagger.v3.oas.annotations.Operation
