@@ -11,10 +11,12 @@ import org.springframework.web.util.UriComponentsBuilder
 
 internal data class RestService(val baseUrl: String, var endpoint: String = "") {
 
-    fun exchangeGet(parameternavn: String?, parameter: String?, restTemplate: () -> TestRestTemplate): ResponseEntity<String> {
-        val fullUrl = initUrl(parameternavn, parameter)
-
-        return restTemplate.invoke().exchange(fullUrl, HttpMethod.GET, null as HttpEntity<*>?, String::class.java)
+    fun exchangeGet(
+        parameternavn: String?,
+        parameter: String?,
+        restTemplate: () -> TestRestTemplate
+    ): ResponseEntity<String> = initUrl(parameternavn, parameter).let { fullUrl ->
+        restTemplate.invoke().exchange(fullUrl, HttpMethod.GET, null as HttpEntity<*>?, String::class.java)
     }
 
     fun exchangePost(json: String, restTemplate: () -> TestRestTemplate): ResponseEntity<String> {

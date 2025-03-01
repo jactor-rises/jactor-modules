@@ -6,6 +6,7 @@ const val ENGLISH = "English"
 const val NORSK = "Norsk"
 const val THAI = "ไทย"
 
+@JvmRecord
 data class Language(
         val locale: Locale,
         val name: String = ""

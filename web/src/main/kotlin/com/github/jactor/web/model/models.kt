@@ -5,15 +5,16 @@ import com.github.jactor.shared.api.PersonDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.web.Technology
 
+@JvmRecord
 data class HomePageModel(val technologies: List<Technology> = ArrayList())
-data class UserModel(private val user: UserDto) {
 
-    private val address: AddressDto
-    private val person: PersonDto = user.person ?: PersonDto()
-
-    init {
-        address = person.address ?: AddressDto()
-    }
+@JvmRecord
+data class UserModel(
+    private val user: UserDto,
+    private val person: PersonDto = user.person ?: PersonDto(),
+    private val address: AddressDto = person.address ?: AddressDto()
+) {
+    constructor(user: UserDto) : this(user = user, person = user.person ?: PersonDto())
 
     fun fetchAddress(): List<String> {
         val allFields = listOf(

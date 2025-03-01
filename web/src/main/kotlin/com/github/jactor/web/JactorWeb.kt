@@ -1,12 +1,15 @@
 package com.github.jactor.web
 
-import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import com.github.jactor.shared.SpringBeanNames
+import io.github.oshai.kotlinlogging.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 @SpringBootApplication
 class JactorWeb : WebMvcConfigurer {
@@ -16,29 +19,31 @@ class JactorWeb : WebMvcConfigurer {
     }
 
     private fun inspect(applicationContext: ApplicationContext, args: Array<String>) {
-        if (LOGGER.isDebugEnabled) {
-            val arguments = if (args.isEmpty()) "without arguments!" else "with arguments: ${args.joinToString { " " }}!"
+        logger.debug {
+            logger.debug { "Starting jactor-web ${gatherArgs(args)}" }
+            logger.debug { "Available beans (only simple names):" }
 
-            LOGGER.debug("Starting jactor-web {}", arguments)
-
-            val springBeanNames = SpringBeanNames()
-            applicationContext.beanDefinitionNames.sorted().forEach(springBeanNames::add)
-
-            LOGGER.debug("Available beans (only simple names):")
-            springBeanNames.listBeanNames().forEach {
-                LOGGER.debug("- $it")
+            SpringBeanNames().also { springBeanNames ->
+                applicationContext.beanDefinitionNames.sorted().forEach(springBeanNames::add)
+                springBeanNames.listBeanNames().forEach {
+                    logger.debug { "- $it" }
+                }
             }
 
-            LOGGER.debug("Ready for service...")
+            "Ready for service..."
         }
     }
 
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(JactorWeb::class.java)
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            SpringApplication.run(JactorWeb::class.java, *args)
+    fun gatherArgs(args: Array<String>): String {
+        val arguments = if (args.isEmpty()) {
+            "without arguments!"
+        } else {
+            "with arguments: ${args.joinToString { " " }}!"
         }
+        return arguments
     }
+}
+
+fun main(args: Array<String>) {
+    SpringApplication.run(JactorWeb::class.java, *args)
 }
