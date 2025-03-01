@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import com.github.jactor.web.JactorWebBeans
 import com.github.jactor.web.client.UserClient
-import com.github.jactor.web.dto.UserModel
+import com.github.jactor.web.model.UserModel
 import com.github.jactor.web.menu.MenuFacade
 import com.github.jactor.web.menu.MenuItem
 

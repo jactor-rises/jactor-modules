@@ -1,3 +1,4 @@
+
 logging:
   level:
     com.githnub.jactor: debug
@@ -27,6 +28,9 @@ spring:
     init:
       username: sa
       password:
+  threads:
+    virtual:
+      enabled: true
 
 springdoc:
   packages-to-scan: com.github.jactor.persistence.controller

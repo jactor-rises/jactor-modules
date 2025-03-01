@@ -34,16 +34,17 @@ jobs:
       - name: Create new semantic version
         id: semver
         run: |
-          .github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} semantic=${{ steps.current.outputs.semver }}
+          .github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} currentSemVer=${{ steps.current.outputs.semver }}
           echo "new=$(cat newSemVer)" >> $GITHUB_OUTPUT
       - name: Fetch github event metadata
         id: metadata
         run: |
-          echo "email=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)" >> $GITHUB_OUTPUT
-          echo "name=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)" >> $GITHUB_OUTPUT
+         echo "email=$(jq -r '.commits[0].committer.email' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+         echo "name=$(jq -r '.commits[0].author.name' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
       - name: Tag new snapshot version for persistence
+        id: tag-persistence
         run: |
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git remote set-url origin https://${{ github.actor }}:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
           git config --global user.email "${{ steps.metadata.outputs.email }}"
           git config --global user.name "${{ steps.metadata.outputs.name }}"
 
