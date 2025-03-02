@@ -19,7 +19,7 @@ fun PersonDto.toModel() = PersonModel(
     description = description
 )
 
-fun UserDto.toModel()= UserModel (
+fun UserDto.toModel() = UserModel(
     persistentModel = PersistentModel(persistentDto = persistentDto),
     person = person?.let { PersonModel(personDto = it) },
     emailAddress = emailAddress,
