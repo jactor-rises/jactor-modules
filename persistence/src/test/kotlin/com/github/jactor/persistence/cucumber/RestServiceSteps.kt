@@ -1,6 +1,5 @@
 package com.github.jactor.persistence.cucumber
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import assertk.assertThat
 import assertk.assertions.contains

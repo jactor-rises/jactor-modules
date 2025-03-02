@@ -113,7 +113,7 @@ internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTe
         assertThat(entriesByGuestBook).hasSize(1)
         entriesByGuestBook.iterator().next().modify("Willie", "On the road again")
 
-        flush { guestBookEntryRepository.save<GuestBookEntryEntity>(entriesByGuestBook.iterator().next()) }
+        flush { guestBookEntryRepository.save(entriesByGuestBook.iterator().next()) }
 
         val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(modifiedEntriesByGuestBook).hasSize(1)
