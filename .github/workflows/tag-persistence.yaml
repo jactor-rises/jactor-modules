@@ -19,7 +19,10 @@ jobs:
         run: |
           git fetch --tags
           CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-persistence" | head -n 1)
-          echo "semver=$CURRENT_SEMVER" >> $GITHUB_OUTPUT
+          echo "current semantic version tag: $CURRENT_SEMVER"
+          NUMBERS=$(echo $CURRENT_SEMVER | sed 's/-.*//')
+          echo "current semantic version version: $NUMBERS"
+          echo "semver=$NUMBERS" >> $GITHUB_OUTPUT
       - uses: actions/setup-java@v2
         with:
           distribution: temurin
@@ -30,12 +33,17 @@ jobs:
         id: version
         run: |
           MAJOR_MINOR=$(./gradlew :persistence:properties | grep version: | grep SNAPSHOT | awk '{print $2}')
-          echo "toPatch=$MAJOR_MINOR" >> $GITHUB_OUTPUT
+          echo "Project version guide: $MAJOR_MINOR"
+          NUMBERS=$(echo $MAJOR_MINOR | sed 's/-.*//')
+          echo "Major/minor version: $NUMBERS"
+          echo "toPatch=$NUMBERS" >> $GITHUB_OUTPUT
       - name: Create new semantic version
         id: semver
         run: |
-          .github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} currentSemVer=${{ steps.current.outputs.semver }}
-          echo "new=$(cat newSemVer)" >> $GITHUB_OUTPUT
+          NEW_SEM_VER=$(.github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} \
+            currentSemVer=${{ steps.current.outputs.semver }})
+          echo "new semantic version: $NEW_SEM_VER"
+          echo "$NEW_SEM_VER" >> $GITHUB_OUTPUT
       - name: Fetch github event metadata
         id: metadata
         run: |
@@ -48,7 +56,8 @@ jobs:
           git config --global user.email "${{ steps.metadata.outputs.email }}"
           git config --global user.name "${{ steps.metadata.outputs.name }}"
 
-          git tag -a "${{ steps.semver.outputs.new }}-persistence" -m "New version tagged. Previous: ${{ steps.current.outputs.semver }}"
+          git tag -a "${{ steps.semver.outputs.newSemVer }}-persistence" \
+            -m "New version tagged. Previous: ${{ steps.current.outputs.semver }}"
           git push --tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
