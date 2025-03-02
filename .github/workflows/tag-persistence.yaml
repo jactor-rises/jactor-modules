@@ -43,7 +43,7 @@ jobs:
           NEW_SEM_VER=$(.github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} \
             currentSemVer=${{ steps.current.outputs.semver }})
           echo "new semantic version: $NEW_SEM_VER"
-          echo "$NEW_SEM_VER" >> $GITHUB_OUTPUT
+          echo "newSemVer=$NEW_SEM_VER" >> $GITHUB_OUTPUT
       - name: Fetch github event metadata
         id: metadata
         run: |
