@@ -15,12 +15,13 @@ import io.cucumber.junit.platform.engine.Constants
 @IncludeEngines("cucumber")
 @SelectClasspathResource("com/github/jactor/persistence/cucumber")
 @ConfigurationParameters(
+    ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "com.github.jactor.persistence.cucumber"),
     ConfigurationParameter(key = Constants.PLUGIN_PROPERTY_NAME, value = "pretty, html:build/cucumber-report.html"),
     ConfigurationParameter(key = Constants.PLUGIN_PUBLISH_QUIET_PROPERTY_NAME, value = "true")
 )
 @ExcludeTags("Disabled")
 @ActiveProfiles("cucumber")
-internal class RunCucumberTest: AbstractSpringBootCucumberConfiguration() {
+internal class RunCucumberTest : AbstractSpringBootCucumberConfiguration() {
     @Before
     fun beforeScenario(scenario: Scenario) {
         val users = userRepository.findAll()

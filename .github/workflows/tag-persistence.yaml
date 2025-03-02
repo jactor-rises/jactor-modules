@@ -34,7 +34,7 @@ jobs:
         run: |
           MAJOR_MINOR=$(./gradlew :persistence:properties | grep version: | grep SNAPSHOT | awk '{print $2}')
           echo "Project version guide: $MAJOR_MINOR"
-          NUMBERS=$(echo $MAJOR_MINOR | sed 's/\.x$//'))
+          NUMBERS=$(echo $MAJOR_MINOR | sed 's/\.x-.*$//')
           echo "Major/minor version: $NUMBERS"
           echo "toPatch=$NUMBERS" >> $GITHUB_OUTPUT
       - name: Create new semantic version
