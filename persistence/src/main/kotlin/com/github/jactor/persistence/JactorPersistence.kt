@@ -11,9 +11,7 @@ import io.swagger.v3.oas.annotations.info.Info
 private val logger = KotlinLogging.logger {}
 
 @SpringBootApplication
-@OpenAPIDefinition(
-    info = Info(title = "jactor-persistence", version = "v1")
-)
+@OpenAPIDefinition(info = Info(title = "jactor-persistence", version = "v2"))
 class JactorPersistence {
     companion object {
         fun inspect(applicationContext: ApplicationContext, args: Array<String>) {

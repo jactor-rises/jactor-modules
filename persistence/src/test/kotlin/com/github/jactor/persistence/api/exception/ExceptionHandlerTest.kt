@@ -32,7 +32,7 @@ internal class ExceptionHandlerTest {
             val kodelinjer = it.finnFeiledeLinjer()
 
             assertAll {
-                assertThat(kodelinjer).containsSubstring("intern: UserController.kt (linje:")
+                assertThat(kodelinjer).containsSubstring("intern: Controllers.kt (linje:")
                 assertThat(kodelinjer).containsSubstring("intern: UserService.kt (linje:")
             }
         }
