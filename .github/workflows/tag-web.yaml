@@ -19,7 +19,10 @@ jobs:
         run: |
           git fetch --tags
           CURRENT_SEMVER=$(git tag --sort=-v:refname -l "*-web" | head -n 1)
-          echo "semver=$CURRENT_SEMVER" >> $GITHUB_OUTPUT
+          echo "current semantic version tag: $CURRENT_SEMVER"
+          NUMBERS=$(echo $CURRENT_SEMVER | sed 's/-.*//')
+          echo "current semantic version version: $NUMBERS"
+          echo "semver=$NUMBERS" >> $GITHUB_OUTPUT
       - uses: actions/setup-java@v2
         with:
           distribution: temurin
@@ -30,17 +33,22 @@ jobs:
         id: version
         run: |
           MAJOR_MINOR=$(./gradlew :web:properties | grep version: | grep SNAPSHOT | awk '{print $2}')
-          echo "toPatch=$MAJOR_MINOR" >> $GITHUB_OUTPUT
+          echo "Project version guide: $MAJOR_MINOR"
+          NUMBERS=$(echo $MAJOR_MINOR | sed 's/\.x-.*$//')
+          echo "Major/minor version: $NUMBERS"
+          echo "toPatch=$NUMBERS" >> $GITHUB_OUTPUT
       - name: Create new semantic version
         id: semver
         run: |
-          .github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} currentSemVer=${{ steps.current.outputs.semver }}
-          echo "new=$(cat newSemVer)" >> $GITHUB_OUTPUT
+          NEW_SEM_VER=$(.github/workflows/new-semver.main.kts majorMinor=${{ steps.version.outputs.toPatch }} \
+            currentSemVer=${{ steps.current.outputs.semver }})
+          echo "new semantic version: $NEW_SEM_VER"
+          echo "newSemVer=$NEW_SEM_VER" >> $GITHUB_OUTPUT
       - name: Fetch github event metadata
         id: metadata
         run: |
-          echo "email=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].committer.email' | head -n 1)" >> $GITHUB_OUTPUT
-          echo "name=$(jq .commits $GITHUB_EVENT_PATH | jq '.[].author.name' | head -n 1)" >> $GITHUB_OUTPUT
+          echo "email=$(jq -r '.commits[0].committer.email' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+          echo "name=$(jq -r '.commits[0].author.name' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
       - name: Tag new snapshot version for web
         id: tag-web
         run: |
@@ -48,7 +56,8 @@ jobs:
           git config --global user.email "${{ steps.metadata.outputs.email }}"
           git config --global user.name "${{ steps.metadata.outputs.name }}"
 
-          git tag -a "${{ steps.semver.outputs.new }}-web" -m "New version tagged. Previous: ${{ steps.current.outputs.semver }}"
+          git tag -a "${{ steps.semver.outputs.newSemVer }}-web" \
+            -m "New version tagged. Previous: ${{ steps.current.outputs.semver }}"
           git push --tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
