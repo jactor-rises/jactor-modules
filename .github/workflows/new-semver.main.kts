@@ -11,8 +11,7 @@ import java.nio.file.Files
  * -
  * Major and minor version will be determined by previous tag and the patch-version is bumped.
  * -
- * The new patched version (full semantic version, <major>.<minor>.<patch>) will be written to a new file named
- * newSemVer
+ * The new patched version (full semantic version, <major>.<minor>.<patch>) will be returned from the script.
  * -
  * Note! If the major/minor version is less than current semantic version or larger than bumped semantic version, the
  * script will fail...
@@ -24,7 +23,6 @@ object Argument {
 
 object Constants {
     const val ENVIRONMENT_IS_DEBUG = "IS_DEBUG"
-    const val FILE_NAME_NEW_SEM_VER = "newSemVer"
 
     private const val SCRIPT_FILE_NAME = "new-semver.main.kts"
 
@@ -36,8 +34,10 @@ object Constants {
         """.trimIndent()
 }
 
-val isDebug = System.getenv(Constants.ENVIRONMENT_IS_DEBUG)?.toBoolean() ?: false
-val allArgs = args.joinToString(" ")
+private val isDebug = System.getenv(Constants.ENVIRONMENT_IS_DEBUG)?.toBoolean() ?: false
+private val allArgs = args.joinToString(" ")
+private lateinit var majorMinorVersion: String
+private lateinit var semanticVersion: String
 
 debugMessage("all args: $allArgs")
 
@@ -59,15 +59,17 @@ val commands = buildMap {
 debugMessage("map args: $commands")
 
 // read arguments
-val majorMinorVersion = commands[Argument.MAJOR_MINOR]
-    ?: errorMessage("${Argument.MAJOR_MINOR} argument is not supplied!")
-val semanticVersion = commands[Argument.CURRENT_SEMANTIC_VERSION]
-    ?: errorMessage("${Argument.CURRENT_SEMANTIC_VERSION} argument is not supplied!")
+majorMinorVersion = commands[Argument.MAJOR_MINOR] ?: errorMessage(
+    "${Argument.MAJOR_MINOR} argument is not supplied!"
+)
+
+semanticVersion = commands[Argument.CURRENT_SEMANTIC_VERSION] ?: errorMessage(
+    "${Argument.CURRENT_SEMANTIC_VERSION} argument is not supplied!"
+)
 
 val newSemanticVersion = createNewSemanticVersion()
-val semVerFile = File(Constants.FILE_NAME_NEW_SEM_VER)
 
-Files.write(semVerFile.toPath(), newSemanticVersion.toByteArray())
+println(newSemanticVersion)
 
 fun errorMessage(message: String): Nothing = Constants.ERROR_MESSAGE.replace("{}", message).let {
     error(it)

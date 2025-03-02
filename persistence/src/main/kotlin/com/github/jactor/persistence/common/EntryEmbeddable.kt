@@ -16,9 +16,9 @@ class EntryEmbeddable {
         private set
 
     val notNullableCreator: String
-        get() = creatorName ?: throw IllegalStateException("A creator is not provided!")
+        get() = creatorName ?: error("A creator is not provided!")
     val notNullableEntry: String
-        get() = entry ?: throw IllegalStateException("An entry is not provided!")
+        get() = entry ?: error("An entry is not provided!")
 
     constructor()
 
@@ -46,8 +46,7 @@ class EntryEmbeddable {
     }
 
     private fun isEqualTo(obj: EntryEmbeddable): Boolean {
-        return entry == obj.entry &&
-            creatorName == obj.creatorName
+        return entry == obj.entry && creatorName == obj.creatorName
     }
 
     override fun toString(): String {
@@ -57,7 +56,7 @@ class EntryEmbeddable {
     private fun shortEntry(): String {
         return entry?.let {
             if (it.length < 50) it else it.substring(0, 47) + "..."
-        } ?: throw IllegalStateException("Entry should be provided when needed!")
+        } ?: error("Entry should be provided when needed!")
     }
 
     override fun hashCode(): Int {
