@@ -8,7 +8,7 @@ val h2DatabaseVersion: String by project
 val kotlinLoggingVersion: String by project
 
 plugins {
-    id("org.springframework.boot") version "3.4.3"
+    id("org.springframework.boot") version "3.5.0"
 }
 
 dependencies {

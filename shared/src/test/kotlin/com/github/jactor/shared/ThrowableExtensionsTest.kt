@@ -1,11 +1,13 @@
 package com.github.jactor.shared
 
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import io.mockk.every
 import io.mockk.mockk
 
+@Disabled("må skrives om siden den mocker kode fra JVM")
 class ThrowableExtensionsTest {
     @Test
     fun `skal bruke klassenavn når filnavn ikke er tilstede`() {

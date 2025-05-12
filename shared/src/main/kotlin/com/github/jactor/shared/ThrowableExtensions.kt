@@ -26,9 +26,8 @@ private fun Throwable?.findRootCauseMessage(): String? {
 
 private fun Throwable.simpleExceptionMessage(): String = "${this::class.simpleName}: ${message}"
 
-fun Throwable.finnFeiledeLinjer(): List<String> {
-    val linjer = mutableListOf<String>()
-    var cause: Throwable? = this
+fun Throwable.finnFeiledeLinjer(): List<String> = buildList{
+    var cause: Throwable? = this@finnFeiledeLinjer
 
     while (cause != null) {
         val stacks = cause.stackTrace
@@ -43,12 +42,10 @@ fun Throwable.finnFeiledeLinjer(): List<String> {
                 val filnavnEllerKlasse = frame.filnavnEllerKlassenavn()
                 val linjeEllerMetode = frame.kodelinjeEllerMetode()
 
-                linjer.add("$indent$internVsEkstern: $filnavnEllerKlasse ($linjeEllerMetode)")
+                add("$indent$internVsEkstern: $filnavnEllerKlasse ($linjeEllerMetode)")
             }
         }
 
         cause = cause.cause
     }
-
-    return linjer
 }
