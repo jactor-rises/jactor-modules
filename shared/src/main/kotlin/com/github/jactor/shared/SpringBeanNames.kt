@@ -4,8 +4,8 @@ private typealias TenNames = String
 
 @JvmRecord
 data class SpringBeanNames(
-    private val beanNames: MutableList<String> = ArrayList(),
-    private val tenNames: MutableList<TenNames> = ArrayList(),
+    private val beanNames: MutableList<String> = mutableListOf(),
+    private val tenNames: MutableList<TenNames> = mutableListOf(),
 ) {
     fun add(name: String) {
         name.contains(".").whenTrue {
