@@ -2,16 +2,14 @@ package com.github.jactor.persistence.api.exception
 
 import java.util.UUID
 import kotlin.test.fail
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.api.controller.UserController
+import com.github.jactor.persistence.test.containsSubstring
 import com.github.jactor.persistence.user.UserRepository
 import com.github.jactor.persistence.user.UserService
-import com.github.jactor.persistence.test.containsSubstring
 import com.github.jactor.shared.finnFeiledeLinjer
 import assertk.assertAll
 import assertk.assertThat
-import assertk.assertions.isEqualTo
 import io.mockk.every
 import io.mockk.mockk
 
@@ -37,45 +35,5 @@ internal class ExceptionHandlerTest {
                 assertThat(kodelinjer).containsSubstring("intern: UserService.kt (linje:")
             }
         }
-    }
-
-    @Test
-    @Disabled("wip - private access???")
-    fun `skal skrive klassenavn når filnavn ikke er tilstede`() {
-        val throwableMock = mockk<Throwable>(relaxed = true) {
-            every { cause } returns null
-            every { stackTrace } returns arrayOf(
-                StackTraceElement(
-                    "com.github.jactor.package.MyService",
-                    "run",
-                    null,
-                    15,
-                ),
-            )
-        }
-
-        val linjer = throwableMock.finnFeiledeLinjer()
-
-        assertThat(linjer).isEqualTo(listOf("intern: com.github.jactor.package.MyService (linje:15)"))
-    }
-
-    @Test
-    @Disabled("wip - private access???")
-    fun `skal skrive metodenavn når kodelinje mangler`() {
-        val throwableMock = mockk<Throwable>(relaxed = true) {
-            every { cause } returns null
-            every { stackTrace } returns arrayOf(
-                StackTraceElement(
-                    "com.github.jactor.package.MyService",
-                    "run",
-                    null,
-                    -1,
-                ),
-            )
-        }
-
-        val linjer = throwableMock.finnFeiledeLinjer()
-
-        assertThat(linjer).isEqualTo(listOf("intern: com.github.jactor.package.MyService (metode:run)"))
     }
 }
