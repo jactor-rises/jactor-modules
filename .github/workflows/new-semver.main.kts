@@ -1,8 +1,5 @@
 #!/usr/bin/env kotlin
 
-import java.io.File
-import java.nio.file.Files
-
 /***********************************************
  * DESCRIPTION:
  * -----------
@@ -36,8 +33,8 @@ object Constants {
 
 private val isDebug = System.getenv(Constants.ENVIRONMENT_IS_DEBUG)?.toBoolean() ?: false
 private val allArgs = args.joinToString(" ")
-private lateinit var majorMinorVersion: String
-private lateinit var semanticVersion: String
+private var majorMinorVersion: String
+private var semanticVersion: String
 
 debugMessage("all args: $allArgs")
 

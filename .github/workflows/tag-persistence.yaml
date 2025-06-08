@@ -27,6 +27,15 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
       - run: ./gradlew :persistence:assemble
       - name: Fetch current major/minor release
         id: version
