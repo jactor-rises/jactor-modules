@@ -36,7 +36,7 @@ class DefaultBlogService(
     }
 
     override fun findEntriesForBlog(blogId: UUID?): List<BlogEntryModel> {
-        return blogEntryRepository.findByBlog_Id(blogId).map { obj: BlogEntryEntity? -> obj?.toModel()!! }
+        return blogEntryRepository.findByBlogId(blogId).map { obj: BlogEntryEntity? -> obj?.toModel()!! }
     }
 
     override fun saveOrUpdate(blogModel: BlogModel): BlogModel {

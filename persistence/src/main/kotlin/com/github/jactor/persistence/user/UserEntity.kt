@@ -50,7 +50,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
     var person: PersonEntity? = null
         internal set
 
-    @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var guestBook: GuestBookEntity? = null
         private set
 

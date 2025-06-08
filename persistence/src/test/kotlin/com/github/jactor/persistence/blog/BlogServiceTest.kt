@@ -92,7 +92,7 @@ internal class BlogServiceTest {
             ).buildBlogEntryEntity()
         )
 
-        every { blogEntryRepositoryMockk.findByBlog_Id(uuid) } returns blogEntryEntities
+        every { blogEntryRepositoryMockk.findByBlogId(uuid) } returns blogEntryEntities
 
         val blogEntries = blogServiceToTest.findEntriesForBlog(uuid)
 
