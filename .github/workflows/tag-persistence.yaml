@@ -27,7 +27,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-          cache: gradle
       - run: ./gradlew :persistence:assemble
       - name: Fetch current major/minor release
         id: version

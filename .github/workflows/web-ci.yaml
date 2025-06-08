@@ -24,7 +24,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-          cache: gradle
       - run: ./gradlew :web:build --scan -x test
       - name: Verify dependencies
         run: |
