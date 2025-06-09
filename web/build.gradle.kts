@@ -22,7 +22,4 @@ dependencies {
     // --- web dependencies ---
     implementation("org.webjars:bootstrap:$bootstrapVersion")
     implementation("org.webjars:jquery:$jqueryVersion")
-
-    // swagger
-    implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")
 }
