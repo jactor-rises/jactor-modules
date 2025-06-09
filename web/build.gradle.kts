@@ -23,10 +23,6 @@ dependencies {
     implementation("org.webjars:bootstrap:$bootstrapVersion")
     implementation("org.webjars:jquery:$jqueryVersion")
 
-    // kotlin
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
     // swagger
     implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")
 }
