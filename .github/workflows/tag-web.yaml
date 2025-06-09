@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'web/**'
+      - 'shared/**'
 
 jobs:
   tag:

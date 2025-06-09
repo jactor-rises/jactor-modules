@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'persistence/**'
+      - 'shared/**'
 
 jobs:
   tag:

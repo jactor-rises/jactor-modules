@@ -22,7 +22,7 @@ class JactorPersistence {
 
                     logger.debug { "Available beans (only simple names):" }
 
-                    springBeanNames.listBeanNames().forEach {
+                    springBeanNames.names.forEach {
                         logger.debug { "- $it" }
                     }
                 }
