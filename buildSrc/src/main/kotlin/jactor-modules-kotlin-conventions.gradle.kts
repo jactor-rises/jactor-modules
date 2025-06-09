@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 val assertkVersion: String by project
 val cucumberVersion: String by project
 val junitPlatformVersion: String by project
+val kotlinLoggingVersion: String by project
 val mockkVersion: String by project
 val springBootVersion: String by project
 val springdocVersion: String by project
@@ -25,6 +26,9 @@ dependencies {
 
     // springdoc-openapi (swagger)
     implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")
+
+    // logging
+    implementation("io.github.oshai:kotlin-logging-jvm:${kotlinLoggingVersion}")
 
     // test
     testImplementation("com.ninja-squad:springmockk:$springmockkVersion")

@@ -5,7 +5,6 @@ description = "jactor::persistence"
 
 val flywayVersion: String by project
 val h2DatabaseVersion: String by project
-val kotlinLoggingVersion: String by project
 
 plugins {
     id("org.springframework.boot") version "3.5.0"
@@ -20,9 +19,6 @@ dependencies {
 
     // internal project dependency
     implementation(project(":shared"))
-
-    // misc dependencies
-    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
     // runtime dependencies
     runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
