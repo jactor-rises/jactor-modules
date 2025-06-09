@@ -6,6 +6,7 @@ on:
     paths:
       - 'persistence/**'
       - 'shared/**'
+      - 'buildSrc'
 
 jobs:
   tag:

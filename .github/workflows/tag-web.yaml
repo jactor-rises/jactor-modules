@@ -6,6 +6,7 @@ on:
     paths:
       - 'web/**'
       - 'shared/**'
+      - 'buildSrc'
 
 jobs:
   tag:
