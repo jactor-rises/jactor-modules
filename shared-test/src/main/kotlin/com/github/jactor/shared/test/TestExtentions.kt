@@ -1,4 +1,4 @@
-package com.github.jactor.shared
+package com.github.jactor.shared.test
 
 import assertk.Assert
 import assertk.assertThat

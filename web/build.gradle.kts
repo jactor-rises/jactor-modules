@@ -19,9 +19,9 @@ dependencies {
 
     // internal project dependency
     implementation(project(":shared"))
-    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
     // --- misc dependencies ---
+    implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
     implementation("org.webjars:bootstrap:$bootstrapVersion")
     implementation("org.webjars:jquery:$jqueryVersion")
 
