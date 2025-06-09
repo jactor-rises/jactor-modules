@@ -1,10 +1,10 @@
 package com.github.jactor.web.menu
 
-import kotlin.test.junit.JUnitAsserter.fail
 import org.junit.jupiter.api.Test
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isNotNull
+import assertk.fail
 
 internal class MenuFacadeTest {
 

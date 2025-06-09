@@ -1,7 +1,6 @@
 package com.github.jactor.persistence.api.exception
 
 import java.util.UUID
-import kotlin.test.fail
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.api.controller.UserController
 import com.github.jactor.persistence.test.containsSubstring
@@ -10,6 +9,7 @@ import com.github.jactor.persistence.user.UserService
 import com.github.jactor.shared.finnFeiledeLinjer
 import assertk.assertAll
 import assertk.assertThat
+import assertk.fail
 import io.mockk.every
 import io.mockk.mockk
 

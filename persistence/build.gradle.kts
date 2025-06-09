@@ -20,9 +20,11 @@ dependencies {
 
     // internal project dependency
     implementation(project(":shared"))
+
+    // misc dependencies
     implementation("io.github.oshai:kotlin-logging-jvm:$kotlinLoggingVersion")
 
-    // database
+    // runtime dependencies
     runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
     runtimeOnly("com.h2database:h2:$h2DatabaseVersion")
 }

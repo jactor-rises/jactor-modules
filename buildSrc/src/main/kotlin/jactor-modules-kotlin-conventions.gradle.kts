@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 val assertkVersion: String by project
 val cucumberVersion: String by project
 val mockkVersion: String by project
+val springBootVersion: String by project
 val springdocVersion: String by project
 val springmockkVersion: String by project
 
@@ -28,9 +29,8 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("org.junit.platform:junit-platform-suite")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude(group = "org.assertj")
         exclude(group = "org.junit", module = "junit")
         exclude(group = "org.hamcrest")

@@ -1,5 +1,9 @@
 package com.github.jactor.shared
 
+import com.github.jactor.shared.test.assertAll
+import com.github.jactor.shared.test.equalTo
+import com.github.jactor.shared.test.withSize
+import com.github.jactor.shared.test.named
 import org.junit.jupiter.api.Test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -59,12 +63,10 @@ class SpringBeanNamesTest {
         assertThat(springBeanNames.names).assertAll {
             it named "names" withSize 2
 
-            val line1 = it.firstOrNull()
-            line1 named "line 1" equalTo "FooBar0, FooBar1, FooBar2, FooBar3, FooBar4, FooBar5, FooBar6, FooBar7," +
-                " FooBar8, FooBar9"
+            it.firstOrNull() named "line 1" equalTo "FooBar0, FooBar1, FooBar2, FooBar3, FooBar4, FooBar5, FooBar6, " +
+                "FooBar7, FooBar8, FooBar9"
 
-            val line2 = it.lastOrNull()
-            line2 named "line 2" equalTo "FooBarA, FooBarB, FooBarC, FooBarD"
+            it.lastOrNull() named "line 2" equalTo "FooBarA, FooBarB, FooBarC, FooBarD"
         }
     }
 }
