@@ -4,6 +4,8 @@ import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -13,12 +15,14 @@ import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.persistence.user.UserEntity
 import com.github.jactor.persistence.test.initUserEntity
+import com.github.jactor.persistence.user.UserRepository
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.PersonDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
+import com.ninjasquad.springmockk.SpykBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
@@ -28,6 +32,11 @@ import assertk.assertions.isNull
 import io.mockk.every
 
 internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var testRestTemplate: TestRestTemplate
+
+    @SpykBean
+    private lateinit var userRepositorySpyk: UserRepository
 
     @Test
     fun `should build full path`() {
@@ -138,7 +147,9 @@ internal class UserControllerTest : AbstractSpringBootNoDirtyContextTest() {
         )
 
         val userResponse = testRestTemplate.exchange(
-            buildFullPath("/user/update"), HttpMethod.PUT, HttpEntity(UserDto(persistentDto = PersistentDto(id = uuid))),
+            buildFullPath("/user/update"),
+            HttpMethod.PUT,
+            HttpEntity(UserDto(persistentDto = PersistentDto(id = uuid))),
             UserDto::class.java
         )
 

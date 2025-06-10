@@ -10,6 +10,8 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
 internal class PersonServiceTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var personRepository: PersonRepository
 
     @Autowired
     private lateinit var personService: PersonService

@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
@@ -17,6 +18,9 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isStrictlyBetween
 
 internal class BlogEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var blogEntryRepository: BlogEntryRepository
+
     @Test
     fun `should save then read blog entry`() {
         val addressDto = AddressModel(

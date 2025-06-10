@@ -2,6 +2,8 @@ package com.github.jactor.persistence
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
@@ -10,6 +12,9 @@ import assertk.assertThat
 import assertk.assertions.contains
 
 internal class DtoMapperTest : AbstractSpringBootNoDirtyContextTest() {
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     @Test
     fun `should map a user to json`() {

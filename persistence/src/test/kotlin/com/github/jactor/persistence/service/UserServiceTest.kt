@@ -8,14 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.person.PersonModel
-import com.github.jactor.persistence.user.UserModel
-import com.github.jactor.persistence.user.UserModel.Usertype
 import com.github.jactor.persistence.person.PersonEntity
+import com.github.jactor.persistence.person.PersonModel
+import com.github.jactor.persistence.person.PersonRepository
 import com.github.jactor.persistence.user.UserBuilder
 import com.github.jactor.persistence.user.UserEntity
+import com.github.jactor.persistence.user.UserModel
+import com.github.jactor.persistence.user.UserModel.Usertype
+import com.github.jactor.persistence.user.UserRepository
 import com.github.jactor.persistence.user.UserService
 import com.github.jactor.shared.api.CreateUserCommand
+import com.ninjasquad.springmockk.SpykBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -24,9 +27,14 @@ import io.mockk.every
 import io.mockk.slot
 
 internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
-
     @Autowired
     private lateinit var userServiceToTest: UserService
+
+    @SpykBean
+    private lateinit var personRepositorySpyk: PersonRepository
+
+    @SpykBean
+    private lateinit var userRepositorySpyk: UserRepository
 
     @Test
     fun `should map a user entity to a dto`() {

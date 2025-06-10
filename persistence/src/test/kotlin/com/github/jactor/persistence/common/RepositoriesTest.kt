@@ -2,6 +2,7 @@ package com.github.jactor.persistence.common
 
 import java.time.LocalDate
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.blog.BlogModel
@@ -9,14 +10,21 @@ import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.blog.BlogBuilder
+import com.github.jactor.persistence.blog.BlogRepository
 import com.github.jactor.persistence.person.PersonBuilder
 import com.github.jactor.persistence.user.UserBuilder
+import com.github.jactor.persistence.user.UserRepository
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
 internal class RepositoriesTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var blogRepository: BlogRepository
+
+    @Autowired
+    private lateinit var userRepository: UserRepository
 
     @Test
     fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {
