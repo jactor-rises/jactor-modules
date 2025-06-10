@@ -34,6 +34,7 @@ internal abstract class AbstractSpringMockMvcTest {
     @Value("\${server.servlet.context-path}")
     protected lateinit var contextPath: String
 
+    @Suppress("UsePropertyAccessSyntax")
     protected val mockMvc: MockMvc by lazy {
         val internalResourceViewResolver = InternalResourceViewResolver()
 

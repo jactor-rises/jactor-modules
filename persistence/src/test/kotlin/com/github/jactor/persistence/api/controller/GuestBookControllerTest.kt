@@ -2,6 +2,8 @@ package com.github.jactor.persistence.api.controller
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
@@ -9,9 +11,11 @@ import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.guestbook.GuestBookModel
 import com.github.jactor.persistence.guestbook.GuestBookEntryModel
 import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.guestbook.GuestBookService
 import com.github.jactor.persistence.test.initGuestBookEntryEntity
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
+import com.ninjasquad.springmockk.SpykBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -22,6 +26,12 @@ import io.mockk.slot
 import io.mockk.verify
 
 internal class GuestBookControllerTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var testRestTemplate: TestRestTemplate
+
+    @SpykBean
+    private lateinit var guestBookServiceSpyk: GuestBookService
+
     @Test
     fun `should build full path`() {
         assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:$port/jactor-persistence/somewhere")

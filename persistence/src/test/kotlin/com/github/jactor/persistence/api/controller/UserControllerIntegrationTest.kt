@@ -1,6 +1,8 @@
 package com.github.jactor.persistence.api.controller
 
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
@@ -13,6 +15,8 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
 internal class UserControllerIntegrationTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var testRestTemplate: TestRestTemplate
 
     @Test
     fun `should create a new user`() {

@@ -3,20 +3,8 @@ package com.github.jactor.persistence
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.transaction.annotation.Transactional
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.jactor.persistence.address.AddressRepository
-import com.github.jactor.persistence.blog.BlogEntryRepository
-import com.github.jactor.persistence.blog.BlogRepository
-import com.github.jactor.persistence.blog.BlogService
-import com.github.jactor.persistence.guestbook.GuestBookEntryRepository
-import com.github.jactor.persistence.guestbook.GuestBookRepository
-import com.github.jactor.persistence.guestbook.GuestBookService
-import com.github.jactor.persistence.person.PersonRepository
-import com.github.jactor.persistence.user.UserRepository
-import com.ninjasquad.springmockk.SpykBean
 import jakarta.persistence.EntityManager
 
 /**
@@ -27,46 +15,6 @@ import jakarta.persistence.EntityManager
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 abstract class AbstractSpringBootNoDirtyContextTest {
-
-    @Autowired
-    protected lateinit var testRestTemplate: TestRestTemplate
-
-    @Autowired
-    protected lateinit var addressRepository: AddressRepository
-
-    @Autowired
-    protected lateinit var blogRepository: BlogRepository
-
-    @Autowired
-    protected lateinit var blogEntryRepository: BlogEntryRepository
-
-    @Autowired
-    protected lateinit var guestBookRepository: GuestBookRepository
-
-    @Autowired
-    protected lateinit var guestBookEntryRepository: GuestBookEntryRepository
-
-    @Autowired
-    protected lateinit var objectMapper: ObjectMapper
-
-    @Autowired
-    protected lateinit var personRepository: PersonRepository
-
-    @Autowired
-    protected lateinit var userRepository: UserRepository
-
-    @SpykBean
-    protected lateinit var blogServiceSpyk: BlogService
-
-    @SpykBean
-    protected lateinit var guestBookServiceSpyk: GuestBookService
-
-    @SpykBean
-    protected lateinit var personRepositorySpyk: PersonRepository
-
-    @SpykBean
-    protected lateinit var userRepositorySpyk: UserRepository
-
     @LocalServerPort
     protected val port = 0
 

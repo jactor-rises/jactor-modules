@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.address
 
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import assertk.assertAll
 import assertk.assertThat
@@ -10,6 +11,9 @@ import assertk.assertions.isIn
 import assertk.assertions.isPresent
 
 internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var addressRepository: AddressRepository
+
     @Test
     fun `should fetch address entities`() {
         flush {

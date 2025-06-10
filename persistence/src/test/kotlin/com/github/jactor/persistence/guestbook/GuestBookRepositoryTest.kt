@@ -3,6 +3,7 @@ package com.github.jactor.persistence.guestbook
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
@@ -11,12 +12,19 @@ import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.persistence.address.AddressBuilder
 import com.github.jactor.persistence.person.PersonBuilder
 import com.github.jactor.persistence.user.UserBuilder
+import com.github.jactor.persistence.user.UserRepository
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
 internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var guestBookRepository: GuestBookRepository
+
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
     @Test
     fun `should write then read guest book`() {
         val addressDto = AddressBuilder
@@ -54,7 +62,7 @@ internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() 
             ).buildGuestBookEntity()
         )
 
-        flush {  }
+        flush { }
 
         val guestBookEntity = guestBookRepository.findByUser(userEntity)
 

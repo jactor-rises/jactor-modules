@@ -2,6 +2,8 @@ package com.github.jactor.persistence.api.controller
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -9,10 +11,12 @@ import org.springframework.http.HttpStatus
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.blog.BlogEntryModel
 import com.github.jactor.persistence.blog.BlogModel
+import com.github.jactor.persistence.blog.BlogService
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto
+import com.ninjasquad.springmockk.SpykBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -23,6 +27,12 @@ import io.mockk.every
 import io.mockk.verify
 
 internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
+    @Autowired
+    private lateinit var testRestTemplate: TestRestTemplate
+
+    @SpykBean
+    private lateinit var blogServiceSpyk: BlogService
+
     @Test
     fun `should build full path`() {
         assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:$port/jactor-persistence/somewhere")
