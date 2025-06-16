@@ -44,7 +44,7 @@ java -jar build/lib/jactor-persistence-<version>-SNAPSHOT.jar
 ### Some technologies used
 
 #### Implementation
-* [spring-boot 3.4.x](https://spring.io/projects/spring-boot)
+* [spring-boot 3.5.x](https://spring.io/projects/spring-boot)
     * with [spring-data-jpa](https://spring.io/projects/spring-data-jpa)
     * with [spring-webflow](https://spring.io/projects/spring-webflow) (mvc)
 * [h2](http://h2database.com)
