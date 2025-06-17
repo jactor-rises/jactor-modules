@@ -23,10 +23,9 @@ class JactorPersistence {
                     logger.debug { "Available beans (only simple names):" }
 
                     springBeanNames.names.forEach {
-                        logger.debug { "- $it" }
+                        logger.debug { "> $it" }
                     }
                 }
-
 
                 "Ready for service..."
             }
