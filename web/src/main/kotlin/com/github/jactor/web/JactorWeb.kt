@@ -26,7 +26,7 @@ class JactorWeb : WebMvcConfigurer {
             SpringBeanNames().also { springBeanNames ->
                 applicationContext.beanDefinitionNames.sorted().forEach(springBeanNames::add)
                 springBeanNames.names.forEach {
-                    logger.debug { "- $it" }
+                    logger.debug { "> $it" }
                 }
             }
 

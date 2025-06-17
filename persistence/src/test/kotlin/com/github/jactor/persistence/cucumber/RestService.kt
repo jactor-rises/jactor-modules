@@ -35,9 +35,9 @@ internal data class RestService(val baseUrl: String, var endpoint: String = "") 
     private fun initUrl(navn: String?, parameter: String?) = navn?.let { initUrlWithBuilder(it, parameter) }
         ?: "$baseUrl$endpoint"
 
-    private fun initUrlWithBuilder(navn: String, parameter: String?) =
-        UriComponentsBuilder.fromHttpUrl("$baseUrl$endpoint")
-            .queryParam(navn, parameter)
-            .build()
-            .toUriString()
+    private fun initUrlWithBuilder(navn: String, parameter: String?) = UriComponentsBuilder
+        .fromUriString("$baseUrl$endpoint")
+        .queryParam(navn, parameter)
+        .build()
+        .toUriString()
 }

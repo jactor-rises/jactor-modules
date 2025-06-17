@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.user.UserRepository
 import io.cucumber.spring.CucumberContextConfiguration
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@CucumberContextConfiguration
 @Transactional
+@CucumberContextConfiguration
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 internal abstract class AbstractSpringBootCucumberConfiguration {
     internal val standardUsers = setOf("jactor", "tip")
 
