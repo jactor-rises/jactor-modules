@@ -4,7 +4,6 @@ description = "jactor-web"
 
 val bootstrapVersion: String by project
 val jqueryVersion: String by project
-val springdocVersion: String by project
 
 plugins {
     id("org.springframework.boot") version "3.5.0"

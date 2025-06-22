@@ -10,7 +10,7 @@ fun Throwable.exceptionMessageMedCause(): String {
 }
 
 fun Throwable.exceptionMessage() = when (this is HttpClientErrorException) {
-    true -> "Internal client, $statusCode: $message"
+    true -> "Internal client, $statusCode: ${simpleExceptionMessage()}"
     false -> simpleExceptionMessage()
 }
 
