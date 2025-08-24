@@ -2,7 +2,7 @@ package com.github.jactor.persistence.cucumber
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.persistence.user.UserRepository
 import io.cucumber.spring.CucumberContextConfiguration
@@ -14,7 +14,7 @@ internal abstract class AbstractSpringBootCucumberConfiguration {
     internal val standardUsers = setOf("jactor", "tip")
 
     @Autowired
-    protected lateinit var testRestTemplate: TestRestTemplate
+    protected lateinit var webTestClient: WebTestClient
 
     @Autowired
     protected lateinit var userRepository: UserRepository

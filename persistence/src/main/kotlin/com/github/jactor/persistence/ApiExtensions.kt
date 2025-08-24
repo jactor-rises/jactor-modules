@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.api.controller
+package com.github.jactor.persistence
 
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel

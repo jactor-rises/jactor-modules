@@ -3,12 +3,9 @@ package com.github.jactor.persistence.api.controller
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
+import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.blog.BlogEntryModel
 import com.github.jactor.persistence.blog.BlogModel
 import com.github.jactor.persistence.blog.BlogService
@@ -16,9 +13,10 @@ import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto
-import com.ninjasquad.springmockk.SpykBean
-import assertk.assertAll
+import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
@@ -26,44 +24,43 @@ import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.verify
 
-internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var testRestTemplate: TestRestTemplate
-
-    @SpykBean
-    private lateinit var blogServiceSpyk: BlogService
-
-    @Test
-    fun `should build full path`() {
-        assertThat(buildFullPath("/somewhere")).isEqualTo("http://localhost:$port/jactor-persistence/somewhere")
-    }
-
+@WebFluxTest(BlogController::class)
+internal class BlogControllerTest @Autowired constructor(
+    private val webTestClient: WebTestClient,
+    @MockkBean private val blogServiceSpyk: BlogService,
+) {
     @Test
     fun `should find a blog`() {
         val uuid = UUID.randomUUID().also {
             every { blogServiceSpyk.find(it) } returns BlogModel()
         }
 
-        val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/$uuid"), BlogDto::class.java)
+        val blogResponse = webTestClient
+            .get()
+            .uri("/blog/$uuid")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(BlogDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.OK)
-            assertThat(blogResponse).isNotNull()
-        }
+        assertThat(blogResponse).isNotNull()
     }
 
     @Test
     fun `should not find a blog`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.find(it) } returns null
+            every { blogServiceSpyk.find(id = it) } returns null
         }
 
-        val blogResponse = testRestTemplate.getForEntity(buildFullPath("/blog/$uuid"), BlogDto::class.java)
+        val blogResponse = webTestClient
+            .get()
+            .uri("/blog/$uuid")
+            .exchange()
+            .expectStatus().isNoContent
+            .expectBody(BlogDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
-            assertThat(blogResponse.body).isNull()
-        }
+        assertThat(blogResponse).isNull()
     }
 
     @Test
@@ -72,15 +69,15 @@ internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
             every { blogServiceSpyk.findEntryBy(it) } returns BlogEntryModel()
         }
 
-        val blogEntryResponse = testRestTemplate.getForEntity(
-            buildFullPath("/blog/entry/$uuid"),
-            BlogEntryDto::class.java
-        )
+        val blogEntryDto = webTestClient
+            .get()
+            .uri("/blog/entry/$uuid")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(BlogEntryDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.OK)
-            assertThat(blogEntryResponse.body).isNotNull()
-        }
+            assertThat(blogEntryDto).isNotNull()
     }
 
     @Test
@@ -89,68 +86,62 @@ internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
             every { blogServiceSpyk.findEntryBy(it) } returns null
         }
 
-        val blogEntryResponse = testRestTemplate.getForEntity(
-            buildFullPath("/blog/entry/$uuid"),
-            BlogEntryDto::class.java
-        )
+        val result = webTestClient
+            .get()
+            .uri("/blog/entry/$uuid")
+            .exchange()
+            .expectStatus().isNoContent
+            .expectBody(BlogEntryDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
-            assertThat(blogEntryResponse.body).isNull()
-        }
+        assertThat(result).isNull()
     }
 
     @Test
     fun `should not find blogs by title`() {
         every { blogServiceSpyk.findBlogsBy(title = "Anything") } returns emptyList()
 
-        val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/title/Anything"),
-            HttpMethod.GET,
-            null,
-            object : ParameterizedTypeReference<List<BlogDto>>() {}
-        )
+        val blogs = webTestClient
+            .get()
+            .uri("/blog/title/Anything")
+            .exchange()
+            .expectStatus().isNoContent
+            .expectBody(object : ParameterizedTypeReference<List<BlogDto>>() {})
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
-            assertThat(blogResponse.body).isNull()
-        }
+        assertThat(blogs).isNotNull().isEmpty()
     }
 
     @Test
     fun `should find blogs by title`() {
         every { blogServiceSpyk.findBlogsBy("Anything") } returns listOf(BlogModel())
 
-        val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/title/Anything"),
-            HttpMethod.GET,
-            null,
-            object : ParameterizedTypeReference<List<BlogDto>>() {}
-        )
+        val blogs = webTestClient
+            .get()
+            .uri("/blog/title/Anything")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(object : ParameterizedTypeReference<List<BlogDto>>() {})
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.OK)
-            assertThat(blogResponse.body as List).isNotEmpty()
-        }
+        assertThat(blogs).isNotNull().hasSize(1)
     }
 
     @Test
     fun `should not find blog entries by blog id`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.findEntriesForBlog(it) } returns emptyList()
+            every { blogServiceSpyk.findEntriesForBlog(blogId = it) } returns emptyList()
         }
 
-        val blogEntriesResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/$uuid/entries"),
-            HttpMethod.GET,
-            null,
-            object : ParameterizedTypeReference<List<BlogEntryDto>>() {}
-        )
+        val blogEntries = webTestClient
+            .get()
+            .uri("/blog/$uuid/entries")
+            .exchange()
+            .expectStatus().isNoContent
+            .expectBody(object : ParameterizedTypeReference<List<BlogEntryDto>>() {})
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogEntriesResponse.statusCode).isEqualTo(HttpStatus.NO_CONTENT)
-            assertThat(blogEntriesResponse.body).isNull()
-        }
+        assertThat(blogEntries).isNotNull().isEmpty()
     }
 
     @Test
@@ -159,17 +150,15 @@ internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
             every { blogServiceSpyk.findEntriesForBlog(it) } returns listOf(BlogEntryModel())
         }
 
-        val blogEntriesResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/$uuid/entries"),
-            HttpMethod.GET,
-            null,
-            object : ParameterizedTypeReference<List<BlogEntryDto>>() {}
-        )
+        val blogEntries = webTestClient
+            .get()
+            .uri("/blog/$uuid/entries")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(object : ParameterizedTypeReference<List<BlogEntryDto>>() {})
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogEntriesResponse.statusCode).isEqualTo(HttpStatus.OK)
-            assertThat(blogEntriesResponse.body as List).isNotEmpty()
-        }
+        assertThat(blogEntries).isNotNull().isNotEmpty()
     }
 
     @Test
@@ -180,15 +169,16 @@ internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
         every { blogServiceSpyk.saveOrUpdate(blogModel) } returns blogModel
 
-        val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/${blogModel.id}"), HttpMethod.PUT, HttpEntity(blogModel.toDto()),
-            BlogDto::class.java
-        )
+        val blog = webTestClient
+            .put()
+            .uri("/blog/${blogModel.id}")
+            .bodyValue(blogModel.toDto())
+            .exchange()
+            .expectStatus().isAccepted
+            .expectBody(BlogDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
-            assertThat(blogResponse.body).isNotNull()
-        }
+        assertThat(blog).isNotNull().isNotNull()
 
         verify { blogServiceSpyk.saveOrUpdate(blogModel) }
     }
@@ -196,20 +186,24 @@ internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should create a blog`() {
         val createdBlogModel = BlogModel(
-            persistentModel = PersistentModel()
+            persistentModel = PersistentModel(
+                id = UUID.randomUUID()
+            )
         )
 
         every { blogServiceSpyk.saveOrUpdate(blogModel = any()) } returns createdBlogModel
 
-        val blogResponse = testRestTemplate.exchange(
-            buildFullPath("/blog"), HttpMethod.POST, HttpEntity(BlogDto()),
-            BlogDto::class.java
-        )
+        val blog = webTestClient
+            .post()
+            .uri("/blog")
+            .bodyValue(BlogDto())
+            .exchange()
+            .expectStatus().isCreated
+            .expectBody(BlogDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogResponse.statusCode).isEqualTo(HttpStatus.CREATED)
-            assertThat(blogResponse).isNotNull()
-            assertThat(blogResponse.body?.persistentDto?.id).isEqualTo(createdBlogModel.id)
+        assertThat(blog).isNotNull().given {
+            assertThat(it.persistentDto.id).isEqualTo(createdBlogModel.id)
         }
 
         verify { blogServiceSpyk.saveOrUpdate(blogModel = any()) }
@@ -223,15 +217,16 @@ internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
         every { blogServiceSpyk.saveOrUpdate(blogEntryModel = blogEntryModel) } returns blogEntryModel
 
-        val blogEntryResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/entry/${blogEntryModel.id}"),
-            HttpMethod.PUT, HttpEntity(blogEntryModel.toDto()), BlogEntryDto::class.java
-        )
+        val blogEntry = webTestClient
+            .put()
+            .uri("/blog/entry/${blogEntryModel.id}")
+            .bodyValue(blogEntryModel.toDto())
+            .exchange()
+            .expectStatus().isAccepted
+            .expectBody(BlogEntryDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.ACCEPTED)
-            assertThat(blogEntryResponse.body).isNotNull()
-        }
+        assertThat(blogEntry).isNotNull()
 
         verify { blogServiceSpyk.saveOrUpdate(blogEntryModel = blogEntryModel) }
     }
@@ -251,16 +246,16 @@ internal class BlogControllerTest : AbstractSpringBootNoDirtyContextTest() {
 
         every { blogServiceSpyk.saveOrUpdate(blogEntryModel = any()) } returns blogEntryModelCreated
 
-        val blogEntryResponse = testRestTemplate.exchange(
-            buildFullPath("/blog/entry"), HttpMethod.POST, HttpEntity(blogEntryDto), BlogEntryDto::class.java
-        )
+        val blogEntry = webTestClient
+            .post()
+            .uri("/blog/entry")
+            .bodyValue(blogEntryDto)
+            .exchange()
+            .expectStatus().isCreated
+            .expectBody(BlogEntryDto::class.java)
+            .returnResult().responseBody
 
-        assertAll {
-            assertThat(blogEntryResponse.statusCode).isEqualTo(HttpStatus.CREATED)
-            assertThat(blogEntryResponse.body).isNotNull()
-            assertThat(blogEntryResponse.body?.entry).isEqualTo(blogEntryDto.entry)
-            assertThat(blogEntryResponse.body?.persistentDto?.id).isEqualTo(blogEntryModelCreated.id)
-        }
+        assertThat(blogEntry?.entry).isEqualTo(blogEntryDto.entry)
 
         verify { blogServiceSpyk.saveOrUpdate(blogEntryModel = any()) }
     }

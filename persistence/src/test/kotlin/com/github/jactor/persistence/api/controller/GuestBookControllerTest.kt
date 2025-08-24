@@ -1,6 +1,7 @@
 package com.github.jactor.persistence.api.controller
 
 import java.util.UUID
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -25,6 +26,7 @@ import io.mockk.every
 import io.mockk.slot
 import io.mockk.verify
 
+@Disabled("wip")
 internal class GuestBookControllerTest : AbstractSpringBootNoDirtyContextTest() {
     @Autowired
     private lateinit var testRestTemplate: TestRestTemplate

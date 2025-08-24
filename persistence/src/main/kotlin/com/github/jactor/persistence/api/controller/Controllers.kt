@@ -18,6 +18,8 @@ import com.github.jactor.persistence.blog.BlogService
 import com.github.jactor.persistence.guestbook.GuestBookEntryModel
 import com.github.jactor.persistence.guestbook.GuestBookModel
 import com.github.jactor.persistence.guestbook.GuestBookService
+import com.github.jactor.persistence.harIdentifikator
+import com.github.jactor.persistence.harIkkeIdentifikator
 import com.github.jactor.persistence.user.UserEntity
 import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.persistence.user.UserService
