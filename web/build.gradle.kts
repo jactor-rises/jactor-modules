@@ -6,7 +6,7 @@ val bootstrapVersion: String by project
 val jqueryVersion: String by project
 
 plugins {
-    id("org.springframework.boot") version "3.5.0"
+    id("org.springframework.boot") version "3.5.5"
 }
 
 dependencies {

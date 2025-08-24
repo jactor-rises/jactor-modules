@@ -7,7 +7,7 @@ val flywayVersion: String by project
 val h2DatabaseVersion: String by project
 
 plugins {
-    id("org.springframework.boot") version "3.5.0"
+    id("org.springframework.boot") version "3.5.5"
 }
 
 dependencies {
