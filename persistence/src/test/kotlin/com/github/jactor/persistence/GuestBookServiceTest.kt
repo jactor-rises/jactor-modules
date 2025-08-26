@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.guestbook
+package com.github.jactor.persistence
 
 import java.util.Optional
 import java.util.UUID

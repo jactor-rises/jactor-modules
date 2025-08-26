@@ -7,9 +7,9 @@ import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogEntryModel
 import com.github.jactor.persistence.BlogModel
-import com.github.jactor.persistence.guestbook.GuestBookBuilder
-import com.github.jactor.persistence.guestbook.GuestBookEntryModel
-import com.github.jactor.persistence.guestbook.GuestBookModel
+import com.github.jactor.persistence.GuestBookBuilder
+import com.github.jactor.persistence.GuestBookEntryModel
+import com.github.jactor.persistence.GuestBookModel
 import com.github.jactor.persistence.person.PersonBuilder
 import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.user.UserBuilder

@@ -1,10 +1,7 @@
-package com.github.jactor.persistence.guestbook
+package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.AddressBuilder
-import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.person.PersonBuilder
 import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.user.UserBuilder
