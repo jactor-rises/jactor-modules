@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.blog.BlogEntryModel
-import com.github.jactor.persistence.blog.BlogModel
-import com.github.jactor.persistence.blog.BlogService
 import com.github.jactor.persistence.guestbook.GuestBookEntryModel
 import com.github.jactor.persistence.guestbook.GuestBookModel
 import com.github.jactor.persistence.guestbook.GuestBookService
@@ -23,9 +20,6 @@ import com.github.jactor.persistence.harIkkeIdentifikator
 import com.github.jactor.persistence.user.UserEntity
 import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.persistence.user.UserService
-import com.github.jactor.shared.whenTrue
-import com.github.jactor.shared.api.BlogDto
-import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
@@ -35,177 +29,6 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-
-@RestController
-@RequestMapping(value = ["/blog"], produces = [MediaType.APPLICATION_JSON_VALUE])
-class BlogController(private val blogService: BlogService) {
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "En blogg for id"),
-            ApiResponse(
-                responseCode = "204",
-                description = "Fant ikke blog for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @Operation(description = "Henter en blogg ved å angi id")
-    @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") blogId: UUID): ResponseEntity<BlogDto> {
-        return blogService.find(blogId)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
-            ?: ResponseEntity(HttpStatus.NO_CONTENT)
-    }
-
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Et blogg-innslag for id"),
-            ApiResponse(
-                responseCode = "204",
-                description = "Fant ikke innslaget for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @Operation(description = "Henter et innslag i en blogg ved å angi id")
-    @GetMapping("/entry/{id}")
-    fun getEntryById(@PathVariable("id") blogEntryId: UUID): ResponseEntity<BlogEntryDto> {
-        return blogService.findEntryBy(blogEntryId)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
-            ?: ResponseEntity(HttpStatus.NO_CONTENT)
-    }
-
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Blogger basert på tittel"),
-            ApiResponse(
-                responseCode = "204",
-                description = "Fant ikke innslaget for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @GetMapping("/title/{title}")
-    @Operation(description = "Søker etter blogger basert på en blog tittel")
-    fun findByTitle(@PathVariable("title") title: String?): ResponseEntity<List<BlogDto>> {
-        val blogsByTitle = blogService.findBlogsBy(title)
-            .map { it.toDto() }
-
-        val httpStatus = blogsByTitle.isNotEmpty().whenTrue { HttpStatus.OK } ?: HttpStatus.NO_CONTENT
-        return ResponseEntity(blogsByTitle, httpStatus)
-    }
-
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Blogg-innslag basert på blogg id"),
-            ApiResponse(
-                responseCode = "204",
-                description = "Fant ikke innslaget for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @GetMapping("/{id}/entries")
-    @Operation(description = "Søker etter blogg-innslag basert på en blogg id")
-    fun findEntriesByBlogId(@PathVariable("id") blogId: UUID): ResponseEntity<List<BlogEntryDto>> {
-        val entriesForBlog = blogService.findEntriesForBlog(blogId)
-            .map { it.toDto() }
-
-        return ResponseEntity(entriesForBlog, if (entriesForBlog.isEmpty()) HttpStatus.NO_CONTENT else HttpStatus.OK)
-    }
-
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "202", description = "Bloggen er endret"),
-            ApiResponse(
-                responseCode = "400",
-                description = "Kunnde ikke finne blogg til å endre",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @Operation(description = "Endre en blogg")
-    @PutMapping("/{blogId}")
-    fun put(@RequestBody blogDto: BlogDto, @PathVariable blogId: UUID): ResponseEntity<BlogDto> {
-        if (blogDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(
-            blogService.saveOrUpdate(blogModel = BlogModel(blogDto = blogDto)).toDto(),
-            HttpStatus.ACCEPTED
-        )
-    }
-
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "201", description = "Bloggen er opprettet"),
-            ApiResponse(
-                responseCode = "400",
-                description = "Mangler blogg å opprette",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @Operation(description = "Opprett en blogg")
-    @PostMapping
-    fun post(@RequestBody blogDto: BlogDto): ResponseEntity<BlogDto> {
-        if (blogDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(blogService.saveOrUpdate(blogModel = BlogModel(blogDto)).toDto(), HttpStatus.CREATED)
-    }
-
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "202", description = "Blogg-innslaget er endret"),
-            ApiResponse(
-                responseCode = "400",
-                description = "Mangler id til blogg-innslag som skal endres",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @Operation(description = "Endrer et blogg-innslag")
-    @PutMapping("/entry/{blogEntryId}")
-    fun putEntry(
-        @RequestBody blogEntryDto: BlogEntryDto,
-        @PathVariable blogEntryId: UUID
-    ): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(
-            blogService.saveOrUpdate(blogEntryModel = BlogEntryModel(blogEntry = blogEntryDto)).toDto(),
-            HttpStatus.ACCEPTED
-        )
-    }
-
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "201", description = "Blogg-innslaget er opprettet"),
-            ApiResponse(
-                responseCode = "400",
-                description = "Mangler id til bloggen som innsaget skal legges  til",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
-        ]
-    )
-    @Operation(description = "Oppretter et blogg-innslag")
-    @PostMapping("/entry")
-    fun postEntry(@RequestBody blogEntryDto: BlogEntryDto): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val createdBlogEntryModel = blogService.saveOrUpdate(
-            blogEntryModel = BlogEntryModel(blogEntry = blogEntryDto)
-        )
-
-        val blogEntryResponseDto = createdBlogEntryModel.toDto()
-        return ResponseEntity(blogEntryResponseDto, HttpStatus.CREATED)
-    }
-}
 
 @RestController
 @RequestMapping(value = ["/guestBook"], produces = [MediaType.APPLICATION_JSON_VALUE])

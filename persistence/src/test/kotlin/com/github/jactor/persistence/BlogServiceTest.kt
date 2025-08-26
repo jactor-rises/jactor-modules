@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.blog
+package com.github.jactor.persistence
 
 import java.time.LocalDate
 import java.util.Optional
@@ -23,7 +23,7 @@ internal class BlogServiceTest {
     private val blogRepositoryMockk: BlogRepository = mockk {}
     private val userServiceMockk: UserService = mockk {}
 
-    private val blogServiceToTest: BlogService = DefaultBlogService(
+    private val blogServiceToTest: BlogService = BlogServiceImpl(
         blogRepository = blogRepositoryMockk,
         blogEntryRepository = blogEntryRepositoryMockk,
         userService = userServiceMockk

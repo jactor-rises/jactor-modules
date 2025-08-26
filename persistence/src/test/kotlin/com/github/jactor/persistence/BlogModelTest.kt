@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.blog
+package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

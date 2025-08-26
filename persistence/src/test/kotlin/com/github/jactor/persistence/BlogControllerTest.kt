@@ -1,4 +1,4 @@
-package com.github.jactor.persistence.api.controller
+package com.github.jactor.persistence
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.test.web.reactive.server.WebTestClient
-import com.github.jactor.persistence.blog.BlogEntryModel
-import com.github.jactor.persistence.blog.BlogModel
-import com.github.jactor.persistence.blog.BlogService
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto

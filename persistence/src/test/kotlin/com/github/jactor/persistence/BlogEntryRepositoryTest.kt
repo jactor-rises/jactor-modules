@@ -1,11 +1,10 @@
-package com.github.jactor.persistence.blog
+package com.github.jactor.persistence
 
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.persistence.person.PersonModel
