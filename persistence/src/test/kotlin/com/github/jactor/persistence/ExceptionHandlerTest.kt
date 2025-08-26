@@ -1,9 +1,8 @@
-package com.github.jactor.persistence.api.exception
+package com.github.jactor.persistence
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import com.github.jactor.persistence.ExceptionHandler
 import com.github.jactor.persistence.api.controller.UserController
 import com.github.jactor.persistence.test.containsSubstring
 import com.github.jactor.persistence.user.UserRepository

@@ -2,7 +2,7 @@ package com.github.jactor.persistence.person
 
 import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.github.jactor.persistence.address.AddressModel
+import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.shared.api.PersonDto
 

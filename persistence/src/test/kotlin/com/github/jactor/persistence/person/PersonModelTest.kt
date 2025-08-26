@@ -3,7 +3,7 @@ package com.github.jactor.persistence.person
 import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.address.AddressModel
+import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
 import assertk.assertAll
 import assertk.assertThat

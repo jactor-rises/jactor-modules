@@ -4,11 +4,9 @@ import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.address.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.user.UserModel
-import com.github.jactor.persistence.address.AddressBuilder
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

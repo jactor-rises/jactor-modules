@@ -1,8 +1,7 @@
-package com.github.jactor.persistence.address
+package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

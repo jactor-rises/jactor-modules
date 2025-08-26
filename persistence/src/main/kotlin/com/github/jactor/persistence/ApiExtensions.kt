@@ -1,6 +1,6 @@
 package com.github.jactor.persistence
 
-import com.github.jactor.persistence.address.AddressModel
+import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.user.UserModel
