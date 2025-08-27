@@ -1,14 +1,19 @@
-package com.github.jactor.persistence.person
+package com.github.jactor.persistence
 
 import java.time.LocalDateTime
 import java.util.Objects
 import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import com.github.jactor.persistence.AddressEntity
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Service
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
+import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.persistence.user.UserEntity
+import com.github.jactor.shared.api.PersonDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -20,6 +25,91 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+
+@Service
+class PersonService(private val personRepository: PersonRepository) {
+    fun createWhenNotExists(person: PersonModel): PersonEntity? {
+        return findExisting(person) ?: create(person)
+    }
+
+    private fun create(person: PersonModel): PersonEntity {
+        return personRepository.save(
+            PersonEntity(
+                person = person.copy(
+                    persistentModel = person.persistentModel.copy(
+                        id = person.id ?: UUID.randomUUID()
+                    )
+                )
+            )
+        )
+    }
+
+    private fun findExisting(person: PersonModel): PersonEntity? {
+        return person.id?.let { personRepository.findById(it).getOrNull() }
+    }
+}
+
+@JvmRecord
+data class PersonModel(
+    val persistentModel: PersistentModel = PersistentModel(),
+    val address: AddressModel? = null,
+    val locale: String? = null,
+    val firstName: String? = null,
+    val surname: String = "",
+    val description: String? = null
+) {
+    val id: UUID? @JsonIgnore get() = persistentModel.id
+
+    constructor(
+        persistentModel: PersistentModel, person: PersonModel
+    ) : this(
+        persistentModel = persistentModel,
+        address = person.address,
+        description = person.description,
+        firstName = person.firstName,
+        locale = person.locale,
+        surname = person.surname
+    )
+
+    constructor(personDto: PersonDto) : this(
+        persistentModel = PersistentModel(persistentDto = personDto.persistentDto),
+        address = if (personDto.address != null) AddressModel(personDto.address!!) else null,
+        description = personDto.description,
+        firstName = personDto.firstName,
+        locale = personDto.locale,
+        surname = personDto.surname
+    )
+
+    fun toPersonDto() = PersonDto(
+        persistentDto = persistentModel.toDto(),
+        address = address?.toAddressDto(),
+        locale = locale,
+        firstName = firstName,
+        surname = surname,
+        description = description
+    )
+}
+
+internal object PersonBuilder {
+    fun new(personModel: PersonModel = PersonModel()): PersonData = PersonData(
+        personModel = personModel.copy(
+            persistentModel = personModel.persistentModel.copy(id = UUID.randomUUID())
+        )
+    )
+
+    fun unchanged(personModel: PersonModel): PersonData = PersonData(
+        personModel = personModel
+    )
+
+    @JvmRecord
+    data class PersonData(val personModel: PersonModel) {
+        fun build(): PersonEntity = PersonEntity(person = personModel)
+    }
+}
+
+interface PersonRepository : CrudRepository<PersonEntity, UUID> {
+    fun findBySurname(surname: String?): List<PersonEntity>
+}
 
 @Entity
 @Table(name = "T_PERSON")

@@ -1,9 +1,8 @@
-package com.github.jactor.persistence.person
+package com.github.jactor.persistence
 
 import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
 import assertk.assertAll
 import assertk.assertThat

@@ -1,9 +1,8 @@
-package com.github.jactor.persistence.person
+package com.github.jactor.persistence
 
 import java.time.LocalDateTime
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.common.PersistentModel
 import assertk.assertThat
 import assertk.assertions.isEqualTo

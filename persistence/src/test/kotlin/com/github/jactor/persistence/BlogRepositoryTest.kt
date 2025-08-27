@@ -5,7 +5,6 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.person.PersonModel
 import com.github.jactor.persistence.user.UserModel
 import assertk.assertAll
 import assertk.assertThat

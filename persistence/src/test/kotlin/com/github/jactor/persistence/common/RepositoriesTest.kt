@@ -9,8 +9,8 @@ import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogModel
 import com.github.jactor.persistence.BlogRepository
-import com.github.jactor.persistence.person.PersonBuilder
-import com.github.jactor.persistence.person.PersonModel
+import com.github.jactor.persistence.PersonBuilder
+import com.github.jactor.persistence.PersonModel
 import com.github.jactor.persistence.user.UserBuilder
 import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.persistence.user.UserRepository

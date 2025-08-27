@@ -10,8 +10,8 @@ import com.github.jactor.persistence.BlogModel
 import com.github.jactor.persistence.GuestBookBuilder
 import com.github.jactor.persistence.GuestBookEntryModel
 import com.github.jactor.persistence.GuestBookModel
-import com.github.jactor.persistence.person.PersonBuilder
-import com.github.jactor.persistence.person.PersonModel
+import com.github.jactor.persistence.PersonBuilder
+import com.github.jactor.persistence.PersonModel
 import com.github.jactor.persistence.user.UserBuilder
 import com.github.jactor.persistence.user.UserModel
 import assertk.assertAll

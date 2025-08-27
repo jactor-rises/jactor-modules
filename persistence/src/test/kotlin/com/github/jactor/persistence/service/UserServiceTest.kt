@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.person.PersonEntity
-import com.github.jactor.persistence.person.PersonModel
-import com.github.jactor.persistence.person.PersonRepository
+import com.github.jactor.persistence.PersonEntity
+import com.github.jactor.persistence.PersonModel
+import com.github.jactor.persistence.PersonRepository
 import com.github.jactor.persistence.user.UserBuilder
 import com.github.jactor.persistence.user.UserEntity
 import com.github.jactor.persistence.user.UserModel

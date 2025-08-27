@@ -9,7 +9,7 @@ import com.github.jactor.persistence.BlogEntity
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
 import com.github.jactor.persistence.GuestBookEntity
-import com.github.jactor.persistence.person.PersonEntity
+import com.github.jactor.persistence.PersonEntity
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
