@@ -7,7 +7,7 @@ internal class UserSteps : No, PersistenceCucumberContextConfiguration() {
 
     init {
         Når("en post gjøres for body:") { body: String ->
-            scenarioValues.responseEntity = scenarioValues.restService.exchangePost(body) { testRestTemplate }
+            scenarioValues.entityExchangeResult = scenarioValues.restService.exchangePost(body) { webTestClient }
         }
 
         Og("gitt url {string}") { url: String ->

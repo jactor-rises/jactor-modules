@@ -1,7 +1,7 @@
 package com.github.jactor.persistence.user
 
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.person.PersonModel
+import com.github.jactor.persistence.PersonModel
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
 

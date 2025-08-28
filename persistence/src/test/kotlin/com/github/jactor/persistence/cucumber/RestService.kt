@@ -1,12 +1,10 @@
 package com.github.jactor.persistence.cucumber
 
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.test.web.reactive.server.EntityExchangeResult
+import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.util.UriComponentsBuilder
 
 internal data class RestService(val baseUrl: String, var endpoint: String = "") {
@@ -14,21 +12,27 @@ internal data class RestService(val baseUrl: String, var endpoint: String = "") 
     fun exchangeGet(
         parameternavn: String?,
         parameter: String?,
-        restTemplate: () -> TestRestTemplate
-    ): ResponseEntity<String> = initUrl(parameternavn, parameter).let { fullUrl ->
-        restTemplate.invoke().exchange(fullUrl, HttpMethod.GET, null as HttpEntity<*>?, String::class.java)
+        webTestClient: () -> WebTestClient
+    ): EntityExchangeResult<String> = initUrl(parameternavn, parameter).let {
+        webTestClient.invoke()
+            .get()
+            .uri(it)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(String::class.java)
+            .returnResult()
     }
 
-    fun exchangePost(json: String, restTemplate: () -> TestRestTemplate): ResponseEntity<String> {
-        val fullUrl = initUrl()
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.APPLICATION_JSON
-
-        return try {
-            restTemplate.invoke().exchange(fullUrl, HttpMethod.POST, HttpEntity(json, headers), String::class.java)
-        } catch (e: HttpClientErrorException) {
-            ResponseEntity(e.statusCode)
-        }
+    fun exchangePost(json: String, webTestClient: () -> WebTestClient): EntityExchangeResult<String> = initUrl().let {
+        webTestClient.invoke()
+            .post()
+            .uri(it)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .bodyValue(json)
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBody(String::class.java)
+            .returnResult()
     }
 
     private fun initUrl() = initUrl(null, null)

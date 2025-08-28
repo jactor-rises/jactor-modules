@@ -28,17 +28,17 @@ internal class RestServiceSteps : No, PersistenceCucumberContextConfiguration() 
         }
 
         Når("en get gjøres på resttjenesten") {
-            scenarioValues.responseEntity = scenarioValues.restService
-                .exchangeGet(parameternavn = null, parameter = null) { testRestTemplate }
+            scenarioValues.entityExchangeResult = scenarioValues.restService
+                .exchangeGet(parameternavn = null, parameter = null) { webTestClient }
         }
 
         Når("en get gjøres på resttjenesten med parameter {string} = {string}") { parameternavn: String, verdi: String ->
-            scenarioValues.responseEntity = scenarioValues.restService
-                .exchangeGet(parameternavn, verdi) { testRestTemplate }
+            scenarioValues.entityExchangeResult = scenarioValues.restService
+                .exchangeGet(parameternavn, verdi) { webTestClient }
         }
 
         Når("en post gjøres med body:") { json: String ->
-            scenarioValues.restService.exchangePost(json) { testRestTemplate }
+            scenarioValues.restService.exchangePost(json) { webTestClient }
         }
 
         Så("skal statuskoden fra resttjenesten være {int}") { statusKode: Int ->

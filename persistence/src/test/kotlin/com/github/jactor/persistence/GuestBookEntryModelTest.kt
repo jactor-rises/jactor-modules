@@ -1,30 +1,32 @@
-package com.github.jactor.persistence.user
+package com.github.jactor.persistence
 
 import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.PersonModel
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 
-internal class UserModelTest {
+internal class GuestBookEntryModelTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val userModel = UserModel(
-            emailAddress = "somewhere@time",
-            person = PersonModel(),
-            username = "me"
+        val guestBookEntryModel = GuestBookEntryModel(
+            creatorName = "me",
+            entry = "entry",
+            guestBook = GuestBookModel()
         )
 
-        val (_, person, emailAddress, username) = UserModel(userModel.persistentModel, userModel)
+        val (creatorName, entry, guestBook) = GuestBookEntryModel(
+            guestBookEntryModel.persistentModel,
+            guestBookEntryModel
+        )
 
         assertAll {
-            assertThat(emailAddress).isEqualTo(userModel.emailAddress)
-            assertThat(person).isEqualTo(userModel.person)
-            assertThat(username).isEqualTo(userModel.username)
+            assertThat(creatorName).isEqualTo(guestBookEntryModel.creatorName)
+            assertThat(guestBook).isEqualTo(guestBookEntryModel.guestBook)
+            assertThat(entry).isEqualTo(guestBookEntryModel.entry)
         }
     }
 
@@ -38,9 +40,9 @@ internal class UserModelTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = UserModel(
+        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = GuestBookEntryModel(
             persistentModel,
-            UserModel()
+            GuestBookEntryModel()
         ).persistentModel
 
         assertAll {

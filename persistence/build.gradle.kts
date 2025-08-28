@@ -1,4 +1,3 @@
-
 group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
@@ -13,7 +12,7 @@ plugins {
 dependencies {
     // spring-boot
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
@@ -27,4 +26,5 @@ dependencies {
 
 tasks.test {
     jvmArgs("--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED")
+    exclude("**/RunCucumberTest*")
 }

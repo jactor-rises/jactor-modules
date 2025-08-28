@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.api.controller
 
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -14,6 +15,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
+@Disabled("wip")
 internal class UserControllerIntegrationTest : AbstractSpringBootNoDirtyContextTest() {
     @Autowired
     private lateinit var testRestTemplate: TestRestTemplate

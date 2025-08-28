@@ -3,8 +3,8 @@ package com.github.jactor.persistence.user
 import java.util.UUID
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import com.github.jactor.persistence.api.controller.toModel
-import com.github.jactor.persistence.person.PersonService
+import com.github.jactor.persistence.toModel
+import com.github.jactor.persistence.PersonService
 import com.github.jactor.shared.api.CreateUserCommand
 
 @Service
