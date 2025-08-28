@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.user.UserEntity
 import com.github.jactor.shared.api.PersonDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType

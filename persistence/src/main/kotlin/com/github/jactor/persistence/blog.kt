@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.persistence.user.UserEntity
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -35,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.user.UserModel
-import com.github.jactor.persistence.user.UserService
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.persistence.common.EntryEmbeddable

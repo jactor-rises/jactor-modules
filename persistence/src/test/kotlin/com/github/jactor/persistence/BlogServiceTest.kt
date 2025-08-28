@@ -5,8 +5,6 @@ import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.user.UserModel
-import com.github.jactor.persistence.user.UserService
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

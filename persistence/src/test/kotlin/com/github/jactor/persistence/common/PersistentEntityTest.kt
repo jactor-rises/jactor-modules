@@ -12,8 +12,8 @@ import com.github.jactor.persistence.GuestBookEntryModel
 import com.github.jactor.persistence.GuestBookModel
 import com.github.jactor.persistence.PersonBuilder
 import com.github.jactor.persistence.PersonModel
-import com.github.jactor.persistence.user.UserBuilder
-import com.github.jactor.persistence.user.UserModel
+import com.github.jactor.persistence.UserBuilder
+import com.github.jactor.persistence.UserModel
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo

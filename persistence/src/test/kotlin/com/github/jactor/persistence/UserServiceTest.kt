@@ -1,22 +1,11 @@
-package com.github.jactor.persistence.service
+package com.github.jactor.persistence
 
 import java.time.LocalDateTime
 import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.PersonEntity
-import com.github.jactor.persistence.PersonModel
-import com.github.jactor.persistence.PersonRepository
-import com.github.jactor.persistence.user.UserBuilder
-import com.github.jactor.persistence.user.UserEntity
-import com.github.jactor.persistence.user.UserModel
-import com.github.jactor.persistence.user.UserModel.Usertype
-import com.github.jactor.persistence.user.UserRepository
-import com.github.jactor.persistence.user.UserService
 import com.github.jactor.shared.api.CreateUserCommand
 import com.ninjasquad.springmockk.SpykBean
 import assertk.assertAll
@@ -47,7 +36,7 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
                     person = personDto,
                     emailAddress = null,
                     username = "jactor",
-                    usertype = Usertype.ACTIVE
+                    usertype = UserModel.Usertype.ACTIVE
                 )
             ).build()
         )
@@ -72,7 +61,7 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
                     person = personDto,
                     emailAddress = null,
                     username = "jactor",
-                    usertype = Usertype.ACTIVE
+                    usertype = UserModel.Usertype.ACTIVE
                 )
             ).build()
         )

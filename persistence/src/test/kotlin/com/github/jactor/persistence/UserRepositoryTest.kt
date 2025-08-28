@@ -1,18 +1,8 @@
-package com.github.jactor.persistence.repository
+package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.AddressBuilder
-import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.PersonBuilder
-import com.github.jactor.persistence.PersonModel
-import com.github.jactor.persistence.user.UserBuilder
-import com.github.jactor.persistence.user.UserEntity
-import com.github.jactor.persistence.user.UserModel
-import com.github.jactor.persistence.user.UserModel.Usertype
-import com.github.jactor.persistence.user.UserRepository
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -135,7 +125,7 @@ internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
                         person = superPersonModel,
                         emailAddress = null,
                         username = "superman",
-                        usertype = Usertype.INACTIVE
+                        usertype = UserModel.Usertype.INACTIVE
                     )
                 ).build()
             )
