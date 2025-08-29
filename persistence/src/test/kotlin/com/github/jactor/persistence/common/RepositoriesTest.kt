@@ -11,9 +11,9 @@ import com.github.jactor.persistence.BlogModel
 import com.github.jactor.persistence.BlogRepository
 import com.github.jactor.persistence.PersonBuilder
 import com.github.jactor.persistence.PersonModel
-import com.github.jactor.persistence.user.UserBuilder
-import com.github.jactor.persistence.user.UserModel
-import com.github.jactor.persistence.user.UserRepository
+import com.github.jactor.persistence.UserBuilder
+import com.github.jactor.persistence.UserModel
+import com.github.jactor.persistence.UserRepository
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize

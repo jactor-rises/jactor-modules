@@ -9,9 +9,9 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isIn
 import assertk.assertions.isPresent
 
-internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var addressRepository: AddressRepository
+internal class AddressRepositoryTest @Autowired constructor(
+    private val addressRepository: AddressRepository
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should fetch address entities`() {

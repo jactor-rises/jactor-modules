@@ -22,8 +22,6 @@ import com.github.jactor.persistence.common.EntryEmbeddable
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
 import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.user.UserEntity
-import com.github.jactor.persistence.user.UserModel
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation

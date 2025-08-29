@@ -2,14 +2,15 @@ package com.github.jactor.persistence.test
 
 import java.util.UUID
 import com.github.jactor.persistence.AddressEntity
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
+import com.github.jactor.persistence.AddressModel
 import com.github.jactor.persistence.GuestBookEntity
 import com.github.jactor.persistence.GuestBookEntryEntity
 import com.github.jactor.persistence.PersonEntity
-import com.github.jactor.persistence.user.UserEntity
-import assertk.Assert
-import assertk.assertions.support.expected
-import assertk.assertions.support.show
+import com.github.jactor.persistence.PersonModel
+import com.github.jactor.persistence.UserEntity
+import com.github.jactor.persistence.UserModel
+import com.github.jactor.persistence.common.PersistentDataEmbeddable
+import com.github.jactor.persistence.common.PersistentModel
 
 fun timestamped(username: String): String {
     return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
@@ -52,12 +53,32 @@ fun initAddressEntity(id: UUID? = UUID.randomUUID()) = AddressEntity().apply {
     this.persistentDataEmbeddable = PersistentDataEmbeddable()
 }
 
-fun Assert<List<String>>.containsSubstring(expected: String) = given { strings ->
-    strings.forEach {
-        if (it.contains(expected)) {
-            return@given
-        }
-    }
+fun initPersonModel(
+    address: AddressModel? = null,
+    firstName: String? = null,
+    description: String? = null,
+    locale: String? = null,
+    persistentModel: PersistentModel = PersistentModel(),
+    surname: String = "Doe",
+) = PersonModel(
+    address = address,
+    firstName = firstName,
+    description = description,
+    persistentModel = persistentModel,
+    locale = locale,
+    surname = surname,
+)
 
-    expected("to contain substring:${show(expected)}, but list was:${show(strings)}")
-}
+fun initUserModel(
+    persistentModel: PersistentModel = PersistentModel(),
+    emailAddress: String? = null,
+    person: PersonModel? = null,
+    username: String? = null,
+    usertype: UserModel.Usertype = UserModel.Usertype.ACTIVE,
+) = UserModel(
+    persistentModel = persistentModel,
+    person = person,
+    emailAddress = emailAddress,
+    username = username,
+    usertype = usertype,
+)

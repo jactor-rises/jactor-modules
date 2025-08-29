@@ -3,11 +3,9 @@ package com.github.jactor.persistence
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import com.github.jactor.persistence.api.controller.UserController
 import com.github.jactor.persistence.test.containsSubstring
-import com.github.jactor.persistence.user.UserRepository
-import com.github.jactor.persistence.user.UserService
 import com.github.jactor.shared.finnFeiledeLinjer
+import assertk.all
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isTrue
@@ -41,18 +39,16 @@ internal class ExceptionHandlerTest {
 
         every { repositoryMockk.findById(any()) } answers { error("boom!") }
 
-        runCatching {
-            avstemmingController.get(id = UUID.randomUUID())
-        }.onSuccess {
-            fail("Kjøring skulle feilet!")
-        }.onFailure {
-            val kodelinjer = it.finnFeiledeLinjer()
+        runCatching { avstemmingController.get(id = UUID.randomUUID()) }
+            .onSuccess { fail("Kjøring skulle feilet!") }
+            .onFailure {
+                val kodelinjer = it.finnFeiledeLinjer()
 
-            assertAll {
-                assertThat(kodelinjer).containsSubstring("intern: Controllers.kt (linje:")
-                assertThat(kodelinjer).containsSubstring("intern: UserService.kt (linje:")
+                assertThat(kodelinjer).all {
+                    containsSubstring("intern: user.kt (linje:")
+                    containsSubstring("intern: com.github.jactor.persistence.UserRepository")
+                }
             }
-        }
     }
 
     class TestController {

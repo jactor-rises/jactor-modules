@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.transaction.annotation.Transactional
-import com.github.jactor.persistence.user.UserRepository
+import com.github.jactor.persistence.UserRepository
 import io.cucumber.spring.CucumberContextConfiguration
 
 @Transactional
