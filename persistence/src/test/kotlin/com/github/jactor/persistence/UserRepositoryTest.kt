@@ -8,9 +8,9 @@ import assertk.assertThat
 import assertk.assertions.containsAtLeast
 import assertk.assertions.isEqualTo
 
-internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var userRepository: UserRepository
+internal class UserRepositoryTest @Autowired constructor(
+    private val userRepository: UserRepository
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find user with username jactor`() {

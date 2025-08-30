@@ -10,9 +10,9 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
 
-internal class MenuFacadeIntegrationTest: AbstractNoDirtySpringContextTest() {
-    @Autowired
-    private lateinit var testMenuFacade: MenuFacade
+internal class MenuFacadeIntegrationTest @Autowired constructor(
+    private val testMenuFacade: MenuFacade
+): AbstractNoDirtySpringContextTest() {
 
     @Test
     fun `should fail when fetching items for an unknown menu`() {

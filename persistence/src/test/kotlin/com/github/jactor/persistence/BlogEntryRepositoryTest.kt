@@ -12,9 +12,9 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isStrictlyBetween
 
-internal class BlogEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var blogEntryRepository: BlogEntryRepository
+internal class BlogEntryRepositoryTest @Autowired constructor(
+    private val blogEntryRepository: BlogEntryRepository
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save then read blog entry`() {

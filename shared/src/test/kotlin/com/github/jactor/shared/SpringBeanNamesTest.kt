@@ -1,8 +1,8 @@
 package com.github.jactor.shared
 
-import com.github.jactor.shared.test.assertAll
-import com.github.jactor.shared.test.equalTo
-import com.github.jactor.shared.test.withSize
+import com.github.jactor.shared.test.all
+import com.github.jactor.shared.test.equals
+import com.github.jactor.shared.test.sized
 import com.github.jactor.shared.test.named
 import org.junit.jupiter.api.Test
 import assertk.assertThat
@@ -54,13 +54,13 @@ class SpringBeanNamesTest {
         springBeanNames.add("com.github.jactor.shared.FooBarC")
         springBeanNames.add("com.github.jactor.shared.FooBarD")
 
-        assertThat(springBeanNames.names).assertAll {
-            it named "names" withSize 4
+        assertThat(springBeanNames.names).all {
+            this named "names" sized 4
 
-            it.firstOrNull() named "line 1" equalTo "FooBar0, FooBar1, FooBar2, FooBar3"
-            it.getOrNull(index = 1) named "line 2" equalTo "FooBar4, FooBar5, FooBar6, FooBar7"
-            it.getOrNull(index = 2) named "line 3" equalTo "FooBar8, FooBar9, FooBarA, FooBarB"
-            it.lastOrNull() named "line 4" equalTo "FooBarC, FooBarD"
+            firstOrNull() named "line 1" equals "FooBar0, FooBar1, FooBar2, FooBar3"
+            getOrNull(index = 1) named "line 2" equals "FooBar4, FooBar5, FooBar6, FooBar7"
+            getOrNull(index = 2) named "line 3" equals "FooBar8, FooBar9, FooBarA, FooBarB"
+            lastOrNull() named "line 4" equals "FooBarC, FooBarD"
         }
     }
 }

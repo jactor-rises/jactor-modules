@@ -2,7 +2,6 @@ package com.github.jactor.persistence.cucumber
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.test.web.reactive.server.EntityExchangeResult
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.util.UriComponentsBuilder
@@ -39,7 +38,7 @@ internal data class RestService(val baseUrl: String, var endpoint: String = "") 
     private fun initUrl(navn: String?, parameter: String?) = navn?.let { initUrlWithBuilder(it, parameter) }
         ?: "$baseUrl$endpoint"
 
-    private fun initUrlWithBuilder(navn: String, parameter: String?) = UriComponentsBuilder
+    private fun initUrlWithBuilder(navn: String, parameter: String?): String = UriComponentsBuilder
         .fromUriString("$baseUrl$endpoint")
         .queryParam(navn, parameter)
         .build()

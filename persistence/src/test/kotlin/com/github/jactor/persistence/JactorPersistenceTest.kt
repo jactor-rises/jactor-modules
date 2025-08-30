@@ -6,10 +6,10 @@ import org.springframework.boot.CommandLineRunner
 import assertk.assertThat
 import assertk.assertions.isNotNull
 
-internal class JactorPersistenceTest : AbstractSpringBootNoDirtyContextTest() {
+internal class JactorPersistenceTest @Autowired constructor(
+    private val commandLineRunner: CommandLineRunner?
+) : AbstractSpringBootNoDirtyContextTest() {
 
-    @Autowired
-    private var commandLineRunner: CommandLineRunner? = null
 
     @Test
     fun `should contain bean named CommandlineRunner`() {

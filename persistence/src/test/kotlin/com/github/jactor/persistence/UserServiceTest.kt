@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.PersistentModel
 import com.github.jactor.shared.api.CreateUserCommand
-import com.ninjasquad.springmockk.SpykBean
+import com.ninjasquad.springmockk.MockkBean
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -15,22 +15,17 @@ import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.slot
 
-internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var userServiceToTest: UserService
-
-    @SpykBean
-    private lateinit var personRepositorySpyk: PersonRepository
-
-    @SpykBean
-    private lateinit var userRepositorySpyk: UserRepository
-
+internal class UserServiceTest @Autowired constructor(
+    private val userServiceToTest: UserService,
+    @MockkBean private val personRepositoryMockk: PersonRepository,
+    @MockkBean private val userRepositoryMockk: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should map a user entity to a dto`() {
         val addressDto = AddressModel()
         val personDto = PersonModel(address = addressDto)
 
-        every { userRepositorySpyk.findByUsername("jactor") } returns Optional.of(
+        every { userRepositoryMockk.findByUsername("jactor") } returns Optional.of(
             UserBuilder.new(
                 userDto = UserModel(
                     person = personDto,
@@ -55,7 +50,7 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
         val addressDto = AddressModel()
         val personDto = PersonModel(address = addressDto)
 
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(
+        every { userRepositoryMockk.findById(uuid) } returns Optional.of(
             UserBuilder.new(
                 UserModel(
                     person = personDto,
@@ -90,7 +85,7 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
             timeOfModification = LocalDateTime.now().minusDays(1)
         )
 
-        every { userRepositorySpyk.findById(uuid) } returns Optional.of(
+        every { userRepositoryMockk.findById(uuid) } returns Optional.of(
             UserEntity(UserModel(persistentModel, userDto))
         )
 
@@ -105,8 +100,8 @@ internal class UserServiceTest : AbstractSpringBootNoDirtyContextTest() {
         val userEntity = UserEntity(userDto)
         val personEntitySlot = slot<PersonEntity>()
 
-        every { userRepositorySpyk.save(any()) } returns userEntity
-        every { personRepositorySpyk.save(capture(personEntitySlot)) } returns PersonEntity(PersonModel())
+        every { userRepositoryMockk.save(any()) } returns userEntity
+        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonEntity(PersonModel())
 
         val user = userServiceToTest.create(createUserCommand)
 

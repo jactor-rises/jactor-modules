@@ -8,12 +8,10 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class PersonServiceTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var personRepository: PersonRepository
-
-    @Autowired
-    private lateinit var personService: PersonService
+internal class PersonServiceTest @Autowired constructor(
+    private val personRepository: PersonRepository,
+    private val personService: PersonService
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should create a new Person`() {

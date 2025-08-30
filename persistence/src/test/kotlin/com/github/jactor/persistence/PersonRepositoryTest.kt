@@ -10,9 +10,9 @@ import assertk.assertions.contains
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
-internal class PersonRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var personRepository: PersonRepository
+internal class PersonRepositoryTest @Autowired constructor(
+    private val personRepository: PersonRepository
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find default persons`() {

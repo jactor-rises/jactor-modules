@@ -20,11 +20,9 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import io.mockk.every
 
-internal class RequestInterceptorTest: AbstractNoDirtySpringContextTest() {
-
-    @Autowired
-    protected lateinit var requestInterceptorToTest: RequestInterceptor
-
+internal class RequestInterceptorTest @Autowired constructor(
+    private val requestInterceptorToTest: RequestInterceptor
+): AbstractNoDirtySpringContextTest() {
     private val handler: Any = Object()
 
     @BeforeEach

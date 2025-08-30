@@ -3,10 +3,9 @@ package com.github.jactor.persistence
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import com.github.jactor.persistence.test.containsSubstring
 import com.github.jactor.shared.finnFeiledeLinjer
+import com.github.jactor.shared.test.containsSubstring
 import assertk.all
-import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isTrue
 import assertk.fail

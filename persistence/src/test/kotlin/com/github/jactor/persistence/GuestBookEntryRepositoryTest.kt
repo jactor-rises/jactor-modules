@@ -8,15 +8,11 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var guestBookRepository: GuestBookRepository
-
-    @Autowired
-    private lateinit var guestBookEntryRepository: GuestBookEntryRepository
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
+internal class GuestBookEntryRepositoryTest @Autowired constructor(
+    private val guestBookRepository: GuestBookRepository,
+    private val guestBookEntryRepository: GuestBookEntryRepository,
+    private val userRepository: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save then read guest book entry entity`() {
