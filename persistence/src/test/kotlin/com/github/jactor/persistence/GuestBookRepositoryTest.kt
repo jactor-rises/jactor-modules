@@ -10,13 +10,10 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var guestBookRepository: GuestBookRepository
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
+internal class GuestBookRepositoryTest @Autowired constructor(
+    private val guestBookRepository: GuestBookRepository,
+    private val userRepository: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should write then read guest book`() {
         val addressDto = AddressBuilder

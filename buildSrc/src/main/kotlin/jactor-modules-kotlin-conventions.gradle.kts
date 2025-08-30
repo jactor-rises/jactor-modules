@@ -30,6 +30,9 @@ dependencies {
     // logging
     implementation("io.github.oshai:kotlin-logging-jvm:${kotlinLoggingVersion}")
 
+    // internal test dependencies
+    testImplementation(project(":shared-test"))
+
     // test
     testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")

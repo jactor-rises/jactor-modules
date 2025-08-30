@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
@@ -15,13 +14,10 @@ import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class UserClientIntegrationTest : AbstractNoDirtySpringContextTest() {
-
-    @Autowired
-    private lateinit var userClientToTest: UserClient
-
-    @Value("\${jactor-persistence.url.root}")
-    private lateinit var baseUrl: String
+internal class UserClientIntegrationTest @Autowired constructor(
+    private val userClientToTest: UserClient,
+    @Value("\${jactor-persistence.url.root}") private val baseUrl: String,
+) : AbstractNoDirtySpringContextTest() {
 
     @BeforeEach
     fun `assume jactor-persistence is running`() {

@@ -19,12 +19,10 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
-internal class RepositoriesTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var blogRepository: BlogRepository
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
+internal class RepositoriesTest @Autowired constructor(
+    private val blogRepository: BlogRepository,
+    private val userRepository: UserRepository,
+): AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {

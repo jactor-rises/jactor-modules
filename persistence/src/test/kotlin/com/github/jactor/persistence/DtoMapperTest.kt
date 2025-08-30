@@ -11,10 +11,9 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 
-internal class DtoMapperTest : AbstractSpringBootNoDirtyContextTest() {
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+internal class DtoMapperTest @Autowired constructor(
+    private val objectMapper: ObjectMapper
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should map a user to json`() {

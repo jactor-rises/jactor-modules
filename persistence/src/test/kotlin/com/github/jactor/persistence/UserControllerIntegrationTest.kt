@@ -3,16 +3,14 @@ package com.github.jactor.persistence
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
-import com.github.jactor.persistence.test.all
-import com.github.jactor.persistence.test.contains
-import com.github.jactor.persistence.test.equals
-import com.github.jactor.persistence.test.named
 import com.github.jactor.persistence.test.timestamped
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
-import assertk.Assert
+import com.github.jactor.shared.test.all
+import com.github.jactor.shared.test.contains
+import com.github.jactor.shared.test.equals
+import com.github.jactor.shared.test.named
 import assertk.assertThat
-import assertk.assertions.isNotNull
 import assertk.fail
 
 internal class UserControllerIntegrationTest @Autowired constructor(

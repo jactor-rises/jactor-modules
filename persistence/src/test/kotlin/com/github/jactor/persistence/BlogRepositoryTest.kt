@@ -11,9 +11,9 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    @Autowired
-    private lateinit var blogRepository: BlogRepository
+internal class BlogRepositoryTest @Autowired constructor(
+    private val blogRepository: BlogRepository
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save and then read blog entity`() {

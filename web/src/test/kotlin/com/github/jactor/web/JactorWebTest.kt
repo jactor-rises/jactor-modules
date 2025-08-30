@@ -9,16 +9,11 @@ import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import assertk.assertThat
 import assertk.assertions.isNotNull
 
-internal class JactorWebTest: AbstractNoDirtySpringContextTest() {
-
-    @Autowired
-    private val homeController: HomeController? = null
-
-    @Autowired
-    private val aboutController: AboutController? = null
-
-    @Autowired
-    private val userController: UserController? = null
+internal class JactorWebTest @Autowired constructor(
+    private val homeController: HomeController?,
+    private val aboutController: AboutController?,
+    private val userController: UserController?
+): AbstractNoDirtySpringContextTest() {
 
     @Test
     fun `should fetch controllers from spring context`() {
