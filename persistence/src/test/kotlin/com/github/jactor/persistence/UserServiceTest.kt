@@ -5,7 +5,8 @@ import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.shared.api.CreateUserCommand
 import com.ninjasquad.springmockk.MockkBean
 import assertk.assertAll
@@ -22,16 +23,16 @@ internal class UserServiceTest @Autowired constructor(
 ) : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should map a user entity to a dto`() {
-        val addressDto = AddressModel()
-        val personDto = PersonModel(address = addressDto)
+        val addressDto = Address()
+        val personDto = Person(address = addressDto)
 
         every { userRepositoryMockk.findByUsername("jactor") } returns Optional.of(
             UserBuilder.new(
-                userDto = UserModel(
+                userDto = User(
                     person = personDto,
                     emailAddress = null,
                     username = "jactor",
-                    usertype = UserModel.Usertype.ACTIVE
+                    usertype = User.Usertype.ACTIVE
                 )
             ).build()
         )
@@ -47,16 +48,16 @@ internal class UserServiceTest @Autowired constructor(
     @Test
     fun `should also map a user entity to a dto when finding by id`() {
         val uuid = UUID.randomUUID()
-        val addressDto = AddressModel()
-        val personDto = PersonModel(address = addressDto)
+        val addressDto = Address()
+        val personDto = Person(address = addressDto)
 
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(
             UserBuilder.new(
-                UserModel(
+                User(
                     person = personDto,
                     emailAddress = null,
                     username = "jactor",
-                    usertype = UserModel.Usertype.ACTIVE
+                    usertype = User.Usertype.ACTIVE
                 )
             ).build()
         )
@@ -72,12 +73,12 @@ internal class UserServiceTest @Autowired constructor(
     @Test
     fun `should update a UserDto with an UserEntity`() {
         val uuid = UUID.randomUUID()
-        val userDto = UserModel(
-            persistentModel = PersistentModel(id = uuid),
+        val userDto = User(
+            persistent = Persistent(id = uuid),
             username = "marley"
         )
 
-        val persistentModel = PersistentModel(
+        val persistent = Persistent(
             createdBy = "",
             id = uuid,
             modifiedBy = "",
@@ -86,7 +87,7 @@ internal class UserServiceTest @Autowired constructor(
         )
 
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(
-            UserEntity(UserModel(persistentModel, userDto))
+            UserEntity(User(persistent, userDto))
         )
 
         val user = userServiceToTest.update(userDto)
@@ -96,17 +97,17 @@ internal class UserServiceTest @Autowired constructor(
     @Test
     fun `should create and save person for the user`() {
         val createUserCommand = CreateUserCommand(username = "jactor", surname = "Jacobsen")
-        val userDto = UserModel()
-        val userEntity = UserEntity(userDto)
+        val user = User()
+        val userEntity = UserEntity(user)
         val personEntitySlot = slot<PersonEntity>()
 
         every { userRepositoryMockk.save(any()) } returns userEntity
-        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonEntity(PersonModel())
+        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonEntity(Person())
 
-        val user = userServiceToTest.create(createUserCommand)
+        val userCreated = userServiceToTest.create(createUserCommand)
 
         assertAll {
-            assertThat(user).isEqualTo(userDto)
+            assertThat(userCreated).isEqualTo(user)
             assertThat(personEntitySlot.captured).isNotNull()
         }
     }

@@ -3,7 +3,8 @@ package com.github.jactor.persistence
 import java.time.LocalDateTime
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
@@ -15,7 +16,7 @@ internal class PersonServiceTest @Autowired constructor(
 
     @Test
     fun `should create a new Person`() {
-        val entity = personService.createWhenNotExists(PersonModel())
+        val entity = personService.createWhenNotExists(Person())
 
         assertThat(entity).isNotNull()
     }
@@ -26,15 +27,15 @@ internal class PersonServiceTest @Autowired constructor(
 
         // when
         val person = personService.createWhenNotExists(
-            PersonModel(
-                PersistentModel(
+            Person(
+                Persistent(
                     createdBy = "creator",
                     id = personEntity.id,
                     modifiedBy = "modifier",
                     timeOfCreation = LocalDateTime.now(),
                     timeOfModification = LocalDateTime.now()
                 ),
-                PersonModel()
+                Person()
             )
         )
 

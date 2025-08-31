@@ -4,7 +4,8 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -18,20 +19,20 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     fun `should write then read guest book`() {
         val addressDto = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testington"
                 )
             )
-            .addressModel
+            .address
 
-        val personDto = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "AA"
+        val personDto = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "AA"
         )
 
-        val userDto = UserModel(
-            PersistentModel(id = UUID.randomUUID()),
+        val userDto = User(
+            Persistent(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
@@ -41,15 +42,13 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             UserBuilder.new(userDto = userDto).build()
         )
 
-        userEntity.setGuestBook(
-            GuestBookBuilder.new(
-                GuestBookModel(
-                    entries = emptySet(),
-                    title = "home sweet home",
-                    user = userEntity.toModel()
-                )
-            ).buildGuestBookEntity()
-        )
+        userEntity.guestBook = GuestBookBuilder.new(
+            GuestBook(
+                entries = emptySet(),
+                title = "home sweet home",
+                user = userEntity.toModel()
+            )
+        ).buildGuestBookEntity()
 
         flush { }
 
@@ -64,15 +63,15 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     @Test
     fun `should write then update and read guest book`() {
         val addressDto = AddressBuilder.new(
-            addressModel = AddressModel(
+            address = Address(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressModel
+        ).address
 
-        val personDto = PersonBuilder.new(PersonModel(address = addressDto, surname = "AA")).personModel
+        val personDto = PersonBuilder.new(Person(address = addressDto, surname = "AA")).person
         val userDto = UserBuilder.unchanged(
-            userModel = UserModel(
-                persistentModel = PersistentModel(),
+            user = User(
+                persistent = Persistent(),
                 personInternal = personDto,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
@@ -81,15 +80,13 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
         val userEntity = userRepository.save(UserBuilder.new(userDto).build())
 
-        userEntity.setGuestBook(
-            GuestBookBuilder.new(
-                GuestBookModel(
-                    entries = emptySet(),
-                    title = "home sweet home",
-                    user = userEntity.toModel()
-                )
-            ).buildGuestBookEntity()
-        )
+        userEntity.guestBook = GuestBookBuilder.new(
+            GuestBook(
+                entries = emptySet(),
+                title = "home sweet home",
+                user = userEntity.toModel()
+            )
+        ).buildGuestBookEntity()
 
         flush { guestBookRepository.save(userEntity.guestBook ?: fail(message = "User missing guest book")) }
 

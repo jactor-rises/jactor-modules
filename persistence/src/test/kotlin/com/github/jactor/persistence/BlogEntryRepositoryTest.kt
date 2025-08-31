@@ -5,7 +5,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -18,29 +19,29 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then read blog entry`() {
-        val addressDto = AddressModel(
-            PersistentModel(id = UUID.randomUUID()), zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
+        val addressDto = Address(
+            Persistent(id = UUID.randomUUID()), zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
         )
 
-        val personDto = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val personDto = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserModel(
-            PersistentModel(id = UUID.randomUUID()),
+        val userDto = User(
+            Persistent(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "white"
         )
 
         var blogData = BlogBuilder.new(
-            blogModel = BlogModel(created = LocalDate.now(), title = "and then some...", user = userDto)
+            blog = Blog(created = LocalDate.now(), title = "and then some...", user = userDto)
         )
 
-        val blogDto = blogData.blogModel
+        val blogDto = blogData.blog
 
         blogData = blogData.withEntry(
-            blogEntryModel = BlogEntryModel(blog = blogDto, creatorName = "smith", entry = "once upon a time")
+            blogEntry = BlogEntry(blog = blogDto, creatorName = "smith", entry = "once upon a time")
         )
 
         flush { blogEntryRepository.save(blogData.buildBlogEntryEntity()) }
@@ -61,28 +62,28 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
     fun `should write then update and read a blog entry`() {
         val addressDto = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
             )
-            .addressModel
+            .address
 
-        val personDto = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val personDto = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserModel(
-            PersistentModel(id = UUID.randomUUID()),
+        val userDto = User(
+            Persistent(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "dark"
         )
 
         val blogEntryToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "and then some...", user = userDto))
-            .withEntry(BlogEntryModel(creatorName = "smith", entry = "once upon a time"))
+            .new(blog = Blog(created = LocalDate.now(), title = "and then some...", user = userDto))
+            .withEntry(BlogEntry(creatorName = "smith", entry = "once upon a time"))
             .buildBlogEntryEntity()
 
         flush { blogEntryRepository.save(blogEntryToSave) }

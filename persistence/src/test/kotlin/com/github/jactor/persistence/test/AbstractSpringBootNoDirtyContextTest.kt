@@ -1,4 +1,4 @@
-package com.github.jactor.persistence
+package com.github.jactor.persistence.test
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

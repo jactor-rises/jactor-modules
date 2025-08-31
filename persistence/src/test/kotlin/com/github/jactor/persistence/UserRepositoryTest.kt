@@ -2,7 +2,8 @@ package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -25,19 +26,19 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then read a user entity`() {
-        val addressModel = AddressBuilder.new(
-            addressModel = AddressModel(
+        val address = AddressBuilder.new(
+            address = Address(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressModel
+        ).address
 
-        val personModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "Solo")
-        ).personModel
+        val person = PersonBuilder.new(
+            person = Person(address = address, surname = "Solo")
+        ).person
 
         val userToPersist = UserBuilder.new(
-            UserModel(
-                person = personModel,
+            User(
+                person = person,
                 emailAddress = "smuggle.fast@tantooine.com",
                 username = "smuggler"
             )
@@ -57,20 +58,20 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read a user entity`() {
-        val addressModel = AddressBuilder.new(
-            addressModel = AddressModel(
+        val address = AddressBuilder.new(
+            address = Address(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressModel
+        ).address
 
-        val personModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "AA")
-        ).personModel
+        val person = PersonBuilder.new(
+            person = Person(address = address, surname = "AA")
+        ).person
 
         val userToPersist = UserBuilder.new(
-            userDto = UserModel(
-                persistentModel = PersistentModel(),
-                person = personModel,
+            userDto = User(
+                persistent = Persistent(),
+                person = person,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
             )
@@ -99,33 +100,33 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find active users and admins`() {
-        val addressModel = AddressBuilder.new(
-            addressModel = AddressModel(
+        val address = AddressBuilder.new(
+            address = Address(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
             )
-        ).addressModel
+        ).address
 
-        val spidyPersonModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "Parker")
-        ).personModel
+        val spidyPerson = PersonBuilder.new(
+            person = Person(address = address, surname = "Parker")
+        ).person
 
-        val superPersonModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "Kent")
-        ).personModel
+        val superPerson = PersonBuilder.new(
+            person = Person(address = address, surname = "Kent")
+        ).person
 
         val userEntity = UserBuilder.new(
-            UserModel(PersistentModel(), spidyPersonModel, null, "spiderman")
+            User(Persistent(), spidyPerson, null, "spiderman")
         ).build()
 
         flush {
             userRepository.save(userEntity)
             userRepository.save(
                 UserBuilder.new(
-                    userDto = UserModel(
-                        person = superPersonModel,
+                    userDto = User(
+                        person = superPerson,
                         emailAddress = null,
                         username = "superman",
-                        usertype = UserModel.Usertype.INACTIVE
+                        usertype = User.Usertype.INACTIVE
                     )
                 ).build()
             )

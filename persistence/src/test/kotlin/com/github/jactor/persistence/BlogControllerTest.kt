@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.test.web.reactive.server.WebTestClient
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto
@@ -29,7 +29,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should find a blog`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.find(it) } returns BlogModel()
+            every { blogServiceSpyk.find(it) } returns Blog()
         }
 
         val blogResponse = webTestClient
@@ -63,7 +63,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should find a blog entry`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.findEntryBy(it) } returns BlogEntryModel()
+            every { blogServiceSpyk.findEntryBy(it) } returns BlogEntry()
         }
 
         val blogEntryDto = webTestClient
@@ -111,7 +111,7 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should find blogs by title`() {
-        every { blogServiceSpyk.findBlogsBy("Anything") } returns listOf(BlogModel())
+        every { blogServiceSpyk.findBlogsBy("Anything") } returns listOf(Blog())
 
         val blogs = webTestClient
             .get()
@@ -144,7 +144,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should find blog entries by blog id`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceSpyk.findEntriesForBlog(it) } returns listOf(BlogEntryModel())
+            every { blogServiceSpyk.findEntriesForBlog(it) } returns listOf(BlogEntry())
         }
 
         val blogEntries = webTestClient
@@ -160,35 +160,35 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should persist changes to existing blog`() {
-        val blogModel = BlogModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID())
+        val blog = Blog(
+            persistent = Persistent(id = UUID.randomUUID())
         )
 
-        every { blogServiceSpyk.saveOrUpdate(blogModel) } returns blogModel
+        every { blogServiceSpyk.saveOrUpdate(blog) } returns blog
 
-        val blog = webTestClient
+        val blogDto = webTestClient
             .put()
-            .uri("/blog/${blogModel.id}")
-            .bodyValue(blogModel.toDto())
+            .uri("/blog/${blog.id}")
+            .bodyValue(blog.toDto())
             .exchange()
             .expectStatus().isAccepted
             .expectBody(BlogDto::class.java)
             .returnResult().responseBody
 
-        assertThat(blog).isNotNull().isNotNull()
+        assertThat(blogDto).isNotNull()
 
-        verify { blogServiceSpyk.saveOrUpdate(blogModel) }
+        verify { blogServiceSpyk.saveOrUpdate(blog) }
     }
 
     @Test
     fun `should create a blog`() {
-        val createdBlogModel = BlogModel(
-            persistentModel = PersistentModel(
+        val createdBlog = Blog(
+            persistent = Persistent(
                 id = UUID.randomUUID()
             )
         )
 
-        every { blogServiceSpyk.saveOrUpdate(blogModel = any()) } returns createdBlogModel
+        every { blogServiceSpyk.saveOrUpdate(blog = any()) } returns createdBlog
 
         val blog = webTestClient
             .post()
@@ -200,32 +200,32 @@ internal class BlogControllerTest @Autowired constructor(
             .returnResult().responseBody
 
         assertThat(blog).isNotNull().given {
-            assertThat(it.persistentDto.id).isEqualTo(createdBlogModel.id)
+            assertThat(it.persistentDto.id).isEqualTo(createdBlog.id)
         }
 
-        verify { blogServiceSpyk.saveOrUpdate(blogModel = any()) }
+        verify { blogServiceSpyk.saveOrUpdate(blog = any()) }
     }
 
     @Test
     fun `should persist changes to existing blog entry`() {
-        val blogEntryModel = BlogEntryModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID())
+        val blogEntry = BlogEntry(
+            persistent = Persistent(id = UUID.randomUUID())
         )
 
-        every { blogServiceSpyk.saveOrUpdate(blogEntryModel = blogEntryModel) } returns blogEntryModel
+        every { blogServiceSpyk.saveOrUpdate(blogEntry = blogEntry) } returns blogEntry
 
-        val blogEntry = webTestClient
+        val blogEntryDto = webTestClient
             .put()
-            .uri("/blog/entry/${blogEntryModel.id}")
-            .bodyValue(blogEntryModel.toDto())
+            .uri("/blog/entry/${blogEntry.id}")
+            .bodyValue(blogEntry.toDto())
             .exchange()
             .expectStatus().isAccepted
             .expectBody(BlogEntryDto::class.java)
             .returnResult().responseBody
 
-        assertThat(blogEntry).isNotNull()
+        assertThat(blogEntryDto).isNotNull()
 
-        verify { blogServiceSpyk.saveOrUpdate(blogEntryModel = blogEntryModel) }
+        verify { blogServiceSpyk.saveOrUpdate(blogEntry = blogEntry) }
     }
 
     @Test
@@ -235,13 +235,13 @@ internal class BlogControllerTest @Autowired constructor(
             blogDto = BlogDto(persistentDto = PersistentDto(id = UUID.randomUUID()))
         )
 
-        val blogEntryModelCreated = BlogEntryModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()),
+        val blogEntryCreated = BlogEntry(
+            persistent = Persistent(id = UUID.randomUUID()),
             entry = blogEntryDto.entry,
-            blog = BlogModel(persistentModel = PersistentModel(id = UUID.randomUUID()))
+            blog = Blog(persistent = Persistent(id = UUID.randomUUID()))
         )
 
-        every { blogServiceSpyk.saveOrUpdate(blogEntryModel = any()) } returns blogEntryModelCreated
+        every { blogServiceSpyk.saveOrUpdate(blogEntry = any()) } returns blogEntryCreated
 
         val blogEntry = webTestClient
             .post()
@@ -254,6 +254,6 @@ internal class BlogControllerTest @Autowired constructor(
 
         assertThat(blogEntry?.entry).isEqualTo(blogEntryDto.entry)
 
-        verify { blogServiceSpyk.saveOrUpdate(blogEntryModel = any()) }
+        verify { blogServiceSpyk.saveOrUpdate(blogEntry = any()) }
     }
 }

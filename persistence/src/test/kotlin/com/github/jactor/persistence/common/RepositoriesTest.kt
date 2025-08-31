@@ -3,16 +3,16 @@ package com.github.jactor.persistence.common
 import java.time.LocalDate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.AddressBuilder
-import com.github.jactor.persistence.AddressModel
+import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.BlogBuilder
-import com.github.jactor.persistence.BlogModel
+import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogRepository
 import com.github.jactor.persistence.PersonBuilder
-import com.github.jactor.persistence.PersonModel
+import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.UserBuilder
-import com.github.jactor.persistence.UserModel
+import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserRepository
 import assertk.assertAll
 import assertk.assertThat
@@ -27,18 +27,18 @@ internal class RepositoriesTest @Autowired constructor(
     @Test
     fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {
         val address = AddressBuilder.new(
-            addressModel = AddressModel(
+            address = Address(
                 zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testoplis"
             )
-        ).addressModel
+        ).address
 
-        val personModel = PersonBuilder.new(
-            personModel = PersonModel(address = address, locale = "no_NO", surname = "Skywalker")
-        ).personModel
+        val person = PersonBuilder.new(
+            person = Person(address = address, locale = "no_NO", surname = "Skywalker")
+        ).person
 
         val userToPersist = UserBuilder.new(
-            userDto = UserModel(
-                person = personModel,
+            userDto = User(
+                person = person,
                 emailAddress = "brains@rebels.com",
                 username = "r2d2"
             )
@@ -52,7 +52,7 @@ internal class RepositoriesTest @Autowired constructor(
         flush {
             blogRepository.save(
                 BlogBuilder.new(
-                    blogModel = BlogModel(
+                    blog = Blog(
                         created = LocalDate.now(),
                         title = "Far, far, away...",
                         user = userByUsername.toModel()

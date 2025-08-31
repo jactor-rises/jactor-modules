@@ -4,7 +4,8 @@ import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -19,26 +20,26 @@ internal class BlogRepositoryTest @Autowired constructor(
     fun `should save and then read blog entity`() {
         val addressDto = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
-            ).addressModel
+            ).address
 
-        val personDto = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val personDto = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserModel(
-            PersistentModel(id = UUID.randomUUID()),
+        val userDto = User(
+            Persistent(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", user = userDto))
+            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -57,27 +58,27 @@ internal class BlogRepositoryTest @Autowired constructor(
     fun `should save then update and read blog entity`() {
         val addressDto = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
             )
-            .addressModel
+            .address
 
-        val personDto = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val personDto = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserModel(
-            PersistentModel(id = UUID.randomUUID()),
+        val userDto = User(
+            Persistent(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", user = userDto))
+            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -104,26 +105,26 @@ internal class BlogRepositoryTest @Autowired constructor(
     fun `should find blog by title`() {
         val addressDto = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
-            ).addressModel
+            ).address
 
-        val personDto = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val personDto = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserModel(
-            PersistentModel(id = UUID.randomUUID()),
+        val userDto = User(
+            Persistent(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blogModel = BlogModel(created = LocalDate.now(), title = "Blah", user = userDto))
+            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = userDto))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -142,26 +143,26 @@ internal class BlogRepositoryTest @Autowired constructor(
     fun `should be able to relate a blog entry`() {
         val addressDto = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1001",
                     addressLine1 = "Test Boulevard 1",
                     city = "Testing"
                 )
-            ).addressModel
+            ).address
 
-        val personDto = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val personDto = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
         )
 
-        val userDto = UserModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()),
+        val userDto = User(
+            persistent = Persistent(id = UUID.randomUUID()),
             personInternal = personDto,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         var blogData = BlogBuilder.new(
-            blogModel = BlogModel(
+            blog = Blog(
                 created = LocalDate.now(), title = "Blah", user = userDto
             )
         )
@@ -169,7 +170,7 @@ internal class BlogRepositoryTest @Autowired constructor(
         val blogEntityToSave: BlogEntity = blogData.buildBlogEntity()
 
         blogData = blogData.withEntry(
-            blogEntryModel = BlogEntryModel(
+            blogEntry = BlogEntry(
                 blog = blogEntityToSave.toModel(),
                 creatorName = "arnold",
                 entry = "i'll be back"

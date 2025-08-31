@@ -4,6 +4,7 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
@@ -25,11 +26,13 @@ internal class DtoMapperTest @Autowired constructor(
             userType = UserType.ACTIVE
         )
 
+        val json = objectMapper.writeValueAsString(userlDto)
+
         assertAll {
-            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"id\":\"$uuid\"")
-            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"emailAddress\":\"some@where\"")
-            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"username\":\"mine\"")
-            assertThat(objectMapper.writeValueAsString(userlDto)).contains("\"userType\":\"ACTIVE\"")
+            assertThat(actual = json, name = "id").contains(""""id":"$uuid"""")
+            assertThat(actual = json, name = "emailAddress").contains(""""emailAddress":"some@where"""")
+            assertThat(actual = json, name = "username").contains(""""username":"mine"""")
+            assertThat(actual = json, name = "userType").contains(""""userType":"ACTIVE"""")
         }
     }
 }

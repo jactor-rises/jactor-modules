@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.common.EntryEmbeddable
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation
@@ -96,8 +96,8 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        val guestBookModel = guestBookService.saveOrUpdate(GuestBookModel(guestBookDto = guestBookDto))
-        return ResponseEntity(guestBookModel.toDto(), HttpStatus.CREATED)
+        val guestBook = guestBookService.saveOrUpdate(GuestBook(guestBookDto = guestBookDto))
+        return ResponseEntity(guestBook.toDto(), HttpStatus.CREATED)
     }
 
     @ApiResponses(
@@ -117,8 +117,8 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        val guestBookModel = GuestBookModel(guestBookDto = guestBookDto)
-        return ResponseEntity(guestBookService.saveOrUpdate(guestBookModel).toDto(), HttpStatus.ACCEPTED)
+        val guestBook = GuestBook(guestBookDto = guestBookDto)
+        return ResponseEntity(guestBookService.saveOrUpdate(guestBook).toDto(), HttpStatus.ACCEPTED)
     }
 
     @ApiResponses(
@@ -138,7 +138,7 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        val dto = guestBookService.saveOrUpdate(GuestBookEntryModel(guestBookEntryDto)).toDto()
+        val dto = guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto)).toDto()
         return ResponseEntity(dto, HttpStatus.CREATED)
     }
 
@@ -160,17 +160,17 @@ class GuestBookController(private val guestBookService: GuestBookService) {
         }
 
         return ResponseEntity(
-            guestBookService.saveOrUpdate(GuestBookEntryModel(guestBookEntryDto = guestBookEntryDto)).toDto(),
+            guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto = guestBookEntryDto)).toDto(),
             HttpStatus.ACCEPTED,
         )
     }
 }
 
 interface GuestBookService {
-    fun find(id: UUID): GuestBookModel?
-    fun findEntry(id: UUID): GuestBookEntryModel?
-    fun saveOrUpdate(guestBookModel: GuestBookModel): GuestBookModel
-    fun saveOrUpdate(guestBookEntryModel: GuestBookEntryModel): GuestBookEntryModel
+    fun find(id: UUID): GuestBook?
+    fun findEntry(id: UUID): GuestBookEntry?
+    fun saveOrUpdate(guestBook: GuestBook): GuestBook
+    fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry
 }
 
 @Service
@@ -178,126 +178,123 @@ class DefaultGuestBookService(
     private val guestBookRepository: GuestBookRepository,
     private val guestBookEntryRepository: GuestBookEntryRepository
 ) : GuestBookService {
-    override fun find(id: UUID): GuestBookModel? {
+    override fun find(id: UUID): GuestBook? {
         return guestBookRepository.findById(id)
             .map { it.toModel() }
             .orElse(null)
     }
 
-    override fun findEntry(id: UUID): GuestBookEntryModel? {
+    override fun findEntry(id: UUID): GuestBookEntry? {
         return guestBookEntryRepository.findById(id)
             .map { it.toModel() }
             .orElse(null)
     }
 
-    override fun saveOrUpdate(guestBookModel: GuestBookModel): GuestBookModel {
-        return guestBookRepository.save(GuestBookEntity(guestBookModel)).toModel()
+    override fun saveOrUpdate(guestBook: GuestBook): GuestBook {
+        return guestBookRepository.save(GuestBookEntity(guestBook)).toModel()
     }
 
-    override fun saveOrUpdate(guestBookEntryModel: GuestBookEntryModel): GuestBookEntryModel {
-        return guestBookEntryRepository.save(GuestBookEntryEntity(guestBookEntryModel)).toModel()
+    override fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry {
+        return guestBookEntryRepository.save(GuestBookEntryEntity(guestBookEntry)).toModel()
     }
 }
 
 @JvmRecord
-data class GuestBookModel(
-    val persistentModel: PersistentModel = PersistentModel(),
-    val entries: Set<GuestBookEntryModel> = emptySet(),
+data class GuestBook(
+    val persistent: Persistent = Persistent(),
+    val entries: Set<GuestBookEntry> = emptySet(),
     val title: String? = null,
-    val user: UserModel? = null
+    val user: User? = null
 ) {
-    val id: UUID? @JsonIgnore get() = persistentModel.id
+    val id: UUID? @JsonIgnore get() = persistent.id
 
-    constructor(persistentModel: PersistentModel, guestBook: GuestBookModel) : this(
-        persistentModel = persistentModel,
+    constructor(persistent: Persistent, guestBook: GuestBook) : this(
+        persistent = persistent,
         entries = guestBook.entries,
         title = guestBook.title,
         user = guestBook.user
     )
 
     constructor(guestBookDto: GuestBookDto) : this(
-        persistentModel = PersistentModel(guestBookDto.persistentDto),
-        entries = guestBookDto.entries.map { GuestBookEntryModel(it) }.toSet(),
+        persistent = Persistent(guestBookDto.persistentDto),
+        entries = guestBookDto.entries.map { GuestBookEntry(it) }.toSet(),
         title = guestBookDto.title,
-        user = guestBookDto.userDto?.let { UserModel(userDto = it) }
+        user = guestBookDto.userDto?.let { User(userDto = it) }
     )
 
     fun toDto(): GuestBookDto = GuestBookDto(
-        persistentDto = persistentModel.toDto(),
-        entries = entries.map { entry: GuestBookEntryModel -> entry.toDto() }.toSet(),
+        persistentDto = persistent.toDto(),
+        entries = entries.map { entry: GuestBookEntry -> entry.toDto() }.toSet(),
         title = title,
         userDto = user?.toDto()
     )
 }
 
 @JvmRecord
-data class GuestBookEntryModel(
+data class GuestBookEntry(
     val creatorName: String? = null,
     val entry: String? = null,
-    val guestBook: GuestBookModel? = null,
-    val persistentModel: PersistentModel = PersistentModel(),
+    val guestBook: GuestBook? = null,
+    val persistent: Persistent = Persistent(),
 ) {
-    val id: UUID? @JsonIgnore get() = persistentModel.id
-
-    val notNullableCreator: String
-        @JsonIgnore get() = creatorName ?: throw IllegalStateException("No creator is provided!")
-    val notNullableEntry: String
-        @JsonIgnore get() = entry ?: throw IllegalStateException("No entry is provided!")
+    val id: UUID? @JsonIgnore get() = persistent.id
+    val notNullableCreator: String @JsonIgnore get() = creatorName ?: error("No creator is provided!")
+    val notNullableEntry: String @JsonIgnore get() = entry ?: error("No entry is provided!")
 
     constructor(
-        persistentModel: PersistentModel, guestBookEntry: GuestBookEntryModel
+        persistent: Persistent, guestBookEntry: GuestBookEntry
     ) : this(
-        persistentModel = persistentModel,
+        persistent = persistent,
         guestBook = guestBookEntry.guestBook,
         creatorName = guestBookEntry.creatorName,
         entry = guestBookEntry.entry
     )
 
     constructor(guestBookEntryDto: GuestBookEntryDto) : this(
-        persistentModel = PersistentModel(guestBookEntryDto.persistentDto),
-        guestBook = guestBookEntryDto.guestBook?.let { GuestBookModel(guestBookDto = it) }
+        persistent = Persistent(guestBookEntryDto.persistentDto),
+        guestBook = guestBookEntryDto.guestBook?.let { GuestBook(guestBookDto = it) }
     )
 
     fun toDto() = GuestBookEntryDto(
         entry = entry,
         creatorName = creatorName,
         guestBook = guestBook?.toDto(),
-        persistentDto = persistentModel.toDto(),
+        persistentDto = persistent.toDto(),
     )
 }
 
 internal object GuestBookBuilder {
-    fun new(guestBookModel: GuestBookModel = GuestBookModel()): GuestBookData = GuestBookData(
-        guestBookModel = guestBookModel.copy(
-            persistentModel = guestBookModel.persistentModel.copy(id = UUID.randomUUID())
+    fun new(guestBook: GuestBook = GuestBook()): GuestBookData = GuestBookData(
+        guestBook = guestBook.copy(
+            persistent = guestBook.persistent.copy(id = UUID.randomUUID())
         )
     )
 
-    fun unchanged(guestBookModel: GuestBookModel): GuestBookData = GuestBookData(
-        guestBookModel = guestBookModel
+    fun unchanged(guestBook: GuestBook): GuestBookData = GuestBookData(
+        guestBook = guestBook
     )
 
     @JvmRecord
-    data class GuestBookData(val guestBookModel: GuestBookModel, val guestBookEntryModel: GuestBookEntryModel? = null) {
-        fun withEntry(guestBookEntryModel: GuestBookEntryModel): GuestBookData = copy(
-            guestBookEntryModel = guestBookEntryModel.copy(
-                persistentModel = guestBookModel.persistentModel.copy(id = UUID.randomUUID())
+    data class GuestBookData(val guestBook: GuestBook, val guestBookEntry: GuestBookEntry? = null) {
+        fun withEntry(guestBookEntry: GuestBookEntry): GuestBookData = copy(
+            guestBookEntry = guestBookEntry.copy(
+                persistent = guestBook.persistent.copy(id = UUID.randomUUID())
             )
         )
 
-        fun withEntryContainingPersistentId(guestBookEntryModel: GuestBookEntryModel): GuestBookData = copy(
-            guestBookEntryModel = guestBookEntryModel
+        fun withEntryContainingPersistentId(guestBookEntry: GuestBookEntry): GuestBookData = copy(
+            guestBookEntry = guestBookEntry
         )
 
-        fun buildGuestBookEntity(): GuestBookEntity = GuestBookEntity(guestBook = guestBookModel)
+        fun buildGuestBookEntity(): GuestBookEntity = GuestBookEntity(guestBook = guestBook)
         fun buildGuestBookEntryEntity(): GuestBookEntryEntity = GuestBookEntryEntity(
-            guestBookEntry = guestBookEntryModel ?: error("no guest book entry provided!")
+            guestBookEntry = guestBookEntry ?: error("no guest book entry provided!")
         )
     }
 }
 
 interface GuestBookRepository : CrudRepository<GuestBookEntity, UUID> {
-    fun findByUser(userEntity: UserEntity): GuestBookEntity?
+    fun findByUser(user: UserEntity): GuestBookEntity?
 }
 
 interface GuestBookEntryRepository : CrudRepository<GuestBookEntryEntity, UUID> {
@@ -343,10 +340,10 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
         user = guestBook.copyUserWithoutId()
     }
 
-    constructor(guestBook: GuestBookModel) {
+    constructor(guestBook: GuestBook) {
         entries = guestBook.entries.map { GuestBookEntryEntity(it) }.toMutableSet()
         id = guestBook.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistentModel)
+        persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistent)
         title = guestBook.title
         user = guestBook.user?.let { UserEntity(it) }
     }
@@ -355,14 +352,12 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
         return user?.copyWithoutId()
     }
 
-    fun toModel(): GuestBookModel {
-        return GuestBookModel(
-            persistentModel = persistentDataEmbeddable.toModel(id),
-            entries = entries.map { it.toModel() }.toMutableSet(),
-            title = title,
-            user = user?.toModel()
-        )
-    }
+    fun toModel(): GuestBook = GuestBook(
+        persistent = persistentDataEmbeddable.toModel(id),
+        entries = entries.map { it.toModel() }.toMutableSet(),
+        title = title,
+        user = user?.toModel()
+    )
 
     override fun copyWithoutId(): GuestBookEntity {
         val guestBookEntity = GuestBookEntity(this)
@@ -446,11 +441,11 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         persistentDataEmbeddable = PersistentDataEmbeddable()
     }
 
-    constructor(guestBookEntry: GuestBookEntryModel) {
+    constructor(guestBookEntry: GuestBookEntry) {
         entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
         guestBook = guestBookEntry.guestBook?.let { GuestBookEntity(it) }
         id = guestBookEntry.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistentModel)
+        persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistent)
     }
 
     private fun copyGuestBookWithoutId(): GuestBookEntity {
@@ -461,14 +456,12 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         return entryEmbeddable.copy()
     }
 
-    fun toModel(): GuestBookEntryModel {
-        return GuestBookEntryModel(
-            creatorName = entryEmbeddable.creatorName,
-            entry = entryEmbeddable.entry,
-            guestBook = guestBook?.toModel(),
-            persistentModel = persistentDataEmbeddable.toModel(id),
-        )
-    }
+    fun toModel() = GuestBookEntry(
+        creatorName = entryEmbeddable.creatorName,
+        entry = entryEmbeddable.entry,
+        guestBook = guestBook?.toModel(),
+        persistent = persistentDataEmbeddable.toModel(id),
+    )
 
     fun modify(modifiedBy: String, entry: String) {
         entryEmbeddable.modify(modifiedBy, entry)

@@ -5,7 +5,7 @@ import java.util.UUID
 import com.github.jactor.shared.api.PersistentDto
 
 @JvmRecord
-data class PersistentModel(
+data class Persistent(
     val createdBy: String = "todo: #3",
     val id: UUID? = null,
     val modifiedBy: String = "todo: #3",

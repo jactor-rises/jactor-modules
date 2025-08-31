@@ -2,6 +2,7 @@ package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -19,7 +20,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             addressRepository.save(
                 AddressBuilder
                     .new(
-                        addressModel = AddressModel(
+                        address = Address(
                             zipCode = "1234",
                             addressLine1 = "somewhere out there",
                             city = "Rud"
@@ -31,7 +32,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             addressRepository.save(
                 AddressBuilder
                     .new(
-                        addressModel = AddressModel(
+                        address = Address(
                             zipCode = "1234",
                             addressLine1 = "somewhere in there",
                             city = "Rud"
@@ -54,7 +55,7 @@ internal class AddressRepositoryTest @Autowired constructor(
     fun `should write then read an address entity`() {
         val addressEntityToPersist = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1234",
                     addressLine1 = "somewhere out there",
                     addressLine2 = "where the streets have no name",
@@ -84,7 +85,7 @@ internal class AddressRepositoryTest @Autowired constructor(
     fun `should write then update and read an address entity`() {
         val addressEntityToPersist = AddressBuilder
             .new(
-                addressModel = AddressModel(
+                address = Address(
                     zipCode = "1234",
                     addressLine1 = "somewhere out there",
                     addressLine2 = "where the streets have no name",

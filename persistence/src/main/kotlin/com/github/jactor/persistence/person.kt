@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.PersonDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.CascadeType
@@ -27,15 +27,15 @@ import jakarta.persistence.Table
 
 @Service
 class PersonService(private val personRepository: PersonRepository) {
-    fun createWhenNotExists(person: PersonModel): PersonEntity? {
+    fun createWhenNotExists(person: Person): PersonEntity? {
         return findExisting(person) ?: create(person)
     }
 
-    private fun create(person: PersonModel): PersonEntity {
+    private fun create(person: Person): PersonEntity {
         return personRepository.save(
             PersonEntity(
                 person = person.copy(
-                    persistentModel = person.persistentModel.copy(
+                    persistent = person.persistent.copy(
                         id = person.id ?: UUID.randomUUID()
                     )
                 )
@@ -43,26 +43,26 @@ class PersonService(private val personRepository: PersonRepository) {
         )
     }
 
-    private fun findExisting(person: PersonModel): PersonEntity? {
+    private fun findExisting(person: Person): PersonEntity? {
         return person.id?.let { personRepository.findById(it).getOrNull() }
     }
 }
 
 @JvmRecord
-data class PersonModel(
-    val persistentModel: PersistentModel = PersistentModel(),
-    val address: AddressModel? = null,
+data class Person(
+    val persistent: Persistent = Persistent(),
+    val address: Address? = null,
     val locale: String? = null,
     val firstName: String? = null,
     val surname: String = "",
     val description: String? = null
 ) {
-    val id: UUID? @JsonIgnore get() = persistentModel.id
+    val id: UUID? @JsonIgnore get() = persistent.id
 
     constructor(
-        persistentModel: PersistentModel, person: PersonModel
+        persistent: Persistent, person: Person
     ) : this(
-        persistentModel = persistentModel,
+        persistent = persistent,
         address = person.address,
         description = person.description,
         firstName = person.firstName,
@@ -71,8 +71,8 @@ data class PersonModel(
     )
 
     constructor(personDto: PersonDto) : this(
-        persistentModel = PersistentModel(persistentDto = personDto.persistentDto),
-        address = if (personDto.address != null) AddressModel(personDto.address!!) else null,
+        persistent = Persistent(persistentDto = personDto.persistentDto),
+        address = if (personDto.address != null) Address(personDto.address!!) else null,
         description = personDto.description,
         firstName = personDto.firstName,
         locale = personDto.locale,
@@ -80,7 +80,7 @@ data class PersonModel(
     )
 
     fun toPersonDto() = PersonDto(
-        persistentDto = persistentModel.toDto(),
+        persistentDto = persistent.toDto(),
         address = address?.toAddressDto(),
         locale = locale,
         firstName = firstName,
@@ -90,19 +90,19 @@ data class PersonModel(
 }
 
 internal object PersonBuilder {
-    fun new(personModel: PersonModel = PersonModel()): PersonData = PersonData(
-        personModel = personModel.copy(
-            persistentModel = personModel.persistentModel.copy(id = UUID.randomUUID())
+    fun new(person: Person = Person()): PersonData = PersonData(
+        person = person.copy(
+            persistent = person.persistent.copy(id = UUID.randomUUID())
         )
     )
 
-    fun unchanged(personModel: PersonModel): PersonData = PersonData(
-        personModel = personModel
+    fun unchanged(person: Person): PersonData = PersonData(
+        person = person
     )
 
     @JvmRecord
-    data class PersonData(val personModel: PersonModel) {
-        fun build(): PersonEntity = PersonEntity(person = personModel)
+    data class PersonData(val person: Person) {
+        fun build(): PersonEntity = PersonEntity(person = person)
     }
 }
 
@@ -159,18 +159,18 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         users = person.users
     }
 
-    constructor(person: PersonModel) {
+    constructor(person: Person) {
         addressEntity = person.address?.let { AddressEntity(it) }
         description = person.description
         firstName = person.firstName
         locale = person.locale
         id = person.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(person.persistentModel)
+        persistentDataEmbeddable = PersistentDataEmbeddable(person.persistent)
         surname = person.surname
     }
 
-    fun toModel() = PersonModel(
-        persistentModel = persistentDataEmbeddable.toModel(id),
+    fun toModel() = Person(
+        persistent = persistentDataEmbeddable.toModel(id),
         address = addressEntity?.toModel(),
         locale = locale,
         firstName = firstName,

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
@@ -103,7 +103,7 @@ class UserController(private val userService: UserService) {
         }
 
         val updatedUser = userService.update(
-            userModel = UserModel(userDto = userDto)
+            user = User(userDto = userDto)
         )
 
         return updatedUser?.let { ResponseEntity(it.toDto(), HttpStatus.ACCEPTED) }
@@ -125,28 +125,28 @@ class UserService(
     private val personService: PersonService,
     private val userRepository: UserRepository
 ) {
-    fun find(username: String): UserModel? {
+    fun find(username: String): User? {
         return userRepository.findByUsername(username)
             .map { it.toModel() }
             .orElse(null)
     }
 
-    fun find(id: UUID): UserModel? {
+    fun find(id: UUID): User? {
         return userRepository.findById(id)
             .map { it.toModel() }
             .orElse(null)
     }
 
     @Transactional
-    fun update(userModel: UserModel): UserModel? {
-        val uuid = userModel.persistentModel.id ?: throw IllegalArgumentException("User must have an id!")
+    fun update(user: User): User? {
+        val uuid = user.persistent.id ?: throw IllegalArgumentException("User must have an id!")
         return userRepository.findById(uuid)
-            .map { it.update(userModel) }
+            .map { it.update(user) }
             .map { it.toModel() }
             .orElse(null)
     }
 
-    fun create(createUserCommand: CreateUserCommand): UserModel {
+    fun create(createUserCommand: CreateUserCommand): User {
         val user = createNewFrom(createUserCommand)
 
         if (user.id == null) {
@@ -157,13 +157,12 @@ class UserService(
     }
 
     private fun createNewFrom(createUserCommand: CreateUserCommand): UserEntity {
-        val personModel = createUserCommand.toPersonDto().toModel()
-        val personEntity = personService.createWhenNotExists(person = personModel)
-        val userEntity = UserEntity(user = createUserCommand.toUserDto().toModel())
+        val person = createUserCommand.toPersonDto().toModel()
+        val personEntity = personService.createWhenNotExists(person = person)
+        val user = UserEntity(user = createUserCommand.toUserDto().toModel())
+        user.person = personEntity
 
-        userEntity.setPersonEntity(personEntity)
-
-        return userEntity
+        return user
     }
 
     fun findUsernames(userType: UserEntity.UserType): List<String> {
@@ -177,27 +176,27 @@ class UserService(
 }
 
 @JvmRecord
-data class UserModel(
-    val persistentModel: PersistentModel = PersistentModel(),
-    val person: PersonModel? = null,
+data class User(
+    val persistent: Persistent = Persistent(),
+    val person: Person? = null,
     val emailAddress: String? = null,
     val username: String? = null,
     val usertype: Usertype = Usertype.ACTIVE
 ) {
-    constructor(persistent: PersistentModel, userModel: UserModel) : this(
-        persistentModel = persistent,
-        emailAddress = userModel.emailAddress,
-        person = userModel.person,
-        username = userModel.username
+    constructor(persistent: Persistent, user: User) : this(
+        persistent = persistent,
+        emailAddress = user.emailAddress,
+        person = user.person,
+        username = user.username
     )
 
     constructor(
-        persistentModel: PersistentModel,
-        personInternal: PersonModel?,
+        persistent: Persistent,
+        personInternal: Person?,
         emailAddress: String?,
         username: String?
     ) : this(
-        persistentModel = persistentModel,
+        persistent = persistent,
         person = personInternal,
         emailAddress = emailAddress,
         username = username,
@@ -205,15 +204,15 @@ data class UserModel(
     )
 
     constructor(userDto: UserDto) : this(
-        persistentModel = PersistentModel(userDto.persistentDto),
-        person = if (userDto.person != null) PersonModel(userDto.person!!) else null,
+        persistent = Persistent(userDto.persistentDto),
+        person = if (userDto.person != null) Person(userDto.person!!) else null,
         emailAddress = userDto.emailAddress,
         username = userDto.username,
         usertype = Usertype.valueOf(userDto.userType.name)
     )
 
     fun toDto() = UserDto(
-        persistentDto = persistentModel.toDto(),
+        persistentDto = persistent.toDto(),
         emailAddress = emailAddress,
         person = person?.toPersonDto(),
         username = username,
@@ -226,16 +225,16 @@ data class UserModel(
 }
 
 internal object UserBuilder {
-    fun new(userDto: UserModel): UserData = UserData(
-        userDto = userDto.copy(persistentModel = userDto.persistentModel.copy(id = UUID.randomUUID()))
+    fun new(userDto: User): UserData = UserData(
+        userDto = userDto.copy(persistent = userDto.persistent.copy(id = UUID.randomUUID()))
     )
 
-    fun unchanged(userModel: UserModel): UserData = UserData(
-        userDto = userModel
+    fun unchanged(user: User): UserData = UserData(
+        userDto = user
     )
 
     @JvmRecord
-    data class UserData(val userDto: UserModel) {
+    data class UserData(val userDto: User) {
         fun build(): UserEntity = UserEntity(user = userDto)
     }
 }
@@ -268,11 +267,16 @@ class UserEntity : PersistentEntity<UserEntity?> {
     @JoinColumn(name = "PERSON_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var person: PersonEntity? = null
-        internal set
+        internal set(value) {
+            field = value
+        }
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var guestBook: GuestBookEntity? = null
-        private set
+        internal set(value) {
+            value?.let { it.user = this }
+            field = value
+        }
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
     private var blogs: MutableSet<BlogEntity> = HashSet()
@@ -286,27 +290,27 @@ class UserEntity : PersistentEntity<UserEntity?> {
     }
 
     /**
-     * @param user is used to create an entity
+     * @param userEntity is used to create an entity
      */
-    private constructor(user: UserEntity) {
-        blogs = user.blogs.map { it.copyWithoutId() }.toMutableSet()
-        emailAddress = user.emailAddress
-        guestBook = user.guestBook?.copyWithoutId()
-        id = user.id
+    private constructor(userEntity: UserEntity) {
+        blogs = userEntity.blogs.map { it.copyWithoutId() }.toMutableSet()
+        emailAddress = userEntity.emailAddress
+        guestBook = userEntity.guestBook?.copyWithoutId()
+        id = userEntity.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
-        person = user.person?.copyWithoutId()
-        username = user.username
-        userType = user.userType
+        person = userEntity.person?.copyWithoutId()
+        username = userEntity.username
+        userType = userEntity.userType
     }
 
-    constructor(user: UserModel) {
+    constructor(user: User) {
         addValues(user)
     }
 
-    private fun addValues(user: UserModel) {
+    private fun addValues(user: User) {
         emailAddress = user.emailAddress
-        id = user.persistentModel.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(user.persistentModel)
+        id = user.persistent.id
+        persistentDataEmbeddable = PersistentDataEmbeddable(user.persistent)
         person = user.person?.let { PersonEntity(it) }
         username = user.username
         userType = UserType.entries
@@ -314,12 +318,12 @@ class UserEntity : PersistentEntity<UserEntity?> {
             ?: throw IllegalArgumentException("Unknown UserType: " + user.usertype)
     }
 
-    fun toModel(): UserModel {
-        return UserModel(
-            persistentDataEmbeddable.toModel(id),
-            person?.toModel(),
-            emailAddress,
-            username
+    fun toModel(): User {
+        return User(
+            persistent = persistentDataEmbeddable.toModel(id),
+            person = person?.toModel(),
+            emailAddress = emailAddress,
+            username = username
         )
     }
 
@@ -329,9 +333,9 @@ class UserEntity : PersistentEntity<UserEntity?> {
     }
 
     override fun copyWithoutId(): UserEntity {
-        val userEntity = UserEntity(this)
-        userEntity.id = null
-        return userEntity
+        val user = UserEntity(this)
+        user.id = null
+        return user
     }
 
     override fun modifiedBy(modifier: String): UserEntity {
@@ -344,8 +348,8 @@ class UserEntity : PersistentEntity<UserEntity?> {
         blogEntity.user = this
     }
 
-    fun update(userModel: UserModel): UserEntity {
-        addValues(userModel)
+    fun update(user: User): UserEntity {
+        addValues(user)
         return this
     }
 
@@ -382,15 +386,6 @@ class UserEntity : PersistentEntity<UserEntity?> {
 
     fun getBlogs(): Set<BlogEntity> {
         return blogs
-    }
-
-    fun setGuestBook(guestBook: GuestBookEntity) {
-        this.guestBook = guestBook
-        guestBook.user = this
-    }
-
-    fun setPersonEntity(personEntity: PersonEntity?) {
-        person = personEntity
     }
 
     enum class UserType {

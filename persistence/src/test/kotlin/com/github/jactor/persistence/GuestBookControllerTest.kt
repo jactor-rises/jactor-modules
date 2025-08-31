@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.test.web.reactive.server.WebTestClient
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initGuestBookEntryEntity
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
@@ -33,7 +33,7 @@ internal class GuestBookControllerTest @Autowired constructor(
             .uri("/guestBook/$uuid")
             .exchange()
             .expectStatus().isNoContent
-            .expectBody(GuestBookModel::class.java)
+            .expectBody(GuestBook::class.java)
             .returnResult().responseBody
 
         assertThat(guestBookExchangeBody).isNull()
@@ -42,7 +42,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMockk.find(id = uuid) } returns GuestBookModel()
+        every { guestBookServiceMockk.find(id = uuid) } returns GuestBook()
 
         val guestBook = webTestClient.get()
             .uri("/guestBook/$uuid")
@@ -63,7 +63,7 @@ internal class GuestBookControllerTest @Autowired constructor(
             .uri("/guestBook/entry/$uuid")
             .exchange()
             .expectStatus().isNoContent
-            .expectBody(GuestBookModel::class.java)
+            .expectBody(GuestBook::class.java)
             .returnResult().responseBody
 
         assertThat(guestBookEntry).isNull()
@@ -87,36 +87,36 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should modify existing guest book`() {
         val uuid = UUID.randomUUID()
-        val guestBookModel = GuestBookModel(
-            persistentModel = PersistentModel(id = uuid)
+        val guestBook = GuestBook(
+            persistent = Persistent(id = uuid)
         )
 
-        val guestBookModelSlot = slot<GuestBookModel>()
-        every { guestBookServiceMockk.saveOrUpdate(guestBookModel = capture(guestBookModelSlot)) } returns guestBookModel
+        val guestBookSlot = slot<GuestBook>()
+        every { guestBookServiceMockk.saveOrUpdate(guestBook = capture(guestBookSlot)) } returns guestBook
 
         webTestClient.put()
             .uri("/guestBook/update")
-            .bodyValue(guestBookModel.toDto())
+            .bodyValue(guestBook.toDto())
             .exchange()
             .expectStatus().isAccepted
 
-        verify { guestBookServiceMockk.saveOrUpdate(guestBookModel = any()) }
+        verify { guestBookServiceMockk.saveOrUpdate(guestBook = any()) }
 
-        assertThat(guestBookModelSlot.captured.id).isEqualTo(uuid)
+        assertThat(guestBookSlot.captured.id).isEqualTo(uuid)
     }
 
     @Test
     fun `should create a guest book`() {
-        val guestBookModel = GuestBookDto()
-        val createdDto = GuestBookModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID())
+        val guestBook = GuestBookDto()
+        val createdDto = GuestBook(
+            persistent = Persistent(id = UUID.randomUUID())
         )
 
-        every { guestBookServiceMockk.saveOrUpdate(guestBookModel = any()) } returns createdDto
+        every { guestBookServiceMockk.saveOrUpdate(guestBook = any()) } returns createdDto
 
         val guestbook = webTestClient.post()
             .uri("/guestBook")
-            .bodyValue(guestBookModel)
+            .bodyValue(guestBook)
             .exchange()
             .expectStatus().isCreated
             .expectBody(GuestBookDto::class.java)
@@ -124,41 +124,41 @@ internal class GuestBookControllerTest @Autowired constructor(
 
         assertThat(guestbook?.persistentDto?.id).isEqualTo(createdDto.id)
 
-        verify { guestBookServiceMockk.saveOrUpdate(guestBookModel = any()) }
+        verify { guestBookServiceMockk.saveOrUpdate(guestBook = any()) }
     }
 
     @Test
     fun `should modify existing guest book entry`() {
         val uuid = UUID.randomUUID()
-        val guestBookEntryModel = GuestBookEntryModel(
-            persistentModel = PersistentModel(id = uuid)
+        val guestBookEntry = GuestBookEntry(
+            persistent = Persistent(id = uuid)
         )
 
-        every { guestBookServiceMockk.saveOrUpdate(guestBookEntryModel) } returns guestBookEntryModel
+        every { guestBookServiceMockk.saveOrUpdate(guestBookEntry) } returns guestBookEntry
 
         val guestbookEntry = webTestClient.put()
             .uri("/guestBook/entry/update")
-            .bodyValue(guestBookEntryModel.toDto())
+            .bodyValue(guestBookEntry.toDto())
             .exchange()
             .expectStatus().isAccepted
             .expectBody(GuestBookEntryDto::class.java)
             .returnResult().responseBody
 
         assertAll {
-            assertThat(guestbookEntry?.persistentDto?.id).isEqualTo(guestBookEntryModel.id)
+            assertThat(guestbookEntry?.persistentDto?.id).isEqualTo(guestBookEntry.id)
 
-            verify { guestBookServiceMockk.saveOrUpdate(guestBookEntryModel) }
+            verify { guestBookServiceMockk.saveOrUpdate(guestBookEntry) }
         }
     }
 
     @Test
     fun `should create a guest book entry`() {
         val guestBookEntryDto = GuestBookEntryDto()
-        val createdDto = GuestBookEntryModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID())
+        val createdDto = GuestBookEntry(
+            persistent = Persistent(id = UUID.randomUUID())
         )
 
-        every { guestBookServiceMockk.saveOrUpdate(guestBookEntryModel = any()) } returns createdDto
+        every { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) } returns createdDto
 
         val guestbookEntry = webTestClient.post()
             .uri("/guestBook/entry")
@@ -171,7 +171,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         assertAll {
             assertThat(guestbookEntry?.persistentDto?.id).isEqualTo(createdDto.id)
 
-            verify { guestBookServiceMockk.saveOrUpdate(guestBookEntryModel = any()) }
+            verify { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) }
         }
     }
 }

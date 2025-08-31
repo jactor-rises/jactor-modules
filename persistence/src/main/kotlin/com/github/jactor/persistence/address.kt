@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.AddressDto
 import jakarta.persistence.AttributeOverride
 import jakarta.persistence.Column
@@ -19,8 +19,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @JvmRecord
-data class AddressModel(
-    val persistentModel: PersistentModel = PersistentModel(),
+data class Address(
+    val persistent: Persistent = Persistent(),
     val zipCode: String? = null,
     val addressLine1: String? = null,
     val addressLine2: String? = null,
@@ -28,22 +28,22 @@ data class AddressModel(
     val city: String? = null,
     val country: String? = null
 ) {
-    val id: UUID? @JsonIgnore get() = persistentModel.id
+    val id: UUID? @JsonIgnore get() = persistent.id
 
     constructor(
-        persistentModel: PersistentModel, addressModel: AddressModel
+        persistent: Persistent, address: Address
     ) : this(
-        persistentModel = persistentModel,
-        addressLine1 = addressModel.addressLine1,
-        addressLine2 = addressModel.addressLine2,
-        addressLine3 = addressModel.addressLine3,
-        city = addressModel.city,
-        country = addressModel.country,
-        zipCode = addressModel.zipCode
+        persistent = persistent,
+        addressLine1 = address.addressLine1,
+        addressLine2 = address.addressLine2,
+        addressLine3 = address.addressLine3,
+        city = address.city,
+        country = address.country,
+        zipCode = address.zipCode
     )
 
     constructor(addressDto: AddressDto) : this(
-        persistentModel = PersistentModel(persistentDto = addressDto.persistentDto),
+        persistent = Persistent(persistentDto = addressDto.persistentDto),
         addressLine1 = addressDto.addressLine1,
         addressLine2 = addressDto.addressLine2,
         addressLine3 = addressDto.addressLine3,
@@ -53,7 +53,7 @@ data class AddressModel(
     )
 
     fun toAddressDto() = AddressDto(
-        persistentDto = persistentModel.toDto(),
+        persistentDto = persistent.toDto(),
         addressLine1 = addressLine1,
         addressLine2 = addressLine2,
         addressLine3 = addressLine3,
@@ -64,19 +64,19 @@ data class AddressModel(
 }
 
 internal object AddressBuilder {
-    fun new(addressModel: AddressModel) = AddressData(
-        addressModel = addressModel.copy(
-            persistentModel = addressModel.persistentModel.copy(id = UUID.randomUUID())
+    fun new(address: Address) = AddressData(
+        address = address.copy(
+            persistent = address.persistent.copy(id = UUID.randomUUID())
         )
     )
 
-    fun unchanged(addressModel: AddressModel): AddressData = AddressData(
-        addressModel = addressModel
+    fun unchanged(address: Address): AddressData = AddressData(
+        address = address
     )
 
     @JvmRecord
-    data class AddressData(val addressModel: AddressModel) {
-        fun build(): AddressEntity = AddressEntity(addressModel = addressModel)
+    data class AddressData(val address: Address) {
+        fun build(): AddressEntity = AddressEntity(address = address)
     }
 }
 
@@ -135,19 +135,19 @@ class AddressEntity : PersistentEntity<AddressEntity?> {
         zipCode = address.zipCode
     }
 
-    internal constructor(addressModel: AddressModel) {
-        persistentDataEmbeddable = PersistentDataEmbeddable(addressModel.persistentModel)
-        addressLine1 = addressModel.addressLine1
-        addressLine2 = addressModel.addressLine2
-        addressLine3 = addressModel.addressLine3
-        city = addressModel.city
-        country = addressModel.country
-        id = addressModel.id
-        zipCode = addressModel.zipCode
+    internal constructor(address: Address) {
+        persistentDataEmbeddable = PersistentDataEmbeddable(address.persistent)
+        addressLine1 = address.addressLine1
+        addressLine2 = address.addressLine2
+        addressLine3 = address.addressLine3
+        city = address.city
+        country = address.country
+        id = address.id
+        zipCode = address.zipCode
     }
 
-    fun toModel(): AddressModel {
-        return AddressModel(
+    fun toModel(): Address {
+        return Address(
             persistentDataEmbeddable.toModel(id),
             zipCode,
             addressLine1,
