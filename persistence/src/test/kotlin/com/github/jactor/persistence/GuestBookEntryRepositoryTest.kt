@@ -3,6 +3,7 @@ package com.github.jactor.persistence
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -17,18 +18,16 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then read guest book entry entity`() {
-        val addressDto = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personDto = PersonBuilder.new(person = Person(address = addressDto, surname = "AA"))
+        val person = PersonBuilder.new(person = Person(address = address, surname = "AA"))
             .person
 
         val userDto = UserBuilder.new(
             userDto = User(
-                person = personDto,
+                person = person,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
             )
@@ -68,18 +67,16 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then modify and read guest book entry entity`() {
-        val addressDto = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personDto = PersonBuilder.new(person = Person(address = addressDto, surname = "AA"))
+        val person = PersonBuilder.new(person = Person(address = address, surname = "AA"))
             .person
 
         val userDto = UserBuilder.new(
             userDto = User(
-                person = personDto,
+                person = person,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
             )
@@ -126,18 +123,16 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write two entries to two different guest books and then find one entry`() {
-        val addressDto = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personDto = PersonBuilder.new(person = Person(address = addressDto, surname = "AA"))
+        val person = PersonBuilder.new(person = Person(address = address, surname = "AA"))
             .person
 
         val userDto = UserBuilder.new(
             userDto = User(
-                person = personDto,
+                person = person,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
             )
@@ -165,7 +160,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
         val anotherUserDto = UserBuilder.new(
             userDto = User(
-                person = personDto,
+                person = person,
                 emailAddress = "hidden@tantooine.com",
                 username = "hidden"
             )

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -26,11 +27,9 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then read a user entity`() {
-        val address = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
         val person = PersonBuilder.new(
             person = Person(address = address, surname = "Solo")
@@ -58,11 +57,9 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read a user entity`() {
-        val address = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
         val person = PersonBuilder.new(
             person = Person(address = address, surname = "AA")
@@ -100,11 +97,9 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find active users and admins`() {
-        val address = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
         val spidyPerson = PersonBuilder.new(
             person = Person(address = address, surname = "Parker")

@@ -1,8 +1,11 @@
 package com.github.jactor.persistence
 
+import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.toEntityWithId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -18,29 +21,22 @@ internal class AddressRepositoryTest @Autowired constructor(
     fun `should fetch address entities`() {
         flush {
             addressRepository.save(
-                AddressBuilder
-                    .new(
-                        address = Address(
-                            zipCode = "1234",
-                            addressLine1 = "somewhere out there",
-                            city = "Rud"
-                        )
-                    )
-                    .build()
+                Address(
+                    zipCode = "1234",
+                    addressLine1 = "somewhere out there",
+                    city = "Rud"
+                ).toEntityWithId()
             )
 
             addressRepository.save(
-                AddressBuilder
-                    .new(
-                        address = Address(
-                            zipCode = "1234",
-                            addressLine1 = "somewhere in there",
-                            city = "Rud"
-                        )
-                    )
-                    .build()
+                Address(
+                    zipCode = "1234",
+                    addressLine1 = "somewhere in there",
+                    city = "Rud"
+                ).toEntityWithId()
             )
         }
+
         val addressEntities = addressRepository.findByZipCode(zipCode = "1234")
 
         assertAll {
@@ -53,17 +49,14 @@ internal class AddressRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then read an address entity`() {
-        val addressEntityToPersist = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1234",
-                    addressLine1 = "somewhere out there",
-                    addressLine2 = "where the streets have no name",
-                    addressLine3 = "in the middle of it",
-                    city = "Rud",
-                    country = "NO"
-                )
-            ).build()
+        val addressEntityToPersist = Address(
+            zipCode = "1234",
+            addressLine1 = "somewhere out there",
+            addressLine2 = "where the streets have no name",
+            addressLine3 = "in the middle of it",
+            city = "Rud",
+            country = "NO"
+        ).toEntityWithId()
 
         flush { addressRepository.save(addressEntityToPersist) }
 
@@ -83,23 +76,20 @@ internal class AddressRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read an address entity`() {
-        val addressEntityToPersist = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1234",
-                    addressLine1 = "somewhere out there",
-                    addressLine2 = "where the streets have no name",
-                    addressLine3 = "in the middle of it",
-                    city = "Rud",
-                    country = "NO"
-                )
-            )
-            .build()
+        val addressEntityToPersist = Address(
+            zipCode = "1234",
+            addressLine1 = "somewhere out there",
+            addressLine2 = "where the streets have no name",
+            addressLine3 = "in the middle of it",
+            city = "Rud",
+            country = "NO"
+        ).toEntityWithId()
 
         flush { addressRepository.save(addressEntityToPersist) }
 
-        val addressEntitySaved =
-            addressRepository.findById(addressEntityToPersist.id!!).orElseThrow { addressNotFound() }!!
+        val addressEntitySaved = addressRepository.findById(addressEntityToPersist.id!!)
+            .getOrNull() ?: throwAddressNotFound()
+
         addressEntitySaved.addressLine1 = "the truth is out there"
         addressEntitySaved.addressLine2 = "among the stars"
         addressEntitySaved.addressLine3 = "there will be life"
@@ -110,8 +100,9 @@ internal class AddressRepositoryTest @Autowired constructor(
         flush { addressRepository.save(addressEntitySaved) }
 
         val possibleAddressEntityById = addressRepository.findById(addressEntityToPersist.id!!)
+            .getOrNull() ?: throwAddressNotFound()
 
-        assertThat(possibleAddressEntityById).isPresent().given { addressEntity: AddressEntity ->
+        assertThat(possibleAddressEntityById).given { addressEntity: AddressEntity ->
             assertAll {
                 assertThat(addressEntity.addressLine1).isEqualTo("the truth is out there")
                 assertThat(addressEntity.addressLine2).isEqualTo("among the stars")
@@ -123,7 +114,7 @@ internal class AddressRepositoryTest @Autowired constructor(
         }
     }
 
-    private fun addressNotFound(): AssertionError {
-        return AssertionError("address not found")
+    private fun throwAddressNotFound(): Nothing {
+        throw AssertionError("address not found")
     }
 }

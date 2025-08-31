@@ -6,6 +6,7 @@ import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -17,23 +18,19 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 ) : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should write then read guest book`() {
-        val addressDto = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1001",
-                    addressLine1 = "Test Boulevard 1",
-                    city = "Testington"
-                )
-            )
-            .address
+        val address = Address(
+            zipCode = "1001",
+            addressLine1 = "Test Boulevard 1",
+            city = "Testington"
+        ).withId()
 
-        val personDto = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "AA"
+        val person = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = address, surname = "AA"
         )
 
         val userDto = User(
             Persistent(id = UUID.randomUUID()),
-            personInternal = personDto,
+            personInternal = person,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
         )
@@ -62,17 +59,15 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read guest book`() {
-        val addressDto = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personDto = PersonBuilder.new(Person(address = addressDto, surname = "AA")).person
+        val person = PersonBuilder.new(Person(address = address, surname = "AA")).person
         val userDto = UserBuilder.unchanged(
             user = User(
                 persistent = Persistent(),
-                personInternal = personDto,
+                personInternal = person,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual"
             )

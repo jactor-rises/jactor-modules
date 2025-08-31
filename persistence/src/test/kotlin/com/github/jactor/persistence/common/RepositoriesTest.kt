@@ -4,7 +4,6 @@ import java.time.LocalDate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.AddressBuilder
 import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.Blog
@@ -14,6 +13,7 @@ import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserRepository
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -22,15 +22,13 @@ import assertk.assertions.isEqualTo
 internal class RepositoriesTest @Autowired constructor(
     private val blogRepository: BlogRepository,
     private val userRepository: UserRepository,
-): AbstractSpringBootNoDirtyContextTest() {
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {
-        val address = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testoplis"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testoplis"
+        ).withId()
 
         val person = PersonBuilder.new(
             person = Person(address = address, locale = "no_NO", surname = "Skywalker")

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
@@ -29,11 +30,9 @@ internal class PersonRepositoryTest @Autowired constructor(
     @Test
     fun `should save then read a person entity`() {
         val allreadyPresentPeople = personRepository.findAll().count()
-        val address = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
+        ).withId()
 
         val personToPersist = PersonBuilder.new(
             person = Person(
@@ -61,11 +60,9 @@ internal class PersonRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then update and read a person entity`() {
-        val address = AddressBuilder.new(
-            address = Address(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).address
+        val address = Address(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
         val personToPersist = PersonBuilder.new(
             Person(

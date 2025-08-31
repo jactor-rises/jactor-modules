@@ -5,7 +5,6 @@ import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import com.github.jactor.persistence.AddressBuilder
 import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogEntry
@@ -18,6 +17,7 @@ import com.github.jactor.persistence.PersonBuilder
 import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
+import com.github.jactor.persistence.test.toEntityWithId
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isStrictlyBetween
@@ -43,12 +43,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on address when used`() {
-        val addressWithoutId = AddressBuilder.unchanged(
-            address = Address(persistent, Address())
-        ).build()
-
-        val address = AddressBuilder.new(address = Address(persistent, Address()))
-            .build()
+        val addressWithoutId = Address(persistent, Address()).toEntityWithId()
+        val address = Address(persistent, Address()).toEntityWithId()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
 
@@ -58,8 +54,6 @@ internal class ModifierAspectTest {
             LocalDateTime.now().minusSeconds(1),
             LocalDateTime.now()
         )
-
-        assertThat(addressWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test

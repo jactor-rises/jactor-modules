@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -60,29 +61,26 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read a blog entry`() {
-        val addressDto = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1001",
-                    addressLine1 = "Test Boulevard 1",
-                    city = "Testing"
-                )
-            )
-            .address
+        val address = Address(
+            zipCode = "1001",
+            addressLine1 = "Test Boulevard 1",
+            city = "Testing"
+        ).withId()
 
-        val personDto = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val person = Person(
+            persistent = Persistent(id = UUID.randomUUID()),
+            address = address, surname = "Adder"
         )
 
-        val userDto = User(
+        val user = User(
             Persistent(id = UUID.randomUUID()),
-            personInternal = personDto,
+            personInternal = person,
             emailAddress = "public@services.com",
             username = "dark"
         )
 
         val blogEntryToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "and then some...", user = userDto))
+            .new(blog = Blog(created = LocalDate.now(), title = "and then some...", user = user))
             .withEntry(BlogEntry(creatorName = "smith", entry = "once upon a time"))
             .buildBlogEntryEntity()
 

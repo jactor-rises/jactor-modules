@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -18,28 +19,26 @@ internal class BlogRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save and then read blog entity`() {
-        val addressDto = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1001",
-                    addressLine1 = "Test Boulevard 1",
-                    city = "Testing"
-                )
-            ).address
+        val address = Address(
+            zipCode = "1001",
+            addressLine1 = "Test Boulevard 1",
+            city = "Testing"
+        ).withId()
 
-        val personDto = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val person = Person(
+            persistent = Persistent(id = UUID.randomUUID()),
+            address = address, surname = "Adder"
         )
 
-        val userDto = User(
+        val user = User(
             Persistent(id = UUID.randomUUID()),
-            personInternal = personDto,
+            personInternal = person,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = userDto))
+            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = user))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -56,29 +55,26 @@ internal class BlogRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then update and read blog entity`() {
-        val addressDto = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1001",
-                    addressLine1 = "Test Boulevard 1",
-                    city = "Testing"
-                )
-            )
-            .address
+        val address = Address(
+            zipCode = "1001",
+            addressLine1 = "Test Boulevard 1",
+            city = "Testing"
+        ).withId()
 
-        val personDto = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val person = Person(
+            persistent = Persistent(id = UUID.randomUUID()),
+            address = address, surname = "Adder"
         )
 
-        val userDto = User(
+        val user = User(
             Persistent(id = UUID.randomUUID()),
-            personInternal = personDto,
+            personInternal = person,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = userDto))
+            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = user))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -103,28 +99,25 @@ internal class BlogRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find blog by title`() {
-        val addressDto = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1001",
-                    addressLine1 = "Test Boulevard 1",
-                    city = "Testing"
-                )
-            ).address
+        val address = Address(
+            zipCode = "1001",
+            addressLine1 = "Test Boulevard 1",
+            city = "Testing"
+        ).withId()
 
-        val personDto = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val person = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = address, surname = "Adder"
         )
 
-        val userDto = User(
+        val user = User(
             Persistent(id = UUID.randomUUID()),
-            personInternal = personDto,
+            personInternal = person,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         val blogEntityToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = userDto))
+            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = user))
             .buildBlogEntity()
 
         blogRepository.save(blogEntityToSave)
@@ -141,29 +134,26 @@ internal class BlogRepositoryTest @Autowired constructor(
 
     @Test
     fun `should be able to relate a blog entry`() {
-        val addressDto = AddressBuilder
-            .new(
-                address = Address(
-                    zipCode = "1001",
-                    addressLine1 = "Test Boulevard 1",
-                    city = "Testing"
-                )
-            ).address
+        val address = Address(
+            zipCode = "1001",
+            addressLine1 = "Test Boulevard 1",
+            city = "Testing"
+        ).withId()
 
-        val personDto = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val person = Person(
+            persistent = Persistent(id = UUID.randomUUID()), address = address, surname = "Adder"
         )
 
-        val userDto = User(
+        val user = User(
             persistent = Persistent(id = UUID.randomUUID()),
-            personInternal = personDto,
+            personInternal = person,
             emailAddress = "public@services.com",
             username = "black"
         )
 
         var blogData = BlogBuilder.new(
             blog = Blog(
-                created = LocalDate.now(), title = "Blah", user = userDto
+                created = LocalDate.now(), title = "Blah", user = user
             )
         )
 

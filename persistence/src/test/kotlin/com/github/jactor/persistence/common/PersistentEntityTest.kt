@@ -2,7 +2,6 @@ package com.github.jactor.persistence.common
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.AddressBuilder
 import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogEntry
@@ -14,6 +13,7 @@ import com.github.jactor.persistence.PersonBuilder
 import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
+import com.github.jactor.persistence.test.toEntityWithId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -26,17 +26,15 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy an address without the id`() {
-        persistentEntityToTest = AddressBuilder.new(
-            address = Address(
-                persistent = Persistent(),
-                zipCode = "1001",
-                addressLine1 = "somewhere",
-                addressLine2 = "out",
-                addressLine3 = "there",
-                city = "svg",
-                country = "NO"
-            )
-        ).build()
+        persistentEntityToTest = Address(
+            persistent = Persistent(),
+            zipCode = "1001",
+            addressLine1 = "somewhere",
+            addressLine2 = "out",
+            addressLine3 = "there",
+            city = "svg",
+            country = "NO"
+        ).toEntityWithId()
 
         persistentEntityToTest.id = UUID.randomUUID()
 
@@ -109,7 +107,7 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy a blog entry without the id`() {
         val blogEntry = BlogEntry(
-            blog =  Blog(),
+            blog = Blog(),
             creatorName = "jactor",
             entry = "the one",
             persistent = Persistent(),
