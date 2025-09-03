@@ -1,8 +1,11 @@
 package com.github.jactor.persistence.test
 
+import java.time.LocalDate
 import java.util.UUID
 import com.github.jactor.persistence.AddressEntity
 import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.GuestBookEntity
 import com.github.jactor.persistence.GuestBookEntryEntity
 import com.github.jactor.persistence.PersonEntity
@@ -32,6 +35,30 @@ fun initAddress(
     city = city,
     country = country,
     zipCode = zipCode
+)
+
+fun initBlog(
+    created: LocalDate? = null,
+    persistent: Persistent = Persistent(),
+    title: String? = null,
+    user: User? = null,
+) = Blog(
+    created = created,
+    persistent = persistent,
+    title = title,
+    user = user,
+)
+
+fun initBlogEntry(
+    blog: Blog? = null,
+    creatorName: String? = null,
+    entry: String? = null,
+    persistent: Persistent = Persistent(),
+) = BlogEntry(
+    blog = blog,
+    persistent = persistent,
+    creatorName = creatorName,
+    entry = entry,
 )
 
 fun initUserEntity(

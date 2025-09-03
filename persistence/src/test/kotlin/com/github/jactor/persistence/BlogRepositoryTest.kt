@@ -38,9 +38,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val blogEntityToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = user))
-            .buildBlogEntity()
+        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
 
         blogRepository.save(blogEntityToSave)
 
@@ -74,9 +72,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val blogEntityToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = user))
-            .buildBlogEntity()
+        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
 
         blogRepository.save(blogEntityToSave)
 
@@ -117,9 +113,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val blogEntityToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "Blah", user = user))
-            .buildBlogEntity()
+        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
 
         blogRepository.save(blogEntityToSave)
 
@@ -152,23 +146,15 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        var blogData = BlogBuilder.new(
-            blog = Blog(
-                created = LocalDate.now(), title = "Blah", user = user
-            )
+        val blog = Blog(created = LocalDate.now(), title = "Blah", user = user).withId()
+        val blogEntityToSave: BlogEntity = blog.toEntity()
+        val blogEntry = BlogEntry(
+            blog = blogEntityToSave.toModel(),
+            creatorName = "arnold",
+            entry = "i'll be back"
         )
 
-        val blogEntityToSave: BlogEntity = blogData.buildBlogEntity()
-
-        blogData = blogData.withEntry(
-            blogEntry = BlogEntry(
-                blog = blogEntityToSave.toModel(),
-                creatorName = "arnold",
-                entry = "i'll be back"
-            )
-        )
-
-        val blogEntryToSave: BlogEntryEntity = blogData.buildBlogEntryEntity()
+        val blogEntryToSave: BlogEntryEntity = blogEntry.withId().toEntity()
 
         blogEntityToSave.add(blogEntryToSave)
         blogRepository.save(blogEntityToSave)

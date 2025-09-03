@@ -6,7 +6,6 @@ import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import com.github.jactor.persistence.Address
-import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.common.Persistent
@@ -17,6 +16,8 @@ import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initBlogEntry
 import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
@@ -59,8 +60,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = BlogBuilder.unchanged(Blog(persistent, Blog())).buildBlogEntity()
-        val blog = BlogBuilder.new(Blog(persistent, Blog())).buildBlogEntity()
+        val blogWithouId = Blog(persistent, initBlog()).toEntity()
+        val blog = Blog(persistent, initBlog()).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 
@@ -72,21 +73,23 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blogEntry when used`() {
-        val blogEntryWithoutId = BlogBuilder.new().withUnchangedEntry(
-            blogEntry = BlogEntry(
-                persistent = persistent,
-                blog = Blog(
-                    persistent = Persistent(id = UUID.randomUUID()),
-                    blog = Blog(persistent = Persistent(id = UUID.randomUUID())),
-                ),
-                creatorName = "me",
-                entry = "some shit"
-            )
-        ).buildBlogEntryEntity()
+        val blogEntryWithoutId = BlogEntry(
+            persistent = persistent,
+            blog = Blog(
+                persistent = Persistent(id = UUID.randomUUID()),
+                blog = initBlog(persistent = Persistent(id = UUID.randomUUID())),
+            ),
+            creatorName = "me",
+            entry = "some shit"
+        ).toEntity()
 
-        val blogEntry = BlogBuilder.new().withEntry(
-            BlogEntry(persistent, BlogEntry(creatorName = "me", entry = "some shit"))
-        ).buildBlogEntryEntity()
+        val blogEntry = BlogEntry(
+            persistent, initBlogEntry(
+                creatorName = "me",
+                entry = "some shit",
+                blog = initBlog(persistent = Persistent(id = UUID.randomUUID())),
+            )
+        ).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blogEntry, blogEntryWithoutId)
 

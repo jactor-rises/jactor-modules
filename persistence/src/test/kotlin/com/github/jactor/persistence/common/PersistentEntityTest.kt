@@ -2,8 +2,6 @@ package com.github.jactor.persistence.common
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.Blog
-import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookBuilder
@@ -11,6 +9,7 @@ import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
@@ -83,12 +82,10 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a blog without the id`() {
-        persistentEntityToTest = BlogBuilder.new(
-            blog = Blog(
-                title = "general ignorance",
-                user = User()
-            )
-        ).buildBlogEntity()
+        persistentEntityToTest = initBlog(
+            title = "general ignorance",
+            user = User()
+        ).withId().toEntity()
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
@@ -103,13 +100,13 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy a blog entry without the id`() {
         val blogEntry = BlogEntry(
-            blog = Blog(),
+            blog = initBlog(),
             creatorName = "jactor",
             entry = "the one",
             persistent = Persistent(),
         )
 
-        persistentEntityToTest = BlogBuilder.new().withEntry(blogEntry = blogEntry).buildBlogEntryEntity()
+        persistentEntityToTest = blogEntry.withId().toEntity()
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
         assertAll {

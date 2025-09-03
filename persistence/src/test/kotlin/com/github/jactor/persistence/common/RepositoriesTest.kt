@@ -4,7 +4,6 @@ import java.time.LocalDate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.Blog
-import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogRepository
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserBuilder
@@ -44,13 +43,11 @@ internal class RepositoriesTest @Autowired constructor(
 
         flush {
             blogRepository.save(
-                BlogBuilder.new(
-                    blog = Blog(
-                        created = LocalDate.now(),
-                        title = "Far, far, away...",
-                        user = userByUsername.toModel()
-                    )
-                ).buildBlogEntity()
+                Blog(
+                    created = LocalDate.now(),
+                    title = "Far, far, away...",
+                    user = userByUsername.toModel()
+                ).withId().toEntity()
             )
         }
 

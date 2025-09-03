@@ -5,6 +5,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initBlog
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -40,7 +41,7 @@ internal class BlogTest {
 
         val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = Blog(
             persistent,
-            Blog()
+            initBlog()
         ).persistent
 
         assertAll {

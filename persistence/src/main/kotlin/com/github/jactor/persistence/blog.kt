@@ -280,49 +280,17 @@ class BlogServiceImpl(
     }
 }
 
-internal object BlogBuilder {
-    fun new(blog: Blog = Blog()): BlogData = BlogData(
-        blog = blog.copy(persistent = blog.persistent.copy(id = UUID.randomUUID()))
-    )
-
-    fun unchanged(blog: Blog = Blog()): BlogData = BlogData(
-        blog = blog
-    )
-
-    @JvmRecord
-    data class BlogData(
-        val blog: Blog,
-        val blogEntry: BlogEntry? = null,
-    ) {
-        fun withEntry(blogEntry: BlogEntry): BlogData = copy(
-            blogEntry = blogEntry.copy(
-                persistent = Persistent(id = UUID.randomUUID()),
-                blog = blog,
-            )
-        )
-
-        fun withUnchangedEntry(blogEntry: BlogEntry): BlogData = copy(
-            blogEntry = blogEntry,
-        )
-
-        fun buildBlogEntity(): BlogEntity = BlogEntity(blog = blog)
-
-        fun buildBlogEntryEntity(): BlogEntryEntity = BlogEntryEntity(
-            blogEntry = blogEntry ?: error("No blog entry dto"),
-        )
-    }
-}
-
 @JvmRecord
 data class Blog(
-    val created: LocalDate? = null,
+    val created: LocalDate?,
     val persistent: Persistent = Persistent(),
-    val title: String? = null,
-    val user: User? = null
+    val title: String?,
+    val user: User?,
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
 
     constructor(blogDto: BlogDto) : this(
+        created = null,
         persistent = Persistent(blogDto.persistentDto),
         title = blogDto.title,
         user = blogDto.user?.let { User(userDto = it) }
@@ -340,13 +308,16 @@ data class Blog(
         title = title,
         user = user?.toDto()
     )
+
+    fun withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
+    fun toEntity() = BlogEntity(blog = this)
 }
 
 @JvmRecord
 data class BlogEntry(
-    val blog: Blog? = null,
-    val creatorName: String? = null,
-    val entry: String? = null,
+    val blog: Blog?,
+    val creatorName: String?,
+    val entry: String?,
     val persistent: Persistent = Persistent(),
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
@@ -357,7 +328,8 @@ data class BlogEntry(
     constructor(blogEntry: BlogEntryDto) : this(
         persistent = Persistent(blogEntry.persistentDto),
         blog = blogEntry.blogDto?.let { Blog(blogDto = it) },
-        entry = blogEntry.entry
+        creatorName = blogEntry.creatorName,
+        entry = blogEntry.entry,
     )
 
     constructor(persistent: Persistent, blogEntry: BlogEntry) : this(
@@ -373,6 +345,9 @@ data class BlogEntry(
         creatorName = creatorName,
         entry = entry,
     )
+
+    fun withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
+    fun toEntity() = BlogEntryEntity(blogEntry = this)
 }
 
 interface BlogRepository : CrudRepository<BlogEntity, UUID> {
@@ -542,7 +517,8 @@ class BlogEntryEntity : PersistentEntity<BlogEntryEntity?> {
     fun toModel() = BlogEntry(
         blog = blog?.toModel(),
         creatorName = entryEmbeddable.creatorName,
-        entry = entryEmbeddable.entry
+        entry = entryEmbeddable.entry,
+        persistent = Persistent(id = id)
     )
 
     fun modify(entry: String, modifiedCreator: String) {

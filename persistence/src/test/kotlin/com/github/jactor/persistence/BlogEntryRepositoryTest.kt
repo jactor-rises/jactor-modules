@@ -1,19 +1,20 @@
 package com.github.jactor.persistence
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initBlogEntry
 import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.shared.test.isNotOlderThan
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
-import assertk.assertions.isStrictlyBetween
 
 internal class BlogEntryRepositoryTest @Autowired constructor(
     private val blogEntryRepository: BlogEntryRepository
@@ -36,17 +37,10 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
             username = "white"
         )
 
-        var blogData = BlogBuilder.new(
-            blog = Blog(created = LocalDate.now(), title = "and then some...", user = userDto)
-        )
+        val blog = initBlog(created = LocalDate.now(), title = "and then some...", user = userDto).withId()
+        val blogEntry = initBlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time").withId()
 
-        val blogDto = blogData.blog
-
-        blogData = blogData.withEntry(
-            blogEntry = BlogEntry(blog = blogDto, creatorName = "smith", entry = "once upon a time")
-        )
-
-        flush { blogEntryRepository.save(blogData.buildBlogEntryEntity()) }
+        flush { blogEntryRepository.save(blogEntry.toEntity()) }
 
         val blogEntries = blogEntryRepository.findAll().toList()
 
@@ -54,8 +48,7 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
             assertThat(blogEntries).hasSize(1)
             val blogEntry = blogEntries.iterator().next()
             assertThat(blogEntry.creatorName).isEqualTo("smith")
-            assertThat(blogEntry.timeOfCreation)
-                .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+            assertThat(blogEntry.timeOfCreation).isNotOlderThan(seconds = 1)
             assertThat(blogEntry.entry).isEqualTo("once upon a time")
         }
     }
@@ -80,21 +73,19 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
             username = "dark"
         )
 
-        val blogEntryToSave = BlogBuilder
-            .new(blog = Blog(created = LocalDate.now(), title = "and then some...", user = user))
-            .withEntry(BlogEntry(creatorName = "smith", entry = "once upon a time"))
-            .buildBlogEntryEntity()
+        val blog = Blog(created = LocalDate.now(), title = "and then some...", user = user).withId()
+        val blogEntry = BlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time").withId()
 
-        flush { blogEntryRepository.save(blogEntryToSave) }
+        flush { blogEntryRepository.save(blogEntry.toEntity()) }
 
         val blogEntries = blogEntryRepository.findAll().toList()
 
         assertThat(blogEntries).hasSize(1)
 
-        val blogEntry = blogEntries.iterator().next()
-        blogEntry.modify("happily ever after", "luke")
+        val readBlogEntry = blogEntries.iterator().next()
+        readBlogEntry.modify("happily ever after", "luke")
 
-        flush { blogEntryRepository.save(blogEntry) }
+        flush { blogEntryRepository.save(readBlogEntry) }
 
         val modifiedEntries = blogEntryRepository.findAll().toList()
 
@@ -104,8 +95,7 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
 
         assertAll {
             assertThat(modifiedEntry.creatorName).isEqualTo("luke")
-            assertThat(modifiedEntry.timeOfModification)
-                .isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+            assertThat(modifiedEntry.timeOfModification).isNotOlderThan(seconds = 1)
             assertThat(modifiedEntry.entry).isEqualTo("happily ever after")
         }
     }

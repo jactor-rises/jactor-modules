@@ -4,6 +4,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initBlogEntry
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -13,7 +15,7 @@ internal class BlogEntryTest {
     @Test
     fun `should have a copy constructor`() {
         val blogEntry = BlogEntry(
-            blog = Blog(),
+            blog = initBlog(),
             creatorName = "someone",
             entry = "entry",
         )
@@ -39,7 +41,7 @@ internal class BlogEntryTest {
 
         val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = BlogEntry(
             persistent = persistent,
-            blogEntry = BlogEntry()
+            blogEntry = initBlogEntry()
         ).persistent
 
         assertAll {
