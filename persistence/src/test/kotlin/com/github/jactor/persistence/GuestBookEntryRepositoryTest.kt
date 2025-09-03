@@ -3,7 +3,8 @@ package com.github.jactor.persistence
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.withId
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -18,13 +19,11 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then read guest book entry entity`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
         ).withId()
 
-        val person = PersonBuilder.new(person = Person(address = address, surname = "AA"))
-            .person
-
+        val person = initPerson(address = address, surname = "AA").withId()
         val userDto = UserBuilder.new(
             userDto = User(
                 person = person,
@@ -67,13 +66,11 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then modify and read guest book entry entity`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
         ).withId()
 
-        val person = PersonBuilder.new(person = Person(address = address, surname = "AA"))
-            .person
-
+        val person = initPerson(address = address, surname = "AA").withId()
         val userDto = UserBuilder.new(
             userDto = User(
                 person = person,
@@ -123,13 +120,11 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write two entries to two different guest books and then find one entry`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
         ).withId()
 
-        val person = PersonBuilder.new(person = Person(address = address, surname = "AA"))
-            .person
-
+        val person = initPerson(address = address, surname = "AA").withId()
         val userDto = UserBuilder.new(
             userDto = User(
                 person = person,

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.shared.api.CreateUserCommand
 import com.ninjasquad.springmockk.MockkBean
 import assertk.assertAll
@@ -23,8 +25,8 @@ internal class UserServiceTest @Autowired constructor(
 ) : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should map a user entity to a dto`() {
-        val addressDto = Address()
-        val personDto = Person(address = addressDto)
+        val addressDto = initAddress()
+        val personDto = initPerson(address = addressDto,)
 
         every { userRepositoryMockk.findByUsername("jactor") } returns Optional.of(
             UserBuilder.new(
@@ -48,8 +50,8 @@ internal class UserServiceTest @Autowired constructor(
     @Test
     fun `should also map a user entity to a dto when finding by id`() {
         val uuid = UUID.randomUUID()
-        val addressDto = Address()
-        val personDto = Person(address = addressDto)
+        val addressDto = initAddress()
+        val personDto = initPerson(address = addressDto,)
 
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(
             UserBuilder.new(
@@ -102,7 +104,7 @@ internal class UserServiceTest @Autowired constructor(
         val personEntitySlot = slot<PersonEntity>()
 
         every { userRepositoryMockk.save(any()) } returns userEntity
-        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonEntity(Person())
+        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonEntity(initPerson())
 
         val userCreated = userServiceToTest.create(createUserCommand)
 

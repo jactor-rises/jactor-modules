@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initAddress
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -12,7 +13,7 @@ internal class AddressTest {
 
     @Test
     fun `hould have a copy constructor`() {
-        val address = Address(
+        val address = initAddress(
             addressLine1 = "address line one",
             addressLine2 = "address line two",
             addressLine3 = "address line three",
@@ -22,8 +23,8 @@ internal class AddressTest {
         )
 
         val (_, zipCode, addressLine1, addressLine2, addressLine3, city, country) = Address(
-            address.persistent,
-            address
+            persistent = address.persistent,
+            address = address
         )
 
         assertAll {
@@ -47,7 +48,7 @@ internal class AddressTest {
         )
 
         val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = Address(
-            persistent, Address()
+            persistent, initAddress()
         ).persistent
 
         assertAll {

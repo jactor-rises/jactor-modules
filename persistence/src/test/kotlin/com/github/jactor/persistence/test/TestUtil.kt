@@ -16,6 +16,24 @@ fun timestamped(username: String): String {
     return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
 }
 
+fun initAddress(
+    persistent: Persistent = Persistent(),
+    addressLine1: String? = null,
+    addressLine2: String? = null,
+    addressLine3: String? = null,
+    city: String? = null,
+    country: String? = null,
+    zipCode: String? = null,
+) = Address(
+    persistent = persistent,
+    addressLine1 = addressLine1,
+    addressLine2 = addressLine2,
+    addressLine3 = addressLine3,
+    city = city,
+    country = country,
+    zipCode = zipCode
+)
+
 fun initUserEntity(
     id: UUID? = UUID.randomUUID(),
     person: PersonEntity = initPersonEntity()
@@ -54,17 +72,18 @@ fun initAddressEntity(id: UUID? = UUID.randomUUID()) = AddressEntity().apply {
 }
 
 fun initPerson(
-    address: Address? = null,
-    firstName: String? = null,
-    description: String? = null,
-    locale: String? = null,
+    id: UUID? = null,
     persistent: Persistent = Persistent(),
+    address: Address? = null,
+    description: String? = null,
+    firstName: String? = null,
+    locale: String? = null,
     surname: String = "Doe",
 ) = Person(
+    persistent = id?.let { persistent.copy(id = id) } ?: persistent,
     address = address,
     firstName = firstName,
     description = description,
-    persistent = persistent,
     locale = locale,
     surname = surname,
 )

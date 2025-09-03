@@ -6,7 +6,8 @@ import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.withId
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -18,14 +19,14 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 ) : AbstractSpringBootNoDirtyContextTest() {
     @Test
     fun `should write then read guest book`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testington"
         ).withId()
 
-        val person = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = address, surname = "AA"
+        val person = initPerson(
+            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "AA",
         )
 
         val userDto = User(
@@ -59,21 +60,19 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read guest book`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
         ).withId()
 
-        val person = PersonBuilder.new(Person(address = address, surname = "AA")).person
-        val userDto = UserBuilder.unchanged(
-            user = User(
-                persistent = Persistent(),
-                personInternal = person,
-                emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
-        ).userDto
+        val person = initPerson(address = address, surname = "AA").withId()
+        val user = User(
+            persistent = Persistent(),
+            personInternal = person,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        )
 
-        val userEntity = userRepository.save(UserBuilder.new(userDto).build())
+        val userEntity = userRepository.save(UserBuilder.new(user).build())
 
         userEntity.guestBook = GuestBookBuilder.new(
             GuestBook(

@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.withId
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -27,14 +28,11 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then read a user entity`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
         ).withId()
 
-        val person = PersonBuilder.new(
-            person = Person(address = address, surname = "Solo")
-        ).person
-
+        val person = initPerson(address = address, surname = "Solo").withId()
         val userToPersist = UserBuilder.new(
             User(
                 person = person,
@@ -57,14 +55,11 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read a user entity`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
         ).withId()
 
-        val person = PersonBuilder.new(
-            person = Person(address = address, surname = "AA")
-        ).person
-
+        val person = initPerson(address = address, surname = "AA").withId()
         val userToPersist = UserBuilder.new(
             userDto = User(
                 persistent = Persistent(),
@@ -97,18 +92,12 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find active users and admins`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
         ).withId()
 
-        val spidyPerson = PersonBuilder.new(
-            person = Person(address = address, surname = "Parker")
-        ).person
-
-        val superPerson = PersonBuilder.new(
-            person = Person(address = address, surname = "Kent")
-        ).person
-
+        val spidyPerson = initPerson(address = address, surname = "Parker").withId()
+        val superPerson = initPerson(address = address, surname = "Kent").withId()
         val userEntity = UserBuilder.new(
             User(Persistent(), spidyPerson, null, "spiderman")
         ).build()

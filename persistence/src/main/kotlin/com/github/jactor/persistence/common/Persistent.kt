@@ -20,6 +20,8 @@ data class Persistent(
         timeOfModification = timeOfModification,
     )
 
+    fun toEmbeddable() = PersistentDataEmbeddable(persistent = this)
+
     constructor(persistentDto: PersistentDto) : this(
         createdBy = persistentDto.createdBy ?: "",
         id = persistentDto.id,

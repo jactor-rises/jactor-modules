@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.withId
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -20,17 +21,17 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then read blog entry`() {
-        val addressDto = Address(
+        val address = initAddress(
             Persistent(id = UUID.randomUUID()), zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
         )
 
-        val personDto = Person(
-            persistent = Persistent(id = UUID.randomUUID()), address = addressDto, surname = "Adder"
+        val person = initPerson(
+            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
         )
 
         val userDto = User(
             Persistent(id = UUID.randomUUID()),
-            personInternal = personDto,
+            personInternal = person,
             emailAddress = "public@services.com",
             username = "white"
         )
@@ -61,15 +62,15 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read a blog entry`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testing"
         ).withId()
 
-        val person = Person(
-            persistent = Persistent(id = UUID.randomUUID()),
-            address = address, surname = "Adder"
+        val person = initPerson(
+            address = address,
+            persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
         )
 
         val user = User(

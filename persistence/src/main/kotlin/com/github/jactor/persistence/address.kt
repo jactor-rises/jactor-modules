@@ -20,13 +20,13 @@ import jakarta.persistence.Table
 
 @JvmRecord
 data class Address(
-    val persistent: Persistent = Persistent(),
-    val zipCode: String? = null,
-    val addressLine1: String? = null,
-    val addressLine2: String? = null,
-    val addressLine3: String? = null,
-    val city: String? = null,
-    val country: String? = null
+    val persistent: Persistent,
+    val zipCode: String?,
+    val addressLine1: String?,
+    val addressLine2: String?,
+    val addressLine3: String?,
+    val city: String?,
+    val country: String?,
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
 
@@ -61,23 +61,13 @@ data class Address(
         country = country,
         zipCode = zipCode
     )
-}
 
-internal object AddressBuilder {
-    fun new(address: Address) = AddressData(
-        address = address.copy(
-            persistent = address.persistent.copy(id = UUID.randomUUID())
+    fun withId(): Address = this.copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
+    fun toEntityWithId() = AddressEntity(
+        this.copy(
+            persistent = persistent.copy(id = id ?: UUID.randomUUID())
         )
     )
-
-    fun unchanged(address: Address): AddressData = AddressData(
-        address = address
-    )
-
-    @JvmRecord
-    data class AddressData(val address: Address) {
-        fun build(): AddressEntity = AddressEntity(address = address)
-    }
 }
 
 interface AddressRepository : CrudRepository<AddressEntity, UUID> {

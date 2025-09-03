@@ -205,7 +205,7 @@ data class User(
 
     constructor(userDto: UserDto) : this(
         persistent = Persistent(userDto.persistentDto),
-        person = if (userDto.person != null) Person(userDto.person!!) else null,
+        person = userDto.person?.let { Person(personDto = it) },
         emailAddress = userDto.emailAddress,
         username = userDto.username,
         usertype = Usertype.valueOf(userDto.userType.name)

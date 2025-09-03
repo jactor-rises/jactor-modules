@@ -50,12 +50,12 @@ class PersonService(private val personRepository: PersonRepository) {
 
 @JvmRecord
 data class Person(
-    val persistent: Persistent = Persistent(),
-    val address: Address? = null,
-    val locale: String? = null,
-    val firstName: String? = null,
-    val surname: String = "",
-    val description: String? = null
+    val persistent: Persistent,
+    val address: Address?,
+    val locale: String?,
+    val firstName: String?,
+    val surname: String,
+    val description: String?,
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
 
@@ -87,22 +87,12 @@ data class Person(
         surname = surname,
         description = description
     )
-}
 
-internal object PersonBuilder {
-    fun new(person: Person = Person()): PersonData = PersonData(
-        person = person.copy(
-            persistent = person.persistent.copy(id = UUID.randomUUID())
-        )
-    )
-
-    fun unchanged(person: Person): PersonData = PersonData(
-        person = person
-    )
-
-    @JvmRecord
-    data class PersonData(val person: Person) {
-        fun build(): PersonEntity = PersonEntity(person = person)
+    fun withId(): Person = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
+    fun toEntity() = PersonEntity(person = this)
+    fun toEntityWithId() = PersonEntity(person = this).apply {
+        id = UUID.randomUUID()
+        persistentDataEmbeddable = Persistent(id = id).toEmbeddable()
     }
 }
 

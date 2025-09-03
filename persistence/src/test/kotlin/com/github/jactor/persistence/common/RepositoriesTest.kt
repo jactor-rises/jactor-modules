@@ -3,17 +3,15 @@ package com.github.jactor.persistence.common
 import java.time.LocalDate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.Address
-import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogRepository
-import com.github.jactor.persistence.PersonBuilder
-import com.github.jactor.persistence.Person
-import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
+import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.UserRepository
-import com.github.jactor.persistence.test.withId
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -26,14 +24,11 @@ internal class RepositoriesTest @Autowired constructor(
 
     @Test
     fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {
-        val address = Address(
+        val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testoplis"
         ).withId()
 
-        val person = PersonBuilder.new(
-            person = Person(address = address, locale = "no_NO", surname = "Skywalker")
-        ).person
-
+        val person = initPerson(address = address, locale = "no_NO", surname = "Skywalker").withId()
         val userToPersist = UserBuilder.new(
             userDto = User(
                 person = person,

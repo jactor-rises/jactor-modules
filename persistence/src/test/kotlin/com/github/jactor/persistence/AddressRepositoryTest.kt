@@ -1,11 +1,10 @@
 package com.github.jactor.persistence
 
-import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.toEntityWithId
+import com.github.jactor.persistence.test.initAddress
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -21,18 +20,18 @@ internal class AddressRepositoryTest @Autowired constructor(
     fun `should fetch address entities`() {
         flush {
             addressRepository.save(
-                Address(
-                    zipCode = "1234",
+                initAddress(
                     addressLine1 = "somewhere out there",
-                    city = "Rud"
+                    city = "Rud",
+                    zipCode = "1234",
                 ).toEntityWithId()
             )
 
             addressRepository.save(
-                Address(
-                    zipCode = "1234",
+                initAddress(
                     addressLine1 = "somewhere in there",
-                    city = "Rud"
+                    city = "Rud",
+                    zipCode = "1234",
                 ).toEntityWithId()
             )
         }
@@ -49,13 +48,13 @@ internal class AddressRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then read an address entity`() {
-        val addressEntityToPersist = Address(
-            zipCode = "1234",
+        val addressEntityToPersist = initAddress(
             addressLine1 = "somewhere out there",
             addressLine2 = "where the streets have no name",
             addressLine3 = "in the middle of it",
             city = "Rud",
-            country = "NO"
+            country = "NO",
+            zipCode = "1234",
         ).toEntityWithId()
 
         flush { addressRepository.save(addressEntityToPersist) }
@@ -76,13 +75,13 @@ internal class AddressRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read an address entity`() {
-        val addressEntityToPersist = Address(
-            zipCode = "1234",
+        val addressEntityToPersist = initAddress(
             addressLine1 = "somewhere out there",
             addressLine2 = "where the streets have no name",
             addressLine3 = "in the middle of it",
             city = "Rud",
-            country = "NO"
+            country = "NO",
+            zipCode = "1234",
         ).toEntityWithId()
 
         flush { addressRepository.save(addressEntityToPersist) }

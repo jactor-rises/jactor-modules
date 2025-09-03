@@ -13,11 +13,12 @@ import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.GuestBookBuilder
 import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.PersonBuilder
 import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
-import com.github.jactor.persistence.test.toEntityWithId
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
+import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isStrictlyBetween
@@ -43,8 +44,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on address when used`() {
-        val addressWithoutId = Address(persistent, Address()).toEntityWithId()
-        val address = Address(persistent, Address()).toEntityWithId()
+        val addressWithoutId = Address(persistent, initAddress()).toEntityWithId()
+        val address = Address(persistent, initAddress()).toEntityWithId()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
 
@@ -148,20 +149,21 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on person when used`() {
-        val person = PersonBuilder.new(Person(persistent, Person())).build()
-        val personWithoutId = PersonBuilder.unchanged(Person(persistent, Person()))
-            .build()
+        val person = Person(persistent, initPerson(id = UUID.randomUUID())).toEntityWithId()
+        val personWithoutId = Person(persistent, initPerson()).toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(person, personWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(person.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
+        assertAll {
+            assertThat(person.timeOfModification, "person with id").isStrictlyBetween(
+                LocalDateTime.now().minusSeconds(1),
+                LocalDateTime.now()
+            )
 
-        assertThat(personWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+            assertThat(personWithoutId.timeOfModification, "person without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test

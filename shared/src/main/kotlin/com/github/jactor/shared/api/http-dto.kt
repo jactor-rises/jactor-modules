@@ -93,4 +93,7 @@ data class PersistentDto(
 
 interface PersistentData {
     val persistentDto: PersistentDto
+
+    fun harIdentifikator(): Boolean = persistentDto.id != null
+    fun harIkkeIdentifikator(): Boolean = persistentDto.id == null
 }

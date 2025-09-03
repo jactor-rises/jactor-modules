@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
@@ -16,26 +17,26 @@ internal class PersonServiceTest @Autowired constructor(
 
     @Test
     fun `should create a new Person`() {
-        val entity = personService.createWhenNotExists(Person())
+        val entity = personService.createWhenNotExists(initPerson())
 
         assertThat(entity).isNotNull()
     }
 
     @Test
     fun `should find Person by id`() {
-        val personEntity = personRepository.save(PersonBuilder.new().build())
+        val personEntity = personRepository.save(initPerson().toEntityWithId())
 
         // when
         val person = personService.createWhenNotExists(
             Person(
-                Persistent(
+                persistent = Persistent(
                     createdBy = "creator",
                     id = personEntity.id,
                     modifiedBy = "modifier",
                     timeOfCreation = LocalDateTime.now(),
                     timeOfModification = LocalDateTime.now()
                 ),
-                Person()
+                person = initPerson()
             )
         )
 

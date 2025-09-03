@@ -2,18 +2,16 @@ package com.github.jactor.persistence.common
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogBuilder
 import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookBuilder
 import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.PersonBuilder
-import com.github.jactor.persistence.Person
-import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
-import com.github.jactor.persistence.test.toEntityWithId
+import com.github.jactor.persistence.UserBuilder
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -26,7 +24,7 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy an address without the id`() {
-        persistentEntityToTest = Address(
+        persistentEntityToTest = initAddress(
             persistent = Persistent(),
             zipCode = "1001",
             addressLine1 = "somewhere",
@@ -50,14 +48,12 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a person without the id`() {
-        persistentEntityToTest = PersonBuilder.new(
-            Person(
-                address = Address(),
-                locale = "us_US",
-                firstName = "Bill",
-                surname = "Smith", description = "here i am"
-            )
-        ).build()
+        persistentEntityToTest = initPerson(
+            address = initAddress(),
+            locale = "us_US",
+            firstName = "Bill",
+            surname = "Smith", description = "here i am"
+        ).toEntityWithId()
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 

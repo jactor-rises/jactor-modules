@@ -1,12 +1,9 @@
 package com.github.jactor.persistence
 
 import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.shared.api.PersistentData
 import com.github.jactor.shared.api.PersonDto
 import com.github.jactor.shared.api.UserDto
 
-fun PersistentData.harIdentifikator(): Boolean = persistentDto.id != null
-fun PersistentData.harIkkeIdentifikator(): Boolean = persistentDto.id == null
 fun PersonDto.toModel() = Person(
     persistent = Persistent(persistentDto = persistentDto),
     address = address?.let { Address(addressDto = it) },
