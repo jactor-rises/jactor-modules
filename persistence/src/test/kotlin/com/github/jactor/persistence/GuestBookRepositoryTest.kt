@@ -25,20 +25,15 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             city = "Testington"
         ).withId()
 
-        val person = initPerson(
-            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "AA",
-        )
-
-        val userDto = User(
+        val person = initPerson(address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "AA")
+        val user = User(
             Persistent(id = UUID.randomUUID()),
             personInternal = person,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
         )
 
-        val userEntity = userRepository.save(
-            UserBuilder.new(userDto = userDto).build()
-        )
+        val userEntity = userRepository.save(user.withId().toEntity())
 
         userEntity.guestBook = GuestBookBuilder.new(
             GuestBook(
@@ -72,7 +67,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             username = "causual"
         )
 
-        val userEntity = userRepository.save(UserBuilder.new(user).build())
+        val userEntity = userRepository.save(user.withId().toEntity())
 
         userEntity.guestBook = GuestBookBuilder.new(
             GuestBook(

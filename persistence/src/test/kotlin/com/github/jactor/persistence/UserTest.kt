@@ -5,6 +5,7 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -13,7 +14,7 @@ internal class UserTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val user = User(
+        val user = initUser(
             emailAddress = "somewhere@time",
             person = initPerson(),
             username = "me"
@@ -40,7 +41,7 @@ internal class UserTest {
 
         val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = User(
             persistent,
-            User()
+            user = initUser()
         ).persistent
 
         assertAll {

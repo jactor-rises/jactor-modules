@@ -13,12 +13,13 @@ import com.github.jactor.persistence.GuestBookBuilder
 import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.Person
-import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initBlogEntry
 import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
+import com.github.jactor.shared.test.isNotOlderThan
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -171,15 +172,14 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on user when used`() {
-        val user = UserBuilder.new(User(persistent, User())).build()
-        val userWithoutId = UserBuilder.unchanged(User(persistent, User()))
-            .build()
+        val user = User(persistent, user = initUser()).withId().toEntity()
+        val userWithoutId = User(persistent, user = initUser()).toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(user, userWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(user.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(user.timeOfModification).isNotOlderThan(seconds = 1)
         assertThat(userWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 }

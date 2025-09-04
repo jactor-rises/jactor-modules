@@ -6,6 +6,7 @@ import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -33,13 +34,11 @@ internal class UserRepositoryTest @Autowired constructor(
         ).withId()
 
         val person = initPerson(address = address, surname = "Solo").withId()
-        val userToPersist = UserBuilder.new(
-            User(
-                person = person,
-                emailAddress = "smuggle.fast@tantooine.com",
-                username = "smuggler"
-            )
-        ).build()
+        val userToPersist = initUser(
+            person = person,
+            emailAddress = "smuggle.fast@tantooine.com",
+            username = "smuggler"
+        ).withId().toEntity()
 
         flush { userRepository.save(userToPersist) }
 
@@ -60,14 +59,12 @@ internal class UserRepositoryTest @Autowired constructor(
         ).withId()
 
         val person = initPerson(address = address, surname = "AA").withId()
-        val userToPersist = UserBuilder.new(
-            userDto = User(
-                persistent = Persistent(),
-                person = person,
-                emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
-        ).build()
+        val userToPersist = initUser(
+            persistent = Persistent(),
+            person = person,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        ).withId().toEntity()
 
         flush { userRepository.save(userToPersist) }
 
@@ -98,21 +95,22 @@ internal class UserRepositoryTest @Autowired constructor(
 
         val spidyPerson = initPerson(address = address, surname = "Parker").withId()
         val superPerson = initPerson(address = address, surname = "Kent").withId()
-        val userEntity = UserBuilder.new(
-            User(Persistent(), spidyPerson, null, "spiderman")
-        ).build()
+        val userEntity = initUser(
+            persistent = Persistent(),
+            person = spidyPerson,
+            emailAddress = null,
+            username = "spiderman"
+        ).withId().toEntity()
 
         flush {
             userRepository.save(userEntity)
             userRepository.save(
-                UserBuilder.new(
-                    userDto = User(
-                        person = superPerson,
-                        emailAddress = null,
-                        username = "superman",
-                        usertype = User.Usertype.INACTIVE
-                    )
-                ).build()
+                initUser(
+                    person = superPerson,
+                    emailAddress = null,
+                    username = "superman",
+                    usertype = User.Usertype.INACTIVE
+                ).withId().toEntity()
             )
         }
 

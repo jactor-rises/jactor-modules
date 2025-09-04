@@ -26,6 +26,7 @@ import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
+import com.github.jactor.shared.whenTrue
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -178,16 +179,17 @@ class UserService(
 @JvmRecord
 data class User(
     val persistent: Persistent = Persistent(),
-    val person: Person? = null,
-    val emailAddress: String? = null,
-    val username: String? = null,
-    val usertype: Usertype = Usertype.ACTIVE
+    val person: Person?,
+    val emailAddress: String?,
+    val username: String?,
+    val usertype: Usertype,
 ) {
     constructor(persistent: Persistent, user: User) : this(
         persistent = persistent,
         emailAddress = user.emailAddress,
         person = user.person,
-        username = user.username
+        username = user.username,
+        usertype = user.usertype
     )
 
     constructor(
@@ -216,26 +218,14 @@ data class User(
         emailAddress = emailAddress,
         person = person?.toPersonDto(),
         username = username,
-        userType = if (usertype == Usertype.ADMIN) UserType.ACTIVE else UserType.valueOf(usertype.name)
+        userType = (usertype == Usertype.ADMIN).whenTrue { UserType.ACTIVE } ?: UserType.valueOf(usertype.name)
     )
+
+    fun withId(): User = copy(persistent = persistent.copy(id = persistent.id ?: UUID.randomUUID()))
+    fun toEntity() = UserEntity(user = this)
 
     enum class Usertype {
         ADMIN, ACTIVE, INACTIVE
-    }
-}
-
-internal object UserBuilder {
-    fun new(userDto: User): UserData = UserData(
-        userDto = userDto.copy(persistent = userDto.persistent.copy(id = UUID.randomUUID()))
-    )
-
-    fun unchanged(user: User): UserData = UserData(
-        userDto = user
-    )
-
-    @JvmRecord
-    data class UserData(val userDto: User) {
-        fun build(): UserEntity = UserEntity(user = userDto)
     }
 }
 
@@ -318,14 +308,13 @@ class UserEntity : PersistentEntity<UserEntity?> {
             ?: throw IllegalArgumentException("Unknown UserType: " + user.usertype)
     }
 
-    fun toModel(): User {
-        return User(
-            persistent = persistentDataEmbeddable.toModel(id),
-            person = person?.toModel(),
-            emailAddress = emailAddress,
-            username = username
-        )
-    }
+    fun toModel() = User(
+        persistent = persistentDataEmbeddable.toModel(id),
+        person = person?.toModel(),
+        emailAddress = emailAddress,
+        username = username,
+        usertype = userType?.let { User.Usertype.valueOf(it.name) } ?: User.Usertype.INACTIVE,
+    )
 
     fun fetchPerson(): PersonEntity {
         person?.addUser(this)

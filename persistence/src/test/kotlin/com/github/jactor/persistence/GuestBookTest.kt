@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -15,7 +16,7 @@ internal class GuestBookTest {
         val guestBook = GuestBook(
             entries = setOf(GuestBookEntry()),
             title = "title",
-            user = User()
+            user = initUser()
         )
 
         val (_, entries, title, userInternal) = GuestBook(guestBook.persistent, guestBook)

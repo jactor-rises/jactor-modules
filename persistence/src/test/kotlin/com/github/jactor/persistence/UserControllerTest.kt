@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.test.initUserEntity
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.CreateUserCommand
@@ -41,7 +42,7 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should find a user by username`() {
-        every { userRepositoryMockk.findByUsername("me") } returns Optional.of(UserEntity(User()))
+        every { userRepositoryMockk.findByUsername("me") } returns Optional.of(UserEntity(initUser()))
 
         val userDto = webTestClient.get()
             .uri("/user/name/me")
@@ -83,7 +84,7 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should modify existing user`() {
         val uuid = UUID.randomUUID()
-        val user = User(persistent = Persistent(id = uuid))
+        val user = initUser(persistent = Persistent(id = uuid))
 
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(UserEntity(user = user))
 
@@ -121,7 +122,7 @@ internal class UserControllerTest @Autowired constructor(
     fun `should accept if user id is not null`() {
         val uuid = UUID.randomUUID()
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(
-            UserEntity(User(persistent = Persistent(id = uuid)))
+            UserEntity(initUser(persistent = Persistent(id = uuid)))
         )
 
         webTestClient.put()

@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogRepository
 import com.github.jactor.persistence.User
-import com.github.jactor.persistence.UserBuilder
 import com.github.jactor.persistence.UserRepository
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -28,13 +28,11 @@ internal class RepositoriesTest @Autowired constructor(
         ).withId()
 
         val person = initPerson(address = address, locale = "no_NO", surname = "Skywalker").withId()
-        val userToPersist = UserBuilder.new(
-            userDto = User(
-                person = person,
-                emailAddress = "brains@rebels.com",
-                username = "r2d2"
-            )
-        ).build()
+        val userToPersist = initUser(
+            person = person,
+            emailAddress = "brains@rebels.com",
+            username = "r2d2"
+        ).withId().toEntity()
 
         flush { userRepository.save(userToPersist) }
 

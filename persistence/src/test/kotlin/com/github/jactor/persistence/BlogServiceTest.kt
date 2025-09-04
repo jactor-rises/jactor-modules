@@ -6,6 +6,7 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -105,7 +106,7 @@ internal class BlogServiceTest {
         val blog = Blog(
             created = LocalDate.now(),
             title = "some blog",
-            user = User(username = "itsme")
+            user = initUser(username = "itsme")
         )
 
         every { userServiceMockk.find(username = any()) } returns null
@@ -127,7 +128,7 @@ internal class BlogServiceTest {
         val blogEntry = BlogEntry(
             blog = initBlog(
                 persistent = Persistent(id = UUID.randomUUID()),
-                user = User(username = "itsme"),
+                user = initUser(username = "itsme"),
             ),
             creatorName = "me",
             entry = "if i where a rich man..."

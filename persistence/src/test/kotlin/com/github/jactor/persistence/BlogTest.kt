@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -17,7 +18,7 @@ internal class BlogTest {
         val blog = Blog(
             created = LocalDate.now(),
             title = "title",
-            user = User()
+            user = initUser()
         )
 
         val (created, _, title, userInternal) = Blog(blog.persistent, blog)

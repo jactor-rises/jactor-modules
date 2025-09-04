@@ -113,10 +113,10 @@ internal class PersonRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val userEntity = UserBuilder.new(userDto = user).build()
+        val userEntity = user.toEntity()
         val personToPersist = userEntity.fetchPerson()
 
-        flush { personRepository.save<PersonEntity>(personToPersist) }
+        flush { personRepository.save(personToPersist) }
 
         assertThat(personRepository.findAll().toList()).hasSize(alreadyPresentPeople + 1)
         val personEntity = personRepository.findBySurname("Adder").iterator().next()

@@ -4,6 +4,7 @@ import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -75,7 +76,7 @@ internal class GuestBookServiceTest {
         val guestBook = GuestBook(
             entries = setOf(guestBookEntry),
             title = "home sweet home",
-            user = User()
+            user = initUser()
         )
 
         every { guestBookRepositoryMockk.save(capture(guestBookEntitySlot)) } returns GuestBookEntity(guestBook)
