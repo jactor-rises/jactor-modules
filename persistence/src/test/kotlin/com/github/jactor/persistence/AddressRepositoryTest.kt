@@ -24,7 +24,7 @@ internal class AddressRepositoryTest @Autowired constructor(
                     addressLine1 = "somewhere out there",
                     city = "Rud",
                     zipCode = "1234",
-                ).toEntityWithId()
+                ).withId().toEntity()
             )
 
             addressRepository.save(
@@ -32,7 +32,7 @@ internal class AddressRepositoryTest @Autowired constructor(
                     addressLine1 = "somewhere in there",
                     city = "Rud",
                     zipCode = "1234",
-                ).toEntityWithId()
+                ).withId().toEntity()
             )
         }
 
@@ -55,7 +55,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             city = "Rud",
             country = "NO",
             zipCode = "1234",
-        ).toEntityWithId()
+        ).withId().toEntity()
 
         flush { addressRepository.save(addressEntityToPersist) }
 
@@ -82,7 +82,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             city = "Rud",
             country = "NO",
             zipCode = "1234",
-        ).toEntityWithId()
+        ).withId().toEntity()
 
         flush { addressRepository.save(addressEntityToPersist) }
 
