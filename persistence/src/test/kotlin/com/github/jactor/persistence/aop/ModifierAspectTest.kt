@@ -6,31 +6,28 @@ import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import com.github.jactor.persistence.Address
-import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.Blog
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.GuestBookBuilder
-import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.GuestBook
+import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.User
+import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initBlogEntry
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
 import com.github.jactor.shared.test.isNotOlderThan
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isStrictlyBetween
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 
 @ExtendWith(MockKExtension::class)
 internal class ModifierAspectTest {
-
     private val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
     private val modifierAspect = ModifierAspect()
     private val persistent = Persistent(
@@ -53,10 +50,7 @@ internal class ModifierAspectTest {
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(address.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
+        assertThat(address.timeOfModification).isNotOlderThan(seconds = 1)
     }
 
     @Test
@@ -68,7 +62,7 @@ internal class ModifierAspectTest {
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(blog.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(blog.timeOfModification).isNotOlderThan(seconds = 1)
         assertThat(blogWithouId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
@@ -96,59 +90,49 @@ internal class ModifierAspectTest {
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(blogEntry.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(blogEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertAll {
+            assertThat(blogEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
+            assertThat(blogEntryWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test
     fun `should modify timestamp on guestBook when used`() {
-        val guestBookWithoutId = GuestBookBuilder.unchanged(
-            guestBook = GuestBook(persistent, GuestBook())
-        ).buildGuestBookEntity()
-
-        val guestBook = GuestBookBuilder.new(guestBook = GuestBook(persistent, GuestBook()))
-            .buildGuestBookEntity()
+        val guestBookWithoutId = initGuestBook(persistent = persistent).toEntity()
+        val guestBook = initGuestBook(persistent = persistent).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBook, guestBookWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(guestBook.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(guestBookWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertAll {
+            assertThat(guestBook.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
+            assertThat(guestBookWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test
     fun `should modify timestamp on guestBookEntry when used`() {
-        val guestBookEntryWithoutId = GuestBookBuilder.new().withEntryContainingPersistentId(
-            guestBookEntry = GuestBookEntry(
-                persistent, GuestBookEntry(creatorName = "me", entry = "hi there")
-            )
-        ).buildGuestBookEntryEntity()
+        val guestBookEntryWithoutId = initGuestBookEntry(
+            creatorName = "me",
+            entry = "hi there",
+            persistent = persistent,
+        ).toEntity()
 
-        val guestBookEntry = GuestBookBuilder.new().withEntry(
-            guestBookEntry = GuestBookEntry(
-                persistent, GuestBookEntry(creatorName = "me", entry = "hi there")
-            )
-        ).buildGuestBookEntryEntity()
+        val guestBookEntry = initGuestBookEntry(
+            creatorName = "me",
+            entry = "hi there",
+            persistent = persistent,
+        ).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(guestBookEntry.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(guestBookEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertAll {
+            assertThat(guestBookEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
+            assertThat(guestBookEntryWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test
@@ -161,11 +145,7 @@ internal class ModifierAspectTest {
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
         assertAll {
-            assertThat(person.timeOfModification, "person with id").isStrictlyBetween(
-                LocalDateTime.now().minusSeconds(1),
-                LocalDateTime.now()
-            )
-
+            assertThat(person.timeOfModification, "person with id").isNotOlderThan(seconds = 1)
             assertThat(personWithoutId.timeOfModification, "person without id").isEqualTo(oneMinuteAgo)
         }
     }

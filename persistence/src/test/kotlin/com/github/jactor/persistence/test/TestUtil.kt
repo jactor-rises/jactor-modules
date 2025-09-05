@@ -6,7 +6,9 @@ import com.github.jactor.persistence.AddressEntity
 import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
+import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookEntity
+import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.GuestBookEntryEntity
 import com.github.jactor.persistence.PersonEntity
 import com.github.jactor.persistence.Person
@@ -59,6 +61,30 @@ fun initBlogEntry(
     persistent = persistent,
     creatorName = creatorName,
     entry = entry,
+)
+
+fun initGuestBook(
+    entries: Set<GuestBookEntry> = emptySet(),
+    persistent: Persistent = Persistent(),
+    title: String? = null,
+    user: User? = null,
+) = GuestBook(
+    entries = entries,
+    persistent = persistent,
+    title = title,
+    user = user,
+)
+
+fun initGuestBookEntry(
+    creatorName: String? = null,
+    entry: String? = null,
+    guestBook: GuestBook? = null,
+    persistent: Persistent = Persistent(),
+) = GuestBookEntry(
+    creatorName = creatorName,
+    entry = entry,
+    guestBook = guestBook,
+    persistent = persistent,
 )
 
 fun initUserEntity(

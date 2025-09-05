@@ -4,6 +4,8 @@ import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
@@ -28,9 +30,7 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should map guest book to a dto`() {
-        val guestBookEntity = GuestBookBuilder.new(
-            guestBook = GuestBook(Persistent(), HashSet(), "@home", null)
-        ).buildGuestBookEntity()
+        val guestBookEntity = initGuestBook(title = "@home").withId().toEntity()
 
         every { guestBookRepositoryMockk.findById(uuid) } returns Optional.of(guestBookEntity)
 
@@ -41,14 +41,12 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should map guest book entry to a dto`() {
-        val anEntry = GuestBookBuilder.new().withEntry(
-            guestBookEntry = GuestBookEntry(
-                guestBook = GuestBook(),
-                creatorName = "me",
-                entry = "too",
-                persistent = Persistent(),
-            )
-        ).buildGuestBookEntryEntity()
+        val anEntry = initGuestBookEntry(
+            guestBook = initGuestBook(),
+            creatorName = "me",
+            entry = "too",
+            persistent = Persistent(),
+        ).withId().toEntity()
 
         every { guestBookEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
 
@@ -66,14 +64,14 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should save GuestBookDto as GuestBookEntity`() {
-        val guestBookEntry = GuestBookEntry(
+        val guestBookEntry = initGuestBookEntry(
             creatorName = "me",
             entry = "all about this",
-            guestBook = GuestBook()
+            guestBook = initGuestBook()
         )
 
         val guestBookEntitySlot = slot<GuestBookEntity>()
-        val guestBook = GuestBook(
+        val guestBook = initGuestBook(
             entries = setOf(guestBookEntry),
             title = "home sweet home",
             user = initUser()
@@ -85,7 +83,7 @@ internal class GuestBookServiceTest {
         val guestBookEntity = guestBookEntitySlot.captured
 
         assertAll {
-            assertThat(guestBookEntity.getEntries()).hasSize(1)
+            assertThat(guestBookEntity.entries).hasSize(1)
             assertThat(guestBookEntity.title).isEqualTo("home sweet home")
             assertThat(guestBookEntity.user).isNotNull()
         }
@@ -94,8 +92,8 @@ internal class GuestBookServiceTest {
     @Test
     fun `should save GuestBookEntryDto as GuestBookEntryEntity`() {
         val guestBookEntryEntitySlot = slot<GuestBookEntryEntity>()
-        val guestBookEntry = GuestBookEntry(
-            guestBook = GuestBook(),
+        val guestBookEntry = initGuestBookEntry(
+            guestBook = initGuestBook(),
             creatorName = "me",
             entry = "if i where a rich man..."
         )

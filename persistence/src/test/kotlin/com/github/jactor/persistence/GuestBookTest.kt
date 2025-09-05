@@ -4,6 +4,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
@@ -13,8 +15,8 @@ internal class GuestBookTest {
 
     @Test
     fun `should have a copy constructor`() {
-        val guestBook = GuestBook(
-            entries = setOf(GuestBookEntry()),
+        val guestBook = initGuestBook(
+            entries = setOf(initGuestBookEntry()),
             title = "title",
             user = initUser()
         )
@@ -39,7 +41,7 @@ internal class GuestBookTest {
         )
 
         val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = GuestBook(
-            persistent, GuestBook()
+            persistent, guestBook = initGuestBook()
         ).persistent
 
         assertAll {

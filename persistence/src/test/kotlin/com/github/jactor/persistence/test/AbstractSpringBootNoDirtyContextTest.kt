@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.transaction.annotation.Transactional
+import com.github.jactor.persistence.GuestBook
+import com.github.jactor.persistence.User
 import jakarta.persistence.EntityManager
 
 /**

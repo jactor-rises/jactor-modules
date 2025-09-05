@@ -3,12 +3,10 @@ package com.github.jactor.persistence.common
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.GuestBookBuilder
-import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.User
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
@@ -118,9 +116,7 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a guest book without the id`() {
-        persistentEntityToTest = GuestBookBuilder.new(
-            guestBook = GuestBook(Persistent(), entries = HashSet(), title = "enter when applied", user = initUser())
-        ).buildGuestBookEntity()
+        persistentEntityToTest = initGuestBook(title = "enter when applied", user = initUser()).withId().toEntity()
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 
@@ -134,11 +130,11 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a guest book entry without the id`() {
-        persistentEntityToTest = GuestBookBuilder.new().withEntry(
-            GuestBookEntry(
-                persistent = Persistent(), guestBook = GuestBook(), creatorName = "jactor", entry = "the one"
-            )
-        ).buildGuestBookEntryEntity()
+        persistentEntityToTest = initGuestBookEntry(
+            guestBook = initGuestBook(),
+            creatorName = "jactor",
+            entry = "the one"
+        ).withId().toEntity()
 
         val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
 

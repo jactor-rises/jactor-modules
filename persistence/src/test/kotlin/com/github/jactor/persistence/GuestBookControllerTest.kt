@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initGuestBookEntryEntity
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
@@ -42,7 +44,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMockk.find(id = uuid) } returns GuestBook()
+        every { guestBookServiceMockk.find(id = uuid) } returns initGuestBook()
 
         val guestBook = webTestClient.get()
             .uri("/guestBook/$uuid")
@@ -87,10 +89,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should modify existing guest book`() {
         val uuid = UUID.randomUUID()
-        val guestBook = GuestBook(
-            persistent = Persistent(id = uuid)
-        )
-
+        val guestBook = initGuestBook(persistent = Persistent(id = uuid))
         val guestBookSlot = slot<GuestBook>()
         every { guestBookServiceMockk.saveOrUpdate(guestBook = capture(guestBookSlot)) } returns guestBook
 
@@ -108,9 +107,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should create a guest book`() {
         val guestBook = GuestBookDto()
-        val createdDto = GuestBook(
-            persistent = Persistent(id = UUID.randomUUID())
-        )
+        val createdDto = initGuestBook(persistent = Persistent(id = UUID.randomUUID()))
 
         every { guestBookServiceMockk.saveOrUpdate(guestBook = any()) } returns createdDto
 
@@ -130,9 +127,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should modify existing guest book entry`() {
         val uuid = UUID.randomUUID()
-        val guestBookEntry = GuestBookEntry(
-            persistent = Persistent(id = uuid)
-        )
+        val guestBookEntry = initGuestBookEntry(persistent = Persistent(id = uuid))
 
         every { guestBookServiceMockk.saveOrUpdate(guestBookEntry) } returns guestBookEntry
 
@@ -154,9 +149,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should create a guest book entry`() {
         val guestBookEntryDto = GuestBookEntryDto()
-        val createdDto = GuestBookEntry(
-            persistent = Persistent(id = UUID.randomUUID())
-        )
+        val createdDto = initGuestBookEntry(persistent = Persistent(id = UUID.randomUUID()))
 
         every { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) } returns createdDto
 

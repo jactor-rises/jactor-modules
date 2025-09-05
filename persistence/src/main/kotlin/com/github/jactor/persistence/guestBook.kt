@@ -201,10 +201,10 @@ class DefaultGuestBookService(
 
 @JvmRecord
 data class GuestBook(
-    val persistent: Persistent = Persistent(),
-    val entries: Set<GuestBookEntry> = emptySet(),
-    val title: String? = null,
-    val user: User? = null
+    val persistent: Persistent,
+    val entries: Set<GuestBookEntry>,
+    val title: String?,
+    val user: User?,
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
 
@@ -228,14 +228,17 @@ data class GuestBook(
         title = title,
         userDto = user?.toDto()
     )
+
+    fun withId(): GuestBook = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
+    fun toEntity() = GuestBookEntity(guestBook = this)
 }
 
 @JvmRecord
 data class GuestBookEntry(
-    val creatorName: String? = null,
-    val entry: String? = null,
-    val guestBook: GuestBook? = null,
-    val persistent: Persistent = Persistent(),
+    val creatorName: String?,
+    val entry: String?,
+    val guestBook: GuestBook?,
+    val persistent: Persistent,
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
     val notNullableCreator: String @JsonIgnore get() = creatorName ?: error("No creator is provided!")
@@ -251,6 +254,8 @@ data class GuestBookEntry(
     )
 
     constructor(guestBookEntryDto: GuestBookEntryDto) : this(
+        creatorName = guestBookEntryDto.creatorName,
+        entry = guestBookEntryDto.entry,
         persistent = Persistent(guestBookEntryDto.persistentDto),
         guestBook = guestBookEntryDto.guestBook?.let { GuestBook(guestBookDto = it) }
     )
@@ -261,36 +266,9 @@ data class GuestBookEntry(
         guestBook = guestBook?.toDto(),
         persistentDto = persistent.toDto(),
     )
-}
 
-internal object GuestBookBuilder {
-    fun new(guestBook: GuestBook = GuestBook()): GuestBookData = GuestBookData(
-        guestBook = guestBook.copy(
-            persistent = guestBook.persistent.copy(id = UUID.randomUUID())
-        )
-    )
-
-    fun unchanged(guestBook: GuestBook): GuestBookData = GuestBookData(
-        guestBook = guestBook
-    )
-
-    @JvmRecord
-    data class GuestBookData(val guestBook: GuestBook, val guestBookEntry: GuestBookEntry? = null) {
-        fun withEntry(guestBookEntry: GuestBookEntry): GuestBookData = copy(
-            guestBookEntry = guestBookEntry.copy(
-                persistent = guestBook.persistent.copy(id = UUID.randomUUID())
-            )
-        )
-
-        fun withEntryContainingPersistentId(guestBookEntry: GuestBookEntry): GuestBookData = copy(
-            guestBookEntry = guestBookEntry
-        )
-
-        fun buildGuestBookEntity(): GuestBookEntity = GuestBookEntity(guestBook = guestBook)
-        fun buildGuestBookEntryEntity(): GuestBookEntryEntity = GuestBookEntryEntity(
-            guestBookEntry = guestBookEntry ?: error("no guest book entry provided!")
-        )
-    }
+    fun toEntity() = GuestBookEntryEntity(guestBookEntry = this)
+    fun withId(): GuestBookEntry = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
 }
 
 interface GuestBookRepository : CrudRepository<GuestBookEntity, UUID> {
@@ -323,7 +301,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     var user: UserEntity? = null
 
     @OneToMany(mappedBy = "guestBook", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
-    private var entries: MutableSet<GuestBookEntryEntity> = HashSet()
+    var entries: MutableSet<GuestBookEntryEntity> = HashSet()
 
     constructor() {
         // used by entity manager
@@ -401,10 +379,6 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
         get() = persistentDataEmbeddable.modifiedBy
     override val timeOfModification: LocalDateTime
         get() = persistentDataEmbeddable.timeOfModification
-
-    fun getEntries(): Set<GuestBookEntryEntity> {
-        return entries
-    }
 }
 
 @Entity

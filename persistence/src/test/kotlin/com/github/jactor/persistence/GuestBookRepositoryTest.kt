@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initGuestBook
 import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
@@ -35,13 +36,11 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
         val userEntity = userRepository.save(user.withId().toEntity())
 
-        userEntity.guestBook = GuestBookBuilder.new(
-            GuestBook(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = userEntity.toModel()
-            )
-        ).buildGuestBookEntity()
+        userEntity.guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = userEntity.toModel()
+        ).withId().toEntity()
 
         flush { }
 
@@ -69,13 +68,11 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
         val userEntity = userRepository.save(user.withId().toEntity())
 
-        userEntity.guestBook = GuestBookBuilder.new(
-            GuestBook(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = userEntity.toModel()
-            )
-        ).buildGuestBookEntity()
+        userEntity.guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = userEntity.toModel()
+        ).withId().toEntity()
 
         flush { guestBookRepository.save(userEntity.guestBook ?: fail(message = "User missing guest book")) }
 

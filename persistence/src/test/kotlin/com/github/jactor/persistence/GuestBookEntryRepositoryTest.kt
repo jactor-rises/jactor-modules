@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
@@ -32,26 +34,22 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
         ).withId()
 
         val savedUser = userRepository.save(UserEntity(user))
-        var guestBookData = GuestBookBuilder.new(
-            GuestBook(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
+        val guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = savedUser.toModel()
         )
 
-        savedUser.guestBook = guestBookData.buildGuestBookEntity()
+        savedUser.guestBook = guestBook.withId().toEntity()
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
-        guestBookData = guestBookData.withEntry(
-            GuestBookEntry(
-                guestBook = savedUser.guestBook?.toModel(),
-                creatorName = "Harry",
-                entry = "Draco Dormiens Nunquam Tittilandus"
-            )
-        )
+        val guestBookEntry = initGuestBookEntry(
+            guestBook = savedUser.guestBook?.toModel(),
+            creatorName = "Harry",
+            entry = "Draco Dormiens Nunquam Tittilandus"
+        ).withId().toEntity()
 
-        flush { guestBookEntryRepository.save(guestBookData.buildGuestBookEntryEntity()) }
+        flush { guestBookEntryRepository.save(guestBookEntry) }
 
         val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
@@ -77,25 +75,21 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
         ).withId()
 
         val savedUser = userRepository.save(UserEntity(user))
-        val guestBookData = GuestBookBuilder.new(
-            GuestBook(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
+        val guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = savedUser.toModel()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
+        val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
 
         flush {
             guestBookEntryRepository.save(
-                guestBookData.withEntry(
-                    GuestBookEntry(
-                        guestBook = savedGuestBook.toModel(),
-                        creatorName = "Harry",
-                        entry = "Draco Dormiens Nunquam Tittilandus"
-                    )
-                ).buildGuestBookEntryEntity()
+                initGuestBookEntry(
+                    creatorName = "Harry",
+                    entry = "Draco Dormiens Nunquam Tittilandus",
+                    guestBook = savedGuestBook.toModel(),
+                ).withId().toEntity()
             )
         }
 
@@ -129,23 +123,19 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
         ).withId()
 
         val savedUser = userRepository.save(UserEntity(user))
-        val guestBookData = GuestBookBuilder.new(
-            GuestBook(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
+        val guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = savedUser.toModel()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
+        val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
         guestBookEntryRepository.save(
-            guestBookData.withEntry(
-                GuestBookEntry(
-                    guestBook = savedGuestBook.toModel(),
-                    creatorName = "somone",
-                    entry = "jadda"
-                )
-            ).buildGuestBookEntryEntity()
+            initGuestBookEntry(
+                creatorName = "somone",
+                entry = "jadda",
+                guestBook = savedGuestBook.toModel(),
+            ).withId().toEntity()
         )
 
         val anotherUser = initUser(
@@ -156,27 +146,17 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
         userRepository.save(UserEntity(anotherUser))
 
-        val anotherGuestBookData = GuestBookBuilder.new(
-            guestBook = GuestBook(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
-        )
+        val anotherSavedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
+        val anotherEntry = initGuestBookEntry(
+            guestBook = anotherSavedGuestBook.toModel(),
+            creatorName = "shrek",
+            entry = "far far away"
+        ).withId()
 
-        val anotherSavedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
-        val anotherEntry = anotherGuestBookData.withEntry(
-            guestBookEntry = GuestBookEntry(
-                guestBook = anotherSavedGuestBook.toModel(),
-                creatorName = "shrek",
-                entry = "far far away"
-            )
-        ).buildGuestBookEntryEntity()
-
-        flush { guestBookEntryRepository.save(anotherEntry) }
+        flush { guestBookEntryRepository.save(anotherEntry.toEntity()) }
 
         val lastEntry = guestBookRepository.findAll().toList()
-            .flatMap { it.getEntries() }
+            .flatMap { it.entries }
             .firstOrNull { it.id == anotherEntry.id }
 
 
