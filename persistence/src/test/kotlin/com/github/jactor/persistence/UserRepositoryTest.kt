@@ -2,7 +2,11 @@ package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
@@ -25,23 +29,16 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then read a user entity`() {
-        val addressModel = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "Solo")
-        ).personModel
-
-        val userToPersist = UserBuilder.new(
-            UserModel(
-                person = personModel,
-                emailAddress = "smuggle.fast@tantooine.com",
-                username = "smuggler"
-            )
-        ).build()
+        val person = initPerson(address = address, surname = "Solo").withId()
+        val userToPersist = initUser(
+            person = person,
+            emailAddress = "smuggle.fast@tantooine.com",
+            username = "smuggler"
+        ).withId().toEntity()
 
         flush { userRepository.save(userToPersist) }
 
@@ -57,24 +54,17 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read a user entity`() {
-        val addressModel = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "AA")
-        ).personModel
-
-        val userToPersist = UserBuilder.new(
-            userDto = UserModel(
-                persistentModel = PersistentModel(),
-                person = personModel,
-                emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
-        ).build()
+        val person = initPerson(address = address, surname = "AA").withId()
+        val userToPersist = initUser(
+            persistent = Persistent(),
+            person = person,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        ).withId().toEntity()
 
         flush { userRepository.save(userToPersist) }
 
@@ -99,35 +89,28 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find active users and admins`() {
-        val addressModel = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val spidyPersonModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "Parker")
-        ).personModel
-
-        val superPersonModel = PersonBuilder.new(
-            personModel = PersonModel(address = addressModel, surname = "Kent")
-        ).personModel
-
-        val userEntity = UserBuilder.new(
-            UserModel(PersistentModel(), spidyPersonModel, null, "spiderman")
-        ).build()
+        val spidyPerson = initPerson(address = address, surname = "Parker").withId()
+        val superPerson = initPerson(address = address, surname = "Kent").withId()
+        val userEntity = initUser(
+            persistent = Persistent(),
+            person = spidyPerson,
+            emailAddress = null,
+            username = "spiderman"
+        ).withId().toEntity()
 
         flush {
             userRepository.save(userEntity)
             userRepository.save(
-                UserBuilder.new(
-                    userDto = UserModel(
-                        person = superPersonModel,
-                        emailAddress = null,
-                        username = "superman",
-                        usertype = UserModel.Usertype.INACTIVE
-                    )
-                ).build()
+                initUser(
+                    person = superPerson,
+                    emailAddress = null,
+                    username = "superman",
+                    usertype = User.Usertype.INACTIVE
+                ).withId().toEntity()
             )
         }
 

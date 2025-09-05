@@ -4,7 +4,9 @@ import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -31,14 +33,12 @@ internal class BlogServiceTest {
 
     @Test
     fun `should map blog to dto`() {
-        val blogEntity = BlogBuilder.new(
-            blogModel = BlogModel(
-                created = null,
-                persistentModel = PersistentModel(),
-                title = "full speed ahead",
-                user = null
-            )
-        ).buildBlogEntity()
+        val blogEntity = Blog(
+            created = null,
+            persistent = Persistent(),
+            title = "full speed ahead",
+            user = null
+        ).withId().toEntity()
 
         every { blogRepositoryMockk.findById(uuid) } returns Optional.of(blogEntity)
 
@@ -49,11 +49,12 @@ internal class BlogServiceTest {
 
     @Test
     fun `should map blog entry to dto`() {
-        val blogEntryModel = BlogEntryModel(
-            blog = BlogModel(), creatorName = "me", entry = "too",
-            persistentModel = PersistentModel(),
+        val blogEntry = BlogEntry(
+            blog = initBlog(), creatorName = "me", entry = "too",
+            persistent = Persistent(),
         )
-        val anEntry = BlogBuilder.new().withEntry(blogEntryModel = blogEntryModel).buildBlogEntryEntity()
+
+        val anEntry = blogEntry.withId().toEntity()
 
         every { blogEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
 
@@ -68,7 +69,7 @@ internal class BlogServiceTest {
 
     @Test
     fun `should find blogs for title`() {
-        val blogsToFind = listOf(BlogBuilder.new(blogModel = BlogModel(title = "Star Wars")).buildBlogEntity())
+        val blogsToFind = listOf(initBlog(title = "Star Wars").withId().toEntity())
 
         every { blogRepositoryMockk.findBlogsByTitle("Star Wars") } returns blogsToFind
 
@@ -80,14 +81,12 @@ internal class BlogServiceTest {
     @Test
     fun `should map blog entries to a list of dto`() {
         val blogEntryEntities: List<BlogEntryEntity?> = listOf(
-            BlogBuilder.new().withEntry(
-                blogEntryModel = BlogEntryModel(
-                    blog = BlogModel(),
-                    creatorName = "you",
-                    entry = "too",
-                    persistentModel = PersistentModel(),
-                )
-            ).buildBlogEntryEntity()
+            BlogEntry(
+                blog = initBlog(),
+                creatorName = "you",
+                entry = "too",
+                persistent = Persistent(),
+            ).withId().toEntity()
         )
 
         every { blogEntryRepositoryMockk.findByBlogId(uuid) } returns blogEntryEntities
@@ -104,16 +103,16 @@ internal class BlogServiceTest {
     @Test
     fun `should save BlogDto as BlogEntity`() {
         val blogEntitySlot = slot<BlogEntity>()
-        val blogModel = BlogModel(
+        val blog = Blog(
             created = LocalDate.now(),
             title = "some blog",
-            user = UserModel(username = "itsme")
+            user = initUser(username = "itsme")
         )
 
         every { userServiceMockk.find(username = any()) } returns null
-        every { blogRepositoryMockk.save(capture(blogEntitySlot)) } returns BlogEntity(blogModel)
+        every { blogRepositoryMockk.save(capture(blogEntitySlot)) } returns BlogEntity(blog)
 
-        blogServiceToTest.saveOrUpdate(blogModel = blogModel)
+        blogServiceToTest.saveOrUpdate(blog = blog)
         val blogEntity = blogEntitySlot.captured
 
         assertAll {
@@ -126,21 +125,19 @@ internal class BlogServiceTest {
     @Test
     fun `should save BlogEntryDto as BlogEntryEntity`() {
         val blogEntryEntitySlot = slot<BlogEntryEntity>()
-        val blogEntryModel = BlogEntryModel(
-            blog = BlogModel(
-                persistentModel = PersistentModel(id = UUID.randomUUID()),
-                user = UserModel(username = "itsme"),
+        val blogEntry = BlogEntry(
+            blog = initBlog(
+                persistent = Persistent(id = UUID.randomUUID()),
+                user = initUser(username = "itsme"),
             ),
             creatorName = "me",
             entry = "if i where a rich man..."
         )
 
-
-
         every { userServiceMockk.find(username = any()) } returns null
-        every { blogEntryRepositoryMockk.save(capture(blogEntryEntitySlot)) } returns BlogEntryEntity(blogEntryModel)
+        every { blogEntryRepositoryMockk.save(capture(blogEntryEntitySlot)) } returns BlogEntryEntity(blogEntry)
 
-        blogServiceToTest.saveOrUpdate(blogEntryModel)
+        blogServiceToTest.saveOrUpdate(blogEntry)
         val blogEntryEntity = blogEntryEntitySlot.captured
 
         assertAll {

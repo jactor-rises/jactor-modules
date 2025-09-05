@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
-import org.springframework.core.ParameterizedTypeReference
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.expectBody
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.test.initUserEntity
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.CreateUserCommand
@@ -43,7 +42,7 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should find a user by username`() {
-        every { userRepositoryMockk.findByUsername("me") } returns Optional.of(UserEntity(UserModel()))
+        every { userRepositoryMockk.findByUsername("me") } returns Optional.of(UserEntity(initUser()))
 
         val userDto = webTestClient.get()
             .uri("/user/name/me")
@@ -85,13 +84,13 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should modify existing user`() {
         val uuid = UUID.randomUUID()
-        val userModel = UserModel(persistentModel = PersistentModel(id = uuid))
+        val user = initUser(persistent = Persistent(id = uuid))
 
-        every { userRepositoryMockk.findById(uuid) } returns Optional.of(UserEntity(user = userModel))
+        every { userRepositoryMockk.findById(uuid) } returns Optional.of(UserEntity(user = user))
 
         val userDto = webTestClient.put()
             .uri("/user/update")
-            .bodyValue(userModel.toDto())
+            .bodyValue(user.toDto())
             .exchange()
             .expectStatus().isAccepted
             .expectBody(UserDto::class.java)
@@ -104,8 +103,8 @@ internal class UserControllerTest @Autowired constructor(
     fun `should find all usernames of active users`() {
         val bartDto = UserDto(person = PersonDto(address = AddressDto()), username = "bart", userType = UserType.ACTIVE)
         val lisaDto = UserDto(person = PersonDto(address = AddressDto()), username = "lisa", userType = UserType.ACTIVE)
-        val bart = UserEntity(UserModel(bartDto))
-        val lisa = UserEntity(UserModel(lisaDto))
+        val bart = UserEntity(User(bartDto))
+        val lisa = UserEntity(User(lisaDto))
 
         every { userRepositoryMockk.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE)) } returns listOf(bart, lisa)
 
@@ -123,7 +122,7 @@ internal class UserControllerTest @Autowired constructor(
     fun `should accept if user id is not null`() {
         val uuid = UUID.randomUUID()
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(
-            UserEntity(UserModel(persistentModel = PersistentModel(id = uuid)))
+            UserEntity(initUser(persistent = Persistent(id = uuid)))
         )
 
         webTestClient.put()

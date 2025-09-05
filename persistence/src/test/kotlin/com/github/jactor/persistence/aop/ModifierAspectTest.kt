@@ -5,32 +5,32 @@ import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import com.github.jactor.persistence.AddressBuilder
-import com.github.jactor.persistence.AddressModel
-import com.github.jactor.persistence.BlogBuilder
-import com.github.jactor.persistence.BlogEntryModel
-import com.github.jactor.persistence.BlogModel
-import com.github.jactor.persistence.common.PersistentModel
-import com.github.jactor.persistence.GuestBookBuilder
-import com.github.jactor.persistence.GuestBookEntryModel
-import com.github.jactor.persistence.GuestBookModel
-import com.github.jactor.persistence.PersonBuilder
-import com.github.jactor.persistence.PersonModel
-import com.github.jactor.persistence.UserBuilder
-import com.github.jactor.persistence.UserModel
+import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogEntry
+import com.github.jactor.persistence.Person
+import com.github.jactor.persistence.User
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initBlogEntry
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
+import com.github.jactor.shared.test.isNotOlderThan
+import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isStrictlyBetween
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 
 @ExtendWith(MockKExtension::class)
 internal class ModifierAspectTest {
-
     private val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
     private val modifierAspect = ModifierAspect()
-    private val persistentModel = PersistentModel(
+    private val persistent = Persistent(
         createdBy = "na",
         id = null,
         modifiedBy = "na",
@@ -43,144 +43,123 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on address when used`() {
-        val addressWithoutId = AddressBuilder.unchanged(
-            addressModel = AddressModel(persistentModel, AddressModel())
-        ).build()
-
-        val address = AddressBuilder.new(addressModel = AddressModel(persistentModel, AddressModel()))
-            .build()
+        val addressWithoutId = Address(persistent, initAddress()).toEntityWithId()
+        val address = Address(persistent, initAddress()).toEntityWithId()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(address.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(addressWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertThat(address.timeOfModification).isNotOlderThan(seconds = 1)
     }
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = BlogBuilder.unchanged(BlogModel(persistentModel, BlogModel())).buildBlogEntity()
-        val blog = BlogBuilder.new(BlogModel(persistentModel, BlogModel())).buildBlogEntity()
+        val blogWithouId = Blog(persistent, initBlog()).toEntity()
+        val blog = Blog(persistent, initBlog()).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(blog.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(blog.timeOfModification).isNotOlderThan(seconds = 1)
         assertThat(blogWithouId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 
     @Test
     fun `should modify timestamp on blogEntry when used`() {
-        val blogEntryWithoutId = BlogBuilder.new().withUnchangedEntry(
-            blogEntryModel = BlogEntryModel(
-                persistentModel = persistentModel,
-                blog = BlogModel(
-                    persistentModel = PersistentModel(id = UUID.randomUUID()),
-                    blog = BlogModel(persistentModel = PersistentModel(id = UUID.randomUUID())),
-                ),
-                creatorName = "me",
-                entry = "some shit"
-            )
-        ).buildBlogEntryEntity()
+        val blogEntryWithoutId = BlogEntry(
+            persistent = persistent,
+            blog = Blog(
+                persistent = Persistent(id = UUID.randomUUID()),
+                blog = initBlog(persistent = Persistent(id = UUID.randomUUID())),
+            ),
+            creatorName = "me",
+            entry = "some shit"
+        ).toEntity()
 
-        val blogEntry = BlogBuilder.new().withEntry(
-            BlogEntryModel(persistentModel, BlogEntryModel(creatorName = "me", entry = "some shit"))
-        ).buildBlogEntryEntity()
+        val blogEntry = BlogEntry(
+            persistent, initBlogEntry(
+                creatorName = "me",
+                entry = "some shit",
+                blog = initBlog(persistent = Persistent(id = UUID.randomUUID())),
+            )
+        ).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(blogEntry, blogEntryWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(blogEntry.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(blogEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertAll {
+            assertThat(blogEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
+            assertThat(blogEntryWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test
     fun `should modify timestamp on guestBook when used`() {
-        val guestBookWithoutId = GuestBookBuilder.unchanged(
-            guestBookModel = GuestBookModel(persistentModel, GuestBookModel())
-        ).buildGuestBookEntity()
-
-        val guestBook = GuestBookBuilder.new(guestBookModel = GuestBookModel(persistentModel, GuestBookModel()))
-            .buildGuestBookEntity()
+        val guestBookWithoutId = initGuestBook(persistent = persistent).toEntity()
+        val guestBook = initGuestBook(persistent = persistent).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBook, guestBookWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(guestBook.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(guestBookWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertAll {
+            assertThat(guestBook.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
+            assertThat(guestBookWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test
     fun `should modify timestamp on guestBookEntry when used`() {
-        val guestBookEntryWithoutId = GuestBookBuilder.new().withEntryContainingPersistentId(
-            guestBookEntryModel = GuestBookEntryModel(
-                persistentModel, GuestBookEntryModel(creatorName = "me", entry = "hi there")
-            )
-        ).buildGuestBookEntryEntity()
+        val guestBookEntryWithoutId = initGuestBookEntry(
+            creatorName = "me",
+            entry = "hi there",
+            persistent = persistent,
+        ).toEntity()
 
-        val guestBookEntry = GuestBookBuilder.new().withEntry(
-            guestBookEntryModel = GuestBookEntryModel(
-                persistentModel, GuestBookEntryModel(creatorName = "me", entry = "hi there")
-            )
-        ).buildGuestBookEntryEntity()
+        val guestBookEntry = initGuestBookEntry(
+            creatorName = "me",
+            entry = "hi there",
+            persistent = persistent,
+        ).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(guestBookEntry.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(guestBookEntryWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertAll {
+            assertThat(guestBookEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
+            assertThat(guestBookEntryWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test
     fun `should modify timestamp on person when used`() {
-        val person = PersonBuilder.new(PersonModel(persistentModel, PersonModel())).build()
-        val personWithoutId = PersonBuilder.unchanged(PersonModel(persistentModel, PersonModel()))
-            .build()
+        val person = Person(persistent, initPerson(id = UUID.randomUUID())).toEntityWithId()
+        val personWithoutId = Person(persistent, initPerson()).toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(person, personWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(person.timeOfModification).isStrictlyBetween(
-            LocalDateTime.now().minusSeconds(1),
-            LocalDateTime.now()
-        )
-
-        assertThat(personWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        assertAll {
+            assertThat(person.timeOfModification, "person with id").isNotOlderThan(seconds = 1)
+            assertThat(personWithoutId.timeOfModification, "person without id").isEqualTo(oneMinuteAgo)
+        }
     }
 
     @Test
     fun `should modify timestamp on user when used`() {
-        val user = UserBuilder.new(UserModel(persistentModel, UserModel())).build()
-        val userWithoutId = UserBuilder.unchanged(UserModel(persistentModel, UserModel()))
-            .build()
+        val user = User(persistent, user = initUser()).withId().toEntity()
+        val userWithoutId = User(persistent, user = initUser()).toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(user, userWithoutId)
 
         modifierAspect.modifyPersistentEntity(joinPointMock)
 
-        assertThat(user.timeOfModification).isStrictlyBetween(LocalDateTime.now().minusSeconds(1), LocalDateTime.now())
+        assertThat(user.timeOfModification).isNotOlderThan(seconds = 1)
         assertThat(userWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
     }
 }

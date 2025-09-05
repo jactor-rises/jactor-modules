@@ -3,7 +3,10 @@ package com.github.jactor.persistence
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
@@ -28,21 +31,17 @@ internal class PersonRepositoryTest @Autowired constructor(
     @Test
     fun `should save then read a person entity`() {
         val allreadyPresentPeople = personRepository.findAll().count()
-        val address = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
+        ).withId()
 
-        val personToPersist = PersonBuilder.new(
-            personModel = PersonModel(
-                address = address,
-                locale = "no_NO",
-                firstName = "Born",
-                surname = "Sometime",
-                description = "Me, myself, and I"
-            )
-        ).build()
+        val personToPersist = initPerson(
+            address = address,
+            firstName = "Born",
+            description = "Me, myself, and I",
+            locale = "no_NO",
+            surname = "Sometime",
+        ).toEntityWithId()
 
         flush { personRepository.save(personToPersist) }
 
@@ -60,21 +59,17 @@ internal class PersonRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then update and read a person entity`() {
-        val addressModel = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personToPersist = PersonBuilder.new(
-            PersonModel(
-                address = addressModel,
-                locale = "no_NO",
-                firstName = "B",
-                surname = "Mine",
-                description = "Just me..."
-            )
-        ).build()
+        val personToPersist = initPerson(
+            address = address,
+            firstName = "B",
+            description = "Just me...",
+            locale = "no_NO",
+            surname = "Mine",
+        ).toEntityWithId()
 
         flush { personRepository.save(personToPersist) }
 
@@ -102,26 +97,26 @@ internal class PersonRepositoryTest @Autowired constructor(
     @Test
     fun `should be able to relate a user`() {
         val alreadyPresentPeople = personRepository.findAll().count()
-        val addressModel = AddressModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()),
+        val address = initAddress(
+            persistent = Persistent(id = UUID.randomUUID()),
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
         )
 
-        val personModel = PersonModel(
-            persistentModel = PersistentModel(id = UUID.randomUUID()), address = addressModel, surname = "Adder"
+        val person = initPerson(
+            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
         )
 
-        val userModel = UserModel(
-            PersistentModel(id = UUID.randomUUID()),
-            personModel,
+        val user = User(
+            Persistent(id = UUID.randomUUID()),
+            person,
             emailAddress = "public@services.com",
             username = "black"
         )
 
-        val userEntity = UserBuilder.new(userDto = userModel).build()
+        val userEntity = user.toEntity()
         val personToPersist = userEntity.fetchPerson()
 
-        flush { personRepository.save<PersonEntity>(personToPersist) }
+        flush { personRepository.save(personToPersist) }
 
         assertThat(personRepository.findAll().toList()).hasSize(alreadyPresentPeople + 1)
         val personEntity = personRepository.findBySurname("Adder").iterator().next()

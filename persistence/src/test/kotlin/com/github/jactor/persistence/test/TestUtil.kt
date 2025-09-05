@@ -1,20 +1,91 @@
 package com.github.jactor.persistence.test
 
+import java.time.LocalDate
 import java.util.UUID
 import com.github.jactor.persistence.AddressEntity
-import com.github.jactor.persistence.AddressModel
+import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogEntry
+import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookEntity
+import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.GuestBookEntryEntity
 import com.github.jactor.persistence.PersonEntity
-import com.github.jactor.persistence.PersonModel
+import com.github.jactor.persistence.Person
+import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserEntity
-import com.github.jactor.persistence.UserModel
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
 
 fun timestamped(username: String): String {
     return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
 }
+
+fun initAddress(
+    persistent: Persistent = Persistent(),
+    addressLine1: String? = null,
+    addressLine2: String? = null,
+    addressLine3: String? = null,
+    city: String? = null,
+    country: String? = null,
+    zipCode: String? = null,
+) = Address(
+    persistent = persistent,
+    addressLine1 = addressLine1,
+    addressLine2 = addressLine2,
+    addressLine3 = addressLine3,
+    city = city,
+    country = country,
+    zipCode = zipCode
+)
+
+fun initBlog(
+    created: LocalDate? = null,
+    persistent: Persistent = Persistent(),
+    title: String? = null,
+    user: User? = null,
+) = Blog(
+    created = created,
+    persistent = persistent,
+    title = title,
+    user = user,
+)
+
+fun initBlogEntry(
+    blog: Blog? = null,
+    creatorName: String? = null,
+    entry: String? = null,
+    persistent: Persistent = Persistent(),
+) = BlogEntry(
+    blog = blog,
+    persistent = persistent,
+    creatorName = creatorName,
+    entry = entry,
+)
+
+fun initGuestBook(
+    entries: Set<GuestBookEntry> = emptySet(),
+    persistent: Persistent = Persistent(),
+    title: String? = null,
+    user: User? = null,
+) = GuestBook(
+    entries = entries,
+    persistent = persistent,
+    title = title,
+    user = user,
+)
+
+fun initGuestBookEntry(
+    creatorName: String? = null,
+    entry: String? = null,
+    guestBook: GuestBook? = null,
+    persistent: Persistent = Persistent(),
+) = GuestBookEntry(
+    creatorName = creatorName,
+    entry = entry,
+    guestBook = guestBook,
+    persistent = persistent,
+)
 
 fun initUserEntity(
     id: UUID? = UUID.randomUUID(),
@@ -53,30 +124,31 @@ fun initAddressEntity(id: UUID? = UUID.randomUUID()) = AddressEntity().apply {
     this.persistentDataEmbeddable = PersistentDataEmbeddable()
 }
 
-fun initPersonModel(
-    address: AddressModel? = null,
-    firstName: String? = null,
+fun initPerson(
+    id: UUID? = null,
+    persistent: Persistent = Persistent(),
+    address: Address? = null,
     description: String? = null,
+    firstName: String? = null,
     locale: String? = null,
-    persistentModel: PersistentModel = PersistentModel(),
     surname: String = "Doe",
-) = PersonModel(
+) = Person(
+    persistent = id?.let { persistent.copy(id = id) } ?: persistent,
     address = address,
     firstName = firstName,
     description = description,
-    persistentModel = persistentModel,
     locale = locale,
     surname = surname,
 )
 
-fun initUserModel(
-    persistentModel: PersistentModel = PersistentModel(),
+fun initUser(
+    persistent: Persistent = Persistent(),
     emailAddress: String? = null,
-    person: PersonModel? = null,
+    person: Person? = null,
     username: String? = null,
-    usertype: UserModel.Usertype = UserModel.Usertype.ACTIVE,
-) = UserModel(
-    persistentModel = persistentModel,
+    usertype: User.Usertype = User.Usertype.ACTIVE,
+) = User(
+    persistent = persistent,
     person = person,
     emailAddress = emailAddress,
     username = username,

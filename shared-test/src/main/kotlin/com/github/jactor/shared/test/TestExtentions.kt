@@ -1,11 +1,13 @@
 package com.github.jactor.shared.test
 
+import java.time.LocalDateTime
 import assertk.Assert
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
+import assertk.assertions.isStrictlyBetween
 import assertk.assertions.support.expected
 import assertk.assertions.support.show
 
@@ -21,6 +23,10 @@ fun <T: Collection<String>> Assert<T>.containsSubstring(expected: String) = give
 
     expected("to contain substring:${show(expected)}, but list was:${show(strings)}")
 }
+
+fun Assert<LocalDateTime>.isNotOlderThan(seconds: Long) = isStrictlyBetween(
+    LocalDateTime.now().minusSeconds(seconds), LocalDateTime.now()
+)
 
 infix fun <T : Collection<*>> Assert<T?>.sized(size: Int): Unit = this.isNotNull().hasSize(size = size)
 infix fun <T> T?.named(name: String): Assert<T?> = assertThat(actual = this, name = name)

@@ -2,6 +2,12 @@ package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -16,44 +22,34 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then read guest book entry entity`() {
-        val addressDto = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personDto = PersonBuilder.new(personModel = PersonModel(address = addressDto, surname = "AA"))
-            .personModel
+        val person = initPerson(address = address, surname = "AA").withId()
+        val user = initUser(
+            person = person,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        ).withId()
 
-        val userDto = UserBuilder.new(
-            userDto = UserModel(
-                person = personDto,
-                emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
-        ).userDto
-
-        val savedUser = userRepository.save(UserEntity(userDto))
-        var guestBookData = GuestBookBuilder.new(
-            GuestBookModel(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
+        val savedUser = userRepository.save(UserEntity(user))
+        val guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = savedUser.toModel()
         )
 
-        savedUser.setGuestBook(guestBookData.buildGuestBookEntity())
+        savedUser.guestBook = guestBook.withId().toEntity()
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
-        guestBookData = guestBookData.withEntry(
-            GuestBookEntryModel(
-                guestBook = savedUser.guestBook?.toModel(),
-                creatorName = "Harry",
-                entry = "Draco Dormiens Nunquam Tittilandus"
-            )
-        )
+        val guestBookEntry = initGuestBookEntry(
+            guestBook = savedUser.guestBook?.toModel(),
+            creatorName = "Harry",
+            entry = "Draco Dormiens Nunquam Tittilandus"
+        ).withId().toEntity()
 
-        flush { guestBookEntryRepository.save(guestBookData.buildGuestBookEntryEntity()) }
+        flush { guestBookEntryRepository.save(guestBookEntry) }
 
         val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
@@ -67,43 +63,33 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then modify and read guest book entry entity`() {
-        val addressDto = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personDto = PersonBuilder.new(personModel = PersonModel(address = addressDto, surname = "AA"))
-            .personModel
+        val person = initPerson(address = address, surname = "AA").withId()
+        val user = initUser(
+            person = person,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        ).withId()
 
-        val userDto = UserBuilder.new(
-            userDto = UserModel(
-                person = personDto,
-                emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
-        ).userDto
-
-        val savedUser = userRepository.save(UserEntity(userDto))
-        val guestBookData = GuestBookBuilder.new(
-            GuestBookModel(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
+        val savedUser = userRepository.save(UserEntity(user))
+        val guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = savedUser.toModel()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
+        val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
 
         flush {
             guestBookEntryRepository.save(
-                guestBookData.withEntry(
-                    GuestBookEntryModel(
-                        guestBook = savedGuestBook.toModel(),
-                        creatorName = "Harry",
-                        entry = "Draco Dormiens Nunquam Tittilandus"
-                    )
-                ).buildGuestBookEntryEntity()
+                initGuestBookEntry(
+                    creatorName = "Harry",
+                    entry = "Draco Dormiens Nunquam Tittilandus",
+                    guestBook = savedGuestBook.toModel(),
+                ).withId().toEntity()
             )
         }
 
@@ -125,74 +111,52 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write two entries to two different guest books and then find one entry`() {
-        val addressDto = AddressBuilder.new(
-            addressModel = AddressModel(
-                zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-            )
-        ).addressModel
+        val address = initAddress(
+            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        ).withId()
 
-        val personDto = PersonBuilder.new(personModel = PersonModel(address = addressDto, surname = "AA"))
-            .personModel
+        val person = initPerson(address = address, surname = "AA").withId()
+        val user = initUser(
+            person = person,
+            emailAddress = "casuel@tantooine.com",
+            username = "causual"
+        ).withId()
 
-        val userDto = UserBuilder.new(
-            userDto = UserModel(
-                person = personDto,
-                emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
-        ).userDto
-
-        val savedUser = userRepository.save(UserEntity(userDto))
-        val guestBookData = GuestBookBuilder.new(
-            GuestBookModel(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
+        val savedUser = userRepository.save(UserEntity(user))
+        val guestBook = initGuestBook(
+            entries = emptySet(),
+            title = "home sweet home",
+            user = savedUser.toModel()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
+        val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
         guestBookEntryRepository.save(
-            guestBookData.withEntry(
-                GuestBookEntryModel(
-                    guestBook = savedGuestBook.toModel(),
-                    creatorName = "somone",
-                    entry = "jadda"
-                )
-            ).buildGuestBookEntryEntity()
+            initGuestBookEntry(
+                creatorName = "somone",
+                entry = "jadda",
+                guestBook = savedGuestBook.toModel(),
+            ).withId().toEntity()
         )
 
-        val anotherUserDto = UserBuilder.new(
-            userDto = UserModel(
-                person = personDto,
-                emailAddress = "hidden@tantooine.com",
-                username = "hidden"
-            )
-        ).userDto
+        val anotherUser = initUser(
+            person = person,
+            emailAddress = "hidden@tantooine.com",
+            username = "hidden"
+        ).withId()
 
-        userRepository.save(UserEntity(anotherUserDto))
+        userRepository.save(UserEntity(anotherUser))
 
-        val anotherGuestBookData = GuestBookBuilder.new(
-            guestBookModel = GuestBookModel(
-                entries = emptySet(),
-                title = "home sweet home",
-                user = savedUser.toModel()
-            )
-        )
+        val anotherSavedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
+        val anotherEntry = initGuestBookEntry(
+            guestBook = anotherSavedGuestBook.toModel(),
+            creatorName = "shrek",
+            entry = "far far away"
+        ).withId()
 
-        val anotherSavedGuestBook = guestBookRepository.save(guestBookData.buildGuestBookEntity())
-        val anotherEntry = anotherGuestBookData.withEntry(
-            guestBookEntryModel = GuestBookEntryModel(
-                guestBook = anotherSavedGuestBook.toModel(),
-                creatorName = "shrek",
-                entry = "far far away"
-            )
-        ).buildGuestBookEntryEntity()
-
-        flush { guestBookEntryRepository.save(anotherEntry) }
+        flush { guestBookEntryRepository.save(anotherEntry.toEntity()) }
 
         val lastEntry = guestBookRepository.findAll().toList()
-            .flatMap { it.getEntries() }
+            .flatMap { it.entries }
             .firstOrNull { it.id == anotherEntry.id }
 
 

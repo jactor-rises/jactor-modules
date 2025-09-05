@@ -18,9 +18,9 @@ internal class JsonMappingTest {
     private val objectMapper = JactorPersistenceConfig().objectMapper()
 
     @Test
-    fun `skal mappe json fra UserDto fra UserModel skapt av UserEntity`() {
-        val userModel = initUserEntity(person = initPersonEntity(address = initAddressEntity())).toModel()
-        val json: String = objectMapper.writeValueAsString(userModel.toDto())
+    fun `skal mappe json fra UserDto fra User skapt av UserEntity`() {
+        val user = initUserEntity(person = initPersonEntity(address = initAddressEntity())).toModel()
+        val json: String = objectMapper.writeValueAsString(user.toDto())
 
         assertThat(json).contains(""""person":{""", """"address":{""")
     }

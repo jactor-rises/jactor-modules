@@ -18,11 +18,11 @@ class PersistentDataEmbeddable {
         timeOfModification = LocalDateTime.now()
     }
 
-    internal constructor(persistentModel: PersistentModel) {
-        createdBy = persistentModel.createdBy
-        timeOfCreation = persistentModel.timeOfCreation
-        modifiedBy = persistentModel.modifiedBy
-        timeOfModification = persistentModel.timeOfModification
+    internal constructor(persistent: Persistent) {
+        createdBy = persistent.createdBy
+        timeOfCreation = persistent.timeOfCreation
+        modifiedBy = persistent.modifiedBy
+        timeOfModification = persistent.timeOfModification
     }
 
     fun modifiedBy(modifier: String) {
@@ -30,8 +30,8 @@ class PersistentDataEmbeddable {
         timeOfModification = LocalDateTime.now()
     }
 
-    fun toModel(id: UUID?): PersistentModel {
-        return PersistentModel(
+    fun toModel(id: UUID?): Persistent {
+        return Persistent(
             createdBy = createdBy,
             id = id,
             modifiedBy = modifiedBy,

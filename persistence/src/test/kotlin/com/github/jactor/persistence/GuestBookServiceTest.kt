@@ -3,7 +3,10 @@ package com.github.jactor.persistence
 import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.common.PersistentModel
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initGuestBookEntry
+import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -27,9 +30,7 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should map guest book to a dto`() {
-        val guestBookEntity = GuestBookBuilder.new(
-            guestBookModel = GuestBookModel(PersistentModel(), HashSet(), "@home", null)
-        ).buildGuestBookEntity()
+        val guestBookEntity = initGuestBook(title = "@home").withId().toEntity()
 
         every { guestBookRepositoryMockk.findById(uuid) } returns Optional.of(guestBookEntity)
 
@@ -40,14 +41,12 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should map guest book entry to a dto`() {
-        val anEntry = GuestBookBuilder.new().withEntry(
-            guestBookEntryModel = GuestBookEntryModel(
-                guestBook = GuestBookModel(),
-                creatorName = "me",
-                entry = "too",
-                persistentModel = PersistentModel(),
-            )
-        ).buildGuestBookEntryEntity()
+        val anEntry = initGuestBookEntry(
+            guestBook = initGuestBook(),
+            creatorName = "me",
+            entry = "too",
+            persistent = Persistent(),
+        ).withId().toEntity()
 
         every { guestBookEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
 
@@ -65,26 +64,26 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should save GuestBookDto as GuestBookEntity`() {
-        val guestBookEntryModel = GuestBookEntryModel(
+        val guestBookEntry = initGuestBookEntry(
             creatorName = "me",
             entry = "all about this",
-            guestBook = GuestBookModel()
+            guestBook = initGuestBook()
         )
 
         val guestBookEntitySlot = slot<GuestBookEntity>()
-        val guestBookModel = GuestBookModel(
-            entries = setOf(guestBookEntryModel),
+        val guestBook = initGuestBook(
+            entries = setOf(guestBookEntry),
             title = "home sweet home",
-            user = UserModel()
+            user = initUser()
         )
 
-        every { guestBookRepositoryMockk.save(capture(guestBookEntitySlot)) } returns GuestBookEntity(guestBookModel)
+        every { guestBookRepositoryMockk.save(capture(guestBookEntitySlot)) } returns GuestBookEntity(guestBook)
 
-        guestBookServiceToTest.saveOrUpdate(guestBookModel)
+        guestBookServiceToTest.saveOrUpdate(guestBook)
         val guestBookEntity = guestBookEntitySlot.captured
 
         assertAll {
-            assertThat(guestBookEntity.getEntries()).hasSize(1)
+            assertThat(guestBookEntity.entries).hasSize(1)
             assertThat(guestBookEntity.title).isEqualTo("home sweet home")
             assertThat(guestBookEntity.user).isNotNull()
         }
@@ -93,17 +92,17 @@ internal class GuestBookServiceTest {
     @Test
     fun `should save GuestBookEntryDto as GuestBookEntryEntity`() {
         val guestBookEntryEntitySlot = slot<GuestBookEntryEntity>()
-        val guestBookEntryModel = GuestBookEntryModel(
-            guestBook = GuestBookModel(),
+        val guestBookEntry = initGuestBookEntry(
+            guestBook = initGuestBook(),
             creatorName = "me",
             entry = "if i where a rich man..."
         )
 
         every { guestBookEntryRepositoryMockk.save(capture(guestBookEntryEntitySlot)) } returns GuestBookEntryEntity(
-            guestBookEntryModel
+            guestBookEntry
         )
 
-        guestBookServiceToTest.saveOrUpdate(guestBookEntryModel)
+        guestBookServiceToTest.saveOrUpdate(guestBookEntry)
         val guestBookEntryEntity = guestBookEntryEntitySlot.captured
 
         assertAll {
