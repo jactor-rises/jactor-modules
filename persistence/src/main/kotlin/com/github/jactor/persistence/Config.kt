@@ -11,6 +11,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.slf4j.MDCContext
+import kotlinx.coroutines.withContext
+
+object Config {
+    internal suspend fun <T> ioContext(function: suspend CoroutineScope.() -> T): T = withContext(
+        Dispatchers.IO + MDCContext(),
+    ) { function() }
+}
+
 
 @Configuration
 @OpenAPIDefinition(info = Info(title = "jactor-persistence", version = "v1"))

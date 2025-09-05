@@ -20,8 +20,8 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
-import io.mockk.every
-import io.mockk.verify
+import io.mockk.coEvery
+import io.mockk.coVerify
 
 @WebFluxTest(BlogController::class)
 internal class BlogControllerTest @Autowired constructor(
@@ -31,7 +31,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should find a blog`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMockk.find(it) } returns initBlog()
+            coEvery { blogServiceMockk.find(it) } returns initBlog()
         }
 
         val blogResponse = webTestClient
@@ -48,7 +48,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should not find a blog`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMockk.find(id = it) } returns null
+            coEvery { blogServiceMockk.find(id = it) } returns null
         }
 
         val blogResponse = webTestClient
@@ -65,7 +65,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should find a blog entry`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMockk.findEntryBy(it) } returns initBlogEntry()
+            coEvery { blogServiceMockk.findEntryBy(it) } returns initBlogEntry()
         }
 
         val blogEntryDto = webTestClient
@@ -76,13 +76,13 @@ internal class BlogControllerTest @Autowired constructor(
             .expectBody(BlogEntryDto::class.java)
             .returnResult().responseBody
 
-            assertThat(blogEntryDto).isNotNull()
+        assertThat(blogEntryDto).isNotNull()
     }
 
     @Test
     fun `should not find a blog entry`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMockk.findEntryBy(it) } returns null
+            coEvery { blogServiceMockk.findEntryBy(it) } returns null
         }
 
         val result = webTestClient
@@ -98,7 +98,7 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should not find blogs by title`() {
-        every { blogServiceMockk.findBlogsBy(title = "Anything") } returns emptyList()
+        coEvery { blogServiceMockk.findBlogsBy(title = "Anything") } returns emptyList()
 
         val blogs = webTestClient
             .get()
@@ -113,7 +113,7 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should find blogs by title`() {
-        every { blogServiceMockk.findBlogsBy("Anything") } returns listOf(initBlog())
+        coEvery { blogServiceMockk.findBlogsBy("Anything") } returns listOf(initBlog())
 
         val blogs = webTestClient
             .get()
@@ -129,7 +129,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should not find blog entries by blog id`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMockk.findEntriesForBlog(blogId = it) } returns emptyList()
+            coEvery { blogServiceMockk.findEntriesForBlog(blogId = it) } returns emptyList()
         }
 
         val blogEntries = webTestClient
@@ -146,7 +146,7 @@ internal class BlogControllerTest @Autowired constructor(
     @Test
     fun `should find blog entries by blog id`() {
         val uuid = UUID.randomUUID().also {
-            every { blogServiceMockk.findEntriesForBlog(it) } returns listOf(initBlogEntry())
+            coEvery { blogServiceMockk.findEntriesForBlog(it) } returns listOf(initBlogEntry())
         }
 
         val blogEntries = webTestClient
@@ -166,7 +166,7 @@ internal class BlogControllerTest @Autowired constructor(
             persistent = Persistent(id = UUID.randomUUID())
         )
 
-        every { blogServiceMockk.saveOrUpdate(blog) } returns blog
+        coEvery { blogServiceMockk.saveOrUpdate(blog) } returns blog
 
         val blogDto = webTestClient
             .put()
@@ -179,7 +179,7 @@ internal class BlogControllerTest @Autowired constructor(
 
         assertThat(blogDto).isNotNull()
 
-        verify { blogServiceMockk.saveOrUpdate(blog) }
+        coVerify { blogServiceMockk.saveOrUpdate(blog) }
     }
 
     @Test
@@ -190,7 +190,7 @@ internal class BlogControllerTest @Autowired constructor(
             )
         )
 
-        every { blogServiceMockk.saveOrUpdate(blog = any()) } returns createdBlog
+        coEvery { blogServiceMockk.saveOrUpdate(blog = any()) } returns createdBlog
 
         val blog = webTestClient
             .post()
@@ -205,7 +205,7 @@ internal class BlogControllerTest @Autowired constructor(
             assertThat(it.persistentDto.id).isEqualTo(createdBlog.id)
         }
 
-        verify { blogServiceMockk.saveOrUpdate(blog = any()) }
+        coVerify { blogServiceMockk.saveOrUpdate(blog = any()) }
     }
 
     @Test
@@ -214,7 +214,7 @@ internal class BlogControllerTest @Autowired constructor(
             persistent = Persistent(id = UUID.randomUUID())
         )
 
-        every { blogServiceMockk.saveOrUpdate(blogEntry = blogEntry) } returns blogEntry
+        coEvery { blogServiceMockk.saveOrUpdate(blogEntry = blogEntry) } returns blogEntry
 
         val blogEntryDto = webTestClient
             .put()
@@ -227,7 +227,7 @@ internal class BlogControllerTest @Autowired constructor(
 
         assertThat(blogEntryDto).isNotNull()
 
-        verify { blogServiceMockk.saveOrUpdate(blogEntry = blogEntry) }
+        coVerify { blogServiceMockk.saveOrUpdate(blogEntry = blogEntry) }
     }
 
     @Test
@@ -243,7 +243,7 @@ internal class BlogControllerTest @Autowired constructor(
             blog = initBlog(persistent = Persistent(id = UUID.randomUUID()))
         )
 
-        every { blogServiceMockk.saveOrUpdate(blogEntry = any()) } returns blogEntryCreated
+        coEvery { blogServiceMockk.saveOrUpdate(blogEntry = any()) } returns blogEntryCreated
 
         val blogEntry = webTestClient
             .post()
@@ -256,6 +256,6 @@ internal class BlogControllerTest @Autowired constructor(
 
         assertThat(blogEntry?.entry).isEqualTo(blogEntryDto.entry)
 
-        verify { blogServiceMockk.saveOrUpdate(blogEntry = any()) }
+        coVerify { blogServiceMockk.saveOrUpdate(blogEntry = any()) }
     }
 }

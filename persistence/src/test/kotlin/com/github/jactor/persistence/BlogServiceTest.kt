@@ -16,6 +16,7 @@ import assertk.assertions.isNull
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.test.runTest
 
 internal class BlogServiceTest {
 
@@ -32,7 +33,7 @@ internal class BlogServiceTest {
     private val uuid: UUID = UUID.randomUUID()
 
     @Test
-    fun `should map blog to dto`() {
+    fun `should map blog to dto`() = runTest {
         val blogEntity = Blog(
             created = null,
             persistent = Persistent(),
@@ -48,7 +49,7 @@ internal class BlogServiceTest {
     }
 
     @Test
-    fun `should map blog entry to dto`() {
+    fun `should map blog entry to dto`() = runTest {
         val blogEntry = BlogEntry(
             blog = initBlog(), creatorName = "me", entry = "too",
             persistent = Persistent(),
@@ -68,7 +69,7 @@ internal class BlogServiceTest {
     }
 
     @Test
-    fun `should find blogs for title`() {
+    fun `should find blogs for title`() = runTest {
         val blogsToFind = listOf(initBlog(title = "Star Wars").withId().toEntity())
 
         every { blogRepositoryMockk.findBlogsByTitle("Star Wars") } returns blogsToFind
@@ -79,7 +80,7 @@ internal class BlogServiceTest {
     }
 
     @Test
-    fun `should map blog entries to a list of dto`() {
+    fun `should map blog entries to a list of dto`() = runTest {
         val blogEntryEntities: List<BlogEntryEntity?> = listOf(
             BlogEntry(
                 blog = initBlog(),
@@ -101,7 +102,7 @@ internal class BlogServiceTest {
     }
 
     @Test
-    fun `should save BlogDto as BlogEntity`() {
+    fun `should save BlogDto as BlogEntity`() = runTest {
         val blogEntitySlot = slot<BlogEntity>()
         val blog = Blog(
             created = LocalDate.now(),
@@ -123,7 +124,7 @@ internal class BlogServiceTest {
     }
 
     @Test
-    fun `should save BlogEntryDto as BlogEntryEntity`() {
+    fun `should save BlogEntryDto as BlogEntryEntity`() = runTest {
         val blogEntryEntitySlot = slot<BlogEntryEntity>()
         val blogEntry = BlogEntry(
             blog = initBlog(

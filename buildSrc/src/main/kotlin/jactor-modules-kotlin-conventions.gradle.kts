@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val assertkVersion: String by project
 val cucumberVersion: String by project
+val coroutinesVersion: String by project
 val junitPlatformVersion: String by project
 val kotlinLoggingVersion: String by project
 val mockkVersion: String by project
@@ -20,9 +21,15 @@ repositories {
 }
 
 dependencies {
+    // kotlin coroutines bom
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:$coroutinesVersion"))
+
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j")
 
     // springdoc-openapi (swagger)
     implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")
@@ -37,6 +44,8 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
     testImplementation("org.junit.platform:junit-platform-suite:$junitPlatformVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude(group = "org.assertj")
