@@ -18,6 +18,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.slot
+import kotlinx.coroutines.test.runTest
 
 internal class UserServiceTest @Autowired constructor(
     private val userServiceToTest: UserService,
@@ -25,7 +26,7 @@ internal class UserServiceTest @Autowired constructor(
     @MockkBean private val userRepositoryMockk: UserRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
     @Test
-    fun `should map a user entity to a dto`() {
+    fun `should map a user entity to a dto`() = runTest {
         val addressDto = initAddress()
         val personDto = initPerson(address = addressDto)
 
@@ -47,7 +48,7 @@ internal class UserServiceTest @Autowired constructor(
     }
 
     @Test
-    fun `should also map a user entity to a dto when finding by id`() {
+    fun `should also map a user entity to a dto when finding by id`() = runTest {
         val uuid = UUID.randomUUID()
         val addressDto = initAddress()
         val personDto = initPerson(address = addressDto)
@@ -70,7 +71,7 @@ internal class UserServiceTest @Autowired constructor(
     }
 
     @Test
-    fun `should update a UserDto with an UserEntity`() {
+    fun `should update a UserDto with an UserEntity`() = runTest {
         val uuid = UUID.randomUUID()
         val user = initUser(persistent = Persistent(id = uuid), username = "marley")
         val persistent = Persistent(
@@ -90,7 +91,7 @@ internal class UserServiceTest @Autowired constructor(
     }
 
     @Test
-    fun `should create and save person for the user`() {
+    fun `should create and save person for the user`() = runTest {
         val createUserCommand = CreateUserCommand(username = "jactor", surname = "Jacobsen")
         val user = initUser()
         val userEntity = UserEntity(user)

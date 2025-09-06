@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 import java.util.Objects
 import java.util.Optional
 import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import org.springframework.data.repository.CrudRepository
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import com.github.jactor.persistence.Config.ioContext
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
 import com.github.jactor.persistence.common.Persistent
@@ -56,7 +58,7 @@ class UserController(private val userService: UserService) {
     )
     @GetMapping("/name/{username}")
     @Operation(description = "Find a user by its username")
-    fun find(@PathVariable("username") username: String): ResponseEntity<UserDto> {
+    suspend fun find(@PathVariable("username") username: String): ResponseEntity<UserDto> {
         return userService.find(username = username)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -69,7 +71,7 @@ class UserController(private val userService: UserService) {
     )
     @GetMapping("/{id}")
     @Operation(description = "Get a user by its id")
-    operator fun get(@PathVariable("id") id: UUID): ResponseEntity<UserDto> {
+    suspend operator fun get(@PathVariable("id") id: UUID): ResponseEntity<UserDto> {
         return userService.find(id)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
@@ -82,12 +84,11 @@ class UserController(private val userService: UserService) {
     )
     @Operation(description = "Create a user")
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun post(@RequestBody createUserCommand: CreateUserCommand): ResponseEntity<UserDto> {
-        if (userService.isAlreadyPresent(createUserCommand.username)) {
-            return ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(userService.create(createUserCommand).toDto(), HttpStatus.CREATED)
+    suspend fun post(
+        @RequestBody createUserCommand: CreateUserCommand
+    ): ResponseEntity<UserDto> = when (userService.isAlreadyPresent(createUserCommand.username)) {
+        true -> ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(userService.create(createUserCommand).toDto(), HttpStatus.CREATED)
     }
 
     @ApiResponses(
@@ -98,26 +99,23 @@ class UserController(private val userService: UserService) {
     )
     @Operation(description = "Update a user by its id")
     @PutMapping("/update")
-    fun put(@RequestBody userDto: UserDto): ResponseEntity<UserDto> {
-        if (userDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val updatedUser = userService.update(
-            user = User(userDto = userDto)
-        )
-
-        return updatedUser?.let { ResponseEntity(it.toDto(), HttpStatus.ACCEPTED) }
-            ?: ResponseEntity(HttpStatus.BAD_REQUEST)
+    suspend fun put(@RequestBody userDto: UserDto): ResponseEntity<UserDto> = when (userDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> userService.update(user = User(userDto = userDto))?.let {
+            ResponseEntity(it.toDto(), HttpStatus.ACCEPTED)
+        } ?: ResponseEntity(HttpStatus.BAD_REQUEST)
     }
 
     @ApiResponses(ApiResponse(responseCode = "200", description = "List of usernames found"))
     @GetMapping("/usernames")
     @Operation(description = "Find all usernames for a user type")
-    fun findAllUsernames(
+    suspend fun findAllUsernames(
         @RequestParam(required = false, defaultValue = "ACTIVE") userType: String
-    ): ResponseEntity<List<String>> {
-        return ResponseEntity(userService.findUsernames(UserEntity.UserType.valueOf(userType)), HttpStatus.OK)
+    ): ResponseEntity<List<String>> = userService.findUsernames(userType = UserEntity.UserType.valueOf(userType)).let {
+        when (it.isEmpty()) {
+            true -> ResponseEntity(HttpStatus.NO_CONTENT)
+            false -> ResponseEntity(it, HttpStatus.OK)
+        }
     }
 }
 
@@ -126,53 +124,49 @@ class UserService(
     private val personService: PersonService,
     private val userRepository: UserRepository
 ) {
-    fun find(username: String): User? {
-        return userRepository.findByUsername(username)
-            .map { it.toModel() }
-            .orElse(null)
+    suspend fun find(username: String): User? = ioContext {
+        userRepository.findByUsername(username).getOrNull()?.toModel()
     }
 
-    fun find(id: UUID): User? {
-        return userRepository.findById(id)
-            .map { it.toModel() }
-            .orElse(null)
+    suspend fun find(id: UUID): User? = ioContext {
+        userRepository.findById(id).getOrNull()?.toModel()
     }
 
     @Transactional
-    fun update(user: User): User? {
+    suspend fun update(user: User): User? {
         val uuid = user.persistent.id ?: throw IllegalArgumentException("User must have an id!")
-        return userRepository.findById(uuid)
-            .map { it.update(user) }
-            .map { it.toModel() }
-            .orElse(null)
+        return ioContext {
+            userRepository.findById(uuid).map { it.update(user) }
+                .getOrNull()?.toModel()
+        }
     }
 
-    fun create(createUserCommand: CreateUserCommand): User {
+    suspend fun create(createUserCommand: CreateUserCommand): User {
         val user = createNewFrom(createUserCommand)
 
         if (user.id == null) {
             user.id = UUID.randomUUID()
         }
 
-        return userRepository.save(user).toModel()
+        return ioContext { userRepository.save(user).toModel() }
     }
 
-    private fun createNewFrom(createUserCommand: CreateUserCommand): UserEntity {
+    private suspend fun createNewFrom(createUserCommand: CreateUserCommand): UserEntity {
         val person = createUserCommand.toPersonDto().toModel()
-        val personEntity = personService.createWhenNotExists(person = person)
+        val personEntity = ioContext { personService.createWhenNotExists(person = person) }
         val user = UserEntity(user = createUserCommand.toUserDto().toModel())
         user.person = personEntity
 
         return user
     }
 
-    fun findUsernames(userType: UserEntity.UserType): List<String> {
-        return userRepository.findByUserTypeIn(listOf(userType))
+    suspend fun findUsernames(userType: UserEntity.UserType): List<String> = ioContext {
+        userRepository.findByUserTypeIn(listOf(userType))
             .map { it.username ?: "username of user with id '${it.id} is null!" }
     }
 
-    fun isAlreadyPresent(username: String): Boolean {
-        return userRepository.findByUsername(username).isPresent
+    suspend fun isAlreadyPresent(username: String): Boolean = ioContext {
+        userRepository.findByUsername(username).isPresent
     }
 }
 
@@ -257,9 +251,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
     @JoinColumn(name = "PERSON_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var person: PersonEntity? = null
-        internal set(value) {
-            field = value
-        }
+        internal set
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var guestBook: GuestBookEntity? = null

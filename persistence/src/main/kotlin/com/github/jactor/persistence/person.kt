@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.persistence.Config.ioContext
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentEntity
 import com.github.jactor.persistence.common.Persistent
@@ -27,24 +28,16 @@ import jakarta.persistence.Table
 
 @Service
 class PersonService(private val personRepository: PersonRepository) {
-    fun createWhenNotExists(person: Person): PersonEntity? {
-        return findExisting(person) ?: create(person)
+    suspend fun createWhenNotExists(person: Person): PersonEntity? = ioContext {
+        findExisting(person) ?: create(person)
     }
 
-    private fun create(person: Person): PersonEntity {
-        return personRepository.save(
-            PersonEntity(
-                person = person.copy(
-                    persistent = person.persistent.copy(
-                        id = person.id ?: UUID.randomUUID()
-                    )
-                )
-            )
-        )
+    private suspend fun create(person: Person): PersonEntity = ioContext {
+        personRepository.save(PersonEntity(person = person.withId()))
     }
 
-    private fun findExisting(person: Person): PersonEntity? {
-        return person.id?.let { personRepository.findById(it).getOrNull() }
+    private suspend fun findExisting(person: Person): PersonEntity? = ioContext {
+        person.id?.let { personRepository.findById(it).getOrNull() }
     }
 }
 

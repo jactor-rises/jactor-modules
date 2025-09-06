@@ -15,6 +15,7 @@ import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.test.runTest
 
 internal class GuestBookServiceTest {
 
@@ -29,18 +30,18 @@ internal class GuestBookServiceTest {
     private val uuid = UUID.randomUUID()
 
     @Test
-    fun `should map guest book to a dto`() {
+    fun `should map guest book to a dto`() = runTest {
         val guestBookEntity = initGuestBook(title = "@home").withId().toEntity()
 
         every { guestBookRepositoryMockk.findById(uuid) } returns Optional.of(guestBookEntity)
 
-        val (_, _, title) = guestBookServiceToTest.find(uuid) ?: throw mockError()
+        val (_, _, title) = guestBookServiceToTest.find(uuid) ?: error("missed mocking?")
 
         assertThat(title).isEqualTo("@home")
     }
 
     @Test
-    fun `should map guest book entry to a dto`() {
+    fun `should map guest book entry to a dto`() = runTest {
         val anEntry = initGuestBookEntry(
             guestBook = initGuestBook(),
             creatorName = "me",
@@ -50,7 +51,7 @@ internal class GuestBookServiceTest {
 
         every { guestBookEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
 
-        val guestBookEntryModel = guestBookServiceToTest.findEntry(uuid) ?: throw mockError()
+        val guestBookEntryModel = guestBookServiceToTest.findEntry(uuid) ?: error("missed mocking?")
 
         assertAll {
             assertThat(guestBookEntryModel.creatorName).isEqualTo("me")
@@ -58,12 +59,8 @@ internal class GuestBookServiceTest {
         }
     }
 
-    private fun mockError(): AssertionError {
-        return AssertionError("missed mocking?")
-    }
-
     @Test
-    fun `should save GuestBookDto as GuestBookEntity`() {
+    fun `should save GuestBookDto as GuestBookEntity`() = runTest {
         val guestBookEntry = initGuestBookEntry(
             creatorName = "me",
             entry = "all about this",
@@ -90,7 +87,7 @@ internal class GuestBookServiceTest {
     }
 
     @Test
-    fun `should save GuestBookEntryDto as GuestBookEntryEntity`() {
+    fun `should save GuestBookEntryDto as GuestBookEntryEntity`() = runTest {
         val guestBookEntryEntitySlot = slot<GuestBookEntryEntity>()
         val guestBookEntry = initGuestBookEntry(
             guestBook = initGuestBook(),

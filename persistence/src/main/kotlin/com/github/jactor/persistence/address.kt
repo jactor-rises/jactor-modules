@@ -62,12 +62,8 @@ data class Address(
         zipCode = zipCode
     )
 
+    fun toEntity() = AddressEntity(address = this)
     fun withId(): Address = this.copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
-    fun toEntityWithId() = AddressEntity(
-        this.copy(
-            persistent = persistent.copy(id = id ?: UUID.randomUUID())
-        )
-    )
 }
 
 interface AddressRepository : CrudRepository<AddressEntity, UUID> {

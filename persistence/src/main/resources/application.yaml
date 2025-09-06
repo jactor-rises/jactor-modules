@@ -1,4 +1,3 @@
-
 logging:
   level:
     com.githnub.jactor: debug
@@ -33,4 +32,6 @@ spring:
       enabled: true
 
 springdoc:
-  packages-to-scan: com.github.jactor.persistence.controller
+  packages-to-scan: com.github.jactor.persistence
+  swagger-ui:
+      path: /swagger-ui.html

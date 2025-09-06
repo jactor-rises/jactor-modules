@@ -43,8 +43,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on address when used`() {
-        val addressWithoutId = Address(persistent, initAddress()).toEntityWithId()
-        val address = Address(persistent, initAddress()).toEntityWithId()
+        val addressWithoutId = Address(persistent, initAddress()).withId().toEntity()
+        val address = Address(persistent, initAddress()).withId().toEntity()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
 

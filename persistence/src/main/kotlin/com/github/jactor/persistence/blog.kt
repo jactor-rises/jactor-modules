@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.persistence.Config.ioContext
 import com.github.jactor.persistence.common.EntryEmbeddable
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
@@ -59,7 +60,7 @@ class BlogController(private val blogService: BlogService) {
 
     @Operation(description = "Henter en blogg ved å angi id")
     @GetMapping("/{id}")
-    operator fun get(@PathVariable("id") blogId: UUID): ResponseEntity<BlogDto> {
+    suspend operator fun get(@PathVariable("id") blogId: UUID): ResponseEntity<BlogDto> {
         return blogService.find(blogId)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -77,7 +78,7 @@ class BlogController(private val blogService: BlogService) {
 
     @Operation(description = "Henter et innslag i en blogg ved å angi id")
     @GetMapping("/entry/{id}")
-    fun getEntryById(@PathVariable("id") blogEntryId: UUID): ResponseEntity<BlogEntryDto> {
+    suspend fun getEntryById(@PathVariable("id") blogEntryId: UUID): ResponseEntity<BlogEntryDto> {
         return blogService.findEntryBy(blogEntryId)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
@@ -95,12 +96,14 @@ class BlogController(private val blogService: BlogService) {
 
     @GetMapping("/title/{title}")
     @Operation(description = "Søker etter blogger basert på en blog tittel")
-    fun findByTitle(@PathVariable("title") title: String?): ResponseEntity<List<BlogDto>> {
+    suspend fun findByTitle(@PathVariable("title") title: String?): ResponseEntity<List<BlogDto>> {
         val blogsByTitle = blogService.findBlogsBy(title)
             .map { it.toDto() }
 
-        val httpStatus = blogsByTitle.isNotEmpty().whenTrue { HttpStatus.OK } ?: HttpStatus.NO_CONTENT
-        return ResponseEntity(blogsByTitle, httpStatus)
+        return when (blogsByTitle.isNotEmpty()) {
+            true -> ResponseEntity(blogsByTitle, HttpStatus.OK)
+            false -> ResponseEntity(HttpStatus.NO_CONTENT)
+        }
     }
 
     @ApiResponses(
@@ -116,11 +119,14 @@ class BlogController(private val blogService: BlogService) {
 
     @GetMapping("/{id}/entries")
     @Operation(description = "Søker etter blogg-innslag basert på en blogg id")
-    fun findEntriesByBlogId(@PathVariable("id") blogId: UUID): ResponseEntity<List<BlogEntryDto>> {
+    suspend fun findEntriesByBlogId(@PathVariable("id") blogId: UUID): ResponseEntity<List<BlogEntryDto>> {
         val entriesForBlog = blogService.findEntriesForBlog(blogId)
             .map { it.toDto() }
 
-        return ResponseEntity(entriesForBlog, if (entriesForBlog.isEmpty()) HttpStatus.NO_CONTENT else HttpStatus.OK)
+        return when (entriesForBlog.isNotEmpty()) {
+            true -> ResponseEntity(entriesForBlog, HttpStatus.OK)
+            false -> ResponseEntity(HttpStatus.NO_CONTENT)
+        }
     }
 
     @ApiResponses(
@@ -136,12 +142,11 @@ class BlogController(private val blogService: BlogService) {
 
     @Operation(description = "Endre en blogg")
     @PutMapping("/{blogId}")
-    fun put(@RequestBody blogDto: BlogDto, @PathVariable blogId: UUID): ResponseEntity<BlogDto> {
-        if (blogDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(
+    suspend fun put(
+        @RequestBody blogDto: BlogDto, @PathVariable blogId: UUID
+    ): ResponseEntity<BlogDto> = when (blogDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
             blogService.saveOrUpdate(blog = Blog(blogDto = blogDto)).toDto(),
             HttpStatus.ACCEPTED
         )
@@ -159,12 +164,12 @@ class BlogController(private val blogService: BlogService) {
     )
     @Operation(description = "Opprett en blogg")
     @PostMapping
-    fun post(@RequestBody blogDto: BlogDto): ResponseEntity<BlogDto> {
-        if (blogDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(blogService.saveOrUpdate(blog = Blog(blogDto)).toDto(), HttpStatus.CREATED)
+    suspend fun post(@RequestBody blogDto: BlogDto): ResponseEntity<BlogDto> = when (blogDto.harIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
+            blogService.saveOrUpdate(blog = Blog(blogDto)).toDto(),
+            HttpStatus.CREATED
+        )
     }
 
     @ApiResponses(
@@ -180,15 +185,12 @@ class BlogController(private val blogService: BlogService) {
 
     @Operation(description = "Endrer et blogg-innslag")
     @PutMapping("/entry/{blogEntryId}")
-    fun putEntry(
+    suspend fun putEntry(
         @RequestBody blogEntryDto: BlogEntryDto,
         @PathVariable blogEntryId: UUID
-    ): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(
+    ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
             blogService.saveOrUpdate(blogEntry = BlogEntry(blogEntry = blogEntryDto)).toDto(),
             HttpStatus.ACCEPTED
         )
@@ -207,27 +209,25 @@ class BlogController(private val blogService: BlogService) {
 
     @Operation(description = "Oppretter et blogg-innslag")
     @PostMapping("/entry")
-    fun postEntry(@RequestBody blogEntryDto: BlogEntryDto): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val createdBlogEntry = blogService.saveOrUpdate(
+    suspend fun postEntry(
+        @RequestBody blogEntryDto: BlogEntryDto
+    ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> blogService.saveOrUpdate(
             blogEntry = BlogEntry(blogEntry = blogEntryDto)
-        )
-
-        val blogEntryResponseDto = createdBlogEntry.toDto()
-        return ResponseEntity(blogEntryResponseDto, HttpStatus.CREATED)
+        ).let {
+            ResponseEntity(it.toDto(), HttpStatus.CREATED)
+        }
     }
 }
 
 interface BlogService {
-    fun find(id: UUID): Blog?
-    fun findBlogsBy(title: String?): List<Blog>
-    fun findEntriesForBlog(blogId: UUID?): List<BlogEntry>
-    fun findEntryBy(blogEntryId: UUID): BlogEntry?
-    fun saveOrUpdate(blog: Blog): Blog
-    fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry
+    suspend fun find(id: UUID): Blog?
+    suspend fun findBlogsBy(title: String?): List<Blog>
+    suspend fun findEntriesForBlog(blogId: UUID?): List<BlogEntry>
+    suspend fun findEntryBy(blogEntryId: UUID): BlogEntry?
+    suspend fun saveOrUpdate(blog: Blog): Blog
+    suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry
 }
 
 @Service
@@ -236,42 +236,36 @@ class BlogServiceImpl(
     private val blogEntryRepository: BlogEntryRepository,
     private val userService: UserService
 ) : BlogService {
-    override fun find(id: UUID): Blog? {
-        return blogRepository.findById(id)
+    override suspend fun find(id: UUID): Blog? = ioContext { blogRepository.findById(id) }
+        .map { it.toModel() }
+        .orElse(null)
+
+    override suspend fun findEntryBy(blogEntryId: UUID): BlogEntry? = ioContext {
+        blogEntryRepository.findById(blogEntryId)
             .map { it.toModel() }
             .orElse(null)
     }
 
-    override fun findEntryBy(blogEntryId: UUID): BlogEntry? {
-        return blogEntryRepository.findById(blogEntryId)
-            .map { it.toModel() }
-            .orElse(null)
+    override suspend fun findBlogsBy(title: String?): List<Blog> = ioContext {
+        blogRepository.findBlogsByTitle(title).map { obj: BlogEntity? -> obj?.toModel()!! }
     }
 
-    override fun findBlogsBy(title: String?): List<Blog> {
-        return blogRepository.findBlogsByTitle(title).map { obj: BlogEntity? -> obj?.toModel()!! }
+    override suspend fun findEntriesForBlog(blogId: UUID?): List<BlogEntry> = ioContext {
+        blogEntryRepository.findByBlogId(blogId).map { obj: BlogEntryEntity? -> obj?.toModel()!! }
     }
 
-    override fun findEntriesForBlog(blogId: UUID?): List<BlogEntry> {
-        return blogEntryRepository.findByBlogId(blogId).map { obj: BlogEntryEntity? -> obj?.toModel()!! }
-    }
-
-    override fun saveOrUpdate(blog: Blog): Blog {
+    override suspend fun saveOrUpdate(blog: Blog): Blog = ioContext {
         val user = userService.find(username = fetchUsername(blog))
-
-        return blogRepository.save(
-            BlogEntity(blog.copy(user = user))
-        ).toModel()
+        blogRepository.save(BlogEntity(blog.copy(user = user))).toModel()
     }
 
-    override fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry {
-        blogEntry.blog?.also {
-            it.id ?: error("An entry must belong to a persistent blog!")
-        } ?: error("An entry must belong to a blog!")
+    override suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry = ioContext {
+        blogEntry.blog?.also { it.id ?: error("An entry must belong to a persistent blog!") }
+            ?: error("An entry must belong to a blog!")
 
         val blogEntryEntity = BlogEntryEntity(blogEntry)
 
-        return blogEntryRepository.save(blogEntryEntity).toModel()
+        blogEntryRepository.save(blogEntryEntity).toModel()
     }
 
     private fun fetchUsername(blog: Blog?): String {
@@ -321,7 +315,8 @@ data class BlogEntry(
     val persistent: Persistent = Persistent(),
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
-    val notNullableEntry: String @JsonIgnore get() = entry ?: throw IllegalStateException("An entry is not provided!")
+    val notNullableEntry: String
+        @JsonIgnore get() = entry ?: throw IllegalStateException("An entry is not provided!")
     val notNullableCreator: String
         @JsonIgnore get() = creatorName ?: throw IllegalStateException("A creator is not provided!")
 

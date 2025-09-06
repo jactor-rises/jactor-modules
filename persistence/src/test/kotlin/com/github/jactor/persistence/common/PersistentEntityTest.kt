@@ -29,7 +29,7 @@ internal class PersistentEntityTest {
             addressLine3 = "there",
             city = "svg",
             country = "NO"
-        ).toEntityWithId()
+        ).withId().toEntity()
 
         persistentEntityToTest.id = UUID.randomUUID()
 
