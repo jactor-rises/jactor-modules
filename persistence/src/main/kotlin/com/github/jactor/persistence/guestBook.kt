@@ -93,13 +93,14 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     )
     @Operation(description = "Opprett en gjestebok")
     @PostMapping
-    suspend fun post(@RequestBody guestBookDto: GuestBookDto): ResponseEntity<GuestBookDto> {
-        if (guestBookDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val guestBook = guestBookService.saveOrUpdate(GuestBook(guestBookDto = guestBookDto))
-        return ResponseEntity(guestBook.toDto(), HttpStatus.CREATED)
+    suspend fun post(
+        @RequestBody guestBookDto: GuestBookDto
+    ): ResponseEntity<GuestBookDto> = when (guestBookDto.harIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
+            guestBookService.saveOrUpdate(GuestBook(guestBookDto = guestBookDto)).toDto(),
+            HttpStatus.CREATED
+        )
     }
 
     @ApiResponses(
@@ -114,13 +115,14 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     )
     @Operation(description = "Endre en gjestebok")
     @PutMapping("/update")
-    suspend fun put(@RequestBody guestBookDto: GuestBookDto): ResponseEntity<GuestBookDto> {
-        if (guestBookDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val guestBook = GuestBook(guestBookDto = guestBookDto)
-        return ResponseEntity(guestBookService.saveOrUpdate(guestBook).toDto(), HttpStatus.ACCEPTED)
+    suspend fun put(
+        @RequestBody guestBookDto: GuestBookDto
+    ): ResponseEntity<GuestBookDto> = when (guestBookDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
+            guestBookService.saveOrUpdate(GuestBook(guestBookDto = guestBookDto)).toDto(),
+            HttpStatus.ACCEPTED
+        )
     }
 
     @ApiResponses(
@@ -135,13 +137,14 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     )
     @Operation(description = "Opprett et innslag i en gjestebok")
     @PostMapping("/entry")
-    suspend fun postEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto): ResponseEntity<GuestBookEntryDto> {
-        if (guestBookEntryDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val dto = guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto)).toDto()
-        return ResponseEntity(dto, HttpStatus.CREATED)
+    suspend fun postEntry(
+        @RequestBody guestBookEntryDto: GuestBookEntryDto
+    ): ResponseEntity<GuestBookEntryDto> = when (guestBookEntryDto.harIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
+            guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto)).toDto(),
+            HttpStatus.CREATED
+        )
     }
 
     @ApiResponses(
@@ -156,12 +159,11 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     )
     @Operation(description = "Endre et innslag i en gjestebok")
     @PutMapping("/entry/update")
-    suspend fun putEntry(@RequestBody guestBookEntryDto: GuestBookEntryDto): ResponseEntity<GuestBookEntryDto> {
-        if (guestBookEntryDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(
+    suspend fun putEntry(
+        @RequestBody guestBookEntryDto: GuestBookEntryDto
+    ): ResponseEntity<GuestBookEntryDto> = when (guestBookEntryDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
             guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto = guestBookEntryDto)).toDto(),
             HttpStatus.ACCEPTED,
         )

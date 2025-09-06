@@ -84,12 +84,11 @@ class UserController(private val userService: UserService) {
     )
     @Operation(description = "Create a user")
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    suspend fun post(@RequestBody createUserCommand: CreateUserCommand): ResponseEntity<UserDto> {
-        if (userService.isAlreadyPresent(createUserCommand.username)) {
-            return ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(userService.create(createUserCommand).toDto(), HttpStatus.CREATED)
+    suspend fun post(
+        @RequestBody createUserCommand: CreateUserCommand
+    ): ResponseEntity<UserDto> = when (userService.isAlreadyPresent(createUserCommand.username)) {
+        true -> ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(userService.create(createUserCommand).toDto(), HttpStatus.CREATED)
     }
 
     @ApiResponses(
@@ -100,17 +99,11 @@ class UserController(private val userService: UserService) {
     )
     @Operation(description = "Update a user by its id")
     @PutMapping("/update")
-    suspend fun put(@RequestBody userDto: UserDto): ResponseEntity<UserDto> {
-        if (userDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val updatedUser = userService.update(
-            user = User(userDto = userDto)
-        )
-
-        return updatedUser?.let { ResponseEntity(it.toDto(), HttpStatus.ACCEPTED) }
-            ?: ResponseEntity(HttpStatus.BAD_REQUEST)
+    suspend fun put(@RequestBody userDto: UserDto): ResponseEntity<UserDto> = when (userDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> userService.update(user = User(userDto = userDto))?.let {
+            ResponseEntity(it.toDto(), HttpStatus.ACCEPTED)
+        } ?: ResponseEntity(HttpStatus.BAD_REQUEST)
     }
 
     @ApiResponses(ApiResponse(responseCode = "200", description = "List of usernames found"))
@@ -118,8 +111,11 @@ class UserController(private val userService: UserService) {
     @Operation(description = "Find all usernames for a user type")
     suspend fun findAllUsernames(
         @RequestParam(required = false, defaultValue = "ACTIVE") userType: String
-    ): ResponseEntity<List<String>> {
-        return ResponseEntity(userService.findUsernames(UserEntity.UserType.valueOf(userType)), HttpStatus.OK)
+    ): ResponseEntity<List<String>> = userService.findUsernames(userType = UserEntity.UserType.valueOf(userType)).let {
+        when (it.isEmpty()) {
+            true -> ResponseEntity(HttpStatus.NO_CONTENT)
+            false -> ResponseEntity(it, HttpStatus.OK)
+        }
     }
 }
 
@@ -255,9 +251,7 @@ class UserEntity : PersistentEntity<UserEntity?> {
     @JoinColumn(name = "PERSON_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var person: PersonEntity? = null
-        internal set(value) {
-            field = value
-        }
+        internal set
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var guestBook: GuestBookEntity? = null
