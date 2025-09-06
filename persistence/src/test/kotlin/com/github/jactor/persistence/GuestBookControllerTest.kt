@@ -17,9 +17,9 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.slot
-import io.mockk.verify
 
 @WebFluxTest(GuestBookController::class)
 internal class GuestBookControllerTest @Autowired constructor(
@@ -29,7 +29,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should not get a guest book`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMockk.find(id = uuid) } returns null
+        coEvery { guestBookServiceMockk.find(id = uuid) } returns null
 
         val guestBookExchangeBody = webTestClient.get()
             .uri("/guestBook/$uuid")
@@ -44,7 +44,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMockk.find(id = uuid) } returns initGuestBook()
+        coEvery { guestBookServiceMockk.find(id = uuid) } returns initGuestBook()
 
         val guestBook = webTestClient.get()
             .uri("/guestBook/$uuid")
@@ -59,7 +59,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should not get a guest book entry`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMockk.findEntry(id = uuid) } returns null
+        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns null
 
         val guestBookEntry = webTestClient.get()
             .uri("/guestBook/entry/$uuid")
@@ -74,7 +74,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book entry`() {
         val uuid = UUID.randomUUID()
-        every { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntryEntity(id = uuid).toModel()
+        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntryEntity(id = uuid).toModel()
 
         val guestBookEntry = webTestClient.get()
             .uri("/guestBook/entry/$uuid")
@@ -91,7 +91,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         val uuid = UUID.randomUUID()
         val guestBook = initGuestBook(persistent = Persistent(id = uuid))
         val guestBookSlot = slot<GuestBook>()
-        every { guestBookServiceMockk.saveOrUpdate(guestBook = capture(guestBookSlot)) } returns guestBook
+        coEvery { guestBookServiceMockk.saveOrUpdate(guestBook = capture(guestBookSlot)) } returns guestBook
 
         webTestClient.put()
             .uri("/guestBook/update")
@@ -99,7 +99,7 @@ internal class GuestBookControllerTest @Autowired constructor(
             .exchange()
             .expectStatus().isAccepted
 
-        verify { guestBookServiceMockk.saveOrUpdate(guestBook = any()) }
+        coVerify { guestBookServiceMockk.saveOrUpdate(guestBook = any()) }
 
         assertThat(guestBookSlot.captured.id).isEqualTo(uuid)
     }
@@ -109,7 +109,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         val guestBook = GuestBookDto()
         val createdDto = initGuestBook(persistent = Persistent(id = UUID.randomUUID()))
 
-        every { guestBookServiceMockk.saveOrUpdate(guestBook = any()) } returns createdDto
+        coEvery { guestBookServiceMockk.saveOrUpdate(guestBook = any()) } returns createdDto
 
         val guestbook = webTestClient.post()
             .uri("/guestBook")
@@ -121,7 +121,7 @@ internal class GuestBookControllerTest @Autowired constructor(
 
         assertThat(guestbook?.persistentDto?.id).isEqualTo(createdDto.id)
 
-        verify { guestBookServiceMockk.saveOrUpdate(guestBook = any()) }
+        coVerify { guestBookServiceMockk.saveOrUpdate(guestBook = any()) }
     }
 
     @Test
@@ -129,7 +129,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         val uuid = UUID.randomUUID()
         val guestBookEntry = initGuestBookEntry(persistent = Persistent(id = uuid))
 
-        every { guestBookServiceMockk.saveOrUpdate(guestBookEntry) } returns guestBookEntry
+        coEvery { guestBookServiceMockk.saveOrUpdate(guestBookEntry) } returns guestBookEntry
 
         val guestbookEntry = webTestClient.put()
             .uri("/guestBook/entry/update")
@@ -142,7 +142,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         assertAll {
             assertThat(guestbookEntry?.persistentDto?.id).isEqualTo(guestBookEntry.id)
 
-            verify { guestBookServiceMockk.saveOrUpdate(guestBookEntry) }
+            coVerify { guestBookServiceMockk.saveOrUpdate(guestBookEntry) }
         }
     }
 
@@ -151,7 +151,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         val guestBookEntryDto = GuestBookEntryDto()
         val createdDto = initGuestBookEntry(persistent = Persistent(id = UUID.randomUUID()))
 
-        every { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) } returns createdDto
+        coEvery { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) } returns createdDto
 
         val guestbookEntry = webTestClient.post()
             .uri("/guestBook/entry")
@@ -164,7 +164,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         assertAll {
             assertThat(guestbookEntry?.persistentDto?.id).isEqualTo(createdDto.id)
 
-            verify { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) }
+            coVerify { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) }
         }
     }
 }
