@@ -11,6 +11,7 @@ import assertk.assertions.isTrue
 import assertk.fail
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 
 internal class ExceptionHandlerTest {
     private val exceptionHandler = ExceptionHandler()
@@ -30,7 +31,7 @@ internal class ExceptionHandlerTest {
     }
 
     @Test
-    fun `skal hente kodelinjer fra vår kode når exception oppstår`() {
+    fun `skal hente kodelinjer fra vår kode når exception oppstår`() = runTest {
         val repositoryMockk = mockk<UserRepository> {}
         val avstemmingController = UserController(
             userService = UserService(personService = mockk {}, userRepository = repositoryMockk),

@@ -3,7 +3,7 @@ package com.github.jactor.persistence
 import java.time.LocalDateTime
 import java.util.Objects
 import java.util.UUID
-import kotlin.jvm.optionals.getOrElse
+import kotlin.jvm.optionals.getOrNull
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
 import org.springframework.data.repository.CrudRepository
@@ -181,11 +181,11 @@ class DefaultGuestBookService(
     private val guestBookEntryRepository: GuestBookEntryRepository
 ) : GuestBookService {
     override suspend fun find(id: UUID): GuestBook? = ioContext {
-        guestBookRepository.findById(id).getOrElse { null }?.toModel()
+        guestBookRepository.findById(id).getOrNull()?.toModel()
     }
 
     override suspend fun findEntry(id: UUID): GuestBookEntry? = ioContext {
-        guestBookEntryRepository.findById(id).getOrElse { null }?.toModel()
+        guestBookEntryRepository.findById(id).getOrNull()?.toModel()
     }
 
     override suspend fun saveOrUpdate(guestBook: GuestBook): GuestBook = ioContext {

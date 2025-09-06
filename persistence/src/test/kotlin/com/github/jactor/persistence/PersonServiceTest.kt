@@ -9,6 +9,7 @@ import com.github.jactor.persistence.test.initPerson
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import kotlinx.coroutines.test.runTest
 
 internal class PersonServiceTest @Autowired constructor(
     private val personRepository: PersonRepository,
@@ -16,14 +17,14 @@ internal class PersonServiceTest @Autowired constructor(
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
-    fun `should create a new Person`() {
+    fun `should create a new Person`() = runTest {
         val entity = personService.createWhenNotExists(initPerson())
 
         assertThat(entity).isNotNull()
     }
 
     @Test
-    fun `should find Person by id`() {
+    fun `should find Person by id`() = runTest {
         val personEntity = personRepository.save(initPerson().toEntityWithId())
 
         // when

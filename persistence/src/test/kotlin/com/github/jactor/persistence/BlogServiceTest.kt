@@ -13,6 +13,7 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -110,7 +111,7 @@ internal class BlogServiceTest {
             user = initUser(username = "itsme")
         )
 
-        every { userServiceMockk.find(username = any()) } returns null
+        coEvery { userServiceMockk.find(username = any()) } returns null
         every { blogRepositoryMockk.save(capture(blogEntitySlot)) } returns BlogEntity(blog)
 
         blogServiceToTest.saveOrUpdate(blog = blog)
@@ -135,7 +136,7 @@ internal class BlogServiceTest {
             entry = "if i where a rich man..."
         )
 
-        every { userServiceMockk.find(username = any()) } returns null
+        coEvery { userServiceMockk.find(username = any()) } returns null
         every { blogEntryRepositoryMockk.save(capture(blogEntryEntitySlot)) } returns BlogEntryEntity(blogEntry)
 
         blogServiceToTest.saveOrUpdate(blogEntry)
