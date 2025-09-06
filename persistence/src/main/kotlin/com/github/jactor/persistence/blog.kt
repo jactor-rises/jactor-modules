@@ -100,8 +100,10 @@ class BlogController(private val blogService: BlogService) {
         val blogsByTitle = blogService.findBlogsBy(title)
             .map { it.toDto() }
 
-        val httpStatus = blogsByTitle.isNotEmpty().whenTrue { HttpStatus.OK } ?: HttpStatus.NO_CONTENT
-        return ResponseEntity(blogsByTitle, httpStatus)
+        return when (blogsByTitle.isNotEmpty()) {
+            true -> ResponseEntity(blogsByTitle, HttpStatus.OK)
+            false -> ResponseEntity(HttpStatus.NO_CONTENT)
+        }
     }
 
     @ApiResponses(
@@ -121,7 +123,10 @@ class BlogController(private val blogService: BlogService) {
         val entriesForBlog = blogService.findEntriesForBlog(blogId)
             .map { it.toDto() }
 
-        return ResponseEntity(entriesForBlog, if (entriesForBlog.isEmpty()) HttpStatus.NO_CONTENT else HttpStatus.OK)
+        return when (entriesForBlog.isNotEmpty()) {
+            true -> ResponseEntity(entriesForBlog, HttpStatus.OK)
+            false -> ResponseEntity(HttpStatus.NO_CONTENT)
+        }
     }
 
     @ApiResponses(
@@ -137,12 +142,11 @@ class BlogController(private val blogService: BlogService) {
 
     @Operation(description = "Endre en blogg")
     @PutMapping("/{blogId}")
-    suspend fun put(@RequestBody blogDto: BlogDto, @PathVariable blogId: UUID): ResponseEntity<BlogDto> {
-        if (blogDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(
+    suspend fun put(
+        @RequestBody blogDto: BlogDto, @PathVariable blogId: UUID
+    ): ResponseEntity<BlogDto> = when (blogDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
             blogService.saveOrUpdate(blog = Blog(blogDto = blogDto)).toDto(),
             HttpStatus.ACCEPTED
         )
@@ -160,12 +164,12 @@ class BlogController(private val blogService: BlogService) {
     )
     @Operation(description = "Opprett en blogg")
     @PostMapping
-    suspend fun post(@RequestBody blogDto: BlogDto): ResponseEntity<BlogDto> {
-        if (blogDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(blogService.saveOrUpdate(blog = Blog(blogDto)).toDto(), HttpStatus.CREATED)
+    suspend fun post(@RequestBody blogDto: BlogDto): ResponseEntity<BlogDto> = when (blogDto.harIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
+            blogService.saveOrUpdate(blog = Blog(blogDto)).toDto(),
+            HttpStatus.CREATED
+        )
     }
 
     @ApiResponses(
@@ -184,12 +188,9 @@ class BlogController(private val blogService: BlogService) {
     suspend fun putEntry(
         @RequestBody blogEntryDto: BlogEntryDto,
         @PathVariable blogEntryId: UUID
-    ): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.harIkkeIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        return ResponseEntity(
+    ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIkkeIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
             blogService.saveOrUpdate(blogEntry = BlogEntry(blogEntry = blogEntryDto)).toDto(),
             HttpStatus.ACCEPTED
         )
@@ -208,17 +209,15 @@ class BlogController(private val blogService: BlogService) {
 
     @Operation(description = "Oppretter et blogg-innslag")
     @PostMapping("/entry")
-    suspend fun postEntry(@RequestBody blogEntryDto: BlogEntryDto): ResponseEntity<BlogEntryDto> {
-        if (blogEntryDto.harIdentifikator()) {
-            return ResponseEntity(HttpStatus.BAD_REQUEST)
-        }
-
-        val createdBlogEntry = blogService.saveOrUpdate(
+    suspend fun postEntry(
+        @RequestBody blogEntryDto: BlogEntryDto
+    ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIdentifikator()) {
+        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> blogService.saveOrUpdate(
             blogEntry = BlogEntry(blogEntry = blogEntryDto)
-        )
-
-        val blogEntryResponseDto = createdBlogEntry.toDto()
-        return ResponseEntity(blogEntryResponseDto, HttpStatus.CREATED)
+        ).let {
+            ResponseEntity(it.toDto(), HttpStatus.CREATED)
+        }
     }
 }
 
@@ -316,7 +315,8 @@ data class BlogEntry(
     val persistent: Persistent = Persistent(),
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
-    val notNullableEntry: String @JsonIgnore get() = entry ?: throw IllegalStateException("An entry is not provided!")
+    val notNullableEntry: String
+        @JsonIgnore get() = entry ?: throw IllegalStateException("An entry is not provided!")
     val notNullableCreator: String
         @JsonIgnore get() = creatorName ?: throw IllegalStateException("A creator is not provided!")
 

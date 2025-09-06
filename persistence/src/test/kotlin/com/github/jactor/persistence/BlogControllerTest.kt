@@ -15,7 +15,6 @@ import com.github.jactor.shared.api.PersistentDto
 import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.hasSize
-import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
@@ -100,15 +99,11 @@ internal class BlogControllerTest @Autowired constructor(
     fun `should not find blogs by title`() {
         coEvery { blogServiceMockk.findBlogsBy(title = "Anything") } returns emptyList()
 
-        val blogs = webTestClient
+        webTestClient
             .get()
             .uri("/blog/title/Anything")
             .exchange()
             .expectStatus().isNoContent
-            .expectBody(object : ParameterizedTypeReference<List<BlogDto>>() {})
-            .returnResult().responseBody
-
-        assertThat(blogs).isNotNull().isEmpty()
     }
 
     @Test
@@ -132,15 +127,11 @@ internal class BlogControllerTest @Autowired constructor(
             coEvery { blogServiceMockk.findEntriesForBlog(blogId = it) } returns emptyList()
         }
 
-        val blogEntries = webTestClient
+        webTestClient
             .get()
             .uri("/blog/$uuid/entries")
             .exchange()
             .expectStatus().isNoContent
-            .expectBody(object : ParameterizedTypeReference<List<BlogEntryDto>>() {})
-            .returnResult().responseBody
-
-        assertThat(blogEntries).isNotNull().isEmpty()
     }
 
     @Test
@@ -184,11 +175,7 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should create a blog`() {
-        val createdBlog = initBlog(
-            persistent = Persistent(
-                id = UUID.randomUUID()
-            )
-        )
+        val createdBlog = initBlog().withId()
 
         coEvery { blogServiceMockk.saveOrUpdate(blog = any()) } returns createdBlog
 
