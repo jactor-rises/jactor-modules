@@ -14,7 +14,7 @@ import com.github.jactor.web.menu.MenuItem
 
 @RestController
 class UserController(
-    @Qualifier("defaultUserClient") private val userClient: UserClient,
+    @param:Qualifier("defaultUserClient") private val userClient: UserClient,
     private val menuFacade: MenuFacade,
     @param:Value("\${server.servlet.context-path}") private val contextPath: String
 ) {
