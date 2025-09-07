@@ -1,17 +1,15 @@
 package com.github.jactor.persistence.common
 
-import jakarta.persistence.Embeddable
-import jakarta.persistence.Lob
+import java.util.Objects
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import java.util.Objects
+import jakarta.persistence.Embeddable
 
 @Embeddable
 class EntryEmbeddable {
     var creatorName: String? = null
         private set
 
-    @Lob
     var entry: String? = null
         private set
 
