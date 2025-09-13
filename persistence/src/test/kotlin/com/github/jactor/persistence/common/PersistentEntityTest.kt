@@ -17,11 +17,11 @@ import assertk.assertions.isNotSameInstanceAs
 import assertk.assertions.isNull
 
 internal class PersistentEntityTest {
-    private lateinit var persistentEntityToTest: PersistentEntity<*>
+    private lateinit var persistentDaoToTest: PersistentDao<*>
 
     @Test
     fun `should be able to copy an address without the id`() {
-        persistentEntityToTest = initAddress(
+        persistentDaoToTest = initAddress(
             persistent = Persistent(),
             zipCode = "1001",
             addressLine1 = "somewhere",
@@ -31,66 +31,66 @@ internal class PersistentEntityTest {
             country = "NO"
         ).withId().toEntity()
 
-        persistentEntityToTest.id = UUID.randomUUID()
+        persistentDaoToTest.id = UUID.randomUUID()
 
-        val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
+        val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
-            assertThat(persistentEntityToTest.id).isNotNull()
+            assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
+            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
     @Test
     fun `should be able to copy a person without the id`() {
-        persistentEntityToTest = initPerson(
+        persistentDaoToTest = initPerson(
             address = initAddress(),
             locale = "us_US",
             firstName = "Bill",
             surname = "Smith", description = "here i am"
         ).toEntityWithId()
 
-        val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
+        val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
-            assertThat(persistentEntityToTest.id).isNotNull()
+            assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
+            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
     @Test
     fun `should be able to copy a user without the id`() {
-        persistentEntityToTest = initUser(persistent = Persistent(), emailAddress = "i.am@home", username = "jactor")
+        persistentDaoToTest = initUser(persistent = Persistent(), emailAddress = "i.am@home", username = "jactor")
             .withId().toEntity()
 
-        val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
+        val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
-            assertThat(persistentEntityToTest.id).isNotNull()
+            assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
+            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
     @Test
     fun `should be able to copy a blog without the id`() {
-        persistentEntityToTest = initBlog(
+        persistentDaoToTest = initBlog(
             title = "general ignorance",
             user = initUser()
         ).withId().toEntity()
 
-        val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
+        val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
-            assertThat(persistentEntityToTest.id).isNotNull()
+            assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
+            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
@@ -103,46 +103,46 @@ internal class PersistentEntityTest {
             persistent = Persistent(),
         )
 
-        persistentEntityToTest = blogEntry.withId().toEntity()
-        val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
+        persistentDaoToTest = blogEntry.withId().toEntity()
+        val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
-            assertThat(persistentEntityToTest.id).isNotNull()
+            assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
+            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
     @Test
     fun `should be able to copy a guest book without the id`() {
-        persistentEntityToTest = initGuestBook(title = "enter when applied", user = initUser()).withId().toEntity()
+        persistentDaoToTest = initGuestBook(title = "enter when applied", user = initUser()).withId().toEntity()
 
-        val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
+        val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
-            assertThat(persistentEntityToTest.id).isNotNull()
+            assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
+            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
     @Test
     fun `should be able to copy a guest book entry without the id`() {
-        persistentEntityToTest = initGuestBookEntry(
+        persistentDaoToTest = initGuestBookEntry(
             guestBook = initGuestBook(),
             creatorName = "jactor",
             entry = "the one"
         ).withId().toEntity()
 
-        val copy = persistentEntityToTest.copyWithoutId() as PersistentEntity<*>
+        val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
-            assertThat(persistentEntityToTest.id).isNotNull()
+            assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentEntityToTest).isEqualTo(copy)
-            assertThat(persistentEntityToTest).isNotSameInstanceAs(copy)
+            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 }

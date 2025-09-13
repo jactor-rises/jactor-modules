@@ -3,9 +3,7 @@ package com.github.jactor.persistence.common
 import java.util.Objects
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import jakarta.persistence.Embeddable
 
-@Embeddable
 class EntryEmbeddable {
     var creatorName: String? = null
         private set

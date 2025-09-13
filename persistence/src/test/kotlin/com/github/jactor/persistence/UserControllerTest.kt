@@ -42,7 +42,7 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should find a user by username`() {
-        every { userRepositoryMockk.findByUsername("me") } returns Optional.of(UserEntity(initUser()))
+        every { userRepositoryMockk.findByUsername("me") } returns Optional.of(UserDao(initUser()))
 
         val userDto = webTestClient.get()
             .uri("/user/name/me")
@@ -86,7 +86,7 @@ internal class UserControllerTest @Autowired constructor(
         val uuid = UUID.randomUUID()
         val user = initUser(persistent = Persistent(id = uuid))
 
-        every { userRepositoryMockk.findById(uuid) } returns Optional.of(UserEntity(user = user))
+        every { userRepositoryMockk.findById(uuid) } returns Optional.of(UserDao(user = user))
 
         val userDto = webTestClient.put()
             .uri("/user/update")
@@ -103,10 +103,10 @@ internal class UserControllerTest @Autowired constructor(
     fun `should find all usernames of active users`() {
         val bartDto = UserDto(person = PersonDto(address = AddressDto()), username = "bart", userType = UserType.ACTIVE)
         val lisaDto = UserDto(person = PersonDto(address = AddressDto()), username = "lisa", userType = UserType.ACTIVE)
-        val bart = UserEntity(User(bartDto))
-        val lisa = UserEntity(User(lisaDto))
+        val bart = UserDao(User(bartDto))
+        val lisa = UserDao(User(lisaDto))
 
-        every { userRepositoryMockk.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE)) } returns listOf(bart, lisa)
+        every { userRepositoryMockk.findByUserTypeIn(listOf(UserDao.UserType.ACTIVE)) } returns listOf(bart, lisa)
 
         val usernames = webTestClient.get()
             .uri("/user/usernames")
@@ -122,7 +122,7 @@ internal class UserControllerTest @Autowired constructor(
     fun `should accept if user id is not null`() {
         val uuid = UUID.randomUUID()
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(
-            UserEntity(initUser(persistent = Persistent(id = uuid)))
+            UserDao(initUser(persistent = Persistent(id = uuid)))
         )
 
         webTestClient.put()
@@ -143,7 +143,7 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should return BAD_REQUEST when username is occupied`() {
-        every { userRepositoryMockk.findByUsername("turbo") } returns Optional.of(UserEntity())
+        every { userRepositoryMockk.findByUsername("turbo") } returns Optional.of(UserDao())
 
         webTestClient.post()
             .uri("/user")

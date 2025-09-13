@@ -86,7 +86,7 @@ internal class BlogRepositoryTest @Autowired constructor(
 
         val modifiedBlogs = blogRepository.findBlogsByTitle("Duh")
         assertThat(modifiedBlogs).hasSize(1)
-        val blogEntity: BlogEntity = modifiedBlogs.iterator().next()
+        val blogEntity: BlogDao = modifiedBlogs.iterator().next()
 
         assertAll {
             assertThat(blogEntity.created).isEqualTo(LocalDate.now())
@@ -147,14 +147,14 @@ internal class BlogRepositoryTest @Autowired constructor(
         )
 
         val blog = Blog(created = LocalDate.now(), title = "Blah", user = user).withId()
-        val blogEntityToSave: BlogEntity = blog.toEntity()
+        val blogEntityToSave: BlogDao = blog.toEntity()
         val blogEntry = BlogEntry(
             blog = blogEntityToSave.toModel(),
             creatorName = "arnold",
             entry = "i'll be back"
         )
 
-        val blogEntryToSave: BlogEntryEntity = blogEntry.withId().toEntity()
+        val blogEntryToSave: BlogEntryDao = blogEntry.withId().toEntity()
 
         blogEntityToSave.add(blogEntryToSave)
         blogRepository.save(blogEntityToSave)

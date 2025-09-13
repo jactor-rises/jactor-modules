@@ -29,7 +29,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j")
 
     // springdoc-openapi (swagger)
     implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")

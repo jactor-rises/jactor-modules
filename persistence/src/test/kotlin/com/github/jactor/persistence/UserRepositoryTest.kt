@@ -114,8 +114,8 @@ internal class UserRepositoryTest @Autowired constructor(
             )
         }
 
-        val usernames = userRepository.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE, UserEntity.UserType.ADMIN))
-            .map(UserEntity::username)
+        val usernames = userRepository.findByUserTypeIn(listOf(UserDao.UserType.ACTIVE, UserDao.UserType.ADMIN))
+            .map(UserDao::username)
 
         assertThat(usernames).containsAtLeast("tip", "spiderman", "jactor")
     }

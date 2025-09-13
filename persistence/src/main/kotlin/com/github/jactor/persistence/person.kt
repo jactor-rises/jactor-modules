@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.Config.ioContext
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
-import com.github.jactor.persistence.common.PersistentEntity
+import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.PersonDto
 import jakarta.persistence.AttributeOverride
@@ -28,15 +28,15 @@ import jakarta.persistence.Table
 
 @Service
 class PersonService(private val personRepository: PersonRepository) {
-    suspend fun createWhenNotExists(person: Person): PersonEntity? = ioContext {
+    suspend fun createWhenNotExists(person: Person): PersonDao? = ioContext {
         findExisting(person) ?: create(person)
     }
 
-    private suspend fun create(person: Person): PersonEntity = ioContext {
-        personRepository.save(PersonEntity(person = person.withId()))
+    private suspend fun create(person: Person): PersonDao = ioContext {
+        personRepository.save(PersonDao(person = person.withId()))
     }
 
-    private suspend fun findExisting(person: Person): PersonEntity? = ioContext {
+    private suspend fun findExisting(person: Person): PersonDao? = ioContext {
         person.id?.let { personRepository.findById(it).getOrNull() }
     }
 }
@@ -82,20 +82,20 @@ data class Person(
     )
 
     fun withId(): Person = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
-    fun toEntity() = PersonEntity(person = this)
-    fun toEntityWithId() = PersonEntity(person = this).apply {
+    fun toEntity() = PersonDao(person = this)
+    fun toEntityWithId() = PersonDao(person = this).apply {
         id = UUID.randomUUID()
         persistentDataEmbeddable = Persistent(id = id).toEmbeddable()
     }
 }
 
-interface PersonRepository : CrudRepository<PersonEntity, UUID> {
-    fun findBySurname(surname: String?): List<PersonEntity>
+interface PersonRepository : CrudRepository<PersonDao, UUID> {
+    fun findBySurname(surname: String?): List<PersonDao>
 }
 
 @Entity
 @Table(name = "T_PERSON")
-class PersonEntity : PersistentEntity<PersonEntity?> {
+class PersonDao : PersistentDao<PersonDao?> {
     @Id
     override var id: UUID? = null
 
@@ -125,13 +125,13 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         internal set
 
     @OneToMany(mappedBy = "person", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.EAGER)
-    private var users: MutableSet<UserEntity> = HashSet()
+    private var users: MutableSet<UserDao> = HashSet()
 
     constructor() {
         // used by entity manager
     }
 
-    private constructor(person: PersonEntity) {
+    private constructor(person: PersonDao) {
         addressEntity = person.addressEntity
         description = person.description
         firstName = person.firstName
@@ -161,20 +161,20 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
         description = description
     )
 
-    override fun copyWithoutId(): PersonEntity {
-        val personEntity = PersonEntity(this)
+    override fun copyWithoutId(): PersonDao {
+        val personEntity = PersonDao(this)
         personEntity.id = null
         return personEntity
     }
 
-    override fun modifiedBy(modifier: String): PersonEntity {
+    override fun modifiedBy(modifier: String): PersonDao {
         persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
     override fun equals(other: Any?): Boolean {
         return this === other || other != null && javaClass == other.javaClass &&
-            addressEntity == (other as PersonEntity).addressEntity &&
+            addressEntity == (other as PersonDao).addressEntity &&
             description == other.description &&
             firstName == other.firstName &&
             surname == other.surname &&
@@ -204,11 +204,11 @@ class PersonEntity : PersistentEntity<PersonEntity?> {
     override val timeOfModification: LocalDateTime
         get() = persistentDataEmbeddable.timeOfModification
 
-    fun getUsers(): Set<UserEntity> {
+    fun getUsers(): Set<UserDao> {
         return users
     }
 
-    fun addUser(user: UserEntity) {
+    fun addUser(user: UserDao) {
         users.add(user)
     }
 }

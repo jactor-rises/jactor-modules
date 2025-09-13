@@ -67,14 +67,14 @@ internal class GuestBookServiceTest {
             guestBook = initGuestBook()
         )
 
-        val guestBookEntitySlot = slot<GuestBookEntity>()
+        val guestBookEntitySlot = slot<GuestBookDao>()
         val guestBook = initGuestBook(
             entries = setOf(guestBookEntry),
             title = "home sweet home",
             user = initUser()
         )
 
-        every { guestBookRepositoryMockk.save(capture(guestBookEntitySlot)) } returns GuestBookEntity(guestBook)
+        every { guestBookRepositoryMockk.save(capture(guestBookEntitySlot)) } returns GuestBookDao(guestBook)
 
         guestBookServiceToTest.saveOrUpdate(guestBook)
         val guestBookEntity = guestBookEntitySlot.captured
@@ -88,14 +88,14 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should save GuestBookEntryDto as GuestBookEntryEntity`() = runTest {
-        val guestBookEntryEntitySlot = slot<GuestBookEntryEntity>()
+        val guestBookEntryEntitySlot = slot<GuestBookEntryDao>()
         val guestBookEntry = initGuestBookEntry(
             guestBook = initGuestBook(),
             creatorName = "me",
             entry = "if i where a rich man..."
         )
 
-        every { guestBookEntryRepositoryMockk.save(capture(guestBookEntryEntitySlot)) } returns GuestBookEntryEntity(
+        every { guestBookEntryRepositoryMockk.save(capture(guestBookEntryEntitySlot)) } returns GuestBookEntryDao(
             guestBookEntry
         )
 

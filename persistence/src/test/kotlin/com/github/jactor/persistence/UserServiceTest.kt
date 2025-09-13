@@ -83,7 +83,7 @@ internal class UserServiceTest @Autowired constructor(
         )
 
         every { userRepositoryMockk.findById(uuid) } returns Optional.of(
-            UserEntity(User(persistent, user))
+            UserDao(User(persistent, user))
         )
 
         val updatedUser = userServiceToTest.update(user)
@@ -94,11 +94,11 @@ internal class UserServiceTest @Autowired constructor(
     fun `should create and save person for the user`() = runTest {
         val createUserCommand = CreateUserCommand(username = "jactor", surname = "Jacobsen")
         val user = initUser()
-        val userEntity = UserEntity(user)
-        val personEntitySlot = slot<PersonEntity>()
+        val userEntity = UserDao(user)
+        val personEntitySlot = slot<PersonDao>()
 
         every { userRepositoryMockk.save(any()) } returns userEntity
-        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonEntity(initPerson())
+        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonDao(initPerson())
 
         val userCreated = userServiceToTest.create(createUserCommand)
 

@@ -23,7 +23,7 @@ import com.github.jactor.persistence.Config.ioContext
 import com.github.jactor.persistence.common.EntryEmbeddable
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
-import com.github.jactor.persistence.common.PersistentEntity
+import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation
@@ -191,11 +191,11 @@ class DefaultGuestBookService(
     }
 
     override suspend fun saveOrUpdate(guestBook: GuestBook): GuestBook = ioContext {
-        guestBookRepository.save(GuestBookEntity(guestBook)).toModel()
+        guestBookRepository.save(GuestBookDao(guestBook)).toModel()
     }
 
     override suspend fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry = ioContext {
-        guestBookEntryRepository.save(GuestBookEntryEntity(guestBookEntry)).toModel()
+        guestBookEntryRepository.save(GuestBookEntryDao(guestBookEntry)).toModel()
     }
 }
 
@@ -230,7 +230,7 @@ data class GuestBook(
     )
 
     fun withId(): GuestBook = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
-    fun toEntity() = GuestBookEntity(guestBook = this)
+    fun toEntity() = GuestBookDao(guestBook = this)
 }
 
 @JvmRecord
@@ -267,21 +267,21 @@ data class GuestBookEntry(
         persistentDto = persistent.toDto(),
     )
 
-    fun toEntity() = GuestBookEntryEntity(guestBookEntry = this)
+    fun toEntity() = GuestBookEntryDao(guestBookEntry = this)
     fun withId(): GuestBookEntry = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
 }
 
-interface GuestBookRepository : CrudRepository<GuestBookEntity, UUID> {
-    fun findByUser(user: UserEntity): GuestBookEntity?
+interface GuestBookRepository : CrudRepository<GuestBookDao, UUID> {
+    fun findByUser(user: UserDao): GuestBookDao?
 }
 
-interface GuestBookEntryRepository : CrudRepository<GuestBookEntryEntity, UUID> {
-    fun findByGuestBook(guestBookEntity: GuestBookEntity): List<GuestBookEntryEntity>
+interface GuestBookEntryRepository : CrudRepository<GuestBookEntryDao, UUID> {
+    fun findByGuestBook(guestBookEntity: GuestBookDao): List<GuestBookEntryDao>
 }
 
 @Entity
 @Table(name = "T_GUEST_BOOK")
-class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
+class GuestBookDao : PersistentDao<GuestBookDao?> {
     @Id
     override var id: UUID? = null
 
@@ -298,10 +298,10 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
 
     @JoinColumn(name = "USER_ID")
     @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
-    var user: UserEntity? = null
+    var user: UserDao? = null
 
     @OneToMany(mappedBy = "guestBook", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
-    var entries: MutableSet<GuestBookEntryEntity> = HashSet()
+    var entries: MutableSet<GuestBookEntryDao> = HashSet()
 
     constructor() {
         // used by entity manager
@@ -310,7 +310,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     /**
      * @param guestBook to copyWithoutId...
      */
-    private constructor(guestBook: GuestBookEntity) {
+    private constructor(guestBook: GuestBookDao) {
         entries = guestBook.entries.map { it.copyWithoutId() }.toMutableSet()
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
@@ -319,14 +319,14 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
     }
 
     constructor(guestBook: GuestBook) {
-        entries = guestBook.entries.map { GuestBookEntryEntity(it) }.toMutableSet()
+        entries = guestBook.entries.map { GuestBookEntryDao(it) }.toMutableSet()
         id = guestBook.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistent)
         title = guestBook.title
-        user = guestBook.user?.let { UserEntity(it) }
+        user = guestBook.user?.let { UserDao(it) }
     }
 
-    private fun copyUserWithoutId(): UserEntity? {
+    private fun copyUserWithoutId(): UserDao? {
         return user?.copyWithoutId()
     }
 
@@ -337,25 +337,25 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
         user = user?.toModel()
     )
 
-    override fun copyWithoutId(): GuestBookEntity {
-        val guestBookEntity = GuestBookEntity(this)
+    override fun copyWithoutId(): GuestBookDao {
+        val guestBookEntity = GuestBookDao(this)
         guestBookEntity.id = null
         return guestBookEntity
     }
 
-    override fun modifiedBy(modifier: String): GuestBookEntity {
+    override fun modifiedBy(modifier: String): GuestBookDao {
         persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
-    fun add(guestBookEntry: GuestBookEntryEntity) {
+    fun add(guestBookEntry: GuestBookEntryDao) {
         entries.add(guestBookEntry)
         guestBookEntry.guestBook = this
     }
 
     override fun equals(other: Any?): Boolean {
         return this === other || other != null && javaClass == other.javaClass &&
-            title == (other as GuestBookEntity).title &&
+            title == (other as GuestBookDao).title &&
             user == other.user
     }
 
@@ -383,7 +383,7 @@ class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
 
 @Entity
 @Table(name = "T_GUEST_BOOK_ENTRY")
-class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
+class GuestBookEntryDao : PersistentDao<GuestBookEntryDao?> {
     @Id
     override var id: UUID? = null
 
@@ -397,7 +397,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "GUEST_BOOK_ID")
-    var guestBook: GuestBookEntity? = null
+    var guestBook: GuestBookDao? = null
 
     @Embedded
     @AttributeOverride(name = "creatorName", column = Column(name = "GUEST_NAME"))
@@ -408,7 +408,7 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         // used by entity manager
     }
 
-    private constructor(guestBookEntry: GuestBookEntryEntity) {
+    private constructor(guestBookEntry: GuestBookEntryDao) {
         entryEmbeddable = guestBookEntry.copyEntry()
         guestBook = guestBookEntry.copyGuestBookWithoutId()
         id = guestBookEntry.id
@@ -417,12 +417,12 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
 
     constructor(guestBookEntry: GuestBookEntry) {
         entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
-        guestBook = guestBookEntry.guestBook?.let { GuestBookEntity(it) }
+        guestBook = guestBookEntry.guestBook?.let { GuestBookDao(it) }
         id = guestBookEntry.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistent)
     }
 
-    private fun copyGuestBookWithoutId(): GuestBookEntity {
+    private fun copyGuestBookWithoutId(): GuestBookDao {
         return guestBook!!.copyWithoutId()
     }
 
@@ -442,22 +442,22 @@ class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
         persistentDataEmbeddable.modifiedBy(modifiedBy)
     }
 
-    override fun copyWithoutId(): GuestBookEntryEntity {
-        val guestBookEntryEntity = GuestBookEntryEntity(this)
+    override fun copyWithoutId(): GuestBookEntryDao {
+        val guestBookEntryEntity = GuestBookEntryDao(this)
         guestBookEntryEntity.id = null
         return guestBookEntryEntity
     }
 
-    override fun modifiedBy(modifier: String): GuestBookEntryEntity {
+    override fun modifiedBy(modifier: String): GuestBookEntryDao {
         persistentDataEmbeddable.modifiedBy(modifier)
         return this
     }
 
     override fun equals(other: Any?): Boolean {
-        return this === other || other != null && javaClass == other.javaClass && isEqualTo(other as GuestBookEntryEntity)
+        return this === other || other != null && javaClass == other.javaClass && isEqualTo(other as GuestBookEntryDao)
     }
 
-    private fun isEqualTo(o: GuestBookEntryEntity): Boolean {
+    private fun isEqualTo(o: GuestBookEntryDao): Boolean {
         return entryEmbeddable == o.entryEmbeddable &&
             guestBook == o.guestBook
     }

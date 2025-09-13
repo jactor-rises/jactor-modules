@@ -55,8 +55,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = Blog(persistent, initBlog()).toEntity()
-        val blog = Blog(persistent, initBlog()).withId().toEntity()
+        val blogWithouId = Blog(persistent, initBlog()).toDao()
+        val blog = Blog(persistent, initBlog()).withId().toDao()
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 

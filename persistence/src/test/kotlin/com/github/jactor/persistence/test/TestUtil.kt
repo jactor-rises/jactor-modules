@@ -7,13 +7,13 @@ import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.GuestBookEntity
+import com.github.jactor.persistence.GuestBookDao
 import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.GuestBookEntryEntity
-import com.github.jactor.persistence.PersonEntity
+import com.github.jactor.persistence.GuestBookEntryDao
+import com.github.jactor.persistence.PersonDao
 import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.User
-import com.github.jactor.persistence.UserEntity
+import com.github.jactor.persistence.UserDao
 import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.Persistent
 
@@ -89,8 +89,8 @@ fun initGuestBookEntry(
 
 fun initUserEntity(
     id: UUID? = UUID.randomUUID(),
-    person: PersonEntity = initPersonEntity()
-) = UserEntity().apply {
+    person: PersonDao = initPersonEntity()
+) = UserDao().apply {
     this.id = id
     this.person = person
     this.persistentDataEmbeddable = PersistentDataEmbeddable()
@@ -99,21 +99,21 @@ fun initUserEntity(
 fun initPersonEntity(
     id: UUID? = UUID.randomUUID(),
     address: AddressEntity? = initAddressEntity()
-) = PersonEntity().apply {
+) = PersonDao().apply {
     this.id = id
     addressEntity = address
     this.persistentDataEmbeddable = PersistentDataEmbeddable()
 }
 
-fun initGuestBookEntity(id: UUID? = null) = GuestBookEntity().apply {
+fun initGuestBookEntity(id: UUID? = null) = GuestBookDao().apply {
     this.id = id
     this.persistentDataEmbeddable = PersistentDataEmbeddable()
 }
 
 fun initGuestBookEntryEntity(
     id: UUID? = null,
-    guestBook: GuestBookEntity = initGuestBookEntity()
-) = GuestBookEntryEntity().apply {
+    guestBook: GuestBookDao = initGuestBookEntity()
+) = GuestBookEntryDao().apply {
     this.id = id
     this.persistentDataEmbeddable = PersistentDataEmbeddable()
     this.guestBook = guestBook
