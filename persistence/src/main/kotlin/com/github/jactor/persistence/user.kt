@@ -1,14 +1,11 @@
 package com.github.jactor.persistence
 
 import java.time.LocalDateTime
-import java.util.Objects
-import java.util.Optional
 import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
+import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
-import org.springframework.data.repository.CrudRepository
+import org.jetbrains.exposed.v1.javatime.datetime
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -22,9 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.Config.ioContext
-import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
@@ -32,20 +28,6 @@ import com.github.jactor.shared.whenTrue
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import jakarta.persistence.AttributeOverride
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Column
-import jakarta.persistence.Embedded
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
-import jakarta.persistence.OneToOne
-import jakarta.persistence.Table
 
 @RestController
 @RequestMapping(path = ["/user"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -124,13 +106,8 @@ class UserService(
     private val personService: PersonService,
     private val userRepository: UserRepository
 ) {
-    suspend fun find(username: String): User? = ioContext {
-        userRepository.findByUsername(username).getOrNull()?.toModel()
-    }
-
-    suspend fun find(id: UUID): User? = ioContext {
-        userRepository.findById(id).getOrNull()?.toPerson()
-    }
+    suspend fun find(username: String): User? = userRepository.findByUsername(username)?.toUser()
+    suspend fun find(id: UUID): User? = userRepository.findById(id)?.toUser()
 
     @Transactional
     suspend fun update(user: User): User? {
@@ -217,98 +194,62 @@ data class User(
 
     fun withId(): User = copy(persistent = persistent.copy(id = persistent.id ?: UUID.randomUUID()))
     fun toEntity() = UserDao(user = this)
+    fun toUser() = User(user = this)
 
     enum class Usertype {
         ADMIN, ACTIVE, INACTIVE
     }
 }
 
-object Users: UUIDTable(name = "T_USER", columnName = "ID") {
+object Users : UUIDTable(name = "T_USER", columnName = "ID") {
+    val createdBy = text("CREATED_BY")
+    val modifiedBy = text("UPDATED_BY")
+    val timeOfCreation = datetime("CREATION_TIME")
+    val timeOfModification = datetime("UPDATED_TIME")
 }
 
-interface UserRepository : CrudRepository<UserDao, UUID> {
-    fun findByUsername(username: String): Optional<UserDao>
-    fun findByUserTypeIn(userType: Collection<UserDao.UserType>): List<UserDao>
+
+object UserRepository {
+    fun findByUsername(username: String): UserDao? = null
+    fun findByUserTypeIn(userType: List<UserDao.UserType>): List<UserDao> = emptyList()
+    fun findUserById(userId: UUID): UserDao {
+        TODO("wip")
+    }
 }
 
-@Entity
-@Table(name = "T_USER")
-class UserDao : PersistentDao<UserDao?> {
-    @Id
-    override var id: UUID? = null
+fun ResultRow.toUserDao(id: UUID? = null): UserDao = UserDao(
+    id = id ?: this[Users.id].value,
+    createdBy = this[Users.createdBy],
+    timeOfCreation = this[Users.timeOfCreation],
+    modifiedBy = this[Users.modifiedBy],
+    timeOfModification = this[Users.timeOfModification],
+    username = this[Users.username],
+    emailAddress = this[Users.emailAddress],
+    person = this.toPersonDao()
+)
 
-    @Embedded
-    @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
-    @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
-    @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
-    @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
-        internal set
+data class UserDao(
+    override var id: UUID? = null,
+    override val createdBy: String,
+    override val timeOfCreation: LocalDateTime,
+    override var modifiedBy: String,
+    override var timeOfModification: LocalDateTime,
 
-    @Column(name = "EMAIL")
-    var emailAddress: String? = null
-
-    @Column(name = "USER_NAME", nullable = false)
-    var username: String? = null
-
-    @JoinColumn(name = "PERSON_ID")
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    var personDao: PersonDao? = null
-        internal set
-
-    @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    var guestBook: GuestBookDao? = null
-        internal set(value) {
-            value?.let { it.user = this }
-            field = value
-        }
-
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
-    private var blogs: MutableSet<BlogDao> = HashSet()
-
-    @Column(name = "USER_TYPE")
-    @Enumerated(EnumType.STRING)
-    private var userType: UserType? = null
-
-    constructor() {
-        // used by entity manager
-    }
-
-    /**
-     * @param userEntity is used to create an entity
-     */
-    private constructor(userEntity: UserDao) {
-        blogs = userEntity.blogs.map { it.copyWithoutId() }.toMutableSet()
-        emailAddress = userEntity.emailAddress
-        guestBook = userEntity.guestBook?.copyWithoutId()
-        id = userEntity.id
-        persistentDataEmbeddable = PersistentDataEmbeddable()
-        personDao = userEntity.personDao?.copyWithoutId()
-        username = userEntity.username
-        userType = userEntity.userType
-    }
-
-    constructor(user: User) {
-        addValues(user)
-    }
-
-    private fun addValues(user: User) {
-        emailAddress = user.emailAddress
-        id = user.persistent.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(user.persistent)
-        personDao = user.person?.let { PersonDao(it) }
-        username = user.username
+    private var blogs: MutableSet<BlogDao> = HashSet(),
+    private var userType: UserType? = null,
+    var emailAddress: String? = null,
+    var guestBook: GuestBookDao? = null,
+    var personDao: PersonDao? = null,
+    var username: String? = null,
+) : PersistentDao<UserDao> {
+    constructor(user: User) : this(
+        id = user.persistent.id,
+        emailAddress = user.emailAddress,
+        personDao = user.person?.let { PersonDao(it) },
+        username = user.username,
         userType = UserType.entries
             .firstOrNull { aUserType: UserType -> aUserType.name == user.usertype.name }
-            ?: throw IllegalArgumentException("Unknown UserType: " + user.usertype)
-    }
-
-    fun toModel() = User(
-        persistent = persistentDataEmbeddable.toModel(id),
-        person = personDao?.toModel(),
-        emailAddress = emailAddress,
-        username = username,
-        usertype = userType?.let { User.Usertype.valueOf(it.name) } ?: User.Usertype.INACTIVE,
+            ?: error(message = "Unknown UserType: ${user.usertype}"),
     )
 
     fun fetchPerson(): PersonDao {
@@ -316,14 +257,15 @@ class UserDao : PersistentDao<UserDao?> {
         return personDao ?: error("No person provided to the user entity")
     }
 
-    override fun copyWithoutId(): UserDao {
-        val user = UserDao(this)
-        user.id = null
-        return user
-    }
+    override fun copyWithoutId(): UserDao = copy(
+        id = null,
+        personDao = personDao?.copyWithoutId(),
+    )
 
     override fun modifiedBy(modifier: String): UserDao {
-        persistentDataEmbeddable.modifiedBy(modifier)
+        modifiedBy = modifier
+        timeOfModification = LocalDateTime.now()
+
         return this
     }
 
@@ -332,44 +274,21 @@ class UserDao : PersistentDao<UserDao?> {
         blogEntity.user = this
     }
 
+    fun toUser() = User(
+        persistent = Persistent(
+            id = id,
+            createdBy = createdBy,
+            timeOfCreation = timeOfCreation,
+            modifiedBy = modifiedBy,
+            timeOfModification = timeOfModification
+        ),
+        emailAddress = emailAddress,
+        person = personDao?.toPerson(),
+    )
+
     fun update(user: User): UserDao {
         addValues(user)
         return this
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other === this || other != null && javaClass == other.javaClass &&
-            emailAddress == (other as UserDao).emailAddress &&
-            personDao == other.personDao &&
-            username == other.username
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(username, personDao, emailAddress)
-    }
-
-    override fun toString(): String {
-        return ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-            .appendSuper(super.toString())
-            .append(username)
-            .append(emailAddress)
-            .append(blogs)
-            .append("guestbook.id=" + if (guestBook != null) guestBook!!.id else null)
-            .append(personDao)
-            .toString()
-    }
-
-    override val createdBy: String
-        get() = persistentDataEmbeddable.createdBy
-    override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfCreation
-    override val modifiedBy: String
-        get() = persistentDataEmbeddable.modifiedBy
-    override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfModification
-
-    fun getBlogs(): Set<BlogDao> {
-        return blogs
     }
 
     enum class UserType {

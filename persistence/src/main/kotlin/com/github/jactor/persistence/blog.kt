@@ -16,7 +16,6 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,6 +29,8 @@ import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
+import com.github.jactor.shared.whenFalse
+import com.github.jactor.shared.whenTrue
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -224,32 +225,31 @@ interface BlogService {
 
 @Service
 class BlogServiceImpl(
-    private val blogRepository: BlogRepository,
     private val userService: UserService
 ) : BlogService {
-    override suspend fun find(id: UUID): Blog? = blogRepository.findBlogById(id)?.toBlog()
+    override suspend fun find(id: UUID): Blog? = BlogRepository.findBlogById(id)?.toBlog()
     override suspend fun findEntryBy(blogEntryId: UUID): BlogEntry? {
-        return blogRepository.findBlogEntryById(blogEntryId)?.toBlogEntry()
+        return BlogRepository.findBlogEntryById(blogEntryId)?.toBlogEntry()
     }
 
     override suspend fun findBlogsBy(title: String): List<Blog> {
-        return blogRepository.findBlogsByTitle(title).map { it.toBlog() }
+        return BlogRepository.findBlogsByTitle(title).map { it.toBlog() }
     }
 
     override suspend fun findEntriesForBlog(blogId: UUID): List<BlogEntry> {
-        return blogRepository.findBlogEntriesByBlogId(blogId).map { it.toBlogEntry() }
+        return BlogRepository.findBlogEntriesByBlogId(blogId).map { it.toBlogEntry() }
     }
 
     override suspend fun saveOrUpdate(blog: Blog): Blog {
         val user = userService.find(username = blog.fetchUsername())
-        return blogRepository.insertOrUpdate(BlogDao(blog.copy(user = user))).toBlog()
+        return BlogRepository.insertOrUpdate(BlogDao(blog.copy(user = user))).toBlog()
     }
 
     override suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry {
         require(blogEntry.isCoupledWithBlog) { "An entry must belong to a persistent blog!" }
         val blogEntryDao = BlogEntryDao(blogEntry)
 
-        return blogRepository.insertOrUpdate(blogEntryDao).toBlogEntry()
+        return BlogRepository.insertOrUpdate(blogEntryDao).toBlogEntry()
     }
 }
 
@@ -344,8 +344,7 @@ object BlogEntries : UUIDTable(name = "T_BLOG_ENTRY", columnName = "ID") {
     val entry = text("ENTRY")
 }
 
-@Repository
-class BlogRepository {
+object BlogRepository {
     fun findBlogById(id: UUID): BlogDao? = transaction {
         Blogs.selectAll()
             .andWhere { Blogs.id eq id }
@@ -366,33 +365,32 @@ class BlogRepository {
             .map { row -> row.toBlogDao() }
     }
 
-    fun findBlogEntriesByBlogId(blogId: UUID?): List<BlogEntryDao> = transaction {
-        (BlogEntries innerJoin Blogs)
-            .selectAll()
-            .andWhere { Blogs.id eq blogId }
+    fun findBlogEntriesByBlogId(blogId: UUID): List<BlogEntryDao> = transaction {
+        BlogEntries.selectAll()
+            .andWhere { BlogEntries.blogId eq blogId }
             .map { row -> row.toBlogEntryDao() }
     }
 
     fun insertOrUpdate(blogDao: BlogDao): BlogDao {
         return blogDao.id?.let { id ->
             Blogs.update(where = { Blogs.id eq id }) { update ->
-                update[modifiedBy] = blogDao.modifiedBy
-                update[timeOfModification] = blogDao.timeOfModification
-                update[created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
-                update[title] = blogDao.title
-                update[userId] = blogDao.user?.id ?: error("A blog must belong to a user")
+                update[Blogs.modifiedBy] = blogDao.modifiedBy
+                update[Blogs.timeOfModification] = blogDao.timeOfModification
+                update[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
+                update[Blogs.title] = blogDao.title
+                update[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
             }
 
             blogDao
         } ?: run {
             val id = Blogs.insertIgnoreAndGetId {
-                it[created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
-                it[createdBy] = blogDao.createdBy
-                it[modifiedBy] = blogDao.modifiedBy
-                it[timeOfCreation] = blogDao.timeOfCreation
-                it[timeOfModification] = blogDao.timeOfModification
-                it[title] = blogDao.title
-                it[userId] = blogDao.user?.id ?: error("A blog must belong to a user")
+                it[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
+                it[Blogs.createdBy] = blogDao.createdBy
+                it[Blogs.modifiedBy] = blogDao.modifiedBy
+                it[Blogs.timeOfCreation] = blogDao.timeOfCreation
+                it[Blogs.timeOfModification] = blogDao.timeOfModification
+                it[Blogs.title] = blogDao.title
+                it[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
             }?.value
 
             blogDao.copy(id = id)
@@ -401,25 +399,25 @@ class BlogRepository {
 
     fun insertOrUpdate(blogEntryDao: BlogEntryDao): BlogEntryDao {
         return blogEntryDao.id?.let {
-            BlogEntries.update(where = { BlogEntries.id eq it }) {
-                it[blogId] = blogEntryDao.blogDao?.id ?: error("A blog entry must belong to a blog")
-                it[createdBy] = blogEntryDao.createdBy
-                it[creatorName] = blogEntryDao.creatorName
-                it[modifiedBy] = blogEntryDao.modifiedBy
-                it[timeOfCreation] = blogEntryDao.timeOfCreation
-                it[timeOfModification] = blogEntryDao.timeOfModification
+            BlogEntries.update(where = { BlogEntries.id eq it }) { update ->
+                update[blogId] = requireNotNull(blogEntryDao.blogId) { "A blog entry must belong to a blog" }
+                update[createdBy] = blogEntryDao.createdBy
+                update[creatorName] = blogEntryDao.creatorName
+                update[modifiedBy] = blogEntryDao.modifiedBy
+                update[timeOfCreation] = blogEntryDao.timeOfCreation
+                update[timeOfModification] = blogEntryDao.timeOfModification
             }
 
             blogEntryDao
         } ?: run {
-            val id = BlogEntries.insertIgnoreAndGetId {
-                it[blogId] = blogEntryDao.blogDao?.id ?: error("A blog entry must belong to a blog")
-                it[createdBy] = blogEntryDao.createdBy
-                it[creatorName] = blogEntryDao.creatorName
-                it[entry] = blogEntryDao.entry
-                it[modifiedBy] = blogEntryDao.modifiedBy
-                it[timeOfCreation] = blogEntryDao.timeOfCreation
-                it[timeOfModification] = blogEntryDao.timeOfModification
+            val id = BlogEntries.insertIgnoreAndGetId { insert ->
+                insert[blogId] = requireNotNull(blogEntryDao.blogId) { "A blog entry must belong to a blog" }
+                insert[createdBy] = blogEntryDao.createdBy
+                insert[creatorName] = blogEntryDao.creatorName
+                insert[entry] = blogEntryDao.entry
+                insert[modifiedBy] = blogEntryDao.modifiedBy
+                insert[timeOfCreation] = blogEntryDao.timeOfCreation
+                insert[timeOfModification] = blogEntryDao.timeOfModification
             }?.value
 
             blogEntryDao.copy(id = id)
@@ -435,7 +433,7 @@ private fun ResultRow.toBlogDao(): BlogDao = BlogDao(
     timeOfCreation = this[Blogs.timeOfCreation],
     timeOfModification = this[Blogs.timeOfModification],
     title = this[Blogs.title],
-    user = this.toUserDao(),
+    userId = this[Blogs.userId],
 )
 
 private fun ResultRow.toBlogEntryDao(): BlogEntryDao = BlogEntryDao(
@@ -446,7 +444,7 @@ private fun ResultRow.toBlogEntryDao(): BlogEntryDao = BlogEntryDao(
     timeOfModification = this[BlogEntries.timeOfModification],
     creatorName = this[BlogEntries.creatorName],
     entry = this[BlogEntries.entry],
-    blogDao = this.toBlogDao()
+    blogId = this[BlogEntries.blogId]
 )
 
 data class BlogDao(
@@ -458,9 +456,11 @@ data class BlogDao(
 
     var created: LocalDate? = null,
     var title: String? = null,
-    var user: UserDao? = null,
-    var entries: MutableSet<BlogEntryDao> = HashSet()
+    var entries: MutableSet<BlogEntryDao> = HashSet(),
+    internal var userId: UUID? = null,
 ) : PersistentDao<BlogDao> {
+    val user: UserDao by lazy { userId?.let { UserRepository.findUserById(userId = it) } ?: error("no user relation?") }
+
     constructor(blog: Blog) : this(
         id = blog.persistent.id,
         created = blog.created,
@@ -470,7 +470,7 @@ data class BlogDao(
         timeOfCreation = blog.persistent.timeOfCreation,
         timeOfModification = blog.persistent.timeOfModification,
         title = blog.title,
-        user = blog.user?.let { UserDao(it) },
+        userId = blog.user?.persistent?.id,
     )
 
     override fun copyWithoutId(): BlogDao = copy(id = null)
@@ -480,8 +480,9 @@ data class BlogDao(
     )
 
     fun add(blogEntryDao: BlogEntryDao) {
-        blogEntryDao.blogDao = this
-        entries.add(blogEntryDao)
+        entries.contains(blogEntryDao).whenFalse {
+            entries.add(blogEntryDao.copy(blogId = id))
+        }
     }
 
     fun toBlog(): Blog = Blog(
@@ -501,15 +502,19 @@ data class BlogEntryDao(
     override val timeOfCreation: LocalDateTime,
     override var timeOfModification: LocalDateTime,
 
-    var blogDao: BlogDao? = null
+    internal var blogId: UUID? = null
 ) : PersistentDao<BlogEntryDao>, EntryDao {
+    val blogDao: BlogDao by lazy {
+        blogId?.let { BlogRepository.findBlogById(id = it) } ?: error("no blog relation?")
+    }
+
     constructor(blogEntry: BlogEntry) : this(
         id = blogEntry.persistent.id,
 
-        blogDao = blogEntry.blog?.let { BlogDao(blog = it) } ?: error("Entry must belong to a blog"),
+        blogId = requireNotNull(blogEntry.blog?.persistent?.id) { "Entry must belong to a blog" },
         createdBy = blogEntry.persistent.createdBy,
-        creatorName = blogEntry.creatorName ?: throw IllegalArgumentException("Creator name must not be null"),
-        entry = blogEntry.entry ?: throw IllegalArgumentException("Entry must not be null"),
+        creatorName = requireNotNull(blogEntry.creatorName) { "Creator name must not be null" },
+        entry = requireNotNull(blogEntry.entry) { "Entry must not be null" },
         timeOfCreation = blogEntry.persistent.timeOfCreation,
         modifiedBy = blogEntry.persistent.modifiedBy,
         timeOfModification = blogEntry.persistent.timeOfModification,
@@ -524,7 +529,7 @@ data class BlogEntryDao(
     fun toBlogEntry() = BlogEntry(
         persistent = toPersistent(),
 
-        blog = blogDao?.toBlog(),
+        blog = blogDao.toBlog(),
         creatorName = creatorName,
         entry = entry,
     )

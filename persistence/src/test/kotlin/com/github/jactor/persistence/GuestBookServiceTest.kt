@@ -35,7 +35,7 @@ internal class GuestBookServiceTest {
 
         every { guestBookRepositoryMockk.findById(uuid) } returns Optional.of(guestBookEntity)
 
-        val (_, _, title) = guestBookServiceToTest.find(uuid) ?: error("missed mocking?")
+        val (_, _, title) = guestBookServiceToTest.findGuestBook(uuid) ?: error("missed mocking?")
 
         assertThat(title).isEqualTo("@home")
     }

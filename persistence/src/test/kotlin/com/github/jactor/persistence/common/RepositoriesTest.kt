@@ -43,7 +43,7 @@ internal class RepositoriesTest @Autowired constructor(
                 Blog(
                     created = LocalDate.now(),
                     title = "Far, far, away...",
-                    user = userByUsername.toModel()
+                    user = userByUsername.toUser()
                 ).withId().toEntity()
             )
         }

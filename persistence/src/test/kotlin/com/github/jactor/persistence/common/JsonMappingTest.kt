@@ -19,7 +19,7 @@ internal class JsonMappingTest {
 
     @Test
     fun `skal mappe json fra UserDto fra User skapt av UserEntity`() {
-        val user = initUserEntity(person = initPersonDao(address = initAddressDao())).toModel()
+        val user = initUserEntity(person = initPersonDao(address = initAddressDao())).toUser()
         val json: String = objectMapper.writeValueAsString(user.toDto())
 
         assertThat(json).contains(""""person":{""", """"address":{""")

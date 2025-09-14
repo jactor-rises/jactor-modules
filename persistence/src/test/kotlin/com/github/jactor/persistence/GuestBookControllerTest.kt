@@ -29,7 +29,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should not get a guest book`() {
         val uuid = UUID.randomUUID()
-        coEvery { guestBookServiceMockk.find(id = uuid) } returns null
+        coEvery { guestBookServiceMockk.findGuestBook(id = uuid) } returns null
 
         val guestBookExchangeBody = webTestClient.get()
             .uri("/guestBook/$uuid")
@@ -44,7 +44,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book`() {
         val uuid = UUID.randomUUID()
-        coEvery { guestBookServiceMockk.find(id = uuid) } returns initGuestBook()
+        coEvery { guestBookServiceMockk.findGuestBook(id = uuid) } returns initGuestBook()
 
         val guestBook = webTestClient.get()
             .uri("/guestBook/$uuid")
@@ -74,7 +74,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book entry`() {
         val uuid = UUID.randomUUID()
-        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntryDao(id = uuid).toModel()
+        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntryDao(id = uuid).toGuestBookEntry()
 
         val guestBookEntry = webTestClient.get()
             .uri("/guestBook/entry/$uuid")

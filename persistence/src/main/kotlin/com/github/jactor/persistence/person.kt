@@ -1,29 +1,15 @@
 package com.github.jactor.persistence
 
 import java.time.LocalDateTime
-import java.util.Objects
 import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
-import org.springframework.data.repository.CrudRepository
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.github.jactor.persistence.Config.ioContext
-import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.PersonDto
-import jakarta.persistence.AttributeOverride
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Column
-import jakarta.persistence.Embedded
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
 
 @Service
 class PersonService(private val personRepository: PersonRepository) {
@@ -88,70 +74,40 @@ data class Person(
     }
 }
 
-interface PersonRepository : CrudRepository<PersonDao, UUID> {
-    fun findBySurname(surname: String?): List<PersonDao>
+@Repository
+class PersonRepository {
+    fun findBySurname(surname: String?): List<PersonDao> = emptyList()
+
+    fun ResultRow.toUserDao(): UserDao = UserDao(
+    )
 }
 
-@Entity
-@Table(name = "T_PERSON")
-class PersonDao : PersistentDao<PersonDao?> {
-    @Id
-    override var id: UUID? = null
+data class PersonDao(
+    override var id: UUID? = null,
+    override var createdBy: String = "todo",
+    override var timeOfCreation: LocalDateTime = LocalDateTime.now(),
+    override var modifiedBy: String = "todo",
+    override var timeOfModification: LocalDateTime = LocalDateTime.now(),
 
-    @Embedded
-    @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
-    @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
-    @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
-    @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
-        internal set
+    var description: String? = null,
+    var firstName: String? = null,
+    var locale: String? = null,
+    var surname: String = "",
+    var addressDao: AddressDao? = null,
 
-    @Column(name = "DESCRIPTION")
-    var description: String? = null
-
-    @Column(name = "FIRST_NAME")
-    var firstName: String? = null
-
-    @Column(name = "LOCALE")
-    var locale: String? = null
-
-    @Column(name = "SURNAME", nullable = false)
-    var surname: String = ""
-
-    @JoinColumn(name = "ADDRESS_ID")
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    var addressDao: AddressEntity? = null
-        internal set
-
-    @OneToMany(mappedBy = "person", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.EAGER)
-    private var users: MutableSet<UserDao> = HashSet()
-
-    constructor() {
-        // used by entity manager
-    }
-
-    private constructor(person: PersonDao) {
-        addressDao = person.addressDao
-        description = person.description
-        firstName = person.firstName
-        locale = person.locale
+    private var users: MutableSet<UserDao> = HashSet(),
+) : PersistentDao<PersonDao?> {
+    constructor(person: Person) : this(
         id = person.id
-        persistentDataEmbeddable = PersistentDataEmbeddable()
-        surname = person.surname
-        users = person.users
-    }
 
-    constructor(person: Person) {
-        addressDao = person.address?.let { AddressEntity(it) }
-        description = person.description
-        firstName = person.firstName
-        locale = person.locale
-        id = person.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(person.persistent)
-        surname = person.surname
-    }
+            addressDao = person . address ?. let { AddressDao(dao = it) }
+            description = person . description
+            firstName = person.firstName
+            locale = person . locale
+            surname = person.surname
+    )
 
-    fun toModel() = Person(
+    fun toPerson() = Person(
         persistent = persistentDataEmbeddable.toModel(id),
         address = addressDao?.toPerson(),
         locale = locale,
@@ -160,52 +116,10 @@ class PersonDao : PersistentDao<PersonDao?> {
         description = description
     )
 
-    override fun copyWithoutId(): PersonDao {
-        val personEntity = PersonDao(this)
-        personEntity.id = null
-        return personEntity
-    }
-
-    override fun modifiedBy(modifier: String): PersonDao {
-        persistentDataEmbeddable.modifiedBy(modifier)
-        return this
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return this === other || other != null && javaClass == other.javaClass &&
-            addressDao == (other as PersonDao).addressDao &&
-            description == other.description &&
-            firstName == other.firstName &&
-            surname == other.surname &&
-            locale == other.locale
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(addressDao, description, firstName, surname, locale)
-    }
-
-    override fun toString(): String {
-        return ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-            .appendSuper(super.toString())
-            .append(firstName)
-            .append(surname)
-            .append(getUsers())
-            .append(addressDao)
-            .toString()
-    }
-
-    override val createdBy: String
-        get() = persistentDataEmbeddable.createdBy
-    override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfCreation
-    override val modifiedBy: String
-        get() = persistentDataEmbeddable.modifiedBy
-    override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfModification
-
-    fun getUsers(): Set<UserDao> {
-        return users
-    }
+    override fun copyWithoutId(): PersonDao  = copy(
+        id = null,
+        addressDao = addressDao?.copyWithoutId(),
+    )
 
     fun addUser(user: UserDao) {
         users.add(user)
