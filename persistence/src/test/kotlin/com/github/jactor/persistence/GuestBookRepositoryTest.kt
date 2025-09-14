@@ -39,7 +39,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
         userEntity.guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = userEntity.toModel()
+            user = userEntity.toPerson()
         ).withId().toEntity()
 
         flush { }
@@ -71,7 +71,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
         userEntity.guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = userEntity.toModel()
+            user = userEntity.toPerson()
         ).withId().toEntity()
 
         flush { guestBookRepository.save(userEntity.guestBook ?: fail(message = "User missing guest book")) }

@@ -103,7 +103,7 @@ internal class GuestBookServiceTest {
         val guestBookEntryEntity = guestBookEntryEntitySlot.captured
 
         assertAll {
-            assertThat(guestBookEntryEntity.guestBook).isNotNull()
+            assertThat(guestBookEntryEntity.guestBookDao).isNotNull()
             assertThat(guestBookEntryEntity.creatorName).isEqualTo("me")
             assertThat(guestBookEntryEntity.entry).isEqualTo("if i where a rich man...")
         }

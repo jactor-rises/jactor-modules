@@ -50,7 +50,7 @@ internal class PersonRepositoryTest @Autowired constructor(
         val personEntity = personRepository.findBySurname("Sometime").iterator().next()
 
         assertAll {
-            assertThat(personEntity.addressEntity).isEqualTo(personToPersist.addressEntity)
+            assertThat(personEntity.addressDao).isEqualTo(personToPersist.addressDao)
             assertThat(personEntity.description).isEqualTo("Me, myself, and I")
             assertThat(personEntity.locale).isEqualTo("no_NO")
             assertThat(personEntity.firstName).isEqualTo("Born")

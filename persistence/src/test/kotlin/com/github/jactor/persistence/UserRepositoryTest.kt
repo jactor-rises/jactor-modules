@@ -23,7 +23,7 @@ internal class UserRepositoryTest @Autowired constructor(
 
         assertAll {
             assertThat(userEntity.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
-            assertThat(userEntity.person?.firstName).isEqualTo("Tor Egil")
+            assertThat(userEntity.personDao?.firstName).isEqualTo("Tor Egil")
         }
     }
 
@@ -46,7 +46,7 @@ internal class UserRepositoryTest @Autowired constructor(
         val userEntity = userById.orElseThrow { userNotFound() }
 
         assertAll {
-            assertThat(userEntity.person).isEqualTo(userToPersist.person)
+            assertThat(userEntity.personDao).isEqualTo(userToPersist.personDao)
             assertThat(userEntity.username).isEqualTo("smuggler")
             assertThat(userEntity.emailAddress).isEqualTo("smuggle.fast@tantooine.com")
         }

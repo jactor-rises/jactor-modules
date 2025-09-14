@@ -8,7 +8,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initGuestBook
 import com.github.jactor.persistence.test.initGuestBookEntry
-import com.github.jactor.persistence.test.initGuestBookEntryEntity
+import com.github.jactor.persistence.test.initGuestBookEntryDao
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import com.ninjasquad.springmockk.MockkBean
@@ -74,7 +74,7 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book entry`() {
         val uuid = UUID.randomUUID()
-        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntryEntity(id = uuid).toModel()
+        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntryDao(id = uuid).toModel()
 
         val guestBookEntry = webTestClient.get()
             .uri("/guestBook/entry/$uuid")

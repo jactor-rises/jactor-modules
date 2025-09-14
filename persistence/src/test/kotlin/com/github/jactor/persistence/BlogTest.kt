@@ -21,7 +21,7 @@ internal class BlogTest {
             user = initUser()
         )
 
-        val (created, _, title, userInternal) = Blog(blog.persistent, blog)
+        val (_, created, title, userInternal) = Blog(blog.persistent, blog)
 
         assertAll {
             assertThat(created).isEqualTo(blog.created)

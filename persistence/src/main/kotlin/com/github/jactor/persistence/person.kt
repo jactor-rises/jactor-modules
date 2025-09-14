@@ -10,7 +10,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.Config.ioContext
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.PersonDto
@@ -73,7 +72,7 @@ data class Person(
     )
 
     fun toPersonDto() = PersonDto(
-        persistentDto = persistent.toDto(),
+        persistentDto = persistent.toPersistentDto(),
         address = address?.toAddressDto(),
         locale = locale,
         firstName = firstName,
@@ -121,7 +120,7 @@ class PersonDao : PersistentDao<PersonDao?> {
 
     @JoinColumn(name = "ADDRESS_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    var addressEntity: AddressEntity? = null
+    var addressDao: AddressEntity? = null
         internal set
 
     @OneToMany(mappedBy = "person", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.EAGER)
@@ -132,7 +131,7 @@ class PersonDao : PersistentDao<PersonDao?> {
     }
 
     private constructor(person: PersonDao) {
-        addressEntity = person.addressEntity
+        addressDao = person.addressDao
         description = person.description
         firstName = person.firstName
         locale = person.locale
@@ -143,7 +142,7 @@ class PersonDao : PersistentDao<PersonDao?> {
     }
 
     constructor(person: Person) {
-        addressEntity = person.address?.let { AddressEntity(it) }
+        addressDao = person.address?.let { AddressEntity(it) }
         description = person.description
         firstName = person.firstName
         locale = person.locale
@@ -154,7 +153,7 @@ class PersonDao : PersistentDao<PersonDao?> {
 
     fun toModel() = Person(
         persistent = persistentDataEmbeddable.toModel(id),
-        address = addressEntity?.toModel(),
+        address = addressDao?.toPerson(),
         locale = locale,
         firstName = firstName,
         surname = surname,
@@ -174,7 +173,7 @@ class PersonDao : PersistentDao<PersonDao?> {
 
     override fun equals(other: Any?): Boolean {
         return this === other || other != null && javaClass == other.javaClass &&
-            addressEntity == (other as PersonDao).addressEntity &&
+            addressDao == (other as PersonDao).addressDao &&
             description == other.description &&
             firstName == other.firstName &&
             surname == other.surname &&
@@ -182,7 +181,7 @@ class PersonDao : PersistentDao<PersonDao?> {
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(addressEntity, description, firstName, surname, locale)
+        return Objects.hash(addressDao, description, firstName, surname, locale)
     }
 
     override fun toString(): String {
@@ -191,7 +190,7 @@ class PersonDao : PersistentDao<PersonDao?> {
             .append(firstName)
             .append(surname)
             .append(getUsers())
-            .append(addressEntity)
+            .append(addressDao)
             .toString()
     }
 

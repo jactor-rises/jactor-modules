@@ -56,7 +56,7 @@ internal class BlogServiceTest {
             persistent = Persistent(),
         )
 
-        val anEntry = blogEntry.withId().toEntity()
+        val anEntry = blogEntry.withId().toBlogEntryDao()
 
         every { blogEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
 
@@ -88,7 +88,7 @@ internal class BlogServiceTest {
                 creatorName = "you",
                 entry = "too",
                 persistent = Persistent(),
-            ).withId().toEntity()
+            ).withId().toBlogEntryDao()
         )
 
         every { blogEntryRepositoryMockk.findBlogEntriesByBlogId(uuid) } returns blogEntryEntities
@@ -112,7 +112,7 @@ internal class BlogServiceTest {
         )
 
         coEvery { userServiceMockk.find(username = any()) } returns null
-        every { blogRepositoryMockk.save(capture(blogEntitySlot)) } returns BlogDao(blog)
+        every { blogRepositoryMockk.insertOrUpdate(capture(blogEntitySlot)) } returns BlogDao(blog)
 
         blogServiceToTest.saveOrUpdate(blog = blog)
         val blogEntity = blogEntitySlot.captured
@@ -143,7 +143,7 @@ internal class BlogServiceTest {
         val blogEntryEntity = blogEntryEntitySlot.captured
 
         assertAll {
-            assertThat(blogEntryEntity.blog).isNotNull()
+            assertThat(blogEntryEntity.blogDao).isNotNull()
             assertThat(blogEntryEntity.creatorName).isEqualTo("me")
             assertThat(blogEntryEntity.entry).isEqualTo("if i where a rich man...")
         }

@@ -7,6 +7,7 @@ import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.Config.ioContext
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.CreateUserCommand
@@ -129,7 +129,7 @@ class UserService(
     }
 
     suspend fun find(id: UUID): User? = ioContext {
-        userRepository.findById(id).getOrNull()?.toModel()
+        userRepository.findById(id).getOrNull()?.toPerson()
     }
 
     @Transactional
@@ -137,7 +137,7 @@ class UserService(
         val uuid = user.persistent.id ?: throw IllegalArgumentException("User must have an id!")
         return ioContext {
             userRepository.findById(uuid).map { it.update(user) }
-                .getOrNull()?.toModel()
+                .getOrNull()?.toPerson()
         }
     }
 
@@ -148,14 +148,14 @@ class UserService(
             user.id = UUID.randomUUID()
         }
 
-        return ioContext { userRepository.save(user).toModel() }
+        return ioContext { userRepository.save(user).toPerson() }
     }
 
     private suspend fun createNewFrom(createUserCommand: CreateUserCommand): UserDao {
-        val person = createUserCommand.toPersonDto().toModel()
+        val person = createUserCommand.toPersonDto().toPerson()
         val personEntity = ioContext { personService.createWhenNotExists(person = person) }
-        val user = UserDao(user = createUserCommand.toUserDto().toModel())
-        user.person = personEntity
+        val user = UserDao(user = createUserCommand.toUserDto().toUser())
+        user.personDao = personEntity
 
         return user
     }
@@ -208,7 +208,7 @@ data class User(
     )
 
     fun toDto() = UserDto(
-        persistentDto = persistent.toDto(),
+        persistentDto = persistent.toPersistentDto(),
         emailAddress = emailAddress,
         person = person?.toPersonDto(),
         username = username,
@@ -221,6 +221,9 @@ data class User(
     enum class Usertype {
         ADMIN, ACTIVE, INACTIVE
     }
+}
+
+object Users: UUIDTable(name = "T_USER", columnName = "ID") {
 }
 
 interface UserRepository : CrudRepository<UserDao, UUID> {
@@ -250,7 +253,7 @@ class UserDao : PersistentDao<UserDao?> {
 
     @JoinColumn(name = "PERSON_ID")
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    var person: PersonDao? = null
+    var personDao: PersonDao? = null
         internal set
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
@@ -280,7 +283,7 @@ class UserDao : PersistentDao<UserDao?> {
         guestBook = userEntity.guestBook?.copyWithoutId()
         id = userEntity.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
-        person = userEntity.person?.copyWithoutId()
+        personDao = userEntity.personDao?.copyWithoutId()
         username = userEntity.username
         userType = userEntity.userType
     }
@@ -293,7 +296,7 @@ class UserDao : PersistentDao<UserDao?> {
         emailAddress = user.emailAddress
         id = user.persistent.id
         persistentDataEmbeddable = PersistentDataEmbeddable(user.persistent)
-        person = user.person?.let { PersonDao(it) }
+        personDao = user.person?.let { PersonDao(it) }
         username = user.username
         userType = UserType.entries
             .firstOrNull { aUserType: UserType -> aUserType.name == user.usertype.name }
@@ -302,15 +305,15 @@ class UserDao : PersistentDao<UserDao?> {
 
     fun toModel() = User(
         persistent = persistentDataEmbeddable.toModel(id),
-        person = person?.toModel(),
+        person = personDao?.toModel(),
         emailAddress = emailAddress,
         username = username,
         usertype = userType?.let { User.Usertype.valueOf(it.name) } ?: User.Usertype.INACTIVE,
     )
 
     fun fetchPerson(): PersonDao {
-        person?.addUser(this)
-        return person ?: error("No person provided to the user entity")
+        personDao?.addUser(this)
+        return personDao ?: error("No person provided to the user entity")
     }
 
     override fun copyWithoutId(): UserDao {
@@ -337,12 +340,12 @@ class UserDao : PersistentDao<UserDao?> {
     override fun equals(other: Any?): Boolean {
         return other === this || other != null && javaClass == other.javaClass &&
             emailAddress == (other as UserDao).emailAddress &&
-            person == other.person &&
+            personDao == other.personDao &&
             username == other.username
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(username, person, emailAddress)
+        return Objects.hash(username, personDao, emailAddress)
     }
 
     override fun toString(): String {
@@ -352,7 +355,7 @@ class UserDao : PersistentDao<UserDao?> {
             .append(emailAddress)
             .append(blogs)
             .append("guestbook.id=" + if (guestBook != null) guestBook!!.id else null)
-            .append(person)
+            .append(personDao)
             .toString()
     }
 

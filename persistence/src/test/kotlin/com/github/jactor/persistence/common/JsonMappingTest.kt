@@ -3,8 +3,8 @@ package com.github.jactor.persistence.common
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.JactorPersistenceConfig
-import com.github.jactor.persistence.test.initAddressEntity
-import com.github.jactor.persistence.test.initPersonEntity
+import com.github.jactor.persistence.test.initAddressDao
+import com.github.jactor.persistence.test.initPersonDao
 import com.github.jactor.persistence.test.initUserEntity
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
@@ -19,7 +19,7 @@ internal class JsonMappingTest {
 
     @Test
     fun `skal mappe json fra UserDto fra User skapt av UserEntity`() {
-        val user = initUserEntity(person = initPersonEntity(address = initAddressEntity())).toModel()
+        val user = initUserEntity(person = initPersonDao(address = initAddressDao())).toModel()
         val json: String = objectMapper.writeValueAsString(user.toDto())
 
         assertThat(json).contains(""""person":{""", """"address":{""")

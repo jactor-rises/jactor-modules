@@ -48,7 +48,7 @@ internal class ModifierAspectTest {
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
 
-        modifierAspect.modifyPersistentEntity(joinPointMock)
+        modifierAspect.modifyPersistentDao(joinPointMock)
 
         assertThat(address.timeOfModification).isNotOlderThan(seconds = 1)
     }
@@ -60,7 +60,7 @@ internal class ModifierAspectTest {
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 
-        modifierAspect.modifyPersistentEntity(joinPointMock)
+        modifierAspect.modifyPersistentDao(joinPointMock)
 
         assertThat(blog.timeOfModification).isNotOlderThan(seconds = 1)
         assertThat(blogWithouId.timeOfModification).isEqualTo(oneMinuteAgo)
@@ -76,7 +76,7 @@ internal class ModifierAspectTest {
             ),
             creatorName = "me",
             entry = "some shit"
-        ).toEntity()
+        ).toBlogEntryDao()
 
         val blogEntry = BlogEntry(
             persistent, initBlogEntry(
@@ -84,11 +84,11 @@ internal class ModifierAspectTest {
                 entry = "some shit",
                 blog = initBlog(persistent = Persistent(id = UUID.randomUUID())),
             )
-        ).withId().toEntity()
+        ).withId().toBlogEntryDao()
 
         every { joinPointMock.args } returns arrayOf<Any>(blogEntry, blogEntryWithoutId)
 
-        modifierAspect.modifyPersistentEntity(joinPointMock)
+        modifierAspect.modifyPersistentDao(joinPointMock)
 
         assertAll {
             assertThat(blogEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
@@ -103,7 +103,7 @@ internal class ModifierAspectTest {
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBook, guestBookWithoutId)
 
-        modifierAspect.modifyPersistentEntity(joinPointMock)
+        modifierAspect.modifyPersistentDao(joinPointMock)
 
         assertAll {
             assertThat(guestBook.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
@@ -127,7 +127,7 @@ internal class ModifierAspectTest {
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId)
 
-        modifierAspect.modifyPersistentEntity(joinPointMock)
+        modifierAspect.modifyPersistentDao(joinPointMock)
 
         assertAll {
             assertThat(guestBookEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
@@ -142,7 +142,7 @@ internal class ModifierAspectTest {
 
         every { joinPointMock.args } returns arrayOf<Any>(person, personWithoutId)
 
-        modifierAspect.modifyPersistentEntity(joinPointMock)
+        modifierAspect.modifyPersistentDao(joinPointMock)
 
         assertAll {
             assertThat(person.timeOfModification, "person with id").isNotOlderThan(seconds = 1)
@@ -157,7 +157,7 @@ internal class ModifierAspectTest {
 
         every { joinPointMock.args } returns arrayOf<Any>(user, userWithoutId)
 
-        modifierAspect.modifyPersistentEntity(joinPointMock)
+        modifierAspect.modifyPersistentDao(joinPointMock)
 
         assertThat(user.timeOfModification).isNotOlderThan(seconds = 1)
         assertThat(userWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)

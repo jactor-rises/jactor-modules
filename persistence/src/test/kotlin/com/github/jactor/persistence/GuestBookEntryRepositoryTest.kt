@@ -37,14 +37,14 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = savedUser.toModel()
+            user = savedUser.toPerson()
         )
 
         savedUser.guestBook = guestBook.withId().toEntity()
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
         val guestBookEntry = initGuestBookEntry(
-            guestBook = savedUser.guestBook?.toModel(),
+            guestBook = savedUser.guestBook?.toPerson(),
             creatorName = "Harry",
             entry = "Draco Dormiens Nunquam Tittilandus"
         ).withId().toEntity()
@@ -78,7 +78,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = savedUser.toModel()
+            user = savedUser.toPerson()
         )
 
         val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
@@ -88,7 +88,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
                 initGuestBookEntry(
                     creatorName = "Harry",
                     entry = "Draco Dormiens Nunquam Tittilandus",
-                    guestBook = savedGuestBook.toModel(),
+                    guestBook = savedGuestBook.toPerson(),
                 ).withId().toEntity()
             )
         }
@@ -126,7 +126,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = savedUser.toModel()
+            user = savedUser.toPerson()
         )
 
         val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
@@ -134,7 +134,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             initGuestBookEntry(
                 creatorName = "somone",
                 entry = "jadda",
-                guestBook = savedGuestBook.toModel(),
+                guestBook = savedGuestBook.toPerson(),
             ).withId().toEntity()
         )
 
@@ -148,7 +148,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
         val anotherSavedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
         val anotherEntry = initGuestBookEntry(
-            guestBook = anotherSavedGuestBook.toModel(),
+            guestBook = anotherSavedGuestBook.toPerson(),
             creatorName = "shrek",
             entry = "far far away"
         ).withId()

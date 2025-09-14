@@ -40,7 +40,7 @@ internal class BlogRepositoryTest @Autowired constructor(
 
         val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
 
-        blogRepository.save(blogEntityToSave)
+        blogRepository.insertOrUpdate(blogEntityToSave)
 
         val blogs = blogRepository.findAll().toList()
         assertThat(blogs).hasSize(1)
@@ -74,7 +74,7 @@ internal class BlogRepositoryTest @Autowired constructor(
 
         val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
 
-        blogRepository.save(blogEntityToSave)
+        blogRepository.insertOrUpdate(blogEntityToSave)
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)
@@ -82,7 +82,7 @@ internal class BlogRepositoryTest @Autowired constructor(
         val blogEntitySaved = blogs.iterator().next()
         blogEntitySaved.title = "Duh"
 
-        blogRepository.save(blogEntitySaved)
+        blogRepository.insertOrUpdate(blogEntitySaved)
 
         val modifiedBlogs = blogRepository.findBlogsByTitle("Duh")
         assertThat(modifiedBlogs).hasSize(1)
@@ -115,7 +115,7 @@ internal class BlogRepositoryTest @Autowired constructor(
 
         val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
 
-        blogRepository.save(blogEntityToSave)
+        blogRepository.insertOrUpdate(blogEntityToSave)
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
 
@@ -149,15 +149,15 @@ internal class BlogRepositoryTest @Autowired constructor(
         val blog = Blog(created = LocalDate.now(), title = "Blah", user = user).withId()
         val blogEntityToSave: BlogDao = blog.toEntity()
         val blogEntry = BlogEntry(
-            blog = blogEntityToSave.toModel(),
+            blog = blogEntityToSave.toBlog(),
             creatorName = "arnold",
             entry = "i'll be back"
         )
 
-        val blogEntryToSave: BlogEntryDao = blogEntry.withId().toEntity()
+        val blogEntryToSave: BlogEntryDao = blogEntry.withId().toBlogEntryDao()
 
         blogEntityToSave.add(blogEntryToSave)
-        blogRepository.save(blogEntityToSave)
+        blogRepository.insertOrUpdate(blogEntityToSave)
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)

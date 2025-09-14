@@ -20,9 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.Config.ioContext
-import com.github.jactor.persistence.common.EntryEmbeddable
+import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
@@ -183,19 +182,19 @@ class DefaultGuestBookService(
     private val guestBookEntryRepository: GuestBookEntryRepository
 ) : GuestBookService {
     override suspend fun find(id: UUID): GuestBook? = ioContext {
-        guestBookRepository.findById(id).getOrNull()?.toModel()
+        guestBookRepository.findById(id).getOrNull()?.toPerson()
     }
 
     override suspend fun findEntry(id: UUID): GuestBookEntry? = ioContext {
-        guestBookEntryRepository.findById(id).getOrNull()?.toModel()
+        guestBookEntryRepository.findById(id).getOrNull()?.toPerson()
     }
 
     override suspend fun saveOrUpdate(guestBook: GuestBook): GuestBook = ioContext {
-        guestBookRepository.save(GuestBookDao(guestBook)).toModel()
+        guestBookRepository.save(GuestBookDao(guestBook)).toPerson()
     }
 
     override suspend fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry = ioContext {
-        guestBookEntryRepository.save(GuestBookEntryDao(guestBookEntry)).toModel()
+        guestBookEntryRepository.save(GuestBookEntryDao(guestBookEntry)).toPerson()
     }
 }
 
@@ -223,7 +222,7 @@ data class GuestBook(
     )
 
     fun toDto(): GuestBookDto = GuestBookDto(
-        persistentDto = persistent.toDto(),
+        persistentDto = persistent.toPersistentDto(),
         entries = entries.map { entry: GuestBookEntry -> entry.toDto() }.toSet(),
         title = title,
         userDto = user?.toDto()
@@ -264,7 +263,7 @@ data class GuestBookEntry(
         entry = entry,
         creatorName = creatorName,
         guestBook = guestBook?.toDto(),
-        persistentDto = persistent.toDto(),
+        persistentDto = persistent.toPersistentDto(),
     )
 
     fun toEntity() = GuestBookEntryDao(guestBookEntry = this)
@@ -350,7 +349,7 @@ class GuestBookDao : PersistentDao<GuestBookDao?> {
 
     fun add(guestBookEntry: GuestBookEntryDao) {
         entries.add(guestBookEntry)
-        guestBookEntry.guestBook = this
+        guestBookEntry.guestBookDao = this
     }
 
     override fun equals(other: Any?): Boolean {
@@ -397,48 +396,48 @@ class GuestBookEntryDao : PersistentDao<GuestBookEntryDao?> {
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "GUEST_BOOK_ID")
-    var guestBook: GuestBookDao? = null
+    var guestBookDao: GuestBookDao? = null
 
     @Embedded
     @AttributeOverride(name = "creatorName", column = Column(name = "GUEST_NAME"))
     @AttributeOverride(name = "entry", column = Column(name = "ENTRY"))
-    private var entryEmbeddable = EntryEmbeddable()
+    private var entryDaoEmbeddable = EntryDao()
 
     constructor() {
         // used by entity manager
     }
 
     private constructor(guestBookEntry: GuestBookEntryDao) {
-        entryEmbeddable = guestBookEntry.copyEntry()
-        guestBook = guestBookEntry.copyGuestBookWithoutId()
+        entryDaoEmbeddable = guestBookEntry.copyEntry()
+        guestBookDao = guestBookEntry.copyGuestBookWithoutId()
         id = guestBookEntry.id
         persistentDataEmbeddable = PersistentDataEmbeddable()
     }
 
     constructor(guestBookEntry: GuestBookEntry) {
-        entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
-        guestBook = guestBookEntry.guestBook?.let { GuestBookDao(it) }
+        entryDaoEmbeddable = EntryDao(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
+        guestBookDao = guestBookEntry.guestBook?.let { GuestBookDao(it) }
         id = guestBookEntry.id
         persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistent)
     }
 
     private fun copyGuestBookWithoutId(): GuestBookDao {
-        return guestBook!!.copyWithoutId()
+        return guestBookDao!!.copyWithoutId()
     }
 
-    private fun copyEntry(): EntryEmbeddable {
-        return entryEmbeddable.copy()
+    private fun copyEntry(): EntryDao {
+        return entryDaoEmbeddable.copy()
     }
 
     fun toModel() = GuestBookEntry(
-        creatorName = entryEmbeddable.creatorName,
-        entry = entryEmbeddable.entry,
-        guestBook = guestBook?.toModel(),
+        creatorName = entryDaoEmbeddable.creatorName,
+        entry = entryDaoEmbeddable.entry,
+        guestBook = guestBookDao?.toModel(),
         persistent = persistentDataEmbeddable.toModel(id),
     )
 
     fun modify(modifiedBy: String, entry: String) {
-        entryEmbeddable.modify(modifiedBy, entry)
+        entryDaoEmbeddable.modify(modifiedBy, entry)
         persistentDataEmbeddable.modifiedBy(modifiedBy)
     }
 
@@ -458,19 +457,19 @@ class GuestBookEntryDao : PersistentDao<GuestBookEntryDao?> {
     }
 
     private fun isEqualTo(o: GuestBookEntryDao): Boolean {
-        return entryEmbeddable == o.entryEmbeddable &&
-            guestBook == o.guestBook
+        return entryDaoEmbeddable == o.entryDaoEmbeddable &&
+            guestBookDao == o.guestBookDao
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(guestBook, entryEmbeddable)
+        return Objects.hash(guestBookDao, entryDaoEmbeddable)
     }
 
     override fun toString(): String {
         return ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
             .appendSuper(super.toString())
-            .append(guestBook)
-            .append(entryEmbeddable)
+            .append(guestBookDao)
+            .append(entryDaoEmbeddable)
             .toString()
     }
 
@@ -483,7 +482,7 @@ class GuestBookEntryDao : PersistentDao<GuestBookEntryDao?> {
     override val timeOfModification: LocalDateTime
         get() = persistentDataEmbeddable.timeOfModification
     val entry: String
-        get() = entryEmbeddable.notNullableEntry
+        get() = entryDaoEmbeddable.notNullableEntry
     val creatorName: String
-        get() = entryEmbeddable.notNullableCreator
+        get() = entryDaoEmbeddable.notNullableCreator
 }

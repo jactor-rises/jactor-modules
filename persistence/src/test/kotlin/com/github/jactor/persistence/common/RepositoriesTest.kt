@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogRepository
-import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserRepository
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -40,7 +39,7 @@ internal class RepositoriesTest @Autowired constructor(
             .orElseThrow { AssertionError("User not found!") }
 
         flush {
-            blogRepository.save(
+            blogRepository.insertOrUpdate(
                 Blog(
                     created = LocalDate.now(),
                     title = "Far, far, away...",

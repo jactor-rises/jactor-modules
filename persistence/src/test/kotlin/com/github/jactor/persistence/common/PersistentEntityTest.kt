@@ -103,7 +103,7 @@ internal class PersistentEntityTest {
             persistent = Persistent(),
         )
 
-        persistentDaoToTest = blogEntry.withId().toEntity()
+        persistentDaoToTest = blogEntry.withId().toBlogEntryDao()
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {

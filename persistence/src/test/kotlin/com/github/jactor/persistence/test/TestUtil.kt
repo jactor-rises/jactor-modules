@@ -1,34 +1,30 @@
 package com.github.jactor.persistence.test
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.UUID
-import com.github.jactor.persistence.AddressEntity
 import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.AddressDao
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookDao
 import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.GuestBookEntryDao
-import com.github.jactor.persistence.PersonDao
 import com.github.jactor.persistence.Person
+import com.github.jactor.persistence.PersonDao
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserDao
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
 import com.github.jactor.persistence.common.Persistent
-
-fun timestamped(username: String): String {
-    return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
-}
 
 fun initAddress(
     persistent: Persistent = Persistent(),
-    addressLine1: String? = null,
+    addressLine1: String = "na",
     addressLine2: String? = null,
     addressLine3: String? = null,
-    city: String? = null,
+    city: String = "na",
     country: String? = null,
-    zipCode: String? = null,
+    zipCode: String = "na",
 ) = Address(
     persistent = persistent,
     addressLine1 = addressLine1,
@@ -37,6 +33,32 @@ fun initAddress(
     city = city,
     country = country,
     zipCode = zipCode
+)
+
+fun initAddressDao(
+    id: UUID? = UUID.randomUUID(),
+    createdBy: String = "unit test",
+    timeOfCreation: LocalDateTime = LocalDateTime.now(),
+    modifiedBy: String = "unit test",
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+    addressLine1: String = "na",
+    addressLine2: String? = null,
+    addressLine3: String? = null,
+    city: String = "na",
+    country: String? = null,
+    zipCode: String = "na",
+) = AddressDao(
+    id = id,
+    createdBy = createdBy,
+    timeOfCreation = timeOfCreation,
+    modifiedBy = modifiedBy,
+    timeOfModification = timeOfModification,
+    addressLine1 = addressLine1,
+    addressLine2 = addressLine2,
+    addressLine3 = addressLine3,
+    city = city,
+    country = country,
+    zipCode = zipCode,
 )
 
 fun initBlog(
@@ -89,39 +111,30 @@ fun initGuestBookEntry(
 
 fun initUserEntity(
     id: UUID? = UUID.randomUUID(),
-    person: PersonDao = initPersonEntity()
+    person: PersonDao = initPersonDao()
 ) = UserDao().apply {
     this.id = id
-    this.person = person
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
+    this.personDao = person
 }
 
-fun initPersonEntity(
+fun initPersonDao(
     id: UUID? = UUID.randomUUID(),
-    address: AddressEntity? = initAddressEntity()
+    address: AddressDao? = initAddressDao()
 ) = PersonDao().apply {
     this.id = id
-    addressEntity = address
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
+    addressDao = address
 }
 
-fun initGuestBookEntity(id: UUID? = null) = GuestBookDao().apply {
+fun initGuestBookDao(id: UUID? = null) = GuestBookDao().apply {
     this.id = id
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
 }
 
-fun initGuestBookEntryEntity(
+fun initGuestBookEntryDao(
     id: UUID? = null,
-    guestBook: GuestBookDao = initGuestBookEntity()
+    guestBook: GuestBookDao = initGuestBookDao()
 ) = GuestBookEntryDao().apply {
     this.id = id
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
-    this.guestBook = guestBook
-}
-
-fun initAddressEntity(id: UUID? = UUID.randomUUID()) = AddressEntity().apply {
-    this.id = id
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
+    this.guestBookDao = guestBook
 }
 
 fun initPerson(
@@ -154,3 +167,7 @@ fun initUser(
     username = username,
     usertype = usertype,
 )
+
+fun timestamped(username: String): String {
+    return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
+}

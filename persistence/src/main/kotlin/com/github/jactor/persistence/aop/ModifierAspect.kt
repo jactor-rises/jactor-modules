@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component
 @Aspect
 @Component
 class ModifierAspect {
-    @Before("execution(* com.github.jactor.persistence.*.*Repository.save(..))")
-    fun modifyPersistentEntity(joinPoint: JoinPoint): Any? {
+    @Before("execution(* com.github.jactor.persistence.*Repository.insertOrUpdate(..))")
+    fun modifyPersistentDao(joinPoint: JoinPoint): Any? {
         return joinPoint.args
             .filterIsInstance<PersistentDao<*>>()
             .filter { persistentDao: PersistentDao<*> -> persistentDao.id != null }
-            .forEach { persistentEntity -> persistentEntity.modifiedBy("todo") }
+            .forEach { persistentEntity -> persistentEntity.modifiedBy(modifier = "todo") }
     }
 }
