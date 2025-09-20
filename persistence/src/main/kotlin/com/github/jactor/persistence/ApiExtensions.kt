@@ -1,6 +1,7 @@
 package com.github.jactor.persistence
 
 import java.time.LocalDateTime
+import com.github.jactor.persistence.UserDao.UserType
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.BlogDto
@@ -44,6 +45,9 @@ fun GuestBookEntryDto.toGuestBookEntry(parent: GuestBook?) = GuestBookEntry(
     guestBook = parent
 )
 
+fun com.github.jactor.shared.api.UserType.toModel(): UserType = UserType.entries
+    .firstOrNull { it.name == this.name } ?: error("User type ${this.name} not found!")
+
 fun PersistentDto.toPersistent() = Persistent(
     id = id,
     createdBy = requireNotNull(createdBy) { "Created by cannot be null!" },
@@ -67,4 +71,16 @@ fun UserDto.toUser() = User(
     emailAddress = emailAddress,
     username = username,
     usertype = User.Usertype.valueOf(userType.name)
+)
+
+fun UserDto.toUserDao() = UserDao(
+    id = persistentDto.id,
+    createdBy = requireNotNull(persistentDto.createdBy) { "Created by cannot be null!" },
+    timeOfCreation = persistentDto.timeOfCreation ?: LocalDateTime.now(),
+    modifiedBy = requireNotNull(persistentDto.modifiedBy) { "Modified by cannot be null!" },
+    timeOfModification = persistentDto.timeOfModification ?: LocalDateTime.now(),
+    userType = userType.toModel(),
+    emailAddress = null,
+    personId = null,
+    username = "na",
 )

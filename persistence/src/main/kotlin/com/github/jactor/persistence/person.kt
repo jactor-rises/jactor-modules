@@ -88,7 +88,7 @@ object PersonRepository {
         .selectAll()
         .where { People.id eq id }
         .map { it.toPersonDao() }
-        .firstOrNull()
+        .singleOrNull()
 
     fun findBySurname(surname: String?): List<PersonDao> = when {
         (surname?.isNotBlank() ?: true) -> emptyList()

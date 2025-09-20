@@ -45,10 +45,6 @@ data class Address(
         country = country,
         zipCode = zipCode
     )
-
-    fun toAddressDao() = AddressDao(
-        address = this
-    )
 }
 
 object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
@@ -92,7 +88,7 @@ object AddressRepository {
         Addresses
             .selectAll()
             .where { Addresses.id eq addressId }
-            .firstOrNull()
+            .singleOrNull()
             ?.toAddressDao()
     }
 }
