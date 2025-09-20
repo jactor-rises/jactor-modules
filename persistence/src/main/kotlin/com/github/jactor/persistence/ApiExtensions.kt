@@ -3,6 +3,7 @@ package com.github.jactor.persistence
 import java.time.LocalDateTime
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.AddressDto
+import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import com.github.jactor.shared.api.PersistentDto
@@ -19,6 +20,8 @@ fun AddressDto.toAddress() = Address(
     country = country,
     zipCode = requireNotNull(zipCode) { "Zip code cannot be null!" },
 )
+
+fun BlogDto.toBlog() = Blog(blogDto = this)
 
 fun GuestBookDto.toGuestBook() = GuestBook(
     persistent = persistentDto.toPersistent(),

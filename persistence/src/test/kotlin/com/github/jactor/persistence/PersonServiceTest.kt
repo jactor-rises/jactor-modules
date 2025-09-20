@@ -25,7 +25,7 @@ internal class PersonServiceTest @Autowired constructor(
 
     @Test
     fun `should find Person by id`() = runTest {
-        val personEntity = personRepository.save(initPerson().toEntityWithId())
+        val personEntity = personRepository.insertOrUpdate(initPerson().toEntityWithId())
 
         // when
         val person = personService.createWhenNotExists(

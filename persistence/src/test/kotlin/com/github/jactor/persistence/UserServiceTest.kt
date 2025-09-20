@@ -98,7 +98,7 @@ internal class UserServiceTest @Autowired constructor(
         val personEntitySlot = slot<PersonDao>()
 
         every { userRepositoryMockk.save(any()) } returns userEntity
-        every { personRepositoryMockk.save(capture(personEntitySlot)) } returns PersonDao(initPerson())
+        every { personRepositoryMockk.insertOrUpdate(capture(personEntitySlot)) } returns PersonDao(initPerson())
 
         val userCreated = userServiceToTest.create(createUserCommand)
 

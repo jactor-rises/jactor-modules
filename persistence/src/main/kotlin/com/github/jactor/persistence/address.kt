@@ -9,7 +9,6 @@ import org.jetbrains.exposed.v1.javatime.datetime
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import org.springframework.stereotype.Repository
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.AddressDto
@@ -46,6 +45,10 @@ data class Address(
         country = country,
         zipCode = zipCode
     )
+
+    fun toAddressDao() = AddressDao(
+        address = this
+    )
 }
 
 object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
@@ -62,8 +65,7 @@ object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
     val zipCode = text("ZIP_CODE")
 }
 
-@Repository
-class AddressRepository {
+object AddressRepository {
     fun findByZipCode(zip: String): List<AddressDao> = transaction {
         Addresses
             .selectAll()
@@ -85,6 +87,14 @@ class AddressRepository {
         country = this[Addresses.country],
         zipCode = this[Addresses.zipCode],
     )
+
+    fun findById(addressId: UUID): AddressDao? = transaction {
+        Addresses
+            .selectAll()
+            .where { Addresses.id eq addressId }
+            .firstOrNull()
+            ?.toAddressDao()
+    }
 }
 
 data class AddressDao(
@@ -101,19 +111,20 @@ data class AddressDao(
     var country: String?,
     var zipCode: String,
 ) : PersistentDao<AddressDao> {
-    constructor(dao: AddressDao) : this(
-        id = dao.id,
+    constructor(address: Address) : this(
+        id = null,
 
-        addressLine1 = dao.addressLine1,
-        addressLine2 = dao.addressLine2,
-        addressLine3 = dao.addressLine3,
-        city = dao.city,
-        country = dao.country,
-        createdBy = dao.createdBy,
-        modifiedBy = dao.modifiedBy,
-        timeOfCreation = dao.timeOfCreation,
-        timeOfModification = dao.timeOfModification,
-        zipCode = dao.zipCode,
+        createdBy = address.persistent.createdBy,
+        timeOfCreation = address.persistent.timeOfCreation,
+        modifiedBy = address.persistent.modifiedBy,
+        timeOfModification = address.persistent.timeOfModification,
+
+        addressLine1 = address.addressLine1,
+        addressLine2 = address.addressLine2,
+        addressLine3 = address.addressLine3,
+        city = address.city,
+        country = address.country,
+        zipCode = address.zipCode,
     )
 
     override fun copyWithoutId(): AddressDao = copy(id = null)
@@ -123,4 +134,15 @@ data class AddressDao(
 
         return this
     }
+
+    fun toAddress() = Address(
+        persistent = toPersistent(),
+
+        addressLine1 = addressLine1,
+        addressLine2 = addressLine2,
+        addressLine3 = addressLine3,
+        city = city,
+        country = country,
+        zipCode = zipCode
+    )
 }

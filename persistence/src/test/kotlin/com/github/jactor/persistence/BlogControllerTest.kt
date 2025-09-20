@@ -162,7 +162,7 @@ internal class BlogControllerTest @Autowired constructor(
         val blogDto = webTestClient
             .put()
             .uri("/blog/${blog.id}")
-            .bodyValue(blog.toDto())
+            .bodyValue(blog.toBlogDto())
             .exchange()
             .expectStatus().isAccepted
             .expectBody(BlogDto::class.java)

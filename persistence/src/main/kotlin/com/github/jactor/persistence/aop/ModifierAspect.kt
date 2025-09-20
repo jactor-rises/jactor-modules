@@ -14,6 +14,6 @@ class ModifierAspect {
         return joinPoint.args
             .filterIsInstance<PersistentDao<*>>()
             .filter { persistentDao: PersistentDao<*> -> persistentDao.id != null }
-            .forEach { persistentEntity -> persistentEntity.modifiedBy(modifier = "todo") }
+            .forEach { persistentDao -> persistentDao.modifiedBy(modifier = "todo") }
     }
 }

@@ -43,7 +43,7 @@ internal class PersonRepositoryTest @Autowired constructor(
             surname = "Sometime",
         ).toEntityWithId()
 
-        flush { personRepository.save(personToPersist) }
+        flush { personRepository.insertOrUpdate(personToPersist) }
 
         val people = personRepository.findAll().toList()
         assertThat(people).hasSize(allreadyPresentPeople + 1)
@@ -71,7 +71,7 @@ internal class PersonRepositoryTest @Autowired constructor(
             surname = "Mine",
         ).toEntityWithId()
 
-        flush { personRepository.save(personToPersist) }
+        flush { personRepository.insertOrUpdate(personToPersist) }
 
         val mine = personRepository.findBySurname("Mine")
         val person = mine.iterator().next()
@@ -81,7 +81,7 @@ internal class PersonRepositoryTest @Autowired constructor(
         person.firstName = "Dr. A."
         person.surname = "Cula"
 
-        flush { personRepository.save(person) }
+        flush { personRepository.insertOrUpdate(person) }
 
         val foundCula = personRepository.findBySurname("Cula")
         val personEntity = foundCula.iterator().next()
@@ -116,7 +116,7 @@ internal class PersonRepositoryTest @Autowired constructor(
         val userEntity = user.toEntity()
         val personToPersist = userEntity.fetchPerson()
 
-        flush { personRepository.save(personToPersist) }
+        flush { personRepository.insertOrUpdate(personToPersist) }
 
         assertThat(personRepository.findAll().toList()).hasSize(alreadyPresentPeople + 1)
         val personEntity = personRepository.findBySurname("Adder").iterator().next()
