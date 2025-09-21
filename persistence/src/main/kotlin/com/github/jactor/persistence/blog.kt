@@ -281,8 +281,7 @@ data class Blog(
     )
 
     fun fetchUsername(): String = this.user?.username ?: error("Unnable to find username in $this")
-    fun toDao() = BlogDao(blog = this)
-    fun withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
+    fun toBlogDao() = BlogDao(blog = this)
 }
 
 @JvmRecord

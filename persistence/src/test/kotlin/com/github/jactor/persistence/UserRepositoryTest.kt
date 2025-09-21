@@ -31,14 +31,14 @@ internal class UserRepositoryTest @Autowired constructor(
     fun `should write then read a user entity`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
-        val person = initPerson(address = address, surname = "Solo").withId()
+        val person = initPerson(address = address, surname = "Solo")
         val userToPersist = initUser(
             person = person,
             emailAddress = "smuggle.fast@tantooine.com",
             username = "smuggler"
-        ).withId().toEntity()
+        ).toUserDao()
 
         flush { userRepository.save(userToPersist) }
 
@@ -56,15 +56,15 @@ internal class UserRepositoryTest @Autowired constructor(
     fun `should write then update and read a user entity`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
-        val person = initPerson(address = address, surname = "AA").withId()
+        val person = initPerson(address = address, surname = "AA")
         val userToPersist = initUser(
             persistent = Persistent(),
             person = person,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
-        ).withId().toEntity()
+        ).toUserDao()
 
         flush { userRepository.save(userToPersist) }
 
@@ -91,16 +91,16 @@ internal class UserRepositoryTest @Autowired constructor(
     fun `should find active users and admins`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
-        val spidyPerson = initPerson(address = address, surname = "Parker").withId()
-        val superPerson = initPerson(address = address, surname = "Kent").withId()
+        val spidyPerson = initPerson(address = address, surname = "Parker")
+        val superPerson = initPerson(address = address, surname = "Kent")
         val userEntity = initUser(
             persistent = Persistent(),
             person = spidyPerson,
             emailAddress = null,
             username = "spiderman"
-        ).withId().toEntity()
+        ).toUserDao()
 
         flush {
             userRepository.save(userEntity)
@@ -110,7 +110,7 @@ internal class UserRepositoryTest @Autowired constructor(
                     emailAddress = null,
                     username = "superman",
                     usertype = User.Usertype.INACTIVE
-                ).withId().toEntity()
+                ).toUserDao()
             )
         }
 

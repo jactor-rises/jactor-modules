@@ -24,14 +24,14 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
     fun `should save then read guest book entry entity`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
-        val person = initPerson(address = address, surname = "AA").withId()
+        val person = initPerson(address = address, surname = "AA")
         val user = initUser(
             person = person,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
-        ).withId()
+        )
 
         val savedUser = userRepository.save(UserDao(user))
         val guestBook = initGuestBook(
@@ -40,14 +40,14 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             user = savedUser.toPerson()
         )
 
-        savedUser.guestBook = guestBook.withId().toEntity()
+        savedUser.guestBook = guestBook.toEntity()
 
         val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
         val guestBookEntry = initGuestBookEntry(
             guestBook = savedUser.guestBook?.toPerson(),
             creatorName = "Harry",
             entry = "Draco Dormiens Nunquam Tittilandus"
-        ).withId().toEntity()
+        ).toGuestBookEntryDao()
 
         flush { guestBookEntryRepository.save(guestBookEntry) }
 
@@ -65,14 +65,14 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
     fun `should save then modify and read guest book entry entity`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
-        val person = initPerson(address = address, surname = "AA").withId()
+        val person = initPerson(address = address, surname = "AA")
         val user = initUser(
             person = person,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
-        ).withId()
+        )
 
         val savedUser = userRepository.save(UserDao(user))
         val guestBook = initGuestBook(
@@ -81,7 +81,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             user = savedUser.toPerson()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
+        val savedGuestBook = guestBookRepository.save(guestBook.toEntity())
 
         flush {
             guestBookEntryRepository.save(
@@ -89,7 +89,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
                     creatorName = "Harry",
                     entry = "Draco Dormiens Nunquam Tittilandus",
                     guestBook = savedGuestBook.toPerson(),
-                ).withId().toEntity()
+                ).toGuestBookEntryDao()
             )
         }
 
@@ -113,14 +113,14 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
     fun `should write two entries to two different guest books and then find one entry`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
-        val person = initPerson(address = address, surname = "AA").withId()
+        val person = initPerson(address = address, surname = "AA")
         val user = initUser(
             person = person,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
-        ).withId()
+        )
 
         val savedUser = userRepository.save(UserDao(user))
         val guestBook = initGuestBook(
@@ -129,31 +129,31 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             user = savedUser.toPerson()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
+        val savedGuestBook = guestBookRepository.save(guestBook.toEntity())
         guestBookEntryRepository.save(
             initGuestBookEntry(
                 creatorName = "somone",
                 entry = "jadda",
                 guestBook = savedGuestBook.toPerson(),
-            ).withId().toEntity()
+            ).toGuestBookEntryDao()
         )
 
         val anotherUser = initUser(
             person = person,
             emailAddress = "hidden@tantooine.com",
             username = "hidden"
-        ).withId()
+        )
 
         userRepository.save(UserDao(anotherUser))
 
-        val anotherSavedGuestBook = guestBookRepository.save(guestBook.withId().toEntity())
+        val anotherSavedGuestBook = guestBookRepository.save(guestBook.toEntity())
         val anotherEntry = initGuestBookEntry(
             guestBook = anotherSavedGuestBook.toPerson(),
             creatorName = "shrek",
             entry = "far far away"
-        ).withId()
+        )
 
-        flush { guestBookEntryRepository.save(anotherEntry.toEntity()) }
+        flush { guestBookEntryRepository.save(anotherEntry.toGuestBookEntryDao()) }
 
         val lastEntry = guestBookRepository.findAll().toList()
             .flatMap { it.entries }

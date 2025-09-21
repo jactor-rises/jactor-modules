@@ -14,9 +14,7 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class BlogRepositoryTest @Autowired constructor(
-    private val blogRepository: BlogRepository
-) : AbstractSpringBootNoDirtyContextTest() {
+internal class BlogRepositoryTest  : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save and then read blog entity`() {
@@ -24,7 +22,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testing"
-        ).withId()
+        )
 
         val person = initPerson(
             address = address,
@@ -38,7 +36,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
+        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
 
         blogRepository.insertOrUpdate(blogEntityToSave)
 
@@ -58,7 +56,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testing"
-        ).withId()
+        )
 
         val person = initPerson(
             address = address,
@@ -72,7 +70,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
+        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
 
         blogRepository.insertOrUpdate(blogEntityToSave)
 
@@ -100,7 +98,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testing"
-        ).withId()
+        )
 
         val person = initPerson(
             address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
@@ -113,7 +111,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
+        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toEntity()
 
         blogRepository.insertOrUpdate(blogEntityToSave)
 
@@ -133,7 +131,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testing"
-        ).withId()
+        )
 
         val person = initPerson(
             address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
@@ -146,7 +144,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val blog = Blog(created = LocalDate.now(), title = "Blah", user = user).withId()
+        val blog = Blog(created = LocalDate.now(), title = "Blah", user = user)
         val blogEntityToSave: BlogDao = blog.toEntity()
         val blogEntry = BlogEntry(
             blog = blogEntityToSave.toBlog(),
@@ -154,7 +152,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             entry = "i'll be back"
         )
 
-        val blogEntryToSave: BlogEntryDao = blogEntry.withId().toBlogEntryDao()
+        val blogEntryToSave: BlogEntryDao = blogEntry.toBlogEntryDao()
 
         blogEntityToSave.add(blogEntryToSave)
         blogRepository.insertOrUpdate(blogEntityToSave)

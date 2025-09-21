@@ -37,8 +37,8 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
             username = "white"
         )
 
-        val blog = initBlog(created = LocalDate.now(), title = "and then some...", user = userDto).withId()
-        val blogEntry = initBlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time").withId()
+        val blog = initBlog(created = LocalDate.now(), title = "and then some...", user = userDto)
+        val blogEntry = initBlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time")
 
         flush { blogEntryRepository.save(blogEntry.toBlogEntryDao()) }
 
@@ -59,7 +59,7 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testing"
-        ).withId()
+        )
 
         val person = initPerson(
             address = address,
@@ -73,8 +73,8 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
             username = "dark"
         )
 
-        val blog = Blog(created = LocalDate.now(), title = "and then some...", user = user).withId()
-        val blogEntry = BlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time").withId()
+        val blog = Blog(created = LocalDate.now(), title = "and then some...", user = user)
+        val blogEntry = BlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time")
 
         flush { blogEntryRepository.save(blogEntry.toBlogEntryDao()) }
 

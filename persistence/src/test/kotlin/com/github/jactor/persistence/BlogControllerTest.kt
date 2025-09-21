@@ -175,7 +175,7 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should create a blog`() {
-        val createdBlog = initBlog().withId()
+        val createdBlog = initBlog()
 
         coEvery { blogServiceMockk.saveOrUpdate(blog = any()) } returns createdBlog
 

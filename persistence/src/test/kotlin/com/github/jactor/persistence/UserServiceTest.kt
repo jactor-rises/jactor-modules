@@ -36,7 +36,7 @@ internal class UserServiceTest @Autowired constructor(
                 emailAddress = null,
                 username = "jactor",
                 usertype = User.Usertype.ACTIVE
-            ).withId().toEntity()
+            ).toUserDao()
         )
 
         val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
@@ -59,7 +59,7 @@ internal class UserServiceTest @Autowired constructor(
                 emailAddress = null,
                 username = "jactor",
                 usertype = User.Usertype.ACTIVE
-            ).withId().toEntity()
+            ).toUserDao()
         )
 
         val user = userServiceToTest.find(uuid) ?: throw AssertionError("mocking?")

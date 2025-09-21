@@ -33,7 +33,7 @@ internal class PersonRepositoryTest @Autowired constructor(
         val allreadyPresentPeople = personRepository.findAll().count()
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
-        ).withId()
+        )
 
         val personToPersist = initPerson(
             address = address,
@@ -61,7 +61,7 @@ internal class PersonRepositoryTest @Autowired constructor(
     fun `should save then update and read a person entity`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
         val personToPersist = initPerson(
             address = address,
@@ -113,7 +113,7 @@ internal class PersonRepositoryTest @Autowired constructor(
             username = "black"
         )
 
-        val userEntity = user.toEntity()
+        val userEntity = user.toUserDao()
         val personToPersist = userEntity.fetchPerson()
 
         flush { personRepository.insertOrUpdate(personToPersist) }

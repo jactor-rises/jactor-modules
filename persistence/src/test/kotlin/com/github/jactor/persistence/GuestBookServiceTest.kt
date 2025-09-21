@@ -31,7 +31,7 @@ internal class GuestBookServiceTest {
 
     @Test
     fun `should map guest book to a dto`() = runTest {
-        val guestBookEntity = initGuestBook(title = "@home").withId().toEntity()
+        val guestBookEntity = initGuestBook(title = "@home").toEntity()
 
         every { guestBookRepositoryMockk.findById(uuid) } returns Optional.of(guestBookEntity)
 
@@ -47,7 +47,7 @@ internal class GuestBookServiceTest {
             creatorName = "me",
             entry = "too",
             persistent = Persistent(),
-        ).withId().toEntity()
+        ).toGuestBookEntryDao()
 
         every { guestBookEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
 

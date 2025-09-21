@@ -14,7 +14,6 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -243,8 +242,7 @@ data class GuestBookEntry(
         persistentDto = persistent.toPersistentDto(),
     )
 
-    fun toEntity() = GuestBookEntryDao(guestBookEntry = this)
-    fun withId(): GuestBookEntry = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
+    fun toGuestBookEntryDao() = GuestBookEntryDao(guestBookEntry = this)
 }
 
 object GuestBooks : UUIDTable(name = "T_GUEST_BOOK", columnName = "ID") {
@@ -285,7 +283,7 @@ object GuestBookRepository {
         guestBookDao.id?.let { id ->
             GuestBooks.update({ GuestBooks.id eq id }) {
                 it[createdBy] = guestBookDao.createdBy
-                it[title] = requireNotNull(guestBookDao.title) { "Title cannot be null!" }
+                it[title] = guestBookDao.title
                 it[modifiedBy] = guestBookDao.modifiedBy
                 it[timeOfCreation] = guestBookDao.timeOfCreation
                 it[timeOfModification] = guestBookDao.timeOfModification
@@ -296,7 +294,7 @@ object GuestBookRepository {
         } ?: run {
             val id = GuestBooks.insertIgnoreAndGetId {
                 it[createdBy] = guestBookDao.createdBy
-                it[title] = requireNotNull(guestBookDao.title) { "Title cannot be null!" }
+                it[title] = guestBookDao.title
                 it[modifiedBy] = guestBookDao.modifiedBy
                 it[timeOfCreation] = guestBookDao.timeOfCreation
                 it[timeOfModification] = guestBookDao.timeOfModification
@@ -430,7 +428,7 @@ data class GuestBookEntryDao(
 
         creatorName = guestBookEntry.creatorName,
         entry = guestBookEntry.entry,
-        guestBookId = guestBookEntry.guestBook?.persistent?.id,
+        guestBookId = guestBookEntry.guestBook?.persistent?.id ?: error("Guest book must have an id!"),
     )
 
     fun toGuestBookEntry() = GuestBookEntry(

@@ -5,7 +5,6 @@ import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.Person
@@ -18,6 +17,7 @@ import com.github.jactor.persistence.test.initGuestBook
 import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
+import com.github.jactor.persistence.test.withId
 import com.github.jactor.shared.test.isNotOlderThan
 import assertk.assertAll
 import assertk.assertThat
@@ -43,8 +43,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on address when used`() {
-        val addressWithoutId = Address(persistent, initAddress()).withId().toEntity()
-        val address = Address(persistent, initAddress()).withId().toEntity()
+        val addressWithoutId = initAddress().toAddressDao()
+        val address = initAddress().withId().toAddressDao()
 
         every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
 
@@ -55,8 +55,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = Blog(persistent, initBlog()).toDao()
-        val blog = Blog(persistent, initBlog()).withId().toDao()
+        val blogWithouId = Blog(persistent, initBlog()).toBlogDao()
+        val blog = Blog(persistent, initBlog()).withId().toBlogDao()
 
         every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
 
@@ -117,13 +117,13 @@ internal class ModifierAspectTest {
             creatorName = "me",
             entry = "hi there",
             persistent = persistent,
-        ).toEntity()
+        ).toGuestBookEntryDao()
 
         val guestBookEntry = initGuestBookEntry(
             creatorName = "me",
             entry = "hi there",
             persistent = persistent,
-        ).withId().toEntity()
+        ).withId().toGuestBookEntryDao()
 
         every { joinPointMock.args } returns arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId)
 
@@ -152,8 +152,8 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on user when used`() {
-        val user = User(persistent, user = initUser()).withId().toEntity()
-        val userWithoutId = User(persistent, user = initUser()).toEntity()
+        val user = User(persistent, user = initUser()).withId().toUserDao()
+        val userWithoutId = User(persistent, user = initUser()).toUserDao()
 
         every { joinPointMock.args } returns arrayOf<Any>(user, userWithoutId)
 

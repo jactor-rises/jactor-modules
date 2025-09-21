@@ -24,7 +24,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             zipCode = "1001",
             addressLine1 = "Test Boulevard 1",
             city = "Testington"
-        ).withId()
+        )
 
         val person = initPerson(address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "AA")
         val user = User(
@@ -34,13 +34,13 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             username = "causual"
         )
 
-        val userEntity = userRepository.save(user.withId().toEntity())
+        val userEntity = userRepository.save(user.toUserDao())
 
         userEntity.guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
             user = userEntity.toPerson()
-        ).withId().toEntity()
+        ).toEntity()
 
         flush { }
 
@@ -56,9 +56,9 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     fun `should write then update and read guest book`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        )
 
-        val person = initPerson(address = address, surname = "AA").withId()
+        val person = initPerson(address = address, surname = "AA")
         val user = User(
             persistent = Persistent(),
             personInternal = person,
@@ -66,13 +66,13 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             username = "causual"
         )
 
-        val userEntity = userRepository.save(user.withId().toEntity())
+        val userEntity = userRepository.save(user.toUserDao())
 
         userEntity.guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
             user = userEntity.toPerson()
-        ).withId().toEntity()
+        ).toEntity()
 
         flush { guestBookRepository.save(userEntity.guestBook ?: fail(message = "User missing guest book")) }
 

@@ -31,7 +31,7 @@ internal class RepositoriesTest @Autowired constructor(
             person = person,
             emailAddress = "brains@rebels.com",
             username = "r2d2"
-        ).withId().toEntity()
+        ).withId().toUserDao()
 
         flush { userRepository.save(userToPersist) }
 

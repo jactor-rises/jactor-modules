@@ -7,8 +7,10 @@ import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.javatime.datetime
 import org.jetbrains.exposed.v1.jdbc.andWhere
+import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.update
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.AddressDto
@@ -45,6 +47,22 @@ data class Address(
         country = country,
         zipCode = zipCode
     )
+
+    fun toAddressDao() = AddressDao(
+        id = null,
+
+        createdBy = persistent.createdBy,
+        timeOfCreation = persistent.timeOfCreation,
+        modifiedBy = persistent.modifiedBy,
+        timeOfModification = persistent.timeOfModification,
+
+        addressLine1 = addressLine1,
+        addressLine2 = addressLine2,
+        addressLine3 = addressLine3,
+        city = city,
+        country = country,
+        zipCode = zipCode,
+    )
 }
 
 object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
@@ -62,10 +80,10 @@ object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
 }
 
 object AddressRepository {
-    fun findByZipCode(zip: String): List<AddressDao> = transaction {
+    fun findByZipCode(zipCode: String): List<AddressDao> = transaction {
         Addresses
             .selectAll()
-            .andWhere { Addresses.zipCode eq zip }
+            .andWhere { Addresses.zipCode eq zipCode }
             .map { it.toAddressDao() }
     }
 
@@ -91,6 +109,41 @@ object AddressRepository {
             .singleOrNull()
             ?.toAddressDao()
     }
+
+    fun save(addressDao: AddressDao): AddressDao = transaction {
+        when (addressDao.isNotPersisted) {
+            true -> insert(addressDao)
+            false -> update(addressDao)
+        }
+    }
+
+    private fun insert(addressDao: AddressDao): AddressDao = Addresses.insertAndGetId { row ->
+        row[createdBy] = addressDao.createdBy
+        row[modifiedBy] = addressDao.modifiedBy
+        row[timeOfCreation] = addressDao.timeOfCreation
+        row[timeOfModification] = addressDao.timeOfModification
+
+        row[addressLine1] = addressDao.addressLine1
+        row[addressLine2] = addressDao.addressLine2
+        row[addressLine3] = addressDao.addressLine3
+        row[city] = addressDao.city
+        row[country] = addressDao.country
+        row[zipCode] = addressDao.zipCode
+    }.let { newId -> addressDao.also { it.id = newId.value } }
+
+    private fun update(addressDao: AddressDao): AddressDao = Addresses.update(
+        { Addresses.id eq addressDao.id }
+    ) { row ->
+        row[modifiedBy] = addressDao.modifiedBy
+        row[timeOfModification] = addressDao.timeOfModification
+
+        row[addressLine1] = addressDao.addressLine1
+        row[addressLine2] = addressDao.addressLine2
+        row[addressLine3] = addressDao.addressLine3
+        row[city] = addressDao.city
+        row[country] = addressDao.country
+        row[zipCode] = addressDao.zipCode
+    }.let { addressDao }
 }
 
 data class AddressDao(
@@ -107,21 +160,7 @@ data class AddressDao(
     var country: String?,
     var zipCode: String,
 ) : PersistentDao<AddressDao> {
-    constructor(address: Address) : this(
-        id = null,
-
-        createdBy = address.persistent.createdBy,
-        timeOfCreation = address.persistent.timeOfCreation,
-        modifiedBy = address.persistent.modifiedBy,
-        timeOfModification = address.persistent.timeOfModification,
-
-        addressLine1 = address.addressLine1,
-        addressLine2 = address.addressLine2,
-        addressLine3 = address.addressLine3,
-        city = address.city,
-        country = address.country,
-        zipCode = address.zipCode,
-    )
+    val isNotPersisted: Boolean get() = id == null
 
     override fun copyWithoutId(): AddressDao = copy(id = null)
     override fun modifiedBy(modifier: String): AddressDao {

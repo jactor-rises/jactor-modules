@@ -98,8 +98,8 @@ fun initGuestBook(
 )
 
 fun initGuestBookEntry(
-    creatorName: String? = null,
-    entry: String? = null,
+    creatorName: String = "na",
+    entry: String = "na",
     guestBook: GuestBook? = null,
     persistent: Persistent = Persistent(),
 ) = GuestBookEntry(
@@ -109,12 +109,12 @@ fun initGuestBookEntry(
     persistent = persistent,
 )
 
-fun initUserEntity(
+fun initUserDao(
     id: UUID? = UUID.randomUUID(),
-    person: PersonDao = initPersonDao()
-) = UserDao().apply {
+    personId: UUID? = null
+): UserDao = initUser().toUserDao().apply {
     this.id = id
-    this.personDao = person
+    this.personId = personId
 }
 
 fun initPersonDao(
@@ -131,10 +131,10 @@ fun initGuestBookDao(id: UUID? = null) = GuestBookDao().apply {
 
 fun initGuestBookEntryDao(
     id: UUID? = null,
-    guestBook: GuestBookDao = initGuestBookDao()
-) = GuestBookEntryDao().apply {
+    guestBookId: UUID = UUID.randomUUID(),
+): GuestBookEntryDao = initGuestBookEntry().toGuestBookEntryDao().apply {
     this.id = id
-    this.guestBookDao = guestBook
+    this.guestBookId = guestBookId
 }
 
 fun initPerson(

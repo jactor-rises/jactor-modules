@@ -171,8 +171,7 @@ data class User(
         userType = (usertype == Usertype.ADMIN).whenTrue { UserType.ACTIVE } ?: UserType.valueOf(usertype.name)
     )
 
-    fun withId(): User = copy(persistent = persistent.copy(id = persistent.id ?: UUID.randomUUID()))
-    fun toEntity() = UserDao(user = this)
+    fun toUserDao() = UserDao(user = this)
 
     enum class Usertype {
         ADMIN, ACTIVE, INACTIVE

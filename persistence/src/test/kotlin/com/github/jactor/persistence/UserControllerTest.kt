@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initUser
-import com.github.jactor.persistence.test.initUserEntity
+import com.github.jactor.persistence.test.initUserDao
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.PersistentDto
@@ -69,7 +69,7 @@ internal class UserControllerTest @Autowired constructor(
     fun `should find a user by id`() {
         val uuid = UUID.randomUUID()
         every { userRepositoryMockk.findById(uuid) } returns Optional
-            .of(initUserEntity(id = uuid))
+            .of(initUserDao(id = uuid))
 
         val userDto = webTestClient.get()
             .uri("/user/$uuid")
