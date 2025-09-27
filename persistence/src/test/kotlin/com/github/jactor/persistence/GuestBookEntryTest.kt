@@ -21,8 +21,10 @@ internal class GuestBookEntryTest {
         )
 
         val (creatorName, entry, guestBook) = GuestBookEntry(
-            guestBookEntry.persistent,
-            guestBookEntry
+            creatorName = guestBookEntry.creatorName,
+            entry = guestBookEntry.entry,
+            persistent = guestBookEntry.persistent,
+            guestBook = guestBookEntry.guestBook
         )
 
         assertAll {
@@ -42,9 +44,11 @@ internal class GuestBookEntryTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = GuestBookEntry(
-            persistent,
-            initGuestBookEntry()
+        val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = GuestBookEntry(
+            creatorName = persistent.createdBy,
+            entry = "entry",
+            persistent = persistent,
+            guestBook = initGuestBook()
         ).persistent
 
         assertAll {

@@ -3,7 +3,7 @@ package com.github.jactor.persistence
 import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -16,9 +16,8 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
-internal class BlogEntryRepositoryTest @Autowired constructor(
-    private val blogEntryRepository: BlogEntryRepository
-) : AbstractSpringBootNoDirtyContextTest() {
+internal class BlogEntryRepositoryTest() : AbstractSpringBootNoDirtyContextTest() {
+    private val blogRepository: BlogRepository = BlogRepositoryObject
 
     @Test
     fun `should save then read blog entry`() {
@@ -31,18 +30,19 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
         )
 
         val userDto = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
+            persistent = Persistent(id = UUID.randomUUID()),
+            person = person,
             emailAddress = "public@services.com",
-            username = "white"
+            username = "white",
+            usertype = User.Usertype.ACTIVE
         )
 
         val blog = initBlog(created = LocalDate.now(), title = "and then some...", user = userDto)
         val blogEntry = initBlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time")
 
-        flush { blogEntryRepository.save(blogEntry.toBlogEntryDao()) }
+        blogRepository.save(blogEntry.toBlogEntryDao())
 
-        val blogEntries = blogEntryRepository.findAll().toList()
+        val blogEntries = blogRepository.findBlogEntries()
 
         assertAll {
             assertThat(blogEntries).hasSize(1)
@@ -67,31 +67,32 @@ internal class BlogEntryRepositoryTest @Autowired constructor(
         )
 
         val user = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
+            persistent = Persistent(id = UUID.randomUUID()),
+            person = person,
             emailAddress = "public@services.com",
-            username = "dark"
+            username = "dark",
+            usertype = User.Usertype.ACTIVE,
         )
 
         val blog = Blog(created = LocalDate.now(), title = "and then some...", user = user)
         val blogEntry = BlogEntry(blog = blog, creatorName = "smith", entry = "once upon a time")
 
-        flush { blogEntryRepository.save(blogEntry.toBlogEntryDao()) }
+        blogRepository.save(blogEntry.toBlogEntryDao())
 
-        val blogEntries = blogEntryRepository.findAll().toList()
+        val blogEntries = blogRepository.findBlogEntries()
 
         assertThat(blogEntries).hasSize(1)
 
-        val readBlogEntry = blogEntries.iterator().next()
-        readBlogEntry.modify("happily ever after", "luke")
+        val readBlogEntry = blogEntries.firstOrNull() ?: fail { "No BlogEntry, even when size is one?..." }
+        readBlogEntry.apply { entry = "happily evewr after" }.modifiedBy(modifier = "luke")
 
-        flush { blogEntryRepository.save(readBlogEntry) }
+        blogRepository.save(readBlogEntry)
 
-        val modifiedEntries = blogEntryRepository.findAll().toList()
+        val modifiedEntries = blogRepository.findBlogEntries()
 
         assertThat(modifiedEntries).hasSize(1)
 
-        val modifiedEntry = modifiedEntries.iterator().next()
+        val modifiedEntry = modifiedEntries.firstOrNull() ?: fail { "No BlogEntry, even when size is one?..." }
 
         assertAll {
             assertThat(modifiedEntry.creatorName).isEqualTo("luke")

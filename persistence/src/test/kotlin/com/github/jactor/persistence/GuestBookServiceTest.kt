@@ -1,6 +1,5 @@
 package com.github.jactor.persistence
 
-import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
@@ -20,22 +19,20 @@ import kotlinx.coroutines.test.runTest
 internal class GuestBookServiceTest {
 
     private val guestBookRepositoryMockk: GuestBookRepository = mockk {}
-    private val guestBookEntryRepositoryMockk: GuestBookEntryRepository = mockk {}
 
-    private val guestBookServiceToTest: GuestBookService = DefaultGuestBookService(
-        guestBookRepository = guestBookRepositoryMockk,
-        guestBookEntryRepository = guestBookEntryRepositoryMockk
+    private val guestBookServiceToTest: GuestBookService = GuestBookServiceBean(
+        guestBookRepository = guestBookRepositoryMockk
     )
 
     private val uuid = UUID.randomUUID()
 
     @Test
     fun `should map guest book to a dto`() = runTest {
-        val guestBookEntity = initGuestBook(title = "@home").toEntity()
+        val guestBookDao = initGuestBook(title = "@home").toGuestBookDao()
 
-        every { guestBookRepositoryMockk.findById(uuid) } returns Optional.of(guestBookEntity)
+        every { guestBookRepositoryMockk.findGuestBookById(id = uuid) } returns guestBookDao
 
-        val (_, _, title) = guestBookServiceToTest.findGuestBook(uuid) ?: error("missed mocking?")
+        val (_, _, title) = guestBookServiceToTest.findGuestBook(id = uuid) ?: error("missed mocking?")
 
         assertThat(title).isEqualTo("@home")
     }
@@ -49,9 +46,9 @@ internal class GuestBookServiceTest {
             persistent = Persistent(),
         ).toGuestBookEntryDao()
 
-        every { guestBookEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
+        every { guestBookRepositoryMockk.findGuestBookEntryById(id = uuid) } returns anEntry
 
-        val guestBookEntryModel = guestBookServiceToTest.findEntry(uuid) ?: error("missed mocking?")
+        val guestBookEntryModel = guestBookServiceToTest.findEntry(id = uuid) ?: error("missed mocking?")
 
         assertAll {
             assertThat(guestBookEntryModel.creatorName).isEqualTo("me")
@@ -74,7 +71,9 @@ internal class GuestBookServiceTest {
             user = initUser()
         )
 
-        every { guestBookRepositoryMockk.save(capture(guestBookEntitySlot)) } returns GuestBookDao(guestBook)
+        every {
+            guestBookRepositoryMockk.save(guestBookDao = capture(guestBookEntitySlot))
+        } returns guestBook.toGuestBookDao()
 
         guestBookServiceToTest.saveOrUpdate(guestBook)
         val guestBookEntity = guestBookEntitySlot.captured
@@ -95,9 +94,9 @@ internal class GuestBookServiceTest {
             entry = "if i where a rich man..."
         )
 
-        every { guestBookEntryRepositoryMockk.save(capture(guestBookEntryEntitySlot)) } returns GuestBookEntryDao(
-            guestBookEntry
-        )
+        every {
+            guestBookRepositoryMockk.save(guestBookEntryDao = capture(guestBookEntryEntitySlot))
+        } returns guestBookEntry.toGuestBookEntryDao()
 
         guestBookServiceToTest.saveOrUpdate(guestBookEntry)
         val guestBookEntryEntity = guestBookEntryEntitySlot.captured

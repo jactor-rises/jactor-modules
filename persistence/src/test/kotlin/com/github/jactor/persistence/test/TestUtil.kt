@@ -122,7 +122,7 @@ fun initPersonDao(
     address: AddressDao? = initAddressDao()
 ) = PersonDao().apply {
     this.id = id
-    addressDao = address
+    addressId = address?.id
 }
 
 fun initGuestBookDao(id: UUID? = null) = GuestBookDao().apply {

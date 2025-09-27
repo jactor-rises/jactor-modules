@@ -1,7 +1,6 @@
 package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -12,18 +11,16 @@ import assertk.assertThat
 import assertk.assertions.containsAtLeast
 import assertk.assertions.isEqualTo
 
-internal class UserRepositoryTest @Autowired constructor(
-    private val userRepository: UserRepository
-) : AbstractSpringBootNoDirtyContextTest() {
+internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+    private val userRepository: UserRepository = UserRepositoryObject
 
     @Test
     fun `should find user with username jactor`() {
-        val userByName = userRepository.findByUsername("jactor")
-        val userEntity = userByName.orElseThrow { userNotFound() }
+        val userDao = userRepository.findByUsername("jactor")
 
         assertAll {
-            assertThat(userEntity.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
-            assertThat(userEntity.personDao?.firstName).isEqualTo("Tor Egil")
+            assertThat(userDao?.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
+            assertThat(userDao?.personDao?.firstName).isEqualTo("Tor Egil")
         }
     }
 
@@ -40,15 +37,14 @@ internal class UserRepositoryTest @Autowired constructor(
             username = "smuggler"
         ).toUserDao()
 
-        flush { userRepository.save(userToPersist) }
+        userRepository.save(userToPersist)
 
-        val userById = userRepository.findByUsername("smuggler")
-        val userEntity = userById.orElseThrow { userNotFound() }
+        val userDao = userRepository.findByUsername("smuggler")
 
         assertAll {
-            assertThat(userEntity.personDao).isEqualTo(userToPersist.personDao)
-            assertThat(userEntity.username).isEqualTo("smuggler")
-            assertThat(userEntity.emailAddress).isEqualTo("smuggle.fast@tantooine.com")
+            assertThat(userDao?.personDao).isEqualTo(userToPersist.personDao)
+            assertThat(userDao?.username).isEqualTo("smuggler")
+            assertThat(userDao?.emailAddress).isEqualTo("smuggle.fast@tantooine.com")
         }
     }
 
@@ -66,25 +62,20 @@ internal class UserRepositoryTest @Autowired constructor(
             username = "causual"
         ).toUserDao()
 
-        flush { userRepository.save(userToPersist) }
+        userRepository.save(userToPersist)
 
         val lukewarm = "lukewarm"
         userToPersist.username = lukewarm
         userToPersist.emailAddress = "luke@force.com"
 
-        flush { userRepository.save(userToPersist) }
+        userRepository.save(userToPersist)
 
-        val userByName = userRepository.findByUsername(lukewarm)
-        val userEntity = userByName.orElseThrow { userNotFound() }
+        val userDao = userRepository.findByUsername(lukewarm)
 
         assertAll {
-            assertThat(userEntity.username).isEqualTo(lukewarm)
-            assertThat(userEntity.emailAddress).isEqualTo("luke@force.com")
+            assertThat(userDao?.username).isEqualTo(lukewarm)
+            assertThat(userDao?.emailAddress).isEqualTo("luke@force.com")
         }
-    }
-
-    private fun userNotFound(): AssertionError {
-        return AssertionError("no user found")
     }
 
     @Test
@@ -95,27 +86,24 @@ internal class UserRepositoryTest @Autowired constructor(
 
         val spidyPerson = initPerson(address = address, surname = "Parker")
         val superPerson = initPerson(address = address, surname = "Kent")
-        val userEntity = initUser(
+        val userDao = initUser(
             persistent = Persistent(),
             person = spidyPerson,
             emailAddress = null,
             username = "spiderman"
         ).toUserDao()
 
-        flush {
-            userRepository.save(userEntity)
-            userRepository.save(
-                initUser(
-                    person = superPerson,
-                    emailAddress = null,
-                    username = "superman",
-                    usertype = User.Usertype.INACTIVE
-                ).toUserDao()
-            )
-        }
+        userRepository.save(userDao)
+        userRepository.save(
+            initUser(
+                person = superPerson,
+                emailAddress = null,
+                username = "superman",
+                usertype = User.Usertype.INACTIVE
+            ).toUserDao()
+        )
 
-        val usernames = userRepository.findByUserTypeIn(listOf(UserDao.UserType.ACTIVE, UserDao.UserType.ADMIN))
-            .map(UserDao::username)
+        val usernames = userRepository.findUsernames(listOf(UserDao.UserType.ACTIVE, UserDao.UserType.ADMIN))
 
         assertThat(usernames).containsAtLeast("tip", "spiderman", "jactor")
     }

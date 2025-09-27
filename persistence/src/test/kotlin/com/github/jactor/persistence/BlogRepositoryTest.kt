@@ -3,7 +3,6 @@ package com.github.jactor.persistence
 import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -14,7 +13,8 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class BlogRepositoryTest  : AbstractSpringBootNoDirtyContextTest() {
+internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+    private val blogRepository: BlogRepository = BlogRepositoryObject
 
     @Test
     fun `should save and then read blog entity`() {
@@ -30,17 +30,18 @@ internal class BlogRepositoryTest  : AbstractSpringBootNoDirtyContextTest() {
         )
 
         val user = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
+            persistent = Persistent(id = UUID.randomUUID()),
+            person = person,
             emailAddress = "public@services.com",
-            username = "black"
+            username = "black",
+            usertype = User.Usertype.ACTIVE
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
+        val blogToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
 
-        blogRepository.insertOrUpdate(blogEntityToSave)
+        blogRepository.save(blogDao = blogToSave)
 
-        val blogs = blogRepository.findAll().toList()
+        val blogs = blogRepository.findBlogs()
         assertThat(blogs).hasSize(1)
         val blogEntity = blogs.iterator().next()
 
@@ -64,27 +65,28 @@ internal class BlogRepositoryTest  : AbstractSpringBootNoDirtyContextTest() {
         )
 
         val user = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
+            persistent = Persistent(id = UUID.randomUUID()),
+            person = person,
             emailAddress = "public@services.com",
-            username = "black"
+            username = "black",
+            usertype = User.Usertype.ACTIVE,
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
+        val blogToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
 
-        blogRepository.insertOrUpdate(blogEntityToSave)
+        blogRepository.save(blogDao = blogToSave)
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)
 
-        val blogEntitySaved = blogs.iterator().next()
+        val blogEntitySaved = blogs.first()
         blogEntitySaved.title = "Duh"
 
-        blogRepository.insertOrUpdate(blogEntitySaved)
+        blogRepository.save(blogEntitySaved)
 
         val modifiedBlogs = blogRepository.findBlogsByTitle("Duh")
         assertThat(modifiedBlogs).hasSize(1)
-        val blogEntity: BlogDao = modifiedBlogs.iterator().next()
+        val blogEntity: BlogDao = modifiedBlogs.first()
 
         assertAll {
             assertThat(blogEntity.created).isEqualTo(LocalDate.now())
@@ -105,22 +107,23 @@ internal class BlogRepositoryTest  : AbstractSpringBootNoDirtyContextTest() {
         )
 
         val user = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
+            persistent = Persistent(id = UUID.randomUUID()),
+            person = person,
             emailAddress = "public@services.com",
-            username = "black"
+            username = "black",
+            usertype = User.Usertype.ACTIVE,
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toEntity()
+        val blogToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
 
-        blogRepository.insertOrUpdate(blogEntityToSave)
+        blogRepository.save(blogDao = blogToSave)
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
 
         assertAll {
             assertThat(blogs).hasSize(1)
-            assertThat(blogs[0]).isNotNull()
-            assertThat(blogs[0].created).isEqualTo(LocalDate.now())
+            assertThat(blogs.firstOrNull()).isNotNull()
+            assertThat(blogs.firstOrNull()?.created).isEqualTo(LocalDate.now())
 
         }
     }
@@ -139,29 +142,30 @@ internal class BlogRepositoryTest  : AbstractSpringBootNoDirtyContextTest() {
 
         val user = User(
             persistent = Persistent(id = UUID.randomUUID()),
-            personInternal = person,
+            person = person,
             emailAddress = "public@services.com",
-            username = "black"
+            username = "black",
+            usertype = User.Usertype.ACTIVE,
         )
 
         val blog = Blog(created = LocalDate.now(), title = "Blah", user = user)
-        val blogEntityToSave: BlogDao = blog.toEntity()
+        val blogToSave: BlogDao = blog.toBlogDao()
         val blogEntry = BlogEntry(
-            blog = blogEntityToSave.toBlog(),
+            blog = blogToSave.toBlog(),
             creatorName = "arnold",
             entry = "i'll be back"
         )
 
         val blogEntryToSave: BlogEntryDao = blogEntry.toBlogEntryDao()
 
-        blogEntityToSave.add(blogEntryToSave)
-        blogRepository.insertOrUpdate(blogEntityToSave)
+        blogToSave.add(blogEntryToSave)
+        blogRepository.save(blogDao = blogToSave)
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
         assertThat(blogs).hasSize(1)
         val blogEntity = blogs.iterator().next()
-        assertThat(blogEntity.getEntries()).hasSize(1)
-        val blogEntryEntity = blogEntity.getEntries().iterator().next()
+        assertThat(blogEntity.entries).hasSize(1)
+        val blogEntryEntity = blogEntity.entries.iterator().next()
 
         assertAll {
             assertThat(blogEntryEntity.entry).isEqualTo("i'll be back")

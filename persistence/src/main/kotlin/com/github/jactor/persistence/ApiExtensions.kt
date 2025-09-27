@@ -1,15 +1,18 @@
 package com.github.jactor.persistence
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import com.github.jactor.persistence.UserDao.UserType
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.BlogDto
+import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.PersonDto
 import com.github.jactor.shared.api.UserDto
+import com.github.jactor.shared.whenTrue
 
 fun AddressDto.toAddress() = Address(
     persistent = persistentDto.toPersistent(),
@@ -22,10 +25,27 @@ fun AddressDto.toAddress() = Address(
     zipCode = requireNotNull(zipCode) { "Zip code cannot be null!" },
 )
 
-fun BlogDto.toBlog() = Blog(blogDto = this)
+fun BlogDto.toBlog() = Blog(
+    persistent = persistentDto.toPersistent(),
+
+    created = persistentDto.withoutId().whenTrue { LocalDate.now() },
+    title = requireNotNull(title) { "Title cannot be null!" },
+    user = requireNotNull(user?.toUser()) { "User cannot be null!" },
+)
+
+private fun PersistentDto.withoutId() = id == null
+
+fun BlogEntryDto.toBlogEntry() = BlogEntry(
+    persistent = persistentDto.toPersistent(),
+
+    blog = blogDto?.toBlog(),
+    creatorName = creatorName,
+    entry = entry,
+)
 
 fun GuestBookDto.toGuestBook() = GuestBook(
     persistent = persistentDto.toPersistent(),
+
     entries = emptySet(),
     title = requireNotNull(title) { "Title cannot be null!" },
     user = requireNotNull(userDto?.toUser()) { "User cannot be null!" },
@@ -33,6 +53,7 @@ fun GuestBookDto.toGuestBook() = GuestBook(
 
 fun GuestBookEntryDto.toGuestBookEntry() = GuestBookEntry(
     persistent = persistentDto.toPersistent(),
+
     creatorName = requireNotNull(creatorName) { "Creator name cannot be null!" },
     entry = requireNotNull(entry) { "Entry cannot be null!" },
     guestBook = guestBook?.toGuestBook()
@@ -40,6 +61,7 @@ fun GuestBookEntryDto.toGuestBookEntry() = GuestBookEntry(
 
 fun GuestBookEntryDto.toGuestBookEntry(parent: GuestBook?) = GuestBookEntry(
     persistent = persistentDto.toPersistent(),
+
     creatorName = requireNotNull(creatorName) { "Creator name cannot be null!" },
     entry = requireNotNull(entry) { "Entry cannot be null!" },
     guestBook = parent
@@ -50,6 +72,7 @@ fun com.github.jactor.shared.api.UserType.toModel(): UserType = UserType.entries
 
 fun PersistentDto.toPersistent() = Persistent(
     id = id,
+
     createdBy = requireNotNull(createdBy) { "Created by cannot be null!" },
     timeOfCreation = timeOfCreation ?: LocalDateTime.now(),
     modifiedBy = requireNotNull(modifiedBy) { "Modified by cannot be null!" },
@@ -58,6 +81,7 @@ fun PersistentDto.toPersistent() = Persistent(
 
 fun PersonDto.toPerson() = Person(
     persistent = persistentDto.toPersistent(),
+
     address = address?.toAddress(),
     locale = locale,
     firstName = firstName,
@@ -67,7 +91,8 @@ fun PersonDto.toPerson() = Person(
 
 fun UserDto.toUser() = User(
     persistent = persistentDto.toPersistent(),
-    person = person?.let { Person(personDto = it) },
+
+    person = person?.toPerson(),
     emailAddress = emailAddress,
     username = username,
     usertype = User.Usertype.valueOf(userType.name)

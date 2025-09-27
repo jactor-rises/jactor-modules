@@ -2,7 +2,7 @@ package com.github.jactor.persistence
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -13,9 +13,9 @@ import assertk.assertions.contains
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
-internal class PersonRepositoryTest @Autowired constructor(
-    private val personRepository: PersonRepository
-) : AbstractSpringBootNoDirtyContextTest() {
+internal class PersonRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+    private val personRepository: PersonRepository = PersonRepository
+    private val userRepository: UserRepository = UserRepositoryObject
 
     @Test
     fun `should find default persons`() {
@@ -41,19 +41,21 @@ internal class PersonRepositoryTest @Autowired constructor(
             description = "Me, myself, and I",
             locale = "no_NO",
             surname = "Sometime",
-        ).toEntityWithId()
+        ).toPersonDao()
 
-        flush { personRepository.insertOrUpdate(personToPersist) }
+        personRepository.save(personToPersist)
 
-        val people = personRepository.findAll().toList()
+        val people = personRepository.findAll()
         assertThat(people).hasSize(allreadyPresentPeople + 1)
-        val personEntity = personRepository.findBySurname("Sometime").iterator().next()
+        val personDao = "Sometime".let {
+            personRepository.findBySurname(surname = it).firstOrNull() ?: fail { "Person with surname $it not found" }
+        }
 
         assertAll {
-            assertThat(personEntity.addressDao).isEqualTo(personToPersist.addressDao)
-            assertThat(personEntity.description).isEqualTo("Me, myself, and I")
-            assertThat(personEntity.locale).isEqualTo("no_NO")
-            assertThat(personEntity.firstName).isEqualTo("Born")
+            assertThat(personDao.addressDao).isEqualTo(personToPersist.addressDao)
+            assertThat(personDao.description).isEqualTo("Me, myself, and I")
+            assertThat(personDao.locale).isEqualTo("no_NO")
+            assertThat(personDao.firstName).isEqualTo("Born")
         }
     }
 
@@ -69,33 +71,36 @@ internal class PersonRepositoryTest @Autowired constructor(
             description = "Just me...",
             locale = "no_NO",
             surname = "Mine",
-        ).toEntityWithId()
+        )
 
-        flush { personRepository.insertOrUpdate(personToPersist) }
+        personRepository.save(personDao = personToPersist.toPersonDao())
 
-        val mine = personRepository.findBySurname("Mine")
-        val person = mine.iterator().next()
+        val personDao = ("Mine" to "Cula").let {
+            val mine = personRepository.findBySurname(surname = it.first)
+            val person = mine.firstOrNull() ?: fail { "Person with surname ${it.first} not found" }
 
-        person.description = "There is no try"
-        person.locale = "dk_DK"
-        person.firstName = "Dr. A."
-        person.surname = "Cula"
+            person.description = "There is no try"
+            person.locale = "dk_DK"
+            person.firstName = "Dr. A."
+            person.surname = it.second
 
-        flush { personRepository.insertOrUpdate(person) }
+            personRepository.save(personDao = person)
+            val foundCula = personRepository.findBySurname(surname = it.second)
 
-        val foundCula = personRepository.findBySurname("Cula")
-        val personEntity = foundCula.iterator().next()
+            foundCula.firstOrNull()
+        }
 
         assertAll {
-            assertThat(personEntity.description).isEqualTo("There is no try")
-            assertThat(personEntity.locale).isEqualTo("dk_DK")
-            assertThat(personEntity.firstName).isEqualTo("Dr. A.")
-            assertThat(personEntity.getUsers()).isEqualTo(person.getUsers())
+            assertThat(personDao?.description).isEqualTo("There is no try")
+            assertThat(personDao?.locale).isEqualTo("dk_DK")
+            assertThat(personDao?.firstName).isEqualTo("Dr. A.")
+            assertThat(personDao?.users)
         }
     }
 
     @Test
     fun `should be able to relate a user`() {
+        val adder = "Adder"
         val alreadyPresentPeople = personRepository.findAll().count()
         val address = initAddress(
             persistent = Persistent(id = UUID.randomUUID()),
@@ -103,29 +108,35 @@ internal class PersonRepositoryTest @Autowired constructor(
         )
 
         val person = initPerson(
-            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
+            address = address,
+            persistent = Persistent(id = UUID.randomUUID()),
+            surname = adder,
         )
+
+        personRepository.save(personDao = person.toPersonDao())
 
         val user = User(
-            Persistent(id = UUID.randomUUID()),
-            person,
+            persistent = Persistent(id = UUID.randomUUID()),
+            person = person,
             emailAddress = "public@services.com",
-            username = "black"
+            username = "black",
+            usertype = User.Usertype.ACTIVE,
         )
 
-        val userEntity = user.toUserDao()
-        val personToPersist = userEntity.fetchPerson()
+        userRepository.save(user = user.toUserDao())
 
-        flush { personRepository.insertOrUpdate(personToPersist) }
+        assertThat(personRepository.findAll()).hasSize(alreadyPresentPeople + 1)
+        val personDao = personRepository.findBySurname(surname = adder).first()
 
-        assertThat(personRepository.findAll().toList()).hasSize(alreadyPresentPeople + 1)
-        val personEntity = personRepository.findBySurname("Adder").iterator().next()
-        assertThat(personEntity.getUsers()).hasSize(1)
-        val persistedUser = personEntity.getUsers().iterator().next()
+        personDao.users.let {
+            assertThat(it).hasSize(1)
 
-        assertAll {
-            assertThat(persistedUser.emailAddress).isEqualTo("public@services.com")
-            assertThat(persistedUser.username).isEqualTo("black")
+            val persistedUser = personDao.users.firstOrNull()
+
+            assertAll {
+                assertThat(persistedUser?.emailAddress).isEqualTo("public@services.com")
+                assertThat(persistedUser?.username).isEqualTo("black")
+            }
         }
     }
 }

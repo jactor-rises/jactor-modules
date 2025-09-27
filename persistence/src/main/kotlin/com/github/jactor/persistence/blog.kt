@@ -139,7 +139,7 @@ class BlogController(private val blogService: BlogService) {
     ): ResponseEntity<BlogDto> = when (blogDto.harIkkeIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(
-            blogService.saveOrUpdate(blog = Blog(blogDto = blogDto)).toBlogDto(),
+            blogService.saveOrUpdate(blog = blogDto.toBlog()).toBlogDto(),
             HttpStatus.ACCEPTED
         )
     }
@@ -159,7 +159,7 @@ class BlogController(private val blogService: BlogService) {
     suspend fun post(@RequestBody blogDto: BlogDto): ResponseEntity<BlogDto> = when (blogDto.harIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(
-            blogService.saveOrUpdate(blog = Blog(blogDto)).toBlogDto(),
+            blogService.saveOrUpdate(blog = blogDto.toBlog()).toBlogDto(),
             HttpStatus.CREATED
         )
     }
@@ -183,7 +183,7 @@ class BlogController(private val blogService: BlogService) {
     ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIkkeIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(
-            blogService.saveOrUpdate(blogEntry = BlogEntry(blogEntry = blogEntryDto)).toBlogEntryDto(),
+            blogService.saveOrUpdate(blogEntry = blogEntryDto.toBlogEntry()).toBlogEntryDto(),
             HttpStatus.ACCEPTED
         )
     }
@@ -205,11 +205,10 @@ class BlogController(private val blogService: BlogService) {
         @RequestBody blogEntryDto: BlogEntryDto
     ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
-        false -> blogService.saveOrUpdate(
-            blogEntry = BlogEntry(blogEntry = blogEntryDto)
-        ).let {
-            ResponseEntity(it.toBlogEntryDto(), HttpStatus.CREATED)
-        }
+        false -> ResponseEntity(
+            blogService.saveOrUpdate(blogEntry = blogEntryDto.toBlogEntry()).toBlogEntryDto(),
+            HttpStatus.CREATED
+        )
     }
 }
 
@@ -223,32 +222,23 @@ interface BlogService {
 }
 
 @Service
-class BlogServiceImpl(
-    private val userService: UserService
-) : BlogService {
-    override suspend fun find(id: UUID): Blog? = BlogRepository.findBlogById(id)?.toBlog()
+class BlogServiceImpl(private val blogRepository: BlogRepository = BlogRepositoryObject) : BlogService {
+    override suspend fun find(id: UUID): Blog? = blogRepository.findBlogById(id)?.toBlog()
     override suspend fun findEntryBy(blogEntryId: UUID): BlogEntry? {
-        return BlogRepository.findBlogEntryById(blogEntryId)?.toBlogEntry()
+        return blogRepository.findBlogEntryById(blogEntryId)?.toBlogEntry()
     }
 
-    override suspend fun findBlogsBy(title: String): List<Blog> {
-        return BlogRepository.findBlogsByTitle(title).map { it.toBlog() }
-    }
+    override suspend fun findBlogsBy(title: String): List<Blog> = blogRepository.findBlogsByTitle(title)
+        .map { it.toBlog() }
 
     override suspend fun findEntriesForBlog(blogId: UUID): List<BlogEntry> {
-        return BlogRepository.findBlogEntriesByBlogId(blogId).map { it.toBlogEntry() }
+        return blogRepository.findBlogEntriesByBlogId(blogId).map { it.toBlogEntry() }
     }
 
-    override suspend fun saveOrUpdate(blog: Blog): Blog {
-        val user = userService.find(username = blog.fetchUsername())
-        return BlogRepository.insertOrUpdate(BlogDao(blog.copy(user = user))).toBlog()
-    }
-
+    override suspend fun saveOrUpdate(blog: Blog): Blog = blogRepository.save(BlogDao(blog)).toBlog()
     override suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry {
         require(blogEntry.isCoupledWithBlog) { "An entry must belong to a persistent blog!" }
-        val blogEntryDao = BlogEntryDao(blogEntry)
-
-        return BlogRepository.insertOrUpdate(blogEntryDao).toBlogEntry()
+        return blogRepository.save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
     }
 }
 
@@ -260,28 +250,26 @@ data class Blog(
     val title: String?,
     val user: User?,
 ) {
-    constructor(blogDto: BlogDto) : this(
-        persistent = blogDto.persistentDto.toPersistent(),
-        created = blogDto.persistentDto.timeOfCreation?.toLocalDate() ?: LocalDate.now(),
-        title = blogDto.title,
-        user = blogDto.user?.let { User(userDto = it) }
-    )
+    val id: UUID? get() = persistent.id
+    val usernameOfBlog: String
+        get() = this.user?.username ?: error("Unnable to find username in $this")
 
-    constructor(persistent: Persistent, blog: Blog) : this(
-        persistent = persistent,
-        created = blog.created,
-        title = blog.title,
-        user = blog.user
+    fun toBlogDao() = BlogDao(
+        id = persistent.id,
+        created = created,
+        createdBy = persistent.createdBy,
+        modifiedBy = persistent.modifiedBy,
+        timeOfCreation = persistent.timeOfCreation,
+        timeOfModification = persistent.timeOfModification,
+        title = title,
+        userId = user?.persistent?.id,
     )
 
     fun toBlogDto() = BlogDto(
         persistentDto = persistent.toPersistentDto(),
         title = title,
-        user = user?.toDto()
+        user = user?.toUserDto()
     )
-
-    fun fetchUsername(): String = this.user?.username ?: error("Unnable to find username in $this")
-    fun toBlogDao() = BlogDao(blog = this)
 }
 
 @JvmRecord
@@ -291,20 +279,9 @@ data class BlogEntry(
     val entry: String?,
     val persistent: Persistent = Persistent(),
 ) {
-    constructor(blogEntry: BlogEntryDto) : this(
-        persistent = blogEntry.persistentDto.toPersistent(),
-
-        blog = blogEntry.blogDto?.toBlog(),
-        creatorName = blogEntry.creatorName,
-        entry = blogEntry.entry,
-    )
-
-    constructor(persistent: Persistent, blogEntry: BlogEntry) : this(
-        persistent = persistent,
-        blog = blogEntry.blog,
-        creatorName = blogEntry.creatorName,
-        entry = blogEntry.entry
-    )
+    val id: UUID? get() = persistent.id
+    val isCoupledWithBlog: Boolean
+        get() = blog?.persistent?.id != null
 
     fun toBlogEntryDto() = BlogEntryDto(
         persistentDto = persistent.toPersistentDto(),
@@ -313,11 +290,17 @@ data class BlogEntry(
         entry = entry,
     )
 
-    val isCoupledWithBlog: Boolean
-        get() = blog?.persistent?.id != null
+    fun toBlogEntryDao() = BlogEntryDao(
+        id = persistent.id,
 
-    fun withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
-    fun toBlogEntryDao() = BlogEntryDao(blogEntry = this)
+        blogId = blog?.persistent?.id,
+        createdBy = persistent.createdBy,
+        creatorName = requireNotNull(value = creatorName) { "Creator name must not be null" },
+        entry = requireNotNull(value = entry) { "Entry must not be null" },
+        timeOfCreation = persistent.timeOfCreation,
+        modifiedBy = persistent.modifiedBy,
+        timeOfModification = persistent.timeOfModification,
+    )
 }
 
 object Blogs : UUIDTable(name = "T_BLOG", columnName = "ID") {
@@ -342,85 +325,115 @@ object BlogEntries : UUIDTable(name = "T_BLOG_ENTRY", columnName = "ID") {
     val entry = text("ENTRY")
 }
 
-object BlogRepository {
-    fun findBlogById(id: UUID): BlogDao? = transaction {
+interface BlogRepository {
+    fun findBlogById(id: UUID): BlogDao?
+    fun findBlogsByUserId(userId: UUID): List<BlogDao>?
+    fun findBlogEntries(): List<BlogEntryDao>
+    fun findBlogEntryById(id: UUID): BlogEntryDao?
+    fun findBlogs(): List<BlogDao>
+    fun findBlogsByTitle(title: String): List<BlogDao>
+    fun findBlogEntriesByBlogId(blogId: UUID): List<BlogEntryDao>
+    fun save(blogDao: BlogDao): BlogDao
+    fun save(blogEntryDao: BlogEntryDao): BlogEntryDao
+}
+
+object BlogRepositoryObject : BlogRepository {
+    override fun findBlogById(id: UUID): BlogDao? = transaction {
         Blogs.selectAll()
             .andWhere { Blogs.id eq id }
-            .map { row -> row.toBlogDao() }
+            .map { it.toBlogDao() }
             .singleOrNull()
     }
 
-    fun findBlogEntryById(id: UUID): BlogEntryDao? = transaction {
+    override fun findBlogsByUserId(userId: UUID): List<BlogDao> = transaction {
+        Blogs.selectAll()
+            .andWhere { Blogs.userId eq userId }
+            .map { it.toBlogDao() }
+    }
+
+    override fun findBlogEntries(): List<BlogEntryDao> = transaction {
+        BlogEntries.selectAll()
+            .map { it.toBlogEntryDao() }
+    }
+
+    override fun findBlogEntryById(id: UUID): BlogEntryDao? = transaction {
         BlogEntries.selectAll()
             .andWhere { BlogEntries.id eq id }
-            .map { row -> row.toBlogEntryDao() }
+            .map { it.toBlogEntryDao() }
             .singleOrNull()
     }
 
-    fun findBlogsByTitle(title: String): List<BlogDao> = transaction {
+    override fun findBlogs(): List<BlogDao> = transaction {
+        Blogs.selectAll()
+            .map { it.toBlogDao() }
+    }
+
+    override fun findBlogsByTitle(title: String): List<BlogDao> = transaction {
         Blogs.selectAll()
             .andWhere { Blogs.title eq title }
-            .map { row -> row.toBlogDao() }
+            .map { it.toBlogDao() }
     }
 
-    fun findBlogEntriesByBlogId(blogId: UUID): List<BlogEntryDao> = transaction {
+    override fun findBlogEntriesByBlogId(blogId: UUID): List<BlogEntryDao> = transaction {
         BlogEntries.selectAll()
             .andWhere { BlogEntries.blogId eq blogId }
-            .map { row -> row.toBlogEntryDao() }
+            .map { it.toBlogEntryDao() }
     }
 
-    fun insertOrUpdate(blogDao: BlogDao): BlogDao = transaction {
-        blogDao.id?.let { id ->
-            Blogs.update(where = { Blogs.id eq id }) { update ->
-                update[Blogs.modifiedBy] = blogDao.modifiedBy
-                update[Blogs.timeOfModification] = blogDao.timeOfModification
-                update[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
-                update[Blogs.title] = blogDao.title
-                update[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
-            }
-
-            blogDao
-        } ?: run {
-            val id = Blogs.insertIgnoreAndGetId {
-                it[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
-                it[Blogs.createdBy] = blogDao.createdBy
-                it[Blogs.modifiedBy] = blogDao.modifiedBy
-                it[Blogs.timeOfCreation] = blogDao.timeOfCreation
-                it[Blogs.timeOfModification] = blogDao.timeOfModification
-                it[Blogs.title] = blogDao.title
-                it[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
-            }?.value
-
-            blogDao.copy(id = id)
+    override fun save(blogDao: BlogDao): BlogDao = transaction {
+        when (blogDao.isNotPersisted) {
+            true -> insert(blogDao)
+            false -> update(blogDao)
         }
     }
 
-    fun insertOrUpdate(blogEntryDao: BlogEntryDao): BlogEntryDao = transaction {
-        blogEntryDao.id?.let {
-            BlogEntries.update(where = { BlogEntries.id eq it }) { update ->
-                update[blogId] = requireNotNull(blogEntryDao.blogId) { "A blog entry must belong to a blog" }
-                update[createdBy] = blogEntryDao.createdBy
-                update[creatorName] = blogEntryDao.creatorName
-                update[modifiedBy] = blogEntryDao.modifiedBy
-                update[timeOfCreation] = blogEntryDao.timeOfCreation
-                update[timeOfModification] = blogEntryDao.timeOfModification
-            }
+    private fun insert(blogDao: BlogDao): BlogDao = Blogs.insertIgnoreAndGetId {
+        it[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
+        it[Blogs.createdBy] = blogDao.createdBy
+        it[Blogs.modifiedBy] = blogDao.modifiedBy
+        it[Blogs.timeOfCreation] = blogDao.timeOfCreation
+        it[Blogs.timeOfModification] = blogDao.timeOfModification
+        it[Blogs.title] = blogDao.title
+        it[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
+    }?.value?.let { blogDao.copy(id = it) } ?: error("Unable to insert BlogDao: $blogDao")
 
-            blogEntryDao
-        } ?: run {
-            val id = BlogEntries.insertIgnoreAndGetId { insert ->
-                insert[blogId] = requireNotNull(blogEntryDao.blogId) { "A blog entry must belong to a blog" }
-                insert[createdBy] = blogEntryDao.createdBy
-                insert[creatorName] = blogEntryDao.creatorName
-                insert[entry] = blogEntryDao.entry
-                insert[modifiedBy] = blogEntryDao.modifiedBy
-                insert[timeOfCreation] = blogEntryDao.timeOfCreation
-                insert[timeOfModification] = blogEntryDao.timeOfModification
-            }?.value
+    private fun update(blogDao: BlogDao): BlogDao = Blogs.update(
+        where = { Blogs.id eq blogDao.id }
+    ) { update ->
+        update[Blogs.modifiedBy] = blogDao.modifiedBy
+        update[Blogs.timeOfModification] = blogDao.timeOfModification
+        update[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
+        update[Blogs.title] = blogDao.title
+        update[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
+    }.let { blogDao }
 
-            blogEntryDao.copy(id = id)
+    override fun save(blogEntryDao: BlogEntryDao): BlogEntryDao = transaction {
+        when (blogEntryDao.isNotPersisted) {
+            true -> insert(blogEntryDao)
+            false -> update(blogEntryDao)
         }
     }
+
+    private fun insert(blogEntryDao: BlogEntryDao): BlogEntryDao = BlogEntries.insertIgnoreAndGetId { insert ->
+        insert[blogId] = requireNotNull(blogEntryDao.blogId) { "A blog entry must belong to a blog" }
+        insert[createdBy] = blogEntryDao.createdBy
+        insert[creatorName] = blogEntryDao.creatorName
+        insert[entry] = blogEntryDao.entry
+        insert[modifiedBy] = blogEntryDao.modifiedBy
+        insert[timeOfCreation] = blogEntryDao.timeOfCreation
+        insert[timeOfModification] = blogEntryDao.timeOfModification
+    }?.value?.let { blogEntryDao.copy(id = it) } ?: error("Unable to insert BlogEntryDao: $blogEntryDao")
+
+    private fun update(blogEntryDao: BlogEntryDao): BlogEntryDao = BlogEntries.update(
+        where = { BlogEntries.id eq blogEntryDao.id },
+    ) { update ->
+        update[blogId] = requireNotNull(blogEntryDao.blogId) { "A blog entry must belong to a blog" }
+        update[createdBy] = blogEntryDao.createdBy
+        update[creatorName] = blogEntryDao.creatorName
+        update[modifiedBy] = blogEntryDao.modifiedBy
+        update[timeOfCreation] = blogEntryDao.timeOfCreation
+        update[timeOfModification] = blogEntryDao.timeOfModification
+    }.let { blogEntryDao }
 
     private fun ResultRow.toBlogDao(): BlogDao = BlogDao(
         id = this[Blogs.id].value,
@@ -457,8 +470,9 @@ data class BlogDao(
     var entries: MutableSet<BlogEntryDao> = HashSet(),
     internal var userId: UUID? = null,
 ) : PersistentDao<BlogDao> {
+    val isNotPersisted: Boolean get() = userId == null
     val user: UserDao by lazy {
-        userId?.let { UserRepository.findUserById(userId = it) } ?: error("no user relation?")
+        userId?.let { UserRepositoryObject.findUserById(userId = it) } ?: error("no user relation?")
     }
 
     constructor(blog: Blog) : this(
@@ -504,21 +518,10 @@ data class BlogEntryDao(
 
     internal var blogId: UUID? = null
 ) : PersistentDao<BlogEntryDao>, EntryDao {
+    val isNotPersisted: Boolean get() = id != null
     val blogDao: BlogDao by lazy {
-        blogId?.let { BlogRepository.findBlogById(id = it) } ?: error("no blog relation?")
+        blogId?.let { BlogRepositoryObject.findBlogById(id = it) } ?: error("no blog relation?")
     }
-
-    constructor(blogEntry: BlogEntry) : this(
-        id = blogEntry.persistent.id,
-
-        blogId = requireNotNull(blogEntry.blog?.persistent?.id) { "Entry must belong to a blog" },
-        createdBy = blogEntry.persistent.createdBy,
-        creatorName = requireNotNull(blogEntry.creatorName) { "Creator name must not be null" },
-        entry = requireNotNull(blogEntry.entry) { "Entry must not be null" },
-        timeOfCreation = blogEntry.persistent.timeOfCreation,
-        modifiedBy = blogEntry.persistent.modifiedBy,
-        timeOfModification = blogEntry.persistent.timeOfModification,
-    )
 
     override fun copyWithoutId(): BlogEntryDao = copy(id = null)
     override fun modifiedBy(modifier: String): BlogEntryDao = copy(

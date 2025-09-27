@@ -21,7 +21,7 @@ internal class BlogTest {
             user = initUser()
         )
 
-        val (_, created, title, userInternal) = Blog(blog.persistent, blog)
+        val (_, created, title, userInternal) = blog.copy()
 
         assertAll {
             assertThat(created).isEqualTo(blog.created)
@@ -40,9 +40,11 @@ internal class BlogTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = Blog(
-            persistent,
-            initBlog()
+        val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = Blog(
+            persistent = persistent,
+            created = LocalDate.now(),
+            title = "title",
+            user = initUser(),
         ).persistent
 
         assertAll {

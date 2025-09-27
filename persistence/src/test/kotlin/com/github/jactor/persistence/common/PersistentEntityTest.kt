@@ -9,6 +9,7 @@ import com.github.jactor.persistence.test.initGuestBook
 import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
+import com.github.jactor.persistence.test.withId
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -22,16 +23,13 @@ internal class PersistentEntityTest {
     @Test
     fun `should be able to copy an address without the id`() {
         persistentDaoToTest = initAddress(
-            persistent = Persistent(),
             zipCode = "1001",
             addressLine1 = "somewhere",
             addressLine2 = "out",
             addressLine3 = "there",
             city = "svg",
             country = "NO"
-        ).withId().toEntity()
-
-        persistentDaoToTest.id = UUID.randomUUID()
+        ).withId().toAddressDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
@@ -49,8 +47,9 @@ internal class PersistentEntityTest {
             address = initAddress(),
             locale = "us_US",
             firstName = "Bill",
-            surname = "Smith", description = "here i am"
-        ).toEntityWithId()
+            surname = "Smith",
+            description = "here i am"
+        ).withId().toPersonDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
@@ -64,8 +63,11 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a user without the id`() {
-        persistentDaoToTest = initUser(persistent = Persistent(), emailAddress = "i.am@home", username = "jactor")
-            .withId().toUserDao()
+        persistentDaoToTest = initUser(
+            persistent = Persistent(id = UUID.randomUUID()),
+            emailAddress = "i.am@home",
+            username = "jactor"
+        ).withId().toUserDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
@@ -82,7 +84,7 @@ internal class PersistentEntityTest {
         persistentDaoToTest = initBlog(
             title = "general ignorance",
             user = initUser()
-        ).withId().toEntity()
+        ).withId().toBlogDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
@@ -116,7 +118,7 @@ internal class PersistentEntityTest {
 
     @Test
     fun `should be able to copy a guest book without the id`() {
-        persistentDaoToTest = initGuestBook(title = "enter when applied", user = initUser()).withId().toEntity()
+        persistentDaoToTest = initGuestBook(title = "enter when applied", user = initUser()).withId().toGuestBookDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 

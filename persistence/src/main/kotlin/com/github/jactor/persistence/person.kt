@@ -6,6 +6,7 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.javatime.datetime
+import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -19,7 +20,7 @@ import com.github.jactor.shared.api.PersonDto
 @Service
 class PersonService() {
     suspend fun createWhenNotExists(person: Person): PersonDao? = findExisting(person) ?: create(person)
-    private suspend fun create(person: Person): PersonDao = PersonRepository.insertOrUpdate(PersonDao(person = person))
+    private suspend fun create(person: Person): PersonDao = PersonRepository.save(personDao = person.toPersonDao())
     private suspend fun findExisting(person: Person): PersonDao? = person.id?.let {
         PersonRepository.findById(it)
     }
@@ -36,24 +37,8 @@ data class Person(
 ) {
     val id: UUID? @JsonIgnore get() = persistent.id
 
-    constructor(
-        persistent: Persistent, person: Person
-    ) : this(
-        persistent = persistent,
-        address = person.address,
-        description = person.description,
-        firstName = person.firstName,
-        locale = person.locale,
-        surname = person.surname
-    )
+    fun toPersonDao() = PersonDao(
 
-    constructor(personDto: PersonDto) : this(
-        persistent = personDto.persistentDto.toPersistent(),
-        address = personDto.address?.toAddress(),
-        description = personDto.description,
-        firstName = personDto.firstName,
-        locale = personDto.locale,
-        surname = personDto.surname
     )
 
     fun toPersonDto() = PersonDto(
@@ -64,10 +49,6 @@ data class Person(
         surname = surname,
         description = description
     )
-
-    fun withId(): Person = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
-    fun toEntity() = PersonDao(person = this)
-    fun toEntityWithId() = PersonDao(person = this).apply { id = UUID.randomUUID() }
 }
 
 object People : UUIDTable(name = "T_PERSON", columnName = "ID") {
@@ -86,7 +67,7 @@ object People : UUIDTable(name = "T_PERSON", columnName = "ID") {
 object PersonRepository {
     fun findById(id: UUID): PersonDao? = People
         .selectAll()
-        .where { People.id eq id }
+        .andWhere { People.id eq id }
         .map { it.toPersonDao() }
         .singleOrNull()
 
@@ -95,7 +76,7 @@ object PersonRepository {
 
         else -> People
             .selectAll()
-            .where { People.surname eq surname }
+            .andWhere { People.surname eq surname }
             .map { it.toPersonDao() }
     }
 
@@ -114,7 +95,7 @@ object PersonRepository {
         addressId = this[People.addressId],
     )
 
-    fun insertOrUpdate(personDao: PersonDao): PersonDao = transaction {
+    fun save(personDao: PersonDao): PersonDao = transaction {
         when (personDao.isIdNull()) {
             true -> insert(personDao)
             false -> update(personDao)
@@ -151,6 +132,10 @@ object PersonRepository {
             }
         }.let { personDao }
     }
+
+    fun findAll(): List<PersonDao> = transaction {
+        People.selectAll().map { it.toPersonDao() }
+    }
 }
 
 data class PersonDao(
@@ -166,26 +151,13 @@ data class PersonDao(
     var surname: String = "",
     var addressId: UUID? = null,
 ) : PersistentDao<PersonDao> {
-    var addressDao: AddressDao?
-        get() = addressId?.let { AddressRepository.findById(addressId = it) }
-        set(value) {
-            addressId = value?.id
-        }
+    val users: List<UserDao> by lazy {
+        id?.let { UserRepositoryObject.findByPersonId(personId = it) } ?: emptyList()
+    }
 
-    constructor(person: Person) : this(
-        id = person.id,
-
-        createdBy = person.persistent.createdBy,
-        modifiedBy = person.persistent.modifiedBy,
-        timeOfCreation = person.persistent.timeOfCreation,
-        timeOfModification = person.persistent.timeOfModification,
-
-        addressId = person.address?.persistent?.id,
-        description = person.description,
-        firstName = person.firstName,
-        locale = person.locale,
-        surname = person.surname,
-    )
+    val addressDao: AddressDao? by lazy {
+        addressId?.let { AddressRepository.findById(addressId = it) }
+    }
 
     fun toPerson() = Person(
         persistent = toPersistent(),

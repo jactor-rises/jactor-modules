@@ -32,12 +32,14 @@ internal class ExceptionHandlerTest {
 
     @Test
     fun `skal hente kodelinjer fra vår kode når exception oppstår`() = runTest {
-        val repositoryMockk = mockk<UserRepository> {}
+        val userRepositoryMockk = mockk<UserRepository> {}
         val avstemmingController = UserController(
-            userService = UserService(personService = mockk {}, userRepository = repositoryMockk),
+            userService = UserService(
+                userRepository = userRepositoryMockk
+            )
         )
 
-        every { repositoryMockk.findById(any()) } answers { error("boom!") }
+        every { userRepositoryMockk.findById(any()) } answers { error("boom!") }
 
         runCatching { avstemmingController.get(id = UUID.randomUUID()) }
             .onSuccess { fail("Kjøring skulle feilet!") }

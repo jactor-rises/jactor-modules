@@ -1,7 +1,6 @@
 package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initGuestBook
@@ -14,11 +13,9 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class GuestBookEntryRepositoryTest @Autowired constructor(
-    private val guestBookRepository: GuestBookRepository,
-    private val guestBookEntryRepository: GuestBookEntryRepository,
-    private val userRepository: UserRepository,
-) : AbstractSpringBootNoDirtyContextTest() {
+internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+    private val guestBookRepository: GuestBookRepository = GuestBookRepositoryObject
+    private val userRepository: UserRepository = UserRepositoryObject
 
     @Test
     fun `should save then read guest book entry entity`() {
@@ -31,29 +28,27 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             person = person,
             emailAddress = "casuel@tantooine.com",
             username = "causual"
-        )
+        ).toUserDao()
 
-        val savedUser = userRepository.save(UserDao(user))
+        val savedUser = userRepository.save(user = user)
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = savedUser.toPerson()
+            user = savedUser.toUser()
         )
 
-        savedUser.guestBook = guestBook.toEntity()
-
-        val savedGuestBook = guestBookRepository.save(savedUser.guestBook!!)
+        val savedGuestBook = guestBookRepository.save(guestBookDao = guestBook.toGuestBookDao())
         val guestBookEntry = initGuestBookEntry(
-            guestBook = savedUser.guestBook?.toPerson(),
+            guestBook = savedGuestBook.toGuestBook(),
             creatorName = "Harry",
             entry = "Draco Dormiens Nunquam Tittilandus"
         ).toGuestBookEntryDao()
 
-        flush { guestBookEntryRepository.save(guestBookEntry) }
+        guestBookRepository.save(guestBookEntryDao = guestBookEntry)
 
-        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
+        val entriesByGuestBook = guestBookRepository.findGuestBookEntryByGuestBook(guestBookDao = savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
-        val entry = entriesByGuestBook.iterator().next()
+        val entry = entriesByGuestBook.first()
 
         assertAll {
             assertThat(entry.creatorName).isEqualTo("Harry")
@@ -74,34 +69,35 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             username = "causual"
         )
 
-        val savedUser = userRepository.save(UserDao(user))
+        val savedUser = userRepository.save(user = user.toUserDao())
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = savedUser.toPerson()
+            user = savedUser.toUser()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBook.toEntity())
+        val savedGuestBook = guestBookRepository.save(guestBookDao = guestBook.toGuestBookDao())
 
-        flush {
-            guestBookEntryRepository.save(
-                initGuestBookEntry(
-                    creatorName = "Harry",
-                    entry = "Draco Dormiens Nunquam Tittilandus",
-                    guestBook = savedGuestBook.toPerson(),
-                ).toGuestBookEntryDao()
-            )
-        }
+        guestBookRepository.save(
+            guestBookEntryDao = initGuestBookEntry(
+                creatorName = "Harry",
+                entry = "Draco Dormiens Nunquam Tittilandus",
+                guestBook = savedGuestBook.toGuestBook(),
+            ).toGuestBookEntryDao()
+        )
 
-        val entriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
+        val entriesByGuestBook = guestBookRepository.findGuestBookEntryByGuestBook(guestBookDao = savedGuestBook)
         assertThat(entriesByGuestBook).hasSize(1)
-        entriesByGuestBook.iterator().next().modify("Willie", "On the road again")
+        entriesByGuestBook.first().apply { entry = "On the road again" }.modifiedBy(modifier = "Willie")
 
-        flush { guestBookEntryRepository.save(entriesByGuestBook.iterator().next()) }
+        guestBookRepository.save(guestBookEntryDao = entriesByGuestBook.first())
 
-        val modifiedEntriesByGuestBook = guestBookEntryRepository.findByGuestBook(savedGuestBook)
+        val modifiedEntriesByGuestBook = guestBookRepository.findGuestBookEntryByGuestBook(
+            guestBookDao = savedGuestBook
+        )
+
         assertThat(modifiedEntriesByGuestBook).hasSize(1)
-        val entry = modifiedEntriesByGuestBook.iterator().next()
+        val entry = modifiedEntriesByGuestBook.first()
 
         assertAll {
             assertThat(entry.creatorName).isEqualTo("Willie")
@@ -122,19 +118,19 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             username = "causual"
         )
 
-        val savedUser = userRepository.save(UserDao(user))
+        val savedUser = userRepository.save(user = user.toUserDao())
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
-            user = savedUser.toPerson()
+            user = savedUser.toUser()
         )
 
-        val savedGuestBook = guestBookRepository.save(guestBook.toEntity())
-        guestBookEntryRepository.save(
+        val savedGuestBook = guestBookRepository.save(guestBookDao = guestBook.toGuestBookDao())
+        guestBookRepository.save(
             initGuestBookEntry(
                 creatorName = "somone",
                 entry = "jadda",
-                guestBook = savedGuestBook.toPerson(),
+                guestBook = savedGuestBook.toGuestBook(),
             ).toGuestBookEntryDao()
         )
 
@@ -144,21 +140,20 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             username = "hidden"
         )
 
-        userRepository.save(UserDao(anotherUser))
+        userRepository.save(user = anotherUser.toUserDao())
 
-        val anotherSavedGuestBook = guestBookRepository.save(guestBook.toEntity())
+        val anotherSavedGuestBook = guestBookRepository.save(guestBookDao = guestBook.toGuestBookDao())
         val anotherEntry = initGuestBookEntry(
-            guestBook = anotherSavedGuestBook.toPerson(),
+            guestBook = anotherSavedGuestBook.toGuestBook(),
             creatorName = "shrek",
             entry = "far far away"
         )
 
-        flush { guestBookEntryRepository.save(anotherEntry.toGuestBookEntryDao()) }
+        guestBookRepository.save(guestBookEntryDao = anotherEntry.toGuestBookEntryDao())
 
-        val lastEntry = guestBookRepository.findAll().toList()
+        val lastEntry = guestBookRepository.findAllGuestBooks()
             .flatMap { it.entries }
             .firstOrNull { it.id == anotherEntry.id }
-
 
         assertAll {
             assertThat(lastEntry).isNotNull()

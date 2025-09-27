@@ -105,7 +105,7 @@ object AddressRepository {
     fun findById(addressId: UUID): AddressDao? = transaction {
         Addresses
             .selectAll()
-            .where { Addresses.id eq addressId }
+            .andWhere { Addresses.id eq addressId }
             .singleOrNull()
             ?.toAddressDao()
     }
