@@ -3,6 +3,7 @@ package com.github.jactor.persistence
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -13,9 +14,10 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class GuestBookRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    private val guestBookRepository: GuestBookRepository = GuestBookRepositoryObject
-    private val userRepository: UserRepository = UserRepositoryObject
+internal class GuestBookRepositoryTest @Autowired constructor(
+    private val guestBookRepository: GuestBookRepository,
+    private val userRepository: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should write then read guest book`() {

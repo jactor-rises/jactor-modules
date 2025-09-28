@@ -1,6 +1,7 @@
 package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initGuestBook
@@ -13,9 +14,10 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class GuestBookEntryRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    private val guestBookRepository: GuestBookRepository = GuestBookRepositoryObject
-    private val userRepository: UserRepository = UserRepositoryObject
+internal class GuestBookEntryRepositoryTest @Autowired constructor(
+    private val guestBookRepository: GuestBookRepository,
+    private val userRepository: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save then read guest book entry entity`() {

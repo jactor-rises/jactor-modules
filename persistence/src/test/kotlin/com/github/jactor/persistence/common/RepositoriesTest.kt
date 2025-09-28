@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogRepository
-import com.github.jactor.persistence.BlogRepositoryObject
 import com.github.jactor.persistence.UserRepository
-import com.github.jactor.persistence.UserRepositoryObject
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initPerson
@@ -18,9 +16,10 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
-internal class RepositoriesTest : AbstractSpringBootNoDirtyContextTest() {
-    private val blogRepository: BlogRepository = BlogRepositoryObject
-    private val userRepository: UserRepository = UserRepositoryObject
+internal class RepositoriesTest(
+    private val blogRepository: BlogRepository,
+    private val userRepository: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {

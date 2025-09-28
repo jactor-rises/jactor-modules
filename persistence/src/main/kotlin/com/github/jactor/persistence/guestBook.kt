@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.util.toGuestBook
+import com.github.jactor.persistence.util.toPersistent
+import com.github.jactor.persistence.util.toUser
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation
@@ -167,9 +170,7 @@ interface GuestBookService {
 }
 
 @Service
-class GuestBookServiceBean(
-    private val guestBookRepository: GuestBookRepository = GuestBookRepositoryObject
-) : GuestBookService {
+class GuestBookServiceBean(private val guestBookRepository: GuestBookRepository) : GuestBookService {
     override suspend fun findGuestBook(id: UUID): GuestBook? {
         return guestBookRepository.findGuestBookById(id)?.toGuestBook()
     }

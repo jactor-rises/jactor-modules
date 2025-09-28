@@ -1,7 +1,15 @@
-package com.github.jactor.persistence
+package com.github.jactor.persistence.util
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogEntry
+import com.github.jactor.persistence.GuestBook
+import com.github.jactor.persistence.GuestBookEntry
+import com.github.jactor.persistence.Person
+import com.github.jactor.persistence.User
+import com.github.jactor.persistence.UserDao
 import com.github.jactor.persistence.UserDao.UserType
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.AddressDto
@@ -28,12 +36,12 @@ fun AddressDto.toAddress() = Address(
 fun BlogDto.toBlog() = Blog(
     persistent = persistentDto.toPersistent(),
 
-    created = persistentDto.withoutId().whenTrue { LocalDate.now() },
+    created = persistentDto.isWithId.whenTrue { LocalDate.now() },
     title = requireNotNull(title) { "Title cannot be null!" },
     user = requireNotNull(user?.toUser()) { "User cannot be null!" },
 )
 
-private fun PersistentDto.withoutId() = id == null
+private val PersistentDto.isWithId: Boolean get() = id != null
 
 fun BlogEntryDto.toBlogEntry() = BlogEntry(
     persistent = persistentDto.toPersistent(),

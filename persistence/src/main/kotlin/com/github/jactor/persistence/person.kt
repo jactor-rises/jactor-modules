@@ -18,11 +18,11 @@ import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.PersonDto
 
 @Service
-class PersonService() {
+class PersonService(private val personRepository: PersonRepository) {
     suspend fun createWhenNotExists(person: Person): PersonDao? = findExisting(person) ?: create(person)
-    private suspend fun create(person: Person): PersonDao = PersonRepository.save(personDao = person.toPersonDao())
+    private suspend fun create(person: Person): PersonDao = personRepository.save(personDao = person.toPersonDao())
     private suspend fun findExisting(person: Person): PersonDao? = person.id?.let {
-        PersonRepository.findById(it)
+        personRepository.findById(it)
     }
 }
 
@@ -64,14 +64,26 @@ object People : UUIDTable(name = "T_PERSON", columnName = "ID") {
     val addressId = uuid("ADDRESS_ID").references(Addresses.id)
 }
 
-object PersonRepository {
-    fun findById(id: UUID): PersonDao? = People
+interface PersonRepository {
+    fun findAll(): List<PersonDao>
+    fun findById(id: UUID): PersonDao?
+    fun findBySurname(surname: String?): List<PersonDao>
+    fun save(personDao: PersonDao): PersonDao
+}
+
+object PersonRepositoryObject: PersonRepository {
+    override fun findAll(): List<PersonDao> = transaction {
+        People.selectAll().map { it.toPersonDao() }
+    }
+
+    override fun findById(id: UUID): PersonDao? = People
         .selectAll()
         .andWhere { People.id eq id }
         .map { it.toPersonDao() }
         .singleOrNull()
 
-    fun findBySurname(surname: String?): List<PersonDao> = when {
+    override fun findBySurname(surname: String?): List<PersonDao> = when {
+        // TODO: use BooleanExtensions from shared
         (surname?.isNotBlank() ?: true) -> emptyList()
 
         else -> People
@@ -95,7 +107,7 @@ object PersonRepository {
         addressId = this[People.addressId],
     )
 
-    fun save(personDao: PersonDao): PersonDao = transaction {
+    override fun save(personDao: PersonDao): PersonDao = transaction {
         when (personDao.isIdNull()) {
             true -> insert(personDao)
             false -> update(personDao)
@@ -117,7 +129,6 @@ object PersonRepository {
             }
         }.let { newId -> personDao.also { it.id = newId.value } }
     }
-
     private fun update(personDao: PersonDao): PersonDao = transaction {
         People.update(where = { People.id eq personDao.id }) { row ->
             row[modifiedBy] = personDao.modifiedBy
@@ -131,10 +142,6 @@ object PersonRepository {
                 row[addressId] = it
             }
         }.let { personDao }
-    }
-
-    fun findAll(): List<PersonDao> = transaction {
-        People.selectAll().map { it.toPersonDao() }
     }
 }
 
@@ -156,7 +163,7 @@ data class PersonDao(
     }
 
     val addressDao: AddressDao? by lazy {
-        addressId?.let { AddressRepository.findById(addressId = it) }
+        addressId?.let { AddressRepositoryObject.findById(addressId = it) }
     }
 
     fun toPerson() = Person(

@@ -3,6 +3,7 @@ package com.github.jactor.persistence
 import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -13,8 +14,9 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 
-internal class BlogRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    private val blogRepository: BlogRepository = BlogRepositoryObject
+internal class BlogRepositoryTest @Autowired constructor(
+    private val blogRepository: BlogRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save and then read blog entity`() {

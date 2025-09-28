@@ -1,40 +1,34 @@
 package com.github.jactor.persistence.common
 
 import java.util.UUID
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jactor.persistence.AddressRepository
-import com.github.jactor.persistence.JactorPersistenceConfig
 import com.github.jactor.persistence.PersonRepository
-import com.github.jactor.persistence.UserRepositoryObject
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUserDao
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto
+import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import io.mockk.every
-import io.mockk.mockkObject
-import io.mockk.unmockkObject
 
-internal class JsonMappingTest {
-
-    private val objectMapper = JactorPersistenceConfig().objectMapper()
-
-    @BeforeEach
-    fun `mock repositories`() = mockkObject(PersonRepository, AddressRepository)
-
-    @AfterEach
-    fun `unmock repositories`() = unmockkObject(PersonRepository, AddressRepository)
+internal class JsonMappingTest @Autowired constructor(
+    @MockkBean private val addressRepositoryMockk: AddressRepository,
+    private val objectMapper: ObjectMapper,
+    @MockkBean private val personRepositoryMockk: PersonRepository,
+): AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `skal mappe json fra UserDto fra User skapt av UserDao`() {
-        every { PersonRepository.findById(id = any()) } returns initPerson().toPersonDao()
-        every { AddressRepository.findById(addressId = any()) } returns initAddress().toAddressDao()
+        every { personRepositoryMockk.findById(id = any()) } returns initPerson().toPersonDao()
+        every { addressRepositoryMockk.findById(addressId = any()) } returns initAddress().toAddressDao()
 
         val user = initUserDao().toUser()
         val json: String = objectMapper.writeValueAsString(user.toUserDto())

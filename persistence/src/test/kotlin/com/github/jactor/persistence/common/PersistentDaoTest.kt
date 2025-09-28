@@ -17,7 +17,7 @@ import assertk.assertions.isNotNull
 import assertk.assertions.isNotSameInstanceAs
 import assertk.assertions.isNull
 
-internal class PersistentEntityTest {
+internal class PersistentDaoTest {
     private lateinit var persistentDaoToTest: PersistentDao<*>
 
     @Test

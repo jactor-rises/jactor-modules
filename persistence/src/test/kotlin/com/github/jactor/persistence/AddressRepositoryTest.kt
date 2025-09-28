@@ -11,11 +11,13 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isIn
 import assertk.assertions.isNotNull
 
-internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
+internal class AddressRepositoryTest @Autowired constructor(
+    private val addressRepository: AddressRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should fetch address entities`() {
-        AddressRepository.save(
+        addressRepository.save(
             initAddress(
                 addressLine1 = "somewhere out there",
                 city = "Rud",
@@ -23,7 +25,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
             ).toAddressDao()
         )
 
-        AddressRepository.save(
+        addressRepository.save(
             initAddress(
                 addressLine1 = "somewhere in there",
                 city = "Rud",
@@ -31,7 +33,7 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
             ).toAddressDao()
         )
 
-        val addresses = AddressRepository.findByZipCode(zipCode = "1234")
+        val addresses = addressRepository.findByZipCode(zipCode = "1234")
 
         assertAll {
             assertThat(addresses).hasSize(2)
@@ -52,9 +54,9 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
             zipCode = "1234",
         ).toAddressDao()
 
-        AddressRepository.save(addressToPersist)
+        addressRepository.save(addressToPersist)
 
-        val possibleAddressById = AddressRepository.findById(addressToPersist.id!!)
+        val possibleAddressById = addressRepository.findById(addressToPersist.id!!)
 
         assertThat(possibleAddressById).isNotNull().given { addressDao: AddressDao ->
             assertAll {
@@ -79,9 +81,9 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
             zipCode = "1234",
         ).toAddressDao()
 
-        AddressRepository.save(addressToPersist)
+        addressRepository.save(addressToPersist)
 
-        val addressSaved = AddressRepository.findById(addressId = addressToPersist.id!!) ?: addressNotFound()
+        val addressSaved = addressRepository.findById(addressId = addressToPersist.id!!) ?: addressNotFound()
 
         addressSaved.addressLine1 = "the truth is out there"
         addressSaved.addressLine2 = "among the stars"
@@ -90,9 +92,9 @@ internal class AddressRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
         addressSaved.city = "Cloud city"
         addressSaved.country = "XX"
 
-        AddressRepository.save(addressSaved)
+        addressRepository.save(addressSaved)
 
-        val possibleAddressById = AddressRepository.findById(addressToPersist.id!!) ?: addressNotFound()
+        val possibleAddressById = addressRepository.findById(addressToPersist.id!!) ?: addressNotFound()
 
         assertThat(possibleAddressById).given { addressDao: AddressDao ->
             assertAll {

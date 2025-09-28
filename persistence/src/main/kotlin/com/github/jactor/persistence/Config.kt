@@ -36,6 +36,24 @@ class ExposedConfig {
 }
 
 @Configuration
+class JactorPersistenceRepositiesConfig {
+    @Bean
+    fun addressRepository(): AddressRepository = AddressRepositoryObject
+
+    @Bean
+    fun blogRepository(): BlogRepository = BlogRepositoryObject
+
+    @Bean
+    fun guestBookRepository(): GuestBookRepository = GuestBookRepositoryObject
+
+    @Bean
+    fun personRepository(): PersonRepository = PersonRepositoryObject
+
+    @Bean
+    fun userRepository(): UserRepository = UserRepositoryObject
+}
+
+@Configuration
 @OpenAPIDefinition(info = Info(title = "jactor-persistence", version = "v1"))
 class JactorPersistenceConfig {
 

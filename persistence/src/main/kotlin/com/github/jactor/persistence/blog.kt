@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.util.toBlog
+import com.github.jactor.persistence.util.toBlogEntry
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.whenFalse
@@ -222,7 +224,7 @@ interface BlogService {
 }
 
 @Service
-class BlogServiceImpl(private val blogRepository: BlogRepository = BlogRepositoryObject) : BlogService {
+class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService {
     override suspend fun find(id: UUID): Blog? = blogRepository.findBlogById(id)?.toBlog()
     override suspend fun findEntryBy(blogEntryId: UUID): BlogEntry? {
         return blogRepository.findBlogEntryById(blogEntryId)?.toBlogEntry()

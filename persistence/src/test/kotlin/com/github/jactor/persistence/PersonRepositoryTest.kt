@@ -3,6 +3,7 @@ package com.github.jactor.persistence
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -13,9 +14,10 @@ import assertk.assertions.contains
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
-internal class PersonRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    private val personRepository: PersonRepository = PersonRepository
-    private val userRepository: UserRepository = UserRepositoryObject
+internal class PersonRepositoryTest @Autowired constructor(
+    private val personRepository: PersonRepository,
+    private val userRepository: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find default persons`() {

@@ -79,8 +79,22 @@ object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
     val zipCode = text("ZIP_CODE")
 }
 
-object AddressRepository {
-    fun findByZipCode(zipCode: String): List<AddressDao> = transaction {
+interface AddressRepository {
+    fun findById(addressId: UUID): AddressDao?
+    fun findByZipCode(zipCode: String): List<AddressDao>
+    fun save(addressDao: AddressDao): AddressDao
+}
+
+object AddressRepositoryObject : AddressRepository {
+    override fun findById(addressId: UUID): AddressDao? = transaction {
+        Addresses
+            .selectAll()
+            .andWhere { Addresses.id eq addressId }
+            .singleOrNull()
+            ?.toAddressDao()
+    }
+
+    override fun findByZipCode(zipCode: String): List<AddressDao> = transaction {
         Addresses
             .selectAll()
             .andWhere { Addresses.zipCode eq zipCode }
@@ -102,15 +116,7 @@ object AddressRepository {
         zipCode = this[Addresses.zipCode],
     )
 
-    fun findById(addressId: UUID): AddressDao? = transaction {
-        Addresses
-            .selectAll()
-            .andWhere { Addresses.id eq addressId }
-            .singleOrNull()
-            ?.toAddressDao()
-    }
-
-    fun save(addressDao: AddressDao): AddressDao = transaction {
+    override fun save(addressDao: AddressDao): AddressDao = transaction {
         when (addressDao.isNotPersisted) {
             true -> insert(addressDao)
             false -> update(addressDao)

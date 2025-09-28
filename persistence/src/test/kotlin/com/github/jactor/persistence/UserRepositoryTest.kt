@@ -1,6 +1,7 @@
 package com.github.jactor.persistence
 
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -11,8 +12,9 @@ import assertk.assertThat
 import assertk.assertions.containsAtLeast
 import assertk.assertions.isEqualTo
 
-internal class UserRepositoryTest : AbstractSpringBootNoDirtyContextTest() {
-    private val userRepository: UserRepository = UserRepositoryObject
+internal class UserRepositoryTest @Autowired constructor(
+    private val userRepository: UserRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should find user with username jactor`() {

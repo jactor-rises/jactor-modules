@@ -12,9 +12,9 @@ import assertk.assertions.isNotNull
 import kotlinx.coroutines.test.runTest
 
 internal class PersonServiceTest @Autowired constructor(
-    private val personService: PersonService
+    private val personService: PersonService,
+    private val personRepository: PersonRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
-    private val personRepository: PersonRepository = PersonRepository
 
     @Test
     fun `should create a new Person`() = runTest {

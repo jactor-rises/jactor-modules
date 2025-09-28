@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -16,8 +17,9 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 
-internal class BlogEntryRepositoryTest() : AbstractSpringBootNoDirtyContextTest() {
-    private val blogRepository: BlogRepository = BlogRepositoryObject
+internal class BlogEntryRepositoryTest @Autowired constructor(
+    private val blogRepository: BlogRepository,
+) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save then read blog entry`() {

@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.util.toUser
+import com.github.jactor.persistence.util.toUserDao
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
@@ -300,7 +302,7 @@ data class UserDao(
     internal var username: String = "na",
 ) : PersistentDao<UserDao> {
     val isPersisted: Boolean get() = id != null
-    val personDao: PersonDao? by lazy { personId?.let { PersonRepository.findById(id = it) } }
+    val personDao: PersonDao? by lazy { personId?.let { PersonRepositoryObject.findById(id = it) } }
     val guestBook: GuestBookDao? by lazy { id?.let { GuestBookRepositoryObject.findByUserId(userId = it) } }
     val blogs: List<BlogDao> by lazy { id?.let { BlogRepositoryObject.findBlogsByUserId(userId = it) } ?: emptyList() }
 
