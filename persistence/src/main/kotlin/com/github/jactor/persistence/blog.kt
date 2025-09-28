@@ -29,12 +29,14 @@ import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.util.toBlog
 import com.github.jactor.persistence.util.toBlogEntry
+import com.github.jactor.persistence.util.toCreateBlogEntry
+import com.github.jactor.persistence.util.toUpdateBlogTitle
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
+import com.github.jactor.shared.api.CreateBlogEntryCommand
+import com.github.jactor.shared.api.UpdateBlogTitleCommand
 import com.github.jactor.shared.whenFalse
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 
@@ -47,7 +49,6 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke blog for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -65,7 +66,6 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke innslaget for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -83,7 +83,6 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke innslaget for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -106,7 +105,6 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke innslaget for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -129,7 +127,6 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Kunnde ikke finne blogg til å endre",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -137,11 +134,10 @@ class BlogController(private val blogService: BlogService) {
     @Operation(description = "Endre en blogg")
     @PutMapping("/{blogId}")
     suspend fun put(
-        @RequestBody blogDto: BlogDto, @PathVariable blogId: UUID
-    ): ResponseEntity<BlogDto> = when (blogDto.harIkkeIdentifikator()) {
-        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
-        false -> ResponseEntity(
-            blogService.saveOrUpdate(blog = blogDto.toBlog()).toBlogDto(),
+        @RequestBody updateBlogTitleCommand: UpdateBlogTitleCommand, @PathVariable blogId: UUID
+    ): ResponseEntity<BlogDto> = (updateBlogTitleCommand.blogId ?: blogId).let {
+        ResponseEntity(
+            blogService.update(updateBlogTitle = updateBlogTitleCommand.toUpdateBlogTitle()).toBlogDto(),
             HttpStatus.ACCEPTED
         )
     }
@@ -149,11 +145,8 @@ class BlogController(private val blogService: BlogService) {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Bloggen er opprettet"),
-            ApiResponse(
-                responseCode = "400",
-                description = "Mangler blogg å opprette",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
+            ApiResponse(responseCode = "400", description = "Mangler blogg å opprette"),
+            ApiResponse(responseCode = "400", description = "Har allerede id på blogg som opprettes"),
         ]
     )
     @Operation(description = "Opprett en blogg")
@@ -172,11 +165,9 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Mangler id til blogg-innslag som skal endres",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
-
     @Operation(description = "Endrer et blogg-innslag")
     @PutMapping("/entry/{blogEntryId}")
     suspend fun putEntry(
@@ -193,38 +184,50 @@ class BlogController(private val blogService: BlogService) {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Blogg-innslaget er opprettet"),
-            ApiResponse(
-                responseCode = "400",
-                description = "Mangler id til bloggen som innsaget skal legges  til",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
+            ApiResponse(responseCode = "400", description = "Mangler id til bloggen som innslaget skal legges til"),
+            ApiResponse(responseCode = "400", description = "Mangler navn til forfatter av innslag"),
+            ApiResponse(responseCode = "400", description = "Mangler innslaget som skal legges inn"),
         ]
     )
-
     @Operation(description = "Oppretter et blogg-innslag")
     @PostMapping("/entry")
     suspend fun postEntry(
-        @RequestBody blogEntryDto: BlogEntryDto
-    ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIdentifikator()) {
-        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
-        false -> ResponseEntity(
-            blogService.saveOrUpdate(blogEntry = blogEntryDto.toBlogEntry()).toBlogEntryDto(),
-            HttpStatus.CREATED
-        )
+        @RequestBody createBlogEntryCommand: CreateBlogEntryCommand
+    ): ResponseEntity<BlogEntryDto> = createBlogEntryCommand.toCreateBlogEntry().let {
+        blogService.create(createBlogEntry = it)
+    }.toBlogEntryDto().let {
+        ResponseEntity(it, HttpStatus.CREATED)
     }
 }
 
 interface BlogService {
+    suspend fun create(createBlogEntry: CreateBlogEntry): BlogEntry
     suspend fun find(id: UUID): Blog?
     suspend fun findBlogsBy(title: String): List<Blog>
     suspend fun findEntriesForBlog(blogId: UUID): List<BlogEntry>
     suspend fun findEntryBy(blogEntryId: UUID): BlogEntry?
     suspend fun saveOrUpdate(blog: Blog): Blog
     suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry
+    suspend fun update(updateBlogTitle: UpdateBlogTitle): Blog
 }
 
 @Service
 class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService {
+    override suspend fun create(createBlogEntry: CreateBlogEntry): BlogEntry {
+        val blogEntryDao = BlogEntryDao(
+            id = null,
+            createdBy = createBlogEntry.creatorName,
+            creatorName = createBlogEntry.creatorName,
+            blogId = createBlogEntry.blogId,
+            entry = createBlogEntry.entry,
+            modifiedBy = createBlogEntry.creatorName,
+            timeOfCreation = LocalDateTime.now(),
+            timeOfModification = LocalDateTime.now(),
+        )
+
+        return blogRepository.save(blogEntryDao = blogEntryDao).toBlogEntry()
+    }
+
     override suspend fun find(id: UUID): Blog? = blogRepository.findBlogById(id)?.toBlog()
     override suspend fun findEntryBy(blogEntryId: UUID): BlogEntry? {
         return blogRepository.findBlogEntryById(blogEntryId)?.toBlogEntry()
@@ -242,6 +245,13 @@ class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService 
         require(blogEntry.isCoupledWithBlog) { "An entry must belong to a persistent blog!" }
         return blogRepository.save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
     }
+
+    override suspend fun update(updateBlogTitle: UpdateBlogTitle): Blog {
+        val blog = requireNotNull(blogRepository.findBlogById(updateBlogTitle.blogId)) { "Cannot find blog to update" }
+            .apply { this.title = updateBlogTitle.title }
+
+        return blogRepository.save(blogDao = blog).toBlog()
+    }
 }
 
 @JvmRecord
@@ -253,8 +263,6 @@ data class Blog(
     val user: User?,
 ) {
     val id: UUID? get() = persistent.id
-    val usernameOfBlog: String
-        get() = this.user?.username ?: error("Unnable to find username in $this")
 
     fun toBlogDao() = BlogDao(
         id = persistent.id,
@@ -304,6 +312,19 @@ data class BlogEntry(
         timeOfModification = persistent.timeOfModification,
     )
 }
+
+@JvmRecord
+data class CreateBlogEntry(
+    val blogId: UUID,
+    val creatorName: String,
+    val entry: String,
+)
+
+@JvmRecord
+data class UpdateBlogTitle(
+    val blogId: UUID,
+    val title: String,
+)
 
 object Blogs : UUIDTable(name = "T_BLOG", columnName = "ID") {
     val createdBy = text("CREATED_BY")

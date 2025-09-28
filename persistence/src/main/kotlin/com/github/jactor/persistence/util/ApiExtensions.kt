@@ -5,9 +5,11 @@ import java.time.LocalDateTime
 import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
+import com.github.jactor.persistence.CreateBlogEntry
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.Person
+import com.github.jactor.persistence.UpdateBlogTitle
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserDao
 import com.github.jactor.persistence.UserDao.UserType
@@ -15,10 +17,12 @@ import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
+import com.github.jactor.shared.api.CreateBlogEntryCommand
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.PersonDto
+import com.github.jactor.shared.api.UpdateBlogTitleCommand
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.whenTrue
 
@@ -59,12 +63,10 @@ fun GuestBookDto.toGuestBook() = GuestBook(
     user = requireNotNull(userDto?.toUser()) { "User cannot be null!" },
 ).let { parent -> parent.copy(entries = entries.map { it.toGuestBookEntry(parent = parent) }.toSet()) }
 
-fun GuestBookEntryDto.toGuestBookEntry() = GuestBookEntry(
-    persistent = persistentDto.toPersistent(),
-
+fun CreateBlogEntryCommand.toCreateBlogEntry() = CreateBlogEntry(
+    blogId = requireNotNull(blogId) { "Blog ID cannot be null!" },
     creatorName = requireNotNull(creatorName) { "Creator name cannot be null!" },
-    entry = requireNotNull(entry) { "Entry cannot be null!" },
-    guestBook = guestBook?.toGuestBook()
+    entry = requireNotNull(entry) { "Entry cannot be null!" }
 )
 
 fun GuestBookEntryDto.toGuestBookEntry(parent: GuestBook?) = GuestBookEntry(
@@ -95,6 +97,11 @@ fun PersonDto.toPerson() = Person(
     firstName = firstName,
     surname = surname,
     description = description
+)
+
+fun UpdateBlogTitleCommand.toUpdateBlogTitle() = UpdateBlogTitle(
+    blogId = requireNotNull(blogId) { "Blog ID cannot be null!" },
+    title = requireNotNull(title) { "Title cannot be null!" }
 )
 
 fun UserDto.toUser() = User(

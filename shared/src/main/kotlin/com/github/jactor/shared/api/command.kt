@@ -46,3 +46,18 @@ data class CreateUserCommand(
         )
     }
 }
+
+@JvmRecord
+@Schema(description = "Metadata for creation of a blog entry")
+data class CreateBlogEntryCommand(
+    @param:Schema(description = "The blog where the etnry is placed") val blogId: UUID? = null,
+    @param:Schema(description = "The creator of the entry") val creatorName: String? = null,
+    @param:Schema(description = "The blog entry") val entry: String? = null,
+)
+
+@JvmRecord
+@Schema(description = "Metadata for modification of a blog title")
+data class UpdateBlogTitleCommand(
+    @param:Schema(description = "The id of the blog to update") val blogId: UUID? = null,
+    @param:Schema(description = "The title to change") val title: String? = null,
+)

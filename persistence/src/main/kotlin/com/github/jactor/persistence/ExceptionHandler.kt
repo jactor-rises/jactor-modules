@@ -30,15 +30,13 @@ class ExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleBadRequest(e: IllegalArgumentException): Mono<ResponseEntity<Any>> {
-        return e.originClassNameEndsWith(txt = "Controller").whenTrue {
-            logger.warn { "${e.rootCauseSimpleMessage()}: ${e.finnFeiledeLinjer().joinToString { ", " }}" }
+        logger.warn { "${e.rootCauseSimpleMessage()}: ${e.finnFeiledeLinjer().joinToString { ", " }}" }
 
-            Mono.just(
-                ResponseEntity
-                    .badRequest()
-                    .header(HttpHeaders.WARNING, "Bad Request: ${e.exceptionMessageMedCause()}!")
-                    .build()
-            )
-        } ?: handleGenericError(e)
+        return Mono.just(
+            ResponseEntity
+                .badRequest()
+                .header(HttpHeaders.WARNING, "Bad Request: ${e.exceptionMessageMedCause()}!")
+                .build()
+        )
     }
 }

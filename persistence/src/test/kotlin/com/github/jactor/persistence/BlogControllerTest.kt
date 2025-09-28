@@ -1,5 +1,6 @@
 package com.github.jactor.persistence
 
+import java.time.LocalDate
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,9 +10,15 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initBlogEntry
+import com.github.jactor.persistence.test.initUser
+import com.github.jactor.persistence.test.withId
+import com.github.jactor.persistence.test.withPersistedData
+import com.github.jactor.persistence.test.withPersistentData
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
+import com.github.jactor.shared.api.CreateBlogEntryCommand
 import com.github.jactor.shared.api.PersistentDto
+import com.github.jactor.shared.api.UpdateBlogTitleCommand
 import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -153,16 +160,17 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should persist changes to existing blog`() {
-        val blog = initBlog(
-            persistent = Persistent(id = UUID.randomUUID())
+        val updateBlogTitleCommand = UpdateBlogTitleCommand(
+            blogId = UUID.randomUUID(),
+            title = "A new title"
         )
 
-        coEvery { blogServiceMockk.saveOrUpdate(blog) } returns blog
+        coEvery { blogServiceMockk.update(updateBlogTitle = any()) } returns initBlog()
 
         val blogDto = webTestClient
             .put()
-            .uri("/blog/${blog.id}")
-            .bodyValue(blog.toBlogDto())
+            .uri("/blog/${updateBlogTitleCommand.blogId}")
+            .bodyValue(updateBlogTitleCommand)
             .exchange()
             .expectStatus().isAccepted
             .expectBody(BlogDto::class.java)
@@ -170,26 +178,36 @@ internal class BlogControllerTest @Autowired constructor(
 
         assertThat(blogDto).isNotNull()
 
-        coVerify { blogServiceMockk.saveOrUpdate(blog) }
+        coVerify {
+            blogServiceMockk.update(
+                updateBlogTitle = withArg {
+                    assertThat(it.title).isEqualTo(updateBlogTitleCommand.title)
+                }
+            )
+        }
     }
 
     @Test
     fun `should create a blog`() {
-        val createdBlog = initBlog()
+        val blog = initBlog(
+            created = LocalDate.now(),
+            title = "Another title",
+            user = initUser(persistent = Persistent(id = UUID.randomUUID()))
+        )
 
-        coEvery { blogServiceMockk.saveOrUpdate(blog = any()) } returns createdBlog
+        coEvery { blogServiceMockk.saveOrUpdate(blog = any()) } returns blog
 
-        val blog = webTestClient
+        val createdBlog = webTestClient
             .post()
             .uri("/blog")
-            .bodyValue(BlogDto())
+            .bodyValue(blog.toBlogDto())
             .exchange()
             .expectStatus().isCreated
             .expectBody(BlogDto::class.java)
             .returnResult().responseBody
 
-        assertThat(blog).isNotNull().given {
-            assertThat(it.persistentDto.id).isEqualTo(createdBlog.id)
+        assertThat(createdBlog).isNotNull().given {
+            assertThat(it.persistentDto.id).isEqualTo(blog.id)
         }
 
         coVerify { blogServiceMockk.saveOrUpdate(blog = any()) }
@@ -219,30 +237,27 @@ internal class BlogControllerTest @Autowired constructor(
 
     @Test
     fun `should create blog entry`() {
-        val blogEntryDto = BlogEntryDto(
+        val creatBlogEntryCommand = CreateBlogEntryCommand(
+            blogId = UUID.randomUUID(),
+            creatorName = "me",
             entry = "hi",
-            blogDto = BlogDto(persistentDto = PersistentDto(id = UUID.randomUUID()))
         )
 
-        val blogEntryCreated = initBlogEntry(
-            persistent = Persistent(id = UUID.randomUUID()),
-            entry = blogEntryDto.entry,
-            blog = initBlog(persistent = Persistent(id = UUID.randomUUID()))
-        )
-
-        coEvery { blogServiceMockk.saveOrUpdate(blogEntry = any()) } returns blogEntryCreated
+        coEvery { blogServiceMockk.create(createBlogEntry = any()) } answers {
+            initBlogEntry(entry = (arg(0) as CreateBlogEntry).entry).withId()
+        }
 
         val blogEntry = webTestClient
             .post()
             .uri("/blog/entry")
-            .bodyValue(blogEntryDto)
+            .bodyValue(creatBlogEntryCommand)
             .exchange()
             .expectStatus().isCreated
             .expectBody(BlogEntryDto::class.java)
             .returnResult().responseBody
 
-        assertThat(blogEntry?.entry).isEqualTo(blogEntryDto.entry)
+        assertThat(blogEntry?.entry).isEqualTo(creatBlogEntryCommand.entry)
 
-        coVerify { blogServiceMockk.saveOrUpdate(blogEntry = any()) }
+        coVerify { blogServiceMockk.create(createBlogEntry = any()) }
     }
 }

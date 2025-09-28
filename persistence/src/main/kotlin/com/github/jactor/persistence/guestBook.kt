@@ -31,8 +31,6 @@ import com.github.jactor.persistence.util.toUser
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 
@@ -45,7 +43,6 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ingen gjestebok på id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -62,7 +59,6 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ingen innslag med id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -79,7 +75,6 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen gjestebok er gitt eller gjesteboka er allerede opprettet",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -101,7 +96,6 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen gjestebok er gitt eller det mangler gjestebok å endre for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -122,9 +116,8 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(responseCode = "201", description = "Innslaget i gjesteboka er opprettet"),
             ApiResponse(
                 responseCode = "400",
-                description = "Ingen id til innslag å opprette",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
+                description = "Ingen id til gjesteboka for innslaget som skal opprettes er gitt",
+            ),
         ]
     )
     @Operation(description = "Opprett et innslag i en gjestebok")
@@ -145,7 +138,6 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen id til innslag for gjestebok er gitt",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
