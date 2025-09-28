@@ -2,8 +2,6 @@ package com.github.jactor.persistence.common
 
 import java.time.LocalDateTime
 import java.util.UUID
-import kotlin.reflect.KClass
-import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.shared.api.PersistentDto
 
 @JvmRecord

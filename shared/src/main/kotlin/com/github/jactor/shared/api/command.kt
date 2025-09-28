@@ -35,7 +35,8 @@ data class CreateUserCommand(
         description = description
     )
 
-    private fun toAddressDto(): AddressDto? = zipCode?.let { AddressDto(
+    private fun toAddressDto(): AddressDto? = zipCode?.let {
+        AddressDto(
             persistentDto = PersistentDto(id = UUID.randomUUID()),
             zipCode = zipCode,
             addressLine1 = addressLine1,
@@ -50,9 +51,24 @@ data class CreateUserCommand(
 @JvmRecord
 @Schema(description = "Metadata for creation of a blog entry")
 data class CreateBlogEntryCommand(
-    @param:Schema(description = "The blog where the etnry is placed") val blogId: UUID? = null,
+    @param:Schema(description = "The blog where the entry is placed") val blogId: UUID? = null,
     @param:Schema(description = "The creator of the entry") val creatorName: String? = null,
     @param:Schema(description = "The blog entry") val entry: String? = null,
+)
+
+@JvmRecord
+@Schema(description = "Metadata for creation of a guest book")
+data class CreateGuestBookCommand(
+    @param:Schema(description = "The title of the guest book") val title: String? = null,
+    @param:Schema(description = "The user id of the owner of the guest book") val userId: UUID? = null,
+)
+
+@JvmRecord
+@Schema(description = "Metadata for creation of a guest book entry")
+data class CreateGuestBookEntryCommand(
+    @param:Schema(description = "The guest book where the entry is placed") val guestBookId: UUID? = null,
+    @param:Schema(description = "The creator of the entry") val creatorName: String? = null,
+    @param:Schema(description = "The guest book entry") val entry: String? = null,
 )
 
 @JvmRecord

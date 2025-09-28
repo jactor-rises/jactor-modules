@@ -8,7 +8,9 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initGuestBook
 import com.github.jactor.persistence.test.initGuestBookEntry
-import com.github.jactor.persistence.test.initGuestBookEntryDao
+import com.github.jactor.persistence.test.withPersistedData
+import com.github.jactor.shared.api.CreateGuestBookCommand
+import com.github.jactor.shared.api.CreateGuestBookEntryCommand
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import com.ninjasquad.springmockk.MockkBean
@@ -74,7 +76,8 @@ internal class GuestBookControllerTest @Autowired constructor(
     @Test
     fun `should get a guest book entry`() {
         val uuid = UUID.randomUUID()
-        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntryDao(id = uuid).toGuestBookEntry()
+        coEvery { guestBookServiceMockk.findEntry(id = uuid) } returns initGuestBookEntry()
+            .withPersistedData(id = uuid)
 
         val guestBookEntry = webTestClient.get()
             .uri("/guestBook/entry/$uuid")
@@ -106,22 +109,27 @@ internal class GuestBookControllerTest @Autowired constructor(
 
     @Test
     fun `should create a guest book`() {
-        val guestBook = GuestBookDto()
-        val createdDto = initGuestBook(persistent = Persistent(id = UUID.randomUUID()))
+        val createdId = UUID.randomUUID()
+        val createGuestBookCommand = CreateGuestBookCommand(
+            title = "A title",
+            userId = UUID.randomUUID()
+        )
 
-        coEvery { guestBookServiceMockk.saveOrUpdate(guestBook = any()) } returns createdDto
+        coEvery { guestBookServiceMockk.create(createGuestBook = any()) } returns initGuestBook(
+            persistent = Persistent(id = createdId)
+        )
 
         val guestbook = webTestClient.post()
             .uri("/guestBook")
-            .bodyValue(guestBook)
+            .bodyValue(createGuestBookCommand)
             .exchange()
             .expectStatus().isCreated
             .expectBody(GuestBookDto::class.java)
             .returnResult().responseBody
 
-        assertThat(guestbook?.persistentDto?.id).isEqualTo(createdDto.id)
+        assertThat(guestbook?.persistentDto?.id).isEqualTo(createdId)
 
-        coVerify { guestBookServiceMockk.saveOrUpdate(guestBook = any()) }
+        coVerify { guestBookServiceMockk.create(createGuestBook = any()) }
     }
 
     @Test
@@ -133,7 +141,7 @@ internal class GuestBookControllerTest @Autowired constructor(
 
         val guestbookEntry = webTestClient.put()
             .uri("/guestBook/entry/update")
-            .bodyValue(guestBookEntry.toDto())
+            .bodyValue(guestBookEntry.toGuestBookEntryDto())
             .exchange()
             .expectStatus().isAccepted
             .expectBody(GuestBookEntryDto::class.java)
@@ -148,23 +156,28 @@ internal class GuestBookControllerTest @Autowired constructor(
 
     @Test
     fun `should create a guest book entry`() {
-        val guestBookEntryDto = GuestBookEntryDto()
-        val createdDto = initGuestBookEntry(persistent = Persistent(id = UUID.randomUUID()))
+        val createdId = UUID.randomUUID()
+        val createGuestBookEntryCommand = CreateGuestBookEntryCommand(
+            creatorName = "creator",
+            entry = "an entry",
+            guestBookId = UUID.randomUUID()
+        )
 
-        coEvery { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) } returns createdDto
+        coEvery { guestBookServiceMockk.create(createGuestBookEntry = any()) } returns initGuestBookEntry(        )
+            .withPersistedData(id = createdId)
 
         val guestbookEntry = webTestClient.post()
             .uri("/guestBook/entry")
-            .bodyValue(guestBookEntryDto)
+            .bodyValue(createGuestBookEntryCommand)
             .exchange()
             .expectStatus().isCreated
             .expectBody(GuestBookEntryDto::class.java)
             .returnResult().responseBody
 
         assertAll {
-            assertThat(guestbookEntry?.persistentDto?.id).isEqualTo(createdDto.id)
+            assertThat(guestbookEntry?.persistentDto?.id).isEqualTo(createdId)
 
-            coVerify { guestBookServiceMockk.saveOrUpdate(guestBookEntry = any()) }
+            coVerify { guestBookServiceMockk.create(createGuestBookEntry = any()) }
         }
     }
 }

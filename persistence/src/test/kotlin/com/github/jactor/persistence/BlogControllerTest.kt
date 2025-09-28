@@ -12,12 +12,9 @@ import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initBlogEntry
 import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.test.withId
-import com.github.jactor.persistence.test.withPersistedData
-import com.github.jactor.persistence.test.withPersistentData
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.CreateBlogEntryCommand
-import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UpdateBlogTitleCommand
 import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat

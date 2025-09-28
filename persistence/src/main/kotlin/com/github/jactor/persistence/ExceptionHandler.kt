@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import com.github.jactor.shared.exceptionMessageMedCause
 import com.github.jactor.shared.finnFeiledeLinjer
-import com.github.jactor.shared.originClassNameEndsWith
 import com.github.jactor.shared.rootCauseSimpleMessage
-import com.github.jactor.shared.whenTrue
 import io.github.oshai.kotlinlogging.KotlinLogging
 import reactor.core.publisher.Mono
 

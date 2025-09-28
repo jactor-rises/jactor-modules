@@ -4,15 +4,11 @@ import java.util.UUID
 import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.BlogEntryDao
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.util.toPersistent
-import com.github.jactor.shared.api.BlogDto
-import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UserDto
 
@@ -23,19 +19,16 @@ fun GuestBook.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID(
 fun GuestBookEntry.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun Person.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun User.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
+
+fun GuestBookEntry.withPersistedData(id: UUID): GuestBookEntry = copy(
+    persistent = Persistent().withPersistedData(id = id),
+)
+
+fun Persistent.withPersistedData(id: UUID? = UUID.randomUUID()) = copy(id = id)
 fun PersistentDto.withPersistedData(id: UUID? = UUID.randomUUID()) = copy(
     id = id,
     createdBy = "unit test",
     modifiedBy = "user test"
-)
-
-fun BlogDto.withPersistentData(id: UUID? = null): BlogDto = copy(
-    persistentDto = persistentDto.withPersistedData(id = id),
-    user = user?.withPersistedData() ?: initUser().toUserDto().withPersistedData()
-)
-
-fun BlogEntryDto.withPersistedData(id: UUID? = null): BlogEntryDto = copy(
-    persistentDto = persistentDto.withPersistedData(id = id)
 )
 
 fun UserDto.withPersistedData(id: UUID = UUID.randomUUID()): UserDto = copy(

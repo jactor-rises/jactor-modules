@@ -6,6 +6,8 @@ import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.CreateBlogEntry
+import com.github.jactor.persistence.CreateGuestBook
+import com.github.jactor.persistence.CreateGuestBookEntry
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.Person
@@ -18,6 +20,8 @@ import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.CreateBlogEntryCommand
+import com.github.jactor.shared.api.CreateGuestBookCommand
+import com.github.jactor.shared.api.CreateGuestBookEntryCommand
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import com.github.jactor.shared.api.PersistentDto
@@ -25,6 +29,12 @@ import com.github.jactor.shared.api.PersonDto
 import com.github.jactor.shared.api.UpdateBlogTitleCommand
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.whenTrue
+
+private object Constants {
+    const val CREATOR_NAME_CANNOT_BE_NULL = "Creator name cannot be null!"
+    const val ENTRY_CANNOT_BE_NULL = "Entry cannot be null!"
+    const val TITLE_CANNOT_BE_NULL = "Title cannot be null!"
+}
 
 fun AddressDto.toAddress() = Address(
     persistent = persistentDto.toPersistent(),
@@ -41,7 +51,7 @@ fun BlogDto.toBlog() = Blog(
     persistent = persistentDto.toPersistent(),
 
     created = persistentDto.isWithId.whenTrue { LocalDate.now() },
-    title = requireNotNull(title) { "Title cannot be null!" },
+    title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL },
     user = requireNotNull(user?.toUser()) { "User cannot be null!" },
 )
 
@@ -59,21 +69,32 @@ fun GuestBookDto.toGuestBook() = GuestBook(
     persistent = persistentDto.toPersistent(),
 
     entries = emptySet(),
-    title = requireNotNull(title) { "Title cannot be null!" },
+    title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL },
     user = requireNotNull(userDto?.toUser()) { "User cannot be null!" },
 ).let { parent -> parent.copy(entries = entries.map { it.toGuestBookEntry(parent = parent) }.toSet()) }
 
 fun CreateBlogEntryCommand.toCreateBlogEntry() = CreateBlogEntry(
     blogId = requireNotNull(blogId) { "Blog ID cannot be null!" },
-    creatorName = requireNotNull(creatorName) { "Creator name cannot be null!" },
-    entry = requireNotNull(entry) { "Entry cannot be null!" }
+    creatorName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
+    entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL }
+)
+
+fun CreateGuestBookCommand.toCreateGuestBook() = CreateGuestBook(
+    title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL },
+    userId = requireNotNull(userId) { "User ID cannot be null!" },
+)
+
+fun CreateGuestBookEntryCommand.toCreateGuestBook() = CreateGuestBookEntry(
+    guestBookId = requireNotNull(guestBookId) { "Guest book ID cannot be null!" },
+    creatorName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
+    entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL }
 )
 
 fun GuestBookEntryDto.toGuestBookEntry(parent: GuestBook?) = GuestBookEntry(
     persistent = persistentDto.toPersistent(),
 
-    creatorName = requireNotNull(creatorName) { "Creator name cannot be null!" },
-    entry = requireNotNull(entry) { "Entry cannot be null!" },
+    creatorName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
+    entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL },
     guestBook = parent
 )
 
@@ -101,7 +122,7 @@ fun PersonDto.toPerson() = Person(
 
 fun UpdateBlogTitleCommand.toUpdateBlogTitle() = UpdateBlogTitle(
     blogId = requireNotNull(blogId) { "Blog ID cannot be null!" },
-    title = requireNotNull(title) { "Title cannot be null!" }
+    title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL }
 )
 
 fun UserDto.toUser() = User(

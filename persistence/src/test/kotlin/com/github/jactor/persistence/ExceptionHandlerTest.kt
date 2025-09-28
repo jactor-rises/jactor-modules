@@ -17,15 +17,8 @@ internal class ExceptionHandlerTest {
     private val exceptionHandler = ExceptionHandler()
 
     @Test
-    fun `skal være internal server error når IllegalArgumentException ikke oppstår i Controller`() {
-        val response = exceptionHandler.handleBadRequest(e = TestController().initFromService()).block()
-
-        assertThat(response!!.statusCode.isSameCodeAs(HttpStatus.INTERNAL_SERVER_ERROR)).isTrue()
-    }
-
-    @Test
-    fun `skal være bad request når IllegalArgumentException oppstår i Controller`() {
-        val response = exceptionHandler.handleBadRequest(e = TestController().initFromController()).block()
+    fun `skal være bad request når IllegalArgumentException oppstår`() {
+        val response = exceptionHandler.handleBadRequest(e = TestController().illegalArgumentException()).block()
 
         assertThat(response!!.statusCode.isSameCodeAs(HttpStatus.BAD_REQUEST)).isTrue()
     }
@@ -54,11 +47,6 @@ internal class ExceptionHandlerTest {
     }
 
     class TestController {
-        fun initFromController() = IllegalArgumentException("feil input!!!")
-        fun initFromService(): IllegalArgumentException = TestService().init()
-    }
-
-    class TestService {
-        fun init(): IllegalArgumentException = IllegalArgumentException("feil input!!!")
+        fun illegalArgumentException() = IllegalArgumentException("feil input!!!")
     }
 }

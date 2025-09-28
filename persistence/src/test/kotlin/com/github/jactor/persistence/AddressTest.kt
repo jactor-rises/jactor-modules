@@ -12,7 +12,7 @@ import assertk.assertions.isEqualTo
 internal class AddressTest {
 
     @Test
-    fun `hould have a copy constructor`() {
+    fun `should have a copy constructor`() {
         val address = initAddress(
             addressLine1 = "address line one",
             addressLine2 = "address line two",
