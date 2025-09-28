@@ -40,7 +40,7 @@ internal class GuestBookTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = GuestBook(
+        val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = GuestBook(
             persistent, guestBook = initGuestBook()
         ).persistent
 
