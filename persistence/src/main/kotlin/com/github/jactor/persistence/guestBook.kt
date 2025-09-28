@@ -408,7 +408,7 @@ data class GuestBookDao(
 ) : PersistentDao<GuestBookDao?> {
     val isPersisted: Boolean get() = id != null
     val user: UserDao by lazy {
-        userId?.let { UserRepositoryObject.findUserById(userId = it) }
+        userId?.let { UserRepositoryObject.findById(id = it) }
             ?: error("no user relation?")
     }
 

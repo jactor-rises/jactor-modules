@@ -53,7 +53,7 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should not get a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositoryMockk.findById(id = uuid) } returns null
+        every { userRepositoryMockk.findById(id = any()) } returns null
 
         webTestClient.get()
             .uri("/user/$uuid")
@@ -64,7 +64,7 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should find a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositoryMockk.findById(uuid) } returns initUserDao(id = uuid)
+        every { userRepositoryMockk.findById(id = any()) } returns initUserDao(id = uuid)
 
         val userDto = webTestClient.get()
             .uri("/user/$uuid")
@@ -82,6 +82,7 @@ internal class UserControllerTest @Autowired constructor(
         val user = initUser(persistent = Persistent(id = uuid))
 
         every { userRepositoryMockk.findById(uuid) } returns user.toUserDao()
+        every { userRepositoryMockk.save(any()) } answers { arg(0) }
 
         val userDto = webTestClient.put()
             .uri("/user/update")
@@ -113,6 +114,7 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should accept if user id is not null`() {
         val uuid = UUID.randomUUID().also {
+            every { userRepositoryMockk.save(any()) } answers { arg(0) }
             every { userRepositoryMockk.findById(id = it) } returns initUser(persistent = Persistent(id = it))
                 .toUserDao()
         }
@@ -135,7 +137,7 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should return BAD_REQUEST when username is occupied`() {
-        every { userRepositoryMockk.findByUsername(username = "turbo") } returns initUser().toUserDao()
+        every { userRepositoryMockk.contains(username = "turbo") } returns true
 
         webTestClient.post()
             .uri("/user")

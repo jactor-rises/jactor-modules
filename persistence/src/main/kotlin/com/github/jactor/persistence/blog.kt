@@ -474,7 +474,7 @@ data class BlogDao(
 ) : PersistentDao<BlogDao> {
     val isNotPersisted: Boolean get() = userId == null
     val user: UserDao by lazy {
-        userId?.let { UserRepositoryObject.findUserById(userId = it) } ?: error("no user relation?")
+        userId?.let { UserRepositoryObject.findById(id = it) } ?: error("no user relation?")
     }
 
     constructor(blog: Blog) : this(

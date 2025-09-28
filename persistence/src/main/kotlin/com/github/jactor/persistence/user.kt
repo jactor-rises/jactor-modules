@@ -115,7 +115,7 @@ class UserController(private val userService: UserService) {
 @Service
 class UserService(private val userRepository: UserRepository = UserRepositoryObject) {
     suspend fun find(username: String): User? = userRepository.findByUsername(username)?.toUser()
-    suspend fun find(id: UUID): User? = userRepository.findUserById(userId = id)?.toUser()
+    suspend fun find(id: UUID): User? = userRepository.findById(id = id)?.toUser()
 
     @Transactional
     suspend fun update(user: User): User = userRepository.save(user.toUserDao()).toUser()
@@ -187,7 +187,6 @@ interface UserRepository {
     fun findById(id: UUID): UserDao?
     fun findByPersonId(personId: UUID): List<UserDao>
     fun findByUsername(username: String): UserDao?
-    fun findUserById(userId: UUID): UserDao?
     fun findUsernames(userType: List<UserDao.UserType>): List<String>
     fun save(user: UserDao): UserDao
 }
@@ -228,14 +227,6 @@ object UserRepositoryObject : UserRepository {
             .singleOrNull()
             ?.toUserDao()
 
-    }
-
-    override fun findUserById(userId: UUID): UserDao? = transaction {
-        Users
-            .selectAll()
-            .andWhere { Users.id eq userId }
-            .singleOrNull()
-            ?.toUserDao()
     }
 
     override fun findUsernames(userType: List<UserDao.UserType>): List<String> = transaction {
