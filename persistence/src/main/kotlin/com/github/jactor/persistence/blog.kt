@@ -240,7 +240,7 @@ class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService 
         return blogRepository.findBlogEntriesByBlogId(blogId).map { it.toBlogEntry() }
     }
 
-    override suspend fun saveOrUpdate(blog: Blog): Blog = blogRepository.save(BlogDao(blog)).toBlog()
+    override suspend fun saveOrUpdate(blog: Blog): Blog = blogRepository.save(blog.toBlogDao()).toBlog()
     override suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry {
         require(blogEntry.isCoupledWithBlog) { "An entry must belong to a persistent blog!" }
         return blogRepository.save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
@@ -490,25 +490,13 @@ data class BlogDao(
 
     var created: LocalDate? = null,
     var title: String? = null,
-    var entries: MutableSet<BlogEntryDao> = HashSet(),
+    var entries: MutableSet<BlogEntryDao> = mutableSetOf(),
     internal var userId: UUID? = null,
 ) : PersistentDao<BlogDao> {
     val isNotPersisted: Boolean get() = userId == null
     val user: UserDao by lazy {
-        userId?.let { UserRepositoryObject.findById(id = it) } ?: error("no user relation?")
+        userId?.let { UserRepositoryObject.findById(it) } ?: error("no user relation?")
     }
-
-    constructor(blog: Blog) : this(
-        id = blog.persistent.id,
-        created = blog.created,
-        createdBy = blog.persistent.createdBy,
-        entries = mutableSetOf(),
-        modifiedBy = blog.persistent.modifiedBy,
-        timeOfCreation = blog.persistent.timeOfCreation,
-        timeOfModification = blog.persistent.timeOfModification,
-        title = blog.title,
-        userId = blog.user?.persistent?.id,
-    )
 
     override fun copyWithoutId(): BlogDao = copy(id = null)
     override fun modifiedBy(modifier: String): BlogDao = copy(
