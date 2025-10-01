@@ -2,8 +2,6 @@ package com.github.jactor.persistence
 
 import java.time.LocalDate
 import java.util.UUID
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.common.Persistent
@@ -20,21 +18,16 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
 import io.mockk.slot
-import io.mockk.unmockkObject
 import kotlinx.coroutines.test.runTest
 
 internal class BlogServiceTest {
-
-    @BeforeEach
-    fun `mock repository objects`() = mockkObject(BlogRepositoryObject, UserRepositoryObject)
-
-    @AfterEach
-    fun `unmock repository objects`() = unmockkObject(BlogRepositoryObject, UserRepositoryObject)
-
     private val blogRepositoryMockk: BlogRepository = mockk {}
-    private val blogServiceToTest: BlogService = BlogServiceImpl(blogRepository = blogRepositoryMockk)
+    private val userRepositoryMockk: UserRepository = mockk {}
+    private val blogServiceToTest: BlogService = BlogServiceImpl(blogRepository = blogRepositoryMockk).also {
+        JactorPersistenceRepositiesConfig.fetchBlogRelation = { id -> blogRepositoryMockk.findBlogById(id = id) }
+        JactorPersistenceRepositiesConfig.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
+    }
 
     private val uuid: UUID = UUID.randomUUID()
 
@@ -131,7 +124,7 @@ internal class BlogServiceTest {
             every { toBlog() } returns blog
         }
 
-        every { UserRepositoryObject.findById(id = blog.user?.id!!) } returns owner.toUserDao()
+        every { userRepositoryMockk.findById(id = blog.user?.id!!) } returns owner.toUserDao()
         every { blogRepositoryMockk.save(capture(blogDaoSlot)) } returns blogDaoMockk
 
         blogServiceToTest.saveOrUpdate(blog = blog)
@@ -158,8 +151,8 @@ internal class BlogServiceTest {
             entry = "if i where a rich man..."
         )
 
-        every { BlogRepositoryObject.findBlogById(id = blogEntry.blog?.id!!) } returns owner.toBlogDao()
-        every { UserRepositoryObject.findById(id = blogEntry.blog?.user?.id!!) } returns owner.user?.toUserDao()
+        every { blogRepositoryMockk.findBlogById(id = blogEntry.blog?.id!!) } returns owner.toBlogDao()
+        every { userRepositoryMockk.findById(id = blogEntry.blog?.user?.id!!) } returns owner.user?.toUserDao()
         every { blogRepositoryMockk.save(blogEntryDao = capture(blogEntryDaoSlot)) } returns blogEntry.toBlogEntryDao()
 
         blogServiceToTest.saveOrUpdate(blogEntry)

@@ -1,6 +1,7 @@
 package com.github.jactor.persistence
 
 import java.text.SimpleDateFormat
+import java.util.UUID
 import javax.sql.DataSource
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.jdbc.Database
@@ -51,6 +52,11 @@ class JactorPersistenceRepositiesConfig {
 
     @Bean
     fun userRepository(): UserRepository = UserRepositoryObject
+
+    internal companion object {
+        internal var fetchBlogRelation: (UUID) -> BlogDao? = { BlogRepositoryObject.findBlogById(id = it) }
+        internal var fetchUserRelation: (UUID) -> UserDao? = { UserRepositoryObject.findById(id = it) }
+    }
 }
 
 @Configuration

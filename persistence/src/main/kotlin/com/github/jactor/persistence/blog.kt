@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import com.github.jactor.persistence.common.DaoRelation
 import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
@@ -493,10 +494,13 @@ data class BlogDao(
     var entries: MutableSet<BlogEntryDao> = mutableSetOf(),
     internal var userId: UUID? = null,
 ) : PersistentDao<BlogDao> {
+    private val userRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
+    )
+
     val isNotPersisted: Boolean get() = userId == null
-    val user: UserDao by lazy {
-        userId?.let { UserRepositoryObject.findById(it) } ?: error("no user relation?")
-    }
+    val user: UserDao
+        get() = userRelation.fetchRelatedInstance(id = userId) ?: error("Missing user relation for blog!")
 
     override fun copyWithoutId(): BlogDao = copy(id = null)
     override fun modifiedBy(modifier: String): BlogDao = copy(
@@ -529,10 +533,13 @@ data class BlogEntryDao(
 
     internal var blogId: UUID? = null
 ) : PersistentDao<BlogEntryDao>, EntryDao {
+    private val blogRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchBlogRelation,
+    )
+
     val isNotPersisted: Boolean get() = id != null
-    val blogDao: BlogDao by lazy {
-        blogId?.let { BlogRepositoryObject.findBlogById(id = it) } ?: error("no blog relation?")
-    }
+    val blogDao: BlogDao
+        get() = blogRelation.fetchRelatedInstance(id = blogId) ?: error("no blog relation?")
 
     override fun copyWithoutId(): BlogEntryDao = copy(id = null)
     override fun modifiedBy(modifier: String): BlogEntryDao = copy(
