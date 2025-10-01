@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import com.github.jactor.persistence.common.DaoRelation
 import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
@@ -194,11 +195,11 @@ class GuestBookServiceBean(private val guestBookRepository: GuestBookRepository)
     }
 
     override suspend fun saveOrUpdate(guestBook: GuestBook): GuestBook {
-        return guestBookRepository.save(GuestBookDao(guestBook)).toGuestBook()
+        return guestBookRepository.save(guestBookDao = guestBook.toGuestBookDao()).toGuestBook()
     }
 
     override suspend fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry {
-        return guestBookRepository.save(GuestBookEntryDao(guestBookEntry)).toGuestBookEntry()
+        return guestBookRepository.save(guestBookEntryDao = guestBookEntry.toGuestBookEntryDao()).toGuestBookEntry()
     }
 }
 
@@ -232,7 +233,16 @@ data class GuestBook(
         userDto = user?.toUserDto()
     )
 
-    fun toGuestBookDao() = GuestBookDao(guestBook = this)
+    fun toGuestBookDao() = GuestBookDao(
+        id = id,
+        createdBy = persistent.createdBy,
+        modifiedBy = persistent.modifiedBy,
+        timeOfCreation = persistent.timeOfCreation,
+        timeOfModification = persistent.timeOfModification,
+        title = requireNotNull(title) { "Title cannot be null!" },
+        userId = user?.id,
+    )
+
     fun toGuestBookDto() = GuestBookDto(
         persistentDto = persistent.toPersistentDto(),
         entries = entries.map { it.toGuestBookEntryDto() }.toSet(),
@@ -277,7 +287,16 @@ data class GuestBookEntry(
         persistentDto = persistent.toPersistentDto(),
     )
 
-    fun toGuestBookEntryDao() = GuestBookEntryDao(guestBookEntry = this)
+    fun toGuestBookEntryDao() = GuestBookEntryDao(
+        id = id,
+        createdBy = persistent.createdBy,
+        modifiedBy = persistent.modifiedBy,
+        timeOfCreation = persistent.timeOfCreation,
+        timeOfModification = persistent.timeOfModification,
+        creatorName = creatorName,
+        entry = entry,
+        guestBookId = guestBook?.persistent?.id ?: error("Guest book must have an id!"),
+    )
 }
 
 object GuestBooks : UUIDTable(name = "T_GUEST_BOOK", columnName = "ID") {
@@ -436,25 +455,16 @@ data class GuestBookDao(
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
 
     var title: String = "no-name",
-    var entries: MutableSet<GuestBookEntryDao> = HashSet(),
+    var entries: MutableSet<GuestBookEntryDao> = mutableSetOf(),
     internal var userId: UUID? = null,
 ) : PersistentDao<GuestBookDao?> {
-    val isPersisted: Boolean get() = id != null
-    val user: UserDao by lazy {
-        userId?.let { UserRepositoryObject.findById(id = it) }
-            ?: error("no user relation?")
-    }
-
-    constructor(guestBook: GuestBook) : this(
-        id = guestBook.id,
-        createdBy = guestBook.persistent.createdBy,
-        modifiedBy = guestBook.persistent.modifiedBy,
-        timeOfCreation = guestBook.persistent.timeOfCreation,
-        timeOfModification = guestBook.persistent.timeOfModification,
-        entries = guestBook.entries.map { GuestBookEntryDao(it) }.toMutableSet(),
-        title = requireNotNull(guestBook.title) { "Title cannot be null!" },
-        userId = guestBook.persistent.id,
+    private val userRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
     )
+
+    val isPersisted: Boolean get() = id != null
+    val user: UserDao
+        get() = userRelation.fetchRelatedInstance(id = userId) ?: error("no user relation?")
 
     fun toGuestBook(): GuestBook = GuestBook(
         persistent = toPersistent(),
@@ -465,7 +475,6 @@ data class GuestBookDao(
 
     override fun copyWithoutId(): GuestBookDao = copy(
         id = null,
-        entries = entries.map { it.copyWithoutId() }.toMutableSet(),
     )
 
     override fun modifiedBy(modifier: String): GuestBookDao {
@@ -473,11 +482,6 @@ data class GuestBookDao(
         timeOfModification = LocalDateTime.now()
 
         return this
-    }
-
-    fun add(guestBookEntry: GuestBookEntryDao) {
-        entries.add(guestBookEntry)
-        guestBookEntry.guestBookId = id ?: error("guest book must have an id before adding entries")
     }
 }
 
@@ -492,23 +496,14 @@ data class GuestBookEntryDao(
     override var entry: String,
     var guestBookId: UUID? = null
 ) : PersistentDao<GuestBookEntryDao>, EntryDao {
-    val isPersisted: Boolean get() = id != null
-    val guestBookDao: GuestBookDao by lazy {
-        guestBookId?.let { GuestBookRepositoryObject.findGuestBookById(id = it) }
-            ?: error("no guest book relation?")
-    }
-
-    constructor(guestBookEntry: GuestBookEntry) : this(
-        id = guestBookEntry.id,
-        createdBy = guestBookEntry.persistent.createdBy,
-        modifiedBy = guestBookEntry.persistent.modifiedBy,
-        timeOfCreation = guestBookEntry.persistent.timeOfCreation,
-        timeOfModification = guestBookEntry.persistent.timeOfModification,
-
-        creatorName = guestBookEntry.creatorName,
-        entry = guestBookEntry.entry,
-        guestBookId = guestBookEntry.guestBook?.persistent?.id ?: error("Guest book must have an id!"),
+    val guestBookRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation,
     )
+
+    val isPersisted: Boolean get() = id != null
+    val guestBookDao: GuestBookDao
+        get() = guestBookRelation.fetchRelatedInstance(id = guestBookId)
+            ?: error("No guest book relation for entry with id $guestBookId exists")
 
     fun toGuestBookEntry() = GuestBookEntry(
         persistent = toPersistent(),
