@@ -2,27 +2,32 @@ package com.github.jactor.persistence
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initCreateUserCommand
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
-import com.github.jactor.shared.api.CreateUserCommand
-import com.ninjasquad.springmockk.MockkBean
+import com.github.jactor.persistence.test.initUserDao
+import com.github.jactor.persistence.util.toCreateUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import io.mockk.Runs
 import io.mockk.every
-import io.mockk.slot
+import io.mockk.just
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 
-internal class UserServiceTest @Autowired constructor(
-    private val userServiceToTest: UserService,
-    @MockkBean private val personRepositoryMockk: PersonRepository,
-    @MockkBean private val userRepositoryMockk: UserRepository,
-) : AbstractSpringBootNoDirtyContextTest() {
+internal class UserServiceTest {
+    private val personRepositoryMockk: PersonRepository = mockk {}
+    private val userRepositoryMockk: UserRepository = mockk {}
+    private val userServiceToTest = UserService(
+        userRepository = userRepositoryMockk,
+    ).also {
+        JactorPersistenceRepositiesConfig.fetchPersonRelation = { id -> personRepositoryMockk.findById(id = id) }
+        JactorPersistenceRepositiesConfig.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
+    }
 
     @Test
     fun `should map a user entity to a dto`() = runTest {
@@ -71,6 +76,7 @@ internal class UserServiceTest @Autowired constructor(
         val user = initUser(persistent = Persistent(id = uuid), username = "marley")
 
         every { userRepositoryMockk.findById(id = uuid) } returns user.toUserDao()
+        every { userRepositoryMockk.save(any()) } returns user.toUserDao()
 
         val updatedUser = userServiceToTest.update(user)
 
@@ -79,17 +85,21 @@ internal class UserServiceTest @Autowired constructor(
 
     @Test
     fun `should create and save person for the user`() = runTest {
-        val user = initUser()
-        val personDaoSlot = slot<PersonDao>()
+        val createUserCommand = initCreateUserCommand(
+            personId = UUID.randomUUID(),
+            username = "jactor",
+        )
 
-        every { userRepositoryMockk.save(user = any()) } returns user.toUserDao()
-        every { personRepositoryMockk.save(personDao = capture(personDaoSlot)) } returns initPerson().toPersonDao()
+        every { userRepositoryMockk.save(user = any()) } returns initUserDao(createUserCommand = createUserCommand)
+        every { personRepositoryMockk.findById(id = createUserCommand.personId!!) } returns mockk {
+            every { toPerson() } returns initPerson(surname = "Jacobsen")
+        }
 
-        val userCreated = userServiceToTest.create(CreateUserCommand(username = "jactor", surname = "Jacobsen"))
+        val user = userServiceToTest.create(createUser = createUserCommand.toCreateUser())
 
         assertAll {
-            assertThat(userCreated).isEqualTo(user)
-            assertThat(personDaoSlot.captured).isNotNull()
+            assertThat(user.person?.surname).isEqualTo("Jacobsen")
+            assertThat(user.username).isEqualTo("jactor")
         }
     }
 }

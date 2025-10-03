@@ -16,6 +16,7 @@ import com.github.jactor.persistence.PersonDao
 import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserDao
 import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.shared.api.CreateUserCommand
 
 fun initAddress(
     persistent: Persistent = Persistent(),
@@ -85,6 +86,16 @@ fun initBlogEntry(
     entry = entry,
 )
 
+fun initCreateUserCommand(
+    personId: UUID? = null,
+    username: String = "noway",
+    surname: String = "dracula",
+) = CreateUserCommand(
+    personId = personId,
+    username = username,
+    surname = surname,
+)
+
 fun initGuestBook(
     entries: Set<GuestBookEntry> = emptySet(),
     persistent: Persistent = Persistent(),
@@ -96,6 +107,10 @@ fun initGuestBook(
     title = title,
     user = user,
 )
+
+fun initGuestBookDao(id: UUID? = null) = GuestBookDao().apply {
+    this.id = id
+}
 
 fun initGuestBookEntry(
     creatorName: String = "na",
@@ -109,26 +124,6 @@ fun initGuestBookEntry(
     persistent = persistent,
 )
 
-fun initUserDao(
-    id: UUID? = UUID.randomUUID(),
-    personId: UUID? = null
-): UserDao = initUser().toUserDao().apply {
-    this.id = id
-    this.personId = personId
-}
-
-fun initPersonDao(
-    id: UUID? = UUID.randomUUID(),
-    address: AddressDao? = initAddressDao()
-) = PersonDao().apply {
-    this.id = id
-    addressId = address?.id
-}
-
-fun initGuestBookDao(id: UUID? = null) = GuestBookDao().apply {
-    this.id = id
-}
-
 fun initGuestBookEntryDao(
     id: UUID? = null,
     guestBookId: UUID = UUID.randomUUID(),
@@ -136,6 +131,36 @@ fun initGuestBookEntryDao(
     this.id = id
     this.guestBookId = guestBookId
 }
+
+fun initUserDao(
+    id: UUID? = UUID.randomUUID(),
+    personId: UUID? = null,
+    username: String = "whoami",
+): UserDao = UserDao(
+    id = id,
+
+    createdBy = "unit test",
+    emailAddress = null,
+    modifiedBy = "unit test",
+    personId = personId,
+    username = username,
+    userType = UserDao.UserType.ACTIVE,
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = LocalDateTime.now(),
+)
+
+fun initUserDao(createUserCommand: CreateUserCommand) = UserDao(
+    id = UUID.randomUUID(),
+
+    createdBy = createUserCommand.username,
+    emailAddress = null,
+    modifiedBy = createUserCommand.username,
+    personId = createUserCommand.personId,
+    username = createUserCommand.username,
+    userType = UserDao.UserType.ACTIVE,
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = LocalDateTime.now(),
+)
 
 fun initPerson(
     id: UUID? = null,
@@ -153,6 +178,14 @@ fun initPerson(
     locale = locale,
     surname = surname,
 )
+
+fun initPersonDao(
+    id: UUID? = UUID.randomUUID(),
+    address: AddressDao? = initAddressDao()
+) = PersonDao().apply {
+    this.id = id
+    addressId = address?.id
+}
 
 fun initUser(
     persistent: Persistent = Persistent(),

@@ -55,6 +55,7 @@ class JactorPersistenceRepositiesConfig {
 
     internal companion object {
         internal var fetchBlogRelation: (UUID) -> BlogDao? = { BlogRepositoryObject.findBlogById(id = it) }
+        internal var fetchPersonRelation: (UUID) -> PersonDao? = { PersonRepositoryObject.findById(id = it) }
         internal var fetchUserRelation: (UUID) -> UserDao? = { UserRepositoryObject.findById(id = it) }
         internal var fetchGuestBookRelation: (UUID) -> GuestBookDao? = {
             GuestBookRepositoryObject.findGuestBookById(id = it)

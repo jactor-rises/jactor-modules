@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jactor.persistence.AddressRepository
+import com.github.jactor.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.persistence.PersonRepository
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUserDao
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
@@ -17,19 +16,18 @@ import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
-import io.mockk.every
 
 internal class JsonMappingTest @Autowired constructor(
     @MockkBean private val addressRepositoryMockk: AddressRepository,
     private val objectMapper: ObjectMapper,
     @MockkBean private val personRepositoryMockk: PersonRepository,
-): AbstractSpringBootNoDirtyContextTest() {
+) : AbstractSpringBootNoDirtyContextTest() {
+    init {
+        // todo: lag person og adresse relasjoner i DaoRelation og legg fetcher i JactorPersistenceRepositiesConfig
+    }
 
     @Test
     fun `skal mappe json fra UserDto fra User skapt av UserDao`() {
-        every { personRepositoryMockk.findById(id = any()) } returns initPerson().toPersonDao()
-        every { addressRepositoryMockk.findById(addressId = any()) } returns initAddress().toAddressDao()
-
         val user = initUserDao().toUser()
         val json: String = objectMapper.writeValueAsString(user.toUserDto())
 

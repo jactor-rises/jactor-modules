@@ -1,11 +1,14 @@
 package com.github.jactor.shared.api
 
+import java.time.LocalDateTime
 import java.util.UUID
 import io.swagger.v3.oas.annotations.media.Schema
 
 @JvmRecord
 @Schema(description = "Metadata for creation of a user")
 data class CreateUserCommand(
+    @param:Schema(description = "Possible id to the persons address") val addressId: UUID? = null,
+    @param:Schema(description = "Possible id to the person represented by this user") val personId: UUID? = null,
     @param:Schema(description = "The username of a user") val username: String = "",
     @param:Schema(description = "The surname of a user") val surname: String = "",
     @param:Schema(description = "The email address of a user") val emailAddress: String? = null,
@@ -20,14 +23,14 @@ data class CreateUserCommand(
     @param:Schema(description = "The country of a user") val country: String? = null
 ) {
     fun toUserDto() = UserDto(
-        persistentDto = PersistentDto(),
+        persistentDto = toPersistentDto(),
         person = toPersonDto(),
         emailAddress = emailAddress,
         username = username
     )
 
     fun toPersonDto() = PersonDto(
-        persistentDto = PersistentDto(),
+        persistentDto = toPersistentDto(id = personId),
         address = toAddressDto(),
         locale = language,
         firstName = firstName,
@@ -37,7 +40,7 @@ data class CreateUserCommand(
 
     private fun toAddressDto(): AddressDto? = zipCode?.let {
         AddressDto(
-            persistentDto = PersistentDto(id = UUID.randomUUID()),
+            persistentDto = PersistentDto(id = addressId),
             zipCode = zipCode,
             addressLine1 = addressLine1,
             addressLine2 = addressLine2,
@@ -46,6 +49,14 @@ data class CreateUserCommand(
             country = country
         )
     }
+
+    private fun toPersistentDto(id: UUID? = null) = PersistentDto(
+        id = id,
+        createdBy = username,
+        modifiedBy = username,
+        timeOfCreation = LocalDateTime.now(),
+        timeOfModification = LocalDateTime.now(),
+    )
 }
 
 @JvmRecord

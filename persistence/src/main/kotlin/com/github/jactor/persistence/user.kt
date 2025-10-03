@@ -27,8 +27,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import com.github.jactor.persistence.common.DaoRelation
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.util.toCreateUser
 import com.github.jactor.persistence.util.toUser
 import com.github.jactor.persistence.util.toUserDao
 import com.github.jactor.shared.api.CreateUserCommand
@@ -80,7 +82,10 @@ class UserController(private val userService: UserService) {
         @RequestBody createUserCommand: CreateUserCommand
     ): ResponseEntity<UserDto> = when (userService.isAlreadyPersisted(username = createUserCommand.username)) {
         true -> ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST)
-        false -> ResponseEntity(userService.create(createUserCommand).toUserDto(), HttpStatus.CREATED)
+        false -> ResponseEntity(
+            userService.create(createUserCommand.toCreateUser()).toUserDto(),
+            HttpStatus.CREATED
+        )
     }
 
     @ApiResponses(
@@ -119,7 +124,7 @@ class UserService(private val userRepository: UserRepository = UserRepositoryObj
 
     @Transactional
     suspend fun update(user: User): User = userRepository.save(user.toUserDao()).toUser()
-    suspend fun create(createUserCommand: CreateUserCommand): User = createUserCommand.toUserDto().toUserDao()
+    suspend fun create(createUser: CreateUser): User = createUser.toUserDao()
         .let { userRepository.save(user = it).toUser() }
 
     suspend fun findUsernames(userType: UserDao.UserType): List<String> = listOf(userType).let { type ->
@@ -165,6 +170,37 @@ data class User(
     enum class Usertype {
         ADMIN, ACTIVE, INACTIVE
     }
+}
+
+@JvmRecord
+data class CreateUser(
+    val addressId: UUID?,
+    val personId: UUID?,
+    val username: String,
+    val firstName: String?,
+    val surname: String,
+    val description: String?,
+    val emailAddress: String?,
+
+    val addressLine1: String?,
+    val addressLine2: String?,
+    val addressLine3: String?,
+    val zipCode: String?,
+    val city: String?,
+    val language: String?,
+    val country: String?
+) {
+    fun toUserDao() = UserDao(
+        createdBy = username,
+        modifiedBy = username,
+        timeOfCreation = LocalDateTime.now(),
+        timeOfModification = LocalDateTime.now(),
+
+        emailAddress = emailAddress,
+        personId = personId,
+        username = username,
+        userType = UserDao.UserType.ACTIVE
+    )
 }
 
 object Users : UUIDTable(name = "T_USER", columnName = "ID") {
@@ -292,9 +328,17 @@ data class UserDao(
     internal var personId: UUID? = null,
     internal var username: String = "na",
 ) : PersistentDao<UserDao> {
+    private val guestBookRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation
+    )
+
+    private val personRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchPersonRelation,
+    )
+
     val isPersisted: Boolean get() = id != null
-    val personDao: PersonDao? by lazy { personId?.let { PersonRepositoryObject.findById(id = it) } }
-    val guestBook: GuestBookDao? by lazy { id?.let { GuestBookRepositoryObject.findByUserId(userId = it) } }
+    val personDao: PersonDao? get() = personRelation.fetchRelatedInstance(id = personId)
+    val guestBook: GuestBookDao? get() = guestBookRelation.fetchRelatedInstance(id = id)
     val blogs: List<BlogDao> by lazy { id?.let { BlogRepositoryObject.findBlogsByUserId(userId = it) } ?: emptyList() }
 
     override fun copyWithoutId(): UserDao = copy(

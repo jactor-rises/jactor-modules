@@ -8,6 +8,7 @@ import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.CreateBlogEntry
 import com.github.jactor.persistence.CreateGuestBook
 import com.github.jactor.persistence.CreateGuestBookEntry
+import com.github.jactor.persistence.CreateUser
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookEntry
 import com.github.jactor.persistence.Person
@@ -22,6 +23,7 @@ import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.CreateBlogEntryCommand
 import com.github.jactor.shared.api.CreateGuestBookCommand
 import com.github.jactor.shared.api.CreateGuestBookEntryCommand
+import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.GuestBookDto
 import com.github.jactor.shared.api.GuestBookEntryDto
 import com.github.jactor.shared.api.PersistentDto
@@ -88,6 +90,23 @@ fun CreateGuestBookEntryCommand.toCreateGuestBook() = CreateGuestBookEntry(
     guestBookId = requireNotNull(guestBookId) { "Guest book ID cannot be null!" },
     creatorName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
     entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL }
+)
+
+fun CreateUserCommand.toCreateUser() = CreateUser(
+    addressId = addressId,
+    personId = personId,
+    username = username,
+    surname = surname,
+    emailAddress = emailAddress,
+    description = description,
+    firstName = firstName,
+    language = language,
+    addressLine1 = addressLine1,
+    addressLine2 = addressLine2,
+    addressLine3 = addressLine3,
+    zipCode = zipCode,
+    city = city,
+    country = country,
 )
 
 fun GuestBookEntryDto.toGuestBookEntry(parent: GuestBook?) = GuestBookEntry(
