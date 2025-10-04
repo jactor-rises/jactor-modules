@@ -2,13 +2,11 @@ package com.github.jactor.persistence.common
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.GuestBookDao
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEqualTo
-import io.mockk.every
 import io.mockk.mockk
 
 class DaoRelationsTest {
@@ -19,13 +17,9 @@ class DaoRelationsTest {
     )
 
     @Test
-    fun `should fetch related instances`() {
-        val guestBookDao = mockk<GuestBookDao> {
-            every { id } returns UUID.randomUUID()
-        }
-
-        val relationsA = daoRelations.fetchRelationsTo(persistentDao = guestBookDao)
-        val relationsB = daoRelations.fetchRelationsTo(persistentDao = guestBookDao)
+    fun `should fetch related instances by id`() {
+        val relationsA = daoRelations.fetchRelations(id = UUID.randomUUID())
+        val relationsB = daoRelations.fetchRelations(id = UUID.randomUUID())
 
         assertAll {
             assertThat(relationsA, "relationsA").hasSize(1)
@@ -37,13 +31,11 @@ class DaoRelationsTest {
 
     @Test
     fun `should fetch relations every time as no id can determine state`() {
-        val guestBookDao = mockk<GuestBookDao> {
-            every { id } returns UUID.randomUUID()
-        }
+        val id = UUID.randomUUID()
 
-        daoRelations.fetchRelationsTo(persistentDao = guestBookDao)
-        daoRelations.fetchRelationsTo(persistentDao = guestBookDao)
-        daoRelations.fetchRelationsTo(persistentDao = guestBookDao)
+        daoRelations.fetchRelations(id = id)
+        daoRelations.fetchRelations(id = id)
+        daoRelations.fetchRelations(id = id)
 
         assertThat(fetchCounter).isEqualTo(3)
     }

@@ -13,6 +13,8 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.stereotype.Service
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.persistence.common.DaoRelation
+import com.github.jactor.persistence.common.DaoRelations
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.PersonDto
@@ -71,7 +73,7 @@ interface PersonRepository {
     fun save(personDao: PersonDao): PersonDao
 }
 
-object PersonRepositoryObject: PersonRepository {
+object PersonRepositoryObject : PersonRepository {
     override fun findAll(): List<PersonDao> = transaction {
         People.selectAll().map { it.toPersonDao() }
     }
@@ -83,7 +85,6 @@ object PersonRepositoryObject: PersonRepository {
         .singleOrNull()
 
     override fun findBySurname(surname: String?): List<PersonDao> = when {
-        // TODO: use BooleanExtensions from shared
         (surname?.isNotBlank() ?: true) -> emptyList()
 
         else -> People
@@ -129,6 +130,7 @@ object PersonRepositoryObject: PersonRepository {
             }
         }.let { newId -> personDao.also { it.id = newId.value } }
     }
+
     private fun update(personDao: PersonDao): PersonDao = transaction {
         People.update(where = { People.id eq personDao.id }) { row ->
             row[modifiedBy] = personDao.modifiedBy
@@ -158,13 +160,10 @@ data class PersonDao(
     var surname: String = "",
     var addressId: UUID? = null,
 ) : PersistentDao<PersonDao> {
-    val users: List<UserDao> by lazy {
-        id?.let { UserRepositoryObject.findByPersonId(personId = it) } ?: emptyList()
-    }
-
-    val addressDao: AddressDao? by lazy {
-        addressId?.let { AddressRepositoryObject.findById(addressId = it) }
-    }
+    private val addressRelation = DaoRelation(fetchRelation = JactorPersistenceRepositiesConfig.fetchAddressRelation)
+    private val userRelations = DaoRelations(fetchRelations = JactorPersistenceRepositiesConfig.fetchUserRelations)
+    val users: List<UserDao> get() = id?.let { userRelations.fetchRelations(id = it) } ?: emptyList()
+    val addressDao: AddressDao? get() = addressRelation.fetchRelatedInstance(id = addressId)
 
     fun toPerson() = Person(
         persistent = toPersistent(),

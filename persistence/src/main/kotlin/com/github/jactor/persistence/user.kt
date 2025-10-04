@@ -28,11 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.common.DaoRelation
+import com.github.jactor.persistence.common.DaoRelations
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.util.toCreateUser
 import com.github.jactor.persistence.util.toUser
-import com.github.jactor.persistence.util.toUserDao
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
@@ -124,12 +124,10 @@ class UserService(private val userRepository: UserRepository = UserRepositoryObj
 
     @Transactional
     suspend fun update(user: User): User = userRepository.save(user.toUserDao()).toUser()
-    suspend fun create(createUser: CreateUser): User = createUser.toUserDao()
-        .let { userRepository.save(user = it).toUser() }
-
-    suspend fun findUsernames(userType: UserDao.UserType): List<String> = listOf(userType).let { type ->
-        userRepository.findUsernames(userType = type)
-    }
+    suspend fun create(createUser: CreateUser): User = userRepository.save(user = createUser.toUserDao()).toUser()
+    suspend fun findUsernames(userType: UserDao.UserType): List<String> = userRepository.findUsernames(
+        userType = listOf(userType)
+    )
 
     suspend fun isAlreadyPersisted(username: String): Boolean = userRepository.contains(username)
 }
@@ -221,7 +219,7 @@ interface UserRepository {
     fun delete(user: UserDao)
     fun findAll(): List<UserDao>
     fun findById(id: UUID): UserDao?
-    fun findByPersonId(personId: UUID): List<UserDao>
+    fun findByPersonId(id: UUID): List<UserDao>
     fun findByUsername(username: String): UserDao?
     fun findUsernames(userType: List<UserDao.UserType>): List<String>
     fun save(user: UserDao): UserDao
@@ -250,9 +248,9 @@ object UserRepositoryObject : UserRepository {
             .singleOrNull()
     }
 
-    override fun findByPersonId(personId: UUID): List<UserDao> = transaction {
+    override fun findByPersonId(id: UUID): List<UserDao> = transaction {
         Users.selectAll()
-            .andWhere { Users.personId eq personId }
+            .andWhere { Users.personId eq id }
             .map { it.toUserDao() }
     }
 
@@ -328,6 +326,7 @@ data class UserDao(
     internal var personId: UUID? = null,
     internal var username: String = "na",
 ) : PersistentDao<UserDao> {
+    private val blogRelations = DaoRelations(fetchRelations = JactorPersistenceRepositiesConfig.fetchBlogRelations)
     private val guestBookRelation = DaoRelation(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation
     )
@@ -339,7 +338,7 @@ data class UserDao(
     val isPersisted: Boolean get() = id != null
     val personDao: PersonDao? get() = personRelation.fetchRelatedInstance(id = personId)
     val guestBook: GuestBookDao? get() = guestBookRelation.fetchRelatedInstance(id = id)
-    val blogs: List<BlogDao> by lazy { id?.let { BlogRepositoryObject.findBlogsByUserId(userId = it) } ?: emptyList() }
+    val blogs: List<BlogDao> get() = id?.let { blogRelations.fetchRelations(id = it) } ?: emptyList()
 
     override fun copyWithoutId(): UserDao = copy(
         id = null,

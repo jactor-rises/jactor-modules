@@ -1,5 +1,7 @@
 package com.github.jactor.persistence.common
 
-class DaoRelations<T : PersistentDao<*>>(private val fetchRelations: (PersistentDao<*>) -> List<T>) {
-    fun fetchRelationsTo(persistentDao: PersistentDao<*>): List<T> = fetchRelations.invoke(persistentDao)
+import java.util.UUID
+
+class DaoRelations<T : PersistentDao<*>>(private val fetchRelations: (UUID) -> List<T>) {
+    fun fetchRelations(id: UUID): List<T> = fetchRelations.invoke(id)
 }

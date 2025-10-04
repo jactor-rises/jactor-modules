@@ -351,7 +351,7 @@ object BlogEntries : UUIDTable(name = "T_BLOG_ENTRY", columnName = "ID") {
 
 interface BlogRepository {
     fun findBlogById(id: UUID): BlogDao?
-    fun findBlogsByUserId(userId: UUID): List<BlogDao>?
+    fun findBlogsByUserId(id: UUID): List<BlogDao>?
     fun findBlogEntries(): List<BlogEntryDao>
     fun findBlogEntryById(id: UUID): BlogEntryDao?
     fun findBlogs(): List<BlogDao>
@@ -369,9 +369,9 @@ object BlogRepositoryObject : BlogRepository {
             .singleOrNull()
     }
 
-    override fun findBlogsByUserId(userId: UUID): List<BlogDao> = transaction {
+    override fun findBlogsByUserId(id: UUID): List<BlogDao> = transaction {
         Blogs.selectAll()
-            .andWhere { Blogs.userId eq userId }
+            .andWhere { Blogs.userId eq id }
             .map { it.toBlogDao() }
     }
 

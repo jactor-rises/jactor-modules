@@ -8,14 +8,18 @@ import com.github.jactor.persistence.AddressRepository
 import com.github.jactor.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.persistence.PersonRepository
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddressDao
+import com.github.jactor.persistence.test.initPersonDao
 import com.github.jactor.persistence.test.initUserDao
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto
 import com.ninjasquad.springmockk.MockkBean
+import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
+import io.mockk.every
 
 internal class JsonMappingTest @Autowired constructor(
     @MockkBean private val addressRepositoryMockk: AddressRepository,
@@ -23,15 +27,25 @@ internal class JsonMappingTest @Autowired constructor(
     @MockkBean private val personRepositoryMockk: PersonRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
     init {
-        // todo: lag person og adresse relasjoner i DaoRelation og legg fetcher i JactorPersistenceRepositiesConfig
+        JactorPersistenceRepositiesConfig.fetchPersonRelation = { personRepositoryMockk.findById(id = it) }
+        JactorPersistenceRepositiesConfig.fetchAddressRelation = { addressRepositoryMockk.findById(id = it) }
     }
 
     @Test
     fun `skal mappe json fra UserDto fra User skapt av UserDao`() {
-        val user = initUserDao().toUser()
+        val addressId = UUID.randomUUID()
+        val personId = UUID.randomUUID()
+
+        every { addressRepositoryMockk.findById(any()) } returns initAddressDao(id = addressId)
+        every { personRepositoryMockk.findById(any()) } returns initPersonDao(id = personId, addressId = addressId)
+
+        val user = initUserDao(personId = personId).toUser()
         val json: String = objectMapper.writeValueAsString(user.toUserDto())
 
-        assertThat(json).contains(""""person":{""", """"address":{""")
+        assertAll {
+            assertThat(json, "person").contains(""""person":{""")
+            assertThat(json, "address").contains(""""address":{""")
+        }
     }
 
     @Test

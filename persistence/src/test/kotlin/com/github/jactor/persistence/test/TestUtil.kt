@@ -181,10 +181,10 @@ fun initPerson(
 
 fun initPersonDao(
     id: UUID? = UUID.randomUUID(),
-    address: AddressDao? = initAddressDao()
+    addressId: UUID? = null,
 ) = PersonDao().apply {
     this.id = id
-    addressId = address?.id
+    this.addressId = addressId
 }
 
 fun initUser(

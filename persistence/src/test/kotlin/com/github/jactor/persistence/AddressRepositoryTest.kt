@@ -83,7 +83,7 @@ internal class AddressRepositoryTest @Autowired constructor(
 
         addressRepository.save(addressToPersist)
 
-        val addressSaved = addressRepository.findById(addressId = addressToPersist.id!!) ?: addressNotFound()
+        val addressSaved = addressRepository.findById(id = addressToPersist.id!!) ?: addressNotFound()
 
         addressSaved.addressLine1 = "the truth is out there"
         addressSaved.addressLine2 = "among the stars"

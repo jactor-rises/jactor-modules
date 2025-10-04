@@ -80,16 +80,16 @@ object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
 }
 
 interface AddressRepository {
-    fun findById(addressId: UUID): AddressDao?
+    fun findById(id: UUID): AddressDao?
     fun findByZipCode(zipCode: String): List<AddressDao>
     fun save(addressDao: AddressDao): AddressDao
 }
 
 object AddressRepositoryObject : AddressRepository {
-    override fun findById(addressId: UUID): AddressDao? = transaction {
+    override fun findById(id: UUID): AddressDao? = transaction {
         Addresses
             .selectAll()
-            .andWhere { Addresses.id eq addressId }
+            .andWhere { Addresses.id eq id }
             .singleOrNull()
             ?.toAddressDao()
     }
