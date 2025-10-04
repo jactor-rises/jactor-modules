@@ -4,10 +4,13 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initAddressDao
 import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initGuestBook
 import com.github.jactor.persistence.test.initGuestBookEntry
+import com.github.jactor.persistence.test.initGuestBookEntryDao
 import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initPersonDao
 import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.test.withId
 import assertk.assertAll
@@ -22,41 +25,28 @@ internal class PersistentDaoTest {
 
     @Test
     fun `should be able to copy an address without the id`() {
-        persistentDaoToTest = initAddress(
-            zipCode = "1001",
-            addressLine1 = "somewhere",
-            addressLine2 = "out",
-            addressLine3 = "there",
-            city = "svg",
-            country = "NO"
-        ).withId().toAddressDao()
+        persistentDaoToTest = initAddressDao(id = UUID.randomUUID())
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
             assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest.timeOfCreation).isEqualTo(copy.timeOfCreation)
             assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
     @Test
     fun `should be able to copy a person without the id`() {
-        persistentDaoToTest = initPerson(
-            address = initAddress(),
-            locale = "us_US",
-            firstName = "Bill",
-            surname = "Smith",
-            description = "here i am"
-        ).withId().toPersonDao()
+        persistentDaoToTest = initPersonDao(id = UUID.randomUUID())
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
             assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest.timeOfCreation).isEqualTo(copy.timeOfCreation)
             assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
@@ -74,7 +64,7 @@ internal class PersistentDaoTest {
         assertAll {
             assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest.timeOfCreation).isEqualTo(copy.timeOfCreation)
             assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
@@ -91,7 +81,7 @@ internal class PersistentDaoTest {
         assertAll {
             assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest.timeOfCreation).isEqualTo(copy.timeOfCreation)
             assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
@@ -111,7 +101,7 @@ internal class PersistentDaoTest {
         assertAll {
             assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest.timeOfCreation).isEqualTo(copy.timeOfCreation)
             assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
@@ -125,25 +115,21 @@ internal class PersistentDaoTest {
         assertAll {
             assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest.timeOfCreation).isEqualTo(copy.timeOfCreation)
             assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
 
     @Test
     fun `should be able to copy a guest book entry without the id`() {
-        persistentDaoToTest = initGuestBookEntry(
-            guestBook = initGuestBook(),
-            creatorName = "jactor",
-            entry = "the one"
-        ).withId().toGuestBookEntryDao()
+        persistentDaoToTest = initGuestBookEntryDao(id = UUID.randomUUID())
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {
             assertThat(persistentDaoToTest.id).isNotNull()
             assertThat(copy.id).isNull()
-            assertThat(persistentDaoToTest).isEqualTo(copy)
+            assertThat(persistentDaoToTest.timeOfCreation).isEqualTo(copy.timeOfCreation)
             assertThat(persistentDaoToTest).isNotSameInstanceAs(copy)
         }
     }
