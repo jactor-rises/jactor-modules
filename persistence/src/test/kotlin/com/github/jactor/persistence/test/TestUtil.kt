@@ -6,7 +6,9 @@ import java.util.UUID
 import com.github.jactor.persistence.Address
 import com.github.jactor.persistence.AddressDao
 import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogDao
 import com.github.jactor.persistence.BlogEntry
+import com.github.jactor.persistence.BlogEntryDao
 import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.GuestBookDao
 import com.github.jactor.persistence.GuestBookEntry
@@ -74,6 +76,17 @@ fun initBlog(
     user = user,
 )
 
+fun initBlogDao(
+    id: UUID? = null,
+    timeOfModification: LocalDateTime = LocalDateTime.now()
+) = BlogDao(
+    id = id,
+    createdBy = "unit test",
+    modifiedBy = "unit test",
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
+)
+
 fun initBlogEntry(
     blog: Blog? = null,
     creatorName: String? = null,
@@ -84,6 +97,19 @@ fun initBlogEntry(
     persistent = persistent,
     creatorName = creatorName,
     entry = entry,
+)
+
+fun initBlogEntryDao(
+    id: UUID? = null,
+    timeOfModification: LocalDateTime = LocalDateTime.now()
+) = BlogEntryDao(
+    id = id,
+    createdBy = "unit test",
+    creatorName = "unit test",
+    entry = "unit test",
+    modifiedBy = "unit test",
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
 )
 
 fun initCreateUserCommand(
@@ -108,9 +134,10 @@ fun initGuestBook(
     user = user,
 )
 
-fun initGuestBookDao(id: UUID? = null) = GuestBookDao().apply {
-    this.id = id
-}
+fun initGuestBookDao(id: UUID? = null, timeOfModification: LocalDateTime = LocalDateTime.now()) = GuestBookDao(
+    id = id,
+    timeOfModification = timeOfModification,
+)
 
 fun initGuestBookEntry(
     creatorName: String = "na",
@@ -126,16 +153,23 @@ fun initGuestBookEntry(
 
 fun initGuestBookEntryDao(
     id: UUID? = null,
-    guestBookId: UUID = UUID.randomUUID(),
-): GuestBookEntryDao = initGuestBookEntry().toGuestBookEntryDao().apply {
-    this.id = id
-    this.guestBookId = guestBookId
-}
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+) = GuestBookEntryDao(
+    id = id,
+    createdBy = "unit test",
+    creatorName = "unit test",
+    entry = "unit test",
+    guestBookId = null,
+    modifiedBy = "unit test",
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
+)
 
 fun initUserDao(
     id: UUID? = UUID.randomUUID(),
     personId: UUID? = null,
     username: String = "whoami",
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
 ): UserDao = UserDao(
     id = id,
 
@@ -146,7 +180,7 @@ fun initUserDao(
     username = username,
     userType = UserDao.UserType.ACTIVE,
     timeOfCreation = LocalDateTime.now(),
-    timeOfModification = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
 )
 
 fun initUserDao(createUserCommand: CreateUserCommand) = UserDao(
@@ -182,10 +216,12 @@ fun initPerson(
 fun initPersonDao(
     id: UUID? = UUID.randomUUID(),
     addressId: UUID? = null,
-) = PersonDao().apply {
-    this.id = id
-    this.addressId = addressId
-}
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+) = PersonDao(
+    id = id,
+    addressId = addressId,
+    timeOfModification = timeOfModification,
+)
 
 fun initUser(
     persistent: Persistent = Persistent(),

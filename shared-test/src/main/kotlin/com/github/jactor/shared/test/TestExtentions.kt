@@ -1,5 +1,6 @@
 package com.github.jactor.shared.test
 
+import java.time.Duration
 import java.time.LocalDateTime
 import assertk.Assert
 import assertk.assertThat
@@ -13,6 +14,7 @@ import assertk.assertions.support.show
 
 fun <T> Assert<T?>.all(function: T.() -> Unit) = isNotNull().given { assertk.assertAll { it.function() } }
 infix fun Assert<String?>.contains(substring: String) = isNotNull().given { it.contains(substring.toRegex()) }
+fun LocalDateTime.countSecondsUntilNow(): Long = Duration.between(this, LocalDateTime.now()).seconds
 infix fun <T> Assert<T?>.equals(actual: T?): Unit = actual?.let { this.isEqualTo(it) } ?: this.isNull()
 fun <T: Collection<String>> Assert<T>.containsSubstring(expected: String) = given { strings ->
     strings.forEach {

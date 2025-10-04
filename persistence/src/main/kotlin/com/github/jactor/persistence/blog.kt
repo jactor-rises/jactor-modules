@@ -503,10 +503,12 @@ data class BlogDao(
         get() = userRelation.fetchRelatedInstance(id = userId) ?: error("Missing user relation for blog!")
 
     override fun copyWithoutId(): BlogDao = copy(id = null)
-    override fun modifiedBy(modifier: String): BlogDao = copy(
-        modifiedBy = modifier,
+    override fun modifiedBy(modifier: String): BlogDao {
+        modifiedBy = modifier
         timeOfModification = LocalDateTime.now()
-    )
+
+        return this
+    }
 
     fun add(blogEntryDao: BlogEntryDao) {
         entries.contains(blogEntryDao).whenFalse {
@@ -542,10 +544,12 @@ data class BlogEntryDao(
         get() = blogRelation.fetchRelatedInstance(id = blogId) ?: error("no blog relation?")
 
     override fun copyWithoutId(): BlogEntryDao = copy(id = null)
-    override fun modifiedBy(modifier: String): BlogEntryDao = copy(
-        modifiedBy = modifier,
+    override fun modifiedBy(modifier: String): BlogEntryDao {
+        modifiedBy = modifier
         timeOfModification = LocalDateTime.now()
-    )
+
+        return this
+    }
 
     fun toBlogEntry() = BlogEntry(
         persistent = toPersistent(),

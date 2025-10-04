@@ -5,17 +5,15 @@ import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initBlog
-import com.github.jactor.persistence.test.initBlogEntry
-import com.github.jactor.persistence.test.initGuestBook
-import com.github.jactor.persistence.test.initGuestBookEntry
-import com.github.jactor.persistence.test.initPerson
-import com.github.jactor.persistence.test.initUser
-import com.github.jactor.persistence.test.withId
-import com.github.jactor.shared.test.isNotOlderThan
+import com.github.jactor.persistence.test.initAddressDao
+import com.github.jactor.persistence.test.initBlogDao
+import com.github.jactor.persistence.test.initBlogEntryDao
+import com.github.jactor.persistence.test.initGuestBookDao
+import com.github.jactor.persistence.test.initGuestBookEntryDao
+import com.github.jactor.persistence.test.initPersonDao
+import com.github.jactor.persistence.test.initUserDao
+import com.github.jactor.shared.test.countSecondsUntilNow
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -40,119 +38,127 @@ internal class ModifierAspectTest {
 
     @Test
     fun `should modify timestamp on address when used`() {
-        val addressWithoutId = initAddress().toAddressDao()
-        val address = initAddress().withId().toAddressDao()
+        val withId = initAddressDao(id = UUID.randomUUID(), timeOfModification = oneMinuteAgo)
+        val withoutId = initAddressDao(id = null, timeOfModification = oneMinuteAgo)
 
-        every { joinPointMock.args } returns arrayOf<Any>(address, addressWithoutId)
+        every { joinPointMock.args } returns arrayOf<Any>(withId, withoutId)
 
         modifierAspect.modifyPersistentDao(joinPointMock)
 
-        assertThat(address.timeOfModification).isNotOlderThan(seconds = 1)
+        val idNoOfSeconds = withId.timeOfModification.countSecondsUntilNow()
+        val noIdNoOfSeconds = withoutId.timeOfModification.countSecondsUntilNow()
+
+        assertAll {
+            assertThat(idNoOfSeconds, "with id").isEqualTo(0)
+            assertThat(noIdNoOfSeconds, "without id").isEqualTo(60)
+        }
     }
 
     @Test
     fun `should modify timestamp on blog when used`() {
-        val blogWithouId = initBlog(persistent = persistent).toBlogDao()
-        val blog = initBlog(persistent = persistent).withId().toBlogDao()
+        val withId = initBlogDao(id = UUID.randomUUID(), timeOfModification = oneMinuteAgo)
+        val withoutId = initBlogDao(id = null, timeOfModification = oneMinuteAgo)
 
-        every { joinPointMock.args } returns arrayOf<Any>(blog, blogWithouId)
+        every { joinPointMock.args } returns arrayOf<Any>(withId, withoutId)
 
         modifierAspect.modifyPersistentDao(joinPointMock)
 
-        assertThat(blog.timeOfModification).isNotOlderThan(seconds = 1)
-        assertThat(blogWithouId.timeOfModification).isEqualTo(oneMinuteAgo)
+        val idNoOfSeconds = withId.timeOfModification.countSecondsUntilNow()
+        val noIdNoOfSeconds = withoutId.timeOfModification.countSecondsUntilNow()
+
+        assertAll {
+            assertThat(idNoOfSeconds, "with id").isEqualTo(0)
+            assertThat(noIdNoOfSeconds, "without id").isEqualTo(60)
+        }
     }
 
     @Test
     fun `should modify timestamp on blogEntry when used`() {
-        val blogEntryWithoutId = BlogEntry(
-            persistent = persistent,
-            blog = initBlog(persistent = Persistent(id = UUID.randomUUID())),
-            creatorName = "me",
-            entry = "some shit"
-        ).toBlogEntryDao()
+        val withId = initBlogEntryDao(id = UUID.randomUUID(), timeOfModification = oneMinuteAgo)
+        val withoutId = initBlogEntryDao(id = null, timeOfModification = oneMinuteAgo)
 
-        val blogEntry = initBlogEntry(
-            persistent = persistent,
-            blog = initBlog(persistent = Persistent(id = UUID.randomUUID())),
-            entry = "some shit",
-            creatorName = "me",
-        ).withId().toBlogEntryDao()
-
-        every { joinPointMock.args } returns arrayOf<Any>(blogEntry, blogEntryWithoutId)
+        every { joinPointMock.args } returns arrayOf<Any>(withId, withoutId)
 
         modifierAspect.modifyPersistentDao(joinPointMock)
 
+        val idNoOfSeconds = withId.timeOfModification.countSecondsUntilNow()
+        val noIdNoOfSeconds = withoutId.timeOfModification.countSecondsUntilNow()
+
         assertAll {
-            assertThat(blogEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
-            assertThat(blogEntryWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+            assertThat(idNoOfSeconds, "with id").isEqualTo(0)
+            assertThat(noIdNoOfSeconds, "without id").isEqualTo(60)
         }
     }
 
     @Test
     fun `should modify timestamp on guestBook when used`() {
-        val guestBookWithoutId = initGuestBook(persistent = persistent).toGuestBookDao()
-        val guestBook = initGuestBook(persistent = persistent).withId().toGuestBookDao()
+        val withId = initGuestBookDao(id = UUID.randomUUID(), timeOfModification = oneMinuteAgo)
+        val withoutId = initGuestBookDao(id = null, timeOfModification = oneMinuteAgo)
 
-        every { joinPointMock.args } returns arrayOf<Any>(guestBook, guestBookWithoutId)
+        every { joinPointMock.args } returns arrayOf<Any>(withId, withoutId)
 
         modifierAspect.modifyPersistentDao(joinPointMock)
 
+        val idNoOfSeconds = withId.timeOfModification.countSecondsUntilNow()
+        val noIdNoOfSeconds = withoutId.timeOfModification.countSecondsUntilNow()
+
         assertAll {
-            assertThat(guestBook.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
-            assertThat(guestBookWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+            assertThat(idNoOfSeconds, "with id").isEqualTo(0)
+            assertThat(noIdNoOfSeconds, "without id").isEqualTo(60)
         }
     }
 
     @Test
     fun `should modify timestamp on guestBookEntry when used`() {
-        val guestBookEntryWithoutId = initGuestBookEntry(
-            creatorName = "me",
-            entry = "hi there",
-            persistent = persistent,
-        ).toGuestBookEntryDao()
+        val withId = initGuestBookEntryDao(id = UUID.randomUUID(), timeOfModification = oneMinuteAgo)
+        val withoutId = initGuestBookEntryDao(id = null, timeOfModification = oneMinuteAgo)
 
-        val guestBookEntry = initGuestBookEntry(
-            creatorName = "me",
-            entry = "hi there",
-            persistent = persistent,
-        ).withId().toGuestBookEntryDao()
-
-        every { joinPointMock.args } returns arrayOf<Any>(guestBookEntry, guestBookEntryWithoutId)
+        every { joinPointMock.args } returns arrayOf<Any>(withId, withoutId)
 
         modifierAspect.modifyPersistentDao(joinPointMock)
 
+        val idNoOfSeconds = withId.timeOfModification.countSecondsUntilNow()
+        val noIdNoOfSeconds = withoutId.timeOfModification.countSecondsUntilNow()
+
         assertAll {
-            assertThat(guestBookEntry.timeOfModification, name = "with id").isNotOlderThan(seconds = 1)
-            assertThat(guestBookEntryWithoutId.timeOfModification, name = "without id").isEqualTo(oneMinuteAgo)
+            assertThat(idNoOfSeconds, "with id").isEqualTo(0)
+            assertThat(noIdNoOfSeconds, "without id").isEqualTo(60)
         }
     }
 
     @Test
     fun `should modify timestamp on person when used`() {
-        val person = initPerson(persistent = persistent).withId().toPersonDao()
-        val personWithoutId = initPerson(persistent = persistent).toPersonDao()
+        val withId = initPersonDao(id = UUID.randomUUID(), timeOfModification = oneMinuteAgo)
+        val withoutId = initPersonDao(id = null, timeOfModification = oneMinuteAgo)
 
-        every { joinPointMock.args } returns arrayOf<Any>(person, personWithoutId)
+        every { joinPointMock.args } returns arrayOf<Any>(withId, withoutId)
 
         modifierAspect.modifyPersistentDao(joinPointMock)
 
+        val idNoOfSeconds = withId.timeOfModification.countSecondsUntilNow()
+        val noIdNoOfSeconds = withoutId.timeOfModification.countSecondsUntilNow()
+
         assertAll {
-            assertThat(person.timeOfModification, "person with id").isNotOlderThan(seconds = 1)
-            assertThat(personWithoutId.timeOfModification, "person without id").isEqualTo(oneMinuteAgo)
+            assertThat(idNoOfSeconds, "with id").isEqualTo(0)
+            assertThat(noIdNoOfSeconds, "without id").isEqualTo(60)
         }
     }
 
     @Test
     fun `should modify timestamp on user when used`() {
-        val user = initUser(persistent = persistent).withId().toUserDao()
-        val userWithoutId = initUser(persistent = persistent).toUserDao()
+        val withId = initUserDao(id = UUID.randomUUID(), timeOfModification = oneMinuteAgo)
+        val withoutId = initUserDao(id = null, timeOfModification = oneMinuteAgo)
 
-        every { joinPointMock.args } returns arrayOf<Any>(user, userWithoutId)
+        every { joinPointMock.args } returns arrayOf<Any>(withId, withoutId)
 
         modifierAspect.modifyPersistentDao(joinPointMock)
 
-        assertThat(user.timeOfModification).isNotOlderThan(seconds = 1)
-        assertThat(userWithoutId.timeOfModification).isEqualTo(oneMinuteAgo)
+        val idNoOfSeconds = withId.timeOfModification.countSecondsUntilNow()
+        val noIdNoOfSeconds = withoutId.timeOfModification.countSecondsUntilNow()
+
+        assertAll {
+            assertThat(idNoOfSeconds, "with id").isEqualTo(0)
+            assertThat(noIdNoOfSeconds, "without id").isEqualTo(60)
+        }
     }
 }

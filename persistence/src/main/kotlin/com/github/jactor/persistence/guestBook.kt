@@ -462,7 +462,6 @@ data class GuestBookDao(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
     )
 
-    val isPersisted: Boolean get() = id != null
     val user: UserDao
         get() = userRelation.fetchRelatedInstance(id = userId) ?: error("no user relation?")
 
@@ -500,7 +499,6 @@ data class GuestBookEntryDao(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation,
     )
 
-    val isPersisted: Boolean get() = id != null
     val guestBookDao: GuestBookDao
         get() = guestBookRelation.fetchRelatedInstance(id = guestBookId)
             ?: error("No guest book relation for entry with id $guestBookId exists")

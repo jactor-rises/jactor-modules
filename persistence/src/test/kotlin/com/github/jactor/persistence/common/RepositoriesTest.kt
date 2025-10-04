@@ -22,7 +22,7 @@ internal class RepositoriesTest(
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
-    fun `should use a BlogRepository to save a blogs and find them on on user which was earlier saved`() {
+    fun `should use a BlogRepository to save blogs and find them on on user which was earlier saved`() {
         val address = initAddress(
             zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testoplis"
         )

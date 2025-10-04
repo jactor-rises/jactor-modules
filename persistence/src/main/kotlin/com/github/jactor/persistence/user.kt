@@ -335,7 +335,6 @@ data class UserDao(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchPersonRelation,
     )
 
-    val isPersisted: Boolean get() = id != null
     val personDao: PersonDao? get() = personRelation.fetchRelatedInstance(id = personId)
     val guestBook: GuestBookDao? get() = guestBookRelation.fetchRelatedInstance(id = id)
     val blogs: List<BlogDao> get() = id?.let { blogRelations.fetchRelations(id = it) } ?: emptyList()
