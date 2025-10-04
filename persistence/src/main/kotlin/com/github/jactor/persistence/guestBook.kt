@@ -14,6 +14,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -328,6 +329,9 @@ interface GuestBookRepository {
     fun save(guestBookDao: GuestBookDao): GuestBookDao
     fun save(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao
 }
+
+@Repository
+class GuestBookRepositoryImpl: GuestBookRepository by GuestBookRepositoryObject
 
 object GuestBookRepositoryObject : GuestBookRepository {
     override fun findAllGuestBooks(): List<GuestBookDao> = transaction {

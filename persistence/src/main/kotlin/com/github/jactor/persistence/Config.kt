@@ -37,32 +37,32 @@ class ExposedConfig {
 }
 
 @Configuration
-class JactorPersistenceRepositiesConfig {
-    @Bean
-    fun addressRepository(): AddressRepository = AddressRepositoryObject
+class JactorPersistenceRepositiesConfig(
+    private val addressRepository: AddressRepository,
+    private val blogRepository: BlogRepository,
+    private val guestBookRepository: GuestBookRepository,
+    private val personRepository: PersonRepository,
+    private val userRepository: UserRepository,
+) {
 
-    @Bean
-    fun blogRepository(): BlogRepository = BlogRepositoryObject
-
-    @Bean
-    fun guestBookRepository(): GuestBookRepository = GuestBookRepositoryObject
-
-    @Bean
-    fun personRepository(): PersonRepository = PersonRepositoryObject
-
-    @Bean
-    fun userRepository(): UserRepository = UserRepositoryObject
+    init {
+        fetchAddressRelation = { addressRepository.findById(id = it) }
+        fetchBlogRelation = { blogRepository.findBlogById(id = it) }
+        fetchBlogRelations = { blogRepository.findBlogsByUserId(id = it) }
+        fetchGuestBookRelation = { guestBookRepository.findGuestBookById(id = it) }
+        fetchPersonRelation = { personRepository.findById(id = it) }
+        fetchUserRelation = { userRepository.findById(id = it) }
+        fetchUserRelations = { userRepository.findByPersonId(id = it) }
+    }
 
     internal companion object {
-        internal var fetchAddressRelation: (UUID) -> AddressDao? = { AddressRepositoryObject.findById(id = it) }
-        internal var fetchBlogRelation: (UUID) -> BlogDao? = { BlogRepositoryObject.findBlogById(id = it) }
-        internal var fetchBlogRelations: (UUID) -> List<BlogDao> = { BlogRepositoryObject.findBlogsByUserId(id = it) }
-        internal var fetchPersonRelation: (UUID) -> PersonDao? = { PersonRepositoryObject.findById(id = it) }
-        internal var fetchUserRelation: (UUID) -> UserDao? = { UserRepositoryObject.findById(id = it) }
-        internal var fetchUserRelations: (UUID) -> List<UserDao> = { UserRepositoryObject.findByPersonId(id = it) }
-        internal var fetchGuestBookRelation: (UUID) -> GuestBookDao? = {
-            GuestBookRepositoryObject.findGuestBookById(id = it)
-        }
+        internal var fetchAddressRelation: (UUID) -> AddressDao? = { null }
+        internal var fetchBlogRelation: (UUID) -> BlogDao? = { null }
+        internal var fetchBlogRelations: (UUID) -> List<BlogDao> = { emptyList() }
+        internal var fetchGuestBookRelation: (UUID) -> GuestBookDao? = { null }
+        internal var fetchPersonRelation: (UUID) -> PersonDao? = { null }
+        internal var fetchUserRelation: (UUID) -> UserDao? = { null }
+        internal var fetchUserRelations: (UUID) -> List<UserDao> = { emptyList() }
     }
 }
 

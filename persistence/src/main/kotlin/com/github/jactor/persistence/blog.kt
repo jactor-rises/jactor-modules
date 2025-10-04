@@ -16,6 +16,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -351,7 +352,7 @@ object BlogEntries : UUIDTable(name = "T_BLOG_ENTRY", columnName = "ID") {
 
 interface BlogRepository {
     fun findBlogById(id: UUID): BlogDao?
-    fun findBlogsByUserId(id: UUID): List<BlogDao>?
+    fun findBlogsByUserId(id: UUID): List<BlogDao>
     fun findBlogEntries(): List<BlogEntryDao>
     fun findBlogEntryById(id: UUID): BlogEntryDao?
     fun findBlogs(): List<BlogDao>
@@ -360,6 +361,9 @@ interface BlogRepository {
     fun save(blogDao: BlogDao): BlogDao
     fun save(blogEntryDao: BlogEntryDao): BlogEntryDao
 }
+
+@Repository
+class BlogRepositoryImpl : BlogRepository by BlogRepositoryObject
 
 object BlogRepositoryObject : BlogRepository {
     override fun findBlogById(id: UUID): BlogDao? = transaction {

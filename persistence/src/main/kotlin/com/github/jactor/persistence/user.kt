@@ -17,6 +17,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
@@ -224,6 +225,9 @@ interface UserRepository {
     fun findUsernames(userType: List<UserDao.UserType>): List<String>
     fun save(user: UserDao): UserDao
 }
+
+@Repository
+class UserRepositoryImpl : UserRepository by UserRepositoryObject
 
 object UserRepositoryObject : UserRepository {
     override fun contains(username: String): Boolean = transaction {

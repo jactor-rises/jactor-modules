@@ -11,6 +11,7 @@ import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
+import org.springframework.stereotype.Repository
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.shared.api.AddressDto
@@ -84,6 +85,9 @@ interface AddressRepository {
     fun findByZipCode(zipCode: String): List<AddressDao>
     fun save(addressDao: AddressDao): AddressDao
 }
+
+@Repository
+class AddressRepositoryImpl: AddressRepository by AddressRepositoryObject
 
 object AddressRepositoryObject : AddressRepository {
     override fun findById(id: UUID): AddressDao? = transaction {
