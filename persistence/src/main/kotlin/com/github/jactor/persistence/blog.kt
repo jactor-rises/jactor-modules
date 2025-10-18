@@ -502,7 +502,6 @@ data class BlogDao(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
     )
 
-    val isNotPersisted: Boolean get() = userId == null
     val user: UserDao
         get() = userRelation.fetchRelatedInstance(id = userId) ?: error("Missing user relation for blog!")
 
@@ -543,7 +542,6 @@ data class BlogEntryDao(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchBlogRelation,
     )
 
-    val isNotPersisted: Boolean get() = id != null
     val blogDao: BlogDao
         get() = blogRelation.fetchRelatedInstance(id = blogId) ?: error("no blog relation?")
 

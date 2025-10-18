@@ -41,7 +41,16 @@ data class Person(
     val id: UUID? @JsonIgnore get() = persistent.id
 
     fun toPersonDao() = PersonDao(
-
+        id = persistent.id,
+        createdBy = persistent.createdBy,
+        timeOfCreation = persistent.timeOfCreation,
+        modifiedBy = persistent.modifiedBy,
+        timeOfModification = persistent.timeOfModification,
+        description = description,
+        firstName = firstName,
+        surname = surname,
+        locale = locale,
+        addressId = address?.persistent?.id
     )
 
     fun toPersonDto() = PersonDto(
@@ -89,7 +98,7 @@ object PersonRepositoryObject : PersonRepository {
         .singleOrNull()
 
     override fun findBySurname(surname: String?): List<PersonDao> = when {
-        (surname?.isNotBlank() ?: true) -> emptyList()
+        (surname?.isBlank() ?: true) -> emptyList()
 
         else -> People
             .selectAll()
@@ -161,7 +170,7 @@ data class PersonDao(
     var description: String? = null,
     var firstName: String? = null,
     var locale: String? = null,
-    var surname: String = "",
+    var surname: String,
     var addressId: UUID? = null,
 ) : PersistentDao<PersonDao> {
     private val addressRelation = DaoRelation(fetchRelation = JactorPersistenceRepositiesConfig.fetchAddressRelation)

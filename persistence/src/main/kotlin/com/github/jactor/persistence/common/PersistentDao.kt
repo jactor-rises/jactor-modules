@@ -4,8 +4,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 interface PersistentDao<T> {
-    val isPersisted: Boolean
-        get() = id != null
+    val isPersisted: Boolean get() = id != null
+    val isNotPersisted: Boolean get() = !isPersisted
 
     var id: UUID?
     val createdBy: String

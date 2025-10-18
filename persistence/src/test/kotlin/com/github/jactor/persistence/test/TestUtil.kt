@@ -19,6 +19,7 @@ import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.CreateUserCommand
+import kotlin.String
 
 fun initAddress(
     persistent: Persistent = Persistent(),
@@ -39,7 +40,7 @@ fun initAddress(
 )
 
 fun initAddressDao(
-    id: UUID? = UUID.randomUUID(),
+    id: UUID? = null,
     createdBy: String = "unit test",
     timeOfCreation: LocalDateTime = LocalDateTime.now(),
     modifiedBy: String = "unit test",
@@ -214,12 +215,20 @@ fun initPerson(
 )
 
 fun initPersonDao(
-    id: UUID? = UUID.randomUUID(),
+    id: UUID? = null,
     addressId: UUID? = null,
+    description: String? = null,
+    firstName: String? = null,
+    locale: String? = null,
+    surname: String = "",
     timeOfModification: LocalDateTime = LocalDateTime.now(),
 ) = PersonDao(
     id = id,
     addressId = addressId,
+    description = description,
+    firstName = firstName,
+    locale = locale,
+    surname = surname,
     timeOfModification = timeOfModification,
 )
 

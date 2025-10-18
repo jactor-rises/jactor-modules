@@ -170,8 +170,6 @@ data class AddressDao(
     var country: String?,
     var zipCode: String,
 ) : PersistentDao<AddressDao> {
-    val isNotPersisted: Boolean get() = id == null
-
     override fun copyWithoutId(): AddressDao = copy(id = null)
     override fun modifiedBy(modifier: String): AddressDao {
         modifiedBy = modifier

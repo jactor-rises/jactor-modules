@@ -16,7 +16,7 @@ internal class AddressRepositoryTest @Autowired constructor(
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
-    fun `should fetch address entities`() {
+    fun `should fetch address entities by zip code`() {
         addressRepository.save(
             initAddress(
                 addressLine1 = "somewhere out there",
@@ -33,18 +33,27 @@ internal class AddressRepositoryTest @Autowired constructor(
             ).toAddressDao()
         )
 
+        addressRepository.save(
+            initAddress(
+                addressLine1 = "on the road",
+                city = "Out There",
+                zipCode = "1001",
+            ).toAddressDao()
+        )
+
         val addresses = addressRepository.findByZipCode(zipCode = "1234")
 
         assertAll {
             assertThat(addresses).hasSize(2)
             addresses.forEach {
                 assertThat(it.addressLine1).isIn("somewhere out there", "somewhere in there")
+                assertThat(it.city).isEqualTo("Rud")
             }
         }
     }
 
     @Test
-    fun `should write then read an address entity`() {
+    fun `should write then read an address entity by id`() {
         val addressToPersist = initAddress(
             addressLine1 = "somewhere out there",
             addressLine2 = "where the streets have no name",
