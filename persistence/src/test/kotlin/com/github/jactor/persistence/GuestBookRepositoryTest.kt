@@ -68,7 +68,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             usertype = User.Usertype.ACTIVE,
         )
 
-        val userDao = userRepository.save(user = user.toUserDao())
+        val userDao = userRepository.save(userDao = user.toUserDao())
         guestBookRepository.save(
             guestBookDao = initGuestBook(
                 entries = emptySet(),

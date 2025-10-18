@@ -124,8 +124,8 @@ class UserService(private val userRepository: UserRepository = UserRepositoryObj
     suspend fun find(id: UUID): User? = userRepository.findById(id = id)?.toUser()
 
     @Transactional
-    suspend fun update(user: User): User = userRepository.save(user.toUserDao()).toUser()
-    suspend fun create(createUser: CreateUser): User = userRepository.save(user = createUser.toUserDao()).toUser()
+    suspend fun update(user: User): User = userRepository.save(userDao = user.toUserDao()).toUser()
+    suspend fun create(createUser: CreateUser): User = userRepository.save(userDao = createUser.toUserDao()).toUser()
     suspend fun findUsernames(userType: UserDao.UserType): List<String> = userRepository.findUsernames(
         userType = listOf(userType)
     )
@@ -209,7 +209,7 @@ object Users : UUIDTable(name = "T_USER", columnName = "ID") {
     val timeOfModification = datetime("UPDATED_TIME")
 
     val emailAddress = text("EMAIL").nullable()
-    val username = text("USERNAME")
+    val username = text("USER_NAME")
     val personId = uuid("PERSON_ID").references(People.id)
     val userType = text("USER_TYPE")
     val inactiveSince = datetime("INACTIVE_SINCE").nullable()
@@ -223,7 +223,7 @@ interface UserRepository {
     fun findByPersonId(id: UUID): List<UserDao>
     fun findByUsername(username: String): UserDao?
     fun findUsernames(userType: List<UserDao.UserType>): List<String>
-    fun save(user: UserDao): UserDao
+    fun save(userDao: UserDao): UserDao
 }
 
 @Repository
@@ -276,9 +276,9 @@ object UserRepositoryObject : UserRepository {
             .map { it[Users.username] }
     }
 
-    override fun save(user: UserDao): UserDao = when (user.isPersisted) {
-        true -> update(user = user)
-        false -> insert(user = user)
+    override fun save(userDao: UserDao): UserDao = when (userDao.isPersisted) {
+        true -> update(user = userDao)
+        false -> insert(user = userDao)
     }
 
     private fun insert(user: UserDao): UserDao = transaction {

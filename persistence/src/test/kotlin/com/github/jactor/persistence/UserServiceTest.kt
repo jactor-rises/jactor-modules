@@ -88,7 +88,7 @@ internal class UserServiceTest {
             username = "jactor",
         )
 
-        every { userRepositoryMockk.save(user = any()) } returns initUserDao(createUserCommand = createUserCommand)
+        every { userRepositoryMockk.save(userDao = any()) } returns initUserDao(createUserCommand = createUserCommand)
         every { personRepositoryMockk.findById(id = createUserCommand.personId!!) } returns mockk {
             every { toPerson() } returns initPerson(surname = "Jacobsen")
         }

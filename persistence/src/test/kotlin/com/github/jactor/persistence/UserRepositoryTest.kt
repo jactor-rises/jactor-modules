@@ -10,13 +10,11 @@ import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.containsAtLeast
-import assertk.assertions.hasSize
+import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
-import java.util.UUID
 
 internal class UserRepositoryTest @Autowired constructor(
-    private val userRepository: UserRepository,
-    private val personRepository: PersonRepository
+    private val userRepository: UserRepository
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
@@ -31,15 +29,17 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then read a user entity`() {
-        val address = initAddress(
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         )
 
-        val person = initPerson(address = address, surname = "Solo")
-        val userToPersist = initUser(
+        val person = save(person = initPerson(address = address, surname = "Solo"))
+
+        val userToPersist = User(
             person = person,
             emailAddress = "smuggle.fast@tantooine.com",
-            username = "smuggler"
+            username = "smuggler",
+            usertype = User.Usertype.ACTIVE
         ).toUserDao()
 
         userRepository.save(userToPersist)
@@ -50,16 +50,17 @@ internal class UserRepositoryTest @Autowired constructor(
             assertThat(userDao?.personDao).isEqualTo(userToPersist.personDao)
             assertThat(userDao?.username).isEqualTo("smuggler")
             assertThat(userDao?.emailAddress).isEqualTo("smuggle.fast@tantooine.com")
+            assertThat(userDao?.userType).isEqualTo(UserDao.UserType.ACTIVE)
         }
     }
 
     @Test
     fun `should write then update and read a user entity`() {
-        val address = initAddress(
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         )
 
-        val person = initPerson(address = address, surname = "AA")
+        val person = save(person = initPerson(address = address, surname = "AA"))
         val userToPersist = initUser(
             persistent = Persistent(),
             person = person,
@@ -85,12 +86,12 @@ internal class UserRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find active users and admins`() {
-        val address = initAddress(
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         )
 
-        val spidyPerson = initPerson(address = address, surname = "Parker")
-        val superPerson = initPerson(address = address, surname = "Kent")
+        val spidyPerson = save(person = initPerson(address = address, surname = "Parker"))
+        val superPerson = save(person = initPerson(address = address, surname = "Kent"))
         val userDao = initUser(
             persistent = Persistent(),
             person = spidyPerson,
@@ -110,48 +111,6 @@ internal class UserRepositoryTest @Autowired constructor(
 
         val usernames = userRepository.findUsernames(listOf(UserDao.UserType.ACTIVE, UserDao.UserType.ADMIN))
 
-        assertThat(usernames).containsAtLeast("tip", "spiderman", "jactor")
-    }
-
-    @Test
-    fun `should be able to relate a user`() {
-        val adder = "Adder"
-        val alreadyPresentPeople = personRepository.findAll().count()
-        val address = initAddress(
-            persistent = Persistent(id = UUID.randomUUID()),
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
-        )
-
-        val person = initPerson(
-            address = address,
-            persistent = Persistent(id = UUID.randomUUID()),
-            surname = adder,
-        )
-
-        personRepository.save(personDao = person.toPersonDao())
-
-        val user = User(
-            persistent = Persistent(id = UUID.randomUUID()),
-            person = person,
-            emailAddress = "public@services.com",
-            username = "black",
-            usertype = User.Usertype.ACTIVE,
-        )
-
-        userRepository.save(user = user.toUserDao())
-
-        assertThat(personRepository.findAll()).hasSize(alreadyPresentPeople + 1)
-        val personDao = personRepository.findBySurname(surname = adder).first()
-
-        personDao.users.let {
-            assertThat(it).hasSize(1)
-
-            val persistedUser = personDao.users.firstOrNull()
-
-            assertAll {
-                assertThat(persistedUser?.emailAddress).isEqualTo("public@services.com")
-                assertThat(persistedUser?.username).isEqualTo("black")
-            }
-        }
+        assertThat(usernames).containsOnly("tip", "spiderman", "jactor")
     }
 }

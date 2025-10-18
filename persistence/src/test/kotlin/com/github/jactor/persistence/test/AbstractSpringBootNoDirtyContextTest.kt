@@ -1,5 +1,10 @@
 package com.github.jactor.persistence.test
 
+import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.JactorPersistenceRepositiesConfig
+import com.github.jactor.persistence.Person
+import com.github.jactor.persistence.User
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 
@@ -10,4 +15,16 @@ import org.springframework.transaction.annotation.Transactional
  */
 @SpringBootTest
 @Transactional
-abstract class AbstractSpringBootNoDirtyContextTest
+abstract class AbstractSpringBootNoDirtyContextTest {
+    @Autowired
+    private lateinit var jactorPersistenceRepositiesConfig: JactorPersistenceRepositiesConfig
+
+    protected fun save(address: Address): Address = jactorPersistenceRepositiesConfig.addressRepository
+        .save(addressDao = address.toAddressDao()).toAddress()
+
+    protected fun save(person: Person): Person = jactorPersistenceRepositiesConfig.personRepository
+        .save(personDao = person.toPersonDao()).toPerson()
+
+    protected fun save(user: User): User = jactorPersistenceRepositiesConfig.userRepository
+        .save(userDao = user.toUserDao()).toUser()
+}

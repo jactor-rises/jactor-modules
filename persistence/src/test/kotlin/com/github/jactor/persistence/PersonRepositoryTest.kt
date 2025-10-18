@@ -31,11 +31,9 @@ internal class PersonRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then read a person entity`() {
-        val addressId = addressRepository.save(
-            addressDao = initAddressDao(
-                zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
-            )
-        ).id ?: fail { "not persisted?!!!" }
+        val addressId = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
+        ).persistent.id ?: fail { "not persisted?!!!" }
 
         val addressDao = addressRepository.findById(id = addressId) ?: fail { "Address (id=$addressId) not found???" }
         val allreadyPresentPeople = personRepository.findAll().count()
@@ -66,13 +64,9 @@ internal class PersonRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then update and read a person entity`() {
-        val addressId = addressRepository.save(
-            initAddress(
-                addressLine1 = "Test Boulevard 1",
-                city = "Testington",
-                zipCode = "1001",
-            ).toAddressDao()
-        ).id ?: fail { "not persisted?!!!" }
+        val addressId = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
+        ).persistent.id ?: fail { "not persisted?!!!" }
 
         val addressDao = addressRepository.findById(id = addressId) ?: fail { "Address (id=$addressId) not found???" }
 

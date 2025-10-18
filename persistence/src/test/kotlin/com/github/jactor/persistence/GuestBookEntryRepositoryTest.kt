@@ -32,7 +32,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             username = "causual"
         ).toUserDao()
 
-        val savedUser = userRepository.save(user = user)
+        val savedUser = userRepository.save(userDao = user)
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
@@ -71,7 +71,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             username = "causual"
         )
 
-        val savedUser = userRepository.save(user = user.toUserDao())
+        val savedUser = userRepository.save(userDao = user.toUserDao())
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
@@ -120,7 +120,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             username = "causual"
         )
 
-        val savedUser = userRepository.save(user = user.toUserDao())
+        val savedUser = userRepository.save(userDao = user.toUserDao())
         val guestBook = initGuestBook(
             entries = emptySet(),
             title = "home sweet home",
@@ -142,7 +142,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             username = "hidden"
         )
 
-        userRepository.save(user = anotherUser.toUserDao())
+        userRepository.save(userDao = anotherUser.toUserDao())
 
         val anotherSavedGuestBook = guestBookRepository.save(guestBookDao = guestBook.toGuestBookDao())
         val anotherEntry = initGuestBookEntry(

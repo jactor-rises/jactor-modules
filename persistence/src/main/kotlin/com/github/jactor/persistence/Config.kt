@@ -38,11 +38,11 @@ class ExposedConfig {
 
 @Configuration
 class JactorPersistenceRepositiesConfig(
-    private val addressRepository: AddressRepository,
-    private val blogRepository: BlogRepository,
-    private val guestBookRepository: GuestBookRepository,
-    private val personRepository: PersonRepository,
-    private val userRepository: UserRepository,
+    internal val addressRepository: AddressRepository,
+    internal val blogRepository: BlogRepository,
+    internal val guestBookRepository: GuestBookRepository,
+    internal val personRepository: PersonRepository,
+    internal val userRepository: UserRepository,
 ) {
 
     init {
