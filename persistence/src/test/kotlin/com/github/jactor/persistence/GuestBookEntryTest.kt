@@ -20,15 +20,15 @@ internal class GuestBookEntryTest {
             guestBook = initGuestBook()
         )
 
-        val (creatorName, entry, guestBook) = GuestBookEntry(
-            creatorName = guestBookEntry.creatorName,
+        val (entry, creatorName, guestBook) = GuestBookEntry(
+            guestName = guestBookEntry.guestName,
             entry = guestBookEntry.entry,
             persistent = guestBookEntry.persistent,
             guestBook = guestBookEntry.guestBook
         )
 
         assertAll {
-            assertThat(creatorName).isEqualTo(guestBookEntry.creatorName)
+            assertThat(creatorName).isEqualTo(guestBookEntry.guestName)
             assertThat(guestBook).isEqualTo(guestBookEntry.guestBook)
             assertThat(entry).isEqualTo(guestBookEntry.entry)
         }
@@ -45,7 +45,7 @@ internal class GuestBookEntryTest {
         )
 
         val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = GuestBookEntry(
-            creatorName = persistent.createdBy,
+            guestName = persistent.createdBy,
             entry = "entry",
             persistent = persistent,
             guestBook = initGuestBook()

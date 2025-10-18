@@ -413,7 +413,7 @@ object BlogRepositoryObject : BlogRepository {
         it[Blogs.timeOfModification] = blogDao.timeOfModification
         it[Blogs.title] = blogDao.title
         it[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
-    }?.value?.let { blogDao.copy(id = it) } ?: error("Unable to insert BlogDao: $blogDao")
+    }.value.let { blogDao.copy(id = it) }
 
     private fun update(blogDao: BlogDao): BlogDao = Blogs.update(
         where = { Blogs.id eq blogDao.id }
@@ -440,7 +440,7 @@ object BlogRepositoryObject : BlogRepository {
         insert[modifiedBy] = blogEntryDao.modifiedBy
         insert[timeOfCreation] = blogEntryDao.timeOfCreation
         insert[timeOfModification] = blogEntryDao.timeOfModification
-    }?.value?.let { blogEntryDao.copy(id = it) } ?: error("Unable to insert BlogEntryDao: $blogEntryDao")
+    }.value.let { blogEntryDao.copy(id = it) }
 
     private fun update(blogEntryDao: BlogEntryDao): BlogEntryDao = BlogEntries.update(
         where = { BlogEntries.id eq blogEntryDao.id },

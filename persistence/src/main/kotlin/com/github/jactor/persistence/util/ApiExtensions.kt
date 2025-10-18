@@ -112,7 +112,7 @@ fun CreateUserCommand.toCreateUser() = CreateUser(
 fun GuestBookEntryDto.toGuestBookEntry(parent: GuestBook?) = GuestBookEntry(
     persistent = persistentDto.toPersistent(),
 
-    creatorName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
+    guestName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
     entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL },
     guestBook = parent
 )

@@ -60,7 +60,7 @@ internal class GuestBookServiceTest {
         val guestBookEntryModel = guestBookServiceToTest.findEntry(id = uuid) ?: fail { "missed mocking?" }
 
         assertAll {
-            assertThat(guestBookEntryModel.creatorName).isEqualTo("me")
+            assertThat(guestBookEntryModel.guestName).isEqualTo("me")
             assertThat(guestBookEntryModel.entry).isEqualTo("too")
         }
     }
@@ -69,6 +69,7 @@ internal class GuestBookServiceTest {
     fun `should save GuestBookDto as GuestBookEntity`() = runTest {
         val guestBookEntitySlot = slot<GuestBookDao>()
         val guestBook = initGuestBook(
+            persistent = Persistent(id = uuid),
             title = "home sweet home",
             user = initUser().withId()
         )
@@ -110,7 +111,7 @@ internal class GuestBookServiceTest {
 
         assertAll {
             assertThat(guestBookEntryEntity.guestBookDao).isNotNull()
-            assertThat(guestBookEntryEntity.creatorName).isEqualTo("me")
+            assertThat(guestBookEntryEntity.guestName).isEqualTo("me")
             assertThat(guestBookEntryEntity.entry).isEqualTo("if i where a rich man...")
         }
     }

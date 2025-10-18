@@ -5,7 +5,11 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import com.github.jactor.persistence.test.*
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
 import com.github.jactor.shared.test.isNotOlderThan
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail

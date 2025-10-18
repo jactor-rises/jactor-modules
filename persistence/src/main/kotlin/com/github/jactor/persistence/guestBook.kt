@@ -20,14 +20,23 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.javatime.datetime
-import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.jdbc.andWhere
+import org.jetbrains.exposed.v1.jdbc.insertAndGetId
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 import java.util.*
 
@@ -172,7 +181,7 @@ class GuestBookServiceBean(private val guestBookRepository: GuestBookRepository)
     override suspend fun create(createGuestBookEntry: CreateGuestBookEntry): GuestBookEntry {
         return guestBookRepository.save(
             guestBookEntryDao = GuestBookEntryDao(
-                creatorName = createGuestBookEntry.creatorName,
+                guestName = createGuestBookEntry.creatorName,
                 entry = createGuestBookEntry.entry,
                 guestBookId = createGuestBookEntry.guestBookId
             )
@@ -203,7 +212,7 @@ data class GuestBook(
     val title: String?,
     val user: User?,
 ) {
-    val id: UUID? get() = persistent.id
+    val id: UUID get() = persistent.id ?: error("Guest book is not persisted!")
 
     constructor(persistent: Persistent, guestBook: GuestBook) : this(
         persistent = persistent,
@@ -227,7 +236,7 @@ data class GuestBook(
     )
 
     fun toGuestBookDao() = GuestBookDao(
-        id = id,
+        id = persistent.id,
         createdBy = persistent.createdBy,
         modifiedBy = persistent.modifiedBy,
         timeOfCreation = persistent.timeOfCreation,
@@ -259,23 +268,23 @@ data class CreateGuestBookEntry(
 
 @JvmRecord
 data class GuestBookEntry(
-    val creatorName: String,
     val entry: String,
+    val guestName: String,
     val guestBook: GuestBook?,
     val persistent: Persistent,
 ) {
     val id: UUID? get() = persistent.id
 
     constructor(guestBookEntryDto: GuestBookEntryDto) : this(
-        creatorName = requireNotNull(guestBookEntryDto.creatorName) { "Creator name cannot be null!" },
         entry = requireNotNull(guestBookEntryDto.entry) { "Entry cannot be null!" },
+        guestName = requireNotNull(guestBookEntryDto.creatorName) { "Creator name cannot be null!" },
         persistent = guestBookEntryDto.persistentDto.toPersistent(),
         guestBook = guestBookEntryDto.guestBook?.toGuestBook(),
     )
 
     fun toGuestBookEntryDto() = GuestBookEntryDto(
         entry = entry,
-        creatorName = creatorName,
+        creatorName = guestName,
         guestBook = guestBook?.toDto(),
         persistentDto = persistent.toPersistentDto(),
     )
@@ -286,7 +295,7 @@ data class GuestBookEntry(
         modifiedBy = persistent.modifiedBy,
         timeOfCreation = persistent.timeOfCreation,
         timeOfModification = persistent.timeOfModification,
-        creatorName = creatorName,
+        guestName = guestName,
         entry = entry,
         guestBookId = guestBook?.persistent?.id ?: error("Guest book must have an id!"),
     )
@@ -303,7 +312,7 @@ object GuestBooks : UUIDTable(name = "T_GUEST_BOOK", columnName = "ID") {
 
 object GuestBookEntries : UUIDTable(name = "T_GUEST_BOOK_ENTRY", columnName = "ID") {
     val createdBy = text("CREATED_BY")
-    val creatorName = text("CREATOR_NAME")
+    val guestName = text("GUEST_NAME")
     val entry = text("ENTRY")
     val guestBookId = uuid("GUEST_BOOK_ID").references(GuestBooks.id)
     val modifiedBy = text("UPDATED_BY")
@@ -323,7 +332,7 @@ interface GuestBookRepository {
 }
 
 @Repository
-class GuestBookRepositoryImpl: GuestBookRepository by GuestBookRepositoryObject
+class GuestBookRepositoryImpl : GuestBookRepository by GuestBookRepositoryObject
 
 object GuestBookRepositoryObject : GuestBookRepository {
     override fun findAllGuestBooks(): List<GuestBookDao> = transaction {
@@ -399,23 +408,23 @@ object GuestBookRepositoryObject : GuestBookRepository {
         where = { GuestBookEntries.id eq guestBookEntryDao.id }
     ) {
         it[createdBy] = guestBookEntryDao.createdBy
-        it[creatorName] = guestBookEntryDao.creatorName
+        it[guestBookId] = requireNotNull(guestBookEntryDao.guestBookId) { "GuestBookId cannot be null!" }
+        it[guestName] = guestBookEntryDao.guestName
         it[entry] = guestBookEntryDao.entry
         it[modifiedBy] = guestBookEntryDao.modifiedBy
         it[timeOfCreation] = guestBookEntryDao.timeOfCreation
         it[timeOfModification] = guestBookEntryDao.timeOfModification
     }.let { guestBookEntryDao }
 
-    private fun insert(
-        guestBookEntryDao: GuestBookEntryDao
-    ): GuestBookEntryDao = GuestBookEntries.insertIgnoreAndGetId {
+    private fun insert(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao = GuestBookEntries.insertAndGetId {
         it[createdBy] = guestBookEntryDao.createdBy
-        it[creatorName] = guestBookEntryDao.creatorName
+        it[guestBookId] = requireNotNull(guestBookEntryDao.guestBookId) { "GuestBookId cannot be null!" }
+        it[guestName] = guestBookEntryDao.guestName
         it[entry] = guestBookEntryDao.entry
         it[modifiedBy] = guestBookEntryDao.modifiedBy
         it[timeOfCreation] = guestBookEntryDao.timeOfCreation
         it[timeOfModification] = guestBookEntryDao.timeOfModification
-    }?.value.let { guestBookEntryDao.copy(id = it) }
+    }.value.let { guestBookEntryDao.copy(id = it) }
 }
 
 fun ResultRow.toGuestBookDao() = GuestBookDao(
@@ -436,7 +445,7 @@ fun ResultRow.toGuestBookEntryDao() = GuestBookEntryDao(
     modifiedBy = this[GuestBookEntries.modifiedBy],
     timeOfModification = this[GuestBookEntries.timeOfModification],
 
-    creatorName = this[GuestBookEntries.creatorName],
+    guestName = this[GuestBookEntries.guestName],
     entry = this[GuestBookEntries.entry],
     guestBookId = this[GuestBookEntries.guestBookId],
 )
@@ -491,10 +500,16 @@ data class GuestBookEntryDao(
     override val timeOfCreation: LocalDateTime = LocalDateTime.now(),
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
 
-    override var creatorName: String,
+    var guestName: String,
     override var entry: String,
     var guestBookId: UUID? = null
 ) : PersistentDao<GuestBookEntryDao>, EntryDao {
+    override var creatorName: String
+        get() = guestName
+        set(value) {
+            guestName = value
+        }
+
     val guestBookRelation = DaoRelation(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation,
     )
@@ -505,7 +520,7 @@ data class GuestBookEntryDao(
 
     fun toGuestBookEntry() = GuestBookEntry(
         persistent = toPersistent(),
-        creatorName = creatorName,
+        guestName = guestName,
         entry = entry,
         guestBook = guestBookDao.toGuestBook(),
     )

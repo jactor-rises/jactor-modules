@@ -148,7 +148,7 @@ fun initGuestBookEntry(
     guestBook: GuestBook? = null,
     persistent: Persistent = Persistent(),
 ) = GuestBookEntry(
-    creatorName = creatorName,
+    guestName = creatorName,
     entry = entry,
     guestBook = guestBook,
     persistent = persistent,
@@ -160,7 +160,7 @@ fun initGuestBookEntryDao(
 ) = GuestBookEntryDao(
     id = id,
     createdBy = "unit test",
-    creatorName = "unit test",
+    guestName = "unit test",
     entry = "unit test",
     guestBookId = null,
     modifiedBy = "unit test",
