@@ -102,7 +102,8 @@ fun initBlogEntry(
 
 fun initBlogEntryDao(
     id: UUID? = null,
-    timeOfModification: LocalDateTime = LocalDateTime.now()
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+    blogId: UUID = UUID.randomUUID(),
 ) = BlogEntryDao(
     id = id,
     createdBy = "unit test",
@@ -111,6 +112,7 @@ fun initBlogEntryDao(
     modifiedBy = "unit test",
     timeOfCreation = LocalDateTime.now(),
     timeOfModification = timeOfModification,
+    blogId = blogId
 )
 
 fun initCreateUserCommand(

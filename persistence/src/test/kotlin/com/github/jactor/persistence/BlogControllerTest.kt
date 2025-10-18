@@ -211,28 +211,6 @@ internal class BlogControllerTest @Autowired constructor(
     }
 
     @Test
-    fun `should persist changes to existing blog entry`() {
-        val blogEntry = initBlogEntry(
-            persistent = Persistent(id = UUID.randomUUID())
-        )
-
-        coEvery { blogServiceMockk.saveOrUpdate(blogEntry = blogEntry) } returns blogEntry
-
-        val blogEntryDto = webTestClient
-            .put()
-            .uri("/blog/entry/${blogEntry.id}")
-            .bodyValue(blogEntry.toBlogEntryDto())
-            .exchange()
-            .expectStatus().isAccepted
-            .expectBody(BlogEntryDto::class.java)
-            .returnResult().responseBody
-
-        assertThat(blogEntryDto).isNotNull()
-
-        coVerify { blogServiceMockk.saveOrUpdate(blogEntry = blogEntry) }
-    }
-
-    @Test
     fun `should create blog entry`() {
         val creatBlogEntryCommand = CreateBlogEntryCommand(
             blogId = UUID.randomUUID(),

@@ -1,35 +1,6 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.UUID
-import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
-import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.javatime.date
-import org.jetbrains.exposed.v1.javatime.datetime
-import org.jetbrains.exposed.v1.jdbc.andWhere
-import org.jetbrains.exposed.v1.jdbc.insertIgnoreAndGetId
-import org.jetbrains.exposed.v1.jdbc.selectAll
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import org.jetbrains.exposed.v1.jdbc.update
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Repository
-import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.common.DaoRelation
-import com.github.jactor.persistence.common.DaoRelations
-import com.github.jactor.persistence.common.EntryDao
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.common.*
 import com.github.jactor.persistence.util.toBlog
 import com.github.jactor.persistence.util.toBlogEntry
 import com.github.jactor.persistence.util.toCreateBlogEntry
@@ -41,7 +12,25 @@ import com.github.jactor.shared.api.UpdateBlogTitleCommand
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.javatime.date
+import org.jetbrains.exposed.v1.javatime.datetime
+import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.update
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 @RestController
 @RequestMapping(value = ["/blog"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -306,7 +295,7 @@ data class BlogEntry(
     fun toBlogEntryDao() = BlogEntryDao(
         id = persistent.id,
 
-        blogId = blog.persistent.id,
+        blogId = blog.persistent.id ?: error("A blog entry must belong to a persisted blog!"),
         createdBy = persistent.createdBy,
         creatorName = creatorName,
         entry = entry,
@@ -443,7 +432,7 @@ object BlogRepositoryObject : BlogRepository {
         }
     }
 
-    private fun insert(blogEntryDao: BlogEntryDao): BlogEntryDao = BlogEntries.insertIgnoreAndGetId { insert ->
+    private fun insert(blogEntryDao: BlogEntryDao): BlogEntryDao = BlogEntries.insertAndGetId { insert ->
         insert[blogId] = requireNotNull(blogEntryDao.blogId) { "A blog entry must belong to a blog" }
         insert[createdBy] = blogEntryDao.createdBy
         insert[creatorName] = blogEntryDao.creatorName
@@ -529,15 +518,15 @@ data class BlogDao(
 }
 
 data class BlogEntryDao(
-    override var id: UUID?,
-    override val createdBy: String,
+    override var id: UUID? = null,
+    override val createdBy: String = "todo",
     override var creatorName: String,
     override var entry: String,
-    override var modifiedBy: String,
-    override val timeOfCreation: LocalDateTime,
-    override var timeOfModification: LocalDateTime,
+    override var modifiedBy: String = "todo",
+    override val timeOfCreation: LocalDateTime = LocalDateTime.now(),
+    override var timeOfModification: LocalDateTime = LocalDateTime.now(),
 
-    internal var blogId: UUID? = null
+    internal var blogId: UUID,
 ) : PersistentDao<BlogEntryDao>, EntryDao {
     private val blogRelation = DaoRelation(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchBlogRelation,

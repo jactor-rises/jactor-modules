@@ -1,20 +1,16 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDate
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import com.github.jactor.persistence.test.initUser
+import com.github.jactor.persistence.test.*
+import com.github.jactor.shared.test.isNotOlderThan
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDate
 
 internal class BlogRepositoryTest @Autowired constructor(
     private val blogRepository: BlogRepository,
@@ -109,6 +105,41 @@ internal class BlogRepositoryTest @Autowired constructor(
             assertThat(blogs).hasSize(1)
             assertThat(blogs.firstOrNull()).isNotNull()
             assertThat(blogs.firstOrNull()?.created).isEqualTo(LocalDate.now())
+        }
+    }
+
+    @Test
+    fun `should save then read blog entry`() {
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
+        )
+
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
+                person = person,
+                emailAddress = "public@services.com",
+                username = "white",
+            )
+        )
+
+        val blog = save(blog = initBlog(created = LocalDate.now(), title = "and then some...", user = user))
+        val blogEntryDao = BlogEntryDao(
+            blogId = blog.persistent.id ?: error("Blog is not persisted!"),
+            creatorName = "smith",
+            entry = "once upon a time",
+        )
+
+        blogRepository.save(blogEntryDao = blogEntryDao)
+
+        val blogEntries = blogRepository.findBlogEntries()
+
+        assertAll {
+            assertThat(blogEntries).hasSize(1)
+            val blogEntry = blogEntries.firstOrNull()
+            assertThat(blogEntry?.creatorName).isEqualTo("smith")
+            assertThat(blogEntry?.timeOfCreation).isNotNull().isNotOlderThan(seconds = 1)
+            assertThat(blogEntry?.entry).isEqualTo("once upon a time")
         }
     }
 }
