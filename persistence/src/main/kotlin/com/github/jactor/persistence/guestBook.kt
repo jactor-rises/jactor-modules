@@ -1,29 +1,7 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDateTime
-import java.util.UUID
-import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
-import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.javatime.datetime
-import org.jetbrains.exposed.v1.jdbc.andWhere
-import org.jetbrains.exposed.v1.jdbc.insertIgnoreAndGetId
-import org.jetbrains.exposed.v1.jdbc.selectAll
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import org.jetbrains.exposed.v1.jdbc.update
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Repository
-import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.common.DaoRelation
+import com.github.jactor.persistence.common.DaoRelations
 import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
@@ -38,6 +16,20 @@ import com.github.jactor.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.javatime.datetime
+import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
+import java.util.*
 
 @RestController
 @RequestMapping(value = ["/guestBook"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -324,8 +316,8 @@ interface GuestBookRepository {
     fun findByUserId(userId: UUID): GuestBookDao?
     fun findGuestBookById(id: UUID): GuestBookDao?
     fun findGuestBookEntryById(id: UUID): GuestBookEntryDao?
-    fun findGuestBookByUser(user: UserDao): GuestBookDao?
-    fun findGuestBookEntryByGuestBook(guestBookDao: GuestBookDao): List<GuestBookEntryDao>
+    fun findGuestBookByUserId(id: UUID): GuestBookDao?
+    fun findGuestBookEtriesByGuestBookId(id: UUID): List<GuestBookEntryDao>
     fun save(guestBookDao: GuestBookDao): GuestBookDao
     fun save(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao
 }
@@ -357,17 +349,15 @@ object GuestBookRepositoryObject : GuestBookRepository {
             .singleOrNull()?.toGuestBookEntryDao()
     }
 
-    override fun findGuestBookByUser(user: UserDao): GuestBookDao? = transaction {
-        require(user.isPersisted) { "A search of a guestbook requires a persistent user!" }
+    override fun findGuestBookByUserId(id: UUID): GuestBookDao? = transaction {
         GuestBooks.selectAll()
-            .andWhere { GuestBooks.userId eq user.id!! }
+            .andWhere { GuestBooks.userId eq id }
             .singleOrNull()?.toGuestBookDao()
     }
 
-    override fun findGuestBookEntryByGuestBook(guestBookDao: GuestBookDao): List<GuestBookEntryDao> = transaction {
-        require(guestBookDao.isPersisted) { "A search of entries requires a persistent guestbook!" }
+    override fun findGuestBookEtriesByGuestBookId(id: UUID): List<GuestBookEntryDao> = transaction {
         GuestBookEntries.selectAll()
-            .andWhere { GuestBookEntries.guestBookId eq guestBookDao.id!! }
+            .andWhere { GuestBookEntries.guestBookId eq id }
             .map { it.toGuestBookEntryDao() }
     }
 
@@ -389,14 +379,14 @@ object GuestBookRepositoryObject : GuestBookRepository {
         it[userId] = requireNotNull(guestBookDao.userId) { "UserId cannot be null!" }
     }.let { guestBookDao }
 
-    private fun insert(guestBookDao: GuestBookDao): GuestBookDao = GuestBooks.insertIgnoreAndGetId {
+    private fun insert(guestBookDao: GuestBookDao): GuestBookDao = GuestBooks.insertAndGetId {
         it[createdBy] = guestBookDao.createdBy
         it[title] = guestBookDao.title
         it[modifiedBy] = guestBookDao.modifiedBy
         it[timeOfCreation] = guestBookDao.timeOfCreation
         it[timeOfModification] = guestBookDao.timeOfModification
         it[userId] = requireNotNull(guestBookDao.userId) { "UserId cannot be null!" }
-    }?.value.let { guestBookDao.copy(id = it) }
+    }.value.let { guestBookDao.copy(id = it) }
 
     override fun save(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao = transaction {
         when (guestBookEntryDao.isPersisted) {
@@ -459,12 +449,18 @@ data class GuestBookDao(
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
 
     var title: String = "no-name",
-    var entries: MutableSet<GuestBookEntryDao> = mutableSetOf(),
     internal var userId: UUID? = null,
 ) : PersistentDao<GuestBookDao?> {
+    private val guestBookEntryRelations = DaoRelations(
+        fetchRelations = JactorPersistenceRepositiesConfig.fetchGuestBookEntryRelations,
+    )
+
     private val userRelation = DaoRelation(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
     )
+
+    val entries: List<GuestBookEntryDao>
+        get() = guestBookEntryRelations.fetchRelations(id = id ?: error("guest book is not persisted"))
 
     val user: UserDao
         get() = userRelation.fetchRelatedInstance(id = userId) ?: error("no user relation?")

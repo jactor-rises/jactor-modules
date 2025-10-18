@@ -48,7 +48,7 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
 
         guestBookRepository.save(guestBookEntryDao = guestBookEntry)
 
-        val entriesByGuestBook = guestBookRepository.findGuestBookEntryByGuestBook(guestBookDao = savedGuestBook)
+        val entriesByGuestBook = guestBookRepository.findGuestBookEtriesByGuestBookId(id = savedGuestBook.id!!)
         assertThat(entriesByGuestBook).hasSize(1)
         val entry = entriesByGuestBook.first()
 
@@ -88,14 +88,14 @@ internal class GuestBookEntryRepositoryTest @Autowired constructor(
             ).toGuestBookEntryDao()
         )
 
-        val entriesByGuestBook = guestBookRepository.findGuestBookEntryByGuestBook(guestBookDao = savedGuestBook)
+        val entriesByGuestBook = guestBookRepository.findGuestBookEtriesByGuestBookId(id = savedGuestBook.id!!)
         assertThat(entriesByGuestBook).hasSize(1)
         entriesByGuestBook.first().apply { entry = "On the road again" }.modifiedBy(modifier = "Willie")
 
         guestBookRepository.save(guestBookEntryDao = entriesByGuestBook.first())
 
-        val modifiedEntriesByGuestBook = guestBookRepository.findGuestBookEntryByGuestBook(
-            guestBookDao = savedGuestBook
+        val modifiedEntriesByGuestBook = guestBookRepository.findGuestBookEtriesByGuestBookId(
+            id = savedGuestBook.id!!
         )
 
         assertThat(modifiedEntriesByGuestBook).hasSize(1)

@@ -141,8 +141,8 @@ data class User(
     val username: String?,
     val usertype: Usertype,
 ) {
-    val id: UUID?
-        get() = persistent.id
+    val id: UUID
+        get() = persistent.id ?: error("User is not persisted!")
 
     fun toUserDao() = UserDao(
         id = persistent.id,

@@ -1,51 +1,42 @@
 package com.github.jactor.persistence
 
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
-import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initGuestBook
-import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.*
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
 
 internal class GuestBookRepositoryTest @Autowired constructor(
-    private val guestBookRepository: GuestBookRepository,
-    private val userRepository: UserRepository,
+    private val guestBookRepository: GuestBookRepository
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should write then read guest book`() {
-        val address = initAddress(
-            zipCode = "1001",
-            addressLine1 = "Test Boulevard 1",
-            city = "Testington"
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
 
-        val person = initPerson(address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "AA")
-        val user = User(
-            Persistent(id = UUID.randomUUID()),
-            person = person,
-            emailAddress = "casuel@tantooine.com",
-            username = "causual",
-            usertype = User.Usertype.ACTIVE
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
+                person = person,
+                emailAddress = "casuel@tantooine.com",
+                username = "causual",
+            )
         )
 
-        val userDao = userRepository.save(user.toUserDao())
         guestBookRepository.save(
-            guestBookDao = initGuestBook(
-                entries = emptySet(),
+            guestBookDao = GuestBookDao(
                 title = "home sweet home",
-                user = userDao.toUser(),
-            ).toGuestBookDao()
+                userId = user.id,
+            )
         )
 
-        val guestBookEntity = guestBookRepository.findGuestBookByUser(user = userDao)
+        val guestBookEntity = guestBookRepository.findGuestBookByUserId(id = user.id)
 
         assertAll {
             assertThat(guestBookEntity?.title).isEqualTo("home sweet home")
@@ -55,39 +46,36 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
     @Test
     fun `should write then update and read guest book`() {
-        val address = initAddress(
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
 
-        val person = initPerson(address = address, surname = "AA")
-        val user = User(
-            persistent = Persistent(),
-            person = person,
-            emailAddress = "casuel@tantooine.com",
-            username = "causual",
-            usertype = User.Usertype.ACTIVE,
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
+                person = person,
+                emailAddress = "casuel@tantooine.com",
+                username = "causual",
+            )
         )
 
-        val userDao = userRepository.save(userDao = user.toUserDao())
         guestBookRepository.save(
             guestBookDao = initGuestBook(
                 entries = emptySet(),
                 title = "home sweet home",
-                user = userDao.toUser(),
+                user = user,
             ).toGuestBookDao()
         )
 
-        guestBookRepository.save(userDao.guestBook ?: fail(message = "User missing guest book"))
-
-        val guestBookDaoToUpdate = guestBookRepository.findGuestBookByUser(user = userDao)
-            ?: fail(message = "Should have found a guest book for user ${userDao.username}")
+        val guestBookDaoToUpdate = guestBookRepository.findGuestBookByUserId(id = user.id)
+            ?: fail(message = "Should have found a guest book for user ${user.username}")
 
         guestBookDaoToUpdate.title = "5000 thousands miles away from home"
 
         guestBookRepository.save(guestBookDaoToUpdate)
 
-        val guestBookDao = guestBookRepository.findGuestBookByUser(user = userDao)
-            ?: fail(message = "Should have found a guest book for user ${userDao.username}")
+        val guestBookDao = guestBookRepository.findGuestBookByUserId(id = user.id)
+            ?: fail(message = "Should have found a guest book for user ${user.username}")
 
         assertThat(guestBookDao.title).isEqualTo("5000 thousands miles away from home")
     }

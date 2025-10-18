@@ -496,7 +496,7 @@ data class BlogDao(
     )
 
     val entries: List<BlogEntryDao>
-        get() = blogEntryRelations.fetchRelations(id ?: error("Blog is not persisted!"))
+        get() = blogEntryRelations.fetchRelations(id = id ?: error("Blog is not persisted!"))
 
     val user: UserDao
         get() = userRelation.fetchRelatedInstance(id = userId) ?: error("Missing user relation for blog!")
