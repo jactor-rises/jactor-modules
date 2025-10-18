@@ -49,6 +49,7 @@ class JactorPersistenceRepositiesConfig(
         fetchAddressRelation = { addressRepository.findById(id = it) }
         fetchBlogRelation = { blogRepository.findBlogById(id = it) }
         fetchBlogRelations = { blogRepository.findBlogsByUserId(id = it) }
+        fetchBlogEntryRelations = { blogRepository.findBlogEntriesByBlogId(id = it) }
         fetchGuestBookRelation = { guestBookRepository.findGuestBookById(id = it) }
         fetchPersonRelation = { personRepository.findById(id = it) }
         fetchUserRelation = { userRepository.findById(id = it) }
@@ -59,6 +60,7 @@ class JactorPersistenceRepositiesConfig(
         internal var fetchAddressRelation: (UUID) -> AddressDao? = { null }
         internal var fetchBlogRelation: (UUID) -> BlogDao? = { null }
         internal var fetchBlogRelations: (UUID) -> List<BlogDao> = { emptyList() }
+        internal var fetchBlogEntryRelations: (UUID) -> List<BlogEntryDao> = { emptyList() }
         internal var fetchGuestBookRelation: (UUID) -> GuestBookDao? = { null }
         internal var fetchPersonRelation: (UUID) -> PersonDao? = { null }
         internal var fetchUserRelation: (UUID) -> UserDao? = { null }

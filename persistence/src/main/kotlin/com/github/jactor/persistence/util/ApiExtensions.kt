@@ -62,9 +62,9 @@ private val PersistentDto.isWithId: Boolean get() = id != null
 fun BlogEntryDto.toBlogEntry() = BlogEntry(
     persistent = persistentDto.toPersistent(),
 
-    blog = blogDto?.toBlog(),
-    creatorName = creatorName,
-    entry = entry,
+    blog = blogDto?.toBlog() ?: error("A blog entry must belong to a blog!"),
+    creatorName = creatorName ?: error("A blog entry must be created by someone!"),
+    entry = entry ?: error("A blog entry must have an entry!"),
 )
 
 fun GuestBookDto.toGuestBook() = GuestBook(

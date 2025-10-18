@@ -4,29 +4,21 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
 import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initBlog
-import com.github.jactor.persistence.test.initBlogEntry
-import com.github.jactor.persistence.test.initPerson
-import com.github.jactor.persistence.test.initUser
+import com.github.jactor.persistence.test.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.util.UUID
 
 class DatabaseRelationsTest @Autowired constructor(
-    private val addressRepository: AddressRepository,
     private val blogRepository: BlogRepository,
-    private val guestBookRepository: GuestBookRepository,
     private val personRepository: PersonRepository,
-    private val userRepository: UserRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
-    fun `should be able to relate a blog entry from a user`() {
+    fun `should be able to get a blog entry from the related entries on the blog`() {
         val address = save(
             address = initAddress(
                 zipCode = "1001",
@@ -35,33 +27,25 @@ class DatabaseRelationsTest @Autowired constructor(
             )
         )
 
-        val person = personRepository.save(
-            personDao = initPerson(
-                address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
-            ).toPersonDao()
-        ).toPerson()
-
-        val user = userRepository.save(
-            userDao = User(
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
                 person = person,
                 emailAddress = "public@services.com",
                 username = "black",
-                usertype = User.Usertype.ACTIVE,
-            ).toUserDao()
-        ).toUser()
+            )
+        )
 
-        val blog = blogRepository.save(
-            blogDao = initBlog(
-                created = LocalDate.now(), title = "Blah", user = user
-            ).toBlogDao()
-        ).toBlog()
+        val blog = save(
+            blog = initBlog(created = LocalDate.now(), title = "Blah", user = user)
+        )
 
-        blogRepository.save(
-            blogEntryDao = initBlogEntry(
+        save(
+            blogEntry = initBlogEntry(
                 blog = blog,
                 creatorName = "arnold",
                 entry = "i'll be back"
-            ).toBlogEntryDao()
+            )
         )
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
@@ -75,40 +59,6 @@ class DatabaseRelationsTest @Autowired constructor(
         assertAll {
             assertThat(blogEntryEntity.entry).isEqualTo("i'll be back")
             assertThat(blogEntryEntity.creatorName).isEqualTo("arnold")
-        }
-    }
-
-    @Test
-    fun `should find blog by title related to a user`() {
-        val address = save(
-            address = initAddress(
-                zipCode = "1001",
-                addressLine1 = "Test Boulevard 1",
-                city = "Testing"
-            )
-        )
-
-        val person = save(person = initPerson(address = address, surname = "Adder"))
-        val user = save(
-            user = User(
-                person = person,
-                emailAddress = "public@services.com",
-                username = "black",
-                usertype = User.Usertype.ACTIVE,
-            )
-        )
-
-        val blogToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
-
-        blogRepository.save(blogDao = blogToSave)
-
-        val blogs = blogRepository.findBlogsByTitle("Blah")
-
-        assertAll {
-            assertThat(blogs).hasSize(1)
-            assertThat(blogs.firstOrNull()).isNotNull()
-            assertThat(blogs.firstOrNull()?.created).isEqualTo(LocalDate.now())
-
         }
     }
 
@@ -145,6 +95,37 @@ class DatabaseRelationsTest @Autowired constructor(
                 assertThat(persistedUser?.emailAddress).isEqualTo("public@services.com")
                 assertThat(persistedUser?.username).isEqualTo("black")
             }
+        }
+    }
+
+    @Test
+    fun `should be able to relate a blog entries from a blog`() {
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
+        )
+
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
+                person = person,
+                emailAddress = "public@services.com",
+                username = "black",
+            )
+        )
+
+        val blog = save(blog = Blog(created = LocalDate.now(), title = "Blah", user = user))
+        save(blogEntry = BlogEntry(blog = blog, creatorName = "arnold", entry = "i'll be back"))
+
+        val blogEntity = blogRepository.findBlogsByTitle(title = blog.title).firstOrNull() ?: fail {
+            "Unable to find any blogs by title ${blog.title}"
+        }
+
+        assertThat(blogEntity.entries).hasSize(1)
+        val blogEntryEntity = blogEntity.entries.iterator().next()
+
+        assertAll {
+            assertThat(blogEntryEntity.entry).isEqualTo("i'll be back")
+            assertThat(blogEntryEntity.creatorName).isEqualTo("arnold")
         }
     }
 }

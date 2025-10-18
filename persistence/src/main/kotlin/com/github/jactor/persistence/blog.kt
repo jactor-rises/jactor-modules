@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import com.github.jactor.persistence.common.DaoRelation
+import com.github.jactor.persistence.common.DaoRelations
 import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
@@ -37,10 +38,10 @@ import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.CreateBlogEntryCommand
 import com.github.jactor.shared.api.UpdateBlogTitleCommand
-import com.github.jactor.shared.whenFalse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 
 @RestController
 @RequestMapping(value = ["/blog"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -244,7 +245,7 @@ class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService 
 
     override suspend fun saveOrUpdate(blog: Blog): Blog = blogRepository.save(blog.toBlogDao()).toBlog()
     override suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry {
-        require(blogEntry.isCoupledWithBlog) { "An entry must belong to a persistent blog!" }
+        require(blogEntry.isBlogPersisted) { "An entry must belong to a persistent blog!" }
         return blogRepository.save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
     }
 
@@ -261,14 +262,14 @@ data class Blog(
     internal val persistent: Persistent = Persistent(),
 
     val created: LocalDate?,
-    val title: String?,
+    val title: String,
     val user: User?,
 ) {
     val id: UUID? get() = persistent.id
 
     fun toBlogDao() = BlogDao(
         id = persistent.id,
-        created = created,
+        created = created ?: persistent.timeOfCreation.toLocalDate(),
         createdBy = persistent.createdBy,
         modifiedBy = persistent.modifiedBy,
         timeOfCreation = persistent.timeOfCreation,
@@ -286,18 +287,18 @@ data class Blog(
 
 @JvmRecord
 data class BlogEntry(
-    val blog: Blog?,
-    val creatorName: String?,
-    val entry: String?,
+    val blog: Blog,
+    val creatorName: String,
+    val entry: String,
     val persistent: Persistent = Persistent(),
 ) {
     val id: UUID? get() = persistent.id
-    val isCoupledWithBlog: Boolean
-        get() = blog?.persistent?.id != null
+    val isBlogPersisted: Boolean
+        get() = blog.persistent.id != null
 
     fun toBlogEntryDto() = BlogEntryDto(
         persistentDto = persistent.toPersistentDto(),
-        blogDto = blog?.toBlogDto(),
+        blogDto = blog.toBlogDto(),
         creatorName = creatorName,
         entry = entry,
     )
@@ -305,10 +306,10 @@ data class BlogEntry(
     fun toBlogEntryDao() = BlogEntryDao(
         id = persistent.id,
 
-        blogId = blog?.persistent?.id,
+        blogId = blog.persistent.id,
         createdBy = persistent.createdBy,
-        creatorName = requireNotNull(value = creatorName) { "Creator name must not be null" },
-        entry = requireNotNull(value = entry) { "Entry must not be null" },
+        creatorName = creatorName,
+        entry = entry,
         timeOfCreation = persistent.timeOfCreation,
         modifiedBy = persistent.modifiedBy,
         timeOfModification = persistent.timeOfModification,
@@ -335,7 +336,7 @@ object Blogs : UUIDTable(name = "T_BLOG", columnName = "ID") {
     val timeOfModification = datetime("UPDATED_TIME")
 
     val created = date("CREATED")
-    val title = text("TITLE").nullable()
+    val title = text("TITLE")
     val userId = uuid("USER_ID").references(Users.id)
 }
 
@@ -357,7 +358,7 @@ interface BlogRepository {
     fun findBlogEntryById(id: UUID): BlogEntryDao?
     fun findBlogs(): List<BlogDao>
     fun findBlogsByTitle(title: String): List<BlogDao>
-    fun findBlogEntriesByBlogId(blogId: UUID): List<BlogEntryDao>
+    fun findBlogEntriesByBlogId(id: UUID): List<BlogEntryDao>
     fun save(blogDao: BlogDao): BlogDao
     fun save(blogEntryDao: BlogEntryDao): BlogEntryDao
 }
@@ -402,9 +403,9 @@ object BlogRepositoryObject : BlogRepository {
             .map { it.toBlogDao() }
     }
 
-    override fun findBlogEntriesByBlogId(blogId: UUID): List<BlogEntryDao> = transaction {
+    override fun findBlogEntriesByBlogId(id: UUID): List<BlogEntryDao> = transaction {
         BlogEntries.selectAll()
-            .andWhere { BlogEntries.blogId eq blogId }
+            .andWhere { BlogEntries.blogId eq id }
             .map { it.toBlogEntryDao() }
     }
 
@@ -415,8 +416,8 @@ object BlogRepositoryObject : BlogRepository {
         }
     }
 
-    private fun insert(blogDao: BlogDao): BlogDao = Blogs.insertIgnoreAndGetId {
-        it[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
+    private fun insert(blogDao: BlogDao): BlogDao = Blogs.insertAndGetId {
+        it[Blogs.created] = blogDao.created
         it[Blogs.createdBy] = blogDao.createdBy
         it[Blogs.modifiedBy] = blogDao.modifiedBy
         it[Blogs.timeOfCreation] = blogDao.timeOfCreation
@@ -430,7 +431,7 @@ object BlogRepositoryObject : BlogRepository {
     ) { update ->
         update[Blogs.modifiedBy] = blogDao.modifiedBy
         update[Blogs.timeOfModification] = blogDao.timeOfModification
-        update[Blogs.created] = blogDao.created ?: blogDao.timeOfCreation.toLocalDate()
+        update[Blogs.created] = blogDao.created
         update[Blogs.title] = blogDao.title
         update[Blogs.userId] = requireNotNull(blogDao.userId) { "A blog must belong to a user" }
     }.let { blogDao }
@@ -493,14 +494,20 @@ data class BlogDao(
     override var modifiedBy: String = "todo",
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
 
-    var created: LocalDate? = null,
-    var title: String? = null,
-    var entries: MutableSet<BlogEntryDao> = mutableSetOf(),
+    var created: LocalDate = LocalDate.now(),
+    var title: String = "",
     internal var userId: UUID? = null,
 ) : PersistentDao<BlogDao> {
+    private val blogEntryRelations = DaoRelations(
+        fetchRelations = JactorPersistenceRepositiesConfig.fetchBlogEntryRelations
+    )
+
     private val userRelation = DaoRelation(
         fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
     )
+
+    val entries: List<BlogEntryDao>
+        get() = blogEntryRelations.fetchRelations(id ?: error("Blog is not persisted!"))
 
     val user: UserDao
         get() = userRelation.fetchRelatedInstance(id = userId) ?: error("Missing user relation for blog!")
@@ -511,12 +518,6 @@ data class BlogDao(
         timeOfModification = LocalDateTime.now()
 
         return this
-    }
-
-    fun add(blogEntryDao: BlogEntryDao) {
-        entries.contains(blogEntryDao).whenFalse {
-            entries.add(blogEntryDao.copy(blogId = id))
-        }
     }
 
     fun toBlog(): Blog = Blog(

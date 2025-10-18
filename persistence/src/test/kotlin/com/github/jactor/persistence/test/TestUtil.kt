@@ -68,7 +68,7 @@ fun initAddressDao(
 fun initBlog(
     created: LocalDate? = null,
     persistent: Persistent = Persistent(),
-    title: String? = null,
+    title: String = "na",
     user: User? = null,
 ) = Blog(
     created = created,
@@ -89,9 +89,9 @@ fun initBlogDao(
 )
 
 fun initBlogEntry(
-    blog: Blog? = null,
-    creatorName: String? = null,
-    entry: String? = null,
+    blog: Blog = initBlog(),
+    creatorName: String = "na",
+    entry: String = "na",
     persistent: Persistent = Persistent(),
 ) = BlogEntry(
     blog = blog,

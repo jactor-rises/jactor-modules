@@ -47,7 +47,7 @@ internal class BlogEntryTest {
             persistent = persistent,
             blog = initBlog(),
             creatorName = persistent.createdBy,
-            entry = null
+            entry = "test"
         ).persistent
 
         assertAll {

@@ -1,6 +1,8 @@
 package com.github.jactor.persistence.test
 
 import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.User
@@ -21,6 +23,12 @@ abstract class AbstractSpringBootNoDirtyContextTest {
 
     protected fun save(address: Address): Address = jactorPersistenceRepositiesConfig.addressRepository
         .save(addressDao = address.toAddressDao()).toAddress()
+
+    protected fun save(blog: Blog): Blog = jactorPersistenceRepositiesConfig.blogRepository
+        .save(blogDao = blog.toBlogDao()).toBlog()
+
+    protected fun save(blogEntry: BlogEntry): BlogEntry = jactorPersistenceRepositiesConfig.blogRepository
+        .save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
 
     protected fun save(person: Person): Person = jactorPersistenceRepositiesConfig.personRepository
         .save(personDao = person.toPersonDao()).toPerson()
