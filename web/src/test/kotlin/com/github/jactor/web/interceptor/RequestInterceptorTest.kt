@@ -23,7 +23,7 @@ import io.mockk.every
 internal class RequestInterceptorTest @Autowired constructor(
     private val requestInterceptorToTest: RequestInterceptor
 ): AbstractNoDirtySpringContextTest() {
-    private val handler: Any = Object()
+    private val handler: Any = object
 
     @BeforeEach
     fun `mock request`() {

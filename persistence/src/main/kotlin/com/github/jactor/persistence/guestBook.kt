@@ -1,15 +1,34 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDateTime
-import java.util.Objects
-import java.util.UUID
-import kotlin.jvm.optionals.getOrNull
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
-import org.springframework.data.repository.CrudRepository
+import com.github.jactor.persistence.common.DaoRelation
+import com.github.jactor.persistence.common.DaoRelations
+import com.github.jactor.persistence.common.EntryDao
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.util.toCreateGuestBook
+import com.github.jactor.persistence.util.toGuestBook
+import com.github.jactor.persistence.util.toPersistent
+import com.github.jactor.persistence.util.toUser
+import com.github.jactor.shared.api.CreateGuestBookCommand
+import com.github.jactor.shared.api.CreateGuestBookEntryCommand
+import com.github.jactor.shared.api.GuestBookDto
+import com.github.jactor.shared.api.GuestBookEntryDto
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.javatime.datetime
+import org.jetbrains.exposed.v1.jdbc.andWhere
+import org.jetbrains.exposed.v1.jdbc.insertAndGetId
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,31 +37,8 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.github.jactor.persistence.Config.ioContext
-import com.github.jactor.persistence.common.EntryEmbeddable
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
-import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.shared.api.GuestBookDto
-import com.github.jactor.shared.api.GuestBookEntryDto
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
-import jakarta.persistence.AttributeOverride
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Column
-import jakarta.persistence.Embedded
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
-import jakarta.persistence.OneToOne
-import jakarta.persistence.Table
+import java.time.LocalDateTime
+import java.util.*
 
 @RestController
 @RequestMapping(value = ["/guestBook"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -53,14 +49,13 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ingen gjestebok på id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
     @GetMapping("/{id}")
     @Operation(description = "Henter en gjesdebok ved å angi id")
     suspend operator fun get(@PathVariable("id") id: UUID): ResponseEntity<GuestBookDto> {
-        return guestBookService.find(id)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
+        return guestBookService.findGuestBook(id)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
@@ -70,14 +65,13 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ingen innslag med id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
     @GetMapping("/entry/{id}")
     @Operation(description = "Hent et innslag i en gjesdebok ved å angi id til innslaget")
     suspend fun getEntry(@PathVariable("id") id: UUID): ResponseEntity<GuestBookEntryDto> {
-        return guestBookService.findEntry(id)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
+        return guestBookService.findEntry(id)?.let { ResponseEntity(it.toGuestBookEntryDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
@@ -87,21 +81,17 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen gjestebok er gitt eller gjesteboka er allerede opprettet",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
     @Operation(description = "Opprett en gjestebok")
     @PostMapping
     suspend fun post(
-        @RequestBody guestBookDto: GuestBookDto
-    ): ResponseEntity<GuestBookDto> = when (guestBookDto.harIdentifikator()) {
-        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
-        false -> ResponseEntity(
-            guestBookService.saveOrUpdate(GuestBook(guestBookDto = guestBookDto)).toDto(),
-            HttpStatus.CREATED
-        )
-    }
+        @RequestBody createGuestBookCommand: CreateGuestBookCommand
+    ): ResponseEntity<GuestBookDto> = ResponseEntity(
+        guestBookService.create(createGuestBook = createGuestBookCommand.toCreateGuestBook()).toGuestBookDto(),
+        HttpStatus.CREATED
+    )
 
     @ApiResponses(
         value = [
@@ -109,7 +99,6 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen gjestebok er gitt eller det mangler gjestebok å endre for id",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -128,24 +117,24 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Innslaget i gjesteboka er opprettet"),
+            ApiResponse(responseCode = "400", description = "Ingen innslag som skal opprettes er gitt"),
+            ApiResponse(responseCode = "400", description = "Ingen forfatter av innslag som skal opprettes er gitt"),
             ApiResponse(
                 responseCode = "400",
-                description = "Ingen id til innslag å opprette",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
-            )
+                description = "Ingen id til gjesteboka for innslaget som skal opprettes er gitt",
+            ),
         ]
     )
     @Operation(description = "Opprett et innslag i en gjestebok")
     @PostMapping("/entry")
     suspend fun postEntry(
-        @RequestBody guestBookEntryDto: GuestBookEntryDto
-    ): ResponseEntity<GuestBookEntryDto> = when (guestBookEntryDto.harIdentifikator()) {
-        true -> ResponseEntity(HttpStatus.BAD_REQUEST)
-        false -> ResponseEntity(
-            guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto)).toDto(),
-            HttpStatus.CREATED
-        )
-    }
+        @RequestBody createGuestBookEntryCommand: CreateGuestBookEntryCommand
+    ): ResponseEntity<GuestBookEntryDto> = ResponseEntity(
+        guestBookService.create(
+            createGuestBookEntry = createGuestBookEntryCommand.toCreateGuestBook()
+        ).toGuestBookEntryDto(),
+        HttpStatus.CREATED
+    )
 
     @ApiResponses(
         value = [
@@ -153,7 +142,6 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen id til innslag for gjestebok er gitt",
-                content = arrayOf(Content(schema = Schema(hidden = true)))
             )
         ]
     )
@@ -164,38 +152,56 @@ class GuestBookController(private val guestBookService: GuestBookService) {
     ): ResponseEntity<GuestBookEntryDto> = when (guestBookEntryDto.harIkkeIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(
-            guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto = guestBookEntryDto)).toDto(),
+            guestBookService.saveOrUpdate(GuestBookEntry(guestBookEntryDto = guestBookEntryDto)).toGuestBookEntryDto(),
             HttpStatus.ACCEPTED,
         )
     }
 }
 
 interface GuestBookService {
-    suspend fun find(id: UUID): GuestBook?
+    suspend fun create(createGuestBook: CreateGuestBook): GuestBook
+    suspend fun create(createGuestBookEntry: CreateGuestBookEntry): GuestBookEntry
+    suspend fun findGuestBook(id: UUID): GuestBook?
     suspend fun findEntry(id: UUID): GuestBookEntry?
     suspend fun saveOrUpdate(guestBook: GuestBook): GuestBook
     suspend fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry
 }
 
 @Service
-class DefaultGuestBookService(
-    private val guestBookRepository: GuestBookRepository,
-    private val guestBookEntryRepository: GuestBookEntryRepository
-) : GuestBookService {
-    override suspend fun find(id: UUID): GuestBook? = ioContext {
-        guestBookRepository.findById(id).getOrNull()?.toModel()
+class GuestBookServiceBean(private val guestBookRepository: GuestBookRepository) : GuestBookService {
+    override suspend fun create(createGuestBook: CreateGuestBook): GuestBook {
+        return guestBookRepository.save(
+            guestBookDao = GuestBookDao().apply {
+                title = createGuestBook.title
+                userId = createGuestBook.userId
+            }
+        ).toGuestBook()
     }
 
-    override suspend fun findEntry(id: UUID): GuestBookEntry? = ioContext {
-        guestBookEntryRepository.findById(id).getOrNull()?.toModel()
+    override suspend fun create(createGuestBookEntry: CreateGuestBookEntry): GuestBookEntry {
+        return guestBookRepository.save(
+            guestBookEntryDao = GuestBookEntryDao(
+                guestName = createGuestBookEntry.creatorName,
+                entry = createGuestBookEntry.entry,
+                guestBookId = createGuestBookEntry.guestBookId
+            )
+        ).toGuestBookEntry()
     }
 
-    override suspend fun saveOrUpdate(guestBook: GuestBook): GuestBook = ioContext {
-        guestBookRepository.save(GuestBookEntity(guestBook)).toModel()
+    override suspend fun findGuestBook(id: UUID): GuestBook? {
+        return guestBookRepository.findGuestBookById(id)?.toGuestBook()
     }
 
-    override suspend fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry = ioContext {
-        guestBookEntryRepository.save(GuestBookEntryEntity(guestBookEntry)).toModel()
+    override suspend fun findEntry(id: UUID): GuestBookEntry? {
+        return guestBookRepository.findGuestBookEntryById(id)?.toGuestBookEntry()
+    }
+
+    override suspend fun saveOrUpdate(guestBook: GuestBook): GuestBook {
+        return guestBookRepository.save(guestBookDao = guestBook.toGuestBookDao()).toGuestBook()
+    }
+
+    override suspend fun saveOrUpdate(guestBookEntry: GuestBookEntry): GuestBookEntry {
+        return guestBookRepository.save(guestBookEntryDao = guestBookEntry.toGuestBookEntryDao()).toGuestBookEntry()
     }
 }
 
@@ -206,7 +212,7 @@ data class GuestBook(
     val title: String?,
     val user: User?,
 ) {
-    val id: UUID? @JsonIgnore get() = persistent.id
+    val id: UUID get() = persistent.id ?: error("Guest book is not persisted!")
 
     constructor(persistent: Persistent, guestBook: GuestBook) : this(
         persistent = persistent,
@@ -216,274 +222,318 @@ data class GuestBook(
     )
 
     constructor(guestBookDto: GuestBookDto) : this(
-        persistent = Persistent(guestBookDto.persistentDto),
+        persistent = guestBookDto.persistentDto.toPersistent(),
         entries = guestBookDto.entries.map { GuestBookEntry(it) }.toSet(),
         title = guestBookDto.title,
-        user = guestBookDto.userDto?.let { User(userDto = it) }
+        user = guestBookDto.userDto?.toUser()
     )
 
     fun toDto(): GuestBookDto = GuestBookDto(
-        persistentDto = persistent.toDto(),
-        entries = entries.map { entry: GuestBookEntry -> entry.toDto() }.toSet(),
+        persistentDto = persistent.toPersistentDto(),
+        entries = entries.map { entry: GuestBookEntry -> entry.toGuestBookEntryDto() }.toSet(),
         title = title,
-        userDto = user?.toDto()
+        userDto = user?.toUserDto()
     )
 
-    fun withId(): GuestBook = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
-    fun toEntity() = GuestBookEntity(guestBook = this)
+    fun toGuestBookDao() = GuestBookDao(
+        id = persistent.id,
+        createdBy = persistent.createdBy,
+        modifiedBy = persistent.modifiedBy,
+        timeOfCreation = persistent.timeOfCreation,
+        timeOfModification = persistent.timeOfModification,
+        title = requireNotNull(title) { "Title cannot be null!" },
+        userId = user?.id,
+    )
+
+    fun toGuestBookDto() = GuestBookDto(
+        persistentDto = persistent.toPersistentDto(),
+        entries = entries.map { it.toGuestBookEntryDto() }.toSet(),
+        title = title,
+        userDto = user?.toUserDto()
+    )
 }
 
 @JvmRecord
+data class CreateGuestBook(
+    val userId: UUID,
+    val title: String,
+)
+
+@JvmRecord
+data class CreateGuestBookEntry(
+    val guestBookId: UUID,
+    val creatorName: String,
+    val entry: String,
+)
+
+@JvmRecord
 data class GuestBookEntry(
-    val creatorName: String?,
-    val entry: String?,
+    val entry: String,
+    val guestName: String,
     val guestBook: GuestBook?,
     val persistent: Persistent,
 ) {
-    val id: UUID? @JsonIgnore get() = persistent.id
-    val notNullableCreator: String @JsonIgnore get() = creatorName ?: error("No creator is provided!")
-    val notNullableEntry: String @JsonIgnore get() = entry ?: error("No entry is provided!")
-
-    constructor(
-        persistent: Persistent, guestBookEntry: GuestBookEntry
-    ) : this(
-        persistent = persistent,
-        guestBook = guestBookEntry.guestBook,
-        creatorName = guestBookEntry.creatorName,
-        entry = guestBookEntry.entry
-    )
+    val id: UUID? get() = persistent.id
 
     constructor(guestBookEntryDto: GuestBookEntryDto) : this(
-        creatorName = guestBookEntryDto.creatorName,
-        entry = guestBookEntryDto.entry,
-        persistent = Persistent(guestBookEntryDto.persistentDto),
-        guestBook = guestBookEntryDto.guestBook?.let { GuestBook(guestBookDto = it) }
+        entry = requireNotNull(guestBookEntryDto.entry) { "Entry cannot be null!" },
+        guestName = requireNotNull(guestBookEntryDto.creatorName) { "Creator name cannot be null!" },
+        persistent = guestBookEntryDto.persistentDto.toPersistent(),
+        guestBook = guestBookEntryDto.guestBook?.toGuestBook(),
     )
 
-    fun toDto() = GuestBookEntryDto(
+    fun toGuestBookEntryDto() = GuestBookEntryDto(
         entry = entry,
-        creatorName = creatorName,
+        creatorName = guestName,
         guestBook = guestBook?.toDto(),
-        persistentDto = persistent.toDto(),
+        persistentDto = persistent.toPersistentDto(),
     )
 
-    fun toEntity() = GuestBookEntryEntity(guestBookEntry = this)
-    fun withId(): GuestBookEntry = copy(persistent = persistent.copy(id = id ?: UUID.randomUUID()))
+    fun toGuestBookEntryDao() = GuestBookEntryDao(
+        id = id,
+        createdBy = persistent.createdBy,
+        modifiedBy = persistent.modifiedBy,
+        timeOfCreation = persistent.timeOfCreation,
+        timeOfModification = persistent.timeOfModification,
+        guestName = guestName,
+        entry = entry,
+        guestBookId = guestBook?.persistent?.id ?: error("Guest book must have an id!"),
+    )
 }
 
-interface GuestBookRepository : CrudRepository<GuestBookEntity, UUID> {
-    fun findByUser(user: UserEntity): GuestBookEntity?
+object GuestBooks : UUIDTable(name = "T_GUEST_BOOK", columnName = "ID") {
+    val createdBy = text("CREATED_BY")
+    val modifiedBy = text("UPDATED_BY")
+    val timeOfCreation = datetime("CREATION_TIME")
+    val timeOfModification = datetime("UPDATED_TIME")
+    val title = text("TITLE")
+    val userId = uuid("USER_ID").references(Users.id)
 }
 
-interface GuestBookEntryRepository : CrudRepository<GuestBookEntryEntity, UUID> {
-    fun findByGuestBook(guestBookEntity: GuestBookEntity): List<GuestBookEntryEntity>
+object GuestBookEntries : UUIDTable(name = "T_GUEST_BOOK_ENTRY", columnName = "ID") {
+    val createdBy = text("CREATED_BY")
+    val guestName = text("GUEST_NAME")
+    val entry = text("ENTRY")
+    val guestBookId = uuid("GUEST_BOOK_ID").references(GuestBooks.id)
+    val modifiedBy = text("UPDATED_BY")
+    val timeOfCreation = datetime("CREATION_TIME")
+    val timeOfModification = datetime("UPDATED_TIME")
 }
 
-@Entity
-@Table(name = "T_GUEST_BOOK")
-class GuestBookEntity : PersistentEntity<GuestBookEntity?> {
-    @Id
-    override var id: UUID? = null
+interface GuestBookRepository {
+    fun findAllGuestBooks(): List<GuestBookDao>
+    fun findByUserId(userId: UUID): GuestBookDao?
+    fun findGuestBookById(id: UUID): GuestBookDao?
+    fun findGuestBookEntryById(id: UUID): GuestBookEntryDao?
+    fun findGuestBookByUserId(id: UUID): GuestBookDao?
+    fun findGuestBookEtriesByGuestBookId(id: UUID): List<GuestBookEntryDao>
+    fun save(guestBookDao: GuestBookDao): GuestBookDao
+    fun save(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao
+}
 
-    @Embedded
-    @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
-    @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
-    @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
-    @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
-        internal set
+@Repository
+class GuestBookRepositoryImpl : GuestBookRepository by GuestBookRepositoryObject
 
-    @Column(name = "TITLE")
-    var title: String? = null
-
-    @JoinColumn(name = "USER_ID")
-    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
-    var user: UserEntity? = null
-
-    @OneToMany(mappedBy = "guestBook", cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
-    var entries: MutableSet<GuestBookEntryEntity> = HashSet()
-
-    constructor() {
-        // used by entity manager
+object GuestBookRepositoryObject : GuestBookRepository {
+    override fun findAllGuestBooks(): List<GuestBookDao> = transaction {
+        GuestBooks.selectAll().map { it.toGuestBookDao() }
     }
 
-    /**
-     * @param guestBook to copyWithoutId...
-     */
-    private constructor(guestBook: GuestBookEntity) {
-        entries = guestBook.entries.map { it.copyWithoutId() }.toMutableSet()
-        id = guestBook.id
-        persistentDataEmbeddable = PersistentDataEmbeddable()
-        title = guestBook.title
-        user = guestBook.copyUserWithoutId()
+    override fun findByUserId(userId: UUID): GuestBookDao? = transaction {
+        GuestBooks.selectAll()
+            .andWhere { GuestBooks.userId eq userId }
+            .map { it.toGuestBookDao() }
+            .singleOrNull()
     }
 
-    constructor(guestBook: GuestBook) {
-        entries = guestBook.entries.map { GuestBookEntryEntity(it) }.toMutableSet()
-        id = guestBook.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(guestBook.persistent)
-        title = guestBook.title
-        user = guestBook.user?.let { UserEntity(it) }
+    override fun findGuestBookById(id: UUID): GuestBookDao? = transaction {
+        GuestBooks.selectAll()
+            .andWhere { GuestBooks.id eq id }
+            .singleOrNull()?.toGuestBookDao()
     }
 
-    private fun copyUserWithoutId(): UserEntity? {
-        return user?.copyWithoutId()
+    override fun findGuestBookEntryById(id: UUID): GuestBookEntryDao? = transaction {
+        GuestBookEntries.selectAll()
+            .andWhere { GuestBookEntries.id eq id }
+            .singleOrNull()?.toGuestBookEntryDao()
     }
 
-    fun toModel(): GuestBook = GuestBook(
-        persistent = persistentDataEmbeddable.toModel(id),
-        entries = entries.map { it.toModel() }.toMutableSet(),
+    override fun findGuestBookByUserId(id: UUID): GuestBookDao? = transaction {
+        GuestBooks.selectAll()
+            .andWhere { GuestBooks.userId eq id }
+            .singleOrNull()?.toGuestBookDao()
+    }
+
+    override fun findGuestBookEtriesByGuestBookId(id: UUID): List<GuestBookEntryDao> = transaction {
+        GuestBookEntries.selectAll()
+            .andWhere { GuestBookEntries.guestBookId eq id }
+            .map { it.toGuestBookEntryDao() }
+    }
+
+    override fun save(guestBookDao: GuestBookDao): GuestBookDao = transaction {
+        when (guestBookDao.isPersisted) {
+            true -> update(guestBookDao)
+            false -> insert(guestBookDao)
+        }
+    }
+
+    private fun update(guestBookDao: GuestBookDao): GuestBookDao = GuestBooks.update(
+        where = { GuestBooks.id eq guestBookDao.id }
+    ) {
+        it[createdBy] = guestBookDao.createdBy
+        it[title] = guestBookDao.title
+        it[modifiedBy] = guestBookDao.modifiedBy
+        it[timeOfCreation] = guestBookDao.timeOfCreation
+        it[timeOfModification] = guestBookDao.timeOfModification
+        it[userId] = requireNotNull(guestBookDao.userId) { "UserId cannot be null!" }
+    }.let { guestBookDao }
+
+    private fun insert(guestBookDao: GuestBookDao): GuestBookDao = GuestBooks.insertAndGetId {
+        it[createdBy] = guestBookDao.createdBy
+        it[title] = guestBookDao.title
+        it[modifiedBy] = guestBookDao.modifiedBy
+        it[timeOfCreation] = guestBookDao.timeOfCreation
+        it[timeOfModification] = guestBookDao.timeOfModification
+        it[userId] = requireNotNull(guestBookDao.userId) { "UserId cannot be null!" }
+    }.value.let { guestBookDao.copy(id = it) }
+
+    override fun save(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao = transaction {
+        when (guestBookEntryDao.isPersisted) {
+            true -> update(guestBookEntryDao)
+            false -> insert(guestBookEntryDao)
+        }
+    }
+
+    private fun update(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao = GuestBookEntries.update(
+        where = { GuestBookEntries.id eq guestBookEntryDao.id }
+    ) {
+        it[createdBy] = guestBookEntryDao.createdBy
+        it[guestBookId] = requireNotNull(guestBookEntryDao.guestBookId) { "GuestBookId cannot be null!" }
+        it[guestName] = guestBookEntryDao.guestName
+        it[entry] = guestBookEntryDao.entry
+        it[modifiedBy] = guestBookEntryDao.modifiedBy
+        it[timeOfCreation] = guestBookEntryDao.timeOfCreation
+        it[timeOfModification] = guestBookEntryDao.timeOfModification
+    }.let { guestBookEntryDao }
+
+    private fun insert(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao = GuestBookEntries.insertAndGetId {
+        it[createdBy] = guestBookEntryDao.createdBy
+        it[guestBookId] = requireNotNull(guestBookEntryDao.guestBookId) { "GuestBookId cannot be null!" }
+        it[guestName] = guestBookEntryDao.guestName
+        it[entry] = guestBookEntryDao.entry
+        it[modifiedBy] = guestBookEntryDao.modifiedBy
+        it[timeOfCreation] = guestBookEntryDao.timeOfCreation
+        it[timeOfModification] = guestBookEntryDao.timeOfModification
+    }.value.let { guestBookEntryDao.copy(id = it) }
+}
+
+fun ResultRow.toGuestBookDao() = GuestBookDao(
+    id = this[GuestBooks.id].value,
+    createdBy = this[GuestBooks.createdBy],
+    timeOfCreation = this[GuestBooks.timeOfCreation],
+    modifiedBy = this[GuestBooks.modifiedBy],
+    timeOfModification = this[GuestBooks.timeOfModification],
+
+    title = this[GuestBooks.title],
+    userId = this[GuestBooks.userId],
+)
+
+fun ResultRow.toGuestBookEntryDao() = GuestBookEntryDao(
+    id = this[GuestBookEntries.id].value,
+    createdBy = this[GuestBookEntries.createdBy],
+    timeOfCreation = this[GuestBookEntries.timeOfCreation],
+    modifiedBy = this[GuestBookEntries.modifiedBy],
+    timeOfModification = this[GuestBookEntries.timeOfModification],
+
+    guestName = this[GuestBookEntries.guestName],
+    entry = this[GuestBookEntries.entry],
+    guestBookId = this[GuestBookEntries.guestBookId],
+)
+
+data class GuestBookDao(
+    override var id: UUID? = null,
+    override var createdBy: String = "todo",
+    override var timeOfCreation: LocalDateTime = LocalDateTime.now(),
+    override var modifiedBy: String = "todo",
+    override var timeOfModification: LocalDateTime = LocalDateTime.now(),
+
+    var title: String = "no-name",
+    internal var userId: UUID? = null,
+) : PersistentDao<GuestBookDao?> {
+    private val guestBookEntryRelations = DaoRelations(
+        fetchRelations = JactorPersistenceRepositiesConfig.fetchGuestBookEntryRelations,
+    )
+
+    private val userRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
+    )
+
+    val entries: List<GuestBookEntryDao>
+        get() = guestBookEntryRelations.fetchRelations(id = id ?: error("guest book is not persisted"))
+
+    val user: UserDao
+        get() = userRelation.fetchRelatedInstance(id = userId) ?: error("no user relation?")
+
+    fun toGuestBook(): GuestBook = GuestBook(
+        persistent = toPersistent(),
+        entries = entries.map { it.toGuestBookEntry() }.toMutableSet(),
         title = title,
-        user = user?.toModel()
+        user = user.toUser()
     )
 
-    override fun copyWithoutId(): GuestBookEntity {
-        val guestBookEntity = GuestBookEntity(this)
-        guestBookEntity.id = null
-        return guestBookEntity
-    }
+    override fun copyWithoutId(): GuestBookDao = copy(
+        id = null,
+    )
 
-    override fun modifiedBy(modifier: String): GuestBookEntity {
-        persistentDataEmbeddable.modifiedBy(modifier)
+    override fun modifiedBy(modifier: String): GuestBookDao {
+        modifiedBy = modifier
+        timeOfModification = LocalDateTime.now()
+
         return this
     }
-
-    fun add(guestBookEntry: GuestBookEntryEntity) {
-        entries.add(guestBookEntry)
-        guestBookEntry.guestBook = this
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return this === other || other != null && javaClass == other.javaClass &&
-            title == (other as GuestBookEntity).title &&
-            user == other.user
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(title, user)
-    }
-
-    override fun toString(): String {
-        return ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-            .appendSuper(super.toString())
-            .append(title)
-            .append(user)
-            .toString()
-    }
-
-    override val createdBy: String
-        get() = persistentDataEmbeddable.createdBy
-    override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfCreation
-    override val modifiedBy: String
-        get() = persistentDataEmbeddable.modifiedBy
-    override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfModification
 }
 
-@Entity
-@Table(name = "T_GUEST_BOOK_ENTRY")
-class GuestBookEntryEntity : PersistentEntity<GuestBookEntryEntity?> {
-    @Id
-    override var id: UUID? = null
+data class GuestBookEntryDao(
+    override var id: UUID? = null,
+    override val createdBy: String = "todo",
+    override var modifiedBy: String = "todo",
+    override val timeOfCreation: LocalDateTime = LocalDateTime.now(),
+    override var timeOfModification: LocalDateTime = LocalDateTime.now(),
 
-    @Embedded
-    @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
-    @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
-    @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
-    @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
-        internal set
+    var guestName: String,
+    override var entry: String,
+    var guestBookId: UUID? = null
+) : PersistentDao<GuestBookEntryDao>, EntryDao {
+    override var creatorName: String
+        get() = guestName
+        set(value) {
+            guestName = value
+        }
 
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JoinColumn(name = "GUEST_BOOK_ID")
-    var guestBook: GuestBookEntity? = null
-
-    @Embedded
-    @AttributeOverride(name = "creatorName", column = Column(name = "GUEST_NAME"))
-    @AttributeOverride(name = "entry", column = Column(name = "ENTRY"))
-    private var entryEmbeddable = EntryEmbeddable()
-
-    constructor() {
-        // used by entity manager
-    }
-
-    private constructor(guestBookEntry: GuestBookEntryEntity) {
-        entryEmbeddable = guestBookEntry.copyEntry()
-        guestBook = guestBookEntry.copyGuestBookWithoutId()
-        id = guestBookEntry.id
-        persistentDataEmbeddable = PersistentDataEmbeddable()
-    }
-
-    constructor(guestBookEntry: GuestBookEntry) {
-        entryEmbeddable = EntryEmbeddable(guestBookEntry.notNullableCreator, guestBookEntry.notNullableEntry)
-        guestBook = guestBookEntry.guestBook?.let { GuestBookEntity(it) }
-        id = guestBookEntry.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(guestBookEntry.persistent)
-    }
-
-    private fun copyGuestBookWithoutId(): GuestBookEntity {
-        return guestBook!!.copyWithoutId()
-    }
-
-    private fun copyEntry(): EntryEmbeddable {
-        return entryEmbeddable.copy()
-    }
-
-    fun toModel() = GuestBookEntry(
-        creatorName = entryEmbeddable.creatorName,
-        entry = entryEmbeddable.entry,
-        guestBook = guestBook?.toModel(),
-        persistent = persistentDataEmbeddable.toModel(id),
+    val guestBookRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation,
     )
 
-    fun modify(modifiedBy: String, entry: String) {
-        entryEmbeddable.modify(modifiedBy, entry)
-        persistentDataEmbeddable.modifiedBy(modifiedBy)
-    }
+    val guestBookDao: GuestBookDao
+        get() = guestBookRelation.fetchRelatedInstance(id = guestBookId)
+            ?: error("No guest book relation for entry with id $guestBookId exists")
 
-    override fun copyWithoutId(): GuestBookEntryEntity {
-        val guestBookEntryEntity = GuestBookEntryEntity(this)
-        guestBookEntryEntity.id = null
-        return guestBookEntryEntity
-    }
+    fun toGuestBookEntry() = GuestBookEntry(
+        persistent = toPersistent(),
+        guestName = guestName,
+        entry = entry,
+        guestBook = guestBookDao.toGuestBook(),
+    )
 
-    override fun modifiedBy(modifier: String): GuestBookEntryEntity {
-        persistentDataEmbeddable.modifiedBy(modifier)
+    override fun copyWithoutId() = copy(
+        id = null,
+        guestBookId = null,
+    )
+
+    override fun modifiedBy(modifier: String): GuestBookEntryDao {
+        modifiedBy = modifier
+        timeOfModification = LocalDateTime.now()
+
         return this
     }
-
-    override fun equals(other: Any?): Boolean {
-        return this === other || other != null && javaClass == other.javaClass && isEqualTo(other as GuestBookEntryEntity)
-    }
-
-    private fun isEqualTo(o: GuestBookEntryEntity): Boolean {
-        return entryEmbeddable == o.entryEmbeddable &&
-            guestBook == o.guestBook
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(guestBook, entryEmbeddable)
-    }
-
-    override fun toString(): String {
-        return ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-            .appendSuper(super.toString())
-            .append(guestBook)
-            .append(entryEmbeddable)
-            .toString()
-    }
-
-    override val createdBy: String
-        get() = persistentDataEmbeddable.createdBy
-    override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfCreation
-    override val modifiedBy: String
-        get() = persistentDataEmbeddable.modifiedBy
-    override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfModification
-    val entry: String
-        get() = entryEmbeddable.notNullableEntry
-    val creatorName: String
-        get() = entryEmbeddable.notNullableCreator
 }

@@ -5,7 +5,6 @@ import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initBlog
-import com.github.jactor.persistence.test.initBlogEntry
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -20,7 +19,12 @@ internal class BlogEntryTest {
             entry = "entry",
         )
 
-        val (blog, creatorName, entry) = BlogEntry(blogEntry.persistent, blogEntry)
+        val (blog, creatorName, entry) = BlogEntry(
+            persistent = blogEntry.persistent,
+            blog = blogEntry.blog,
+            creatorName = blogEntry.creatorName,
+            entry = blogEntry.entry
+        )
 
         assertAll {
             assertThat(blog).isEqualTo(blogEntry.blog)
@@ -39,9 +43,11 @@ internal class BlogEntryTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = BlogEntry(
+        val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = BlogEntry(
             persistent = persistent,
-            blogEntry = initBlogEntry()
+            blog = initBlog(),
+            creatorName = persistent.createdBy,
+            entry = "test"
         ).persistent
 
         assertAll {

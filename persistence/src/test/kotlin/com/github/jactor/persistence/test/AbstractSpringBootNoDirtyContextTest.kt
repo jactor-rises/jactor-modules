@@ -1,42 +1,46 @@
 package com.github.jactor.persistence.test
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.transaction.annotation.Transactional
+import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogEntry
 import com.github.jactor.persistence.GuestBook
+import com.github.jactor.persistence.JactorPersistenceRepositiesConfig
+import com.github.jactor.persistence.Person
 import com.github.jactor.persistence.User
-import jakarta.persistence.EntityManager
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * For å unngå å starte en spring-boot applikasjon og eventuelt laste spring-context på ny og når endringer som gjøres i
  * enhetstestene ikke skal ha innvirkning på spring-context<br>
  * Hvis test krever data i database, må det settes opp manuelt
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @Transactional
 abstract class AbstractSpringBootNoDirtyContextTest {
-    @LocalServerPort
-    protected val port = 0
-
-    @Value("\${server.servlet.context-path}")
-    protected lateinit var contextPath: String
-
-    // database operations
-
     @Autowired
-    private lateinit var entityManager: EntityManager
+    private lateinit var jactorPersistenceRepositiesConfig: JactorPersistenceRepositiesConfig
 
-    protected fun <T> flush(databaseOperation: () -> T): T {
-        val entity = databaseOperation.invoke()
-        entityManager.flush()
-        entityManager.clear()
+    protected fun save(address: Address): Address = jactorPersistenceRepositiesConfig.addressRepository
+        .save(addressDao = address.toAddressDao()).toAddress()
 
-        return entity
-    }
+    protected fun save(blog: Blog): Blog = jactorPersistenceRepositiesConfig.blogRepository
+        .save(blogDao = blog.toBlogDao()).toBlog()
 
-    protected fun buildFullPath(url: String): String {
-        return "http://localhost:$port$contextPath$url"
+    protected fun save(blogEntry: BlogEntry): BlogEntry = jactorPersistenceRepositiesConfig.blogRepository
+        .save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
+
+    protected fun save(guestBook: GuestBook): GuestBook = jactorPersistenceRepositiesConfig.guestBookRepository
+        .save(guestBookDao = guestBook.toGuestBookDao()).toGuestBook()
+
+    protected fun save(person: Person): Person = jactorPersistenceRepositiesConfig.personRepository
+        .save(personDao = person.toPersonDao()).toPerson()
+
+    protected fun save(user: User): User = jactorPersistenceRepositiesConfig.userRepository
+        .save(userDao = user.toUserDao()).toUser()
+
+    protected fun resetFetchRelations() {
+        jactorPersistenceRepositiesConfig.initFetchRelations()
     }
 }

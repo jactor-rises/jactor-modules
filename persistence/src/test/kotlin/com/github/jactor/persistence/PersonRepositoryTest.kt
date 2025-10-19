@@ -1,20 +1,21 @@
 package com.github.jactor.persistence
 
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initAddressDao
+import com.github.jactor.persistence.test.initPersonDao
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
 
 internal class PersonRepositoryTest @Autowired constructor(
-    private val personRepository: PersonRepository
+    private val addressRepository: AddressRepository,
+    private val personRepository: PersonRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
@@ -30,102 +31,74 @@ internal class PersonRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then read a person entity`() {
-        val allreadyPresentPeople = personRepository.findAll().count()
-        val address = initAddress(
-            zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"
-        ).withId()
+        val addressId = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
+        ).persistent.id ?: fail { "not persisted?!!!" }
 
-        val personToPersist = initPerson(
-            address = address,
-            firstName = "Born",
+        val addressDao = addressRepository.findById(id = addressId) ?: fail { "Address (id=$addressId) not found???" }
+        val allreadyPresentPeople = personRepository.findAll().count()
+        val personToPersist = PersonDao(
+            addressId = addressDao.id,
             description = "Me, myself, and I",
+            firstName = "Born",
             locale = "no_NO",
             surname = "Sometime",
-        ).toEntityWithId()
+        )
 
-        flush { personRepository.save(personToPersist) }
+        personRepository.save(personToPersist)
 
-        val people = personRepository.findAll().toList()
-        assertThat(people).hasSize(allreadyPresentPeople + 1)
-        val personEntity = personRepository.findBySurname("Sometime").iterator().next()
+        val people = personRepository.findAll()
+        assertThat(people, "allready present people").hasSize(allreadyPresentPeople + 1)
+
+        val personDao = personToPersist.surname.let {
+            personRepository.findBySurname(surname = it).firstOrNull() ?: fail { "Person with surname $it not found" }
+        }
 
         assertAll {
-            assertThat(personEntity.addressEntity).isEqualTo(personToPersist.addressEntity)
-            assertThat(personEntity.description).isEqualTo("Me, myself, and I")
-            assertThat(personEntity.locale).isEqualTo("no_NO")
-            assertThat(personEntity.firstName).isEqualTo("Born")
+            assertThat(personDao.addressDao).isEqualTo(personToPersist.addressDao)
+            assertThat(personDao.description).isEqualTo("Me, myself, and I")
+            assertThat(personDao.locale).isEqualTo("no_NO")
+            assertThat(personDao.firstName).isEqualTo("Born")
         }
     }
 
     @Test
     fun `should save then update and read a person entity`() {
-        val address = initAddress(
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"
-        ).withId()
+        val addressId = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
+        ).persistent.id ?: fail { "not persisted?!!!" }
 
-        val personToPersist = initPerson(
-            address = address,
-            firstName = "B",
-            description = "Just me...",
-            locale = "no_NO",
-            surname = "Mine",
-        ).toEntityWithId()
+        val addressDao = addressRepository.findById(id = addressId) ?: fail { "Address (id=$addressId) not found???" }
 
-        flush { personRepository.save(personToPersist) }
+        personRepository.save(
+            personDao = PersonDao(
+                addressId = addressDao.id,
+                firstName = "B",
+                description = "Just me...",
+                locale = "no_NO",
+                surname = "Mine",
+            )
+        )
 
-        val mine = personRepository.findBySurname("Mine")
-        val person = mine.iterator().next()
+        val personDao = ("Mine" to "Cula").let {
+            val mine = personRepository.findBySurname(surname = it.first)
+            val person = mine.firstOrNull() ?: fail { "Person with surname ${it.first} not found" }
 
-        person.description = "There is no try"
-        person.locale = "dk_DK"
-        person.firstName = "Dr. A."
-        person.surname = "Cula"
+            person.description = "There is no try"
+            person.locale = "dk_DK"
+            person.firstName = "Dr. A."
+            person.surname = it.second
 
-        flush { personRepository.save(person) }
+            personRepository.save(personDao = person)
+            val foundCula = personRepository.findBySurname(surname = it.second)
 
-        val foundCula = personRepository.findBySurname("Cula")
-        val personEntity = foundCula.iterator().next()
-
-        assertAll {
-            assertThat(personEntity.description).isEqualTo("There is no try")
-            assertThat(personEntity.locale).isEqualTo("dk_DK")
-            assertThat(personEntity.firstName).isEqualTo("Dr. A.")
-            assertThat(personEntity.getUsers()).isEqualTo(person.getUsers())
+            foundCula.firstOrNull()
         }
-    }
-
-    @Test
-    fun `should be able to relate a user`() {
-        val alreadyPresentPeople = personRepository.findAll().count()
-        val address = initAddress(
-            persistent = Persistent(id = UUID.randomUUID()),
-            zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"
-        )
-
-        val person = initPerson(
-            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
-        )
-
-        val user = User(
-            Persistent(id = UUID.randomUUID()),
-            person,
-            emailAddress = "public@services.com",
-            username = "black"
-        )
-
-        val userEntity = user.toEntity()
-        val personToPersist = userEntity.fetchPerson()
-
-        flush { personRepository.save(personToPersist) }
-
-        assertThat(personRepository.findAll().toList()).hasSize(alreadyPresentPeople + 1)
-        val personEntity = personRepository.findBySurname("Adder").iterator().next()
-        assertThat(personEntity.getUsers()).hasSize(1)
-        val persistedUser = personEntity.getUsers().iterator().next()
 
         assertAll {
-            assertThat(persistedUser.emailAddress).isEqualTo("public@services.com")
-            assertThat(persistedUser.username).isEqualTo("black")
+            assertThat(personDao?.description).isEqualTo("There is no try")
+            assertThat(personDao?.locale).isEqualTo("dk_DK")
+            assertThat(personDao?.firstName).isEqualTo("Dr. A.")
         }
     }
 }

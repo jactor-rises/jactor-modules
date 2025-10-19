@@ -1,6 +1,5 @@
 package com.github.jactor.persistence
 
-import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,30 +8,37 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.web.reactive.server.WebTestClient
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initUser
-import com.github.jactor.persistence.test.initUserEntity
-import com.github.jactor.shared.api.AddressDto
+import com.github.jactor.persistence.test.initUserDao
+import com.github.jactor.persistence.test.withPersistedData
 import com.github.jactor.shared.api.CreateUserCommand
 import com.github.jactor.shared.api.PersistentDto
-import com.github.jactor.shared.api.PersonDto
 import com.github.jactor.shared.api.UserDto
-import com.github.jactor.shared.api.UserType
 import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import assertk.fail
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.timestamped
+import com.github.jactor.persistence.test.withId
+import com.github.jactor.shared.test.all
+import com.github.jactor.shared.test.contains
+import com.github.jactor.shared.test.equals
+import com.github.jactor.shared.test.named
+import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.mockk
 
 @WebFluxTest(UserController::class)
-@Import(UserService::class)
+@Import(UserService::class, UserRepository::class)
 internal class UserControllerTest @Autowired constructor(
     private val webTestClient: WebTestClient,
-    @Suppress("unused") @MockkBean private val personServiceMockk: PersonService,
     @MockkBean private val userRepositoryMockk: UserRepository,
 ) {
 
     @Test
     fun `should not find a user by username`() {
-        every { userRepositoryMockk.findByUsername("me") } returns Optional.empty()
+        every { userRepositoryMockk.findByUsername(username = "me") } returns null
 
         webTestClient.get()
             .uri("/user/name/me")
@@ -42,7 +48,7 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should find a user by username`() {
-        every { userRepositoryMockk.findByUsername("me") } returns Optional.of(UserEntity(initUser()))
+        every { userRepositoryMockk.findByUsername(username = "me") } returns initUser().toUserDao()
 
         val userDto = webTestClient.get()
             .uri("/user/name/me")
@@ -57,7 +63,7 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should not get a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositoryMockk.findById(uuid) } returns Optional.empty()
+        every { userRepositoryMockk.findById(id = any()) } returns null
 
         webTestClient.get()
             .uri("/user/$uuid")
@@ -68,8 +74,7 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should find a user by id`() {
         val uuid = UUID.randomUUID()
-        every { userRepositoryMockk.findById(uuid) } returns Optional
-            .of(initUserEntity(id = uuid))
+        every { userRepositoryMockk.findById(id = any()) } returns initUserDao(id = uuid)
 
         val userDto = webTestClient.get()
             .uri("/user/$uuid")
@@ -86,11 +91,12 @@ internal class UserControllerTest @Autowired constructor(
         val uuid = UUID.randomUUID()
         val user = initUser(persistent = Persistent(id = uuid))
 
-        every { userRepositoryMockk.findById(uuid) } returns Optional.of(UserEntity(user = user))
+        every { userRepositoryMockk.findById(uuid) } returns user.toUserDao()
+        every { userRepositoryMockk.save(any()) } answers { arg(0) }
 
         val userDto = webTestClient.put()
             .uri("/user/update")
-            .bodyValue(user.toDto())
+            .bodyValue(user.toUserDto())
             .exchange()
             .expectStatus().isAccepted
             .expectBody(UserDto::class.java)
@@ -101,12 +107,9 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should find all usernames of active users`() {
-        val bartDto = UserDto(person = PersonDto(address = AddressDto()), username = "bart", userType = UserType.ACTIVE)
-        val lisaDto = UserDto(person = PersonDto(address = AddressDto()), username = "lisa", userType = UserType.ACTIVE)
-        val bart = UserEntity(User(bartDto))
-        val lisa = UserEntity(User(lisaDto))
-
-        every { userRepositoryMockk.findByUserTypeIn(listOf(UserEntity.UserType.ACTIVE)) } returns listOf(bart, lisa)
+        every {
+            userRepositoryMockk.findUsernames(userType = listOf(UserDao.UserType.ACTIVE))
+        } returns listOf("bart", "lisa")
 
         val usernames = webTestClient.get()
             .uri("/user/usernames")
@@ -120,14 +123,15 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should accept if user id is not null`() {
-        val uuid = UUID.randomUUID()
-        every { userRepositoryMockk.findById(uuid) } returns Optional.of(
-            UserEntity(initUser(persistent = Persistent(id = uuid)))
-        )
+        val uuid = UUID.randomUUID().also {
+            every { userRepositoryMockk.save(any()) } answers { arg(0) }
+            every { userRepositoryMockk.findById(id = it) } returns initUser(persistent = Persistent(id = it))
+                .toUserDao()
+        }
 
         webTestClient.put()
             .uri("/user/update")
-            .bodyValue(UserDto(persistentDto = PersistentDto(id = uuid)))
+            .bodyValue(UserDto().withPersistedData(id = uuid))
             .exchange()
             .expectStatus().isAccepted
     }
@@ -143,12 +147,70 @@ internal class UserControllerTest @Autowired constructor(
 
     @Test
     fun `should return BAD_REQUEST when username is occupied`() {
-        every { userRepositoryMockk.findByUsername("turbo") } returns Optional.of(UserEntity())
+        every { userRepositoryMockk.contains(username = "turbo") } returns true
 
         webTestClient.post()
             .uri("/user")
             .bodyValue(CreateUserCommand(username = "turbo"))
             .exchange()
             .expectStatus().isBadRequest
+    }
+
+    @Test
+    fun `should create a new user`() {
+        val createUserCommand = CreateUserCommand(username = timestamped(username = "turbo"), surname = "Someone")
+
+        every { userRepositoryMockk.contains(any()) } returns false
+        every { userRepositoryMockk.save(any()) } returns initUserDao(
+            id = UUID.randomUUID(),
+            username = createUserCommand.username,
+        )
+
+        webTestClient.post()
+            .uri("/user")
+            .bodyValue(createUserCommand)
+            .exchange()
+            .expectStatus().isCreated
+    }
+
+    @Test
+    fun `should get a BAD_REQUEST if trying to create an existing user`() {
+        val createUserCommand = CreateUserCommand(username = timestamped(username = "turbo"), surname = "Someone")
+
+        every { userRepositoryMockk.contains(any()) } returns true
+
+        webTestClient.post()
+            .uri("/user")
+            .bodyValue(createUserCommand)
+            .exchange()
+            .expectStatus().isBadRequest
+    }
+
+    @Test
+    fun `should create a new user with an email address`() {
+        val createUserCommand = CreateUserCommand(
+            username = timestamped("turbo"),
+            surname = "Someone",
+            emailAddress = "somewhere@somehow.com"
+        )
+
+        coEvery { userRepositoryMockk.contains(any()) } returns false
+        coEvery { userRepositoryMockk.save(any()) } returns initUser(
+            username = createUserCommand.username,
+            emailAddress = createUserCommand.emailAddress
+        ).withId().toUserDao()
+
+        val userDto = webTestClient.post()
+            .uri("/user")
+            .bodyValue(createUserCommand)
+            .exchange()
+            .expectStatus().isCreated
+            .expectBody(UserDto::class.java)
+            .returnResult().responseBody ?: fail(message = "no user created")
+
+        assertThat(userDto).all {
+            emailAddress named "email address" equals "somewhere@somehow.com"
+            username named "username" contains "turbo"
+        }
     }
 }

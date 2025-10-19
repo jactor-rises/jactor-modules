@@ -12,7 +12,7 @@ import assertk.assertions.isEqualTo
 internal class AddressTest {
 
     @Test
-    fun `hould have a copy constructor`() {
+    fun `should have a copy constructor`() {
         val address = initAddress(
             addressLine1 = "address line one",
             addressLine2 = "address line two",
@@ -20,12 +20,9 @@ internal class AddressTest {
             city = "oslo",
             country = "NO",
             zipCode = "1234"
-        )
+        ).toAddressDao()
 
-        val (_, zipCode, addressLine1, addressLine2, addressLine3, city, country) = Address(
-            persistent = address.persistent,
-            address = address
-        )
+        val (_, addressLine1, addressLine2, addressLine3, city, country, zipCode) = Address(dao = address)
 
         assertAll {
             assertThat(addressLine1).isEqualTo(address.addressLine1)
@@ -47,8 +44,14 @@ internal class AddressTest {
             timeOfModification = LocalDateTime.now(),
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = Address(
-            persistent, initAddress()
+        val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = Address(
+            persistent = persistent,
+            addressLine1 = "address line one",
+            addressLine2 = "address line two",
+            addressLine3 = "address line three",
+            city = "oslo",
+            country = "NO",
+            zipCode = "1234"
         ).persistent
 
         assertAll {

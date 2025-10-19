@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import com.github.jactor.shared.exceptionMessageMedCause
 import com.github.jactor.shared.finnFeiledeLinjer
-import com.github.jactor.shared.originClassNameEndsWith
 import com.github.jactor.shared.rootCauseSimpleMessage
-import com.github.jactor.shared.whenTrue
 import io.github.oshai.kotlinlogging.KotlinLogging
 import reactor.core.publisher.Mono
 
@@ -30,15 +28,13 @@ class ExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleBadRequest(e: IllegalArgumentException): Mono<ResponseEntity<Any>> {
-        return e.originClassNameEndsWith(txt = "Controller").whenTrue {
-            logger.warn { "${e.rootCauseSimpleMessage()}: ${e.finnFeiledeLinjer().joinToString { ", " }}" }
+        logger.warn { "${e.rootCauseSimpleMessage()}: ${e.finnFeiledeLinjer().joinToString { ", " }}" }
 
-            Mono.just(
-                ResponseEntity
-                    .badRequest()
-                    .header(HttpHeaders.WARNING, "Bad Request: ${e.exceptionMessageMedCause()}!")
-                    .build()
-            )
-        } ?: handleGenericError(e)
+        return Mono.just(
+            ResponseEntity
+                .badRequest()
+                .header(HttpHeaders.WARNING, "Bad Request: ${e.exceptionMessageMedCause()}!")
+                .build()
+        )
     }
 }

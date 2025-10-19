@@ -23,7 +23,7 @@ import io.cucumber.junit.platform.engine.Constants
 @ActiveProfiles("cucumber")
 internal class RunCucumberTest : AbstractSpringBootCucumberConfiguration() {
     @Before
-    fun beforeScenario(scenario: Scenario) {
+    fun beforeScenario(@Suppress("unused") scenario: Scenario) {
         val users = userRepository.findAll()
 
         for (user in users) {

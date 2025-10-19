@@ -1,6 +1,5 @@
 package com.github.jactor.persistence
 
-import kotlin.jvm.optionals.getOrNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
@@ -10,110 +9,115 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isIn
-import assertk.assertions.isPresent
+import assertk.assertions.isNotNull
 
 internal class AddressRepositoryTest @Autowired constructor(
-    private val addressRepository: AddressRepository
+    private val addressRepository: AddressRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
-    fun `should fetch address entities`() {
-        flush {
-            addressRepository.save(
-                initAddress(
-                    addressLine1 = "somewhere out there",
-                    city = "Rud",
-                    zipCode = "1234",
-                ).withId().toEntity()
-            )
+    fun `should fetch address entities by zip code`() {
+        addressRepository.save(
+            initAddress(
+                addressLine1 = "somewhere out there",
+                city = "Rud",
+                zipCode = "1234",
+            ).toAddressDao()
+        )
 
-            addressRepository.save(
-                initAddress(
-                    addressLine1 = "somewhere in there",
-                    city = "Rud",
-                    zipCode = "1234",
-                ).withId().toEntity()
-            )
-        }
+        addressRepository.save(
+            initAddress(
+                addressLine1 = "somewhere in there",
+                city = "Rud",
+                zipCode = "1234",
+            ).toAddressDao()
+        )
 
-        val addressEntities = addressRepository.findByZipCode(zipCode = "1234")
+        addressRepository.save(
+            initAddress(
+                addressLine1 = "on the road",
+                city = "Out There",
+                zipCode = "1001",
+            ).toAddressDao()
+        )
+
+        val addresses = addressRepository.findByZipCode(zipCode = "1234")
 
         assertAll {
-            assertThat(addressEntities).hasSize(2)
-            addressEntities.forEach {
+            assertThat(addresses).hasSize(2)
+            addresses.forEach {
                 assertThat(it.addressLine1).isIn("somewhere out there", "somewhere in there")
+                assertThat(it.city).isEqualTo("Rud")
             }
         }
     }
 
     @Test
-    fun `should write then read an address entity`() {
-        val addressEntityToPersist = initAddress(
+    fun `should write then read an address entity by id`() {
+        val addressToPersist = initAddress(
             addressLine1 = "somewhere out there",
             addressLine2 = "where the streets have no name",
             addressLine3 = "in the middle of it",
             city = "Rud",
             country = "NO",
             zipCode = "1234",
-        ).withId().toEntity()
+        ).toAddressDao()
 
-        flush { addressRepository.save(addressEntityToPersist) }
+        addressRepository.save(addressToPersist)
 
-        val possibleAddressEntityById = addressRepository.findById(addressEntityToPersist.id!!)
+        val possibleAddressById = addressRepository.findById(addressToPersist.id!!)
 
-        assertThat(possibleAddressEntityById).isPresent().given { addressEntity: AddressEntity ->
+        assertThat(possibleAddressById).isNotNull().given { addressDao: AddressDao ->
             assertAll {
-                assertThat(addressEntity.addressLine1).isEqualTo("somewhere out there")
-                assertThat(addressEntity.addressLine2).isEqualTo("where the streets have no name")
-                assertThat(addressEntity.addressLine3).isEqualTo("in the middle of it")
-                assertThat(addressEntity.zipCode).isEqualTo("1234")
-                assertThat(addressEntity.country).isEqualTo("NO")
-                assertThat(addressEntity.city).isEqualTo("Rud")
+                assertThat(addressDao.addressLine1).isEqualTo("somewhere out there")
+                assertThat(addressDao.addressLine2).isEqualTo("where the streets have no name")
+                assertThat(addressDao.addressLine3).isEqualTo("in the middle of it")
+                assertThat(addressDao.zipCode).isEqualTo("1234")
+                assertThat(addressDao.country).isEqualTo("NO")
+                assertThat(addressDao.city).isEqualTo("Rud")
             }
         }
     }
 
     @Test
     fun `should write then update and read an address entity`() {
-        val addressEntityToPersist = initAddress(
+        val addressToPersist = initAddress(
             addressLine1 = "somewhere out there",
             addressLine2 = "where the streets have no name",
             addressLine3 = "in the middle of it",
             city = "Rud",
             country = "NO",
             zipCode = "1234",
-        ).withId().toEntity()
+        ).toAddressDao()
 
-        flush { addressRepository.save(addressEntityToPersist) }
+        addressRepository.save(addressToPersist)
 
-        val addressEntitySaved = addressRepository.findById(addressEntityToPersist.id!!)
-            .getOrNull() ?: throwAddressNotFound()
+        val addressSaved = addressRepository.findById(id = addressToPersist.id!!) ?: addressNotFound()
 
-        addressEntitySaved.addressLine1 = "the truth is out there"
-        addressEntitySaved.addressLine2 = "among the stars"
-        addressEntitySaved.addressLine3 = "there will be life"
-        addressEntitySaved.zipCode = "666"
-        addressEntitySaved.city = "Cloud city"
-        addressEntitySaved.country = "XX"
+        addressSaved.addressLine1 = "the truth is out there"
+        addressSaved.addressLine2 = "among the stars"
+        addressSaved.addressLine3 = "there will be life"
+        addressSaved.zipCode = "666"
+        addressSaved.city = "Cloud city"
+        addressSaved.country = "XX"
 
-        flush { addressRepository.save(addressEntitySaved) }
+        addressRepository.save(addressSaved)
 
-        val possibleAddressEntityById = addressRepository.findById(addressEntityToPersist.id!!)
-            .getOrNull() ?: throwAddressNotFound()
+        val possibleAddressById = addressRepository.findById(addressToPersist.id!!) ?: addressNotFound()
 
-        assertThat(possibleAddressEntityById).given { addressEntity: AddressEntity ->
+        assertThat(possibleAddressById).given { addressDao: AddressDao ->
             assertAll {
-                assertThat(addressEntity.addressLine1).isEqualTo("the truth is out there")
-                assertThat(addressEntity.addressLine2).isEqualTo("among the stars")
-                assertThat(addressEntity.addressLine3).isEqualTo("there will be life")
-                assertThat(addressEntity.zipCode).isEqualTo("666")
-                assertThat(addressEntity.country).isEqualTo("XX")
-                assertThat(addressEntity.city).isEqualTo("Cloud city")
+                assertThat(addressDao.addressLine1).isEqualTo("the truth is out there")
+                assertThat(addressDao.addressLine2).isEqualTo("among the stars")
+                assertThat(addressDao.addressLine3).isEqualTo("there will be life")
+                assertThat(addressDao.zipCode).isEqualTo("666")
+                assertThat(addressDao.country).isEqualTo("XX")
+                assertThat(addressDao.city).isEqualTo("Cloud city")
             }
         }
     }
 
-    private fun throwAddressNotFound(): Nothing {
+    private fun addressNotFound(): Nothing {
         throw AssertionError("address not found")
     }
 }

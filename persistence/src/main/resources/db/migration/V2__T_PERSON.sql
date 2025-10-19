@@ -9,7 +9,6 @@ CREATE TABLE T_PERSON
     FIRST_NAME    TEXT,
     SURNAME       TEXT      NOT NULL,
     LOCALE        TEXT,
-    USER_ID       UUID,
     ADDRESS_ID    UUID
 );
 

@@ -1,16 +1,34 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDateTime
-import java.util.Objects
-import java.util.Optional
-import java.util.UUID
-import kotlin.jvm.optionals.getOrNull
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
-import org.springframework.data.repository.CrudRepository
+import com.github.jactor.persistence.common.DaoRelation
+import com.github.jactor.persistence.common.DaoRelations
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.util.toCreateUser
+import com.github.jactor.persistence.util.toUser
+import com.github.jactor.shared.api.CreateUserCommand
+import com.github.jactor.shared.api.UserDto
+import com.github.jactor.shared.api.UserType
+import com.github.jactor.shared.whenTrue
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.javatime.datetime
+import org.jetbrains.exposed.v1.jdbc.andWhere
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.insertAndGetId
+import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,31 +39,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.Config.ioContext
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
-import com.github.jactor.persistence.common.PersistentEntity
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.shared.api.CreateUserCommand
-import com.github.jactor.shared.api.UserDto
-import com.github.jactor.shared.api.UserType
-import com.github.jactor.shared.whenTrue
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
-import jakarta.persistence.AttributeOverride
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Column
-import jakarta.persistence.Embedded
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
-import jakarta.persistence.OneToOne
-import jakarta.persistence.Table
+import java.time.LocalDateTime
+import java.util.*
 
 @RestController
 @RequestMapping(path = ["/user"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -59,7 +54,7 @@ class UserController(private val userService: UserService) {
     @GetMapping("/name/{username}")
     @Operation(description = "Find a user by its username")
     suspend fun find(@PathVariable("username") username: String): ResponseEntity<UserDto> {
-        return userService.find(username = username)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
+        return userService.find(username = username)?.let { ResponseEntity(it.toUserDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
@@ -72,7 +67,7 @@ class UserController(private val userService: UserService) {
     @GetMapping("/{id}")
     @Operation(description = "Get a user by its id")
     suspend operator fun get(@PathVariable("id") id: UUID): ResponseEntity<UserDto> {
-        return userService.find(id)?.let { ResponseEntity(it.toDto(), HttpStatus.OK) }
+        return userService.find(id)?.let { ResponseEntity(it.toUserDto(), HttpStatus.OK) }
             ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
@@ -86,9 +81,12 @@ class UserController(private val userService: UserService) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     suspend fun post(
         @RequestBody createUserCommand: CreateUserCommand
-    ): ResponseEntity<UserDto> = when (userService.isAlreadyPresent(createUserCommand.username)) {
+    ): ResponseEntity<UserDto> = when (userService.isAlreadyPersisted(username = createUserCommand.username)) {
         true -> ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST)
-        false -> ResponseEntity(userService.create(createUserCommand).toDto(), HttpStatus.CREATED)
+        false -> ResponseEntity(
+            userService.create(createUserCommand.toCreateUser()).toUserDto(),
+            HttpStatus.CREATED
+        )
     }
 
     @ApiResponses(
@@ -101,9 +99,10 @@ class UserController(private val userService: UserService) {
     @PutMapping("/update")
     suspend fun put(@RequestBody userDto: UserDto): ResponseEntity<UserDto> = when (userDto.harIkkeIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
-        false -> userService.update(user = User(userDto = userDto))?.let {
-            ResponseEntity(it.toDto(), HttpStatus.ACCEPTED)
-        } ?: ResponseEntity(HttpStatus.BAD_REQUEST)
+        false -> ResponseEntity(
+            userService.update(user = userDto.toUser()).toUserDto(),
+            HttpStatus.ACCEPTED
+        )
     }
 
     @ApiResponses(ApiResponse(responseCode = "200", description = "List of usernames found"))
@@ -111,7 +110,7 @@ class UserController(private val userService: UserService) {
     @Operation(description = "Find all usernames for a user type")
     suspend fun findAllUsernames(
         @RequestParam(required = false, defaultValue = "ACTIVE") userType: String
-    ): ResponseEntity<List<String>> = userService.findUsernames(userType = UserEntity.UserType.valueOf(userType)).let {
+    ): ResponseEntity<List<String>> = userService.findUsernames(userType = UserDao.UserType.valueOf(userType)).let {
         when (it.isEmpty()) {
             true -> ResponseEntity(HttpStatus.NO_CONTENT)
             false -> ResponseEntity(it, HttpStatus.OK)
@@ -120,54 +119,18 @@ class UserController(private val userService: UserService) {
 }
 
 @Service
-class UserService(
-    private val personService: PersonService,
-    private val userRepository: UserRepository
-) {
-    suspend fun find(username: String): User? = ioContext {
-        userRepository.findByUsername(username).getOrNull()?.toModel()
-    }
-
-    suspend fun find(id: UUID): User? = ioContext {
-        userRepository.findById(id).getOrNull()?.toModel()
-    }
+class UserService(private val userRepository: UserRepository = UserRepositoryObject) {
+    suspend fun find(username: String): User? = userRepository.findByUsername(username)?.toUser()
+    suspend fun find(id: UUID): User? = userRepository.findById(id = id)?.toUser()
 
     @Transactional
-    suspend fun update(user: User): User? {
-        val uuid = user.persistent.id ?: throw IllegalArgumentException("User must have an id!")
-        return ioContext {
-            userRepository.findById(uuid).map { it.update(user) }
-                .getOrNull()?.toModel()
-        }
-    }
+    suspend fun update(user: User): User = userRepository.save(userDao = user.toUserDao()).toUser()
+    suspend fun create(createUser: CreateUser): User = userRepository.save(userDao = createUser.toUserDao()).toUser()
+    suspend fun findUsernames(userType: UserDao.UserType): List<String> = userRepository.findUsernames(
+        userType = listOf(userType)
+    )
 
-    suspend fun create(createUserCommand: CreateUserCommand): User {
-        val user = createNewFrom(createUserCommand)
-
-        if (user.id == null) {
-            user.id = UUID.randomUUID()
-        }
-
-        return ioContext { userRepository.save(user).toModel() }
-    }
-
-    private suspend fun createNewFrom(createUserCommand: CreateUserCommand): UserEntity {
-        val person = createUserCommand.toPersonDto().toModel()
-        val personEntity = ioContext { personService.createWhenNotExists(person = person) }
-        val user = UserEntity(user = createUserCommand.toUserDto().toModel())
-        user.person = personEntity
-
-        return user
-    }
-
-    suspend fun findUsernames(userType: UserEntity.UserType): List<String> = ioContext {
-        userRepository.findByUserTypeIn(listOf(userType))
-            .map { it.username ?: "username of user with id '${it.id} is null!" }
-    }
-
-    suspend fun isAlreadyPresent(username: String): Boolean = ioContext {
-        userRepository.findByUsername(username).isPresent
-    }
+    suspend fun isAlreadyPersisted(username: String): Boolean = userRepository.contains(username)
 }
 
 @JvmRecord
@@ -178,196 +141,231 @@ data class User(
     val username: String?,
     val usertype: Usertype,
 ) {
-    constructor(persistent: Persistent, user: User) : this(
-        persistent = persistent,
-        emailAddress = user.emailAddress,
-        person = user.person,
-        username = user.username,
-        usertype = user.usertype
-    )
+    val id: UUID
+        get() = persistent.id ?: error("User is not persisted!")
 
-    constructor(
-        persistent: Persistent,
-        personInternal: Person?,
-        emailAddress: String?,
-        username: String?
-    ) : this(
-        persistent = persistent,
-        person = personInternal,
+    fun toUserDao() = UserDao(
+        id = persistent.id,
+        createdBy = persistent.createdBy,
+        modifiedBy = persistent.modifiedBy,
+        timeOfCreation = persistent.timeOfCreation,
+        timeOfModification = persistent.timeOfModification,
+
         emailAddress = emailAddress,
-        username = username,
-        usertype = Usertype.ACTIVE
+        personId = person?.persistent?.id,
+        username = username ?: "na",
+        userType = UserDao.UserType.entries.firstOrNull { it.name == usertype.name }
+            ?: error(message = "Unknown UserType: $usertype"),
     )
 
-    constructor(userDto: UserDto) : this(
-        persistent = Persistent(userDto.persistentDto),
-        person = userDto.person?.let { Person(personDto = it) },
-        emailAddress = userDto.emailAddress,
-        username = userDto.username,
-        usertype = Usertype.valueOf(userDto.userType.name)
-    )
-
-    fun toDto() = UserDto(
-        persistentDto = persistent.toDto(),
+    fun toUserDto() = UserDto(
+        persistentDto = persistent.toPersistentDto(),
         emailAddress = emailAddress,
         person = person?.toPersonDto(),
         username = username,
         userType = (usertype == Usertype.ADMIN).whenTrue { UserType.ACTIVE } ?: UserType.valueOf(usertype.name)
     )
 
-    fun withId(): User = copy(persistent = persistent.copy(id = persistent.id ?: UUID.randomUUID()))
-    fun toEntity() = UserEntity(user = this)
-
     enum class Usertype {
         ADMIN, ACTIVE, INACTIVE
     }
 }
 
-interface UserRepository : CrudRepository<UserEntity, UUID> {
-    fun findByUsername(username: String): Optional<UserEntity>
-    fun findByUserTypeIn(userType: Collection<UserEntity.UserType>): List<UserEntity>
+@JvmRecord
+data class CreateUser(
+    val addressId: UUID?,
+    val personId: UUID?,
+    val username: String,
+    val firstName: String?,
+    val surname: String,
+    val description: String?,
+    val emailAddress: String?,
+
+    val addressLine1: String?,
+    val addressLine2: String?,
+    val addressLine3: String?,
+    val zipCode: String?,
+    val city: String?,
+    val language: String?,
+    val country: String?
+) {
+    fun toUserDao() = UserDao(
+        createdBy = username,
+        modifiedBy = username,
+        timeOfCreation = LocalDateTime.now(),
+        timeOfModification = LocalDateTime.now(),
+
+        emailAddress = emailAddress,
+        personId = personId,
+        username = username,
+        userType = UserDao.UserType.ACTIVE
+    )
 }
 
-@Entity
-@Table(name = "T_USER")
-class UserEntity : PersistentEntity<UserEntity?> {
-    @Id
-    override var id: UUID? = null
+object Users : UUIDTable(name = "T_USER", columnName = "ID") {
+    val createdBy = text("CREATED_BY")
+    val modifiedBy = text("UPDATED_BY")
+    val timeOfCreation = datetime("CREATION_TIME")
+    val timeOfModification = datetime("UPDATED_TIME")
 
-    @Embedded
-    @AttributeOverride(name = "createdBy", column = Column(name = "CREATED_BY"))
-    @AttributeOverride(name = "timeOfCreation", column = Column(name = "CREATION_TIME"))
-    @AttributeOverride(name = "modifiedBy", column = Column(name = "UPDATED_BY"))
-    @AttributeOverride(name = "timeOfModification", column = Column(name = "UPDATED_TIME"))
-    lateinit var persistentDataEmbeddable: PersistentDataEmbeddable
-        internal set
+    val emailAddress = text("EMAIL").nullable()
+    val username = text("USER_NAME")
+    val personId = uuid("PERSON_ID").references(People.id)
+    val userType = text("USER_TYPE")
+    val inactiveSince = datetime("INACTIVE_SINCE").nullable()
+}
 
-    @Column(name = "EMAIL")
-    var emailAddress: String? = null
+interface UserRepository {
+    fun contains(username: String): Boolean
+    fun delete(user: UserDao)
+    fun findAll(): List<UserDao>
+    fun findById(id: UUID): UserDao?
+    fun findByPersonId(id: UUID): List<UserDao>
+    fun findByUsername(username: String): UserDao?
+    fun findUsernames(userType: List<UserDao.UserType>): List<String>
+    fun save(userDao: UserDao): UserDao
+}
 
-    @Column(name = "USER_NAME", nullable = false)
-    var username: String? = null
+@Repository
+class UserRepositoryImpl : UserRepository by UserRepositoryObject
 
-    @JoinColumn(name = "PERSON_ID")
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    var person: PersonEntity? = null
-        internal set
-
-    @OneToOne(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    var guestBook: GuestBookEntity? = null
-        internal set(value) {
-            value?.let { it.user = this }
-            field = value
-        }
-
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
-    private var blogs: MutableSet<BlogEntity> = HashSet()
-
-    @Column(name = "USER_TYPE")
-    @Enumerated(EnumType.STRING)
-    private var userType: UserType? = null
-
-    constructor() {
-        // used by entity manager
+object UserRepositoryObject : UserRepository {
+    override fun contains(username: String): Boolean = transaction {
+        Users
+            .select(column = Users.username)
+            .andWhere { Users.username eq username }
+            .count() > 0
     }
 
-    /**
-     * @param userEntity is used to create an entity
-     */
-    private constructor(userEntity: UserEntity) {
-        blogs = userEntity.blogs.map { it.copyWithoutId() }.toMutableSet()
-        emailAddress = userEntity.emailAddress
-        guestBook = userEntity.guestBook?.copyWithoutId()
-        id = userEntity.id
-        persistentDataEmbeddable = PersistentDataEmbeddable()
-        person = userEntity.person?.copyWithoutId()
-        username = userEntity.username
-        userType = userEntity.userType
+    override fun delete(user: UserDao): Unit = transaction {
+        Users.deleteWhere { Users.id eq user.id }
     }
 
-    constructor(user: User) {
-        addValues(user)
+    override fun findAll(): List<UserDao> = transaction {
+        Users.selectAll().map { it.toUserDao() }
     }
 
-    private fun addValues(user: User) {
-        emailAddress = user.emailAddress
-        id = user.persistent.id
-        persistentDataEmbeddable = PersistentDataEmbeddable(user.persistent)
-        person = user.person?.let { PersonEntity(it) }
-        username = user.username
-        userType = UserType.entries
-            .firstOrNull { aUserType: UserType -> aUserType.name == user.usertype.name }
-            ?: throw IllegalArgumentException("Unknown UserType: " + user.usertype)
+    override fun findById(id: UUID): UserDao? = transaction {
+        Users.selectAll()
+            .andWhere { Users.id eq id }
+            .map { it.toUserDao() }
+            .singleOrNull()
     }
 
-    fun toModel() = User(
-        persistent = persistentDataEmbeddable.toModel(id),
-        person = person?.toModel(),
-        emailAddress = emailAddress,
-        username = username,
-        usertype = userType?.let { User.Usertype.valueOf(it.name) } ?: User.Usertype.INACTIVE,
+    override fun findByPersonId(id: UUID): List<UserDao> = transaction {
+        Users.selectAll()
+            .andWhere { Users.personId eq id }
+            .map { it.toUserDao() }
+    }
+
+    override fun findByUsername(username: String): UserDao? = transaction {
+        Users
+            .selectAll()
+            .andWhere { Users.username eq username }
+            .singleOrNull()
+            ?.toUserDao()
+
+    }
+
+    override fun findUsernames(userType: List<UserDao.UserType>): List<String> = transaction {
+        val userTypes = userType.map { it.name }
+
+        Users.select(column = Users.username)
+            .andWhere { Users.userType inList userTypes }
+            .withDistinct()
+            .map { it[Users.username] }
+    }
+
+    override fun save(userDao: UserDao): UserDao = when (userDao.isPersisted) {
+        true -> update(user = userDao)
+        false -> insert(user = userDao)
+    }.also {
+        val users = findAll()
+        println("${users.size} users persisted: ${users.map { "${it.username}/${it.id}" }}")
+    }
+
+    private fun insert(user: UserDao): UserDao = transaction {
+        Users.insertAndGetId { row ->
+            row[createdBy] = user.createdBy
+            row[modifiedBy] = user.modifiedBy
+            row[timeOfCreation] = user.timeOfCreation
+            row[timeOfModification] = user.timeOfModification
+            row[emailAddress] = user.emailAddress
+            row[username] = user.username
+            row[personId] = requireNotNull(user.personId) { "Person id cannot be null when inserting a user." }
+            row[userType] = user.userType.name
+        }.value.let { newId -> user.also { it.id = newId } }
+    }
+
+    private fun update(user: UserDao): UserDao = transaction {
+        Users.update(where = { Users.id eq user.id }) {
+            it[modifiedBy] = user.modifiedBy
+            it[timeOfModification] = user.timeOfModification
+            it[emailAddress] = user.emailAddress
+            it[username] = user.username
+            it[userType] = userType.name
+            it[personId] = personId
+            // createdBy & timeOfCreation are intentionally not updated
+        }.let { user }
+    }
+
+    private fun ResultRow.toUserDao(id: UUID? = null): UserDao = UserDao(
+        id = id ?: this[Users.id].value,
+        createdBy = this[Users.createdBy],
+        timeOfCreation = this[Users.timeOfCreation],
+        modifiedBy = this[Users.modifiedBy],
+        timeOfModification = this[Users.timeOfModification],
+        username = this[Users.username],
+        emailAddress = this[Users.emailAddress],
+        personId = this[Users.personId],
+    )
+}
+
+data class UserDao(
+    override var id: UUID? = null,
+    override val createdBy: String,
+    override val timeOfCreation: LocalDateTime,
+    override var modifiedBy: String,
+    override var timeOfModification: LocalDateTime,
+
+    internal var userType: UserType = UserType.ACTIVE,
+    internal var emailAddress: String? = null,
+    internal var personId: UUID? = null,
+    internal var username: String = "na",
+) : PersistentDao<UserDao> {
+    private val blogRelations = DaoRelations(fetchRelations = JactorPersistenceRepositiesConfig.fetchBlogRelations)
+    private val guestBookRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation
     )
 
-    fun fetchPerson(): PersonEntity {
-        person?.addUser(this)
-        return person ?: error("No person provided to the user entity")
-    }
+    private val personRelation = DaoRelation(
+        fetchRelation = JactorPersistenceRepositiesConfig.fetchPersonRelation,
+    )
 
-    override fun copyWithoutId(): UserEntity {
-        val user = UserEntity(this)
-        user.id = null
-        return user
-    }
+    val personDao: PersonDao? get() = personRelation.fetchRelatedInstance(id = personId)
+    val guestBook: GuestBookDao? get() = guestBookRelation.fetchRelatedInstance(id = id)
+    val blogs: List<BlogDao> get() = id?.let { blogRelations.fetchRelations(id = it) } ?: emptyList()
 
-    override fun modifiedBy(modifier: String): UserEntity {
-        persistentDataEmbeddable.modifiedBy(modifier)
+    override fun copyWithoutId(): UserDao = copy(
+        id = null,
+        personId = null,
+    )
+
+    override fun modifiedBy(modifier: String): UserDao {
+        modifiedBy = modifier
+        timeOfModification = LocalDateTime.now()
+
         return this
     }
 
-    fun add(blogEntity: BlogEntity) {
-        blogs.add(blogEntity)
-        blogEntity.user = this
-    }
-
-    fun update(user: User): UserEntity {
-        addValues(user)
-        return this
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other === this || other != null && javaClass == other.javaClass &&
-            emailAddress == (other as UserEntity).emailAddress &&
-            person == other.person &&
-            username == other.username
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(username, person, emailAddress)
-    }
-
-    override fun toString(): String {
-        return ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-            .appendSuper(super.toString())
-            .append(username)
-            .append(emailAddress)
-            .append(blogs)
-            .append("guestbook.id=" + if (guestBook != null) guestBook!!.id else null)
-            .append(person)
-            .toString()
-    }
-
-    override val createdBy: String
-        get() = persistentDataEmbeddable.createdBy
-    override val timeOfCreation: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfCreation
-    override val modifiedBy: String
-        get() = persistentDataEmbeddable.modifiedBy
-    override val timeOfModification: LocalDateTime
-        get() = persistentDataEmbeddable.timeOfModification
-
-    fun getBlogs(): Set<BlogEntity> {
-        return blogs
-    }
+    fun toUser() = User(
+        persistent = toPersistent(),
+        username = username,
+        emailAddress = emailAddress,
+        person = personDao?.toPerson(),
+        usertype = User.Usertype.entries.firstOrNull { it.name == userType.name }
+            ?: error("Unknown UserType: $userType")
+    )
 
     enum class UserType {
         ADMIN, ACTIVE, INACTIVE

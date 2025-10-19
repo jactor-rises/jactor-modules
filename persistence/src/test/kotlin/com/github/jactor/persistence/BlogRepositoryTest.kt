@@ -1,50 +1,45 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDate
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.initUser
+import com.github.jactor.shared.test.isNotOlderThan
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDate
 
 internal class BlogRepositoryTest @Autowired constructor(
-    private val blogRepository: BlogRepository
+    private val blogRepository: BlogRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
     fun `should save and then read blog entity`() {
-        val address = initAddress(
-            zipCode = "1001",
-            addressLine1 = "Test Boulevard 1",
-            city = "Testing"
-        ).withId()
-
-        val person = initPerson(
-            address = address,
-            persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
 
-        val user = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
-            emailAddress = "public@services.com",
-            username = "black"
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
+                person = person,
+                emailAddress = "public@services.com",
+                username = "black",
+            )
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
+        blogRepository.save(
+            blogDao = BlogDao(created = LocalDate.now(), title = "Blah", userId = user.persistent.id)
+        )
 
-        blogRepository.save(blogEntityToSave)
-
-        val blogs = blogRepository.findAll().toList()
-        assertThat(blogs).hasSize(1)
-        val blogEntity = blogs.iterator().next()
+        val blogEntity = blogRepository.findBlogs().firstOrNull() ?: fail { "Unable to find any blogs" }
 
         assertAll {
             assertThat(blogEntity.created).isEqualTo(LocalDate.now())
@@ -54,39 +49,33 @@ internal class BlogRepositoryTest @Autowired constructor(
 
     @Test
     fun `should save then update and read blog entity`() {
-        val address = initAddress(
-            zipCode = "1001",
-            addressLine1 = "Test Boulevard 1",
-            city = "Testing"
-        ).withId()
-
-        val person = initPerson(
-            address = address,
-            persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
 
-        val user = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
-            emailAddress = "public@services.com",
-            username = "black"
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
+                person = person,
+                emailAddress = "public@services.com",
+                username = "black",
+            )
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
+        val blogToSave = BlogDao(created = LocalDate.now(), title = "Blah", userId = user.persistent.id)
+        blogRepository.save(blogDao = blogToSave)
 
-        blogRepository.save(blogEntityToSave)
+        val blogEntitySaved = blogRepository.findBlogsByTitle(title = blogToSave.title).firstOrNull() ?: fail {
+            "Unable to find any blogs by title $${blogToSave.title}"
+        }
 
-        val blogs = blogRepository.findBlogsByTitle("Blah")
-        assertThat(blogs).hasSize(1)
-
-        val blogEntitySaved = blogs.iterator().next()
         blogEntitySaved.title = "Duh"
 
         blogRepository.save(blogEntitySaved)
 
-        val modifiedBlogs = blogRepository.findBlogsByTitle("Duh")
-        assertThat(modifiedBlogs).hasSize(1)
-        val blogEntity: BlogEntity = modifiedBlogs.iterator().next()
+        val modifiedBlogs = blogRepository.findBlogsByTitle(title = blogEntitySaved.title)
+        assertThat(modifiedBlogs, "saved blog with title ${blogEntitySaved.title}").hasSize(1)
+        val blogEntity: BlogDao = modifiedBlogs.first()
 
         assertAll {
             assertThat(blogEntity.created).isEqualTo(LocalDate.now())
@@ -96,78 +85,65 @@ internal class BlogRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find blog by title`() {
-        val address = initAddress(
-            zipCode = "1001",
-            addressLine1 = "Test Boulevard 1",
-            city = "Testing"
-        ).withId()
-
-        val person = initPerson(
-            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
 
-        val user = User(
-            Persistent(id = UUID.randomUUID()),
-            personInternal = person,
-            emailAddress = "public@services.com",
-            username = "black"
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = User(
+                person = person,
+                emailAddress = "public@services.com",
+                username = "black",
+                usertype = User.Usertype.ACTIVE,
+            )
         )
 
-        val blogEntityToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).withId().toEntity()
+        val blogToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
 
-        blogRepository.save(blogEntityToSave)
+        blogRepository.save(blogDao = blogToSave)
 
         val blogs = blogRepository.findBlogsByTitle("Blah")
 
         assertAll {
             assertThat(blogs).hasSize(1)
-            assertThat(blogs[0]).isNotNull()
-            assertThat(blogs[0].created).isEqualTo(LocalDate.now())
-
+            assertThat(blogs.firstOrNull()).isNotNull()
+            assertThat(blogs.firstOrNull()?.created).isEqualTo(LocalDate.now())
         }
     }
 
     @Test
-    fun `should be able to relate a blog entry`() {
-        val address = initAddress(
-            zipCode = "1001",
-            addressLine1 = "Test Boulevard 1",
-            city = "Testing"
-        ).withId()
-
-        val person = initPerson(
-            address = address, persistent = Persistent(id = UUID.randomUUID()), surname = "Adder",
+    fun `should save then read blog entry`() {
+        val address = save(
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
 
-        val user = User(
-            persistent = Persistent(id = UUID.randomUUID()),
-            personInternal = person,
-            emailAddress = "public@services.com",
-            username = "black"
+        val person = save(person = initPerson(address = address, surname = "Adder"))
+        val user = save(
+            user = initUser(
+                person = person,
+                emailAddress = "public@services.com",
+                username = "white",
+            )
         )
 
-        val blog = Blog(created = LocalDate.now(), title = "Blah", user = user).withId()
-        val blogEntityToSave: BlogEntity = blog.toEntity()
-        val blogEntry = BlogEntry(
-            blog = blogEntityToSave.toModel(),
-            creatorName = "arnold",
-            entry = "i'll be back"
+        val blog = save(blog = initBlog(created = LocalDate.now(), title = "and then some...", user = user))
+        val blogEntryDao = BlogEntryDao(
+            blogId = blog.persistent.id ?: error("Blog is not persisted!"),
+            creatorName = "smith",
+            entry = "once upon a time",
         )
 
-        val blogEntryToSave: BlogEntryEntity = blogEntry.withId().toEntity()
+        blogRepository.save(blogEntryDao = blogEntryDao)
 
-        blogEntityToSave.add(blogEntryToSave)
-        blogRepository.save(blogEntityToSave)
-
-        val blogs = blogRepository.findBlogsByTitle("Blah")
-        assertThat(blogs).hasSize(1)
-        val blogEntity = blogs.iterator().next()
-        assertThat(blogEntity.getEntries()).hasSize(1)
-        val blogEntryEntity = blogEntity.getEntries().iterator().next()
+        val blogEntries = blogRepository.findBlogEntries()
 
         assertAll {
-            assertThat(blogEntryEntity.entry).isEqualTo("i'll be back")
-            assertThat(blogEntryEntity.creatorName).isEqualTo("arnold")
+            assertThat(blogEntries).hasSize(1)
+            val blogEntry = blogEntries.firstOrNull()
+            assertThat(blogEntry?.creatorName).isEqualTo("smith")
+            assertThat(blogEntry?.timeOfCreation).isNotNull().isNotOlderThan(seconds = 1)
+            assertThat(blogEntry?.entry).isEqualTo("once upon a time")
         }
     }
 }

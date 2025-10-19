@@ -1,34 +1,34 @@
 package com.github.jactor.persistence.test
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.UUID
-import com.github.jactor.persistence.AddressEntity
 import com.github.jactor.persistence.Address
+import com.github.jactor.persistence.AddressDao
 import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogDao
 import com.github.jactor.persistence.BlogEntry
+import com.github.jactor.persistence.BlogEntryDao
 import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.GuestBookEntity
+import com.github.jactor.persistence.GuestBookDao
 import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.GuestBookEntryEntity
-import com.github.jactor.persistence.PersonEntity
+import com.github.jactor.persistence.GuestBookEntryDao
 import com.github.jactor.persistence.Person
+import com.github.jactor.persistence.PersonDao
 import com.github.jactor.persistence.User
-import com.github.jactor.persistence.UserEntity
-import com.github.jactor.persistence.common.PersistentDataEmbeddable
+import com.github.jactor.persistence.UserDao
 import com.github.jactor.persistence.common.Persistent
-
-fun timestamped(username: String): String {
-    return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
-}
+import com.github.jactor.shared.api.CreateUserCommand
+import kotlin.String
 
 fun initAddress(
     persistent: Persistent = Persistent(),
-    addressLine1: String? = null,
+    addressLine1: String = "na",
     addressLine2: String? = null,
     addressLine3: String? = null,
-    city: String? = null,
+    city: String = "na",
     country: String? = null,
-    zipCode: String? = null,
+    zipCode: String = "na",
 ) = Address(
     persistent = persistent,
     addressLine1 = addressLine1,
@@ -39,10 +39,36 @@ fun initAddress(
     zipCode = zipCode
 )
 
+fun initAddressDao(
+    id: UUID? = null,
+    createdBy: String = "unit test",
+    timeOfCreation: LocalDateTime = LocalDateTime.now(),
+    modifiedBy: String = "unit test",
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+    addressLine1: String = "na",
+    addressLine2: String? = null,
+    addressLine3: String? = null,
+    city: String = "na",
+    country: String? = null,
+    zipCode: String = "na",
+) = AddressDao(
+    id = id,
+    createdBy = createdBy,
+    timeOfCreation = timeOfCreation,
+    modifiedBy = modifiedBy,
+    timeOfModification = timeOfModification,
+    addressLine1 = addressLine1,
+    addressLine2 = addressLine2,
+    addressLine3 = addressLine3,
+    city = city,
+    country = country,
+    zipCode = zipCode,
+)
+
 fun initBlog(
     created: LocalDate? = null,
     persistent: Persistent = Persistent(),
-    title: String? = null,
+    title: String = "na",
     user: User? = null,
 ) = Blog(
     created = created,
@@ -51,16 +77,52 @@ fun initBlog(
     user = user,
 )
 
+fun initBlogDao(
+    id: UUID? = null,
+    timeOfModification: LocalDateTime = LocalDateTime.now()
+) = BlogDao(
+    id = id,
+    createdBy = "unit test",
+    modifiedBy = "unit test",
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
+)
+
 fun initBlogEntry(
-    blog: Blog? = null,
-    creatorName: String? = null,
-    entry: String? = null,
+    blog: Blog = initBlog(),
+    creatorName: String = "na",
+    entry: String = "na",
     persistent: Persistent = Persistent(),
 ) = BlogEntry(
     blog = blog,
     persistent = persistent,
     creatorName = creatorName,
     entry = entry,
+)
+
+fun initBlogEntryDao(
+    id: UUID? = null,
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+    blogId: UUID = UUID.randomUUID(),
+) = BlogEntryDao(
+    id = id,
+    createdBy = "unit test",
+    creatorName = "unit test",
+    entry = "unit test",
+    modifiedBy = "unit test",
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
+    blogId = blogId
+)
+
+fun initCreateUserCommand(
+    personId: UUID? = null,
+    username: String = "noway",
+    surname: String = "dracula",
+) = CreateUserCommand(
+    personId = personId,
+    username = username,
+    surname = surname,
 )
 
 fun initGuestBook(
@@ -75,54 +137,67 @@ fun initGuestBook(
     user = user,
 )
 
+fun initGuestBookDao(id: UUID? = null, timeOfModification: LocalDateTime = LocalDateTime.now()) = GuestBookDao(
+    id = id,
+    timeOfModification = timeOfModification,
+)
+
 fun initGuestBookEntry(
-    creatorName: String? = null,
-    entry: String? = null,
+    creatorName: String = "na",
+    entry: String = "na",
     guestBook: GuestBook? = null,
     persistent: Persistent = Persistent(),
 ) = GuestBookEntry(
-    creatorName = creatorName,
+    guestName = creatorName,
     entry = entry,
     guestBook = guestBook,
     persistent = persistent,
 )
 
-fun initUserEntity(
-    id: UUID? = UUID.randomUUID(),
-    person: PersonEntity = initPersonEntity()
-) = UserEntity().apply {
-    this.id = id
-    this.person = person
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
-}
-
-fun initPersonEntity(
-    id: UUID? = UUID.randomUUID(),
-    address: AddressEntity? = initAddressEntity()
-) = PersonEntity().apply {
-    this.id = id
-    addressEntity = address
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
-}
-
-fun initGuestBookEntity(id: UUID? = null) = GuestBookEntity().apply {
-    this.id = id
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
-}
-
-fun initGuestBookEntryEntity(
+fun initGuestBookEntryDao(
     id: UUID? = null,
-    guestBook: GuestBookEntity = initGuestBookEntity()
-) = GuestBookEntryEntity().apply {
-    this.id = id
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
-    this.guestBook = guestBook
-}
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+) = GuestBookEntryDao(
+    id = id,
+    createdBy = "unit test",
+    guestName = "unit test",
+    entry = "unit test",
+    guestBookId = null,
+    modifiedBy = "unit test",
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
+)
 
-fun initAddressEntity(id: UUID? = UUID.randomUUID()) = AddressEntity().apply {
-    this.id = id
-    this.persistentDataEmbeddable = PersistentDataEmbeddable()
-}
+fun initUserDao(
+    id: UUID? = UUID.randomUUID(),
+    personId: UUID? = null,
+    username: String = "whoami",
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+): UserDao = UserDao(
+    id = id,
+
+    createdBy = "unit test",
+    emailAddress = null,
+    modifiedBy = "unit test",
+    personId = personId,
+    username = username,
+    userType = UserDao.UserType.ACTIVE,
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = timeOfModification,
+)
+
+fun initUserDao(createUserCommand: CreateUserCommand) = UserDao(
+    id = UUID.randomUUID(),
+
+    createdBy = createUserCommand.username,
+    emailAddress = null,
+    modifiedBy = createUserCommand.username,
+    personId = createUserCommand.personId,
+    username = createUserCommand.username,
+    userType = UserDao.UserType.ACTIVE,
+    timeOfCreation = LocalDateTime.now(),
+    timeOfModification = LocalDateTime.now(),
+)
 
 fun initPerson(
     id: UUID? = null,
@@ -141,6 +216,24 @@ fun initPerson(
     surname = surname,
 )
 
+fun initPersonDao(
+    id: UUID? = null,
+    addressId: UUID? = null,
+    description: String? = null,
+    firstName: String? = null,
+    locale: String? = null,
+    surname: String = "",
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
+) = PersonDao(
+    id = id,
+    addressId = addressId,
+    description = description,
+    firstName = firstName,
+    locale = locale,
+    surname = surname,
+    timeOfModification = timeOfModification,
+)
+
 fun initUser(
     persistent: Persistent = Persistent(),
     emailAddress: String? = null,
@@ -154,3 +247,7 @@ fun initUser(
     username = username,
     usertype = usertype,
 )
+
+fun timestamped(username: String): String {
+    return "$username@${java.lang.Long.toHexString(System.currentTimeMillis())}"
+}

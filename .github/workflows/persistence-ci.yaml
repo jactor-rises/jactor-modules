@@ -49,4 +49,5 @@ jobs:
           ./gradlew -q :persistence:dependencies
             exit 1;
           fi
-      - run: ./gradlew :persistence:test --tests "*" --stacktrace
+      - name: Run tests with stack trace information
+        run: ./gradlew :persistence:test --tests "*" --stacktrace --info

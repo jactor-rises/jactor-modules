@@ -20,7 +20,7 @@ internal class UserTest {
             username = "me"
         )
 
-        val (_, person, emailAddress, username) = User(user.persistent, user)
+        val (_, person, emailAddress, username) = user.copy(persistent = user.persistent)
 
         assertAll {
             assertThat(emailAddress).isEqualTo(user.emailAddress)
@@ -39,9 +39,8 @@ internal class UserTest {
             timeOfModification = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = User(
-            persistent,
-            user = initUser()
+        val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = initUser(
+            persistent = persistent,
         ).persistent
 
         assertAll {

@@ -2,9 +2,7 @@ package com.github.jactor.persistence
 
 import java.util.UUID
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
@@ -12,21 +10,20 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 
-internal class DtoMapperTest @Autowired constructor(
-    private val objectMapper: ObjectMapper
-) : AbstractSpringBootNoDirtyContextTest() {
+internal class DtoMapperTest {
+    private val objectMapper: ObjectMapper = JactorPersistenceConfig().objectMapper()
 
     @Test
     fun `should map a user to json`() {
         val uuid = UUID.randomUUID()
-        val userlDto = UserDto(
+        val userDto = UserDto(
             persistentDto = PersistentDto(id = uuid),
             emailAddress = "some@where",
             username = "mine",
             userType = UserType.ACTIVE
         )
 
-        val json = objectMapper.writeValueAsString(userlDto)
+        val json = objectMapper.writeValueAsString(userDto)
 
         assertAll {
             assertThat(actual = json, name = "id").contains(""""id":"$uuid"""")

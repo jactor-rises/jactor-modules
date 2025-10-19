@@ -11,7 +11,6 @@ internal class JactorPersistenceTest @Autowired constructor(
     private val commandLineRunner: CommandLineRunner?
 ) : AbstractSpringBootNoDirtyContextTest() {
 
-
     @Test
     fun `should contain bean named CommandlineRunner`() {
         assertThat(commandLineRunner).isNotNull()

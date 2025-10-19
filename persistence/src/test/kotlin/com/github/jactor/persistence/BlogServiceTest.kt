@@ -1,48 +1,48 @@
 package com.github.jactor.persistence
 
 import java.time.LocalDate
-import java.util.Optional
 import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initBlogEntry
 import com.github.jactor.persistence.test.initUser
+import com.github.jactor.persistence.test.withId
+import com.github.jactor.persistence.test.withPersistedData
+import com.github.jactor.persistence.test.withPersistentData
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import assertk.assertions.isNull
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
 
 internal class BlogServiceTest {
-
-    private val blogEntryRepositoryMockk: BlogEntryRepository = mockk {}
     private val blogRepositoryMockk: BlogRepository = mockk {}
-    private val userServiceMockk: UserService = mockk {}
-
-    private val blogServiceToTest: BlogService = BlogServiceImpl(
-        blogRepository = blogRepositoryMockk,
-        blogEntryRepository = blogEntryRepositoryMockk,
-        userService = userServiceMockk
-    )
+    private val userRepositoryMockk: UserRepository = mockk {}
+    private val blogServiceToTest: BlogService = BlogServiceImpl(blogRepository = blogRepositoryMockk).also {
+        JactorPersistenceRepositiesConfig.fetchBlogRelation = { id -> blogRepositoryMockk.findBlogById(id = id) }
+        JactorPersistenceRepositiesConfig.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
+    }
 
     private val uuid: UUID = UUID.randomUUID()
 
     @Test
     fun `should map blog to dto`() = runTest {
-        val blogEntity = Blog(
-            created = null,
-            persistent = Persistent(),
-            title = "full speed ahead",
-            user = null
-        ).withId().toEntity()
+        val blogDao = mockk<BlogDao> {
+            every { toBlog() } returns Blog(
+                created = null,
+                persistent = Persistent(),
+                title = "full speed ahead",
+                user = null
+            ).withId()
+        }
 
-        every { blogRepositoryMockk.findById(uuid) } returns Optional.of(blogEntity)
+        every { blogRepositoryMockk.findBlogById(id = uuid) } returns blogDao
 
         val (_, _, title) = blogServiceToTest.find(uuid) ?: throw AssertionError("missed mocking?")
 
@@ -51,17 +51,17 @@ internal class BlogServiceTest {
 
     @Test
     fun `should map blog entry to dto`() = runTest {
-        val blogEntry = BlogEntry(
-            blog = initBlog(), creatorName = "me", entry = "too",
-            persistent = Persistent(),
-        )
+        val blogEntryDao = mockk<BlogEntryDao> {
+            every { toBlogEntry() } returns initBlogEntry(
+                blog = initBlog(), creatorName = "me", entry = "too",
+                persistent = Persistent().withPersistedData(),
+            )
+        }
 
-        val anEntry = blogEntry.withId().toEntity()
+        every { blogRepositoryMockk.findBlogEntryById(uuid) } returns blogEntryDao
 
-        every { blogEntryRepositoryMockk.findById(uuid) } returns Optional.of(anEntry)
-
-        val (_, creatorName, entry, _) = blogServiceToTest.findEntryBy(uuid)
-            ?: throw AssertionError("missed mocking?")
+        val (_, creatorName, entry, _) = blogServiceToTest.findEntryBy(blogEntryId = uuid)
+            ?: fail { "no entry found???" }
 
         assertAll {
             assertThat(creatorName).isEqualTo("me")
@@ -71,7 +71,13 @@ internal class BlogServiceTest {
 
     @Test
     fun `should find blogs for title`() = runTest {
-        val blogsToFind = listOf(initBlog(title = "Star Wars").withId().toEntity())
+        val blogsToFind = listOf(
+            mockk<BlogDao> {
+                every { toBlog() } returns initBlog(
+                    title = "Star Wars",
+                )
+            }
+        )
 
         every { blogRepositoryMockk.findBlogsByTitle("Star Wars") } returns blogsToFind
 
@@ -82,68 +88,78 @@ internal class BlogServiceTest {
 
     @Test
     fun `should map blog entries to a list of dto`() = runTest {
-        val blogEntryEntities: List<BlogEntryEntity?> = listOf(
-            BlogEntry(
-                blog = initBlog(),
-                creatorName = "you",
-                entry = "too",
-                persistent = Persistent(),
-            ).withId().toEntity()
+        val blogEntryEntities: List<BlogEntryDao> = listOf(
+            mockk {
+                every { toBlogEntry() } returns BlogEntry(
+                    blog = initBlog().withPersistentData(),
+                    creatorName = "you",
+                    entry = "too",
+                    persistent = Persistent().withPersistedData(),
+                )
+            }
         )
 
-        every { blogEntryRepositoryMockk.findByBlogId(uuid) } returns blogEntryEntities
+        every { blogRepositoryMockk.findBlogEntriesByBlogId(uuid) } returns blogEntryEntities
 
         val blogEntries = blogServiceToTest.findEntriesForBlog(uuid)
 
         assertAll {
             assertThat(blogEntries).hasSize(1)
-            assertThat(blogEntries[0].creatorName).isEqualTo("you")
-            assertThat(blogEntries[0].entry).isEqualTo("too")
+            assertThat(blogEntries.firstOrNull()?.creatorName).isEqualTo("you")
+            assertThat(blogEntries.firstOrNull()?.entry).isEqualTo("too")
         }
     }
 
     @Test
-    fun `should save BlogDto as BlogEntity`() = runTest {
-        val blogEntitySlot = slot<BlogEntity>()
-        val blog = Blog(
+    fun `should save BlogDto as BlogDao`() = runTest {
+        val blogDaoSlot = slot<BlogDao>()
+        val owner = initUser(username = "itsme").withId()
+        val blog = initBlog(
             created = LocalDate.now(),
             title = "some blog",
-            user = initUser(username = "itsme")
+            user = owner
         )
 
-        coEvery { userServiceMockk.find(username = any()) } returns null
-        every { blogRepositoryMockk.save(capture(blogEntitySlot)) } returns BlogEntity(blog)
+        val blogDaoMockk = mockk<BlogDao>(relaxed = true) {
+            every { toBlog() } returns blog
+        }
+
+        every { userRepositoryMockk.findById(id = blog.user?.id!!) } returns owner.toUserDao()
+        every { blogRepositoryMockk.save(capture(blogDaoSlot)) } returns blogDaoMockk
 
         blogServiceToTest.saveOrUpdate(blog = blog)
-        val blogEntity = blogEntitySlot.captured
+        val blogDao = blogDaoSlot.captured
 
         assertAll {
-            assertThat(blogEntity.created).isEqualTo(LocalDate.now())
-            assertThat(blogEntity.title).isEqualTo("some blog")
-            assertThat(blogEntity.user).isNull()
+            assertThat(blogDao.created).isEqualTo(LocalDate.now())
+            assertThat(blogDao.title).isEqualTo("some blog")
+            assertThat(blogDao.user).isEqualTo(owner.toUserDao())
         }
     }
 
     @Test
     fun `should save BlogEntryDto as BlogEntryEntity`() = runTest {
-        val blogEntryEntitySlot = slot<BlogEntryEntity>()
+        val blogEntryDaoSlot = slot<BlogEntryDao>()
+        val owner = initBlog(
+            persistent = Persistent(id = UUID.randomUUID()),
+            user = initUser(username = "itsme").withId(),
+        )
+
         val blogEntry = BlogEntry(
-            blog = initBlog(
-                persistent = Persistent(id = UUID.randomUUID()),
-                user = initUser(username = "itsme"),
-            ),
+            blog = owner,
             creatorName = "me",
             entry = "if i where a rich man..."
         )
 
-        coEvery { userServiceMockk.find(username = any()) } returns null
-        every { blogEntryRepositoryMockk.save(capture(blogEntryEntitySlot)) } returns BlogEntryEntity(blogEntry)
+        every { blogRepositoryMockk.findBlogById(id = blogEntry.blog?.id!!) } returns owner.toBlogDao()
+        every { userRepositoryMockk.findById(id = blogEntry.blog?.user?.id!!) } returns owner.user?.toUserDao()
+        every { blogRepositoryMockk.save(blogEntryDao = capture(blogEntryDaoSlot)) } returns blogEntry.toBlogEntryDao()
 
         blogServiceToTest.saveOrUpdate(blogEntry)
-        val blogEntryEntity = blogEntryEntitySlot.captured
+        val blogEntryEntity = blogEntryDaoSlot.captured
 
         assertAll {
-            assertThat(blogEntryEntity.blog).isNotNull()
+            assertThat(blogEntryEntity.blogDao).isNotNull()
             assertThat(blogEntryEntity.creatorName).isEqualTo("me")
             assertThat(blogEntryEntity.entry).isEqualTo("if i where a rich man...")
         }

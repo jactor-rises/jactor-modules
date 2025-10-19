@@ -22,9 +22,8 @@ internal class PersonTest {
             surname = "surname",
         )
 
-        val (_, address, locale, firstName, surname, description) = Person(
+        val (_, address, locale, firstName, surname, description) = person.copy(
             persistent = person.persistent,
-            person = person
         )
 
         assertAll {
@@ -46,9 +45,8 @@ internal class PersonTest {
             timeOfCreation = LocalDateTime.now()
         )
 
-        val (createdBy, id, modifiedBy, timeOfCreation, timeOfModification) = Person(
+        val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = initPerson(
             persistent = persistent,
-            person = initPerson()
         ).persistent
 
         assertAll {
@@ -72,7 +70,7 @@ internal class PersonTest {
             ),
         )
 
-        val address = Person(person.persistent, person).toPersonDto().address
+        val address = person.toPersonDto().address
 
         assertAll {
             assertThat(address?.addressLine1).isEqualTo("somewhere")
