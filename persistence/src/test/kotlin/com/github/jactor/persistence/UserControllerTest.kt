@@ -17,7 +17,17 @@ import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import assertk.fail
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.timestamped
+import com.github.jactor.persistence.test.withId
+import com.github.jactor.shared.test.all
+import com.github.jactor.shared.test.contains
+import com.github.jactor.shared.test.equals
+import com.github.jactor.shared.test.named
+import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.mockk
 
 @WebFluxTest(UserController::class)
 @Import(UserService::class, UserRepository::class)
@@ -144,5 +154,63 @@ internal class UserControllerTest @Autowired constructor(
             .bodyValue(CreateUserCommand(username = "turbo"))
             .exchange()
             .expectStatus().isBadRequest
+    }
+
+    @Test
+    fun `should create a new user`() {
+        val createUserCommand = CreateUserCommand(username = timestamped(username = "turbo"), surname = "Someone")
+
+        every { userRepositoryMockk.contains(any()) } returns false
+        every { userRepositoryMockk.save(any()) } returns initUserDao(
+            id = UUID.randomUUID(),
+            username = createUserCommand.username,
+        )
+
+        webTestClient.post()
+            .uri("/user")
+            .bodyValue(createUserCommand)
+            .exchange()
+            .expectStatus().isCreated
+    }
+
+    @Test
+    fun `should get a BAD_REQUEST if trying to create an existing user`() {
+        val createUserCommand = CreateUserCommand(username = timestamped(username = "turbo"), surname = "Someone")
+
+        every { userRepositoryMockk.contains(any()) } returns true
+
+        webTestClient.post()
+            .uri("/user")
+            .bodyValue(createUserCommand)
+            .exchange()
+            .expectStatus().isBadRequest
+    }
+
+    @Test
+    fun `should create a new user with an email address`() {
+        val createUserCommand = CreateUserCommand(
+            username = timestamped("turbo"),
+            surname = "Someone",
+            emailAddress = "somewhere@somehow.com"
+        )
+
+        coEvery { userRepositoryMockk.contains(any()) } returns false
+        coEvery { userRepositoryMockk.save(any()) } returns initUser(
+            username = createUserCommand.username,
+            emailAddress = createUserCommand.emailAddress
+        ).withId().toUserDao()
+
+        val userDto = webTestClient.post()
+            .uri("/user")
+            .bodyValue(createUserCommand)
+            .exchange()
+            .expectStatus().isCreated
+            .expectBody(UserDto::class.java)
+            .returnResult().responseBody ?: fail(message = "no user created")
+
+        assertThat(userDto).all {
+            emailAddress named "email address" equals "somewhere@somehow.com"
+            username named "username" contains "turbo"
+        }
     }
 }
