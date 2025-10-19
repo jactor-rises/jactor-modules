@@ -46,6 +46,10 @@ class JactorPersistenceRepositiesConfig(
 ) {
 
     init {
+        initFetchRelations()
+    }
+
+    internal fun initFetchRelations() {
         fetchAddressRelation = { addressRepository.findById(id = it) }
         fetchBlogRelation = { blogRepository.findBlogById(id = it) }
         fetchBlogRelations = { blogRepository.findBlogsByUserId(id = it) }

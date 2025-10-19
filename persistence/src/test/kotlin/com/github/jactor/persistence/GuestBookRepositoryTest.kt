@@ -6,6 +6,7 @@ import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import com.github.jactor.persistence.test.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class GuestBookRepositoryTest @Autowired constructor(
     private val guestBookRepository: GuestBookRepository
 ) : AbstractSpringBootNoDirtyContextTest() {
+
+    @BeforeEach
+    fun `reset fetch relations`() {
+        resetFetchRelations()
+    }
 
     @Test
     fun `should write then read guest book`() {

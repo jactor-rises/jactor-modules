@@ -39,4 +39,8 @@ abstract class AbstractSpringBootNoDirtyContextTest {
 
     protected fun save(user: User): User = jactorPersistenceRepositiesConfig.userRepository
         .save(userDao = user.toUserDao()).toUser()
+
+    protected fun resetFetchRelations() {
+        jactorPersistenceRepositiesConfig.initFetchRelations()
+    }
 }
