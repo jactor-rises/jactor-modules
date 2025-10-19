@@ -4,24 +4,27 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
-import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initBlogEntry
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
-import java.util.*
 
 class DatabaseRelationsTest @Autowired constructor(
     private val blogRepository: BlogRepository,
     private val personRepository: PersonRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
 
+    @BeforeEach
+    fun `reset fetch relations`() {
+        resetFetchRelations()
+    }
     @Test
     fun `should be able to get a blog entry from the related entries on the blog`() {
         val address = save(
@@ -80,7 +83,6 @@ class DatabaseRelationsTest @Autowired constructor(
         val person = save(person = initPerson(address = address, surname = adder))
         save(
             user = initUser(
-                persistent = Persistent(id = UUID.randomUUID()),
                 person = person,
                 emailAddress = "public@services.com",
                 username = "black",

@@ -14,7 +14,6 @@ interface PersistentDao<T> {
     val timeOfModification: LocalDateTime
 
     fun copyWithoutId(): T
-    fun isIdNull(): Boolean = id == null
     fun modifiedBy(modifier: String): T
     fun toPersistent() = Persistent(
         id = id,

@@ -10,6 +10,7 @@ import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,6 +19,11 @@ import java.time.LocalDate
 internal class RepositoriesTest @Autowired constructor(
     private val userRepository: UserRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
+
+    @BeforeEach
+    fun `reset fetch releation`() {
+        resetFetchRelations()
+    }
 
     @Test
     fun `should use a BlogRepository to save blogs and find them on on user which was earlier saved`() {

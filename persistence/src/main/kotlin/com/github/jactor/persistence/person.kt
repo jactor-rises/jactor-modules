@@ -122,7 +122,7 @@ object PersonRepositoryObject : PersonRepository {
     )
 
     override fun save(personDao: PersonDao): PersonDao = transaction {
-        when (personDao.isIdNull()) {
+        when (personDao.isNotPersisted) {
             true -> insert(personDao)
             false -> update(personDao)
         }

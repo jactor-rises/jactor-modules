@@ -279,6 +279,9 @@ object UserRepositoryObject : UserRepository {
     override fun save(userDao: UserDao): UserDao = when (userDao.isPersisted) {
         true -> update(user = userDao)
         false -> insert(user = userDao)
+    }.also {
+        val users = findAll()
+        println("${users.size} users persisted: ${users.map { "${it.username}/${it.id}" }}")
     }
 
     private fun insert(user: UserDao): UserDao = transaction {

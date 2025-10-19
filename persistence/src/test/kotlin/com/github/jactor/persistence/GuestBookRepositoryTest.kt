@@ -12,7 +12,7 @@ import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class GuestBookRepositoryTest @Autowired constructor(
-    private val guestBookRepository: GuestBookRepository
+    private val guestBookRepository: GuestBookRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @BeforeEach
