@@ -1,7 +1,18 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDateTime
-import java.util.UUID
+import com.github.jactor.persistence.common.DaoRelation
+import com.github.jactor.persistence.common.DaoRelations
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.util.toCreateUser
+import com.github.jactor.persistence.util.toUser
+import com.github.jactor.shared.api.CreateUserCommand
+import com.github.jactor.shared.api.UserDto
+import com.github.jactor.shared.api.UserType
+import com.github.jactor.shared.whenTrue
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.core.eq
@@ -28,19 +39,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.jactor.persistence.common.DaoRelation
-import com.github.jactor.persistence.common.DaoRelations
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.common.PersistentDao
-import com.github.jactor.persistence.util.toCreateUser
-import com.github.jactor.persistence.util.toUser
-import com.github.jactor.shared.api.CreateUserCommand
-import com.github.jactor.shared.api.UserDto
-import com.github.jactor.shared.api.UserType
-import com.github.jactor.shared.whenTrue
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
+import java.time.LocalDateTime
+import java.util.*
 
 @RestController
 @RequestMapping(path = ["/user"], produces = [MediaType.APPLICATION_JSON_VALUE])
