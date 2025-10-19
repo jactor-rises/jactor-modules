@@ -1,5 +1,6 @@
 package com.github.jactor.persistence
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 import java.util.UUID
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -27,6 +28,8 @@ data class Address(
     val country: String?,
     val zipCode: String,
 ) {
+    val id: UUID? @JsonIgnore get() = persistent.id
+
     constructor(dao: AddressDao) : this(
         persistent = dao.toPersistent(),
 
@@ -87,7 +90,7 @@ interface AddressRepository {
 }
 
 @Repository
-class AddressRepositoryImpl: AddressRepository by AddressRepositoryObject
+class AddressRepositoryImpl : AddressRepository by AddressRepositoryObject
 
 object AddressRepositoryObject : AddressRepository {
     override fun findById(id: UUID): AddressDao? = transaction {

@@ -3,13 +3,10 @@ package com.github.jactor.persistence.common
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initAddressDao
 import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initGuestBook
-import com.github.jactor.persistence.test.initGuestBookEntry
 import com.github.jactor.persistence.test.initGuestBookEntryDao
-import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initPersonDao
 import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.test.withId
@@ -73,7 +70,7 @@ internal class PersistentDaoTest {
     fun `should be able to copy a blog without the id`() {
         persistentDaoToTest = initBlog(
             title = "general ignorance",
-            user = initUser()
+            userId = UUID.randomUUID(),
         ).withId().toBlogDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
@@ -89,13 +86,12 @@ internal class PersistentDaoTest {
     @Test
     fun `should be able to copy a blog entry without the id`() {
         val blogEntry = BlogEntry(
-            blog = initBlog().withId(),
+            blogId = UUID.randomUUID(),
             creatorName = "jactor",
             entry = "the one",
-            persistent = Persistent(),
-        )
+        ).withId()
 
-        persistentDaoToTest = blogEntry.withId().toBlogEntryDao()
+        persistentDaoToTest = blogEntry.toBlogEntryDao()
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
         assertAll {

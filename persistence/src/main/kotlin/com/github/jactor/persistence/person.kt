@@ -1,7 +1,9 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDateTime
-import java.util.UUID
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.shared.api.PersonDto
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.core.eq
@@ -13,12 +15,8 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.github.jactor.persistence.common.DaoRelation
-import com.github.jactor.persistence.common.DaoRelations
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.common.PersistentDao
-import com.github.jactor.shared.api.PersonDto
+import java.time.LocalDateTime
+import java.util.*
 
 @Service
 class PersonService(private val personRepository: PersonRepository) {
@@ -32,7 +30,7 @@ class PersonService(private val personRepository: PersonRepository) {
 @JvmRecord
 data class Person(
     val persistent: Persistent,
-    val address: Address?,
+    val addressId: UUID?,
     val locale: String?,
     val firstName: String?,
     val surname: String,
@@ -50,12 +48,12 @@ data class Person(
         firstName = firstName,
         surname = surname,
         locale = locale,
-        addressId = address?.persistent?.id
+        addressId = addressId,
     )
 
     fun toPersonDto() = PersonDto(
         persistentDto = persistent.toPersistentDto(),
-        address = address?.toAddressDto(),
+        addressId = addressId,
         locale = locale,
         firstName = firstName,
         surname = surname,
@@ -173,14 +171,9 @@ data class PersonDao(
     var surname: String,
     var addressId: UUID? = null,
 ) : PersistentDao<PersonDao> {
-    private val addressRelation = DaoRelation(fetchRelation = JactorPersistenceRepositiesConfig.fetchAddressRelation)
-    private val userRelations = DaoRelations(fetchRelations = JactorPersistenceRepositiesConfig.fetchUserRelations)
-    val users: List<UserDao> get() = id?.let { userRelations.fetchRelations(id = it) } ?: emptyList()
-    val addressDao: AddressDao? get() = addressRelation.fetchRelatedInstance(id = addressId)
-
     fun toPerson() = Person(
         persistent = toPersistent(),
-        address = addressDao?.toAddress(),
+        addressId = addressId,
         locale = locale,
         firstName = firstName,
         surname = surname,

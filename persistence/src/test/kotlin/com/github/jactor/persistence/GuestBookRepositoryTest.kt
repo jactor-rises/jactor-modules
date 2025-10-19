@@ -42,11 +42,11 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             )
         )
 
-        val guestBookEntity = guestBookRepository.findGuestBookByUserId(id = user.id)
+        val guestBookDao = guestBookRepository.findGuestBookByUserId(id = user.id)
 
         assertAll {
-            assertThat(guestBookEntity?.title).isEqualTo("home sweet home")
-            assertThat(guestBookEntity?.user).isNotNull()
+            assertThat(guestBookDao?.title).isEqualTo("home sweet home")
+            assertThat(guestBookDao?.userId).isEqualTo(user.id)
         }
     }
 
@@ -67,7 +67,6 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
         guestBookRepository.save(
             guestBookDao = initGuestBook(
-                entries = emptySet(),
                 title = "home sweet home",
                 user = user,
             ).toGuestBookDao()
@@ -127,7 +126,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `should write two entries to two different guest books and then find one entry`() {
+    fun `should write two entries to a guest book and then find one entry`() {
         val address = save(
             address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         )
@@ -143,7 +142,6 @@ internal class GuestBookRepositoryTest @Autowired constructor(
 
         val guestBook = save(
             guestBook = initGuestBook(
-                entries = emptySet(),
                 title = "home sweet home",
                 user = user,
             )
@@ -170,16 +168,15 @@ internal class GuestBookRepositoryTest @Autowired constructor(
         )
 
         guestBookRepository.save(guestBookEntryDao = anEntry.toGuestBookEntryDao())
-        val anotherEntryDao = guestBookRepository.save(guestBookEntryDao = anotherEntry.toGuestBookEntryDao())
+        guestBookRepository.save(guestBookEntryDao = anotherEntry.toGuestBookEntryDao())
 
-        val lastEntry = guestBookRepository.findAllGuestBooks()
-            .flatMap { it.entries }
-            .firstOrNull { it.id == anotherEntryDao.id }
+        val lastEntry = guestBookRepository.findGuestBookEtriesByGuestBookId(id = guestBook.id)
+            .lastOrNull()
 
         assertAll {
-            assertThat(lastEntry).isNotNull()
-            assertThat(lastEntry?.guestName).isEqualTo("shrek")
-            assertThat(lastEntry?.entry).isEqualTo("far far away")
+            assertThat(lastEntry, "last entry").isNotNull()
+            assertThat(lastEntry?.guestName, "guest on last entry").isEqualTo("shrek")
+            assertThat(lastEntry?.entry, "text from last entry").isEqualTo("far far away")
         }
     }
 }

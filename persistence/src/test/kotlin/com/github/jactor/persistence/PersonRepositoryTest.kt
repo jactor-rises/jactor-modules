@@ -30,7 +30,7 @@ internal class PersonRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `should save then read a person entity`() {
+    fun `should save then read a person dao`() {
         val addressId = save(
             address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
         ).persistent.id ?: fail { "not persisted?!!!" }
@@ -55,7 +55,7 @@ internal class PersonRepositoryTest @Autowired constructor(
         }
 
         assertAll {
-            assertThat(personDao.addressDao).isEqualTo(personToPersist.addressDao)
+            assertThat(personDao.addressId).isEqualTo(personToPersist.addressId)
             assertThat(personDao.description).isEqualTo("Me, myself, and I")
             assertThat(personDao.locale).isEqualTo("no_NO")
             assertThat(personDao.firstName).isEqualTo("Born")
@@ -63,7 +63,7 @@ internal class PersonRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `should save then update and read a person entity`() {
+    fun `should save then update and read a person dao`() {
         val addressId = save(
             address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
         ).persistent.id ?: fail { "not persisted?!!!" }

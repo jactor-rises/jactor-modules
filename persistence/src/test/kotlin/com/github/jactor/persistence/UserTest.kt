@@ -9,6 +9,7 @@ import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.persistence.test.withId
 
 internal class UserTest {
 
@@ -16,15 +17,15 @@ internal class UserTest {
     fun `should have a copy constructor`() {
         val user = initUser(
             emailAddress = "somewhere@time",
-            person = initPerson(),
+            person = initPerson().withId(),
             username = "me"
         )
 
-        val (_, person, emailAddress, username) = user.copy(persistent = user.persistent)
+        val (_, emailAddress, personId, username) = user.copy(persistent = user.persistent)
 
         assertAll {
             assertThat(emailAddress).isEqualTo(user.emailAddress)
-            assertThat(person).isEqualTo(user.person)
+            assertThat(personId).isEqualTo(user.personId)
             assertThat(username).isEqualTo(user.username)
         }
     }

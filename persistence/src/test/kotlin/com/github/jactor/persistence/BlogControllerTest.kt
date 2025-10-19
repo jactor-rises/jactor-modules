@@ -1,30 +1,28 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDate
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.core.ParameterizedTypeReference
-import org.springframework.test.web.reactive.server.WebTestClient
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.initBlog
-import com.github.jactor.persistence.test.initBlogEntry
-import com.github.jactor.persistence.test.initUser
-import com.github.jactor.persistence.test.withId
-import com.github.jactor.shared.api.BlogDto
-import com.github.jactor.shared.api.BlogEntryDto
-import com.github.jactor.shared.api.CreateBlogEntryCommand
-import com.github.jactor.shared.api.UpdateBlogTitleCommand
-import com.ninjasquad.springmockk.MockkBean
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEmpty
 import assertk.assertions.isNotNull
 import assertk.assertions.isNull
+import com.github.jactor.persistence.test.initBlog
+import com.github.jactor.persistence.test.initBlogEntry
+import com.github.jactor.persistence.test.withId
+import com.github.jactor.shared.api.BlogDto
+import com.github.jactor.shared.api.BlogEntryDto
+import com.github.jactor.shared.api.CreateBlogEntryCommand
+import com.github.jactor.shared.api.UpdateBlogTitleCommand
+import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.core.ParameterizedTypeReference
+import org.springframework.test.web.reactive.server.WebTestClient
+import java.time.LocalDate
+import java.util.*
 
 @WebFluxTest(BlogController::class)
 internal class BlogControllerTest @Autowired constructor(
@@ -189,7 +187,7 @@ internal class BlogControllerTest @Autowired constructor(
         val blog = initBlog(
             created = LocalDate.now(),
             title = "Another title",
-            user = initUser(persistent = Persistent(id = UUID.randomUUID()))
+            userId = UUID.randomUUID(),
         )
 
         coEvery { blogServiceMockk.saveOrUpdate(blog = any()) } returns blog
@@ -219,7 +217,7 @@ internal class BlogControllerTest @Autowired constructor(
         )
 
         coEvery { blogServiceMockk.create(createBlogEntry = any()) } answers {
-            initBlogEntry(entry = (arg(0) as CreateBlogEntry).entry).withId()
+            initBlogEntry(blog = initBlog().withId(), entry = (arg(0) as CreateBlogEntry).entry).withId()
         }
 
         val blogEntry = webTestClient

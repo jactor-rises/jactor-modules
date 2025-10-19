@@ -1,33 +1,34 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDateTime
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.initAddress
-import com.github.jactor.persistence.test.initPerson
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initAddress
+import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.persistence.test.withId
+import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
+import java.util.*
 
 internal class PersonTest {
 
     @Test
     fun `should have a copy constructor`() {
         val person = initPerson(
-            address = initAddress(),
+            address = initAddress().withId(),
             firstName = "first name",
             description = "description",
             locale = "no",
             surname = "surname",
         )
 
-        val (_, address, locale, firstName, surname, description) = person.copy(
+        val (_, addressId, locale, firstName, surname, description) = person.copy(
             persistent = person.persistent,
         )
 
         assertAll {
-            assertThat(address).isEqualTo(person.address)
+            assertThat(addressId).isEqualTo(person.addressId)
             assertThat(description).isEqualTo(person.description)
             assertThat(firstName).isEqualTo(person.firstName)
             assertThat(locale).isEqualTo(person.locale)
@@ -55,29 +56,6 @@ internal class PersonTest {
             assertThat(id).isEqualTo(persistent.id)
             assertThat(modifiedBy).isEqualTo(persistent.modifiedBy)
             assertThat(timeOfModification).isEqualTo(persistent.timeOfModification)
-        }
-    }
-
-    @Test
-    fun `should get address for person`() {
-        val person = initPerson(
-            address = initAddress(
-                addressLine1 = "somewhere",
-                addressLine2 = "in",
-                addressLine3 = "time",
-                city = "out there",
-                zipCode = "1234"
-            ),
-        )
-
-        val address = person.toPersonDto().address
-
-        assertAll {
-            assertThat(address?.addressLine1).isEqualTo("somewhere")
-            assertThat(address?.addressLine2).isEqualTo("in")
-            assertThat(address?.addressLine3).isEqualTo("time")
-            assertThat(address?.city).isEqualTo("out there")
-            assertThat(address?.zipCode).isEqualTo("1234")
         }
     }
 }

@@ -1,32 +1,30 @@
 package com.github.jactor.persistence
 
-import java.time.LocalDateTime
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.initGuestBook
-import com.github.jactor.persistence.test.initGuestBookEntry
-import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.test.initGuestBook
+import com.github.jactor.persistence.test.initUser
+import com.github.jactor.persistence.test.withId
+import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
+import java.util.*
 
 internal class GuestBookTest {
 
     @Test
     fun `should have a copy constructor`() {
         val guestBook = initGuestBook(
-            entries = setOf(initGuestBookEntry()),
             title = "title",
-            user = initUser()
+            user = initUser().withId()
         )
 
-        val (_, entries, title, userInternal) = GuestBook(guestBook.persistent, guestBook)
+        val (_, title, userId) = GuestBook(guestBook.persistent, guestBook)
 
         assertAll {
-            assertThat(entries).isEqualTo(guestBook.entries)
             assertThat(title).isEqualTo(guestBook.title)
-            assertThat(userInternal).isEqualTo(guestBook.user)
+            assertThat(userId).isEqualTo(guestBook.userId)
         }
     }
 

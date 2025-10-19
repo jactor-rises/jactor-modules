@@ -24,14 +24,14 @@ data class CreateUserCommand(
 ) {
     fun toUserDto() = UserDto(
         persistentDto = toPersistentDto(),
-        person = toPersonDto(),
+        personId = personId,
         emailAddress = emailAddress,
         username = username
     )
 
     fun toPersonDto() = PersonDto(
         persistentDto = toPersistentDto(id = personId),
-        address = toAddressDto(),
+        addressId = addressId,
         locale = language,
         firstName = firstName,
         surname = surname,

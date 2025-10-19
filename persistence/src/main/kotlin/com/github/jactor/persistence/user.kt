@@ -1,7 +1,5 @@
 package com.github.jactor.persistence
 
-import com.github.jactor.persistence.common.DaoRelation
-import com.github.jactor.persistence.common.DaoRelations
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.util.toCreateUser
@@ -136,8 +134,8 @@ class UserService(private val userRepository: UserRepository = UserRepositoryObj
 @JvmRecord
 data class User(
     val persistent: Persistent = Persistent(),
-    val person: Person?,
     val emailAddress: String?,
+    val personId: UUID?,
     val username: String?,
     val usertype: Usertype,
 ) {
@@ -152,7 +150,7 @@ data class User(
         timeOfModification = persistent.timeOfModification,
 
         emailAddress = emailAddress,
-        personId = person?.persistent?.id,
+        personId = personId,
         username = username ?: "na",
         userType = UserDao.UserType.entries.firstOrNull { it.name == usertype.name }
             ?: error(message = "Unknown UserType: $usertype"),
@@ -161,7 +159,7 @@ data class User(
     fun toUserDto() = UserDto(
         persistentDto = persistent.toPersistentDto(),
         emailAddress = emailAddress,
-        person = person?.toPersonDto(),
+        personId = personId,
         username = username,
         userType = (usertype == Usertype.ADMIN).whenTrue { UserType.ACTIVE } ?: UserType.valueOf(usertype.name)
     )
@@ -333,19 +331,6 @@ data class UserDao(
     internal var personId: UUID? = null,
     internal var username: String = "na",
 ) : PersistentDao<UserDao> {
-    private val blogRelations = DaoRelations(fetchRelations = JactorPersistenceRepositiesConfig.fetchBlogRelations)
-    private val guestBookRelation = DaoRelation(
-        fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation
-    )
-
-    private val personRelation = DaoRelation(
-        fetchRelation = JactorPersistenceRepositiesConfig.fetchPersonRelation,
-    )
-
-    val personDao: PersonDao? get() = personRelation.fetchRelatedInstance(id = personId)
-    val guestBook: GuestBookDao? get() = guestBookRelation.fetchRelatedInstance(id = id)
-    val blogs: List<BlogDao> get() = id?.let { blogRelations.fetchRelations(id = it) } ?: emptyList()
-
     override fun copyWithoutId(): UserDao = copy(
         id = null,
         personId = null,
@@ -362,7 +347,7 @@ data class UserDao(
         persistent = toPersistent(),
         username = username,
         emailAddress = emailAddress,
-        person = personDao?.toPerson(),
+        personId = personId,
         usertype = User.Usertype.entries.firstOrNull { it.name == userType.name }
             ?: error("Unknown UserType: $userType")
     )

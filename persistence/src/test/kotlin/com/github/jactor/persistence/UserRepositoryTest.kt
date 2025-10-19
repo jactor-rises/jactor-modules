@@ -1,17 +1,16 @@
 package com.github.jactor.persistence
 
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.containsOnly
+import assertk.assertions.isEqualTo
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
-import assertk.assertAll
-import assertk.assertThat
-import assertk.assertions.containsAtLeast
-import assertk.assertions.containsOnly
-import assertk.assertions.isEqualTo
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 
 internal class UserRepositoryTest @Autowired constructor(
     private val userRepository: UserRepository
@@ -21,14 +20,11 @@ internal class UserRepositoryTest @Autowired constructor(
     fun `should find user with username jactor`() {
         val userDao = userRepository.findByUsername("jactor")
 
-        assertAll {
-            assertThat(userDao?.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
-            assertThat(userDao?.personDao?.firstName).isEqualTo("Tor Egil")
-        }
+        assertThat(userDao?.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
     }
 
     @Test
-    fun `should write then read a user entity`() {
+    fun `should write then read a user dao`() {
         val address = save(
             address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         )
@@ -36,7 +32,7 @@ internal class UserRepositoryTest @Autowired constructor(
         val person = save(person = initPerson(address = address, surname = "Solo"))
 
         val userToPersist = User(
-            person = person,
+            personId = person.id,
             emailAddress = "smuggle.fast@tantooine.com",
             username = "smuggler",
             usertype = User.Usertype.ACTIVE
@@ -47,7 +43,7 @@ internal class UserRepositoryTest @Autowired constructor(
         val userDao = userRepository.findByUsername("smuggler")
 
         assertAll {
-            assertThat(userDao?.personDao).isEqualTo(userToPersist.personDao)
+            assertThat(userDao?.personId).isEqualTo(userToPersist.personId)
             assertThat(userDao?.username).isEqualTo("smuggler")
             assertThat(userDao?.emailAddress).isEqualTo("smuggle.fast@tantooine.com")
             assertThat(userDao?.userType).isEqualTo(UserDao.UserType.ACTIVE)
@@ -55,7 +51,7 @@ internal class UserRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `should write then update and read a user entity`() {
+    fun `should write then update and read a user dao`() {
         val address = save(
             address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
         )
