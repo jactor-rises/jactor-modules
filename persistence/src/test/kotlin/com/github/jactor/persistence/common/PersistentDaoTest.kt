@@ -89,7 +89,7 @@ internal class PersistentDaoTest {
     @Test
     fun `should be able to copy a blog entry without the id`() {
         val blogEntry = BlogEntry(
-            blog = initBlog(),
+            blog = initBlog().withId(),
             creatorName = "jactor",
             entry = "the one",
             persistent = Persistent(),
@@ -108,7 +108,10 @@ internal class PersistentDaoTest {
 
     @Test
     fun `should be able to copy a guest book without the id`() {
-        persistentDaoToTest = initGuestBook(title = "enter when applied", user = initUser()).withId().toGuestBookDao()
+        persistentDaoToTest = initGuestBook(
+            title = "enter when applied",
+            user = initUser(persistent = Persistent(id = UUID.randomUUID())),
+        ).withId().toGuestBookDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>
 
