@@ -5,6 +5,7 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import com.github.jactor.persistence.Blog
+import com.github.jactor.persistence.BlogRepository
 import com.github.jactor.persistence.UserRepository
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 
 internal class RepositoriesTest @Autowired constructor(
+    private val blogRepository: BlogRepository,
     private val userRepository: UserRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
 
@@ -49,21 +51,21 @@ internal class RepositoriesTest @Autowired constructor(
             blog = Blog(
                 created = LocalDate.now(),
                 title = "Far, far, away...",
-                user = userByUsername.toUser()
+                userId = userByUsername.id
             )
         )
 
         userByUsername = userRepository.findByUsername("r2d2")
             ?: fail { "User not found!" }
 
-        val blogs = userByUsername.blogs
+        val blogs = blogRepository.findBlogsByUserId(id = userByUsername.id!!)
 
         assertThat(blogs).hasSize(1)
-        val blogEntity = blogs.iterator().next()
+        val blogDao = blogs.iterator().next()
 
         assertAll {
-            assertThat(blogEntity.title).isEqualTo("Far, far, away...")
-            assertThat(blogEntity.user).isEqualTo(userByUsername)
+            assertThat(blogDao.title).isEqualTo("Far, far, away...")
+            assertThat(blogDao.userId).isEqualTo(userByUsername.id)
         }
     }
 }

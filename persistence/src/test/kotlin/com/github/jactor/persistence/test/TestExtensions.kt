@@ -1,5 +1,6 @@
 package com.github.jactor.persistence.test
 
+import com.github.jactor.persistence.Address
 import java.util.UUID
 import com.github.jactor.persistence.Blog
 import com.github.jactor.persistence.BlogEntry
@@ -11,6 +12,7 @@ import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UserDto
 
+fun Address.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun Blog.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun BlogEntry.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun GuestBook.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))

@@ -1,22 +1,22 @@
 package com.github.jactor.shared.api
 
+import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 import java.util.UUID
-import io.swagger.v3.oas.annotations.media.Schema
 
 @JvmRecord
 @Schema(description = "Metadata til en blog")
 data class BlogDto(
     @param:Schema(description = "Standard lagrede data") override val persistentDto: PersistentDto = PersistentDto(),
     @param:Schema(description = "Tittel") val title: String? = null,
-    @param:Schema(description = "Bruker") val user: UserDto? = null,
+    @param:Schema(description = "Id til bruker som presenterer bloggen") val userId: UUID? = null,
 ) : PersistentData
 
 @JvmRecord
 @Schema(description = "Metadata til et blogginnlegg")
 data class BlogEntryDto(
     @param:Schema(description = "Standard lagrede data") override val persistentDto: PersistentDto = PersistentDto(),
-    @param:Schema(description = "Blog") val blogDto: BlogDto? = null,
+    @param:Schema(description = "Id til blog som har entry") val blogId: UUID? = null,
     @param:Schema(description = "Hvem laget innlegget") val creatorName: String? = null,
     @param:Schema(description = "Innlegg") val entry: String? = null,
 ) : PersistentData
@@ -25,9 +25,8 @@ data class BlogEntryDto(
 @Schema(description = "Metadata til en gjestebok")
 data class GuestBookDto(
     @param:Schema(description = "Standard lagrede data") override val persistentDto: PersistentDto = PersistentDto(),
-    @param:Schema(description = "Innlegg i gjestebok") val entries: Set<GuestBookEntryDto> = emptySet(),
     @param:Schema(description = "Navn for gjestebok") val title: String? = null,
-    @param:Schema(description = "Bruker") val userDto: UserDto? = null
+    @param:Schema(description = "Id til bruker") val userId: UUID? = null
 ) : PersistentData
 
 @JvmRecord
@@ -36,7 +35,7 @@ data class GuestBookEntryDto(
     @param:Schema(description = "Standard lagrede data") override val persistentDto: PersistentDto = PersistentDto(),
     @param:Schema(description = "Hvem laget innlegget") val creatorName: String? = null,
     @param:Schema(description = "Innlegg") val entry: String? = null,
-    @param:Schema(description = "Gjesteboka som har innlegget") val guestBook: GuestBookDto? = null,
+    @param:Schema(description = "Id til gjesteboka som har innlegget") val guestBookId: UUID? = null,
 ) : PersistentData
 
 @JvmRecord
@@ -44,7 +43,7 @@ data class GuestBookEntryDto(
 data class UserDto(
     @param:Schema(description = "Standard lagrede data") override val persistentDto: PersistentDto = PersistentDto(),
     @param:Schema(description = "Epostadresse") val emailAddress: String? = null,
-    @param:Schema(description = "Persondata") val person: PersonDto? = null,
+    @param:Schema(description = "Id thil brukerens persondata") val personId: UUID? = null,
     @param:Schema(description = "Brukernavn") val username: String? = null,
     @param:Schema(description = "Brukerstatus") val userType: UserType = UserType.ACTIVE
 ) : PersistentData
@@ -62,7 +61,7 @@ enum class UserType {
 @Schema(description = "Metadata for en person")
 data class PersonDto(
     @param:Schema(description = "Standard lagrede data") override val persistentDto: PersistentDto = PersistentDto(),
-    @param:Schema(description = "Adressen til en person") val address: AddressDto? = null,
+    @param:Schema(description = "Id til adressen til en person") val addressId: UUID? = null,
     @param:Schema(description = "Beskrivelse") val description: String? = null,
     @param:Schema(description = "Fornavn") val firstName: String? = null,
     @param:Schema(description = "Internasjonal id (land & språk - ISO/IEC 15897)") val locale: String? = null,

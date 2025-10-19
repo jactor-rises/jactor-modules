@@ -9,6 +9,7 @@ import com.github.jactor.persistence.test.initGuestBookEntry
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.persistence.test.withId
 
 internal class GuestBookEntryTest {
 
@@ -17,20 +18,20 @@ internal class GuestBookEntryTest {
         val guestBookEntry = initGuestBookEntry(
             creatorName = "me",
             entry = "entry",
-            guestBook = initGuestBook()
+            guestBook = initGuestBook().withId()
         )
 
-        val (entry, creatorName, guestBook) = GuestBookEntry(
+        val (entry, creatorName, guestBookId) = GuestBookEntry(
             guestName = guestBookEntry.guestName,
             entry = guestBookEntry.entry,
             persistent = guestBookEntry.persistent,
-            guestBook = guestBookEntry.guestBook
+            guestBookId = guestBookEntry.guestBookId
         )
 
         assertAll {
             assertThat(creatorName).isEqualTo(guestBookEntry.guestName)
-            assertThat(guestBook).isEqualTo(guestBookEntry.guestBook)
             assertThat(entry).isEqualTo(guestBookEntry.entry)
+            assertThat(guestBookId).isEqualTo(guestBookEntry.guestBookId)
         }
     }
 
@@ -48,7 +49,7 @@ internal class GuestBookEntryTest {
             guestName = persistent.createdBy,
             entry = "entry",
             persistent = persistent,
-            guestBook = initGuestBook()
+            guestBookId = null
         ).persistent
 
         assertAll {

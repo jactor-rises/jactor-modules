@@ -10,7 +10,6 @@ import com.github.jactor.persistence.test.initBlogEntry
 import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.test.withId
 import com.github.jactor.persistence.test.withPersistedData
-import com.github.jactor.persistence.test.withPersistentData
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -38,7 +37,7 @@ internal class BlogServiceTest {
                 created = null,
                 persistent = Persistent(),
                 title = "full speed ahead",
-                user = null
+                userId = null
             ).withId()
         }
 
@@ -53,7 +52,7 @@ internal class BlogServiceTest {
     fun `should map blog entry to dto`() = runTest {
         val blogEntryDao = mockk<BlogEntryDao> {
             every { toBlogEntry() } returns initBlogEntry(
-                blog = initBlog(), creatorName = "me", entry = "too",
+                blog = initBlog().withId(), creatorName = "me", entry = "too",
                 persistent = Persistent().withPersistedData(),
             )
         }
@@ -91,7 +90,7 @@ internal class BlogServiceTest {
         val blogEntryEntities: List<BlogEntryDao> = listOf(
             mockk {
                 every { toBlogEntry() } returns BlogEntry(
-                    blog = initBlog().withPersistentData(),
+                    blogId = UUID.randomUUID(),
                     creatorName = "you",
                     entry = "too",
                     persistent = Persistent().withPersistedData(),
@@ -117,14 +116,14 @@ internal class BlogServiceTest {
         val blog = initBlog(
             created = LocalDate.now(),
             title = "some blog",
-            user = owner
+            userId = owner.id
         )
 
         val blogDaoMockk = mockk<BlogDao>(relaxed = true) {
             every { toBlog() } returns blog
         }
 
-        every { userRepositoryMockk.findById(id = blog.user?.id!!) } returns owner.toUserDao()
+        every { userRepositoryMockk.findById(id = blog.userId!!) } returns owner.toUserDao()
         every { blogRepositoryMockk.save(capture(blogDaoSlot)) } returns blogDaoMockk
 
         blogServiceToTest.saveOrUpdate(blog = blog)
@@ -133,35 +132,36 @@ internal class BlogServiceTest {
         assertAll {
             assertThat(blogDao.created).isEqualTo(LocalDate.now())
             assertThat(blogDao.title).isEqualTo("some blog")
-            assertThat(blogDao.user).isEqualTo(owner.toUserDao())
+            assertThat(blogDao.userId).isEqualTo(owner.id)
         }
     }
 
     @Test
-    fun `should save BlogEntryDto as BlogEntryEntity`() = runTest {
+    fun `should save BlogEntryDto as blogEntryDao`() = runTest {
         val blogEntryDaoSlot = slot<BlogEntryDao>()
+        val user = initUser(username = "itsme").withId()
         val owner = initBlog(
             persistent = Persistent(id = UUID.randomUUID()),
-            user = initUser(username = "itsme").withId(),
-        )
+            userId = user.id,
+        ).withId()
 
         val blogEntry = BlogEntry(
-            blog = owner,
+            blogId = owner.id!!,
             creatorName = "me",
             entry = "if i where a rich man..."
         )
 
-        every { blogRepositoryMockk.findBlogById(id = blogEntry.blog?.id!!) } returns owner.toBlogDao()
-        every { userRepositoryMockk.findById(id = blogEntry.blog?.user?.id!!) } returns owner.user?.toUserDao()
+        every { blogRepositoryMockk.findBlogById(id = blogEntry.blogId) } returns owner.toBlogDao()
+        every { userRepositoryMockk.findById(id = blogEntry.blogId) } returns user.toUserDao()
         every { blogRepositoryMockk.save(blogEntryDao = capture(blogEntryDaoSlot)) } returns blogEntry.toBlogEntryDao()
 
         blogServiceToTest.saveOrUpdate(blogEntry)
-        val blogEntryEntity = blogEntryDaoSlot.captured
+        val blogEntryDao = blogEntryDaoSlot.captured
 
         assertAll {
-            assertThat(blogEntryEntity.blogDao).isNotNull()
-            assertThat(blogEntryEntity.creatorName).isEqualTo("me")
-            assertThat(blogEntryEntity.entry).isEqualTo("if i where a rich man...")
+            assertThat(blogEntryDao.blogId).isEqualTo(owner.id)
+            assertThat(blogEntryDao.creatorName).isEqualTo("me")
+            assertThat(blogEntryDao.entry).isEqualTo("if i where a rich man...")
         }
     }
 }

@@ -53,7 +53,7 @@ internal class AddressRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `should write then read an address entity by id`() {
+    fun `should write then read an address dao by id`() {
         val addressToPersist = initAddress(
             addressLine1 = "somewhere out there",
             addressLine2 = "where the streets have no name",
@@ -80,7 +80,7 @@ internal class AddressRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun `should write then update and read an address entity`() {
+    fun `should write then update and read an address dao`() {
         val addressToPersist = initAddress(
             addressLine1 = "somewhere out there",
             addressLine2 = "where the streets have no name",

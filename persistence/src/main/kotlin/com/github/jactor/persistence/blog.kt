@@ -234,7 +234,6 @@ class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService 
 
     override suspend fun saveOrUpdate(blog: Blog): Blog = blogRepository.save(blog.toBlogDao()).toBlog()
     override suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry {
-        require(blogEntry.isBlogPersisted) { "An entry must belong to a persistent blog!" }
         return blogRepository.save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
     }
 
@@ -252,7 +251,7 @@ data class Blog(
 
     val created: LocalDate?,
     val title: String,
-    val user: User?,
+    val userId: UUID?,
 ) {
     val id: UUID? get() = persistent.id
 
@@ -264,30 +263,28 @@ data class Blog(
         timeOfCreation = persistent.timeOfCreation,
         timeOfModification = persistent.timeOfModification,
         title = title,
-        userId = user?.persistent?.id,
+        userId = userId,
     )
 
     fun toBlogDto() = BlogDto(
         persistentDto = persistent.toPersistentDto(),
         title = title,
-        user = user?.toUserDto()
+        userId = userId
     )
 }
 
 @JvmRecord
 data class BlogEntry(
-    val blog: Blog,
+    val blogId: UUID,
     val creatorName: String,
     val entry: String,
     val persistent: Persistent = Persistent(),
 ) {
     val id: UUID? get() = persistent.id
-    val isBlogPersisted: Boolean
-        get() = blog.persistent.id != null
 
     fun toBlogEntryDto() = BlogEntryDto(
         persistentDto = persistent.toPersistentDto(),
-        blogDto = blog.toBlogDto(),
+        blogId = blogId,
         creatorName = creatorName,
         entry = entry,
     )
@@ -295,7 +292,7 @@ data class BlogEntry(
     fun toBlogEntryDao() = BlogEntryDao(
         id = persistent.id,
 
-        blogId = blog.persistent.id ?: error("A blog entry must belong to a persisted blog!"),
+        blogId = blogId,
         createdBy = persistent.createdBy,
         creatorName = creatorName,
         entry = entry,
@@ -487,20 +484,6 @@ data class BlogDao(
     var title: String = "",
     internal var userId: UUID? = null,
 ) : PersistentDao<BlogDao> {
-    private val blogEntryRelations = DaoRelations(
-        fetchRelations = JactorPersistenceRepositiesConfig.fetchBlogEntryRelations
-    )
-
-    private val userRelation = DaoRelation(
-        fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
-    )
-
-    val entries: List<BlogEntryDao>
-        get() = blogEntryRelations.fetchRelations(id = id ?: error("Blog is not persisted!"))
-
-    val user: UserDao
-        get() = userRelation.fetchRelatedInstance(id = userId) ?: error("Missing user relation for blog!")
-
     override fun copyWithoutId(): BlogDao = copy(id = null)
     override fun modifiedBy(modifier: String): BlogDao {
         modifiedBy = modifier
@@ -513,7 +496,7 @@ data class BlogDao(
         created = created,
         persistent = toPersistent(),
         title = title,
-        user = user.toUser()
+        userId = userId
     )
 }
 
@@ -528,13 +511,6 @@ data class BlogEntryDao(
 
     internal var blogId: UUID,
 ) : PersistentDao<BlogEntryDao>, EntryDao {
-    private val blogRelation = DaoRelation(
-        fetchRelation = JactorPersistenceRepositiesConfig.fetchBlogRelation,
-    )
-
-    val blogDao: BlogDao
-        get() = blogRelation.fetchRelatedInstance(id = blogId) ?: error("no blog relation?")
-
     override fun copyWithoutId(): BlogEntryDao = copy(id = null)
     override fun modifiedBy(modifier: String): BlogEntryDao {
         modifiedBy = modifier
@@ -546,7 +522,7 @@ data class BlogEntryDao(
     fun toBlogEntry() = BlogEntry(
         persistent = toPersistent(),
 
-        blog = blogDao.toBlog(),
+        blogId = blogId,
         creatorName = creatorName,
         entry = entry,
     )

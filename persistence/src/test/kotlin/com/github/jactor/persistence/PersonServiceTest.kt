@@ -19,9 +19,9 @@ internal class PersonServiceTest @Autowired constructor(
 
     @Test
     fun `should create a new Person`() = runTest {
-        val entity = personService.createWhenNotExists(initPerson())
+        val dao = personService.createWhenNotExists(initPerson())
 
-        assertThat(entity).isNotNull()
+        assertThat(dao).isNotNull()
     }
 
     @Test

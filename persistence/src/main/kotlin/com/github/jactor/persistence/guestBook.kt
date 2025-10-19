@@ -1,14 +1,10 @@
 package com.github.jactor.persistence
 
-import com.github.jactor.persistence.common.DaoRelation
-import com.github.jactor.persistence.common.DaoRelations
 import com.github.jactor.persistence.common.EntryDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.persistence.common.PersistentDao
 import com.github.jactor.persistence.util.toCreateGuestBook
-import com.github.jactor.persistence.util.toGuestBook
 import com.github.jactor.persistence.util.toPersistent
-import com.github.jactor.persistence.util.toUser
 import com.github.jactor.shared.api.CreateGuestBookCommand
 import com.github.jactor.shared.api.CreateGuestBookEntryCommand
 import com.github.jactor.shared.api.GuestBookDto
@@ -208,31 +204,27 @@ class GuestBookServiceBean(private val guestBookRepository: GuestBookRepository)
 @JvmRecord
 data class GuestBook(
     val persistent: Persistent,
-    val entries: Set<GuestBookEntry>,
     val title: String?,
-    val user: User?,
+    val userId: UUID?,
 ) {
     val id: UUID get() = persistent.id ?: error("Guest book is not persisted!")
 
     constructor(persistent: Persistent, guestBook: GuestBook) : this(
         persistent = persistent,
-        entries = guestBook.entries,
         title = guestBook.title,
-        user = guestBook.user
+        userId = guestBook.userId
     )
 
     constructor(guestBookDto: GuestBookDto) : this(
         persistent = guestBookDto.persistentDto.toPersistent(),
-        entries = guestBookDto.entries.map { GuestBookEntry(it) }.toSet(),
         title = guestBookDto.title,
-        user = guestBookDto.userDto?.toUser()
+        userId = guestBookDto.userId,
     )
 
     fun toDto(): GuestBookDto = GuestBookDto(
         persistentDto = persistent.toPersistentDto(),
-        entries = entries.map { entry: GuestBookEntry -> entry.toGuestBookEntryDto() }.toSet(),
         title = title,
-        userDto = user?.toUserDto()
+        userId = userId
     )
 
     fun toGuestBookDao() = GuestBookDao(
@@ -242,14 +234,13 @@ data class GuestBook(
         timeOfCreation = persistent.timeOfCreation,
         timeOfModification = persistent.timeOfModification,
         title = requireNotNull(title) { "Title cannot be null!" },
-        userId = user?.id,
+        userId = userId,
     )
 
     fun toGuestBookDto() = GuestBookDto(
         persistentDto = persistent.toPersistentDto(),
-        entries = entries.map { it.toGuestBookEntryDto() }.toSet(),
         title = title,
-        userDto = user?.toUserDto()
+        userId = userId
     )
 }
 
@@ -270,7 +261,7 @@ data class CreateGuestBookEntry(
 data class GuestBookEntry(
     val entry: String,
     val guestName: String,
-    val guestBook: GuestBook?,
+    val guestBookId: UUID?,
     val persistent: Persistent,
 ) {
     val id: UUID? get() = persistent.id
@@ -279,13 +270,13 @@ data class GuestBookEntry(
         entry = requireNotNull(guestBookEntryDto.entry) { "Entry cannot be null!" },
         guestName = requireNotNull(guestBookEntryDto.creatorName) { "Creator name cannot be null!" },
         persistent = guestBookEntryDto.persistentDto.toPersistent(),
-        guestBook = guestBookEntryDto.guestBook?.toGuestBook(),
+        guestBookId = guestBookEntryDto.guestBookId,
     )
 
     fun toGuestBookEntryDto() = GuestBookEntryDto(
         entry = entry,
         creatorName = guestName,
-        guestBook = guestBook?.toDto(),
+        guestBookId = guestBookId,
         persistentDto = persistent.toPersistentDto(),
     )
 
@@ -297,7 +288,7 @@ data class GuestBookEntry(
         timeOfModification = persistent.timeOfModification,
         guestName = guestName,
         entry = entry,
-        guestBookId = guestBook?.persistent?.id ?: error("Guest book must have an id!"),
+        guestBookId = guestBookId
     )
 }
 
@@ -460,25 +451,10 @@ data class GuestBookDao(
     var title: String = "no-name",
     internal var userId: UUID? = null,
 ) : PersistentDao<GuestBookDao?> {
-    private val guestBookEntryRelations = DaoRelations(
-        fetchRelations = JactorPersistenceRepositiesConfig.fetchGuestBookEntryRelations,
-    )
-
-    private val userRelation = DaoRelation(
-        fetchRelation = JactorPersistenceRepositiesConfig.fetchUserRelation,
-    )
-
-    val entries: List<GuestBookEntryDao>
-        get() = guestBookEntryRelations.fetchRelations(id = id ?: error("guest book is not persisted"))
-
-    val user: UserDao
-        get() = userRelation.fetchRelatedInstance(id = userId) ?: error("no user relation?")
-
     fun toGuestBook(): GuestBook = GuestBook(
         persistent = toPersistent(),
-        entries = entries.map { it.toGuestBookEntry() }.toMutableSet(),
         title = title,
-        user = user.toUser()
+        userId = userId
     )
 
     override fun copyWithoutId(): GuestBookDao = copy(
@@ -510,19 +486,11 @@ data class GuestBookEntryDao(
             guestName = value
         }
 
-    val guestBookRelation = DaoRelation(
-        fetchRelation = JactorPersistenceRepositiesConfig.fetchGuestBookRelation,
-    )
-
-    val guestBookDao: GuestBookDao
-        get() = guestBookRelation.fetchRelatedInstance(id = guestBookId)
-            ?: error("No guest book relation for entry with id $guestBookId exists")
-
     fun toGuestBookEntry() = GuestBookEntry(
         persistent = toPersistent(),
         guestName = guestName,
         entry = entry,
-        guestBook = guestBookDao.toGuestBook(),
+        guestBookId = guestBookId,
     )
 
     override fun copyWithoutId() = copy(

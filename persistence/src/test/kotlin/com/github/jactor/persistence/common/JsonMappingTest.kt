@@ -8,14 +8,12 @@ import com.github.jactor.persistence.AddressRepository
 import com.github.jactor.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.persistence.PersonRepository
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import com.github.jactor.persistence.test.initAddressDao
 import com.github.jactor.persistence.test.initPersonDao
 import com.github.jactor.persistence.test.initUserDao
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
 import com.github.jactor.shared.api.PersistentDto
 import com.ninjasquad.springmockk.MockkBean
-import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
@@ -33,19 +31,14 @@ internal class JsonMappingTest @Autowired constructor(
 
     @Test
     fun `skal mappe json fra UserDto fra User skapt av UserDao`() {
-        val addressId = UUID.randomUUID()
         val personId = UUID.randomUUID()
 
-        every { addressRepositoryMockk.findById(any()) } returns initAddressDao(id = addressId)
-        every { personRepositoryMockk.findById(any()) } returns initPersonDao(id = personId, addressId = addressId)
+        every { personRepositoryMockk.findById(any()) } returns initPersonDao(id = personId)
 
         val user = initUserDao(personId = personId).toUser()
         val json: String = objectMapper.writeValueAsString(user.toUserDto())
 
-        assertAll {
-            assertThat(json, "person").contains(""""person":{""")
-            assertThat(json, "address").contains(""""address":{""")
-        }
+        assertThat(json, "person").contains(""""personId":"$personId"""")
     }
 
     @Test
@@ -61,11 +54,11 @@ internal class JsonMappingTest @Autowired constructor(
     fun `skal mappe BlogEntryDto til jason og tilbake til BlogEntryDto`() {
         val uuid = UUID.randomUUID()
         val json = objectMapper.writeValueAsString(
-            BlogEntryDto(blogDto = BlogDto(persistentDto = PersistentDto(id = uuid)))
+            BlogEntryDto(blogId = uuid)
         )
 
         val blogEntry = objectMapper.readValue(json, BlogEntryDto::class.java)
 
-        assertThat(blogEntry.blogDto?.persistentDto?.id).isEqualTo(uuid)
+        assertThat(blogEntry.blogId).isEqualTo(uuid)
     }
 }

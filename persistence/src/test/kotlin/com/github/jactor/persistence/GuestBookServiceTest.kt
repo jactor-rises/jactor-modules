@@ -40,7 +40,7 @@ internal class GuestBookServiceTest {
         every { guestBookRepositoryMockk.findGuestBookById(id = uuid) } returns guestBookDao
         every { userRepositoryMockk.findById(any()) } returns initUser().withId().toUserDao()
 
-        val (_, _, title) = guestBookServiceToTest.findGuestBook(id = uuid) ?: fail { "missed mocking?" }
+        val (_, title, _) = guestBookServiceToTest.findGuestBook(id = uuid) ?: fail { "missed mocking?" }
 
         assertThat(title).isEqualTo("@home")
     }
@@ -66,53 +66,52 @@ internal class GuestBookServiceTest {
     }
 
     @Test
-    fun `should save GuestBookDto as GuestBookEntity`() = runTest {
-        val guestBookEntitySlot = slot<GuestBookDao>()
+    fun `should save GuestBookDto as GuestBookDao`() = runTest {
+        val guestBookDaoSlot = slot<GuestBookDao>()
+        val user = initUser().withId()
         val guestBook = initGuestBook(
             persistent = Persistent(id = uuid),
             title = "home sweet home",
-            user = initUser().withId()
+            user = user
         )
 
-        every { userRepositoryMockk.findById(id = guestBook.user?.id!!) } returns guestBook.user!!.toUserDao()
+        every { userRepositoryMockk.findById(id = guestBook.userId!!) } returns user.toUserDao()
         every {
-            guestBookRepositoryMockk.save(guestBookDao = capture(guestBookEntitySlot))
+            guestBookRepositoryMockk.save(guestBookDao = capture(guestBookDaoSlot))
         } returns guestBook.toGuestBookDao()
 
         guestBookServiceToTest.saveOrUpdate(guestBook)
-        val guestBookEntity = guestBookEntitySlot.captured
+        val guestBookDao = guestBookDaoSlot.captured
 
-        assertAll {
-            assertThat(guestBookEntity.title).isEqualTo("home sweet home")
-            assertThat(guestBookEntity.user).isNotNull()
-        }
+        assertThat(guestBookDao.title).isEqualTo("home sweet home")
     }
 
     @Test
-    fun `should save GuestBookEntryDto as GuestBookEntryEntity`() = runTest {
-        val guestBookEntryEntitySlot = slot<GuestBookEntryDao>()
-        val guestBook = initGuestBook(title = "guest who?", user = initUser().withId()).withId()
+    fun `should save GuestBookEntryDto as guestBookEntryDao`() = runTest {
+        val guestBookEntryDaoSlot = slot<GuestBookEntryDao>()
+        val user = initUser().withId()
+        val guestBook = initGuestBook(title = "guest who?", user = user).withId()
         val guestBookEntry = initGuestBookEntry(
             guestBook = guestBook,
             creatorName = "me",
             entry = "if i where a rich man..."
         )
 
-        every { userRepositoryMockk.findById(id = guestBook.user?.id!!) } returns guestBook.user!!.toUserDao()
-        every { guestBookRepositoryMockk.findGuestBookById(id = guestBookEntry.guestBook?.id!!) } returns guestBook
+        every { userRepositoryMockk.findById(id = guestBook.userId!!) } returns user.toUserDao()
+        every { guestBookRepositoryMockk.findGuestBookById(id = guestBookEntry.guestBookId!!) } returns guestBook
             .toGuestBookDao()
 
         every {
-            guestBookRepositoryMockk.save(guestBookEntryDao = capture(guestBookEntryEntitySlot))
+            guestBookRepositoryMockk.save(guestBookEntryDao = capture(guestBookEntryDaoSlot))
         } returns guestBookEntry.toGuestBookEntryDao()
 
         guestBookServiceToTest.saveOrUpdate(guestBookEntry)
-        val guestBookEntryEntity = guestBookEntryEntitySlot.captured
+        val guestBookEntryDao = guestBookEntryDaoSlot.captured
 
         assertAll {
-            assertThat(guestBookEntryEntity.guestBookDao).isNotNull()
-            assertThat(guestBookEntryEntity.guestName).isEqualTo("me")
-            assertThat(guestBookEntryEntity.entry).isEqualTo("if i where a rich man...")
+            assertThat(guestBookEntryDao.guestBookId).isNotNull()
+            assertThat(guestBookEntryDao.guestName).isEqualTo("me")
+            assertThat(guestBookEntryDao.entry).isEqualTo("if i where a rich man...")
         }
     }
 }

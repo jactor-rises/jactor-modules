@@ -13,6 +13,7 @@ import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import org.junit.jupiter.api.Disabled
 
 internal class UserClientIntegrationTest @Autowired constructor(
     private val userClientToTest: UserClient,
@@ -50,9 +51,6 @@ internal class UserClientIntegrationTest @Autowired constructor(
         assertThat(possibleUser).isNotNull()
         val user = possibleUser!!
 
-        assertAll {
-            assertThat(user.person?.firstName).isEqualTo("Tor Egil")
-            assertThat(user.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
-        }
+        assertThat(user.emailAddress).isEqualTo("tor.egil.jacobsen@gmail.com")
     }
 }

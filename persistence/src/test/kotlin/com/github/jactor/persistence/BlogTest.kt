@@ -1,15 +1,13 @@
 package com.github.jactor.persistence
 
-import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.UUID
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.persistence.test.initBlog
-import com.github.jactor.persistence.test.initUser
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.persistence.common.Persistent
+import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 internal class BlogTest {
 
@@ -18,15 +16,15 @@ internal class BlogTest {
         val blog = Blog(
             created = LocalDate.now(),
             title = "title",
-            user = initUser()
+            userId = UUID.randomUUID(),
         )
 
-        val (_, created, title, userInternal) = blog.copy()
+        val (_, created, title, userId) = blog.copy()
 
         assertAll {
             assertThat(created).isEqualTo(blog.created)
             assertThat(title).isEqualTo(blog.title)
-            assertThat(userInternal).isEqualTo(blog.user)
+            assertThat(userId).isEqualTo(blog.userId)
         }
     }
 
@@ -44,7 +42,7 @@ internal class BlogTest {
             persistent = persistent,
             created = LocalDate.now(),
             title = "title",
-            user = initUser(),
+            userId = null,
         ).persistent
 
         assertAll {

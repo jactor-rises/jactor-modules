@@ -28,7 +28,7 @@ internal class UserServiceTest {
     }
 
     @Test
-    fun `should map a user entity to a dto`() = runTest {
+    fun `should map a user dao to a dto`() = runTest {
         val addressDto = initAddress()
         val personDto = initPerson(address = addressDto)
 
@@ -48,7 +48,7 @@ internal class UserServiceTest {
     }
 
     @Test
-    fun `should also map a user entity to a dto when finding by id`() = runTest {
+    fun `should also map a user dao to a dto when finding by id`() = runTest {
         val uuid = UUID.randomUUID()
         val addressDto = initAddress()
         val personDto = initPerson(address = addressDto)
@@ -95,9 +95,6 @@ internal class UserServiceTest {
 
         val user = userServiceToTest.create(createUser = createUserCommand.toCreateUser())
 
-        assertAll {
-            assertThat(user.person?.surname).isEqualTo("Jacobsen")
-            assertThat(user.username).isEqualTo("jactor")
-        }
+        assertThat(user.username).isEqualTo("jactor")
     }
 }

@@ -14,20 +14,20 @@ internal class BlogEntryTest {
     @Test
     fun `should have a copy constructor`() {
         val blogEntry = BlogEntry(
-            blog = initBlog(),
+            blogId = UUID.randomUUID(),
             creatorName = "someone",
             entry = "entry",
         )
 
         val (blog, creatorName, entry) = BlogEntry(
             persistent = blogEntry.persistent,
-            blog = blogEntry.blog,
+            blogId = blogEntry.blogId,
             creatorName = blogEntry.creatorName,
             entry = blogEntry.entry
         )
 
         assertAll {
-            assertThat(blog).isEqualTo(blogEntry.blog)
+            assertThat(blog).isEqualTo(blogEntry.blogId)
             assertThat(creatorName).isEqualTo(blogEntry.creatorName)
             assertThat(entry).isEqualTo(blogEntry.entry)
         }
@@ -45,7 +45,7 @@ internal class BlogEntryTest {
 
         val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = BlogEntry(
             persistent = persistent,
-            blog = initBlog(),
+            blogId = UUID.randomUUID(),
             creatorName = persistent.createdBy,
             entry = "test"
         ).persistent

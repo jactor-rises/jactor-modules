@@ -19,6 +19,7 @@ import com.github.jactor.persistence.User
 import com.github.jactor.persistence.UserDao
 import com.github.jactor.persistence.common.Persistent
 import com.github.jactor.shared.api.CreateUserCommand
+import org.junit.jupiter.api.fail
 import kotlin.String
 
 fun initAddress(
@@ -69,12 +70,12 @@ fun initBlog(
     created: LocalDate? = null,
     persistent: Persistent = Persistent(),
     title: String = "na",
-    user: User? = null,
+    userId: UUID? = null,
 ) = Blog(
     created = created,
     persistent = persistent,
     title = title,
-    user = user,
+    userId = userId,
 )
 
 fun initBlogDao(
@@ -89,12 +90,12 @@ fun initBlogDao(
 )
 
 fun initBlogEntry(
-    blog: Blog = initBlog(),
+    blog: Blog = initBlog().withId(),
     creatorName: String = "na",
     entry: String = "na",
     persistent: Persistent = Persistent(),
 ) = BlogEntry(
-    blog = blog,
+    blogId = blog.id ?: fail { "The blog must be persisted!" },
     persistent = persistent,
     creatorName = creatorName,
     entry = entry,
@@ -126,15 +127,13 @@ fun initCreateUserCommand(
 )
 
 fun initGuestBook(
-    entries: Set<GuestBookEntry> = emptySet(),
     persistent: Persistent = Persistent(),
     title: String? = null,
     user: User? = null,
 ) = GuestBook(
-    entries = entries,
     persistent = persistent,
     title = title,
-    user = user,
+    userId = user?.id,
 )
 
 fun initGuestBookDao(id: UUID? = null, timeOfModification: LocalDateTime = LocalDateTime.now()) = GuestBookDao(
@@ -150,7 +149,7 @@ fun initGuestBookEntry(
 ) = GuestBookEntry(
     guestName = creatorName,
     entry = entry,
-    guestBook = guestBook,
+    guestBookId = guestBook?.id,
     persistent = persistent,
 )
 
@@ -209,7 +208,7 @@ fun initPerson(
     surname: String = "Doe",
 ) = Person(
     persistent = id?.let { persistent.copy(id = id) } ?: persistent,
-    address = address,
+    addressId = address?.id,
     firstName = firstName,
     description = description,
     locale = locale,
@@ -242,7 +241,7 @@ fun initUser(
     usertype: User.Usertype = User.Usertype.ACTIVE,
 ) = User(
     persistent = persistent,
-    person = person,
+    personId = person?.id,
     emailAddress = emailAddress,
     username = username,
     usertype = usertype,

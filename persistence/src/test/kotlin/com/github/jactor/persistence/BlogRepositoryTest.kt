@@ -21,7 +21,7 @@ internal class BlogRepositoryTest @Autowired constructor(
 ) : AbstractSpringBootNoDirtyContextTest() {
 
     @Test
-    fun `should save and then read blog entity`() {
+    fun `should save and then read blog dao`() {
         val address = save(
             address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
@@ -39,16 +39,16 @@ internal class BlogRepositoryTest @Autowired constructor(
             blogDao = BlogDao(created = LocalDate.now(), title = "Blah", userId = user.persistent.id)
         )
 
-        val blogEntity = blogRepository.findBlogs().firstOrNull() ?: fail { "Unable to find any blogs" }
+        val blogDao = blogRepository.findBlogs().firstOrNull() ?: fail { "Unable to find any blogs" }
 
         assertAll {
-            assertThat(blogEntity.created).isEqualTo(LocalDate.now())
-            assertThat(blogEntity.title).isEqualTo("Blah")
+            assertThat(blogDao.created).isEqualTo(LocalDate.now())
+            assertThat(blogDao.title).isEqualTo("Blah")
         }
     }
 
     @Test
-    fun `should save then update and read blog entity`() {
+    fun `should save then update and read blog dao`() {
         val address = save(
             address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
         )
@@ -65,21 +65,21 @@ internal class BlogRepositoryTest @Autowired constructor(
         val blogToSave = BlogDao(created = LocalDate.now(), title = "Blah", userId = user.persistent.id)
         blogRepository.save(blogDao = blogToSave)
 
-        val blogEntitySaved = blogRepository.findBlogsByTitle(title = blogToSave.title).firstOrNull() ?: fail {
+        val blogDaoSaved = blogRepository.findBlogsByTitle(title = blogToSave.title).firstOrNull() ?: fail {
             "Unable to find any blogs by title $${blogToSave.title}"
         }
 
-        blogEntitySaved.title = "Duh"
+        blogDaoSaved.title = "Duh"
 
-        blogRepository.save(blogEntitySaved)
+        blogRepository.save(blogDaoSaved)
 
-        val modifiedBlogs = blogRepository.findBlogsByTitle(title = blogEntitySaved.title)
-        assertThat(modifiedBlogs, "saved blog with title ${blogEntitySaved.title}").hasSize(1)
-        val blogEntity: BlogDao = modifiedBlogs.first()
+        val modifiedBlogs = blogRepository.findBlogsByTitle(title = blogDaoSaved.title)
+        assertThat(modifiedBlogs, "saved blog with title ${blogDaoSaved.title}").hasSize(1)
+        val blogDao: BlogDao = modifiedBlogs.first()
 
         assertAll {
-            assertThat(blogEntity.created).isEqualTo(LocalDate.now())
-            assertThat(blogEntity.title).isEqualTo("Duh")
+            assertThat(blogDao.created).isEqualTo(LocalDate.now())
+            assertThat(blogDao.title).isEqualTo("Duh")
         }
     }
 
@@ -92,14 +92,14 @@ internal class BlogRepositoryTest @Autowired constructor(
         val person = save(person = initPerson(address = address, surname = "Adder"))
         val user = save(
             user = User(
-                person = person,
+                personId = person.id,
                 emailAddress = "public@services.com",
                 username = "black",
                 usertype = User.Usertype.ACTIVE,
             )
         )
 
-        val blogToSave = Blog(created = LocalDate.now(), title = "Blah", user = user).toBlogDao()
+        val blogToSave = Blog(created = LocalDate.now(), title = "Blah", userId = user.id).toBlogDao()
 
         blogRepository.save(blogDao = blogToSave)
 
@@ -127,7 +127,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             )
         )
 
-        val blog = save(blog = initBlog(created = LocalDate.now(), title = "and then some...", user = user))
+        val blog = save(blog = initBlog(created = LocalDate.now(), title = "and then some...", userId = user.id))
         val blogEntryDao = BlogEntryDao(
             blogId = blog.persistent.id ?: error("Blog is not persisted!"),
             creatorName = "smith",

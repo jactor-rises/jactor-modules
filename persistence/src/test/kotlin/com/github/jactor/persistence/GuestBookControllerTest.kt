@@ -94,6 +94,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         val uuid = UUID.randomUUID()
         val guestBook = initGuestBook(persistent = Persistent(id = uuid))
         val guestBookSlot = slot<GuestBook>()
+
         coEvery { guestBookServiceMockk.saveOrUpdate(guestBook = capture(guestBookSlot)) } returns guestBook
 
         webTestClient.put()
