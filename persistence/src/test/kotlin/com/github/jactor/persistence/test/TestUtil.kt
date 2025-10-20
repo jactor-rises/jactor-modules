@@ -1,26 +1,25 @@
 package com.github.jactor.persistence.test
 
+import com.github.jactor.persistence.Persistent
+import com.github.jactor.persistence.address.Address
+import com.github.jactor.persistence.address.AddressDao
+import com.github.jactor.persistence.blog.Blog
+import com.github.jactor.persistence.blog.BlogDao
+import com.github.jactor.persistence.blog.BlogEntry
+import com.github.jactor.persistence.blog.BlogEntryDao
+import com.github.jactor.persistence.guestbook.GuestBook
+import com.github.jactor.persistence.guestbook.GuestBookDao
+import com.github.jactor.persistence.guestbook.GuestBookEntry
+import com.github.jactor.persistence.guestbook.GuestBookEntryDao
+import com.github.jactor.persistence.person.Person
+import com.github.jactor.persistence.person.PersonDao
+import com.github.jactor.persistence.user.User
+import com.github.jactor.persistence.user.UserDao
+import com.github.jactor.shared.api.CreateUserCommand
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import com.github.jactor.persistence.Address
-import com.github.jactor.persistence.AddressDao
-import com.github.jactor.persistence.Blog
-import com.github.jactor.persistence.BlogDao
-import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.BlogEntryDao
-import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.GuestBookDao
-import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.GuestBookEntryDao
-import com.github.jactor.persistence.Person
-import com.github.jactor.persistence.PersonDao
-import com.github.jactor.persistence.User
-import com.github.jactor.persistence.UserDao
-import com.github.jactor.persistence.common.Persistent
-import com.github.jactor.shared.api.CreateUserCommand
 import org.junit.jupiter.api.fail
-import kotlin.String
 
 fun initAddress(
     persistent: Persistent = Persistent(),

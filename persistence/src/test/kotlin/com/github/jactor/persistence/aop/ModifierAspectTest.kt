@@ -5,7 +5,7 @@ import java.util.UUID
 import org.aspectj.lang.JoinPoint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.Persistent
 import com.github.jactor.persistence.test.initAddressDao
 import com.github.jactor.persistence.test.initBlogDao
 import com.github.jactor.persistence.test.initBlogEntryDao

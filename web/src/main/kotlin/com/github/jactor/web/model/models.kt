@@ -1,6 +1,5 @@
 package com.github.jactor.web.model
 
-import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.web.Technology
 import java.util.UUID

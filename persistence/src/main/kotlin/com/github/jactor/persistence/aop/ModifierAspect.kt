@@ -1,6 +1,6 @@
 package com.github.jactor.persistence.aop
 
-import com.github.jactor.persistence.common.PersistentDao
+import com.github.jactor.persistence.PersistentDao
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
