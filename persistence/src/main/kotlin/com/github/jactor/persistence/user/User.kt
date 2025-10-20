@@ -2,7 +2,6 @@ package com.github.jactor.persistence.user
 
 import com.github.jactor.persistence.Persistent
 import com.github.jactor.shared.api.UserDto
-import com.github.jactor.shared.api.UserType
 import com.github.jactor.shared.whenTrue
 import java.util.UUID
 
@@ -12,7 +11,7 @@ data class User(
     val emailAddress: String?,
     val personId: UUID?,
     val username: String?,
-    val usertype: Usertype,
+    val userType: UserType,
 ) {
     val id: UUID
         get() = persistent.id ?: error("User is not persisted!")
@@ -27,8 +26,8 @@ data class User(
         emailAddress = emailAddress,
         personId = personId,
         username = username ?: "na",
-        userType = UserDao.UserType.entries.firstOrNull { it.name == usertype.name }
-            ?: error(message = "Unknown UserType: $usertype"),
+        userType = UserType.entries.firstOrNull { it.name == userType.name }
+            ?: error(message = "Unknown UserType: $userType"),
     )
 
     fun toUserDto() = UserDto(
@@ -36,10 +35,7 @@ data class User(
         emailAddress = emailAddress,
         personId = personId,
         username = username,
-        userType = (usertype == Usertype.ADMIN).whenTrue { UserType.ACTIVE } ?: UserType.valueOf(usertype.name)
+        userType = (userType == UserType.ADMIN).whenTrue { UserTypeDto.ACTIVE }
+            ?: UserTypeDto.valueOf(userType.name)
     )
-
-    enum class Usertype {
-        ADMIN, ACTIVE, INACTIVE
-    }
 }

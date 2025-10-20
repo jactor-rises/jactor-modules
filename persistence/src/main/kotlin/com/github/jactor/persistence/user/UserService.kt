@@ -12,7 +12,7 @@ class UserService(private val userRepository: UserRepository = UserRepositoryObj
     @Transactional
     suspend fun update(user: User): User = userRepository.save(userDao = user.toUserDao()).toUser()
     suspend fun create(createUser: CreateUser): User = userRepository.save(userDao = createUser.toUserDao()).toUser()
-    suspend fun findUsernames(userType: UserDao.UserType): List<String> = userRepository.findUsernames(
+    suspend fun findUsernames(userType: UserType): List<String> = userRepository.findUsernames(
         userType = listOf(userType)
     )
 

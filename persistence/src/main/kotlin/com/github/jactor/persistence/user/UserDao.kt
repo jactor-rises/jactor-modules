@@ -33,11 +33,7 @@ data class UserDao(
         username = username,
         emailAddress = emailAddress,
         personId = personId,
-        usertype = User.Usertype.entries.firstOrNull { it.name == userType.name }
+        userType = UserType.entries.firstOrNull { it.name == userType.name }
             ?: error("Unknown UserType: $userType")
     )
-
-    enum class UserType {
-        ADMIN, ACTIVE, INACTIVE
-    }
 }

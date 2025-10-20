@@ -13,7 +13,7 @@ import com.github.jactor.persistence.guestbook.GuestBookEntry
 import com.github.jactor.persistence.person.Person
 import com.github.jactor.persistence.user.CreateUser
 import com.github.jactor.persistence.user.User
-import com.github.jactor.persistence.user.UserDao.UserType
+import com.github.jactor.persistence.user.UserType
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
@@ -148,5 +148,5 @@ fun UserDto.toUser() = User(
     personId = personId,
     emailAddress = emailAddress,
     username = username,
-    usertype = User.Usertype.valueOf(userType.name)
+    userType = UserType.valueOf(userType.name)
 )

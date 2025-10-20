@@ -88,7 +88,7 @@ class UserController(private val userService: UserService) {
     @Operation(description = "Find all usernames for a user type")
     suspend fun findAllUsernames(
         @RequestParam(required = false, defaultValue = "ACTIVE") userType: String
-    ): ResponseEntity<List<String>> = userService.findUsernames(userType = UserDao.UserType.valueOf(userType)).let {
+    ): ResponseEntity<List<String>> = userService.findUsernames(userType = UserType.valueOf(userType)).let {
         when (it.isEmpty()) {
             true -> ResponseEntity(HttpStatus.NO_CONTENT)
             false -> ResponseEntity(it, HttpStatus.OK)
