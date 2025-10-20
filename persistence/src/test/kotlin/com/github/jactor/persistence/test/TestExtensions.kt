@@ -1,16 +1,16 @@
 package com.github.jactor.persistence.test
 
-import com.github.jactor.persistence.Address
-import java.util.UUID
-import com.github.jactor.persistence.Blog
-import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.Person
-import com.github.jactor.persistence.User
-import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.Persistent
+import com.github.jactor.persistence.address.Address
+import com.github.jactor.persistence.blog.Blog
+import com.github.jactor.persistence.blog.BlogEntry
+import com.github.jactor.persistence.guestbook.GuestBook
+import com.github.jactor.persistence.guestbook.GuestBookEntry
+import com.github.jactor.persistence.person.Person
+import com.github.jactor.persistence.user.User
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UserDto
+import java.util.UUID
 
 fun Address.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun Blog.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))

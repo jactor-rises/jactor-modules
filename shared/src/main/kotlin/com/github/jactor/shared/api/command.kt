@@ -1,8 +1,8 @@
 package com.github.jactor.shared.api
 
+import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 import java.util.UUID
-import io.swagger.v3.oas.annotations.media.Schema
 
 @JvmRecord
 @Schema(description = "Metadata for creation of a user")

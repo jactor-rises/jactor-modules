@@ -1,20 +1,19 @@
 package com.github.jactor.persistence.util
 
-import com.github.jactor.persistence.Address
-import com.github.jactor.persistence.Blog
-import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.CreateBlogEntry
-import com.github.jactor.persistence.CreateGuestBook
-import com.github.jactor.persistence.CreateGuestBookEntry
-import com.github.jactor.persistence.CreateUser
-import com.github.jactor.persistence.GuestBook
-import com.github.jactor.persistence.GuestBookEntry
-import com.github.jactor.persistence.Person
-import com.github.jactor.persistence.UpdateBlogTitle
-import com.github.jactor.persistence.User
-import com.github.jactor.persistence.UserDao
-import com.github.jactor.persistence.UserDao.UserType
-import com.github.jactor.persistence.common.Persistent
+import com.github.jactor.persistence.Persistent
+import com.github.jactor.persistence.address.Address
+import com.github.jactor.persistence.blog.Blog
+import com.github.jactor.persistence.blog.BlogEntry
+import com.github.jactor.persistence.blog.CreateBlogEntry
+import com.github.jactor.persistence.blog.UpdateBlogTitle
+import com.github.jactor.persistence.guestbook.CreateGuestBook
+import com.github.jactor.persistence.guestbook.CreateGuestBookEntry
+import com.github.jactor.persistence.guestbook.GuestBook
+import com.github.jactor.persistence.guestbook.GuestBookEntry
+import com.github.jactor.persistence.person.Person
+import com.github.jactor.persistence.user.CreateUser
+import com.github.jactor.persistence.user.User
+import com.github.jactor.persistence.user.UserDao.UserType
 import com.github.jactor.shared.api.AddressDto
 import com.github.jactor.shared.api.BlogDto
 import com.github.jactor.shared.api.BlogEntryDto
@@ -150,16 +149,4 @@ fun UserDto.toUser() = User(
     emailAddress = emailAddress,
     username = username,
     usertype = User.Usertype.valueOf(userType.name)
-)
-
-fun UserDto.toUserDao() = UserDao(
-    id = persistentDto.id,
-    createdBy = requireNotNull(persistentDto.createdBy) { "Created by cannot be null!" },
-    timeOfCreation = persistentDto.timeOfCreation ?: LocalDateTime.now(),
-    modifiedBy = requireNotNull(persistentDto.modifiedBy) { "Modified by cannot be null!" },
-    timeOfModification = persistentDto.timeOfModification ?: LocalDateTime.now(),
-    userType = userType.toModel(),
-    emailAddress = null,
-    personId = null,
-    username = "na",
 )

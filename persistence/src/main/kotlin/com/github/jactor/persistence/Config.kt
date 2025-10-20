@@ -1,5 +1,23 @@
 package com.github.jactor.persistence
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.github.jactor.persistence.address.AddressDao
+import com.github.jactor.persistence.address.AddressRepository
+import com.github.jactor.persistence.blog.BlogDao
+import com.github.jactor.persistence.blog.BlogEntryDao
+import com.github.jactor.persistence.blog.BlogRepository
+import com.github.jactor.persistence.guestbook.GuestBookDao
+import com.github.jactor.persistence.guestbook.GuestBookEntryDao
+import com.github.jactor.persistence.guestbook.GuestBookRepository
+import com.github.jactor.persistence.person.PersonDao
+import com.github.jactor.persistence.person.PersonRepository
+import com.github.jactor.persistence.user.UserDao
+import com.github.jactor.persistence.user.UserRepository
+import io.swagger.v3.oas.annotations.OpenAPIDefinition
+import io.swagger.v3.oas.annotations.info.Info
 import java.text.SimpleDateFormat
 import java.util.UUID
 import javax.sql.DataSource
@@ -11,12 +29,6 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import com.fasterxml.jackson.annotation.JsonInclude.Include
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import io.swagger.v3.oas.annotations.OpenAPIDefinition
-import io.swagger.v3.oas.annotations.info.Info
 
 @Configuration
 class ExposedConfig {
@@ -44,7 +56,6 @@ class JactorPersistenceRepositiesConfig(
     internal val personRepository: PersonRepository,
     internal val userRepository: UserRepository,
 ) {
-
     init {
         initFetchRelations()
     }
@@ -79,10 +90,8 @@ class JactorPersistenceRepositiesConfig(
 class JactorPersistenceConfig {
 
     @Bean
-    fun commandLineRunner(applicationContext: ApplicationContext): CommandLineRunner {
-        return CommandLineRunner {
-            JactorPersistence.inspect(applicationContext, it)
-        }
+    fun commandLineRunner(applicationContext: ApplicationContext): CommandLineRunner = CommandLineRunner {
+        JactorPersistence.inspect(applicationContext, it)
     }
 
     @Bean

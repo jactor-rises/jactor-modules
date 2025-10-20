@@ -1,17 +1,20 @@
 package com.github.jactor.persistence
 
-import java.util.UUID
-import org.junit.jupiter.api.Test
-import org.springframework.http.HttpStatus
-import com.github.jactor.shared.finnFeiledeLinjer
-import com.github.jactor.shared.test.containsSubstring
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.isTrue
 import assertk.fail
+import com.github.jactor.persistence.user.UserController
+import com.github.jactor.persistence.user.UserRepository
+import com.github.jactor.persistence.user.UserService
+import com.github.jactor.shared.finnFeiledeLinjer
+import com.github.jactor.shared.test.containsSubstring
 import io.mockk.every
 import io.mockk.mockk
+import java.util.UUID
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus
 
 internal class ExceptionHandlerTest {
     private val exceptionHandler = ExceptionHandler()
@@ -40,8 +43,8 @@ internal class ExceptionHandlerTest {
                 val kodelinjer = it.finnFeiledeLinjer()
 
                 assertThat(kodelinjer).all {
-                    containsSubstring("intern: user.kt (linje:")
-                    containsSubstring("intern: com.github.jactor.persistence.UserRepository")
+                    containsSubstring("intern: ExceptionHandlerTest.kt (linje:")
+                    containsSubstring("intern: com.github.jactor.persistence.user.UserRepository")
                 }
             }
     }

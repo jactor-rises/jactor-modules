@@ -1,12 +1,12 @@
 package com.github.jactor.persistence.test
 
-import com.github.jactor.persistence.Address
-import com.github.jactor.persistence.Blog
-import com.github.jactor.persistence.BlogEntry
-import com.github.jactor.persistence.GuestBook
 import com.github.jactor.persistence.JactorPersistenceRepositiesConfig
-import com.github.jactor.persistence.Person
-import com.github.jactor.persistence.User
+import com.github.jactor.persistence.address.Address
+import com.github.jactor.persistence.blog.Blog
+import com.github.jactor.persistence.blog.BlogEntry
+import com.github.jactor.persistence.guestbook.GuestBook
+import com.github.jactor.persistence.person.Person
+import com.github.jactor.persistence.user.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
