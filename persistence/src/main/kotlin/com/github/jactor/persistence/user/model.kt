@@ -3,6 +3,8 @@ package com.github.jactor.persistence.user
 import java.time.LocalDateTime
 import java.util.UUID
 
+typealias UserTypeDto = com.github.jactor.shared.api.UserType
+
 @JvmRecord
 data class CreateUser(
     val addressId: UUID?,
@@ -30,6 +32,10 @@ data class CreateUser(
         emailAddress = emailAddress,
         personId = personId,
         username = username,
-        userType = UserDao.UserType.ACTIVE
+        userType = UserType.ACTIVE
     )
+}
+
+enum class UserType {
+    ADMIN, ACTIVE, INACTIVE
 }

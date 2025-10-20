@@ -50,7 +50,7 @@ object UserRepositoryObject : UserRepository {
 
     }
 
-    override fun findUsernames(userType: List<UserDao.UserType>): List<String> = transaction {
+    override fun findUsernames(userType: List<UserType>): List<String> = transaction {
         val userTypes = userType.map { it.name }
 
         Users.select(column = Users.username)

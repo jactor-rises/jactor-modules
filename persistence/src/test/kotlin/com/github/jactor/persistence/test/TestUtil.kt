@@ -15,6 +15,8 @@ import com.github.jactor.persistence.person.Person
 import com.github.jactor.persistence.person.PersonDao
 import com.github.jactor.persistence.user.User
 import com.github.jactor.persistence.user.UserDao
+import com.github.jactor.persistence.user.UserType
+import com.github.jactor.persistence.user.UserTypeDto
 import com.github.jactor.shared.api.CreateUserCommand
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -179,7 +181,7 @@ fun initUserDao(
     modifiedBy = "unit test",
     personId = personId,
     username = username,
-    userType = UserDao.UserType.ACTIVE,
+    userType = UserType.ACTIVE,
     timeOfCreation = LocalDateTime.now(),
     timeOfModification = timeOfModification,
 )
@@ -192,7 +194,7 @@ fun initUserDao(createUserCommand: CreateUserCommand) = UserDao(
     modifiedBy = createUserCommand.username,
     personId = createUserCommand.personId,
     username = createUserCommand.username,
-    userType = UserDao.UserType.ACTIVE,
+    userType = UserType.ACTIVE,
     timeOfCreation = LocalDateTime.now(),
     timeOfModification = LocalDateTime.now(),
 )
@@ -237,13 +239,13 @@ fun initUser(
     emailAddress: String? = null,
     person: Person? = null,
     username: String? = null,
-    usertype: User.Usertype = User.Usertype.ACTIVE,
+    userType: UserType = UserType.ACTIVE,
 ) = User(
     persistent = persistent,
     personId = person?.id,
     emailAddress = emailAddress,
     username = username,
-    usertype = usertype,
+    userType = userType,
 )
 
 fun timestamped(username: String): String {

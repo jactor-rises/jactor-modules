@@ -35,7 +35,7 @@ internal class UserRepositoryTest @Autowired constructor(
             personId = person.id,
             emailAddress = "smuggle.fast@tantooine.com",
             username = "smuggler",
-            usertype = User.Usertype.ACTIVE
+            userType = UserType.ACTIVE
         ).toUserDao()
 
         userRepository.save(userToPersist)
@@ -46,7 +46,7 @@ internal class UserRepositoryTest @Autowired constructor(
             assertThat(userDao?.personId).isEqualTo(userToPersist.personId)
             assertThat(userDao?.username).isEqualTo("smuggler")
             assertThat(userDao?.emailAddress).isEqualTo("smuggle.fast@tantooine.com")
-            assertThat(userDao?.userType).isEqualTo(UserDao.UserType.ACTIVE)
+            assertThat(userDao?.userType).isEqualTo(UserType.ACTIVE)
         }
     }
 
@@ -101,11 +101,11 @@ internal class UserRepositoryTest @Autowired constructor(
                 person = superPerson,
                 emailAddress = null,
                 username = "superman",
-                usertype = User.Usertype.INACTIVE
+                userType = UserType.INACTIVE
             ).toUserDao()
         )
 
-        val usernames = userRepository.findUsernames(listOf(UserDao.UserType.ACTIVE, UserDao.UserType.ADMIN))
+        val usernames = userRepository.findUsernames(listOf(UserType.ACTIVE, UserType.ADMIN))
 
         assertThat(usernames).containsOnly("tip", "spiderman", "jactor")
     }

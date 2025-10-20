@@ -11,6 +11,7 @@ import com.github.jactor.persistence.test.initBlog
 import com.github.jactor.persistence.test.initPerson
 import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.user.User
+import com.github.jactor.persistence.user.UserType
 import com.github.jactor.shared.test.isNotOlderThan
 import java.time.LocalDate
 import org.junit.jupiter.api.Test
@@ -96,7 +97,7 @@ internal class BlogRepositoryTest @Autowired constructor(
                 personId = person.id,
                 emailAddress = "public@services.com",
                 username = "black",
-                usertype = User.Usertype.ACTIVE,
+                userType = UserType.ACTIVE,
             )
         )
 

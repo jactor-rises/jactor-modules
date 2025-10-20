@@ -106,7 +106,7 @@ internal class UserControllerTest @Autowired constructor(
     @Test
     fun `should find all usernames of active users`() {
         every {
-            userRepositoryMockk.findUsernames(userType = listOf(UserDao.UserType.ACTIVE))
+            userRepositoryMockk.findUsernames(userType = listOf(UserType.ACTIVE))
         } returns listOf("bart", "lisa")
 
         val usernames = webTestClient.get()

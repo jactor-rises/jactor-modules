@@ -38,7 +38,7 @@ internal class UserServiceTest {
             person = personDto,
             emailAddress = null,
             username = "jactor",
-            usertype = User.Usertype.ACTIVE
+            userType = UserType.ACTIVE
         ).toUserDao()
 
         val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
@@ -59,7 +59,7 @@ internal class UserServiceTest {
             person = personDto,
             emailAddress = null,
             username = "jactor",
-            usertype = User.Usertype.ACTIVE
+            userType = UserType.ACTIVE
         ).toUserDao()
 
         val user = userServiceToTest.find(uuid) ?: throw AssertionError("mocking?")
