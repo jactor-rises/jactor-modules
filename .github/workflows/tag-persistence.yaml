@@ -57,8 +57,8 @@ jobs:
       - name: Fetch github event metadata
         id: metadata
         run: |
-         echo "email=$(jq -r '.commits[0].committer.email' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
-         echo "name=$(jq -r '.commits[0].author.name' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+          echo "email=$(jq -r '.commits[0].committer.email' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+          echo "name=$(jq -r '.commits[0].author.name' $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
       - name: Tag new snapshot version for persistence
         id: tag-persistence
         run: |

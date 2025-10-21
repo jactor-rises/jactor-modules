@@ -1,19 +1,19 @@
 package com.github.jactor.web
 
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import assertk.assertThat
+import assertk.assertions.isNotNull
 import com.github.jactor.web.controller.AboutController
 import com.github.jactor.web.controller.HomeController
 import com.github.jactor.web.controller.UserController
 import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
-import assertk.assertThat
-import assertk.assertions.isNotNull
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 
 internal class JactorWebTest @Autowired constructor(
     private val homeController: HomeController?,
     private val aboutController: AboutController?,
     private val userController: UserController?
-): AbstractNoDirtySpringContextTest() {
+) : AbstractNoDirtySpringContextTest() {
 
     @Test
     fun `should fetch controllers from spring context`() {

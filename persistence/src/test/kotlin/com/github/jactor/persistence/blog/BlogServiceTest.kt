@@ -25,7 +25,8 @@ internal class BlogServiceTest {
     private val blogRepositoryMockk: BlogRepository = mockk {}
     private val userRepositoryMockk: UserRepository = mockk {}
     private val blogServiceToTest: BlogService = BlogServiceImpl(blogRepository = blogRepositoryMockk).also {
-        JactorPersistenceRepositiesConfig.Companion.fetchBlogRelation = { id -> blogRepositoryMockk.findBlogById(id = id) }
+        JactorPersistenceRepositiesConfig.Companion.fetchBlogRelation =
+            { id -> blogRepositoryMockk.findBlogById(id = id) }
         JactorPersistenceRepositiesConfig.Companion.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
     }
 

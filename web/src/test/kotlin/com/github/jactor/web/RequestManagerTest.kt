@@ -1,13 +1,13 @@
 package com.github.jactor.web
 
-import org.junit.jupiter.api.Test
-import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import io.mockk.every
+import org.junit.jupiter.api.Test
 
-internal class RequestManagerTest: AbstractNoDirtySpringContextTest() {
+internal class RequestManagerTest : AbstractNoDirtySpringContextTest() {
     @Test
     fun `should fetch currentUrl and attach it to the model`() {
         every { httpServletRequestMockk.requestURI } returns "$contextPath/user"

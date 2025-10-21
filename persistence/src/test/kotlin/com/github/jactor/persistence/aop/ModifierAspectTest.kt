@@ -1,10 +1,8 @@
 package com.github.jactor.persistence.aop
 
-import java.time.LocalDateTime
-import java.util.UUID
-import org.aspectj.lang.JoinPoint
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 import com.github.jactor.persistence.Persistent
 import com.github.jactor.persistence.test.initAddressDao
 import com.github.jactor.persistence.test.initBlogDao
@@ -14,12 +12,14 @@ import com.github.jactor.persistence.test.initGuestBookEntryDao
 import com.github.jactor.persistence.test.initPersonDao
 import com.github.jactor.persistence.test.initUserDao
 import com.github.jactor.shared.test.countSecondsUntilNow
-import assertk.assertAll
-import assertk.assertThat
-import assertk.assertions.isEqualTo
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import java.time.LocalDateTime
+import java.util.UUID
+import org.aspectj.lang.JoinPoint
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 internal class ModifierAspectTest {

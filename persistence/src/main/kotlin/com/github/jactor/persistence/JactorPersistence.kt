@@ -1,12 +1,12 @@
 package com.github.jactor.persistence
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.ApplicationContext
 import com.github.jactor.shared.SpringBeanNames
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.context.ApplicationContext
 
 private val logger = KotlinLogging.logger {}
 

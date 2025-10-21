@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title th:text="#{page.about.html.title}">about</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="../static/css/jactor-rises.css" th:href="@{/css/jactor-rises.css}"/>
+    <title th:text="#{page.about.html.title}">about</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/jactor-rises.css"
+          th:href="@{/css/jactor-rises.css}"/>
 </head>
 <body>
 
 <header th:replace="fragments/header :: header">header</header>
-  <div class="container">
-  <table>
-    <tr>
-      <td>
-        <div class="alignLeft" th:text="#{page.about.contact}">Contact</div>
-      </td>
-      <td>
-        <div class="alignLeft">tor.egil.jacobsen@gmail.com</div>
-      </td>
-    </tr>
-  </table>
+<div class="container">
+    <table>
+        <tr>
+            <td>
+                <div class="alignLeft" th:text="#{page.about.contact}">Contact</div>
+            </td>
+            <td>
+                <div class="alignLeft">tor.egil.jacobsen@gmail.com</div>
+            </td>
+        </tr>
+    </table>
 </div>
 <div th:replace="fragments/footer :: footer" class="footer">footer</div>
 

@@ -1,18 +1,18 @@
 package com.github.jactor.web.menu
 
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.springframework.beans.factory.annotation.Autowired
-import com.github.jactor.web.JactorWebBeans
-import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
+import com.github.jactor.web.JactorWebBeans
+import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.springframework.beans.factory.annotation.Autowired
 
 internal class MenuFacadeIntegrationTest @Autowired constructor(
     private val testMenuFacade: MenuFacade
-): AbstractNoDirtySpringContextTest() {
+) : AbstractNoDirtySpringContextTest() {
 
     @Test
     fun `should fail when fetching items for an unknown menu`() {

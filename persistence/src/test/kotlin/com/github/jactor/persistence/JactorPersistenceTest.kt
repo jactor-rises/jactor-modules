@@ -1,11 +1,11 @@
 package com.github.jactor.persistence
 
+import assertk.assertThat
+import assertk.assertions.isNotNull
+import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
-import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
-import assertk.assertThat
-import assertk.assertions.isNotNull
 
 internal class JactorPersistenceTest @Autowired constructor(
     private val commandLineRunner: CommandLineRunner?

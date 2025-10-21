@@ -1,19 +1,19 @@
 package com.github.jactor.web.controller
 
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import com.github.jactor.shared.api.UserDto
+import com.github.jactor.web.menu.MenuItem
+import com.github.jactor.web.test.AbstractSpringMockMvcTest
+import io.mockk.every
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
-import com.github.jactor.shared.api.UserDto
-import com.github.jactor.web.menu.MenuItem
-import com.github.jactor.web.test.AbstractSpringMockMvcTest
-import assertk.assertThat
-import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
-import io.mockk.every
-import io.mockk.verify
 
 internal class UserControllerTest : AbstractSpringMockMvcTest() {
     override val initMockMvc: (InternalResourceViewResolver) -> MockMvc = {

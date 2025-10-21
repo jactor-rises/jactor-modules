@@ -1,10 +1,10 @@
 package com.github.jactor.web.menu
 
-import org.junit.jupiter.api.Test
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isNotNull
 import assertk.fail
+import org.junit.jupiter.api.Test
 
 internal class MenuFacadeTest {
 

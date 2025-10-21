@@ -1,15 +1,15 @@
 package com.github.jactor.web.test
 
+import com.github.jactor.web.client.UserClient
+import com.github.jactor.web.i18n.MyMessages
+import com.github.jactor.web.menu.MenuFacade
+import com.ninjasquad.springmockk.MockkBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.servlet.view.InternalResourceViewResolver
-import com.github.jactor.web.client.UserClient
-import com.github.jactor.web.i18n.MyMessages
-import com.github.jactor.web.menu.MenuFacade
-import com.ninjasquad.springmockk.MockkBean
 
 @SpringBootTest
 internal abstract class AbstractSpringMockMvcTest {

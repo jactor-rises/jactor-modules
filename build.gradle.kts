@@ -1,4 +1,3 @@
-
 plugins {
     id("com.github.ben-manes.versions") version "0.46.0" apply false
     id("io.spring.dependency-management") version "1.1.0" apply false

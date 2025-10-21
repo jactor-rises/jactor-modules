@@ -18,6 +18,7 @@ import io.mockk.mockk
 import java.util.UUID
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
 
 internal class UserServiceTest {
     private val personRepositoryMockk: PersonRepository = mockk {}
@@ -25,7 +26,8 @@ internal class UserServiceTest {
     private val userServiceToTest = UserService(
         userRepository = userRepositoryMockk,
     ).also {
-        JactorPersistenceRepositiesConfig.Companion.fetchPersonRelation = { id -> personRepositoryMockk.findById(id = id) }
+        JactorPersistenceRepositiesConfig.Companion.fetchPersonRelation =
+            { id -> personRepositoryMockk.findById(id = id) }
         JactorPersistenceRepositiesConfig.Companion.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
     }
 
@@ -62,7 +64,7 @@ internal class UserServiceTest {
             userType = UserType.ACTIVE
         ).toUserDao()
 
-        val user = userServiceToTest.find(uuid) ?: throw AssertionError("mocking?")
+        val user = userServiceToTest.find(uuid) ?: fail { "null. mocking?" }
 
         assertAll {
             assertThat(user).isNotNull()

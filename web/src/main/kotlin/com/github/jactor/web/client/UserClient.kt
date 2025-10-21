@@ -1,11 +1,11 @@
 package com.github.jactor.web.client
 
+import com.github.jactor.shared.api.UserDto
+import com.github.jactor.web.JactorWebBeans
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import com.github.jactor.shared.api.UserDto
-import com.github.jactor.web.JactorWebBeans
 
 @Service
 class DefaultUserClient(

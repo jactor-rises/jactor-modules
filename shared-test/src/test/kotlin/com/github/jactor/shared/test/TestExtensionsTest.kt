@@ -1,9 +1,9 @@
 package com.github.jactor.shared.test
 
-import org.junit.jupiter.api.Test
 import assertk.assertFailure
 import assertk.assertThat
 import assertk.assertions.isFailure
+import org.junit.jupiter.api.Test
 
 class TestExtensionsTest {
     @Test

@@ -1,65 +1,66 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title th:text="#{page.user.html.title}">>users</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="../static/css/jactor-rises.css" th:href="@{/css/jactor-rises.css}"/>
+    <title th:text="#{page.user.html.title}">>users</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/jactor-rises.css"
+          th:href="@{/css/jactor-rises.css}"/>
 </head>
 
 <body>
 <header th:replace="fragments/header :: header">header</header>
 <div class="container">
-  <table>
-    <tr>
-      <td>
-        <table th:each="menuItem : ${usersMenu}">
-          <tr>
+    <table>
+        <tr>
             <td>
-              <div th:text="#{${menuItem.itemName}}">a menu item</div>
-              <div th:if="${menuItem.hasChildren()}">
-                <ul th:with="choose=#{page.user.menu.choose}">
-                  <li th:each="child : ${menuItem.children}">
-                    <a th:href="${child.target}" th:title="${choose}">
-                      <span th:text="${child.itemName}">a child menu item</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </td>
-      <td>
-        <div class="container" th:with="user=${user}">
-          <table th:if="${user} != null">
-            <tr>
-              <td th:text="#{page.user.username}">Username</td>
-              <td th:text="${user.fetchUsername()}">jactor.rises</td>
-            </tr>
-            <tr>
-              <td th:text="#{page.user.name}">Name</td>
-              <td th:text="${user.fetchFullName()}">TE Jacobsen</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>
-                <table th:each="line : ${user.fetchAddress()}">
-                  <tr>
-                    <td th:text="${line}">Address...</td>
-                  </tr>
+                <table th:each="menuItem : ${usersMenu}">
+                    <tr>
+                        <td>
+                            <div th:text="#{${menuItem.itemName}}">a menu item</div>
+                            <div th:if="${menuItem.hasChildren()}">
+                                <ul th:with="choose=#{page.user.menu.choose}">
+                                    <li th:each="child : ${menuItem.children}">
+                                        <a th:href="${child.target}" th:title="${choose}">
+                                            <span th:text="${child.itemName}">a child menu item</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
-              </td>
-            </tr>
-          </table>
-          <div th:if="${unknownUser} != null" th:text="#{page.user.unknown}">
-            <div th:text="${unknownUser}">some user</div>
-          </div>
-          <div th:if="${user} == null" th:text="#{page.user.choose}">choose a user</div>
-        </div>
-      </td>
-    </tr>
-  </table>
+            </td>
+            <td>
+                <div class="container" th:with="user=${user}">
+                    <table th:if="${user} != null">
+                        <tr>
+                            <td th:text="#{page.user.username}">Username</td>
+                            <td th:text="${user.fetchUsername()}">jactor.rises</td>
+                        </tr>
+                        <tr>
+                            <td th:text="#{page.user.name}">Name</td>
+                            <td th:text="${user.fetchFullName()}">TE Jacobsen</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <table th:each="line : ${user.fetchAddress()}">
+                                    <tr>
+                                        <td th:text="${line}">Address...</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <div th:if="${unknownUser} != null" th:text="#{page.user.unknown}">
+                        <div th:text="${unknownUser}">some user</div>
+                    </div>
+                    <div th:if="${user} == null" th:text="#{page.user.choose}">choose a user</div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
 <div th:replace="fragments/footer :: footer" class="footer">footer</div>
 </body>
