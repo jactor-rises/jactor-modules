@@ -1,5 +1,11 @@
 package com.github.jactor.web.controller
 
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isNotNull
+import com.github.jactor.web.model.HomePageModel
+import com.github.jactor.web.test.AbstractSpringMockMvcTest
 import org.junit.jupiter.api.Test
 import org.opentest4j.AssertionFailedError
 import org.springframework.test.web.servlet.MockMvc
@@ -7,12 +13,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
-import com.github.jactor.web.model.HomePageModel
-import com.github.jactor.web.test.AbstractSpringMockMvcTest
-import assertk.assertAll
-import assertk.assertThat
-import assertk.assertions.hasSize
-import assertk.assertions.isNotNull
 
 internal class HomeControllerTest : AbstractSpringMockMvcTest() {
     override val initMockMvc: (InternalResourceViewResolver) -> MockMvc = {

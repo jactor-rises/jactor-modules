@@ -1,11 +1,9 @@
 package com.github.jactor.web.interceptor
 
-import java.util.Locale
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.i18n.LocaleContextHolder
-import org.springframework.web.servlet.ModelAndView
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isInstanceOf
 import com.github.jactor.web.ENGLISH
 import com.github.jactor.web.Language
 import com.github.jactor.web.NORSK
@@ -14,15 +12,17 @@ import com.github.jactor.web.THAI
 import com.github.jactor.web.interceptor.RequestInterceptor.Companion.CHOSEN_LANGUAGE
 import com.github.jactor.web.interceptor.RequestInterceptor.Companion.CURRENT_REQUEST
 import com.github.jactor.web.test.AbstractNoDirtySpringContextTest
-import assertk.assertAll
-import assertk.assertThat
-import assertk.assertions.isEqualTo
-import assertk.assertions.isInstanceOf
 import io.mockk.every
+import java.util.Locale
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.web.servlet.ModelAndView
 
 internal class RequestInterceptorTest @Autowired constructor(
     private val requestInterceptorToTest: RequestInterceptor
-): AbstractNoDirtySpringContextTest() {
+) : AbstractNoDirtySpringContextTest() {
     private val handler: Any = object
 
     @BeforeEach

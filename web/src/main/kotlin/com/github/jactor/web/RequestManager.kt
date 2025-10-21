@@ -1,7 +1,7 @@
 package com.github.jactor.web
 
-import java.util.Locale
 import jakarta.servlet.http.HttpServletRequest
+import java.util.Locale
 
 data class RequestManager(
     val contextPath: String,

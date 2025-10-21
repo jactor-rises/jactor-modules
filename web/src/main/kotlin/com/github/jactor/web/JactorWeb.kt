@@ -1,13 +1,13 @@
 package com.github.jactor.web
 
+import com.github.jactor.shared.SpringBeanNames
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import com.github.jactor.shared.SpringBeanNames
-import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 

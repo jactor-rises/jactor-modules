@@ -1,5 +1,9 @@
 package com.github.jactor.web.test
 
+import com.github.jactor.web.JactorWebBeans
+import com.ninjasquad.springmockk.MockkBean
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
@@ -7,10 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.context.annotation.PropertySource
 import org.springframework.web.client.RestTemplate
-import com.github.jactor.web.JactorWebBeans
-import com.ninjasquad.springmockk.MockkBean
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 
 @PropertySource("classpath:application.properties")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

@@ -25,7 +25,7 @@ internal class PersonServiceTest @Autowired constructor(
     }
 
     @Test
-    @Disabled("Disabled because of tansaction management on CI???, but not locally")
+    @Disabled("Disabled because of transaction management on CI???, but not locally")
     fun `should find Person by id`() = runTest {
         val personDao = personRepository.save(initPerson().toPersonDao())
 

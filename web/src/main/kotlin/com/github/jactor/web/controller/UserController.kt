@@ -1,16 +1,16 @@
 package com.github.jactor.web.controller
 
+import com.github.jactor.web.JactorWebBeans
+import com.github.jactor.web.client.UserClient
+import com.github.jactor.web.menu.MenuFacade
+import com.github.jactor.web.menu.MenuItem
+import com.github.jactor.web.model.UserModel
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import com.github.jactor.web.JactorWebBeans
-import com.github.jactor.web.client.UserClient
-import com.github.jactor.web.model.UserModel
-import com.github.jactor.web.menu.MenuFacade
-import com.github.jactor.web.menu.MenuItem
 
 @RestController
 class UserController(

@@ -1,8 +1,8 @@
 package com.github.jactor.persistence
 
+import com.github.jactor.shared.api.PersistentDto
 import java.time.LocalDateTime
 import java.util.UUID
-import com.github.jactor.shared.api.PersistentDto
 
 @JvmRecord
 data class Persistent(

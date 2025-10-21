@@ -1,9 +1,9 @@
 package com.github.jactor.web.menu
 
-import org.junit.jupiter.api.Test
 import assertk.assertThat
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
+import org.junit.jupiter.api.Test
 
 internal class MenuItemTest {
 

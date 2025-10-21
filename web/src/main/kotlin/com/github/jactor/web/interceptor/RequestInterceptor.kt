@@ -5,17 +5,18 @@ import com.github.jactor.web.Request
 import com.github.jactor.web.RequestManager
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import java.util.Locale
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
-import java.util.Locale
 
 @Component
 @PropertySource("classpath:application.properties")
-class RequestInterceptor(@param:Value("\${server.servlet.context-path}") private val contextPath: String) : HandlerInterceptor {
+class RequestInterceptor(@param:Value("\${server.servlet.context-path}") private val contextPath: String) :
+    HandlerInterceptor {
 
     companion object {
         const val CHOSEN_LANGUAGE = "chosenLanguage"
