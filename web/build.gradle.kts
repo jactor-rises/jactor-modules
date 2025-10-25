@@ -1,24 +1,23 @@
-group = "com.github.jactor-rises"
-version = "1.0.x-SNAPSHOT"
-description = "jactor-web"
-
-val bootstrapVersion: String by project
-val jqueryVersion: String by project
-
 plugins {
-    id("org.springframework.boot") version "3.5.5"
+    id("jactor-modules-spring-application")
 }
 
+group = "com.github.jactor-rises"
+version = "2.0.x-SNAPSHOT"
+description = "jactor::web"
+
 dependencies {
-    // spring-boot
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
-    // internal project dependency
+    // internal project dependencies
     implementation(project(":shared"))
+}
 
-    // --- web dependencies ---
-    implementation("org.webjars:bootstrap:$bootstrapVersion")
-    implementation("org.webjars:jquery:$jqueryVersion")
+tasks.bootJar {
+    enabled = true
+}
+
+tasks.jar {
+    enabled = false
 }
