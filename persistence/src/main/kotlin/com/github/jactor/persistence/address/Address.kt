@@ -1,9 +1,8 @@
 package com.github.jactor.persistence.address
 
+import java.util.UUID
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.github.jactor.persistence.Persistent
-import com.github.jactor.shared.api.AddressDto
-import java.util.UUID
 
 @JvmRecord
 data class Address(
@@ -27,17 +26,6 @@ data class Address(
         city = dao.city,
         country = dao.country,
         zipCode = dao.zipCode
-    )
-
-    fun toAddressDto(): AddressDto = AddressDto(
-        persistentDto = persistent.toPersistentDto(),
-
-        addressLine1 = addressLine1,
-        addressLine2 = addressLine2,
-        addressLine3 = addressLine3,
-        city = city,
-        country = country,
-        zipCode = zipCode
     )
 
     fun toAddressDao() = AddressDao(

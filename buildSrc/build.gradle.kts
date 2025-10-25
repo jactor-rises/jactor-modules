@@ -1,4 +1,4 @@
-val kotlinVersion = "2.2.10"
+val kotlinVersion = "2.1.0"
 
 plugins {
     `kotlin-dsl`
@@ -6,13 +6,13 @@ plugins {
 
 repositories {
     gradlePluginPortal()
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    mavenCentral()
 }
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
+
+    // spring-boot gradle plugin
+    implementation("org.springframework.boot:spring-boot-gradle-plugin:3.4.1")
 }

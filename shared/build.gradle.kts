@@ -1,15 +1,25 @@
-group = "com.github.jactor-rises"
-description = "jactor::shared"
-
 plugins {
-    id("jactor-modules-kotlin-conventions")
+    id("jactor-modules-spring-library")
 }
 
-val springdocVersion: String by project
+group = "com.github.jactor-rises"
+version = "2.0.x-SNAPSHOT"
+description = "jactor::shared"
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xjsr305=strict")
+    }
+
+    jvmToolchain(21)  // Use same version as Java
+}
 
 dependencies {
-    implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")
-
-    // test
     testImplementation(project(":shared-test"))
 }
