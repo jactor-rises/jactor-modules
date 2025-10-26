@@ -17,15 +17,18 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
 
-    // kotlin
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
     // jetbrains-exposed
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:${exposedVersion}")
     implementation("org.jetbrains.exposed:exposed-spring-boot-starter:$exposedVersion")
+
+    // Ensure kotlinx-datetime is explicitly declared
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+
+    // Ensure kotlin-stdlib-jdk8 is available at runtime
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    runtimeOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // internal project dependency
     implementation(project(":shared"))
@@ -33,10 +36,6 @@ dependencies {
     // runtime dependencies
     runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
     runtimeOnly("com.h2database:h2:$h2DatabaseVersion")
-
-    // test dependencies
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    testRuntimeOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }
 
 tasks.test {
