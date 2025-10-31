@@ -9,6 +9,18 @@ description = "jactor::persistence"
 val exposedVersion: String by project
 val flywayVersion: String by project
 val h2DatabaseVersion: String by project
+val kotlinVersion: String by project
+
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+        force("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
+    }
+}
+
 
 dependencies {
     // spring-boot
@@ -23,12 +35,13 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:${exposedVersion}")
     implementation("org.jetbrains.exposed:exposed-spring-boot-starter:$exposedVersion")
 
-    // Ensure kotlinx-datetime is explicitly declared
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+    // Force kotlinx-datetime version compatible with Kotlin 2.1.0
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
-    // Ensure kotlin-stdlib-jdk8 is available at runtime
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    runtimeOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    // Explicitly add Kotlin stdlib for both compile and runtime
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    testRuntimeOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
 
     // internal project dependency
     implementation(project(":shared"))
