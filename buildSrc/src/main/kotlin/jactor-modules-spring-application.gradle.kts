@@ -7,7 +7,6 @@ apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 apply(plugin = "org.jetbrains.kotlin.plugin.spring")
 
-val kotlinLoggingVersion: String by project
 val mockkVersion: String by project
 val springdocVersion: String by project
 val springmockkVersion: String by project
@@ -19,7 +18,7 @@ repositories {
 }
 
 val toml = file("../gradle/libs.versions.toml").readText()
-val versionRegex = """(\w+)\s*=\s*"([^"]+)"""".toRegex()
+val versionRegex = """([\w-]+)\s*=\s*"([^"]+)"""".toRegex()
 val versions = versionRegex.findAll(toml)
     .associate { it.groupValues[1] to it.groupValues[2] }
 
@@ -37,7 +36,7 @@ dependencies {
     add("implementation", "org.springdoc:springdoc-openapi-ui:$springdocVersion")
 
     // logging
-    add("implementation", "io.github.oshai:kotlin-logging-jvm:${kotlinLoggingVersion}")
+    add("implementation", "io.github.oshai:kotlin-logging-jvm:${versions["kotlin-logging"]}")
 
     // internal test dependencies
     add("testImplementation", project(":shared-test"))
