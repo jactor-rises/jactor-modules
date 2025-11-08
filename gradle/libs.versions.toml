@@ -1,5 +1,5 @@
 [versions]
-kotlin-gradle-plugin = "2.2.0"
+kotlin-gradle-plugin = "2.2.21"
 springBoot = "3.5.6"
 springDependencyManagement = "1.1.4"
 
