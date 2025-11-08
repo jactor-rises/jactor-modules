@@ -10,7 +10,6 @@ import org.jetbrains.exposed.v1.jdbc.update
 
 object PersonRepositoryObject : PersonRepository {
     override fun findAll(): List<PersonDao> = People.selectAll().map { it.toPersonDao() }
-
     override fun findById(id: UUID): PersonDao? = People
         .selectAll()
         .andWhere { People.id eq id }
