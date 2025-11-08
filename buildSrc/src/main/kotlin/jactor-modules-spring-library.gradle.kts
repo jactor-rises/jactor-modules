@@ -5,8 +5,6 @@ apply(plugin = "io.spring.dependency-management")
 apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 
-val springmockkVersion: String by project
-
 repositories {
     gradlePluginPortal()
     mavenCentral()
@@ -38,13 +36,13 @@ dependencies {
     add("testImplementation", project(":shared-test"))
 
     // test
-    add("testImplementation", "com.ninja-squad:springmockk:$springmockkVersion")
+    add("testImplementation", "com.ninja-squad:springmockk:${versions["springmockk"]}")
     add("testImplementation", "com.willowtreeapps.assertk:assertk-jvm:${versions["assertk"]}")
     add("testImplementation", "io.mockk:mockk:${versions["mockk"]}")
     add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")
     add("testImplementation", "org.jetbrains.kotlinx:kotlinx-coroutines-test")
     add("testImplementation", "org.junit.platform:junit-platform-suite:${versions["junitPlatform"]}")
-    add("testImplementation", "org.springframework.boot:spring-boot-starter-test:${versions["springBoot"]}") {
+    add("testImplementation", "org.springframework.boot:spring-boot-starter-test:${versions["spring-boot"]}") {
         exclude(group = "org.assertj")
         exclude(group = "org.junit", module = "junit")
         exclude(group = "org.hamcrest")

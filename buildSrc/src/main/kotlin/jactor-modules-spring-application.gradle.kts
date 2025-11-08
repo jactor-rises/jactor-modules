@@ -7,8 +7,6 @@ apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 apply(plugin = "org.jetbrains.kotlin.plugin.spring")
 
-val springmockkVersion: String by project
-
 repositories {
     gradlePluginPortal()
     mavenCentral()
@@ -40,7 +38,7 @@ dependencies {
     add("testImplementation", project(":shared-test"))
 
     // test
-    add("testImplementation", "com.ninja-squad:springmockk:$springmockkVersion")
+    add("testImplementation", "com.ninja-squad:springmockk:${versions["springmockk"]}")
     add("testImplementation", "com.willowtreeapps.assertk:assertk-jvm:${versions["assertk"]}")
     add("testImplementation", "io.mockk:mockk:${versions["mockk"]}")
     add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")
