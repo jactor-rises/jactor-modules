@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initPerson
+import com.github.jactor.shared.test.all
+import com.github.jactor.shared.test.equals
+import com.github.jactor.shared.test.named
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
@@ -41,6 +44,11 @@ internal class PersonServiceTest @Autowired constructor(
         )
 
         // then
-        assertThat(person).isEqualTo(personDao)
+        assertThat(person).all {
+            id named "id" equals personDao.id
+            surname named "surname" equals personDao.surname
+            firstName named "firstName" equals personDao.firstName
+            description named "description" equals personDao.description
+        }
     }
 }
