@@ -6,7 +6,6 @@ apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 
 val cucumberVersion: String by project
-val coroutinesVersion: String by project
 val junitPlatformVersion: String by project
 val kotlinLoggingVersion: String by project
 val mockkVersion: String by project
@@ -26,7 +25,7 @@ val versions = versionRegex.findAll(toml)
 
 dependencies {
     // kotlin coroutines bom
-    add("implementation", platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:$coroutinesVersion"))
+    add("implementation", platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:${versions["coroutines"]}"))
 
     // kotlin
     add("implementation", "org.jetbrains.kotlin:kotlin-reflect")
