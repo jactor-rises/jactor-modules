@@ -6,24 +6,19 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 
 object AddressRepositoryObject : AddressRepository {
-    override fun findById(id: UUID): AddressDao? = transaction {
-        Addresses
-            .selectAll()
-            .andWhere { Addresses.id eq id }
-            .singleOrNull()
-            ?.toAddressDao()
-    }
+    override fun findById(id: UUID): AddressDao? = Addresses
+        .selectAll()
+        .andWhere { Addresses.id eq id }
+        .singleOrNull()
+        ?.toAddressDao()
 
-    override fun findByZipCode(zipCode: String): List<AddressDao> = transaction {
-        Addresses
-            .selectAll()
-            .andWhere { Addresses.zipCode eq zipCode }
-            .map { it.toAddressDao() }
-    }
+    override fun findByZipCode(zipCode: String): List<AddressDao> = Addresses
+        .selectAll()
+        .andWhere { Addresses.zipCode eq zipCode }
+        .map { it.toAddressDao() }
 
     private fun ResultRow.toAddressDao(): AddressDao = AddressDao(
         id = this[Addresses.id].value,
@@ -40,11 +35,9 @@ object AddressRepositoryObject : AddressRepository {
         zipCode = this[Addresses.zipCode],
     )
 
-    override fun save(addressDao: AddressDao): AddressDao = transaction {
-        when (addressDao.isNotPersisted) {
-            true -> insert(addressDao)
-            false -> update(addressDao)
-        }
+    override fun save(addressDao: AddressDao): AddressDao = when (addressDao.isNotPersisted) {
+        true -> insert(addressDao)
+        false -> update(addressDao)
     }
 
     private fun insert(addressDao: AddressDao): AddressDao = Addresses.insertAndGetId { row ->

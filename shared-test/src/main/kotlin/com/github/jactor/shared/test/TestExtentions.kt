@@ -30,5 +30,5 @@ fun Assert<LocalDateTime>.isNotOlderThan(seconds: Long) = isStrictlyBetween(
     LocalDateTime.now().minusSeconds(seconds), LocalDateTime.now()
 )
 
-infix fun <T : Collection<*>> Assert<T?>.sized(size: Int): Unit = this.isNotNull().hasSize(size = size)
 infix fun <T> T?.named(name: String): Assert<T?> = assertThat(actual = this, name = name)
+infix fun <T : Collection<*>> Assert<T?>.sized(size: Int): Unit = this.isNotNull().hasSize(size = size)

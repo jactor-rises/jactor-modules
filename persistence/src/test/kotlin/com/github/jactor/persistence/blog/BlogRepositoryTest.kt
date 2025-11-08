@@ -1,10 +1,9 @@
 package com.github.jactor.persistence.blog
 
-import assertk.assertAll
-import assertk.assertThat
-import assertk.assertions.hasSize
-import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
+import java.time.LocalDate
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initAddress
 import com.github.jactor.persistence.test.initBlog
@@ -13,10 +12,11 @@ import com.github.jactor.persistence.test.initUser
 import com.github.jactor.persistence.user.User
 import com.github.jactor.persistence.user.UserType
 import com.github.jactor.shared.test.isNotOlderThan
-import java.time.LocalDate
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.fail
-import org.springframework.beans.factory.annotation.Autowired
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 
 internal class BlogRepositoryTest @Autowired constructor(
     private val blogRepository: BlogRepository,
