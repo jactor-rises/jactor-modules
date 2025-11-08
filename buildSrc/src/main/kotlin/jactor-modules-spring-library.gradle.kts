@@ -5,7 +5,6 @@ apply(plugin = "io.spring.dependency-management")
 apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 
-val springdocVersion: String by project
 val springmockkVersion: String by project
 
 repositories {
@@ -30,7 +29,7 @@ dependencies {
     add("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     // springdoc-openapi (swagger)
-    add("implementation", "org.springdoc:springdoc-openapi-ui:$springdocVersion")
+    add("implementation", "org.springdoc:springdoc-openapi-ui:${versions["springdoc-openapi"]}")
 
     // logging
     add("implementation", "io.github.oshai:kotlin-logging-jvm:${versions["kotlin-logging"]}")
