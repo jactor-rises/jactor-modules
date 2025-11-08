@@ -1,5 +1,3 @@
-val kotlinVersion = "2.2.21"
-
 plugins {
     `kotlin-dsl`
 }
@@ -9,10 +7,14 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-    implementation("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
+val toml = file("../gradle/libs.versions.toml").readText()
+val versionRegex = """(\w+)\s*=\s*"([^"]+)"""".toRegex()
+val versions = versionRegex.findAll(toml)
+    .associate { it.groupValues[1] to it.groupValues[2] }
 
-    // spring-boot gradle plugin
-    implementation("org.springframework.boot:spring-boot-gradle-plugin:3.4.1")
+dependencies {
+    implementation("io.spring.gradle:dependency-management-plugin:${versions["dependencyManagement"]}")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions["kotlin"]}")
+    implementation("org.jetbrains.kotlin:kotlin-allopen:${versions["kotlin"]}")
+    implementation("org.springframework.boot:spring-boot-gradle-plugin:${versions["springBoot"]}")
 }

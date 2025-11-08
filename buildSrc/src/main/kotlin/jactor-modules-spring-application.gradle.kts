@@ -14,7 +14,6 @@ val coroutinesVersion: String by project
 val junitPlatformVersion: String by project
 val kotlinLoggingVersion: String by project
 val mockkVersion: String by project
-val springBootVersion: String by project
 val springdocVersion: String by project
 val springmockkVersion: String by project
 
@@ -50,7 +49,7 @@ dependencies {
     add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")
     add("testImplementation", "org.jetbrains.kotlinx:kotlinx-coroutines-test")
     add("testImplementation", "org.junit.platform:junit-platform-suite:$junitPlatformVersion")
-    add("testImplementation", "org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
+    add("testImplementation", "org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.assertj")
         exclude(group = "org.junit", module = "junit")
         exclude(group = "org.hamcrest")
