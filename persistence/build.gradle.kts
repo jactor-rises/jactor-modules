@@ -6,7 +6,6 @@ group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
-val h2DatabaseVersion: String by project
 val kotlinVersion: String by project
 
 configurations.all {
@@ -38,7 +37,7 @@ dependencies {
 
     // runtime dependencies
     runtimeOnly(libs.flyway.core)
-    runtimeOnly("com.h2database:h2:$h2DatabaseVersion")
+    runtimeOnly(libs.h2database)
 }
 
 tasks.test {
