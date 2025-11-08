@@ -1,16 +1,15 @@
 package com.github.jactor.persistence.person
 
-import assertk.assertThat
-import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
+import java.time.LocalDateTime
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import com.github.jactor.persistence.Persistent
 import com.github.jactor.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.persistence.test.initPerson
-import java.time.LocalDateTime
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 
 internal class PersonServiceTest @Autowired constructor(
     private val personService: PersonService,

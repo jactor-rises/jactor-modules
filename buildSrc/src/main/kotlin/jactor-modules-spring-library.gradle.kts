@@ -5,7 +5,6 @@ apply(plugin = "io.spring.dependency-management")
 apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 
-val cucumberVersion: String by project
 val junitPlatformVersion: String by project
 val kotlinLoggingVersion: String by project
 val mockkVersion: String by project
@@ -57,10 +56,10 @@ dependencies {
     }
 
     // cucumber
-    add("testImplementation", "io.cucumber:cucumber-java:$cucumberVersion")
-    add("testImplementation", "io.cucumber:cucumber-java8:$cucumberVersion")
-    add("testImplementation", "io.cucumber:cucumber-junit-platform-engine:$cucumberVersion")
-    add("testImplementation", "io.cucumber:cucumber-spring:$cucumberVersion")
+    add("testImplementation", "io.cucumber:cucumber-java:${versions["cucumber"]}")
+    add("testImplementation", "io.cucumber:cucumber-java8:${versions["cucumber"]}")
+    add("testImplementation", "io.cucumber:cucumber-junit-platform-engine:${versions["cucumber"]}")
+    add("testImplementation", "io.cucumber:cucumber-spring:${versions["cucumber"]}")
 }
 
 plugins.withId("org.springframework.boot") {
