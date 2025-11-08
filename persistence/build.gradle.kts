@@ -6,19 +6,6 @@ group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
-val kotlinVersion: String by project
-
-configurations.all {
-    resolutionStrategy {
-        force("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
-        force("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-        force("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
-    }
-}
-
-
 dependencies {
     // spring-boot
     implementation("org.springframework.boot:spring-boot-starter-actuator")
