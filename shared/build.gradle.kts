@@ -5,10 +5,11 @@ plugins {
 group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::shared"
+val javaVersion = libs.versions.jvm.get().toInt()
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(javaVersion))
     }
 }
 
