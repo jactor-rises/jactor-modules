@@ -1,11 +1,27 @@
 [versions]
-kotlin-gradle-plugin = "2.2.21"
-springBoot = "3.5.6"
-springDependencyManagement = "1.1.4"
+assertk = "0.28.1"
+coroutines = "1.10.2"
+cucumber = "7.23.0"
+exposed = "1.0.0-rc-3"
+dependencyManagement = "1.1.4"
+flyway = "11.9.1"
+h2Database = "2.3.232"
+jvm = "21" # also remember that .github actions also defines a JDK version
+junitPlatform = "1.13.1"
+kotlin = "2.2.21"
+kotlin-logging = "7.0.13"
+mockk = "1.14.6"
+spring-boot = "3.5.6"
+springdoc-openapi = "1.8.0"
+springmockk = "4.0.2"
 
 [libraries]
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+exposed-spring-boot-starter = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed" }
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+h2database = { module = "com.h2database:h2", version.ref = "h2Database" }
 
 [plugins]
-springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
-springDependecyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
