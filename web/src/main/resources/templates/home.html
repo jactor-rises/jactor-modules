@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title th:text="#{page.home.html.title}">homepage</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="../static/css/jactor-rises.css" th:href="@{/css/jactor-rises.css}"/>
+    <title th:text="#{page.home.html.title}">homepage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/jactor-rises.css"
+          th:href="@{/css/jactor-rises.css}"/>
 </head>
 <body>
 <header th:replace="fragments/header :: header">header</header>
 <div class="container">
-  <h2 th:text="#{page.home.welcome}">jactor-rises</h2>
-  <p th:text="#{page.home.paragraph.a}">$a</p>
-  <p th:text="#{page.home.paragraph.b}">$b</p>
-  <p th:text="#{page.home.paragraph.c}">$c</p>
-  <p th:text="#{page.home.techs}">tech used:</p>
+    <h2 th:text="#{page.home.welcome}">jactor-rises</h2>
+    <p th:text="#{page.home.paragraph.a}">$a</p>
+    <p th:text="#{page.home.paragraph.b}">$b</p>
+    <p th:text="#{page.home.paragraph.c}">$c</p>
+    <p th:text="#{page.home.techs}">tech used:</p>
 
-  <div class="container" th:with="homepage=${homepage}">
-    <table th:each="technology : ${homepage.technologies}">
-      <tr>
-        <td>
-          <a th:href="${technology.url}" target="_blank">
-            <div th:text="${technology.tech}">tech</div>
-          </a>
-        </td>
-        <td th:text="${technology.getMessage()}">tech description</td>
-      </tr>
-    </table>
-  </div>
+    <div class="container" th:with="homepage=${homepage}">
+        <table th:each="technology : ${homepage.technologies}">
+            <tr>
+                <td>
+                    <a th:href="${technology.url}" target="_blank">
+                        <div th:text="${technology.tech}">tech</div>
+                    </a>
+                </td>
+                <td th:text="${technology.getMessage()}">tech description</td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div th:replace="fragments/footer :: footer" class="footer">footer</div>
 </body>

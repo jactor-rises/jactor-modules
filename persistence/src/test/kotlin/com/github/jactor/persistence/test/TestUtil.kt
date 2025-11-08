@@ -16,7 +16,6 @@ import com.github.jactor.persistence.person.PersonDao
 import com.github.jactor.persistence.user.User
 import com.github.jactor.persistence.user.UserDao
 import com.github.jactor.persistence.user.UserType
-import com.github.jactor.persistence.user.UserTypeDto
 import com.github.jactor.shared.api.CreateUserCommand
 import java.time.LocalDate
 import java.time.LocalDateTime

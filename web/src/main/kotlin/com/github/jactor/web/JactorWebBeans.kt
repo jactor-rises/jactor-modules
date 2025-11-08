@@ -1,5 +1,8 @@
 package com.github.jactor.web
 
+import com.github.jactor.web.menu.Menu
+import com.github.jactor.web.menu.MenuFacade
+import com.github.jactor.web.menu.MenuItem
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -8,9 +11,6 @@ import org.springframework.context.annotation.Scope
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.DefaultUriBuilderFactory
 import org.springframework.web.util.UriTemplateHandler
-import com.github.jactor.web.menu.Menu
-import com.github.jactor.web.menu.MenuFacade
-import com.github.jactor.web.menu.MenuItem
 
 @Configuration
 @PropertySource("classpath:application.properties")

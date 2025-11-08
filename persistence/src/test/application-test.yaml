@@ -1,3 +1,3 @@
 spring:
-    exposed:
-        show-sql: true
+  exposed:
+    show-sql: true

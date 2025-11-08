@@ -1,12 +1,12 @@
 package com.github.jactor.shared
 
-import com.github.jactor.shared.test.all
-import com.github.jactor.shared.test.equals
-import com.github.jactor.shared.test.sized
-import com.github.jactor.shared.test.named
-import org.junit.jupiter.api.Test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.shared.test.all
+import com.github.jactor.shared.test.equals
+import com.github.jactor.shared.test.named
+import com.github.jactor.shared.test.sized
+import org.junit.jupiter.api.Test
 
 class SpringBeanNamesTest {
     private val springBeanNames = SpringBeanNames()

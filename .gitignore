@@ -13,5 +13,5 @@ sys-test/target
 /**/.DS_Store
 
 # kotlin
-/.kotlin/sessions/
+/.kotlin/
 /buildSrc/.kotlin/sessions

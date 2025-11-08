@@ -1,5 +1,8 @@
 package com.github.jactor.persistence.cucumber
 
+import io.cucumber.java.Before
+import io.cucumber.java.Scenario
+import io.cucumber.junit.platform.engine.Constants
 import org.junit.platform.suite.api.ConfigurationParameter
 import org.junit.platform.suite.api.ConfigurationParameters
 import org.junit.platform.suite.api.ExcludeTags
@@ -7,9 +10,6 @@ import org.junit.platform.suite.api.IncludeEngines
 import org.junit.platform.suite.api.SelectClasspathResource
 import org.junit.platform.suite.api.Suite
 import org.springframework.test.context.ActiveProfiles
-import io.cucumber.java.Before
-import io.cucumber.java.Scenario
-import io.cucumber.junit.platform.engine.Constants
 
 @Suite
 @IncludeEngines("cucumber")

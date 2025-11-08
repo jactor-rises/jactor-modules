@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/jactor-rises.css" th:href="@{/css/jactor-rises.css}"/>
-  <title>header</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../../static/css/jactor-rises.css"
+          th:href="@{/css/jactor-rises.css}"/>
+    <title>header</title>
 </head>
 <body>
 <header th:fragment="header" class="header">
-  <div class="container">
-    <table>
-      <tr>
-        <td>
-          <div th:replace="fragments/language :: language">language</div>
-        </td>
-        <td>
-          <div th:replace="fragments/title :: title">title</div>
-        </td>
-        <td>
-          <div th:replace="fragments/icon :: icon">icon</div>
-        </td>
-      </tr>
-    </table>
-  </div>
+    <div class="container">
+        <table>
+            <tr>
+                <td>
+                    <div th:replace="fragments/language :: language">language</div>
+                </td>
+                <td>
+                    <div th:replace="fragments/title :: title">title</div>
+                </td>
+                <td>
+                    <div th:replace="fragments/icon :: icon">icon</div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </header>
 </body>
 </html>

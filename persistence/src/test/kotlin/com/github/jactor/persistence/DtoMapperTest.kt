@@ -1,14 +1,14 @@
 package com.github.jactor.persistence
 
-import java.util.UUID
-import org.junit.jupiter.api.Test
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.contains
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jactor.shared.api.PersistentDto
 import com.github.jactor.shared.api.UserDto
 import com.github.jactor.shared.api.UserType
-import assertk.assertAll
-import assertk.assertThat
-import assertk.assertions.contains
+import java.util.UUID
+import org.junit.jupiter.api.Test
 
 internal class DtoMapperTest {
     private val objectMapper: ObjectMapper = JactorPersistenceConfig().objectMapper()

@@ -8,8 +8,8 @@ const val THAI = "ไทย"
 
 @JvmRecord
 data class Language(
-        val locale: Locale,
-        val name: String = ""
+    val locale: Locale,
+    val name: String = ""
 ) {
     fun matches(locale: Locale): Boolean {
         return this.locale == locale

@@ -1,11 +1,11 @@
 package com.github.jactor.persistence.cucumber
 
-import org.springframework.http.HttpStatus
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import io.cucumber.java8.No
+import org.springframework.http.HttpStatus
 
 @Suppress("unused", "LeakingThis") // bestemmes av cucumber
 internal class RestServiceSteps : No, PersistenceCucumberContextConfiguration() {
