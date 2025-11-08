@@ -10,6 +10,7 @@ jvm = "21" # also remember that .github actions also defines a JDK version
 junitPlatform = "1.13.1"
 kotlin = "2.2.21"
 kotlin-logging = "7.0.13"
+mockk = "1.14.6"
 springBoot = "3.5.6"
 
 [libraries]

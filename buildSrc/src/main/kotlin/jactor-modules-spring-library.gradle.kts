@@ -5,7 +5,6 @@ apply(plugin = "io.spring.dependency-management")
 apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 
-val mockkVersion: String by project
 val springdocVersion: String by project
 val springmockkVersion: String by project
 
@@ -42,7 +41,7 @@ dependencies {
     // test
     add("testImplementation", "com.ninja-squad:springmockk:$springmockkVersion")
     add("testImplementation", "com.willowtreeapps.assertk:assertk-jvm:${versions["assertk"]}")
-    add("testImplementation", "io.mockk:mockk:$mockkVersion")
+    add("testImplementation", "io.mockk:mockk:${versions["mockk"]}")
     add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")
     add("testImplementation", "org.jetbrains.kotlinx:kotlinx-coroutines-test")
     add("testImplementation", "org.junit.platform:junit-platform-suite:${versions["junitPlatform"]}")
