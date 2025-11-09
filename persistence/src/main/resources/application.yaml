@@ -32,6 +32,6 @@ spring:
       enabled: true
 
 springdoc:
-  packages-to-scan: com.github.jactor.persistence
+  packages-to-scan: com.github.jactor.rises.persistence
   swagger-ui:
     path: /swagger-ui.html
