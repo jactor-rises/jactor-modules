@@ -4,9 +4,11 @@ on:
     branches:
       - main
     paths:
+      - '.github'
       - 'persistence/**'
       - 'shared/**'
       - 'buildSrc'
+      - 'gradle'
 
 jobs:
   tag:
