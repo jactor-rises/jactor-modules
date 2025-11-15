@@ -13,25 +13,48 @@
  * Note! If the major/minor version is less than current semantic version or larger than bumped semantic version, the
  * script will fail...
  */
-object Argument {
+object Constants {
+    const val ENVIRONMENT_IS_DEBUG = "IS_DEBUG"
     const val MAJOR_MINOR = "majorMinor"
     const val CURRENT_SEMANTIC_VERSION = "currentSemVer"
 }
 
-object Constants {
-    const val ENVIRONMENT_IS_DEBUG = "IS_DEBUG"
+private fun Array<java.io.File>.findSciptFile(): java.io.File? {
+    val kts = filter { it.extension == "kts" }
 
-    private const val SCRIPT_FILE_NAME = "new-semver.main.kts"
+    if (kts.isEmpty()) return null
 
-    val ERROR_MESSAGE = """
-            >>> ERROR <<<
-            {}
-              Usage: $SCRIPT_FILE_NAME <mapped args, ie: ${Argument.MAJOR_MINOR}=? ${Argument.CURRENT_SEMANTIC_VERSION}=?>
-              - ex: ./$SCRIPT_FILE_NAME ${Argument.MAJOR_MINOR}=2.0 ${Argument.CURRENT_SEMANTIC_VERSION}=2.0.15
-        """.trimIndent()
+    return when {
+        kts.size == 1 -> kts[0]
+        else -> kts.firstOrNull { it.nameWithoutExtension.contains("semver") }
+    }
 }
 
 private val isDebug = System.getenv(Constants.ENVIRONMENT_IS_DEBUG)?.toBoolean() ?: false
+
+fun debugMessage(message: String) {
+    if (isDebug) println(message)
+}
+
+class ScriptFile {
+    val name: String
+        get() = java.io.File(".").also { debugMessage("> current directory: ${it.absolutePath}") }
+            .listFiles().also { files -> files?.forEach { debugMessage("> ${it.name}") } }
+            ?.findSciptFile()
+            ?.name ?: "<script-file>.kts"
+}
+
+private val scriptFileName = ScriptFile().name
+private val errorMessage = """
+    {}
+        Usage: $scriptFileName <mapped args, ie: ${Constants.MAJOR_MINOR}=? ${Constants.CURRENT_SEMANTIC_VERSION}=?>
+        - ex: ./$scriptFileName ${Constants.MAJOR_MINOR}=2.0 ${Constants.CURRENT_SEMANTIC_VERSION}=2.0.15
+""".trimIndent()
+
+fun errorWithMessage(message: String): Nothing = errorMessage.replace("{}", message).let {
+    error(it)
+}
+
 private val allArgs = args.joinToString(" ")
 private var majorMinorVersion: String
 private var semanticVersion: String
@@ -39,7 +62,7 @@ private var semanticVersion: String
 debugMessage("all args: $allArgs")
 
 if (args.size < 2) {
-    errorMessage("Two arguments are required!")
+    errorWithMessage("Two arguments are required!")
 }
 
 val commands = buildMap {
@@ -56,31 +79,27 @@ val commands = buildMap {
 debugMessage("map args: $commands")
 
 // read arguments
-majorMinorVersion = commands[Argument.MAJOR_MINOR] ?: errorMessage(
-    "${Argument.MAJOR_MINOR} argument is not supplied!"
+majorMinorVersion = commands[Constants.MAJOR_MINOR] ?: errorWithMessage(
+    "${Constants.MAJOR_MINOR} argument is not supplied!"
 )
 
-semanticVersion = commands[Argument.CURRENT_SEMANTIC_VERSION] ?: errorMessage(
-    "${Argument.CURRENT_SEMANTIC_VERSION} argument is not supplied!"
+semanticVersion = commands[Constants.CURRENT_SEMANTIC_VERSION] ?: errorWithMessage(
+    "${Constants.CURRENT_SEMANTIC_VERSION} argument is not supplied!"
 )
 
 val newSemanticVersion = createNewSemanticVersion()
 
 println(newSemanticVersion)
 
-fun errorMessage(message: String): Nothing = Constants.ERROR_MESSAGE.replace("{}", message).let {
-    error(it)
-}
-
 fun createNewSemanticVersion(): String {
     debugMessage("creating new semantic version from $majorMinorVersion and current semantic version ($semanticVersion)")
 
     if (!semanticVersion.startsWith(majorMinorVersion)) {
         return createNewSemanticVersion(
-            majorMinorVersion.split(".")[0].toInt(),
-            majorMinorVersion.split(".")[1].toInt(),
-            semanticVersion.split(".")[0].toInt(),
-            semanticVersion.split(".")[1].toInt()
+            majorVersion = majorMinorVersion.split(".")[0].toInt(),
+            minorVersion = majorMinorVersion.split(".")[1].toInt(),
+            currentMajorVersion = semanticVersion.split(".")[0].toInt(),
+            currentMinorVersion = semanticVersion.split(".")[1].toInt()
         )
     }
 
@@ -121,8 +140,4 @@ fun createNewSemanticVersion(
     }
 
     return "$majorMinorVersion.0"
-}
-
-fun debugMessage(message: String) {
-    if (isDebug) println(message)
 }
