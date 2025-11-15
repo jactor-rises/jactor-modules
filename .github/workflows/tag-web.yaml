@@ -7,8 +7,8 @@ on:
       - '.github/**'
       - 'web/**'
       - 'shared/**'
-      - 'buildSrc'
-      - 'gradle'
+      - 'buildSrc/**'
+      - 'gradle/**'
 
 jobs:
   tag:
