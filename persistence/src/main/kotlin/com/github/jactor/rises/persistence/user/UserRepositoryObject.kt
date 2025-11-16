@@ -1,15 +1,14 @@
 package com.github.jactor.rises.persistence.user
 
 import java.util.UUID
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.jdbc.andWhere
-import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
+import com.github.jactor.rises.persistence.util.toUserDao
 
 object UserRepositoryObject : UserRepository {
     override fun contains(username: String): Boolean = Users
@@ -17,11 +16,6 @@ object UserRepositoryObject : UserRepository {
         .andWhere { Users.username eq username }
         .count() > 0
 
-    override fun delete(user: UserDao) {
-        Users.deleteWhere { Users.id eq user.id }
-    }
-
-    override fun findAll(): List<UserDao> = Users.selectAll().map { it.toUserDao() }
     override fun findById(id: UUID): UserDao? = Users.selectAll()
         .andWhere { Users.id eq id }
         .map { it.toUserDao() }
@@ -49,9 +43,6 @@ object UserRepositoryObject : UserRepository {
     override fun save(userDao: UserDao): UserDao = when (userDao.isPersisted) {
         true -> update(user = userDao)
         false -> insert(user = userDao)
-    }.also {
-        val users = findAll()
-        println("${users.size} users persisted: ${users.map { "${it.username}/${it.id}" }}")
     }
 
     private fun insert(user: UserDao): UserDao = Users.insertAndGetId { row ->
@@ -76,15 +67,4 @@ object UserRepositoryObject : UserRepository {
         it[personId] = personId
         // createdBy & timeOfCreation are intentionally not updated
     }.let { user }
-
-    private fun ResultRow.toUserDao(id: UUID? = null): UserDao = UserDao(
-        id = id ?: this[Users.id].value,
-        createdBy = this[Users.createdBy],
-        timeOfCreation = this[Users.timeOfCreation],
-        modifiedBy = this[Users.modifiedBy],
-        timeOfModification = this[Users.timeOfModification],
-        username = this[Users.username],
-        emailAddress = this[Users.emailAddress],
-        personId = this[Users.personId],
-    )
 }

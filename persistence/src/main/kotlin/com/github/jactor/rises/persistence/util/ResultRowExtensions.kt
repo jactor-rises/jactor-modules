@@ -1,5 +1,6 @@
-package com.github.jactor.rises.persistence.guestbook
+package com.github.jactor.rises.persistence.util
 
+import java.util.UUID
 import org.jetbrains.exposed.v1.core.ResultRow
 import com.github.jactor.rises.persistence.address.AddressDao
 import com.github.jactor.rises.persistence.address.Addresses
@@ -7,8 +8,14 @@ import com.github.jactor.rises.persistence.blog.BlogDao
 import com.github.jactor.rises.persistence.blog.BlogEntries
 import com.github.jactor.rises.persistence.blog.BlogEntryDao
 import com.github.jactor.rises.persistence.blog.Blogs
+import com.github.jactor.rises.persistence.guestbook.GuestBookDao
+import com.github.jactor.rises.persistence.guestbook.GuestBookEntries
+import com.github.jactor.rises.persistence.guestbook.GuestBookEntryDao
+import com.github.jactor.rises.persistence.guestbook.GuestBooks
 import com.github.jactor.rises.persistence.person.People
 import com.github.jactor.rises.persistence.person.PersonDao
+import com.github.jactor.rises.persistence.user.UserDao
+import com.github.jactor.rises.persistence.user.Users
 
 fun ResultRow.toAddressDao(): AddressDao = AddressDao(
     id = this[Addresses.id].value,
@@ -83,4 +90,15 @@ fun ResultRow.toPersonDao() = PersonDao(
     surname = this[People.surname],
     locale = this[People.locale],
     addressId = this[People.addressId],
+)
+
+fun ResultRow.toUserDao(id: UUID? = null): UserDao = UserDao(
+    id = id ?: this[Users.id].value,
+    createdBy = this[Users.createdBy],
+    timeOfCreation = this[Users.timeOfCreation],
+    modifiedBy = this[Users.modifiedBy],
+    timeOfModification = this[Users.timeOfModification],
+    username = this[Users.username],
+    emailAddress = this[Users.emailAddress],
+    personId = this[Users.personId],
 )

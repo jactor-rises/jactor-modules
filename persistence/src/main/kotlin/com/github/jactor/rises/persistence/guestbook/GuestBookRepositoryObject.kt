@@ -6,6 +6,8 @@ import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
+import com.github.jactor.rises.persistence.util.toGuestBookDao
+import com.github.jactor.rises.persistence.util.toGuestBookEntryDao
 
 object GuestBookRepositoryObject : GuestBookRepository {
     override fun findAllGuestBooks(): List<GuestBookDao> = GuestBooks.selectAll().map { it.toGuestBookDao() }

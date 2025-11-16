@@ -4,7 +4,7 @@ import java.util.UUID
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
-import com.github.jactor.rises.persistence.guestbook.toAddressDao
+import com.github.jactor.rises.persistence.util.toAddressDao
 
 object AddressRepositoryObject : AddressRepository {
     override fun findById(id: UUID): AddressDao? = Addresses

@@ -6,8 +6,8 @@ import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
-import com.github.jactor.rises.persistence.guestbook.toBlogDao
-import com.github.jactor.rises.persistence.guestbook.toBlogEntryDao
+import com.github.jactor.rises.persistence.util.toBlogDao
+import com.github.jactor.rises.persistence.util.toBlogEntryDao
 
 object BlogRepositoryObject : BlogRepository {
     override fun findBlogById(id: UUID): BlogDao? = Blogs.selectAll()
