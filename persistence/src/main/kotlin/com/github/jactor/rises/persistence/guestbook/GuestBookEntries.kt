@@ -1,9 +1,17 @@
 package com.github.jactor.rises.persistence.guestbook
 
-import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import java.util.UUID
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.javatime.datetime
+import com.github.jactor.rises.persistence.UUIDv7
 
-object GuestBookEntries : UUIDTable(name = "T_GUEST_BOOK_ENTRY", columnName = "ID") {
+object GuestBookEntries : IdTable<UUID>(name = "T_GUEST_BOOK_ENTRY") {
+    override val id: Column<EntityID<UUID>> = uuid("ID")
+        .clientDefault { UUIDv7.generate() }
+        .entityId()
+
     val createdBy = text("CREATED_BY")
     val guestName = text("GUEST_NAME")
     val entry = text("ENTRY")

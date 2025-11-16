@@ -1,11 +1,19 @@
 package com.github.jactor.rises.persistence.blog
 
-import com.github.jactor.rises.persistence.user.Users
-import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import java.util.UUID
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.javatime.datetime
+import com.github.jactor.rises.persistence.UUIDv7
+import com.github.jactor.rises.persistence.user.Users
 
-object Blogs : UUIDTable(name = "T_BLOG", columnName = "ID") {
+object Blogs : IdTable<UUID>(name = "T_BLOG") {
+    override val id: Column<EntityID<UUID>> = uuid("ID")
+        .clientDefault { UUIDv7.generate() }
+        .entityId()
+
     val createdBy = text("CREATED_BY")
     val modifiedBy = text("UPDATED_BY")
     val timeOfCreation = datetime("CREATION_TIME")

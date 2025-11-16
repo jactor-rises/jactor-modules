@@ -14,6 +14,7 @@ mockk = "1.14.6"
 spring-boot = "3.5.7"
 springdoc-openapi = "1.8.0"
 springmockk = "4.0.2"
+java-uuid-generator = "5.1.1"
 
 [libraries]
 assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
@@ -23,5 +24,6 @@ exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datet
 exposed-spring-boot-starter = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed" }
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 h2database = { module = "com.h2database:h2", version.ref = "h2Database" }
+uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "java-uuid-generator" }
 
 [plugins]

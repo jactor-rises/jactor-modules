@@ -1,9 +1,17 @@
 package com.github.jactor.rises.persistence.address
 
-import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import java.util.UUID
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.javatime.datetime
+import com.github.jactor.rises.persistence.UUIDv7
 
-object Addresses : UUIDTable(name = "T_ADDRESS", columnName = "ID") {
+object Addresses : IdTable<UUID>(name = "T_ADDRESS") {
+    override val id: Column<EntityID<UUID>> = uuid("ID")
+        .clientDefault { UUIDv7.generate() }
+        .entityId()
+
     val createdBy = text("CREATED_BY")
     val modifiedBy = text("UPDATED_BY")
     val timeOfCreation = datetime("CREATION_TIME")
