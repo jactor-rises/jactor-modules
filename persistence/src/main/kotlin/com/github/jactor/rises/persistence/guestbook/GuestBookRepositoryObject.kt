@@ -22,10 +22,6 @@ object GuestBookRepositoryObject : GuestBookRepository {
         .andWhere { GuestBookEntries.id eq id }
         .singleOrNull()?.toGuestBookEntryDao()
 
-    override fun findGuestBookByUserId(id: UUID): GuestBookDao? = GuestBooks.selectAll()
-        .andWhere { GuestBooks.userId eq id }
-        .singleOrNull()?.toGuestBookDao()
-
     override fun findGuestBookEtriesByGuestBookId(id: UUID): List<GuestBookEntryDao> = GuestBookEntries.selectAll()
         .andWhere { GuestBookEntries.guestBookId eq id }
         .map { it.toGuestBookEntryDao() }

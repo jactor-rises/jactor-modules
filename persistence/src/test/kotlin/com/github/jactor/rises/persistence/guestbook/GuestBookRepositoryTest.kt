@@ -47,7 +47,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             )
         )
 
-        val guestBookDao = guestBookRepository.findGuestBookByUserId(id = user.id)
+        val guestBookDao = GuestBookTestRepositoryObject.findGuestBookByUserId(id = user.id)
 
         assertAll {
             assertThat(guestBookDao?.title).isEqualTo("home sweet home")
@@ -77,14 +77,14 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             ).toGuestBookDao()
         )
 
-        val guestBookDaoToUpdate = guestBookRepository.findGuestBookByUserId(id = user.id)
+        val guestBookDaoToUpdate = GuestBookTestRepositoryObject.findGuestBookByUserId(id = user.id)
             ?: fail(message = "Should have found a guest book for user ${user.username}")
 
         guestBookDaoToUpdate.title = "5000 thousands miles away from home"
 
         guestBookRepository.save(guestBookDaoToUpdate)
 
-        val guestBookDao = guestBookRepository.findGuestBookByUserId(id = user.id)
+        val guestBookDao = GuestBookTestRepositoryObject.findGuestBookByUserId(id = user.id)
             ?: fail(message = "Should have found a guest book for user ${user.username}")
 
         assertThat(guestBookDao.title).isEqualTo("5000 thousands miles away from home")
