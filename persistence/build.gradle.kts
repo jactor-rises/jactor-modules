@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.exposed.java.time)
     implementation(libs.exposed.kotlin.datetime)
     implementation(libs.exposed.spring.boot.starter)
+    implementation(libs.uuid.generator)
 
     // internal project dependency
     implementation(project(":shared"))

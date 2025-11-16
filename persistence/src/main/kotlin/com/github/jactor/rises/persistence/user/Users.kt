@@ -1,10 +1,18 @@
 package com.github.jactor.rises.persistence.user
 
-import com.github.jactor.rises.persistence.person.People
-import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import java.util.UUID
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.javatime.datetime
+import com.github.jactor.rises.persistence.UUIDv7
+import com.github.jactor.rises.persistence.person.People
 
-object Users : UUIDTable(name = "T_USER", columnName = "ID") {
+object Users : IdTable<UUID>(name = "T_USER") {
+    override val id: Column<EntityID<UUID>> = uuid("ID")
+        .clientDefault { UUIDv7.generate() }
+        .entityId()
+
     val createdBy = text("CREATED_BY")
     val modifiedBy = text("UPDATED_BY")
     val timeOfCreation = datetime("CREATION_TIME")
