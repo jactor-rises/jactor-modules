@@ -7,6 +7,8 @@ import com.github.jactor.rises.persistence.blog.BlogDao
 import com.github.jactor.rises.persistence.blog.BlogEntries
 import com.github.jactor.rises.persistence.blog.BlogEntryDao
 import com.github.jactor.rises.persistence.blog.Blogs
+import com.github.jactor.rises.persistence.person.People
+import com.github.jactor.rises.persistence.person.PersonDao
 
 fun ResultRow.toAddressDao(): AddressDao = AddressDao(
     id = this[Addresses.id].value,
@@ -66,4 +68,19 @@ fun ResultRow.toGuestBookEntryDao() = GuestBookEntryDao(
     guestName = this[GuestBookEntries.guestName],
     entry = this[GuestBookEntries.entry],
     guestBookId = this[GuestBookEntries.guestBookId],
+)
+
+fun ResultRow.toPersonDao() = PersonDao(
+    id = this[People.id].value,
+
+    createdBy = this[People.createdBy],
+    modifiedBy = this[People.modifiedBy],
+    timeOfCreation = this[People.timeOfCreation],
+    timeOfModification = this[People.timeOfModification],
+
+    description = this[People.description],
+    firstName = this[People.firstName],
+    surname = this[People.surname],
+    locale = this[People.locale],
+    addressId = this[People.addressId],
 )

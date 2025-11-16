@@ -19,7 +19,7 @@ internal class PersonRepositoryTest @Autowired constructor(
 
     @Test
     fun `should find default persons`() {
-        val firstNames = personRepository.findBySurname("Jacobsen")
+        val firstNames = PersonTestRepositoryObject.findBySurname("Jacobsen")
             .map { it.firstName }
 
         assertAll {
@@ -35,7 +35,7 @@ internal class PersonRepositoryTest @Autowired constructor(
         ).persistent.id ?: fail { "not persisted?!!!" }
 
         val addressDao = addressRepository.findById(id = addressId) ?: fail { "Address (id=$addressId) not found???" }
-        val allreadyPresentPeople = personRepository.findAll().count()
+        val allreadyPresentPeople = PersonTestRepositoryObject.findAll().count()
         val personToPersist = PersonDao(
             addressId = addressDao.id,
             description = "Me, myself, and I",
@@ -46,11 +46,11 @@ internal class PersonRepositoryTest @Autowired constructor(
 
         personRepository.save(personToPersist)
 
-        val people = personRepository.findAll()
+        val people = PersonTestRepositoryObject.findAll()
         assertThat(people, "allready present people").hasSize(allreadyPresentPeople + 1)
 
         val personDao = personToPersist.surname.let {
-            personRepository.findBySurname(surname = it).firstOrNull() ?: fail { "Person with surname $it not found" }
+            PersonTestRepositoryObject.findBySurname(surname = it).firstOrNull() ?: fail { "Person with surname $it not found" }
         }
 
         assertAll {
@@ -80,7 +80,7 @@ internal class PersonRepositoryTest @Autowired constructor(
         )
 
         val personDao = ("Mine" to "Cula").let {
-            val mine = personRepository.findBySurname(surname = it.first)
+            val mine = PersonTestRepositoryObject.findBySurname(surname = it.first)
             val person = mine.firstOrNull() ?: fail { "Person with surname ${it.first} not found" }
 
             person.description = "There is no try"
@@ -89,7 +89,7 @@ internal class PersonRepositoryTest @Autowired constructor(
             person.surname = it.second
 
             personRepository.save(personDao = person)
-            val foundCula = personRepository.findBySurname(surname = it.second)
+            val foundCula = PersonTestRepositoryObject.findBySurname(surname = it.second)
 
             foundCula.firstOrNull()
         }
