@@ -1,12 +1,13 @@
 package com.github.jactor.rises.persistence.blog
 
 import java.util.UUID
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
+import com.github.jactor.rises.persistence.guestbook.toBlogDao
+import com.github.jactor.rises.persistence.guestbook.toBlogEntryDao
 
 object BlogRepositoryObject : BlogRepository {
     override fun findBlogById(id: UUID): BlogDao? = Blogs.selectAll()
@@ -18,16 +19,10 @@ object BlogRepositoryObject : BlogRepository {
         .andWhere { Blogs.userId eq id }
         .map { it.toBlogDao() }
 
-    override fun findBlogEntries(): List<BlogEntryDao> = BlogEntries.selectAll()
-        .map { it.toBlogEntryDao() }
-
     override fun findBlogEntryById(id: UUID): BlogEntryDao? = BlogEntries.selectAll()
         .andWhere { BlogEntries.id eq id }
         .map { it.toBlogEntryDao() }
         .singleOrNull()
-
-    override fun findBlogs(): List<BlogDao> = Blogs.selectAll()
-        .map { it.toBlogDao() }
 
     override fun findBlogsByTitle(title: String): List<BlogDao> = Blogs.selectAll()
         .andWhere { Blogs.title eq title }
@@ -87,26 +82,4 @@ object BlogRepositoryObject : BlogRepository {
         update[timeOfCreation] = blogEntryDao.timeOfCreation
         update[timeOfModification] = blogEntryDao.timeOfModification
     }.let { blogEntryDao }
-
-    private fun ResultRow.toBlogDao(): BlogDao = BlogDao(
-        id = this[Blogs.id].value,
-        created = this[Blogs.created],
-        createdBy = this[Blogs.createdBy],
-        modifiedBy = this[Blogs.modifiedBy],
-        timeOfCreation = this[Blogs.timeOfCreation],
-        timeOfModification = this[Blogs.timeOfModification],
-        title = this[Blogs.title],
-        userId = this[Blogs.userId],
-    )
-
-    private fun ResultRow.toBlogEntryDao(): BlogEntryDao = BlogEntryDao(
-        id = this[BlogEntries.id].value,
-        createdBy = this[BlogEntries.createdBy],
-        timeOfCreation = this[BlogEntries.timeOfCreation],
-        modifiedBy = this[BlogEntries.modifiedBy],
-        timeOfModification = this[BlogEntries.timeOfModification],
-        creatorName = this[BlogEntries.creatorName],
-        entry = this[BlogEntries.entry],
-        blogId = this[BlogEntries.blogId]
-    )
 }

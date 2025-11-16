@@ -5,6 +5,7 @@ import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
+import com.github.jactor.rises.persistence.guestbook.toAddressDao
 
 object AddressTestRepositoryObject {
     fun findByZipCode(zipCode: String): List<AddressDao> = Addresses
