@@ -1,44 +1,19 @@
 package com.github.jactor.rises.persistence.person
 
 import java.util.UUID
-import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
+import com.github.jactor.rises.persistence.util.toPersonDao
 
 object PersonRepositoryObject : PersonRepository {
-    override fun findAll(): List<PersonDao> = People.selectAll().map { it.toPersonDao() }
     override fun findById(id: UUID): PersonDao? = People
         .selectAll()
         .andWhere { People.id eq id }
         .map { it.toPersonDao() }
         .singleOrNull()
-
-    override fun findBySurname(surname: String?): List<PersonDao> = when {
-        (surname?.isBlank() ?: true) -> emptyList()
-
-        else -> People
-            .selectAll()
-            .andWhere { People.surname eq surname }
-            .map { it.toPersonDao() }
-    }
-
-    private fun ResultRow.toPersonDao() = PersonDao(
-        id = this[People.id].value,
-
-        createdBy = this[People.createdBy],
-        modifiedBy = this[People.modifiedBy],
-        timeOfCreation = this[People.timeOfCreation],
-        timeOfModification = this[People.timeOfModification],
-
-        description = this[People.description],
-        firstName = this[People.firstName],
-        surname = this[People.surname],
-        locale = this[People.locale],
-        addressId = this[People.addressId],
-    )
 
     override fun save(personDao: PersonDao): PersonDao = when (personDao.isNotPersisted) {
         true -> insert(personDao)

@@ -6,6 +6,8 @@ import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
+import com.github.jactor.rises.persistence.util.toGuestBookDao
+import com.github.jactor.rises.persistence.util.toGuestBookEntryDao
 
 object GuestBookRepositoryObject : GuestBookRepository {
     override fun findAllGuestBooks(): List<GuestBookDao> = GuestBooks.selectAll().map { it.toGuestBookDao() }
@@ -21,10 +23,6 @@ object GuestBookRepositoryObject : GuestBookRepository {
     override fun findGuestBookEntryById(id: UUID): GuestBookEntryDao? = GuestBookEntries.selectAll()
         .andWhere { GuestBookEntries.id eq id }
         .singleOrNull()?.toGuestBookEntryDao()
-
-    override fun findGuestBookByUserId(id: UUID): GuestBookDao? = GuestBooks.selectAll()
-        .andWhere { GuestBooks.userId eq id }
-        .singleOrNull()?.toGuestBookDao()
 
     override fun findGuestBookEtriesByGuestBookId(id: UUID): List<GuestBookEntryDao> = GuestBookEntries.selectAll()
         .andWhere { GuestBookEntries.guestBookId eq id }

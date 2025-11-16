@@ -1,15 +1,16 @@
 package com.github.jactor.rises.persistence.test
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 import com.github.jactor.rises.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.address.Address
+import com.github.jactor.rises.persistence.address.AddressTestRepositoryObject
 import com.github.jactor.rises.persistence.blog.Blog
 import com.github.jactor.rises.persistence.blog.BlogEntry
 import com.github.jactor.rises.persistence.guestbook.GuestBook
 import com.github.jactor.rises.persistence.person.Person
 import com.github.jactor.rises.persistence.user.User
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.transaction.annotation.Transactional
 
 /**
  * For å unngå å starte en spring-boot applikasjon og eventuelt laste spring-context på ny og når endringer som gjøres i
@@ -22,8 +23,9 @@ abstract class AbstractSpringBootNoDirtyContextTest {
     @Autowired
     private lateinit var jactorPersistenceRepositiesConfig: JactorPersistenceRepositiesConfig
 
-    protected fun save(address: Address): Address = jactorPersistenceRepositiesConfig.addressRepository
-        .save(addressDao = address.toAddressDao()).toAddress()
+    protected fun save(address: Address): Address = AddressTestRepositoryObject.save(
+        addressDao = address.toAddressDao()
+    ).toAddress()
 
     protected fun save(blog: Blog): Blog = jactorPersistenceRepositiesConfig.blogRepository
         .save(blogDao = blog.toBlogDao()).toBlog()

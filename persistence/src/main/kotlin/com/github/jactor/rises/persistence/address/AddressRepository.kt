@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository
 
 interface AddressRepository {
     fun findById(id: UUID): AddressDao?
-    fun findByZipCode(zipCode: String): List<AddressDao>
-    fun save(addressDao: AddressDao): AddressDao
 }
 
 @Repository

@@ -41,7 +41,7 @@ internal class BlogRepositoryTest @Autowired constructor(
             blogDao = BlogDao(created = LocalDate.now(), title = "Blah", userId = user.persistent.id)
         )
 
-        val blogDao = blogRepository.findBlogs().firstOrNull() ?: fail { "Unable to find any blogs" }
+        val blogDao = BlogTestRepositoryObject.findBlogs().firstOrNull() ?: fail { "Unable to find any blogs" }
 
         assertAll {
             assertThat(blogDao.created).isEqualTo(LocalDate.now())
@@ -138,7 +138,7 @@ internal class BlogRepositoryTest @Autowired constructor(
 
         blogRepository.save(blogEntryDao = blogEntryDao)
 
-        val blogEntries = blogRepository.findBlogEntries()
+        val blogEntries = BlogTestRepositoryObject.findBlogEntries()
 
         assertAll {
             assertThat(blogEntries).hasSize(1)

@@ -17,7 +17,7 @@ internal class AddressRepositoryTest @Autowired constructor(
 
     @Test
     fun `should fetch address entities by zip code`() {
-        addressRepository.save(
+        AddressTestRepositoryObject.save(
             initAddress(
                 addressLine1 = "somewhere out there",
                 city = "Rud",
@@ -25,7 +25,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             ).toAddressDao()
         )
 
-        addressRepository.save(
+        AddressTestRepositoryObject.save(
             initAddress(
                 addressLine1 = "somewhere in there",
                 city = "Rud",
@@ -33,7 +33,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             ).toAddressDao()
         )
 
-        addressRepository.save(
+        AddressTestRepositoryObject.save(
             initAddress(
                 addressLine1 = "on the road",
                 city = "Out There",
@@ -41,7 +41,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             ).toAddressDao()
         )
 
-        val addresses = addressRepository.findByZipCode(zipCode = "1234")
+        val addresses = AddressTestRepositoryObject.findByZipCode(zipCode = "1234")
 
         assertAll {
             assertThat(addresses).hasSize(2)
@@ -63,7 +63,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             zipCode = "1234",
         ).toAddressDao()
 
-        addressRepository.save(addressToPersist)
+        AddressTestRepositoryObject.save(addressToPersist)
 
         val possibleAddressById = addressRepository.findById(addressToPersist.id!!)
 
@@ -90,7 +90,7 @@ internal class AddressRepositoryTest @Autowired constructor(
             zipCode = "1234",
         ).toAddressDao()
 
-        addressRepository.save(addressToPersist)
+        AddressTestRepositoryObject.save(addressToPersist)
 
         val addressSaved = addressRepository.findById(id = addressToPersist.id!!) ?: addressNotFound()
 
@@ -101,7 +101,7 @@ internal class AddressRepositoryTest @Autowired constructor(
         addressSaved.city = "Cloud city"
         addressSaved.country = "XX"
 
-        addressRepository.save(addressSaved)
+        AddressTestRepositoryObject.save(addressSaved)
 
         val possibleAddressById = addressRepository.findById(addressToPersist.id!!) ?: addressNotFound()
 

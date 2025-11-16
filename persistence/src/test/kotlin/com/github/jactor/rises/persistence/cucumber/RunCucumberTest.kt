@@ -10,6 +10,7 @@ import org.junit.platform.suite.api.IncludeEngines
 import org.junit.platform.suite.api.SelectClasspathResource
 import org.junit.platform.suite.api.Suite
 import org.springframework.test.context.ActiveProfiles
+import com.github.jactor.rises.persistence.user.UserTestRepositoryObject
 
 @Suite
 @IncludeEngines("cucumber")
@@ -24,11 +25,11 @@ import org.springframework.test.context.ActiveProfiles
 internal class RunCucumberTest : AbstractSpringBootCucumberConfiguration() {
     @Before
     fun beforeScenario(@Suppress("unused") scenario: Scenario) {
-        val users = userRepository.findAll()
+        val users = UserTestRepositoryObject.findAll()
 
         for (user in users) {
             if (user.username !in standardUsers) {
-                userRepository.delete(user)
+                UserTestRepositoryObject.delete(user)
             }
         }
     }

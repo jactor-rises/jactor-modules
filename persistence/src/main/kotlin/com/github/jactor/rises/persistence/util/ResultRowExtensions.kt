@@ -1,0 +1,104 @@
+package com.github.jactor.rises.persistence.util
+
+import java.util.UUID
+import org.jetbrains.exposed.v1.core.ResultRow
+import com.github.jactor.rises.persistence.address.AddressDao
+import com.github.jactor.rises.persistence.address.Addresses
+import com.github.jactor.rises.persistence.blog.BlogDao
+import com.github.jactor.rises.persistence.blog.BlogEntries
+import com.github.jactor.rises.persistence.blog.BlogEntryDao
+import com.github.jactor.rises.persistence.blog.Blogs
+import com.github.jactor.rises.persistence.guestbook.GuestBookDao
+import com.github.jactor.rises.persistence.guestbook.GuestBookEntries
+import com.github.jactor.rises.persistence.guestbook.GuestBookEntryDao
+import com.github.jactor.rises.persistence.guestbook.GuestBooks
+import com.github.jactor.rises.persistence.person.People
+import com.github.jactor.rises.persistence.person.PersonDao
+import com.github.jactor.rises.persistence.user.UserDao
+import com.github.jactor.rises.persistence.user.Users
+
+fun ResultRow.toAddressDao(): AddressDao = AddressDao(
+    id = this[Addresses.id].value,
+    createdBy = this[Addresses.createdBy],
+    timeOfCreation = this[Addresses.timeOfCreation],
+    modifiedBy = this[Addresses.modifiedBy],
+    timeOfModification = this[Addresses.timeOfModification],
+
+    addressLine1 = this[Addresses.addressLine1],
+    addressLine2 = this[Addresses.addressLine2],
+    addressLine3 = this[Addresses.addressLine3],
+    city = this[Addresses.city],
+    country = this[Addresses.country],
+    zipCode = this[Addresses.zipCode],
+)
+
+fun ResultRow.toBlogDao(): BlogDao = BlogDao(
+    id = this[Blogs.id].value,
+    created = this[Blogs.created],
+    createdBy = this[Blogs.createdBy],
+    modifiedBy = this[Blogs.modifiedBy],
+    timeOfCreation = this[Blogs.timeOfCreation],
+    timeOfModification = this[Blogs.timeOfModification],
+    title = this[Blogs.title],
+    userId = this[Blogs.userId],
+)
+
+fun ResultRow.toBlogEntryDao(): BlogEntryDao = BlogEntryDao(
+    id = this[BlogEntries.id].value,
+    createdBy = this[BlogEntries.createdBy],
+    timeOfCreation = this[BlogEntries.timeOfCreation],
+    modifiedBy = this[BlogEntries.modifiedBy],
+    timeOfModification = this[BlogEntries.timeOfModification],
+    creatorName = this[BlogEntries.creatorName],
+    entry = this[BlogEntries.entry],
+    blogId = this[BlogEntries.blogId]
+)
+
+fun ResultRow.toGuestBookDao() = GuestBookDao(
+    id = this[GuestBooks.id].value,
+    createdBy = this[GuestBooks.createdBy],
+    timeOfCreation = this[GuestBooks.timeOfCreation],
+    modifiedBy = this[GuestBooks.modifiedBy],
+    timeOfModification = this[GuestBooks.timeOfModification],
+
+    title = this[GuestBooks.title],
+    userId = this[GuestBooks.userId],
+)
+
+fun ResultRow.toGuestBookEntryDao() = GuestBookEntryDao(
+    id = this[GuestBookEntries.id].value,
+    createdBy = this[GuestBookEntries.createdBy],
+    timeOfCreation = this[GuestBookEntries.timeOfCreation],
+    modifiedBy = this[GuestBookEntries.modifiedBy],
+    timeOfModification = this[GuestBookEntries.timeOfModification],
+
+    guestName = this[GuestBookEntries.guestName],
+    entry = this[GuestBookEntries.entry],
+    guestBookId = this[GuestBookEntries.guestBookId],
+)
+
+fun ResultRow.toPersonDao() = PersonDao(
+    id = this[People.id].value,
+
+    createdBy = this[People.createdBy],
+    modifiedBy = this[People.modifiedBy],
+    timeOfCreation = this[People.timeOfCreation],
+    timeOfModification = this[People.timeOfModification],
+
+    description = this[People.description],
+    firstName = this[People.firstName],
+    surname = this[People.surname],
+    locale = this[People.locale],
+    addressId = this[People.addressId],
+)
+
+fun ResultRow.toUserDao(id: UUID? = null): UserDao = UserDao(
+    id = id ?: this[Users.id].value,
+    createdBy = this[Users.createdBy],
+    timeOfCreation = this[Users.timeOfCreation],
+    modifiedBy = this[Users.modifiedBy],
+    timeOfModification = this[Users.timeOfModification],
+    username = this[Users.username],
+    emailAddress = this[Users.emailAddress],
+    personId = this[Users.personId],
+)
