@@ -31,9 +31,6 @@ dependencies {
     // springdoc-openapi (swagger)
     add("implementation", "org.springdoc:springdoc-openapi-ui:${versions["springdoc-openapi"]}")
 
-    // test
-    add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")
-
     // cucumber
     add("testImplementation", "io.cucumber:cucumber-java:${versions["cucumber"]}")
     add("testImplementation", "io.cucumber:cucumber-java8:${versions["cucumber"]}")
