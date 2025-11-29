@@ -20,12 +20,6 @@ dependencies {
     // kotlin coroutines bom
     add("implementation", platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:${versions["coroutines"]}"))
 
-    // kotlin
-    add("implementation", "org.jetbrains.kotlin:kotlin-reflect")
-    add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    add("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    add("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
     // springdoc-openapi (swagger)
     add("implementation", "org.springdoc:springdoc-openapi-ui:${versions["springdoc-openapi"]}")
 

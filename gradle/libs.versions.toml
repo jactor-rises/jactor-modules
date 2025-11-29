@@ -17,15 +17,24 @@ springmockk = "4.0.2"
 java-uuid-generator = "5.1.1"
 
 [libraries]
-assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+# jetvbrains exposed
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
 exposed-spring-boot-starter = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed" }
+
+# kotlin
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
+kotlinx-coroutins-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "coroutines" }
+
+# misc third party
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 h2database = { module = "com.h2database:h2", version.ref = "h2Database" }
+uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "java-uuid-generator" }
+
+# test
+assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitPlatform" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "java-uuid-generator" }
 
 [plugins]

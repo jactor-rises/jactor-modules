@@ -7,6 +7,10 @@ version = "2.0.x-SNAPSHOT"
 description = "jactor::shared-test"
 
 dependencies {
+    implementation(libs.kotlin.bom)
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
     implementation(libs.assertk)
     implementation(libs.junit.jupiter)
     implementation(libs.junit.platform.launcher)
