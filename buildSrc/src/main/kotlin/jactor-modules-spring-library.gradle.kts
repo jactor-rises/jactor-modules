@@ -14,9 +14,6 @@ dependencies {
     // kotlin coroutines bom
     add("implementation", platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:${versions["coroutines"]}"))
 
-    // springdoc-openapi (swagger)
-    add("implementation", "org.springdoc:springdoc-openapi-ui:${versions["springdoc-openapi"]}")
-
     // cucumber
     add("testImplementation", "io.cucumber:cucumber-java:${versions["cucumber"]}")
     add("testImplementation", "io.cucumber:cucumber-java8:${versions["cucumber"]}")

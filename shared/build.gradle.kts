@@ -33,6 +33,7 @@ dependencies {
     api(libs.kotlin.logging)
     api(libs.kotlin.reflect)
     api(libs.kotlin.stdlib.jdk8)
+    api(libs.springdoc.openapi.ui)
 
     testImplementation(project(":shared-test"))
 }

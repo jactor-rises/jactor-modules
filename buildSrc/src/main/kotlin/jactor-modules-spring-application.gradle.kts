@@ -26,9 +26,6 @@ dependencies {
     add("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-core")
     add("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-    // springdoc-openapi (swagger)
-    add("implementation", "org.springdoc:springdoc-openapi-ui:${versions["springdoc-openapi"]}")
-
     // cucumber
     add("testImplementation", "io.cucumber:cucumber-java:${versions["cucumber"]}")
     add("testImplementation", "io.cucumber:cucumber-java8:${versions["cucumber"]}")
