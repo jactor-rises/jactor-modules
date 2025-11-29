@@ -20,5 +20,7 @@ dependencies {
     api(libs.assertk)
     api(libs.junit.jupiter)
     api(libs.junit.platform.launcher)
+    api(libs.junit.platform.suite)
+    api(libs.kotlinx.coroutines.test)
     api(libs.mockk)
 }
