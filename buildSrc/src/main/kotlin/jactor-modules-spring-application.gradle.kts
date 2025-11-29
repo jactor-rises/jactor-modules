@@ -32,17 +32,7 @@ dependencies {
     add("implementation", "org.springdoc:springdoc-openapi-ui:${versions["springdoc-openapi"]}")
 
     // test
-    add("testImplementation", "com.willowtreeapps.assertk:assertk-jvm:${versions["assertk"]}")
-    add("testImplementation", "io.mockk:mockk:${versions["mockk"]}")
     add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")
-    add("testImplementation", "org.jetbrains.kotlinx:kotlinx-coroutines-test")
-    add("testImplementation", "org.junit.platform:junit-platform-suite:${versions["junitPlatform"]}")
-    add("testImplementation", "org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.assertj")
-        exclude(group = "org.junit", module = "junit")
-        exclude(group = "org.hamcrest")
-        exclude(group = "org.mockito")
-    }
 
     // cucumber
     add("testImplementation", "io.cucumber:cucumber-java:${versions["cucumber"]}")

@@ -15,6 +15,9 @@ dependencies {
     testImplementation(project(":shared-test"))
 
     // test implementations
+    testImplementation(libs.junit.platform.suite)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.springmockk)
 }
 

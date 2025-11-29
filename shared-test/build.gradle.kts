@@ -20,4 +20,5 @@ dependencies {
     api(libs.assertk)
     api(libs.junit.jupiter)
     api(libs.junit.platform.launcher)
+    api(libs.mockk)
 }

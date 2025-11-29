@@ -35,8 +35,12 @@ uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.re
 
 # test
 assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
-springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmockk" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitPlatform" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
+junit-platform-suite = { module = "org.junit.platform:junit-platform-suite", version.ref = "junitPlatform" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmockk" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 
 [plugins]
