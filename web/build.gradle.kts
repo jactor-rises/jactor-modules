@@ -12,6 +12,11 @@ dependencies {
 
     // internal project dependencies
     implementation(project(":shared"))
+    testImplementation(project(":shared-test"))
+
+    // test implementations
+    testImplementation(libs.springmockk)
+    testImplementation(libs.spring.boot.starter.test)
 }
 
 tasks.bootJar {

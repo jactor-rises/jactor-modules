@@ -20,12 +20,21 @@ dependencies {
     implementation(libs.exposed.spring.boot.starter)
     implementation(libs.uuid.generator)
 
-    // internal project dependency
+    // internal project dependencies
     implementation(project(":shared"))
+    testImplementation(project(":shared-test"))
 
     // runtime dependencies
     runtimeOnly(libs.flyway.core)
     runtimeOnly(libs.h2database)
+
+    // test implementations
+    testImplementation(libs.cucumber.java)
+    testImplementation(libs.cucumber.java8)
+    testImplementation(libs.cucumber.junit.platform.engine)
+    testImplementation(libs.cucumber.spring)
+    testImplementation(libs.springmockk)
+    testImplementation(libs.spring.boot.starter.test)
 }
 
 tasks.test {

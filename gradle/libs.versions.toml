@@ -1,7 +1,7 @@
 [versions]
 assertk = "0.28.1"
-coroutines = "1.10.2"
 cucumber = "7.23.0"
+coroutines = "1.10.2"
 exposed = "1.0.0-rc-4"
 dependencyManagement = "1.1.4"
 flyway = "11.17.0"
@@ -17,15 +17,37 @@ springmockk = "4.0.2"
 java-uuid-generator = "5.1.1"
 
 [libraries]
-assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+# jetvbrains exposed
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
 exposed-spring-boot-starter = { module = "org.jetbrains.exposed:exposed-spring-boot-starter", version.ref = "exposed" }
+
+# kotlin
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "coroutines" }
+
+# misc third party
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 h2database = { module = "com.h2database:h2", version.ref = "h2Database" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
+springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-ui", version.ref = "springdoc-openapi" }
+uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "java-uuid-generator" }
+
+# test
+assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+cucumber-java = { module = "io.cucumber:cucumber-java", version.ref = "cucumber" }
+cucumber-java8 = { module = "io.cucumber:cucumber-java8", version.ref = "cucumber" }
+cucumber-junit-platform-engine = { module = "io.cucumber:cucumber-junit-platform-engine", version.ref = "cucumber" }
+cucumber-spring = { module = "io.cucumber:cucumber-spring", version.ref = "cucumber" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitPlatform" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "java-uuid-generator" }
+junit-platform-suite = { module = "org.junit.platform:junit-platform-suite", version.ref = "junitPlatform" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmockk" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 
 [plugins]

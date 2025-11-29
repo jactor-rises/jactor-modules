@@ -5,6 +5,7 @@ plugins {
 group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::shared"
+
 val javaVersion = libs.versions.jvm.get().toInt()
 
 java {
@@ -22,5 +23,12 @@ kotlin {
 }
 
 dependencies {
+    api(libs.kotlin.logging)
+    api(libs.kotlin.reflect)
+    api(libs.kotlin.stdlib.jdk8)
+    api(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.coroutines.reactor)
+    api(libs.springdoc.openapi.ui)
+
     testImplementation(project(":shared-test"))
 }
