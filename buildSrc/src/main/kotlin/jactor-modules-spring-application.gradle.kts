@@ -38,7 +38,6 @@ dependencies {
     add("testImplementation", project(":shared-test"))
 
     // test
-    add("testImplementation", "com.ninja-squad:springmockk:${versions["springmockk"]}")
     add("testImplementation", "com.willowtreeapps.assertk:assertk-jvm:${versions["assertk"]}")
     add("testImplementation", "io.mockk:mockk:${versions["mockk"]}")
     add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")

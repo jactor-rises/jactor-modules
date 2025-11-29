@@ -26,6 +26,9 @@ dependencies {
     // runtime dependencies
     runtimeOnly(libs.flyway.core)
     runtimeOnly(libs.h2database)
+
+    // test implementations
+    testImplementation(libs.springmockk)
 }
 
 tasks.test {

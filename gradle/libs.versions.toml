@@ -34,6 +34,7 @@ uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.re
 
 # test
 assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmockk" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitPlatform" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
 
