@@ -8,4 +8,6 @@ description = "jactor::shared-test"
 
 dependencies {
     implementation(libs.assertk)
+    implementation(libs.junit.jupiter)
+    implementation(libs.junit.platform.launcher)
 }
