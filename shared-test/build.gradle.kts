@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.kotlin.bom)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.bom)
 
     api(libs.assertk)
     api(libs.junit.jupiter)

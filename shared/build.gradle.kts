@@ -33,6 +33,9 @@ dependencies {
     api(libs.kotlin.logging)
     api(libs.kotlin.reflect)
     api(libs.kotlin.stdlib.jdk8)
+    api(libs.kotlinx.coroutines.bom)
+    api(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.coroutines.reactor)
     api(libs.springdoc.openapi.ui)
 
     testImplementation(project(":shared-test"))

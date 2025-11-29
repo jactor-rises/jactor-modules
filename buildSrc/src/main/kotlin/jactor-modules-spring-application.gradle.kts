@@ -19,13 +19,6 @@ val versions = versionRegex.findAll(toml)
     .associate { it.groupValues[1] to it.groupValues[2] }
 
 dependencies {
-    // kotlin coroutines bom
-    add("implementation", platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:${versions["coroutines"]}"))
-
-    // kotlin
-    add("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    add("implementation", "org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
     // cucumber
     add("testImplementation", "io.cucumber:cucumber-java:${versions["cucumber"]}")
     add("testImplementation", "io.cucumber:cucumber-java8:${versions["cucumber"]}")
