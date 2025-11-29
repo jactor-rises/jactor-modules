@@ -31,8 +31,8 @@ kotlin {
 dependencies {
     api(libs.kotlin.bom)
     api(libs.kotlin.logging)
-    api("org.jetbrains.kotlin:kotlin-reflect")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    api(libs.kotlin.reflect)
+    api(libs.kotlin.stdlib.jdk8)
 
     testImplementation(project(":shared-test"))
 }
