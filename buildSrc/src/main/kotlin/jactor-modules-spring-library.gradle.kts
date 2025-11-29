@@ -5,12 +5,6 @@ apply(plugin = "io.spring.dependency-management")
 apply(plugin = "java-library")
 apply(plugin = "org.jetbrains.kotlin.jvm")
 
-repositories {
-    gradlePluginPortal()
-    mavenCentral()
-    mavenLocal()
-}
-
 val toml = file("../gradle/libs.versions.toml").readText()
 val versionRegex = """([\w-]+)\s*=\s*"([^"]+)"""".toRegex()
 val versions = versionRegex.findAll(toml)
