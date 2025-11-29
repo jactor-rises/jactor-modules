@@ -6,12 +6,6 @@ group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::shared-test"
 
-repositories {
-    gradlePluginPortal()
-    mavenCentral()
-    mavenLocal()
-}
-
 dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib.jdk8)

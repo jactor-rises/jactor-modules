@@ -38,6 +38,10 @@ uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.re
 
 # test
 assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+cucumber-java = { module = "io.cucumber:cucumber-java", version.ref = "cucumber" }
+cucumber-java8 = { module = "io.cucumber:cucumber-java8", version.ref = "cucumber" }
+cucumber-junit-platform-engine = { module = "io.cucumber:cucumber-junit-platform-engine", version.ref = "cucumber" }
+cucumber-spring = { module = "io.cucumber:cucumber-spring", version.ref = "cucumber" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitPlatform" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
 junit-platform-suite = { module = "org.junit.platform:junit-platform-suite", version.ref = "junitPlatform" }

@@ -29,6 +29,10 @@ dependencies {
     runtimeOnly(libs.h2database)
 
     // test implementations
+    testImplementation(libs.cucumber.java)
+    testImplementation(libs.cucumber.java8)
+    testImplementation(libs.cucumber.junit.platform.engine)
+    testImplementation(libs.cucumber.spring)
     testImplementation(libs.springmockk)
     testImplementation(libs.spring.boot.starter.test)
 }

@@ -6,12 +6,6 @@ group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::shared"
 
-repositories {
-    gradlePluginPortal()
-    mavenCentral()
-    mavenLocal()
-}
-
 val javaVersion = libs.versions.jvm.get().toInt()
 
 java {

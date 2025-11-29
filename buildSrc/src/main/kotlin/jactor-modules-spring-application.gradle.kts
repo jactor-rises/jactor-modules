@@ -13,19 +13,6 @@ repositories {
     mavenLocal()
 }
 
-val toml = file("../gradle/libs.versions.toml").readText()
-val versionRegex = """([\w-]+)\s*=\s*"([^"]+)"""".toRegex()
-val versions = versionRegex.findAll(toml)
-    .associate { it.groupValues[1] to it.groupValues[2] }
-
-dependencies {
-    // cucumber
-    add("testImplementation", "io.cucumber:cucumber-java:${versions["cucumber"]}")
-    add("testImplementation", "io.cucumber:cucumber-java8:${versions["cucumber"]}")
-    add("testImplementation", "io.cucumber:cucumber-junit-platform-engine:${versions["cucumber"]}")
-    add("testImplementation", "io.cucumber:cucumber-spring:${versions["cucumber"]}")
-}
-
 tasks.withType<KotlinCompile> {
     compilerOptions {
         allWarningsAsErrors = true
