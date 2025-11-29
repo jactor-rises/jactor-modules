@@ -20,8 +20,9 @@ dependencies {
     implementation(libs.exposed.spring.boot.starter)
     implementation(libs.uuid.generator)
 
-    // internal project dependency
+    // internal project dependencies
     implementation(project(":shared"))
+    testImplementation(project(":shared-test"))
 
     // runtime dependencies
     runtimeOnly(libs.flyway.core)

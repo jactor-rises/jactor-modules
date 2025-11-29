@@ -13,11 +13,11 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.kotlin.bom)
+    api(libs.kotlin.bom)
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation(libs.assertk)
-    implementation(libs.junit.jupiter)
-    implementation(libs.junit.platform.launcher)
+    api(libs.assertk)
+    api(libs.junit.jupiter)
+    api(libs.junit.platform.launcher)
 }

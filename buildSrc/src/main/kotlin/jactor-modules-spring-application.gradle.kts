@@ -31,12 +31,6 @@ dependencies {
     // springdoc-openapi (swagger)
     add("implementation", "org.springdoc:springdoc-openapi-ui:${versions["springdoc-openapi"]}")
 
-    // logging
-    add("implementation", "io.github.oshai:kotlin-logging-jvm:${versions["kotlin-logging"]}")
-
-    // internal test dependencies
-    add("testImplementation", project(":shared-test"))
-
     // test
     add("testImplementation", "com.willowtreeapps.assertk:assertk-jvm:${versions["assertk"]}")
     add("testImplementation", "io.mockk:mockk:${versions["mockk"]}")

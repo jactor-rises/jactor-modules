@@ -12,6 +12,7 @@ dependencies {
 
     // internal project dependencies
     implementation(project(":shared"))
+    testImplementation(project(":shared-test"))
 
     // test implementations
     testImplementation(libs.springmockk)
