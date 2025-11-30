@@ -1,10 +1,11 @@
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.versions)
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.spring) apply false
+    alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.spring.boot) apply false
     alias(libs.plugins.spring.dependency.management) apply false
+    alias(libs.plugins.versions)
 }
 
 allprojects {
@@ -19,6 +20,15 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        version.set("1.5.0")
+        android.set(false)
+        outputToConsole.set(true)
+        ignoreFailures.set(false)
+    }
+
     plugins.withType<JavaPlugin> {
         extensions.configure<JavaPluginExtension> {
             toolchain {
