@@ -7,25 +7,24 @@ import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.test.initGuestBook
 import com.github.jactor.rises.persistence.test.initGuestBookEntry
 import com.github.jactor.rises.persistence.test.withId
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.UUID
-import org.junit.jupiter.api.Test
 
 internal class GuestBookEntryTest {
-
     @Test
     fun `should have a copy constructor`() {
         val guestBookEntry = initGuestBookEntry(
             creatorName = "me",
             entry = "entry",
-            guestBook = initGuestBook().withId()
+            guestBook = initGuestBook().withId(),
         )
 
         val (entry, creatorName, guestBookId) = GuestBookEntry(
             guestName = guestBookEntry.guestName,
             entry = guestBookEntry.entry,
             persistent = guestBookEntry.persistent,
-            guestBookId = guestBookEntry.guestBookId
+            guestBookId = guestBookEntry.guestBookId,
         )
 
         assertAll {
@@ -42,14 +41,14 @@ internal class GuestBookEntryTest {
             id = UUID.randomUUID(),
             modifiedBy = "tip",
             timeOfCreation = LocalDateTime.now(),
-            timeOfModification = LocalDateTime.now()
+            timeOfModification = LocalDateTime.now(),
         )
 
         val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = GuestBookEntry(
             guestName = persistent.createdBy,
             entry = "entry",
             persistent = persistent,
-            guestBookId = null
+            guestBookId = null,
         ).persistent
 
         assertAll {

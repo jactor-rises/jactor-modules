@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class GuestBookRepositoryTest @Autowired constructor(
     private val guestBookRepository: GuestBookRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
-
     @BeforeEach
     fun `reset fetch relations`() {
         resetFetchRelations()
@@ -28,7 +27,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     @Test
     fun `should write then read guest book`() {
         val address = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"),
         )
 
         val person = save(person = initPerson(address = address, surname = "Adder"))
@@ -37,14 +36,14 @@ internal class GuestBookRepositoryTest @Autowired constructor(
                 person = person,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual",
-            )
+            ),
         )
 
         guestBookRepository.save(
             guestBookDao = GuestBookDao(
                 title = "home sweet home",
                 userId = user.id,
-            )
+            ),
         )
 
         val guestBookDao = GuestBookTestRepositoryObject.findGuestBookByUserId(id = user.id)
@@ -58,7 +57,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     @Test
     fun `should write then update and read guest book`() {
         val address = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testing"),
         )
 
         val person = save(person = initPerson(address = address, surname = "Adder"))
@@ -67,14 +66,14 @@ internal class GuestBookRepositoryTest @Autowired constructor(
                 person = person,
                 emailAddress = "casuel@tantooine.com",
                 username = "causual",
-            )
+            ),
         )
 
         guestBookRepository.save(
             guestBookDao = initGuestBook(
                 title = "home sweet home",
                 user = user,
-            ).toGuestBookDao()
+            ).toGuestBookDao(),
         )
 
         val guestBookDaoToUpdate = GuestBookTestRepositoryObject.findGuestBookByUserId(id = user.id)
@@ -93,7 +92,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     @Test
     fun `should save then read dao for guest book entry`() {
         val address = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"),
         )
 
         val person = save(person = initPerson(address = address, surname = "AA"))
@@ -101,21 +100,21 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             user = initUser(
                 person = person,
                 emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
+                username = "causual",
+            ),
         )
 
         val guestBook = save(
             guestBook = initGuestBook(
                 title = "home sweet home",
                 user = user,
-            )
+            ),
         )
 
         val guestBookEntry = initGuestBookEntry(
             guestBook = guestBook,
             creatorName = "Harry",
-            entry = "Draco Dormiens Nunquam Tittilandus"
+            entry = "Draco Dormiens Nunquam Tittilandus",
         ).toGuestBookEntryDao()
 
         guestBookRepository.save(guestBookEntryDao = guestBookEntry)
@@ -133,7 +132,7 @@ internal class GuestBookRepositoryTest @Autowired constructor(
     @Test
     fun `should write two entries to a guest book and then find one entry`() {
         val address = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"),
         )
 
         val person = save(person = initPerson(address = address, surname = "AA"))
@@ -141,15 +140,15 @@ internal class GuestBookRepositoryTest @Autowired constructor(
             user = initUser(
                 person = person,
                 emailAddress = "casuel@tantooine.com",
-                username = "causual"
-            )
+                username = "causual",
+            ),
         )
 
         val guestBook = save(
             guestBook = initGuestBook(
                 title = "home sweet home",
                 user = user,
-            )
+            ),
         )
 
         guestBookRepository.save(
@@ -157,19 +156,19 @@ internal class GuestBookRepositoryTest @Autowired constructor(
                 creatorName = "somone",
                 entry = "jadda",
                 guestBook = guestBook,
-            ).toGuestBookEntryDao()
+            ).toGuestBookEntryDao(),
         )
 
         val anEntry = initGuestBookEntry(
             guestBook = guestBook,
             creatorName = "shriek",
-            entry = "i am out there"
+            entry = "i am out there",
         )
 
         val anotherEntry = initGuestBookEntry(
             guestBook = guestBook,
             creatorName = "shrek",
-            entry = "far far away"
+            entry = "far far away",
         )
 
         guestBookRepository.save(guestBookEntryDao = anEntry.toGuestBookEntryDao())

@@ -11,10 +11,9 @@ data class GuestBookEntryDao(
     override var modifiedBy: String = "todo",
     override val timeOfCreation: LocalDateTime = LocalDateTime.now(),
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
-
     var guestName: String,
     override var entry: String,
-    var guestBookId: UUID? = null
+    var guestBookId: UUID? = null,
 ) : PersistentDao<GuestBookEntryDao>, EntryDao {
     override var creatorName: String
         get() = guestName

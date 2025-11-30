@@ -19,7 +19,7 @@ fun GuestBook.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID(
 fun Person.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun User.withId() = copy(persistent = persistent.copy(id = UUID.randomUUID()))
 fun Blog.withPersistentData(): Blog = copy(
-    persistent = persistent.withPersistedData()
+    persistent = persistent.withPersistedData(),
 )
 
 fun GuestBookEntry.withPersistedData(id: UUID): GuestBookEntry = copy(
@@ -39,5 +39,5 @@ fun PersistentDto.withPersistedData(id: UUID? = UUID.randomUUID()) = copy(
 )
 
 fun UserDto.withPersistedData(id: UUID = UUID.randomUUID()): UserDto = copy(
-    persistentDto = persistentDto.withPersistedData(id = id)
+    persistentDto = persistentDto.withPersistedData(id = id),
 )

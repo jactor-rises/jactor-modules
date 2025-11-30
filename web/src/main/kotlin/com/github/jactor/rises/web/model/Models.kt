@@ -5,7 +5,9 @@ import com.github.jactor.rises.web.Technology
 import java.util.UUID
 
 @JvmRecord
-data class HomePageModel(val technologies: List<Technology> = ArrayList())
+data class HomePageModel(
+    val technologies: List<Technology> = ArrayList(),
+)
 
 @JvmRecord
 data class UserModel(
@@ -17,7 +19,5 @@ data class UserModel(
 
     constructor(user: UserDto) : this(user = user, personId = user.personId ?: UUID.randomUUID())
 
-    fun fetchUsername(): String? {
-        return user.username
-    }
+    fun fetchUsername(): String? = user.username
 }

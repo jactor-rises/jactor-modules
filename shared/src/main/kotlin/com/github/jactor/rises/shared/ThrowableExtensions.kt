@@ -29,7 +29,7 @@ fun Throwable.originClassNameEndsWith(txt: String): Boolean = findOrginCause().s
 
 fun Throwable.findOrginCause(): Throwable = generateSequence(this) { it.cause }.last()
 fun Throwable.rootCauseSimpleMessage(): String = findOrginCause().simpleExceptionMessage()
-private fun Throwable.simpleExceptionMessage(): String = "${this::class.simpleName}: ${message}"
+private fun Throwable.simpleExceptionMessage(): String = "${this::class.simpleName}: $message"
 
 fun Throwable.finnFeiledeLinjer(): List<String> = buildList {
     var cause: Throwable? = this@finnFeiledeLinjer
@@ -54,5 +54,3 @@ fun Throwable.finnFeiledeLinjer(): List<String> = buildList {
         cause = cause.cause
     }
 }
-
-

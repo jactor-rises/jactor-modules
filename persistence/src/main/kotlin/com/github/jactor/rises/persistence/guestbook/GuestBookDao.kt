@@ -10,14 +10,13 @@ data class GuestBookDao(
     override var timeOfCreation: LocalDateTime = LocalDateTime.now(),
     override var modifiedBy: String = "todo",
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
-
     var title: String = "no-name",
     internal var userId: UUID? = null,
 ) : PersistentDao<GuestBookDao?> {
     fun toGuestBook(): GuestBook = GuestBook(
         persistent = toPersistent(),
         title = title,
-        userId = userId
+        userId = userId,
     )
 
     override fun copyWithoutId(): GuestBookDao = copy(

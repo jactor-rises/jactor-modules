@@ -1,8 +1,8 @@
 package com.github.jactor.rises.persistence.blog
 
+import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
-import org.springframework.stereotype.Service
 
 interface BlogService {
     suspend fun create(createBlogEntry: CreateBlogEntry): BlogEntry
@@ -56,4 +56,3 @@ class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService 
         return blogRepository.save(blogDao = blog).toBlog()
     }
 }
-

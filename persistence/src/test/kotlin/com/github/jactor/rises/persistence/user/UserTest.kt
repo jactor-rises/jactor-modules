@@ -7,18 +7,17 @@ import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.test.initPerson
 import com.github.jactor.rises.persistence.test.initUser
 import com.github.jactor.rises.persistence.test.withId
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.UUID
-import org.junit.jupiter.api.Test
 
 internal class UserTest {
-
     @Test
     fun `should have a copy constructor`() {
         val user = initUser(
             emailAddress = "somewhere@time",
             person = initPerson().withId(),
-            username = "me"
+            username = "me",
         )
 
         val (_, emailAddress, personId, username) = user.copy(persistent = user.persistent)
@@ -37,7 +36,7 @@ internal class UserTest {
             id = UUID.randomUUID(),
             modifiedBy = "tip",
             timeOfCreation = LocalDateTime.now(),
-            timeOfModification = LocalDateTime.now()
+            timeOfModification = LocalDateTime.now(),
         )
 
         val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = initUser(

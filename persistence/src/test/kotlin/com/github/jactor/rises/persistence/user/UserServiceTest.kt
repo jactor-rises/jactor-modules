@@ -15,10 +15,10 @@ import com.github.jactor.rises.persistence.test.initUserDao
 import com.github.jactor.rises.persistence.util.toCreateUser
 import io.mockk.every
 import io.mockk.mockk
-import java.util.UUID
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import java.util.UUID
 
 internal class UserServiceTest {
     private val personRepositoryMockk: PersonRepository = mockk {}
@@ -40,7 +40,7 @@ internal class UserServiceTest {
             person = personDto,
             emailAddress = null,
             username = "jactor",
-            userType = UserType.ACTIVE
+            userType = UserType.ACTIVE,
         ).toUserDao()
 
         val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
@@ -61,7 +61,7 @@ internal class UserServiceTest {
             person = personDto,
             emailAddress = null,
             username = "jactor",
-            userType = UserType.ACTIVE
+            userType = UserType.ACTIVE,
         ).toUserDao()
 
         val user = userServiceToTest.find(uuid) ?: fail { "null. mocking?" }

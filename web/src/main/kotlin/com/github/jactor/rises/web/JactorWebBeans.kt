@@ -15,13 +15,14 @@ import org.springframework.web.util.UriTemplateHandler
 @Configuration
 @PropertySource("classpath:application.properties")
 class JactorWebBeans {
-
     companion object {
         const val USERS_MENU_NAME = "user"
     }
 
     @Bean
-    fun menuFacade(@Value("\${server.servlet.context-path}") contextPath: String): MenuFacade {
+    fun menuFacade(
+        @Value($$"${server.servlet.context-path}") contextPath: String,
+    ): MenuFacade {
         return MenuFacade(listOf(usersMenu(contextPath)))
     }
 
@@ -32,26 +33,26 @@ class JactorWebBeans {
                 MenuItem(
                     itemName = "jactor",
                     target = "$contextPath/user?choose=jactor",
-                    description = "menu.users.jactor.desc"
-                )
+                    description = "menu.users.jactor.desc",
+                ),
             )
             .addItem(
                 MenuItem(
                     itemName = "tip",
                     target = "$contextPath/user?choose=tip",
-                    description = "menu.users.tip.desc"
-                )
+                    description = "menu.users.tip.desc",
+                ),
             )
     }
 
     @Bean
     fun jactorWebUriTemplateHandler(
-        @Value("\${jactor-persistence.url.root}") rootUrlPersistence: String?
+        @Value($$"${jactor-persistence.url.root}") rootUrlPersistence: String?,
     ): JactorWebUriTemplateHandler = rootUrlPersistence?.let {
         val uriTemplateHandler = DefaultUriBuilderFactory(it)
 
         JactorWebUriTemplateHandler(
-            uriTemplateHandler = uriTemplateHandler
+            uriTemplateHandler = uriTemplateHandler,
         )
     } ?: throw IllegalArgumentException("No root url given!")
 

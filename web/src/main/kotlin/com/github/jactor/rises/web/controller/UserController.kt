@@ -16,10 +16,12 @@ import org.springframework.web.servlet.ModelAndView
 class UserController(
     @param:Qualifier("defaultUserClient") private val userClient: UserClient,
     private val menuFacade: MenuFacade,
-    @param:Value("\${server.servlet.context-path}") private val contextPath: String
+    @param:Value($$"${server.servlet.context-path}") private val contextPath: String,
 ) {
     @GetMapping(value = ["/user"])
-    operator fun get(@RequestParam(name = "choose", required = false) username: String?): ModelAndView {
+    operator fun get(
+        @RequestParam(name = "choose", required = false) username: String?,
+    ): ModelAndView {
         val modelAndView = ModelAndView("user")
 
         if (username != null && username.trim() != "") {
@@ -49,7 +51,7 @@ class UserController(
 
         modelAndView.addObject(
             "usersMenu",
-            listOf(MenuItem(itemName = "menu.users.choose", children = menuItems as MutableList<MenuItem>))
+            listOf(MenuItem(itemName = "menu.users.choose", children = menuItems as MutableList<MenuItem>)),
         )
     }
 

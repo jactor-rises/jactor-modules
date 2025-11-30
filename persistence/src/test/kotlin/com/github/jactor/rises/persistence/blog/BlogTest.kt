@@ -4,13 +4,12 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.github.jactor.rises.persistence.Persistent
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import org.junit.jupiter.api.Test
 
 internal class BlogTest {
-
     @Test
     fun `should have a copy constructor`() {
         val blog = Blog(
@@ -35,7 +34,7 @@ internal class BlogTest {
             id = UUID.randomUUID(),
             modifiedBy = "tip",
             timeOfCreation = LocalDateTime.now(),
-            timeOfModification = LocalDateTime.now()
+            timeOfModification = LocalDateTime.now(),
         )
 
         val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = Blog(

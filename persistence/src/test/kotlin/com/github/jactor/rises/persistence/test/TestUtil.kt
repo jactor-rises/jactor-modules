@@ -17,10 +17,10 @@ import com.github.jactor.rises.persistence.user.User
 import com.github.jactor.rises.persistence.user.UserDao
 import com.github.jactor.rises.persistence.user.UserType
 import com.github.jactor.rises.shared.api.CreateUserCommand
+import org.junit.jupiter.api.fail
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import org.junit.jupiter.api.fail
 
 fun initAddress(
     persistent: Persistent = Persistent(),
@@ -37,7 +37,7 @@ fun initAddress(
     addressLine3 = addressLine3,
     city = city,
     country = country,
-    zipCode = zipCode
+    zipCode = zipCode,
 )
 
 fun initAddressDao(
@@ -80,7 +80,7 @@ fun initBlog(
 
 fun initBlogDao(
     id: UUID? = null,
-    timeOfModification: LocalDateTime = LocalDateTime.now()
+    timeOfModification: LocalDateTime = LocalDateTime.now(),
 ) = BlogDao(
     id = id,
     createdBy = "unit test",
@@ -113,7 +113,7 @@ fun initBlogEntryDao(
     modifiedBy = "unit test",
     timeOfCreation = LocalDateTime.now(),
     timeOfModification = timeOfModification,
-    blogId = blogId
+    blogId = blogId,
 )
 
 fun initCreateUserCommand(
@@ -174,7 +174,6 @@ fun initUserDao(
     timeOfModification: LocalDateTime = LocalDateTime.now(),
 ): UserDao = UserDao(
     id = id,
-
     createdBy = "unit test",
     emailAddress = null,
     modifiedBy = "unit test",
@@ -187,7 +186,6 @@ fun initUserDao(
 
 fun initUserDao(createUserCommand: CreateUserCommand) = UserDao(
     id = UUID.randomUUID(),
-
     createdBy = createUserCommand.username,
     emailAddress = null,
     modifiedBy = createUserCommand.username,

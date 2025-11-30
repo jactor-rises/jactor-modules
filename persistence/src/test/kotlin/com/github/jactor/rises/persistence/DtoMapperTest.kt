@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.jactor.rises.shared.api.PersistentDto
 import com.github.jactor.rises.shared.api.UserDto
 import com.github.jactor.rises.shared.api.UserType
-import java.util.UUID
 import org.junit.jupiter.api.Test
+import java.util.UUID
 
 internal class DtoMapperTest {
     private val objectMapper: ObjectMapper = JactorPersistenceConfig().objectMapper()
@@ -20,7 +20,7 @@ internal class DtoMapperTest {
             persistentDto = PersistentDto(id = uuid),
             emailAddress = "some@where",
             username = "mine",
-            userType = UserType.ACTIVE
+            userType = UserType.ACTIVE,
         )
 
         val json = objectMapper.writeValueAsString(userDto)

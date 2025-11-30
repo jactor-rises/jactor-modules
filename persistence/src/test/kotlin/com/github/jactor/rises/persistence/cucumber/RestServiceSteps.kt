@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus
 
 @Suppress("unused", "LeakingThis") // bestemmes av cucumber
 internal class RestServiceSteps : No, PersistenceCucumberContextConfiguration() {
-
     init {
         Gitt("base url {string}") { baseUrl: String ->
             scenarioValues.restService = RestService(baseUrl)

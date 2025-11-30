@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.guestbook
 
-import java.util.UUID
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 interface GuestBookService {
     suspend fun create(createGuestBook: CreateGuestBook): GuestBook
@@ -19,7 +19,7 @@ class GuestBookServiceBean(private val guestBookRepository: GuestBookRepository)
             guestBookDao = GuestBookDao().apply {
                 title = createGuestBook.title
                 userId = createGuestBook.userId
-            }
+            },
         ).toGuestBook()
     }
 
@@ -28,8 +28,8 @@ class GuestBookServiceBean(private val guestBookRepository: GuestBookRepository)
             guestBookEntryDao = GuestBookEntryDao(
                 guestName = createGuestBookEntry.creatorName,
                 entry = createGuestBookEntry.entry,
-                guestBookId = createGuestBookEntry.guestBookId
-            )
+                guestBookId = createGuestBookEntry.guestBookId,
+            ),
         ).toGuestBookEntry()
     }
 

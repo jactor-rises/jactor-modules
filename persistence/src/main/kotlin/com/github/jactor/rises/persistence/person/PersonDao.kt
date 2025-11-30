@@ -10,7 +10,6 @@ data class PersonDao(
     override var timeOfCreation: LocalDateTime = LocalDateTime.now(),
     override var modifiedBy: String = "todo",
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
-
     var description: String? = null,
     var firstName: String? = null,
     var locale: String? = null,
@@ -23,7 +22,7 @@ data class PersonDao(
         locale = locale,
         firstName = firstName,
         surname = surname,
-        description = description
+        description = description,
     )
 
     override fun copyWithoutId(): PersonDao = copy(

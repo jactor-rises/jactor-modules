@@ -11,7 +11,6 @@ data class BlogDao(
     override var timeOfCreation: LocalDateTime = LocalDateTime.now(),
     override var modifiedBy: String = "todo",
     override var timeOfModification: LocalDateTime = LocalDateTime.now(),
-
     var created: LocalDate = LocalDate.now(),
     var title: String = "",
     internal var userId: UUID? = null,
@@ -28,6 +27,6 @@ data class BlogDao(
         created = created,
         persistent = toPersistent(),
         title = title,
-        userId = userId
+        userId = userId,
     )
 }

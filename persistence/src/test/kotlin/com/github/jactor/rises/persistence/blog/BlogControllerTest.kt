@@ -16,13 +16,13 @@ import com.github.jactor.rises.shared.api.UpdateBlogTitleCommand
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
-import java.time.LocalDate
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.test.web.reactive.server.WebTestClient
+import java.time.LocalDate
+import java.util.UUID
 
 @WebFluxTest(BlogController::class)
 internal class BlogControllerTest @Autowired constructor(
@@ -157,7 +157,7 @@ internal class BlogControllerTest @Autowired constructor(
     fun `should persist changes to existing blog`() {
         val updateBlogTitleCommand = UpdateBlogTitleCommand(
             blogId = UUID.randomUUID(),
-            title = "A new title"
+            title = "A new title",
         )
 
         coEvery { blogServiceMockk.update(updateBlogTitle = any()) } returns initBlog()
@@ -177,7 +177,7 @@ internal class BlogControllerTest @Autowired constructor(
             blogServiceMockk.update(
                 updateBlogTitle = withArg {
                     assertThat(it.title).isEqualTo(updateBlogTitleCommand.title)
-                }
+                },
             )
         }
     }

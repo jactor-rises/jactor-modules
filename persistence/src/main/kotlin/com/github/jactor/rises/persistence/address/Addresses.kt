@@ -1,11 +1,11 @@
 package com.github.jactor.rises.persistence.address
 
-import java.util.UUID
+import com.github.jactor.rises.persistence.UUIDv7
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.javatime.datetime
-import com.github.jactor.rises.persistence.UUIDv7
+import java.util.UUID
 
 object Addresses : IdTable<UUID>(name = "T_ADDRESS") {
     override val id: Column<EntityID<UUID>> = uuid("ID")

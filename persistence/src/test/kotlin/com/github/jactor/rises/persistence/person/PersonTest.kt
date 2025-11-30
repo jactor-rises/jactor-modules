@@ -7,12 +7,11 @@ import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.test.initAddress
 import com.github.jactor.rises.persistence.test.initPerson
 import com.github.jactor.rises.persistence.test.withId
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.UUID
-import org.junit.jupiter.api.Test
 
 internal class PersonTest {
-
     @Test
     fun `should have a copy constructor`() {
         val person = initPerson(
@@ -43,7 +42,7 @@ internal class PersonTest {
             id = UUID.randomUUID(),
             modifiedBy = "tip",
             timeOfModification = LocalDateTime.now(),
-            timeOfCreation = LocalDateTime.now()
+            timeOfCreation = LocalDateTime.now(),
         )
 
         val (id, createdBy, modifiedBy, timeOfCreation, timeOfModification) = initPerson(

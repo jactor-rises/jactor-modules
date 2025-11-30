@@ -12,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class JactorWebTest @Autowired constructor(
     private val homeController: HomeController?,
     private val aboutController: AboutController?,
-    private val userController: UserController?
+    private val userController: UserController?,
 ) : AbstractNoDirtySpringContextTest() {
-
     @Test
     fun `should fetch controllers from spring context`() {
         assertThat(homeController).isNotNull()

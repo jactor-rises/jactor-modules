@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.guestbook
 
-import java.util.UUID
 import org.springframework.stereotype.Repository
+import java.util.UUID
 
 interface GuestBookRepository {
     fun findAllGuestBooks(): List<GuestBookDao>

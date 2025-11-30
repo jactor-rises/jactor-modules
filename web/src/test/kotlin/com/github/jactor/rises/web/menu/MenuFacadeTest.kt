@@ -7,14 +7,13 @@ import assertk.fail
 import org.junit.jupiter.api.Test
 
 internal class MenuFacadeTest {
-
     @Test
     fun `should fail if the menu asked for is unknown`() {
         val menuItem = MenuItem(itemName = "name", target = "target")
         val menuFacadeToTest = MenuFacade(
             listOf(
-                Menu("known", mutableListOf(menuItem))
-            )
+                Menu("known", mutableListOf(menuItem)),
+            ),
         )
 
         runCatching { menuFacadeToTest.fetchMenuItemsByName("unknown.menu") }
@@ -30,8 +29,8 @@ internal class MenuFacadeTest {
         val menuItem = MenuItem(itemName = "name", target = "target")
         val menuFacadeToTest = MenuFacade(
             listOf(
-                Menu("known", mutableListOf(menuItem))
-            )
+                Menu("known", mutableListOf(menuItem)),
+            ),
         )
 
         val menuItems = menuFacadeToTest.fetchMenuItemsByName("known")

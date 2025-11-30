@@ -14,8 +14,8 @@ import com.github.jactor.rises.persistence.test.initGuestBookEntryDao
 import com.github.jactor.rises.persistence.test.initPersonDao
 import com.github.jactor.rises.persistence.test.initUser
 import com.github.jactor.rises.persistence.test.withId
-import java.util.UUID
 import org.junit.jupiter.api.Test
+import java.util.UUID
 
 internal class PersistentDaoTest {
     private lateinit var persistentDaoToTest: PersistentDao<*>
@@ -53,7 +53,7 @@ internal class PersistentDaoTest {
         persistentDaoToTest = initUser(
             persistent = Persistent(id = UUID.randomUUID()),
             emailAddress = "i.am@home",
-            username = "jactor"
+            username = "jactor",
         ).withId().toUserDao()
 
         val copy = persistentDaoToTest.copyWithoutId() as PersistentDao<*>

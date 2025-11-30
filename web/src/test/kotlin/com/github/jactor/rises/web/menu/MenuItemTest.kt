@@ -6,7 +6,6 @@ import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 
 internal class MenuItemTest {
-
     companion object {
         private const val HIT_DEAD_CENTER = "hit?dead=center"
     }

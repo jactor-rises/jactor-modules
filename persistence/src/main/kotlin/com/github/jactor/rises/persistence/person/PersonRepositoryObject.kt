@@ -1,12 +1,12 @@
 package com.github.jactor.rises.persistence.person
 
-import java.util.UUID
+import com.github.jactor.rises.persistence.util.toPersonDao
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
-import com.github.jactor.rises.persistence.util.toPersonDao
+import java.util.UUID
 
 object PersonRepositoryObject : PersonRepository {
     override fun findById(id: UUID): PersonDao? = People
@@ -35,7 +35,7 @@ object PersonRepositoryObject : PersonRepository {
     }.let { newId -> personDao.also { it.id = newId.value } }
 
     private fun update(personDao: PersonDao): PersonDao = People.update(
-        where = { People.id eq personDao.id }
+        where = { People.id eq personDao.id },
     ) { row ->
         row[modifiedBy] = personDao.modifiedBy
         row[timeOfModification] = personDao.timeOfModification

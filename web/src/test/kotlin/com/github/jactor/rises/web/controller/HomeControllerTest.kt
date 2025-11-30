@@ -21,11 +21,9 @@ internal class HomeControllerTest : AbstractSpringMockMvcTest() {
 
     @Test
     fun `should create a homepage dto with my messages`() {
-        val modelAndView = mockMvc.perform(
-            MockMvcRequestBuilders.get("/home")
-        ).andExpect(
-            MockMvcResultMatchers.status().isOk
-        ).andReturn().modelAndView
+        val modelAndView = mockMvc.perform(MockMvcRequestBuilders.get("/home"))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn().modelAndView
 
         assertAll {
             assertThat(modelAndView).isNotNull()

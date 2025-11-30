@@ -17,16 +17,16 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.slot
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.test.web.reactive.server.WebTestClient
+import java.util.UUID
 
 @WebFluxTest(GuestBookController::class)
 internal class GuestBookControllerTest @Autowired constructor(
     private val webTestClient: WebTestClient,
-    @MockkBean private val guestBookServiceMockk: GuestBookService
+    @MockkBean private val guestBookServiceMockk: GuestBookService,
 ) {
     @Test
     fun `should not get a guest book`() {
@@ -113,11 +113,11 @@ internal class GuestBookControllerTest @Autowired constructor(
         val createdId = UUID.randomUUID()
         val createGuestBookCommand = CreateGuestBookCommand(
             title = "A title",
-            userId = UUID.randomUUID()
+            userId = UUID.randomUUID(),
         )
 
         coEvery { guestBookServiceMockk.create(createGuestBook = any()) } returns initGuestBook(
-            persistent = Persistent(id = createdId)
+            persistent = Persistent(id = createdId),
         )
 
         val guestbook = webTestClient.post()
@@ -161,7 +161,7 @@ internal class GuestBookControllerTest @Autowired constructor(
         val createGuestBookEntryCommand = CreateGuestBookEntryCommand(
             creatorName = "creator",
             entry = "an entry",
-            guestBookId = UUID.randomUUID()
+            guestBookId = UUID.randomUUID(),
         )
 
         coEvery { guestBookServiceMockk.create(createGuestBookEntry = any()) } returns initGuestBookEntry()

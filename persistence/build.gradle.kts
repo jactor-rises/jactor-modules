@@ -1,14 +1,12 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.versions)
-    `java-library`
 }
 
-group = "com.github.jactor-rises"
-version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
 
 repositories {

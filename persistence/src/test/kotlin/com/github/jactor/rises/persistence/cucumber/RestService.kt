@@ -7,11 +7,10 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.util.UriComponentsBuilder
 
 internal data class RestService(val baseUrl: String, var endpoint: String = "") {
-
     fun exchangeGet(
         parameternavn: String?,
         parameter: String?,
-        webTestClient: () -> WebTestClient
+        webTestClient: () -> WebTestClient,
     ): EntityExchangeResult<String> = initUrl(parameternavn, parameter).let {
         webTestClient.invoke()
             .get()

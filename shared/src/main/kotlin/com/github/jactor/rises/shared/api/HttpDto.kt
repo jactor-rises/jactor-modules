@@ -26,7 +26,7 @@ data class BlogEntryDto(
 data class GuestBookDto(
     @param:Schema(description = "Standard lagrede data") override val persistentDto: PersistentDto = PersistentDto(),
     @param:Schema(description = "Navn for gjestebok") val title: String? = null,
-    @param:Schema(description = "Id til bruker") val userId: UUID? = null
+    @param:Schema(description = "Id til bruker") val userId: UUID? = null,
 ) : PersistentData
 
 @JvmRecord
@@ -45,7 +45,7 @@ data class UserDto(
     @param:Schema(description = "Epostadresse") val emailAddress: String? = null,
     @param:Schema(description = "Id thil brukerens persondata") val personId: UUID? = null,
     @param:Schema(description = "Brukernavn") val username: String? = null,
-    @param:Schema(description = "Brukerstatus") val userType: UserType = UserType.ACTIVE
+    @param:Schema(description = "Brukerstatus") val userType: UserType = UserType.ACTIVE,
 ) : PersistentData
 
 @Schema(description = "Metadata for ulike brukertyper")
@@ -54,7 +54,7 @@ enum class UserType {
     ACTIVE,
 
     @Schema(description = "Inaktiv bruker")
-    INACTIVE
+    INACTIVE,
 }
 
 @JvmRecord
@@ -65,7 +65,7 @@ data class PersonDto(
     @param:Schema(description = "Beskrivelse") val description: String? = null,
     @param:Schema(description = "Fornavn") val firstName: String? = null,
     @param:Schema(description = "Internasjonal id (land & språk - ISO/IEC 15897)") val locale: String? = null,
-    @param:Schema(description = "Etternavn") val surname: String = ""
+    @param:Schema(description = "Etternavn") val surname: String = "",
 ) : PersistentData
 
 @JvmRecord
@@ -94,5 +94,6 @@ interface PersistentData {
     val persistentDto: PersistentDto
 
     fun harIdentifikator(): Boolean = persistentDto.id != null
+
     fun harIkkeIdentifikator(): Boolean = persistentDto.id == null
 }

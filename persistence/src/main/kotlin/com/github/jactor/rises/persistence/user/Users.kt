@@ -1,12 +1,12 @@
 package com.github.jactor.rises.persistence.user
 
-import java.util.UUID
+import com.github.jactor.rises.persistence.UUIDv7
+import com.github.jactor.rises.persistence.person.People
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.javatime.datetime
-import com.github.jactor.rises.persistence.UUIDv7
-import com.github.jactor.rises.persistence.person.People
+import java.util.UUID
 
 object Users : IdTable<UUID>(name = "T_USER") {
     override val id: Column<EntityID<UUID>> = uuid("ID")

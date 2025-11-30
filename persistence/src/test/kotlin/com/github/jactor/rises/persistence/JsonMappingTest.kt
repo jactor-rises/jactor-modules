@@ -14,9 +14,9 @@ import com.github.jactor.rises.shared.api.BlogEntryDto
 import com.github.jactor.rises.shared.api.PersistentDto
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.util.UUID
 
 internal class JsonMappingTest @Autowired constructor(
     @MockkBean private val addressRepositoryMockk: AddressRepository,
@@ -53,7 +53,7 @@ internal class JsonMappingTest @Autowired constructor(
     fun `skal mappe BlogEntryDto til jason og tilbake til BlogEntryDto`() {
         val uuid = UUID.randomUUID()
         val json = objectMapper.writeValueAsString(
-            BlogEntryDto(blogId = uuid)
+            BlogEntryDto(blogId = uuid),
         )
 
         val blogEntry = objectMapper.readValue(json, BlogEntryDto::class.java)
