@@ -19,7 +19,7 @@ springmockk = "4.0.2"
 versions-plugin = "0.53.0"
 
 [libraries]
-# jetvbrains exposed
+# jetbrains exposed
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
 exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
