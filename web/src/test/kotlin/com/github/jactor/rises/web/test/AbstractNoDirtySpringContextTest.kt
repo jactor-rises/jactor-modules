@@ -27,7 +27,7 @@ internal abstract class AbstractNoDirtySpringContextTest {
     @MockkBean
     protected lateinit var httpServletResponseMockk: HttpServletResponse
 
-    @Value("\${server.servlet.context-path}")
+    @Value($$"${server.servlet.context-path}")
     protected lateinit var contextPath: String
 
     protected val restTemplate: RestTemplate by lazy {

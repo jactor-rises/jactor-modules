@@ -17,7 +17,7 @@ internal class UserClientIntegrationTest
     @Autowired
     constructor(
         private val userClientToTest: UserClient,
-        @param:Value("\${jactor-persistence.url.root}") private val baseUrl: String,
+        @param:Value($$"${jactor-persistence.url.root}") private val baseUrl: String,
     ) : AbstractNoDirtySpringContextTest() {
         @BeforeEach
         fun `assume jactor-persistence is running`() {

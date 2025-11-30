@@ -25,16 +25,15 @@ internal abstract class AbstractSpringMockMvcTest {
     @Qualifier("userConsumer")
     protected lateinit var userClientMock: UserClient
 
-    @Value("\${spring.mvc.view.prefix}")
+    @Value($$"${spring.mvc.view.prefix}")
     private lateinit var prefix: String
 
-    @Value("\${spring.mvc.view.suffix}")
+    @Value($$"${spring.mvc.view.suffix}")
     private lateinit var suffix: String
 
-    @Value("\${server.servlet.context-path}")
+    @Value($$"${server.servlet.context-path}")
     protected lateinit var contextPath: String
 
-    @Suppress("UsePropertyAccessSyntax")
     protected val mockMvc: MockMvc by lazy {
         val internalResourceViewResolver = InternalResourceViewResolver()
 

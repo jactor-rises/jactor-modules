@@ -21,7 +21,7 @@ class JactorWebBeans {
 
     @Bean
     fun menuFacade(
-        @Value("\${server.servlet.context-path}") contextPath: String,
+        @Value($$"${server.servlet.context-path}") contextPath: String,
     ): MenuFacade {
         return MenuFacade(listOf(usersMenu(contextPath)))
     }

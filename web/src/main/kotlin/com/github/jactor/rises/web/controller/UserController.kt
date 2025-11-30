@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView
 class UserController(
     @param:Qualifier("defaultUserClient") private val userClient: UserClient,
     private val menuFacade: MenuFacade,
-    @param:Value("\${server.servlet.context-path}") private val contextPath: String,
+    @param:Value($$"${server.servlet.context-path}") private val contextPath: String,
 ) {
     @GetMapping(value = ["/user"])
     operator fun get(
