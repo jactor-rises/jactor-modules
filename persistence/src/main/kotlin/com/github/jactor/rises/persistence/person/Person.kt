@@ -35,6 +35,6 @@ data class Person(
         locale = locale,
         firstName = firstName,
         surname = surname,
-        description = description
+        description = description,
     )
 }

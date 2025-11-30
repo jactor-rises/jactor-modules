@@ -27,7 +27,8 @@ fun <T : Collection<String>> Assert<T>.containsSubstring(expected: String) = giv
 }
 
 fun Assert<LocalDateTime>.isNotOlderThan(seconds: Long) = isStrictlyBetween(
-    LocalDateTime.now().minusSeconds(seconds), LocalDateTime.now()
+    LocalDateTime.now().minusSeconds(seconds),
+    LocalDateTime.now(),
 )
 
 infix fun <T> T?.named(name: String): Assert<T?> = assertThat(actual = this, name = name)

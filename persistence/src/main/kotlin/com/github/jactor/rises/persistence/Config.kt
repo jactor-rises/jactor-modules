@@ -18,9 +18,6 @@ import com.github.jactor.rises.persistence.user.UserDao
 import com.github.jactor.rises.persistence.user.UserRepository
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
-import java.text.SimpleDateFormat
-import java.util.UUID
-import javax.sql.DataSource
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
@@ -29,10 +26,12 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.text.SimpleDateFormat
+import java.util.UUID
+import javax.sql.DataSource
 
 @Configuration
 class ExposedConfig {
-
     @Bean
     fun databaseConfig() = DatabaseConfig {
         useNestedTransactions = true
@@ -88,7 +87,6 @@ class JactorPersistenceRepositiesConfig(
 @Configuration
 @OpenAPIDefinition(info = Info(title = "jactor-persistence", version = "v1"))
 class JactorPersistenceConfig {
-
     @Bean
     fun commandLineRunner(applicationContext: ApplicationContext): CommandLineRunner = CommandLineRunner {
         JactorPersistence.inspect(applicationContext, it)

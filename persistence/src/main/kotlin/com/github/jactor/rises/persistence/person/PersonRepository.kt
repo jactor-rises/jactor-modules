@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.person
 
-import java.util.UUID
 import org.springframework.stereotype.Repository
+import java.util.UUID
 
 interface PersonRepository {
     fun findById(id: UUID): PersonDao?

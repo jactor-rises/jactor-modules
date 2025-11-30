@@ -14,16 +14,16 @@ import com.github.jactor.rises.persistence.user.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import java.util.UUID
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
+import java.util.UUID
 
 internal class GuestBookServiceTest {
     private val guestBookRepositoryMockk: GuestBookRepository = mockk {}
     private val userRepositoryMockk: UserRepository = mockk {}
     private val guestBookServiceToTest: GuestBookService = GuestBookServiceBean(
-        guestBookRepository = guestBookRepositoryMockk
+        guestBookRepository = guestBookRepositoryMockk,
     ).also {
         JactorPersistenceRepositiesConfig.Companion.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
         JactorPersistenceRepositiesConfig.Companion.fetchGuestBookRelation = { id ->
@@ -74,7 +74,7 @@ internal class GuestBookServiceTest {
         val guestBook = initGuestBook(
             persistent = Persistent(id = uuid),
             title = "home sweet home",
-            user = user
+            user = user,
         )
 
         every { userRepositoryMockk.findById(id = guestBook.userId!!) } returns user.toUserDao()
@@ -96,7 +96,7 @@ internal class GuestBookServiceTest {
         val guestBookEntry = initGuestBookEntry(
             guestBook = guestBook,
             creatorName = "me",
-            entry = "if i where a rich man..."
+            entry = "if i where a rich man...",
         )
 
         every { userRepositoryMockk.findById(id = guestBook.userId!!) } returns user.toUserDao()

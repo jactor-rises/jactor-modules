@@ -1,13 +1,13 @@
 package com.github.jactor.rises.persistence.blog
 
-import java.util.UUID
+import com.github.jactor.rises.persistence.util.toBlogDao
+import com.github.jactor.rises.persistence.util.toBlogEntryDao
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
-import com.github.jactor.rises.persistence.util.toBlogDao
-import com.github.jactor.rises.persistence.util.toBlogEntryDao
+import java.util.UUID
 
 object BlogRepositoryObject : BlogRepository {
     override fun findBlogById(id: UUID): BlogDao? = Blogs.selectAll()
@@ -48,7 +48,7 @@ object BlogRepositoryObject : BlogRepository {
     }.value.let { blogDao.copy(id = it) }
 
     private fun update(blogDao: BlogDao): BlogDao = Blogs.update(
-        where = { Blogs.id eq blogDao.id }
+        where = { Blogs.id eq blogDao.id },
     ) { update ->
         update[Blogs.modifiedBy] = blogDao.modifiedBy
         update[Blogs.timeOfModification] = blogDao.timeOfModification

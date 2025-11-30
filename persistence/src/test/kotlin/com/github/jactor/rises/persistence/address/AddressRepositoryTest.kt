@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class AddressRepositoryTest @Autowired constructor(
     private val addressRepository: AddressRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
-
     @Test
     fun `should fetch address entities by zip code`() {
         AddressTestRepositoryObject.save(
@@ -22,7 +21,7 @@ internal class AddressRepositoryTest @Autowired constructor(
                 addressLine1 = "somewhere out there",
                 city = "Rud",
                 zipCode = "1234",
-            ).toAddressDao()
+            ).toAddressDao(),
         )
 
         AddressTestRepositoryObject.save(
@@ -30,7 +29,7 @@ internal class AddressRepositoryTest @Autowired constructor(
                 addressLine1 = "somewhere in there",
                 city = "Rud",
                 zipCode = "1234",
-            ).toAddressDao()
+            ).toAddressDao(),
         )
 
         AddressTestRepositoryObject.save(
@@ -38,7 +37,7 @@ internal class AddressRepositoryTest @Autowired constructor(
                 addressLine1 = "on the road",
                 city = "Out There",
                 zipCode = "1001",
-            ).toAddressDao()
+            ).toAddressDao(),
         )
 
         val addresses = AddressTestRepositoryObject.findByZipCode(zipCode = "1234")

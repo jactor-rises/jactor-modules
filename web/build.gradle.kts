@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
-    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.versions)
+    alias(libs.plugins.spring.boot)
 }
 
 description = "jactor::web"

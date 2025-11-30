@@ -36,6 +36,6 @@ data class GuestBookEntry(
         timeOfModification = persistent.timeOfModification,
         guestName = guestName,
         entry = entry,
-        guestBookId = guestBookId
+        guestBookId = guestBookId,
     )
 }

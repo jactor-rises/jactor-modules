@@ -1,6 +1,6 @@
 package com.github.jactor.rises.persistence.user
 
-import java.util.UUID
+import com.github.jactor.rises.persistence.util.toUserDao
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.jdbc.andWhere
@@ -8,7 +8,7 @@ import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
-import com.github.jactor.rises.persistence.util.toUserDao
+import java.util.UUID
 
 object UserRepositoryObject : UserRepository {
     override fun contains(username: String): Boolean = Users
@@ -57,7 +57,7 @@ object UserRepositoryObject : UserRepository {
     }.value.let { newId -> user.also { it.id = newId } }
 
     private fun update(user: UserDao): UserDao = Users.update(
-        where = { Users.id eq user.id }
+        where = { Users.id eq user.id },
     ) {
         it[modifiedBy] = user.modifiedBy
         it[timeOfModification] = user.timeOfModification

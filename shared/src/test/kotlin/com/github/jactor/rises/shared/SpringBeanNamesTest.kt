@@ -33,7 +33,7 @@ class SpringBeanNamesTest {
         springBeanNames.add("com.github.jactor.rises.shared.FooBar3")
 
         assertThat(springBeanNames.names).isEqualTo(
-            listOf("FooBar0, FooBar1, FooBar2, FooBar3")
+            listOf("FooBar0, FooBar1, FooBar2, FooBar3"),
         )
     }
 

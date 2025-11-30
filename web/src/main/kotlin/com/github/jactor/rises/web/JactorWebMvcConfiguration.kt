@@ -23,10 +23,9 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 @PropertySource("classpath:application.properties")
 class JactorWebMvcConfiguration(
     @param:Autowired private val requestInterceptor: RequestInterceptor,
-    @param:Value("\${spring.mvc.view.prefix}") private val prefix: String,
-    @param:Value("\${spring.mvc.view.suffix}") private val suffix: String
+    @param:Value($$"${spring.mvc.view.prefix}") private val prefix: String,
+    @param:Value($$"${spring.mvc.view.suffix}") private val suffix: String,
 ) : WebMvcConfigurer {
-
     @Bean
     fun templateResolver(): ClassLoaderTemplateResolver {
         val templateResolver = ClassLoaderTemplateResolver()

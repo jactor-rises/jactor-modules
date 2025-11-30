@@ -20,6 +20,6 @@ interface PersistentDao<T> {
         createdBy = createdBy,
         modifiedBy = modifiedBy,
         timeOfCreation = timeOfCreation,
-        timeOfModification = timeOfModification
+        timeOfModification = timeOfModification,
     )
 }

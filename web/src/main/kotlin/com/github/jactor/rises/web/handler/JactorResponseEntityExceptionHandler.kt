@@ -13,19 +13,18 @@ private val kLogger = KotlinLogging.logger {}
 
 @ControllerAdvice
 class JactorResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
-
     @ExceptionHandler(value = [RuntimeException::class])
     fun handleInternalServerError(
         runtimeException: RuntimeException,
         headers: HttpHeaders?,
-        webRequest: WebRequest
+        webRequest: WebRequest,
     ): ResponseEntity<Any>? = logException(runtimeException, webRequest).let {
         handleExceptionInternal(
             runtimeException,
             null,
             headers ?: HttpHeaders(),
             HttpStatus.INTERNAL_SERVER_ERROR,
-            webRequest
+            webRequest,
         )
     }
 

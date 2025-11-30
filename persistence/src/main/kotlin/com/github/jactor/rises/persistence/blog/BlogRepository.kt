@@ -1,7 +1,7 @@
 package com.github.jactor.rises.persistence.blog
 
-import java.util.UUID
 import org.springframework.stereotype.Repository
+import java.util.UUID
 
 interface BlogRepository {
     fun findBlogById(id: UUID): BlogDao?

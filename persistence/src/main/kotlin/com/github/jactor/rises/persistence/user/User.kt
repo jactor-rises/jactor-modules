@@ -22,7 +22,6 @@ data class User(
         modifiedBy = persistent.modifiedBy,
         timeOfCreation = persistent.timeOfCreation,
         timeOfModification = persistent.timeOfModification,
-
         emailAddress = emailAddress,
         personId = personId,
         username = username ?: "na",
@@ -36,6 +35,6 @@ data class User(
         personId = personId,
         username = username,
         userType = (userType == UserType.ADMIN).whenTrue { UserTypeDto.ACTIVE }
-            ?: UserTypeDto.valueOf(userType.name)
+            ?: UserTypeDto.valueOf(userType.name),
     )
 }

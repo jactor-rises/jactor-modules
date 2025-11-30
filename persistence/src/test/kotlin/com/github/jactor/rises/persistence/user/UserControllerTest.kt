@@ -20,12 +20,12 @@ import com.github.jactor.rises.shared.test.named
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.reactive.server.WebTestClient
+import java.util.UUID
 
 @WebFluxTest(UserController::class)
 @Import(UserService::class, UserRepository::class)
@@ -33,7 +33,6 @@ internal class UserControllerTest @Autowired constructor(
     private val webTestClient: WebTestClient,
     @MockkBean private val userRepositoryMockk: UserRepository,
 ) {
-
     @Test
     fun `should not find a user by username`() {
         every { userRepositoryMockk.findByUsername(username = "me") } returns null
@@ -189,13 +188,13 @@ internal class UserControllerTest @Autowired constructor(
         val createUserCommand = CreateUserCommand(
             username = timestamped("turbo"),
             surname = "Someone",
-            emailAddress = "somewhere@somehow.com"
+            emailAddress = "somewhere@somehow.com",
         )
 
         coEvery { userRepositoryMockk.contains(any()) } returns false
         coEvery { userRepositoryMockk.save(any()) } returns initUser(
             username = createUserCommand.username,
-            emailAddress = createUserCommand.emailAddress
+            emailAddress = createUserCommand.emailAddress,
         ).withId().toUserDao()
 
         val userDto = webTestClient.post()

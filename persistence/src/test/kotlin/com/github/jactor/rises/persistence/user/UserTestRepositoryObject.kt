@@ -1,9 +1,9 @@
 package com.github.jactor.rises.persistence.user
 
+import com.github.jactor.rises.persistence.util.toUserDao
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
-import com.github.jactor.rises.persistence.util.toUserDao
 
 object UserTestRepositoryObject {
     fun delete(user: UserDao) {

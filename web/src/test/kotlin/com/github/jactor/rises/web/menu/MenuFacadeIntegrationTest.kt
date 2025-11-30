@@ -11,9 +11,8 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class MenuFacadeIntegrationTest @Autowired constructor(
-    private val testMenuFacade: MenuFacade
+    private val testMenuFacade: MenuFacade,
 ) : AbstractNoDirtySpringContextTest() {
-
     @Test
     fun `should fail when fetching items for an unknown menu`() {
         assertThrows<IllegalArgumentException> { testMenuFacade.fetchMenuItemsByName("unknown") }

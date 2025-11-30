@@ -8,7 +8,6 @@ import java.util.UUID
 @JvmRecord
 data class Blog(
     internal val persistent: Persistent = Persistent(),
-
     val created: LocalDate?,
     val title: String,
     val userId: UUID?,
@@ -29,6 +28,6 @@ data class Blog(
     fun toBlogDto() = BlogDto(
         persistentDto = persistent.toPersistentDto(),
         title = title,
-        userId = userId
+        userId = userId,
     )
 }

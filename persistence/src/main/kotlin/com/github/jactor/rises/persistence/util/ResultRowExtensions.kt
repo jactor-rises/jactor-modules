@@ -1,7 +1,5 @@
 package com.github.jactor.rises.persistence.util
 
-import java.util.UUID
-import org.jetbrains.exposed.v1.core.ResultRow
 import com.github.jactor.rises.persistence.address.AddressDao
 import com.github.jactor.rises.persistence.address.Addresses
 import com.github.jactor.rises.persistence.blog.BlogDao
@@ -16,6 +14,8 @@ import com.github.jactor.rises.persistence.person.People
 import com.github.jactor.rises.persistence.person.PersonDao
 import com.github.jactor.rises.persistence.user.UserDao
 import com.github.jactor.rises.persistence.user.Users
+import org.jetbrains.exposed.v1.core.ResultRow
+import java.util.UUID
 
 fun ResultRow.toAddressDao(): AddressDao = AddressDao(
     id = this[Addresses.id].value,
@@ -23,7 +23,6 @@ fun ResultRow.toAddressDao(): AddressDao = AddressDao(
     timeOfCreation = this[Addresses.timeOfCreation],
     modifiedBy = this[Addresses.modifiedBy],
     timeOfModification = this[Addresses.timeOfModification],
-
     addressLine1 = this[Addresses.addressLine1],
     addressLine2 = this[Addresses.addressLine2],
     addressLine3 = this[Addresses.addressLine3],
@@ -51,7 +50,7 @@ fun ResultRow.toBlogEntryDao(): BlogEntryDao = BlogEntryDao(
     timeOfModification = this[BlogEntries.timeOfModification],
     creatorName = this[BlogEntries.creatorName],
     entry = this[BlogEntries.entry],
-    blogId = this[BlogEntries.blogId]
+    blogId = this[BlogEntries.blogId],
 )
 
 fun ResultRow.toGuestBookDao() = GuestBookDao(
@@ -60,7 +59,6 @@ fun ResultRow.toGuestBookDao() = GuestBookDao(
     timeOfCreation = this[GuestBooks.timeOfCreation],
     modifiedBy = this[GuestBooks.modifiedBy],
     timeOfModification = this[GuestBooks.timeOfModification],
-
     title = this[GuestBooks.title],
     userId = this[GuestBooks.userId],
 )
@@ -71,7 +69,6 @@ fun ResultRow.toGuestBookEntryDao() = GuestBookEntryDao(
     timeOfCreation = this[GuestBookEntries.timeOfCreation],
     modifiedBy = this[GuestBookEntries.modifiedBy],
     timeOfModification = this[GuestBookEntries.timeOfModification],
-
     guestName = this[GuestBookEntries.guestName],
     entry = this[GuestBookEntries.entry],
     guestBookId = this[GuestBookEntries.guestBookId],
@@ -79,12 +76,10 @@ fun ResultRow.toGuestBookEntryDao() = GuestBookEntryDao(
 
 fun ResultRow.toPersonDao() = PersonDao(
     id = this[People.id].value,
-
     createdBy = this[People.createdBy],
     modifiedBy = this[People.modifiedBy],
     timeOfCreation = this[People.timeOfCreation],
     timeOfModification = this[People.timeOfModification],
-
     description = this[People.description],
     firstName = this[People.firstName],
     surname = this[People.surname],

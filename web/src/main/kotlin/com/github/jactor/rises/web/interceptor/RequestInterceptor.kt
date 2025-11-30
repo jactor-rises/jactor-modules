@@ -5,19 +5,20 @@ import com.github.jactor.rises.web.Request
 import com.github.jactor.rises.web.RequestManager
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import java.util.Locale
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
+import java.util.Locale
 
 @Component
 @PropertySource("classpath:application.properties")
-class RequestInterceptor(@param:Value("\${server.servlet.context-path}") private val contextPath: String) :
+class RequestInterceptor(
+    @param:Value("\${server.servlet.context-path}") private val contextPath: String,
+) :
     HandlerInterceptor {
-
     companion object {
         const val CHOSEN_LANGUAGE = "chosenLanguage"
         const val CURRENT_REQUEST = "currentRequest"
@@ -29,7 +30,7 @@ class RequestInterceptor(@param:Value("\${server.servlet.context-path}") private
         private val SUPPORTED_LANGUAGES = listOf(
             LANGUAGE_DEFAULT_IS_ENGLISH,
             Language(Locale.of("no"), "Norsk"),
-            Language(Locale.of("th"), "ไทย")
+            Language(Locale.of("th"), "ไทย"),
         )
     }
 
@@ -37,7 +38,7 @@ class RequestInterceptor(@param:Value("\${server.servlet.context-path}") private
         servletRequest: HttpServletRequest,
         servletResponse: HttpServletResponse,
         handler: Any,
-        modelAndView: ModelAndView?
+        modelAndView: ModelAndView?,
     ) {
         if (modelAndView != null) {
             val requestManager = RequestManager(contextPath, servletRequest)
@@ -52,6 +53,8 @@ class RequestInterceptor(@param:Value("\${server.servlet.context-path}") private
     private fun fetchChosenLangugae(requestManager: RequestManager): Language {
         return if (requestManager.noLanguageParameters()) {
             requestManager.fetchFrom(SUPPORTED_LANGUAGES, LocaleContextHolder.getLocale(), LANGUAGE_DEFAULT_IS_ENGLISH)
-        } else requestManager.fetchFromParameters(SUPPORTED_LANGUAGES, LANGUAGE_DEFAULT_IS_ENGLISH)
+        } else {
+            requestManager.fetchFromParameters(SUPPORTED_LANGUAGES, LANGUAGE_DEFAULT_IS_ENGLISH)
+        }
     }
 }

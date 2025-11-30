@@ -22,7 +22,7 @@ class ExceptionHandler {
             ResponseEntity
                 .internalServerError()
                 .header(HttpHeaders.WARNING, "Internal Server Error! ${e.exceptionMessageMedCause()}!")
-                .build()
+                .build(),
         )
     }
 
@@ -34,7 +34,7 @@ class ExceptionHandler {
             ResponseEntity
                 .badRequest()
                 .header(HttpHeaders.WARNING, "Bad Request: ${e.exceptionMessageMedCause()}!")
-                .build()
+                .build(),
         )
     }
 }

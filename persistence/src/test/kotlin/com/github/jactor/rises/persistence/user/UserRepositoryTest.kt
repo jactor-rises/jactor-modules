@@ -13,9 +13,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class UserRepositoryTest @Autowired constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
-
     @Test
     fun `should find user with username jactor`() {
         val userDao = userRepository.findByUsername("jactor")
@@ -26,7 +25,7 @@ internal class UserRepositoryTest @Autowired constructor(
     @Test
     fun `should write then read a user dao`() {
         val address = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"),
         )
 
         val person = save(person = initPerson(address = address, surname = "Solo"))
@@ -35,7 +34,7 @@ internal class UserRepositoryTest @Autowired constructor(
             personId = person.id,
             emailAddress = "smuggle.fast@tantooine.com",
             username = "smuggler",
-            userType = UserType.ACTIVE
+            userType = UserType.ACTIVE,
         ).toUserDao()
 
         userRepository.save(userToPersist)
@@ -53,7 +52,7 @@ internal class UserRepositoryTest @Autowired constructor(
     @Test
     fun `should write then update and read a user dao`() {
         val address = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"),
         )
 
         val person = save(person = initPerson(address = address, surname = "AA"))
@@ -61,7 +60,7 @@ internal class UserRepositoryTest @Autowired constructor(
             persistent = Persistent(),
             person = person,
             emailAddress = "casuel@tantooine.com",
-            username = "causual"
+            username = "causual",
         ).toUserDao()
 
         userRepository.save(userToPersist)
@@ -83,7 +82,7 @@ internal class UserRepositoryTest @Autowired constructor(
     @Test
     fun `should find active users and admins`() {
         val address = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevard 1", city = "Testington"),
         )
 
         val spidyPerson = save(person = initPerson(address = address, surname = "Parker"))
@@ -92,7 +91,7 @@ internal class UserRepositoryTest @Autowired constructor(
             persistent = Persistent(),
             person = spidyPerson,
             emailAddress = null,
-            username = "spiderman"
+            username = "spiderman",
         ).toUserDao()
 
         userRepository.save(userDao)
@@ -101,8 +100,8 @@ internal class UserRepositoryTest @Autowired constructor(
                 person = superPerson,
                 emailAddress = null,
                 username = "superman",
-                userType = UserType.INACTIVE
-            ).toUserDao()
+                userType = UserType.INACTIVE,
+            ).toUserDao(),
         )
 
         val usernames = userRepository.findUsernames(listOf(UserType.ACTIVE, UserType.ADMIN))

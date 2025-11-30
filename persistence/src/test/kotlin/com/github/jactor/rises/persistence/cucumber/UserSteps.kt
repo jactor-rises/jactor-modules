@@ -4,7 +4,6 @@ import io.cucumber.java8.No
 
 @Suppress("unused", "LeakingThis") // bestemmes av cucumber
 internal class UserSteps : No, PersistenceCucumberContextConfiguration() {
-
     init {
         Når("en post gjøres for body:") { body: String ->
             scenarioValues.entityExchangeResult = scenarioValues.restService.exchangePost(body) { webTestClient }

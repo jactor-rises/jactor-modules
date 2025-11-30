@@ -10,9 +10,8 @@ import org.springframework.web.client.RestTemplate
 @Service
 class DefaultUserClient(
     private val restTemplate: RestTemplate,
-    jactorWebUriTemplateHandler: JactorWebBeans.JactorWebUriTemplateHandler
+    jactorWebUriTemplateHandler: JactorWebBeans.JactorWebUriTemplateHandler,
 ) : UserClient {
-
     init {
         restTemplate.uriTemplateHandler = jactorWebUriTemplateHandler.uriTemplateHandler
     }
@@ -32,7 +31,7 @@ class DefaultUserClient(
             val badConfiguredResponseMesssage = String.format(
                 "Bad configuration of consumer! ResponseCode: %s(%d)",
                 responseEntity.statusCode.toString(),
-                responseEntity.statusCode
+                responseEntity.statusCode,
             )
 
             throw IllegalStateException(badConfiguredResponseMesssage)

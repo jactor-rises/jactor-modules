@@ -20,43 +20,47 @@ data class CreateUserCommand(
     @param:Schema(description = "The users third address line") val addressLine3: String? = null,
     @param:Schema(description = "The zip code of a user") val zipCode: String? = null,
     @param:Schema(description = "The city of a user") val city: String? = null,
-    @param:Schema(description = "The country of a user") val country: String? = null
+    @param:Schema(description = "The country of a user") val country: String? = null,
 ) {
-    fun toUserDto() = UserDto(
-        persistentDto = toPersistentDto(),
-        personId = personId,
-        emailAddress = emailAddress,
-        username = username
-    )
-
-    fun toPersonDto() = PersonDto(
-        persistentDto = toPersistentDto(id = personId),
-        addressId = addressId,
-        locale = language,
-        firstName = firstName,
-        surname = surname,
-        description = description
-    )
-
-    private fun toAddressDto(): AddressDto? = zipCode?.let {
-        AddressDto(
-            persistentDto = PersistentDto(id = addressId),
-            zipCode = zipCode,
-            addressLine1 = addressLine1,
-            addressLine2 = addressLine2,
-            addressLine3 = addressLine3,
-            city = city,
-            country = country
+    fun toUserDto() =
+        UserDto(
+            persistentDto = toPersistentDto(),
+            personId = personId,
+            emailAddress = emailAddress,
+            username = username,
         )
-    }
 
-    private fun toPersistentDto(id: UUID? = null) = PersistentDto(
-        id = id,
-        createdBy = username,
-        modifiedBy = username,
-        timeOfCreation = LocalDateTime.now(),
-        timeOfModification = LocalDateTime.now(),
-    )
+    fun toPersonDto() =
+        PersonDto(
+            persistentDto = toPersistentDto(id = personId),
+            addressId = addressId,
+            locale = language,
+            firstName = firstName,
+            surname = surname,
+            description = description,
+        )
+
+    private fun toAddressDto(): AddressDto? =
+        zipCode?.let {
+            AddressDto(
+                persistentDto = PersistentDto(id = addressId),
+                zipCode = zipCode,
+                addressLine1 = addressLine1,
+                addressLine2 = addressLine2,
+                addressLine3 = addressLine3,
+                city = city,
+                country = country,
+            )
+        }
+
+    private fun toPersistentDto(id: UUID? = null) =
+        PersistentDto(
+            id = id,
+            createdBy = username,
+            modifiedBy = username,
+            timeOfCreation = LocalDateTime.now(),
+            timeOfModification = LocalDateTime.now(),
+        )
 }
 
 @JvmRecord

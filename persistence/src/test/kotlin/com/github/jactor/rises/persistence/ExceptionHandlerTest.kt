@@ -11,10 +11,10 @@ import com.github.jactor.rises.shared.finnFeiledeLinjer
 import com.github.jactor.rises.shared.test.containsSubstring
 import io.mockk.every
 import io.mockk.mockk
-import java.util.UUID
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import java.util.UUID
 
 internal class ExceptionHandlerTest {
     private val exceptionHandler = ExceptionHandler()
@@ -31,8 +31,8 @@ internal class ExceptionHandlerTest {
         val userRepositoryMockk = mockk<UserRepository> {}
         val avstemmingController = UserController(
             userService = UserService(
-                userRepository = userRepositoryMockk
-            )
+                userRepository = userRepositoryMockk,
+            ),
         )
 
         every { userRepositoryMockk.findById(any()) } answers { error("boom!") }

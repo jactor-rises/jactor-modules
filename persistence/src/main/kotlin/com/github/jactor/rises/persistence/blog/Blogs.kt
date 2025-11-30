@@ -1,13 +1,13 @@
 package com.github.jactor.rises.persistence.blog
 
-import java.util.UUID
+import com.github.jactor.rises.persistence.UUIDv7
+import com.github.jactor.rises.persistence.user.Users
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.javatime.datetime
-import com.github.jactor.rises.persistence.UUIDv7
-import com.github.jactor.rises.persistence.user.Users
+import java.util.UUID
 
 object Blogs : IdTable<UUID>(name = "T_BLOG") {
     override val id: Column<EntityID<UUID>> = uuid("ID")

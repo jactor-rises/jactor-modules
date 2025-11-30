@@ -7,10 +7,13 @@ data class RequestManager(
     val contextPath: String,
     val httpServletRequest: HttpServletRequest,
     private var queryString: String? = null,
-    private var languageParameter: String = ""
+    private var languageParameter: String = "",
 ) {
     constructor(contextPath: String, httpServletRequest: HttpServletRequest) : this(
-        contextPath, httpServletRequest, httpServletRequest.queryString, languageParameter = ""
+        contextPath,
+        httpServletRequest,
+        httpServletRequest.queryString,
+        languageParameter = "",
     )
 
     fun fetchChosenView(): String {

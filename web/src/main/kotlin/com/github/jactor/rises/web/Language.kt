@@ -9,15 +9,16 @@ const val THAI = "ไทย"
 @JvmRecord
 data class Language(
     val locale: Locale,
-    val name: String = ""
+    val name: String = "",
 ) {
     fun matches(locale: Locale): Boolean {
         return this.locale == locale
     }
 
-    fun matches(language: String): Boolean {
-        return if (language.startsWith("lang=")) locale.language == language.replace("lang=", "")
-        else locale.language == language
+    fun matches(language: String): Boolean = if (language.startsWith("lang=")) {
+        locale.language == language.replace("lang=", "")
+    } else {
+        locale.language == language
     }
 
     fun isEnglish(): Boolean {
@@ -31,5 +32,4 @@ data class Language(
     fun isThai(): Boolean {
         return name == THAI
     }
-
 }

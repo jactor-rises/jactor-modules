@@ -10,7 +10,6 @@ data class AddressDao(
     override val timeOfCreation: LocalDateTime,
     override var modifiedBy: String,
     override var timeOfModification: LocalDateTime,
-
     var addressLine1: String,
     var addressLine2: String?,
     var addressLine3: String?,
@@ -28,12 +27,11 @@ data class AddressDao(
 
     fun toAddress() = Address(
         persistent = toPersistent(),
-
         addressLine1 = addressLine1,
         addressLine2 = addressLine2,
         addressLine3 = addressLine3,
         city = city,
         country = country,
-        zipCode = zipCode
+        zipCode = zipCode,
     )
 }

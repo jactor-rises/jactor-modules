@@ -39,9 +39,9 @@ internal class UserControllerTest : AbstractSpringMockMvcTest() {
         every { userClientMock.findAllUsernames() } returns emptyList()
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get(USER_ENDPOINT).requestAttr(REQUEST_USER, " \n \t")
+            MockMvcRequestBuilders.get(USER_ENDPOINT).requestAttr(REQUEST_USER, " \n \t"),
         ).andExpect(
-            MockMvcResultMatchers.status().isOk
+            MockMvcResultMatchers.status().isOk,
         )
 
         verify(exactly = 0) { userClientMock.find(any()) }
@@ -66,7 +66,7 @@ internal class UserControllerTest : AbstractSpringMockMvcTest() {
         every { userClientMock.findAllUsernames() } returns emptyList()
 
         val modelAndView = mockMvc.perform(
-            MockMvcRequestBuilders.get(USER_ENDPOINT).param(REQUEST_USER, "someone")
+            MockMvcRequestBuilders.get(USER_ENDPOINT).param(REQUEST_USER, "someone"),
         ).andExpect(MockMvcResultMatchers.status().isOk).andReturn().modelAndView
 
         assertThat(modelAndView?.model).isNotNull()
@@ -88,15 +88,16 @@ internal class UserControllerTest : AbstractSpringMockMvcTest() {
         assertThat(menuItem).isEqualTo(
             listOf(
                 MenuItem(
-                    itemName = "menu.users.choose", children = mutableListOf(
+                    itemName = "menu.users.choose",
+                    children = mutableListOf(
                         MenuItem(
                             itemName = "jactor",
                             target = "$contextPath/user?choose=jactor",
-                            description = "user.choose.desc"
-                        )
-                    )
-                )
-            )
+                            description = "user.choose.desc",
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 }

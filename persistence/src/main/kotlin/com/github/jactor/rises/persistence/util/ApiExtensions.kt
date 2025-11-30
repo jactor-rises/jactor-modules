@@ -39,7 +39,6 @@ private object Constants {
 
 fun AddressDto.toAddress() = Address(
     persistent = persistentDto.toPersistent(),
-
     addressLine1 = requireNotNull(addressLine1) { "Address line 1 cannot be null!" },
     addressLine2 = addressLine2,
     addressLine3 = addressLine3,
@@ -50,7 +49,6 @@ fun AddressDto.toAddress() = Address(
 
 fun BlogDto.toBlog() = Blog(
     persistent = persistentDto.toPersistent(),
-
     created = persistentDto.isWithId.whenTrue { LocalDate.now() },
     title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL },
     userId = userId,
@@ -60,7 +58,6 @@ private val PersistentDto.isWithId: Boolean get() = id != null
 
 fun BlogEntryDto.toBlogEntry() = BlogEntry(
     persistent = persistentDto.toPersistent(),
-
     blogId = blogId ?: error("A blog entry must belong to a blog!"),
     creatorName = creatorName ?: error("A blog entry must be created by someone!"),
     entry = entry ?: error("A blog entry must have an entry!"),
@@ -68,7 +65,6 @@ fun BlogEntryDto.toBlogEntry() = BlogEntry(
 
 fun GuestBookDto.toGuestBook() = GuestBook(
     persistent = persistentDto.toPersistent(),
-
     title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL },
     userId = userId,
 )
@@ -76,7 +72,7 @@ fun GuestBookDto.toGuestBook() = GuestBook(
 fun CreateBlogEntryCommand.toCreateBlogEntry() = CreateBlogEntry(
     blogId = requireNotNull(blogId) { "Blog ID cannot be null!" },
     creatorName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
-    entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL }
+    entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL },
 )
 
 fun CreateGuestBookCommand.toCreateGuestBook() = CreateGuestBook(
@@ -87,7 +83,7 @@ fun CreateGuestBookCommand.toCreateGuestBook() = CreateGuestBook(
 fun CreateGuestBookEntryCommand.toCreateGuestBook() = CreateGuestBookEntry(
     guestBookId = requireNotNull(guestBookId) { "Guest book ID cannot be null!" },
     creatorName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
-    entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL }
+    entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL },
 )
 
 fun CreateUserCommand.toCreateUser() = CreateUser(
@@ -109,10 +105,9 @@ fun CreateUserCommand.toCreateUser() = CreateUser(
 
 fun GuestBookEntryDto.toGuestBookEntry(parent: GuestBook?) = GuestBookEntry(
     persistent = persistentDto.toPersistent(),
-
     guestName = requireNotNull(creatorName) { Constants.CREATOR_NAME_CANNOT_BE_NULL },
     entry = requireNotNull(entry) { Constants.ENTRY_CANNOT_BE_NULL },
-    guestBookId = parent?.persistent?.id
+    guestBookId = parent?.persistent?.id,
 )
 
 fun com.github.jactor.rises.shared.api.UserType.toModel(): UserType = UserType.entries
@@ -120,33 +115,30 @@ fun com.github.jactor.rises.shared.api.UserType.toModel(): UserType = UserType.e
 
 fun PersistentDto.toPersistent() = Persistent(
     id = id,
-
     createdBy = requireNotNull(createdBy) { "Created by cannot be null!" },
     timeOfCreation = timeOfCreation ?: LocalDateTime.now(),
     modifiedBy = requireNotNull(modifiedBy) { "Modified by cannot be null!" },
-    timeOfModification = timeOfModification ?: LocalDateTime.now()
+    timeOfModification = timeOfModification ?: LocalDateTime.now(),
 )
 
 fun PersonDto.toPerson() = Person(
     persistent = persistentDto.toPersistent(),
-
     addressId = addressId,
     locale = locale,
     firstName = firstName,
     surname = surname,
-    description = description
+    description = description,
 )
 
 fun UpdateBlogTitleCommand.toUpdateBlogTitle() = UpdateBlogTitle(
     blogId = requireNotNull(blogId) { "Blog ID cannot be null!" },
-    title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL }
+    title = requireNotNull(title) { Constants.TITLE_CANNOT_BE_NULL },
 )
 
 fun UserDto.toUser() = User(
     persistent = persistentDto.toPersistent(),
-
     personId = personId,
     emailAddress = emailAddress,
     username = username,
-    userType = UserType.valueOf(userType.name)
+    userType = UserType.valueOf(userType.name),
 )

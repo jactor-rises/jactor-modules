@@ -16,7 +16,6 @@ internal class PersonRepositoryTest @Autowired constructor(
     private val addressRepository: AddressRepository,
     private val personRepository: PersonRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
-
     @Test
     fun `should find default persons`() {
         val firstNames = PersonTestRepositoryObject.findBySurname("Jacobsen")
@@ -31,7 +30,7 @@ internal class PersonRepositoryTest @Autowired constructor(
     @Test
     fun `should save then read a person dao`() {
         val addressId = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"),
         ).persistent.id ?: fail { "not persisted?!!!" }
 
         val addressDao = addressRepository.findById(id = addressId) ?: fail { "Address (id=$addressId) not found???" }
@@ -64,7 +63,7 @@ internal class PersonRepositoryTest @Autowired constructor(
     @Test
     fun `should save then update and read a person dao`() {
         val addressId = save(
-            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington")
+            address = initAddress(zipCode = "1001", addressLine1 = "Test Boulevar 1", city = "Testington"),
         ).persistent.id ?: fail { "not persisted?!!!" }
 
         val addressDao = addressRepository.findById(id = addressId) ?: fail { "Address (id=$addressId) not found???" }
@@ -76,7 +75,7 @@ internal class PersonRepositoryTest @Autowired constructor(
                 description = "Just me...",
                 locale = "no_NO",
                 surname = "Mine",
-            )
+            ),
         )
 
         val personDao = ("Mine" to "Cula").let {

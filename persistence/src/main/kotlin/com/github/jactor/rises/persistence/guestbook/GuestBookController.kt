@@ -8,7 +8,6 @@ import com.github.jactor.rises.shared.api.GuestBookEntryDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/guestBook"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -29,8 +29,8 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ingen gjestebok på id",
-            )
-        ]
+            ),
+        ],
     )
     @GetMapping("/{id}")
     @Operation(description = "Henter en gjesdebok ved å angi id")
@@ -45,8 +45,8 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ingen innslag med id",
-            )
-        ]
+            ),
+        ],
     )
     @GetMapping("/entry/{id}")
     @Operation(description = "Hent et innslag i en gjesdebok ved å angi id til innslaget")
@@ -61,16 +61,16 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen gjestebok er gitt eller gjesteboka er allerede opprettet",
-            )
-        ]
+            ),
+        ],
     )
     @Operation(description = "Opprett en gjestebok")
     @PostMapping
     suspend fun post(
-        @RequestBody createGuestBookCommand: CreateGuestBookCommand
+        @RequestBody createGuestBookCommand: CreateGuestBookCommand,
     ): ResponseEntity<GuestBookDto> = ResponseEntity(
         guestBookService.create(createGuestBook = createGuestBookCommand.toCreateGuestBook()).toGuestBookDto(),
-        HttpStatus.CREATED
+        HttpStatus.CREATED,
     )
 
     @ApiResponses(
@@ -79,18 +79,18 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen gjestebok er gitt eller det mangler gjestebok å endre for id",
-            )
-        ]
+            ),
+        ],
     )
     @Operation(description = "Endre en gjestebok")
     @PutMapping("/update")
     suspend fun put(
-        @RequestBody guestBookDto: GuestBookDto
+        @RequestBody guestBookDto: GuestBookDto,
     ): ResponseEntity<GuestBookDto> = when (guestBookDto.harIkkeIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(
             guestBookService.saveOrUpdate(GuestBook(guestBookDto = guestBookDto)).toDto(),
-            HttpStatus.ACCEPTED
+            HttpStatus.ACCEPTED,
         )
     }
 
@@ -103,17 +103,17 @@ class GuestBookController(private val guestBookService: GuestBookService) {
                 responseCode = "400",
                 description = "Ingen id til gjesteboka for innslaget som skal opprettes er gitt",
             ),
-        ]
+        ],
     )
     @Operation(description = "Opprett et innslag i en gjestebok")
     @PostMapping("/entry")
     suspend fun postEntry(
-        @RequestBody createGuestBookEntryCommand: CreateGuestBookEntryCommand
+        @RequestBody createGuestBookEntryCommand: CreateGuestBookEntryCommand,
     ): ResponseEntity<GuestBookEntryDto> = ResponseEntity(
         guestBookService.create(
-            createGuestBookEntry = createGuestBookEntryCommand.toCreateGuestBook()
+            createGuestBookEntry = createGuestBookEntryCommand.toCreateGuestBook(),
         ).toGuestBookEntryDto(),
-        HttpStatus.CREATED
+        HttpStatus.CREATED,
     )
 
     @ApiResponses(
@@ -122,13 +122,13 @@ class GuestBookController(private val guestBookService: GuestBookService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Ingen id til innslag for gjestebok er gitt",
-            )
-        ]
+            ),
+        ],
     )
     @Operation(description = "Endre et innslag i en gjestebok")
     @PutMapping("/entry/update")
     suspend fun putEntry(
-        @RequestBody guestBookEntryDto: GuestBookEntryDto
+        @RequestBody guestBookEntryDto: GuestBookEntryDto,
     ): ResponseEntity<GuestBookEntryDto> = when (guestBookEntryDto.harIkkeIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(

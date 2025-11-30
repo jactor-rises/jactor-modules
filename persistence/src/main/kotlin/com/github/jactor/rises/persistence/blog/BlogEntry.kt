@@ -22,7 +22,6 @@ data class BlogEntry(
 
     fun toBlogEntryDao() = BlogEntryDao(
         id = persistent.id,
-
         blogId = blogId,
         createdBy = persistent.createdBy,
         creatorName = creatorName,

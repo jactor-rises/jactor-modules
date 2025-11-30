@@ -1,24 +1,22 @@
 package com.github.jactor.rises.persistence.person
 
-import java.time.LocalDateTime
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import assertk.assertThat
+import assertk.assertions.isNotNull
 import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.test.AbstractSpringBootNoDirtyContextTest
 import com.github.jactor.rises.persistence.test.initPerson
 import com.github.jactor.rises.shared.test.all
 import com.github.jactor.rises.shared.test.equals
 import com.github.jactor.rises.shared.test.named
-import assertk.assertThat
-import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDateTime
 
 internal class PersonServiceTest @Autowired constructor(
     private val personService: PersonService,
     private val personRepository: PersonRepository,
 ) : AbstractSpringBootNoDirtyContextTest() {
-
     @Test
     fun `should create a new Person`() = runTest {
         val dao = personService.createWhenNotExists(initPerson())
@@ -38,9 +36,9 @@ internal class PersonServiceTest @Autowired constructor(
                     id = personDao.id,
                     modifiedBy = "modifier",
                     timeOfCreation = LocalDateTime.now(),
-                    timeOfModification = LocalDateTime.now()
+                    timeOfModification = LocalDateTime.now(),
                 ),
-            )
+            ),
         )
 
         // then

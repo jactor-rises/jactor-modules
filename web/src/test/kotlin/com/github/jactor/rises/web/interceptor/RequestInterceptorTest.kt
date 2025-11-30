@@ -13,15 +13,15 @@ import com.github.jactor.rises.web.interceptor.RequestInterceptor.Companion.CHOS
 import com.github.jactor.rises.web.interceptor.RequestInterceptor.Companion.CURRENT_REQUEST
 import com.github.jactor.rises.web.test.AbstractNoDirtySpringContextTest
 import io.mockk.every
-import java.util.Locale
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.web.servlet.ModelAndView
+import java.util.Locale
 
 internal class RequestInterceptorTest @Autowired constructor(
-    private val requestInterceptorToTest: RequestInterceptor
+    private val requestInterceptorToTest: RequestInterceptor,
 ) : AbstractNoDirtySpringContextTest() {
     private val handler: Any = object
 
@@ -57,7 +57,8 @@ internal class RequestInterceptorTest @Autowired constructor(
         requestInterceptorToTest.postHandle(httpServletRequestMockk, httpServletResponseMockk, handler, modelAndView)
 
         val language = modelAndView.model.getOrDefault(
-            CHOSEN_LANGUAGE, Language(Locale.of("svada"), "there")
+            CHOSEN_LANGUAGE,
+            Language(Locale.of("svada"), "there"),
         ) as Language
 
         assertAll {
@@ -74,7 +75,8 @@ internal class RequestInterceptorTest @Autowired constructor(
         requestInterceptorToTest.postHandle(httpServletRequestMockk, httpServletResponseMockk, handler, modelAndView)
 
         val language = modelAndView.model.getOrDefault(
-            CHOSEN_LANGUAGE, Language(Locale.of("svada"), "there")
+            CHOSEN_LANGUAGE,
+            Language(Locale.of("svada"), "there"),
         ) as Language
 
         assertAll {
@@ -91,7 +93,8 @@ internal class RequestInterceptorTest @Autowired constructor(
         requestInterceptorToTest.postHandle(httpServletRequestMockk, httpServletResponseMockk, handler, modelAndView)
 
         val language = modelAndView.model.getOrDefault(
-            CHOSEN_LANGUAGE, Language(Locale.of("svada"), "there")
+            CHOSEN_LANGUAGE,
+            Language(Locale.of("svada"), "there"),
         ) as Language
 
         assertAll {
@@ -109,7 +112,8 @@ internal class RequestInterceptorTest @Autowired constructor(
         requestInterceptorToTest.postHandle(httpServletRequestMockk, httpServletResponseMockk, handler, modelAndView)
 
         val language = modelAndView.model.getOrDefault(
-            CHOSEN_LANGUAGE, Language(Locale.of("svada"), "there")
+            CHOSEN_LANGUAGE,
+            Language(Locale.of("svada"), "there"),
         ) as Language
 
         assertAll {
@@ -127,7 +131,8 @@ internal class RequestInterceptorTest @Autowired constructor(
         requestInterceptorToTest.postHandle(httpServletRequestMockk, httpServletResponseMockk, handler, modelAndView)
 
         val language = modelAndView.model.getOrDefault(
-            CHOSEN_LANGUAGE, Language(Locale.of("svada"), "there")
+            CHOSEN_LANGUAGE,
+            Language(Locale.of("svada"), "there"),
         ) as Language
 
         assertAll {
@@ -145,7 +150,8 @@ internal class RequestInterceptorTest @Autowired constructor(
         requestInterceptorToTest.postHandle(httpServletRequestMockk, httpServletResponseMockk, handler, modelAndView)
 
         val language = modelAndView.model.getOrDefault(
-            CHOSEN_LANGUAGE, Language(Locale.of("svada"), "there")
+            CHOSEN_LANGUAGE,
+            Language(Locale.of("svada"), "there"),
         ) as Language
 
         assertAll {
@@ -163,7 +169,8 @@ internal class RequestInterceptorTest @Autowired constructor(
         requestInterceptorToTest.postHandle(httpServletRequestMockk, httpServletResponseMockk, handler, modelAndView)
 
         val language = modelAndView.model.getOrDefault(
-            CHOSEN_LANGUAGE, Language(Locale.of("svada"), "there")
+            CHOSEN_LANGUAGE,
+            Language(Locale.of("svada"), "there"),
         ) as Language
 
         assertAll {

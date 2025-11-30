@@ -16,7 +16,7 @@ data class GuestBook(
     constructor(persistent: Persistent, guestBook: GuestBook) : this(
         persistent = persistent,
         title = guestBook.title,
-        userId = guestBook.userId
+        userId = guestBook.userId,
     )
 
     constructor(guestBookDto: GuestBookDto) : this(
@@ -28,7 +28,7 @@ data class GuestBook(
     fun toDto(): GuestBookDto = GuestBookDto(
         persistentDto = persistent.toPersistentDto(),
         title = title,
-        userId = userId
+        userId = userId,
     )
 
     fun toGuestBookDao() = GuestBookDao(
@@ -44,6 +44,6 @@ data class GuestBook(
     fun toGuestBookDto() = GuestBookDto(
         persistentDto = persistent.toPersistentDto(),
         title = title,
-        userId = userId
+        userId = userId,
     )
 }

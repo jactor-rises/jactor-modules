@@ -5,12 +5,11 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.test.initAddress
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.UUID
-import org.junit.jupiter.api.Test
 
 internal class AddressTest {
-
     @Test
     fun `should have a copy constructor`() {
         val address = initAddress(
@@ -19,7 +18,7 @@ internal class AddressTest {
             addressLine3 = "address line three",
             city = "oslo",
             country = "NO",
-            zipCode = "1234"
+            zipCode = "1234",
         ).toAddressDao()
 
         val (_, addressLine1, addressLine2, addressLine3, city, country, zipCode) = Address(dao = address)
@@ -51,7 +50,7 @@ internal class AddressTest {
             addressLine3 = "address line three",
             city = "oslo",
             country = "NO",
-            zipCode = "1234"
+            zipCode = "1234",
         ).persistent
 
         assertAll {

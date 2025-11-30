@@ -1,13 +1,13 @@
 package com.github.jactor.rises.persistence.guestbook
 
-import java.util.UUID
+import com.github.jactor.rises.persistence.util.toGuestBookDao
+import com.github.jactor.rises.persistence.util.toGuestBookEntryDao
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.andWhere
 import org.jetbrains.exposed.v1.jdbc.insertAndGetId
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.update
-import com.github.jactor.rises.persistence.util.toGuestBookDao
-import com.github.jactor.rises.persistence.util.toGuestBookEntryDao
+import java.util.UUID
 
 object GuestBookRepositoryObject : GuestBookRepository {
     override fun findAllGuestBooks(): List<GuestBookDao> = GuestBooks.selectAll().map { it.toGuestBookDao() }
@@ -35,7 +35,7 @@ object GuestBookRepositoryObject : GuestBookRepository {
         }
 
     private fun update(guestBookDao: GuestBookDao): GuestBookDao = GuestBooks.update(
-        where = { GuestBooks.id eq guestBookDao.id }
+        where = { GuestBooks.id eq guestBookDao.id },
     ) {
         it[createdBy] = guestBookDao.createdBy
         it[title] = guestBookDao.title
@@ -60,7 +60,7 @@ object GuestBookRepositoryObject : GuestBookRepository {
     }
 
     private fun update(guestBookEntryDao: GuestBookEntryDao): GuestBookEntryDao = GuestBookEntries.update(
-        where = { GuestBookEntries.id eq guestBookEntryDao.id }
+        where = { GuestBookEntries.id eq guestBookEntryDao.id },
     ) {
         it[createdBy] = guestBookEntryDao.createdBy
         it[guestBookId] = requireNotNull(guestBookEntryDao.guestBookId) { "GuestBookId cannot be null!" }

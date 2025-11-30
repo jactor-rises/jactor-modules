@@ -11,7 +11,6 @@ import com.github.jactor.rises.shared.api.UpdateBlogTitleCommand
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/blog"], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -32,8 +32,8 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke blog for id",
-            )
-        ]
+            ),
+        ],
     )
 
     @Operation(description = "Henter en blogg ved å angi id")
@@ -49,8 +49,8 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke innslaget for id",
-            )
-        ]
+            ),
+        ],
     )
 
     @Operation(description = "Henter et innslag i en blogg ved å angi id")
@@ -66,8 +66,8 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke innslaget for id",
-            )
-        ]
+            ),
+        ],
     )
 
     @GetMapping("/title/{title}")
@@ -88,8 +88,8 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "204",
                 description = "Fant ikke innslaget for id",
-            )
-        ]
+            ),
+        ],
     )
 
     @GetMapping("/{id}/entries")
@@ -110,18 +110,18 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Kunnde ikke finne blogg til å endre",
-            )
-        ]
+            ),
+        ],
     )
 
     @Operation(description = "Endre en blogg")
     @PutMapping("/{blogId}")
     suspend fun put(
-        @RequestBody updateBlogTitleCommand: UpdateBlogTitleCommand, @PathVariable blogId: UUID
+        @RequestBody updateBlogTitleCommand: UpdateBlogTitleCommand, @PathVariable blogId: UUID,
     ): ResponseEntity<BlogDto> = (updateBlogTitleCommand.blogId ?: blogId).let {
         ResponseEntity(
             blogService.update(updateBlogTitle = updateBlogTitleCommand.toUpdateBlogTitle()).toBlogDto(),
-            HttpStatus.ACCEPTED
+            HttpStatus.ACCEPTED,
         )
     }
 
@@ -130,7 +130,7 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(responseCode = "201", description = "Bloggen er opprettet"),
             ApiResponse(responseCode = "400", description = "Mangler blogg å opprette"),
             ApiResponse(responseCode = "400", description = "Har allerede id på blogg som opprettes"),
-        ]
+        ],
     )
     @Operation(description = "Opprett en blogg")
     @PostMapping
@@ -138,7 +138,7 @@ class BlogController(private val blogService: BlogService) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(
             blogService.saveOrUpdate(blog = blogDto.toBlog()).toBlogDto(),
-            HttpStatus.CREATED
+            HttpStatus.CREATED,
         )
     }
 
@@ -148,19 +148,19 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(
                 responseCode = "400",
                 description = "Mangler id til blogg-innslag som skal endres",
-            )
-        ]
+            ),
+        ],
     )
     @Operation(description = "Endrer et blogg-innslag")
     @PutMapping("/entry/{blogEntryId}")
     suspend fun putEntry(
         @RequestBody blogEntryDto: BlogEntryDto,
-        @PathVariable blogEntryId: UUID
+        @PathVariable blogEntryId: UUID,
     ): ResponseEntity<BlogEntryDto> = when (blogEntryDto.harIkkeIdentifikator()) {
         true -> ResponseEntity(HttpStatus.BAD_REQUEST)
         false -> ResponseEntity(
             blogService.saveOrUpdate(blogEntry = blogEntryDto.toBlogEntry()).toBlogEntryDto(),
-            HttpStatus.ACCEPTED
+            HttpStatus.ACCEPTED,
         )
     }
 
@@ -170,12 +170,12 @@ class BlogController(private val blogService: BlogService) {
             ApiResponse(responseCode = "400", description = "Mangler id til bloggen som innslaget skal legges til"),
             ApiResponse(responseCode = "400", description = "Mangler navn til forfatter av innslag"),
             ApiResponse(responseCode = "400", description = "Mangler innslaget som skal legges inn"),
-        ]
+        ],
     )
     @Operation(description = "Oppretter et blogg-innslag")
     @PostMapping("/entry")
     suspend fun postEntry(
-        @RequestBody createBlogEntryCommand: CreateBlogEntryCommand
+        @RequestBody createBlogEntryCommand: CreateBlogEntryCommand,
     ): ResponseEntity<BlogEntryDto> = createBlogEntryCommand.toCreateBlogEntry().let {
         blogService.create(createBlogEntry = it)
     }.toBlogEntryDto().let {
