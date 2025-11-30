@@ -1,5 +1,7 @@
 plugins {
-    id("jactor-modules-spring-library")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.versions)
+    `java-library`
 }
 
 group = "com.github.jactor-rises"

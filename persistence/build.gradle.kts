@@ -1,10 +1,21 @@
 plugins {
-    id("jactor-modules-spring-application")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.versions)
+    `java-library`
 }
 
 group = "com.github.jactor-rises"
 version = "2.0.x-SNAPSHOT"
 description = "jactor::persistence"
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+    mavenLocal()
+}
 
 dependencies {
     // spring-boot

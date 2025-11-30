@@ -6,6 +6,7 @@ exposed = "1.0.0-rc-4"
 dependencyManagement = "1.1.4"
 flyway = "11.17.0"
 h2Database = "2.4.240"
+java-uuid-generator = "5.1.1"
 jvm = "21" # remember that .github actions also defines a JDK version
 junitPlatform = "6.0.1"
 kotlin = "2.2.21"
@@ -14,7 +15,7 @@ mockk = "1.14.6"
 spring-boot = "3.5.7"
 springdoc-openapi = "1.8.0"
 springmockk = "4.0.2"
-java-uuid-generator = "5.1.1"
+versions-plugin = "0.53.0"
 
 [libraries]
 # jetvbrains exposed
@@ -51,3 +52,8 @@ springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmoc
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 
 [plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "dependencyManagement" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions-plugin" }
