@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.versions)
-    `java-library`
 }
 
 description = "jactor::web"

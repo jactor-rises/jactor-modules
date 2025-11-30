@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.versions)
-    `java-library`
 }
 
 description = "jactor::shared"

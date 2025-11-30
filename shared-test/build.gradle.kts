@@ -1,11 +1,8 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.versions)
-    `java-library`
 }
 
-group = "com.github.jactor-rises"
-version = "2.0.x-SNAPSHOT"
 description = "jactor::shared-test"
 
 dependencies {
