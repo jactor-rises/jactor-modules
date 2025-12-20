@@ -4,6 +4,7 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import com.github.jactor.rises.persistence.PersistenceHandler
 import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.config.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.test.initGuestBook
@@ -24,9 +25,10 @@ internal class GuestBookServiceTest {
     private val userRepositoryMockk: UserRepository = mockk {}
     private val guestBookServiceToTest: GuestBookService = GuestBookServiceBean(
         guestBookRepository = guestBookRepositoryMockk,
+        persistenceHandler = PersistenceHandler(),
     ).also {
-        JactorPersistenceRepositiesConfig.Companion.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
-        JactorPersistenceRepositiesConfig.Companion.fetchGuestBookRelation = { id ->
+        JactorPersistenceRepositiesConfig.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
+        JactorPersistenceRepositiesConfig.fetchGuestBookRelation = { id ->
             guestBookRepositoryMockk.findGuestBookById(id = id)
         }
     }

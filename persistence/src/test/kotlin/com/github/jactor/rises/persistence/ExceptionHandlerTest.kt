@@ -32,6 +32,7 @@ internal class ExceptionHandlerTest {
         val avstemmingController = UserController(
             userService = UserService(
                 userRepository = userRepositoryMockk,
+                persistenceHandler = PersistenceHandler(),
             ),
         )
 

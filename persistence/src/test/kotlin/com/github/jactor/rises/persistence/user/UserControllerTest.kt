@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
 import assertk.fail
+import com.github.jactor.rises.persistence.PersistenceHandler
 import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.test.initUser
 import com.github.jactor.rises.persistence.test.initUserDao
@@ -25,10 +26,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
 import java.util.UUID
 
 @WebFluxTest(UserController::class)
-@Import(UserService::class, UserRepository::class)
+@Import(UserService::class, UserRepository::class, PersistenceHandler::class)
 internal class UserControllerTest @Autowired constructor(
     private val webTestClient: WebTestClient,
     @MockkBean private val userRepositoryMockk: UserRepository,
@@ -51,7 +53,7 @@ internal class UserControllerTest @Autowired constructor(
             .uri("/user/name/me")
             .exchange()
             .expectStatus().isOk
-            .expectBody(UserDto::class.java)
+            .expectBody<UserDto>()
             .returnResult().responseBody
 
         assertThat(userDto).isNotNull()
@@ -77,7 +79,7 @@ internal class UserControllerTest @Autowired constructor(
             .uri("/user/$uuid")
             .exchange()
             .expectStatus().isOk
-            .expectBody(UserDto::class.java)
+            .expectBody<UserDto>()
             .returnResult().responseBody
 
         assertThat(userDto).isNotNull()
@@ -96,7 +98,7 @@ internal class UserControllerTest @Autowired constructor(
             .bodyValue(user.toUserDto())
             .exchange()
             .expectStatus().isAccepted
-            .expectBody(UserDto::class.java)
+            .expectBody<UserDto>()
             .returnResult().responseBody
 
         assertThat(userDto).isNotNull()
@@ -112,7 +114,7 @@ internal class UserControllerTest @Autowired constructor(
             .uri("/user/usernames")
             .exchange()
             .expectStatus().isOk
-            .expectBody(String::class.java)
+            .expectBody<String>()
             .returnResult().responseBody
 
         assertThat(usernames).isEqualTo("""["bart","lisa"]""")
@@ -202,7 +204,7 @@ internal class UserControllerTest @Autowired constructor(
             .bodyValue(createUserCommand)
             .exchange()
             .expectStatus().isCreated
-            .expectBody(UserDto::class.java)
+            .expectBody<UserDto>()
             .returnResult().responseBody ?: fail(message = "no user created")
 
         assertThat(userDto).all {

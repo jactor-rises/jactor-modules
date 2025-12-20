@@ -4,6 +4,7 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
+import com.github.jactor.rises.persistence.PersistenceHandler
 import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.config.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.person.PersonRepository
@@ -25,10 +26,10 @@ internal class UserServiceTest {
     private val userRepositoryMockk: UserRepository = mockk {}
     private val userServiceToTest = UserService(
         userRepository = userRepositoryMockk,
+        persistenceHandler = PersistenceHandler(),
     ).also {
-        JactorPersistenceRepositiesConfig.Companion.fetchPersonRelation =
-            { id -> personRepositoryMockk.findById(id = id) }
-        JactorPersistenceRepositiesConfig.Companion.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
+        JactorPersistenceRepositiesConfig.fetchPersonRelation = { id -> personRepositoryMockk.findById(id = id) }
+        JactorPersistenceRepositiesConfig.fetchUserRelation = { id -> userRepositoryMockk.findById(id = id) }
     }
 
     @Test
@@ -38,9 +39,7 @@ internal class UserServiceTest {
 
         every { userRepositoryMockk.findByUsername("jactor") } returns initUser(
             person = personDto,
-            emailAddress = null,
             username = "jactor",
-            userType = UserType.ACTIVE,
         ).toUserDao()
 
         val user = userServiceToTest.find("jactor") ?: throw AssertionError("mocking?")
@@ -59,9 +58,7 @@ internal class UserServiceTest {
 
         every { userRepositoryMockk.findById(uuid) } returns initUser(
             person = personDto,
-            emailAddress = null,
             username = "jactor",
-            userType = UserType.ACTIVE,
         ).toUserDao()
 
         val user = userServiceToTest.find(uuid) ?: fail { "null. mocking?" }
