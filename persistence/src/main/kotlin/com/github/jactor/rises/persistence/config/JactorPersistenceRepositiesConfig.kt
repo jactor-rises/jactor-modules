@@ -1,9 +1,5 @@
-package com.github.jactor.rises.persistence
+package com.github.jactor.rises.persistence.config
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.github.jactor.rises.persistence.address.AddressDao
 import com.github.jactor.rises.persistence.address.AddressRepository
 import com.github.jactor.rises.persistence.blog.BlogDao
@@ -18,36 +14,11 @@ import com.github.jactor.rises.persistence.user.UserDao
 import com.github.jactor.rises.persistence.user.UserRepository
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
-import org.jetbrains.exposed.v1.core.DatabaseConfig
-import org.jetbrains.exposed.v1.jdbc.Database
-import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
-import org.jetbrains.exposed.v1.spring.transaction.SpringTransactionManager
-import org.springframework.boot.CommandLineRunner
-import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.text.SimpleDateFormat
 import java.util.UUID
-import javax.sql.DataSource
 
 @Configuration
-class ExposedConfig {
-    @Bean
-    fun databaseConfig() = DatabaseConfig {
-        useNestedTransactions = true
-    }
-
-    @Bean
-    fun database(dataSource: DataSource, databaseConfig: DatabaseConfig): Database =
-        Database.connect(dataSource, databaseConfig = databaseConfig).also {
-            TransactionManager.defaultDatabase = it
-        }
-
-    @Bean
-    fun transactionManager(dataSource: DataSource) = SpringTransactionManager(dataSource)
-}
-
-@Configuration
+@OpenAPIDefinition(info = Info(title = "jactor-persistence.repositories", version = "v2"))
 class JactorPersistenceRepositiesConfig(
     internal val addressRepository: AddressRepository,
     internal val blogRepository: BlogRepository,
@@ -82,20 +53,4 @@ class JactorPersistenceRepositiesConfig(
         internal var fetchUserRelation: (UUID) -> UserDao? = { null }
         internal var fetchUserRelations: (UUID) -> List<UserDao> = { emptyList() }
     }
-}
-
-@Configuration
-@OpenAPIDefinition(info = Info(title = "jactor-persistence", version = "v1"))
-class JactorPersistenceConfig {
-    @Bean
-    fun commandLineRunner(applicationContext: ApplicationContext): CommandLineRunner = CommandLineRunner {
-        JactorPersistence.inspect(applicationContext, it)
-    }
-
-    @Bean
-    fun objectMapper(): ObjectMapper = ObjectMapper()
-        .registerModule(JavaTimeModule())
-        .registerModule(Jdk8Module())
-        .setDateFormat(SimpleDateFormat("yyyy-MM-dd"))
-        .setSerializationInclusion(Include.NON_NULL)
 }

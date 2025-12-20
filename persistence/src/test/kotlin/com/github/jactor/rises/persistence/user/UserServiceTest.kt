@@ -4,8 +4,8 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotNull
-import com.github.jactor.rises.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.Persistent
+import com.github.jactor.rises.persistence.config.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.person.PersonRepository
 import com.github.jactor.rises.persistence.test.initAddress
 import com.github.jactor.rises.persistence.test.initCreateUserCommand

@@ -4,6 +4,7 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.jactor.rises.persistence.config.JactorPersistenceConfig
 import com.github.jactor.rises.shared.api.PersistentDto
 import com.github.jactor.rises.shared.api.UserDto
 import com.github.jactor.rises.shared.api.UserType
