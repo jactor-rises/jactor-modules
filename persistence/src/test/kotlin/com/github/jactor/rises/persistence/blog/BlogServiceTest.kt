@@ -4,8 +4,8 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
-import com.github.jactor.rises.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.Persistent
+import com.github.jactor.rises.persistence.config.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.test.initBlog
 import com.github.jactor.rises.persistence.test.initBlogEntry
 import com.github.jactor.rises.persistence.test.initUser

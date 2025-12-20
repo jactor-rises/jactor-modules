@@ -1,10 +1,10 @@
 package com.github.jactor.rises.persistence.test
 
-import com.github.jactor.rises.persistence.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.address.Address
 import com.github.jactor.rises.persistence.address.AddressTestRepositoryObject
 import com.github.jactor.rises.persistence.blog.Blog
 import com.github.jactor.rises.persistence.blog.BlogEntry
+import com.github.jactor.rises.persistence.config.JactorPersistenceRepositiesConfig
 import com.github.jactor.rises.persistence.guestbook.GuestBook
 import com.github.jactor.rises.persistence.person.Person
 import com.github.jactor.rises.persistence.user.User
