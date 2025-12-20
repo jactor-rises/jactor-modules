@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 class JactorPersistenceConfig {
     @Bean
     fun commandLineRunner(applicationContext: ApplicationContext): CommandLineRunner = CommandLineRunner {
-        JactorPersistence.Companion.inspect(applicationContext, it)
+        JactorPersistence.inspect(applicationContext, it)
     }
 
     @Bean

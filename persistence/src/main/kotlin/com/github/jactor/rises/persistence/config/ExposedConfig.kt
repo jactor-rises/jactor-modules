@@ -20,8 +20,8 @@ class ExposedConfig {
 
     @Bean
     fun database(dataSource: DataSource, databaseConfig: DatabaseConfig): Database =
-        Database.Companion.connect(dataSource, databaseConfig = databaseConfig).also {
-            TransactionManager.Companion.defaultDatabase = it
+        Database.connect(dataSource, databaseConfig = databaseConfig).also {
+            TransactionManager.defaultDatabase = it
         }
 
     @Bean
