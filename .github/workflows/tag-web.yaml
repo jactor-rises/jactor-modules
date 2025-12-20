@@ -27,7 +27,8 @@ jobs:
           NUMBERS=$(echo $CURRENT_SEMVER | sed 's/-.*//')
           echo "current semantic version version: $NUMBERS"
           echo "semver=$NUMBERS" >> $GITHUB_OUTPUT
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v4
+
         with:
           distribution: temurin
           java-version: 25
