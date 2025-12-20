@@ -1,5 +1,6 @@
 package com.github.jactor.rises.persistence.blog
 
+import com.github.jactor.rises.persistence.PersistenceHandler
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -16,7 +17,10 @@ interface BlogService {
 }
 
 @Service
-class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService {
+class BlogServiceImpl(
+    private val blogRepository: BlogRepository,
+    private val persistenceHandler: PersistenceHandler,
+) : BlogService {
     override suspend fun create(createBlogEntry: CreateBlogEntry): BlogEntry {
         val blogEntryDao = BlogEntryDao(
             id = null,
@@ -29,7 +33,9 @@ class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService 
             timeOfModification = LocalDateTime.now(),
         )
 
-        return blogRepository.save(blogEntryDao = blogEntryDao).toBlogEntry()
+        return persistenceHandler.modifyAndSave(dao = blogEntryDao) {
+            blogRepository.save(blogEntryDao = it)
+        }.toBlogEntry()
     }
 
     override suspend fun find(id: UUID): Blog? = blogRepository.findBlogById(id)?.toBlog()
@@ -44,15 +50,20 @@ class BlogServiceImpl(private val blogRepository: BlogRepository) : BlogService 
         return blogRepository.findBlogEntriesByBlogId(blogId).map { it.toBlogEntry() }
     }
 
-    override suspend fun saveOrUpdate(blog: Blog): Blog = blogRepository.save(blog.toBlogDao()).toBlog()
+    override suspend fun saveOrUpdate(blog: Blog): Blog = persistenceHandler.modifyAndSave(dao = blog.toBlogDao()) {
+        blogRepository.save(blogDao = it)
+    }.toBlog()
+
     override suspend fun saveOrUpdate(blogEntry: BlogEntry): BlogEntry {
-        return blogRepository.save(blogEntryDao = blogEntry.toBlogEntryDao()).toBlogEntry()
+        return persistenceHandler.modifyAndSave(dao = blogEntry.toBlogEntryDao()) {
+            blogRepository.save(blogEntryDao = it)
+        }.toBlogEntry()
     }
 
     override suspend fun update(updateBlogTitle: UpdateBlogTitle): Blog {
         val blog = requireNotNull(blogRepository.findBlogById(updateBlogTitle.blogId)) { "Cannot find blog to update" }
             .apply { this.title = updateBlogTitle.title }
 
-        return blogRepository.save(blogDao = blog).toBlog()
+        return persistenceHandler.modifyAndSave(dao = blog) { blogRepository.save(blogDao = it) }.toBlog()
     }
 }
