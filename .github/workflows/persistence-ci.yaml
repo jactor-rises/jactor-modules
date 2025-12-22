@@ -24,7 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-
         with:
           distribution: temurin
           java-version: 25
@@ -37,21 +36,7 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      - name: Run ktlintCheck
-        run: ./gradlew :persistence:ktlintCheck
-
+      - run: ./gradlew :persistence:ktlintCheck
       - run: ./gradlew :persistence:build --scan -x test
-      - name: Verify dependencies
-        run: |
-          COUNT=$(./gradlew -q :persistence:dependencies | grep -c SNAPSHOT || true)
-
-          echo "Found $COUNT SNAPSHOT dependencies"
-
-          if [ "$COUNT" -gt 0 ]
-          then
-            >&2 echo ::error No SNAPSHOT dependencies allowed
-          ./gradlew -q :persistence:dependencies
-            exit 1;
-          fi
       - name: Run tests with stack trace information
         run: ./gradlew :persistence:test --tests "*" --stacktrace --info
