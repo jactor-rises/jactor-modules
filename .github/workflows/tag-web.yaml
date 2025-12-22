@@ -7,7 +7,6 @@ on:
       - '.github/**'
       - 'web/**'
       - 'shared/**'
-      - 'buildSrc/**'
       - 'gradle/**'
 
 jobs:

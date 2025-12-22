@@ -9,19 +9,17 @@ The main purpose is to learn about programming microservices using Kotlin, (with
 to get a deeper understanding of continuous integration/DevOps using GitHub workflow/actions and gradle.
 integration testing with cucumber.
 
-This project is a microservice dealing with persistence to a database using JPA (java persistence api) via
-spring-data-jpa and is a microservice to use under `com.github.jactor.percistence` (formerly as part of the archived
-project [jactor-rises](https://github.com/jactor-rises/jactor-rises))
+This project is a microservice dealing with persistence to a database using jetbrains exposed (formerly as part of the
+archived project [jactor-rises](https://github.com/jactor-rises/jactor-rises))
 
 ### Set up
 
 * a spring-boot 3 application
     * build with [gradle](https://gradle.org).
     * is using [h2](http://h2database.com) (in-memory database)
-    * run it with spring-boot, or as any other java-application
-* this application is documented with swagger. After startup, use link:
-    * <http://localhost:1099/jactor-persistence/swagger-ui/index.html?configUrl=/jactor-persistence/v3/api-docs/swagger-config#/> (
-      swagger ui)
+    * run it with spring-boot
+* this application is documented with swagger. After startup, use link
+  [swagger ui](http://localhost:1099/jactor-persistence/swagger-ui/index.html?configUrl=/jactor-persistence/v3/api-docs/swagger-config#/)
 
 ### Build
 
@@ -68,7 +66,7 @@ java -jar build/lib/jactor-persistence-<version>-SNAPSHOT.jar
 
 * [flyway](https://flywaydb.org)
 * [github actions](https://docs.github.com/en/actions/learn-github-actions)
-* [gradle](https://gradle.org) (8.x)
+* [gradle](https://gradle.org) (9.x)
 * [swagger-ui](https://swagger.io/tools/swagger-ui/)
     * herunder [springdoc](https://springdoc.org)
 * [sdk man](https://sdkman.io)
