@@ -37,6 +37,9 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
+      - name: Run ktlintCheck
+        run: ./gradlew :persistence:ktlintCheck
+
       - run: ./gradlew :persistence:build --scan -x test
       - name: Verify dependencies
         run: |
