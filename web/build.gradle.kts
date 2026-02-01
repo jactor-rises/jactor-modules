@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.versions)
-    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.boot.web)
 }
 
 description = "jactor::web"
@@ -15,9 +15,15 @@ dependencies {
 
     // internal project dependencies
     implementation(project(":shared"))
-    testImplementation(project(":shared-test"))
+
+    // misc third party dependencies
+    implementation(libs.kotlin.logging)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactor)
 
     // test implementations
+    testImplementation(libs.assertk)
     testImplementation(libs.springmockk)
     testImplementation(libs.spring.boot.starter.test)
 }

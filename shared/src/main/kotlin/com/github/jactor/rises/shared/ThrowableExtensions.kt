@@ -1,35 +1,8 @@
 package com.github.jactor.rises.shared
 
-import org.springframework.web.client.HttpClientErrorException
-
-fun Throwable.exceptionMessageMedCause(): String {
-    val exceptionMessage = exceptionMessage()
-    val causeMessage = cause?.let { " - caused by ${it.findRootCauseMessage()}" } ?: ""
-
-    return "$exceptionMessage$causeMessage".take(10000)
-}
-
-fun Throwable.exceptionMessage() = when (this is HttpClientErrorException) {
-    true -> "Internal client, $statusCode: ${simpleExceptionMessage()}"
-    false -> simpleExceptionMessage()
-}
-
-private fun Throwable?.findRootCauseMessage(): String? {
-    var rootCause: Throwable? = this
-
-    while (rootCause?.cause != null) {
-        rootCause = rootCause.cause
-    }
-
-    return rootCause?.simpleExceptionMessage()
-}
-
-fun Throwable.originClassNameEndsWith(txt: String): Boolean = findOrginCause().stackTrace
-    ?.firstOrNull()?.className?.endsWith(txt) ?: false
-
 fun Throwable.findOrginCause(): Throwable = generateSequence(this) { it.cause }.last()
 fun Throwable.rootCauseSimpleMessage(): String = findOrginCause().simpleExceptionMessage()
-private fun Throwable.simpleExceptionMessage(): String = "${this::class.simpleName}: $message"
+fun Throwable.simpleExceptionMessage(): String = "${this::class.simpleName}: $message"
 
 fun Throwable.finnFeiledeLinjer(): List<String> = buildList {
     var cause: Throwable? = this@finnFeiledeLinjer

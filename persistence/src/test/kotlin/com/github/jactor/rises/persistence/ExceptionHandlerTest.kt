@@ -4,11 +4,11 @@ import assertk.all
 import assertk.assertThat
 import assertk.assertions.isTrue
 import assertk.fail
+import com.github.jactor.rises.persistence.test.containsSubstring
 import com.github.jactor.rises.persistence.user.UserController
 import com.github.jactor.rises.persistence.user.UserRepository
 import com.github.jactor.rises.persistence.user.UserService
 import com.github.jactor.rises.shared.finnFeiledeLinjer
-import com.github.jactor.rises.shared.test.containsSubstring
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

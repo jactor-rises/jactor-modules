@@ -1,11 +1,11 @@
 package com.github.jactor.rises.shared
 
+import assertk.Assert
 import assertk.assertThat
+import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
-import com.github.jactor.rises.shared.test.all
-import com.github.jactor.rises.shared.test.equals
-import com.github.jactor.rises.shared.test.named
-import com.github.jactor.rises.shared.test.sized
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import org.junit.jupiter.api.Test
 
 class SpringBeanNamesTest {
@@ -64,3 +64,8 @@ class SpringBeanNamesTest {
         }
     }
 }
+
+fun <T> Assert<T?>.all(function: T.() -> Unit) = isNotNull().given { assertk.assertAll { it.function() } }
+infix fun <T> Assert<T?>.equals(actual: T?): Unit = actual?.let { this.isEqualTo(it) } ?: this.isNull()
+infix fun <T> T?.named(name: String): Assert<T?> = assertThat(actual = this, name = name)
+infix fun <T : Collection<*>> Assert<T?>.sized(size: Int): Unit = this.isNotNull().hasSize(size = size)

@@ -3,6 +3,7 @@ package com.github.jactor.rises.persistence
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.github.jactor.rises.persistence.test.countSecondsUntilNow
 import com.github.jactor.rises.persistence.test.initAddressDao
 import com.github.jactor.rises.persistence.test.initBlogDao
 import com.github.jactor.rises.persistence.test.initBlogEntryDao
@@ -10,7 +11,6 @@ import com.github.jactor.rises.persistence.test.initGuestBookDao
 import com.github.jactor.rises.persistence.test.initGuestBookEntryDao
 import com.github.jactor.rises.persistence.test.initPersonDao
 import com.github.jactor.rises.persistence.test.initUserDao
-import com.github.jactor.rises.shared.test.countSecondsUntilNow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
