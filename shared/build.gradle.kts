@@ -7,12 +7,9 @@ plugins {
 description = "jactor::shared"
 
 dependencies {
-    api(libs.kotlin.logging)
-    api(libs.kotlin.reflect)
-    api(libs.kotlin.stdlib.jdk8)
-    api(libs.kotlinx.coroutines.core)
-    api(libs.kotlinx.coroutines.reactor)
-    api(libs.springdoc.openapi.ui)
+    implementation(libs.springdoc.openapi.ui)
 
-    testImplementation(project(":shared-test"))
+    testImplementation(libs.assertk)
+    testImplementation(libs.junit.platform.suite)
+    testImplementation(libs.junit.jupiter)
 }

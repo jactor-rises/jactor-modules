@@ -15,9 +15,15 @@ dependencies {
 
     // internal project dependencies
     implementation(project(":shared"))
-    testImplementation(project(":shared-test"))
+
+    // misc third party dependencies
+    implementation(libs.kotlin.logging)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactor)
 
     // test implementations
+    testImplementation(libs.assertk)
     testImplementation(libs.springmockk)
     testImplementation(libs.spring.boot.starter.test)
 }

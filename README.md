@@ -15,9 +15,6 @@ These microservices also have common http-api which was previously a separate mo
 
 - https://github.com/jactor-rises/jactor-shared -> [jactor-modules/shared](https://github.com/jactor-rises/jactor-modules/tree/main/shared)
 
-These three modules share common test
-code: [jactor-modules/shared-test](https://github.com/jactor-rises/jactor-modules/tree/main/shared-test)
-
 For details on each microservice,
 see [persistence/README.md](https://github.com/jactor-rises/jactor-modules/blob/main/persistence/README.md)
 and [web/README.md](https://github.com/jactor-rises/jactor-modules/blob/main/web/README.md)

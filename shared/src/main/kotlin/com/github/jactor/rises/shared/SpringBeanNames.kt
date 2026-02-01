@@ -1,7 +1,5 @@
 package com.github.jactor.rises.shared
 
-import com.github.jactor.rises.shared.SpringBeanNames.Companion.NO_OF_BEANS_ON_LINE
-
 @JvmRecord
 data class SpringBeanNames(
     private val beanNames: BeanNames = BeanNames(),
@@ -32,7 +30,7 @@ data class BeanNames(
     fun add(name: String) {
         tenNames.add(name)
 
-        if (tenNames.size == NO_OF_BEANS_ON_LINE) {
+        if (tenNames.size == SpringBeanNames.NO_OF_BEANS_ON_LINE) {
             beanNames.add(tenNames.joinToString(separator = ", "))
             tenNames.clear()
         }

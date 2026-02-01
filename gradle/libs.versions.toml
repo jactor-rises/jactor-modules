@@ -12,7 +12,6 @@ junitPlatform = "6.0.1"
 kotlin = "2.3.0"
 kotlin-logging = "7.0.13"
 ktlint = "14.0.1"
-mockk = "1.14.7"
 spring-boot = "3.5.8"
 springdoc-openapi = "1.8.0"
 springmockk = "4.0.2"
@@ -45,10 +44,8 @@ cucumber-java8 = { module = "io.cucumber:cucumber-java8", version.ref = "cucumbe
 cucumber-junit-platform-engine = { module = "io.cucumber:cucumber-junit-platform-engine", version.ref = "cucumber" }
 cucumber-spring = { module = "io.cucumber:cucumber-spring", version.ref = "cucumber" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitPlatform" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junitPlatform" }
 junit-platform-suite = { module = "org.junit.platform:junit-platform-suite", version.ref = "junitPlatform" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 springmockk = { module = "com.ninja-squad:springmockk", version.ref = "springmockk" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 

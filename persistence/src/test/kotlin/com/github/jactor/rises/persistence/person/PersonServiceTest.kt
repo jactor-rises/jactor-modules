@@ -4,10 +4,10 @@ import assertk.assertThat
 import assertk.assertions.isNotNull
 import com.github.jactor.rises.persistence.Persistent
 import com.github.jactor.rises.persistence.test.AbstractSpringBootNoDirtyContextTest
+import com.github.jactor.rises.persistence.test.all
+import com.github.jactor.rises.persistence.test.equals
 import com.github.jactor.rises.persistence.test.initPerson
-import com.github.jactor.rises.shared.test.all
-import com.github.jactor.rises.shared.test.equals
-import com.github.jactor.rises.shared.test.named
+import com.github.jactor.rises.persistence.test.named
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

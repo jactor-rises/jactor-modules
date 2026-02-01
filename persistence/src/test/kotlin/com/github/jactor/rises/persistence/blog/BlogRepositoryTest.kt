@@ -10,9 +10,9 @@ import com.github.jactor.rises.persistence.test.initAddress
 import com.github.jactor.rises.persistence.test.initBlog
 import com.github.jactor.rises.persistence.test.initPerson
 import com.github.jactor.rises.persistence.test.initUser
+import com.github.jactor.rises.persistence.test.isNotOlderThan
 import com.github.jactor.rises.persistence.user.User
 import com.github.jactor.rises.persistence.user.UserType
-import com.github.jactor.rises.shared.test.isNotOlderThan
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
