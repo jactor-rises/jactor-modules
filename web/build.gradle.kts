@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.versions)
-    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.boot.web)
 }
 
 description = "jactor::web"
