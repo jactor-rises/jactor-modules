@@ -5,12 +5,13 @@ import com.github.jactor.rises.persistence.user.Users
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
+import org.jetbrains.exposed.v1.core.java.javaUUID
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.javatime.datetime
 import java.util.UUID
 
 object Blogs : IdTable<UUID>(name = "T_BLOG") {
-    override val id: Column<EntityID<UUID>> = uuid("ID")
+    override val id: Column<EntityID<UUID>> = javaUUID("ID")
         .clientDefault { UUIDv7.generate() }
         .entityId()
 
@@ -21,5 +22,5 @@ object Blogs : IdTable<UUID>(name = "T_BLOG") {
 
     val created = date("CREATED")
     val title = text("TITLE")
-    val userId = uuid("USER_ID").references(Users.id)
+    val userId = javaUUID("USER_ID").references(Users.id)
 }
